@@ -219,7 +219,7 @@ const UI_STRINGS = {
   en: {
     nav_checker: "Home",
     nav_checker_page: "Checker",
-    nav_tools: "Tools",
+    nav_tools: "Horoscope",
     nav_animals: "Zodiac Guide",
     nav_compatibility: "Compatibility",
     nav_wedding: "Wedding Dates",
