@@ -259,6 +259,26 @@ nav a:hover { color: var(--accent); }
   margin-bottom: 16px;
 }
 
+/* Make the native calendar-picker icon bigger and easier to tap (it's
+   tiny and hard to hit accurately by default, especially on mobile). */
+input[type="date"] {
+  position: relative;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 7px;
+  margin-right: -4px;
+  border-radius: 6px;
+  filter: invert(72%) sepia(40%) saturate(500%) hue-rotate(358deg) brightness(95%);
+  transform: scale(1.35);
+  transition: background 0.15s ease;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  background: rgba(212, 175, 55, 0.16);
+}
+/* Firefox doesn't support ::-webkit-calendar-picker-indicator; its native
+   date field already renders a reasonably large built-in picker button. */
+
 .checker-form button {
   background: var(--accent);
   color: #1a1430;
