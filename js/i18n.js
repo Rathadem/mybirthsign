@@ -390,6 +390,7 @@ const UI_STRINGS = {
 
     dob_label: "Your date of birth",
     reveal_button: "Reveal My Sign",
+    hero_cta_button: "MyBirthSign",
 
     compat_heading: "Check Compatibility",
     compat_intro: "See how two birthdays match up — for a relationship or a business partnership.",
@@ -628,6 +629,7 @@ const UI_STRINGS = {
 
     dob_label: "ថ្ងៃខែឆ្នាំកំណើតរបស់អ្នក",
     reveal_button: "បង្ហាញនិមិត្តសញ្ញារបស់ខ្ញុំ",
+    hero_cta_button: "MyBirthSign",
 
     compat_heading: "ពិនិត្យភាពសមស្រប",
     compat_intro: "មើលថាកំណើតទាំងពីរសមស្របគ្នាកម្រិតណា — សម្រាប់ទំនាក់ទំនងស្នេហា ឬដៃគូអាជីវកម្ម។",
