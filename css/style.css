@@ -718,8 +718,13 @@ article.post.post-wide {
 }
 .animal-details .overview-text { margin-top: 10px; font-size: 0.92rem; }
 .animal-details p strong { color: var(--accent-soft); }
-.animal-cta {
+.animal-cta-row {
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.animal-cta {
   text-align: center;
   background: var(--accent);
   color: #1a1430;
@@ -730,6 +735,12 @@ article.post.post-wide {
   font-size: 0.9rem;
 }
 .animal-cta:hover { background: #e6c35f; }
+.animal-cta-secondary {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+.animal-cta-secondary:hover { background: rgba(230, 195, 95, 0.12); color: #e6c35f; border-color: #e6c35f; }
 
 footer.site-footer {
   border-top: 1px solid var(--border);

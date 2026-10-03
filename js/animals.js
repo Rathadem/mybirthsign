@@ -34,7 +34,10 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="overview-text">${overview}</p>
           <p><strong>${S.careers_heading}:</strong> ${careers}</p>
         </details>
-        <a class="animal-cta" href="checker.html">${S.animals_cta}</a>
+        <div class="animal-cta-row">
+          <a class="animal-cta" href="checker.html">${S.animals_cta}</a>
+          <a class="animal-cta animal-cta-secondary" href="blog/zodiac-year-${animal.toLowerCase()}.html">${S.animals_blog_cta}</a>
+        </div>
       </div>
     `;
   }).join("");

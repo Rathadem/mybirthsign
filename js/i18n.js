@@ -234,6 +234,7 @@ const UI_STRINGS = {
     animals_hero_subtitle: "All 12 zodiac animals — personality, luck, and compatibility at a glance. Tap any animal to read the full profile.",
     animals_read_more: "Read full personality",
     animals_cta: "Check your own sign →",
+    animals_blog_cta: "See full year guide →",
 
     compat_page_hero_title: "Zodiac Compatibility Checker",
     compat_page_hero_subtitle: "Enter two birthdays to see how your signs match up — for romance or for business.",
@@ -487,6 +488,7 @@ const UI_STRINGS = {
     animals_hero_subtitle: "សត្វនិមិត្តសញ្ញាទាំង១២ — បុគ្គលិកលក្ខណៈ សំណាង និងភាពសមស្របជាមួយអ្នកដទៃ។ ចុចលើសត្វនីមួយៗដើម្បីអានព័ត៌មានពេញលេញ។",
     animals_read_more: "អានបុគ្គលិកលក្ខណៈពេញលេញ",
     animals_cta: "ពិនិត្យនិមិត្តសញ្ញារបស់អ្នក →",
+    animals_blog_cta: "មគ្គុទ្ទេសក៍ប្រចាំឆ្នាំពេញលេញ →",
 
     compat_page_hero_title: "ឧបករណ៍ពិនិត្យភាពសមស្របនិមិត្តសញ្ញា",
     compat_page_hero_subtitle: "បញ្ចូលថ្ងៃខែឆ្នាំកំណើតពីរ ដើម្បីមើលថានិមិត្តសញ្ញារបស់អ្នកសមគ្នាកម្រិតណា — សម្រាប់ស្នេហា ឬអាជីវកម្ម។",
