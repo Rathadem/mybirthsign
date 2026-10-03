@@ -377,7 +377,7 @@ const UI_STRINGS = {
     hero_title: "What Does Your Birthday Say About You?",
     hero_subtitle: "Enter your date of birth to reveal your zodiac animal, element, lucky numbers, and more.",
 
-    checker_hero_title: "Chinese Zodiac Checker",
+    checker_hero_title: "Khmer/Chinese Zodiac Horoscope",
     checker_hero_subtitle: "Enter your date of birth to find your zodiac animal, element, lucky numbers, colors, and a personalized reading.",
 
     today_label: "Today",
@@ -625,7 +625,7 @@ const UI_STRINGS = {
     hero_title: "ថ្ងៃកំណើតរបស់អ្នកបកស្រាយអំពីអ្នកយ៉ាងណា?",
     hero_subtitle: "បញ្ចូលថ្ងៃខែឆ្នាំកំណើតរបស់អ្នក ដើម្បីដឹងពីសត្វនិមិត្តសញ្ញា ធាតុ លេខសំណាង និងព័ត៌មានជាច្រើនទៀត។",
 
-    checker_hero_title: "ឧបករណ៍ពិនិត្យនិមិត្តសញ្ញាចិន",
+    checker_hero_title: "ហោរាសាស្ត្រតាមឆ្នាំកំណើត (ខ្មែរ/ចិន)",
     checker_hero_subtitle: "បញ្ចូលថ្ងៃខែឆ្នាំកំណើតរបស់អ្នក ដើម្បីដឹងពីសត្វនិមិត្តសញ្ញា ធាតុ លេខសំណាង ពណ៌សំណាង និងការទស្សន៍ទាយផ្ទាល់ខ្លួន។",
 
     today_label: "ថ្ងៃនេះ",
