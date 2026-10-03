@@ -441,11 +441,35 @@ document.addEventListener("DOMContentLoaded", function () {
     const analysis = buildAnalysis(signA, signB, numA, numB, rel.element, rel.modality, numRel, seedStr);
     const insights = buildInsights(signA, signB, numA, numB, scores, p1Name, p2Name);
 
-    const dateLocale = isKm ? "km-KH" : "en-US";
+    // Many mobile browsers ship with reduced ICU data and silently fall back
+    // to English when asked to format a date in "km-KH", instead of
+    // throwing — so for Khmer we format manually with known-good month
+    // names rather than relying on the browser's Intl support (same fix as
+    // the one used for the "Today" strip in js/app.js).
+    const KM_MONTHS_RC = ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"];
     function fmtDate(d) {
-      try { return d.toLocaleDateString(dateLocale, { year: "numeric", month: "long", day: "numeric" }); }
+      if (isKm) return "ថ្ងៃទី" + d.getDate() + " ខែ" + KM_MONTHS_RC[d.getMonth()] + " ឆ្នាំ" + d.getFullYear();
+      try { return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }); }
       catch (e) { return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }); }
     }
+
+    const scoreValues = Object.keys(scores).map(function (k) { return scores[k]; });
+    const overall = Math.round(scoreValues.reduce(function (a, b) { return a + b; }, 0) / scoreValues.length);
+    const overallTier = overall >= 75 ? "high" : (overall >= 50 ? "medium" : "low");
+    const overallTagline = S["rc_card_tagline_" + overallTier] || "";
+    const cardSpec = {
+      cardType: "compat",
+      eyebrow: S.rc_card_eyebrow || "RELATIONSHIP COMPATIBILITY",
+      overallLabel: S.rc_card_overall_label || "Compatibility",
+      p1Label: p1Name,
+      p1Sub: fmtDate(dob1),
+      p1Emoji: chineseA ? ZODIAC_EMOJI[chineseA.animal] : signA.symbol,
+      p2Label: p2Name,
+      p2Sub: fmtDate(dob2),
+      p2Emoji: chineseB ? ZODIAC_EMOJI[chineseB.animal] : signB.symbol,
+      overall: overall,
+      tagline: overallTagline
+    };
 
     const hasTimeLoc = !!time1 || !!time2 || !!loc1 || !!loc2;
     const extraAstroHtml = hasTimeLoc
@@ -469,6 +493,9 @@ document.addEventListener("DOMContentLoaded", function () {
     resultBox.innerHTML = `
       <div class="rc-result-card">
         <h2 class="rc-result-title">${S.rc_hero_title || "💞 Relationship Compatibility Calculator"}</h2>
+
+        ${shareBlockHtml((p1Name + " + " + p2Name), cardSpec)}
+
         <div class="rc-pair-header">
           <div class="rc-pair-person">
             <span class="rc-pair-symbol">${signA.symbol}${chineseA ? " " + ZODIAC_EMOJI[chineseA.animal] : ""}</span>
@@ -580,6 +607,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <p class="rc-disclaimer">${S.rc_disclaimer || ""}</p>
       </div>
     `;
+    if (typeof wireShareRows === "function") wireShareRows(resultBox);
     resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 });

@@ -340,6 +340,227 @@ function _buildShareCardBlob(spec) {
   });
 }
 
+// Draws a heart-shaped path. (cx, topY) is the point of the notch between
+// the two lobes at the top of the heart; `w`/`h` set its bounding box.
+function _heartPath(ctx, cx, topY, w, h) {
+  const topCurveHeight = h * 0.3;
+  ctx.beginPath();
+  ctx.moveTo(cx, topY + topCurveHeight);
+  ctx.bezierCurveTo(cx, topY, cx - w / 2, topY, cx - w / 2, topY + topCurveHeight);
+  ctx.bezierCurveTo(cx - w / 2, topY + (h + topCurveHeight) / 2, cx, topY + (h + topCurveHeight) / 2, cx, topY + h);
+  ctx.bezierCurveTo(cx, topY + (h + topCurveHeight) / 2, cx + w / 2, topY + (h + topCurveHeight) / 2, cx + w / 2, topY + topCurveHeight);
+  ctx.bezierCurveTo(cx + w / 2, topY, cx, topY, cx, topY + topCurveHeight);
+  ctx.closePath();
+}
+
+// A faint field of small scattered hearts used as background texture on the
+// pink compatibility card, in place of the zodiac card's starfield.
+function _scatterHearts(ctx, W, H, seed, count) {
+  const rand = _seededRandom(seed);
+  for (let i = 0; i < count; i++) {
+    const hx = rand() * W;
+    const hy = rand() * H;
+    const s = rand() * 20 + 10;
+    ctx.save();
+    ctx.globalAlpha = 0.10 + rand() * 0.16;
+    ctx.fillStyle = "#ffffff";
+    _heartPath(ctx, hx, hy, s, s);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+// Draws a branded, portrait "compatibility share card" (two people, a big
+// percentage heart, and a supportive tagline), modeled on the pink/hearts
+// "LoveMath"-style layout, and resolves with a PNG Blob.
+// `spec`: { p1Label, p1Sub, p1Emoji, p2Label, p2Sub, p2Emoji, overall, tagline, overallLabel, eyebrow }
+function _buildCompatCardBlob(spec) {
+  // Wait for webfonts to finish loading first: if "Noto Sans Khmer" is still
+  // loading when we measureText() for the name/date pills below, the canvas
+  // silently falls back to a narrower system font for the measurement, then
+  // (once the webfont finishes loading a moment later) draws the *actual*
+  // text with the real, wider Khmer glyphs — so the pill ends up too narrow
+  // and the text overflows its edges. Waiting for fonts.ready keeps the
+  // measurement and the draw using the same, final font.
+  const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  return fontsReady.then(function () {
+    return new Promise(function (resolve) {
+    const W = 1080, H = 1420;
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
+    const deepPink = "#c2185b";
+    const hotPink = "#ff5c8d";
+    const white = "#ffffff";
+
+    // Background: warm pink gradient.
+    const bg = ctx.createRadialGradient(W / 2, H * 0.35, 60, W / 2, H * 0.5, H * 0.9);
+    bg.addColorStop(0, "#ff8fb3");
+    bg.addColorStop(0.55, "#ff6a9c");
+    bg.addColorStop(1, "#e84a85");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    _scatterHearts(ctx, W, H, 7, 70);
+
+    // Outer card border, framed look.
+    _roundRectPath(ctx, 28, 28, W - 56, H - 56, 28);
+    ctx.strokeStyle = "rgba(255,255,255,0.55)";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    _roundRectPath(ctx, 42, 42, W - 84, H - 84, 20);
+    ctx.strokeStyle = "rgba(255,255,255,0.28)";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.textAlign = "center";
+
+    // Eyebrow + site wordmark
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.font = "600 26px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.save();
+    ctx.letterSpacing = "3px";
+    ctx.fillText(spec.eyebrow || "RELATIONSHIP COMPATIBILITY", W / 2, 108);
+    ctx.restore();
+
+    ctx.fillStyle = white;
+    ctx.font = "700 44px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.fillText("💞 MYBIRTHSIGN", W / 2, 160);
+
+    ctx.strokeStyle = "rgba(255,255,255,0.4)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 80, 186);
+    ctx.lineTo(W / 2 + 80, 186);
+    ctx.stroke();
+
+    // Two person "avatar" circles with a small heart between them.
+    const avatarY = 330;
+    const avatarR = 130;
+    const avatarGap = 280;
+    const p1X = W / 2 - avatarGap / 2;
+    const p2X = W / 2 + avatarGap / 2;
+
+    function drawAvatar(cx, cy, r, emoji, colorA, colorB) {
+      const grad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+      grad.addColorStop(0, colorA);
+      grad.addColorStop(1, colorB);
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.lineWidth = 8;
+      ctx.strokeStyle = white;
+      ctx.stroke();
+      ctx.fillStyle = white;
+      ctx.font = (r * 1.05) + "px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+      ctx.fillText(emoji, cx, cy + r * 0.36);
+    }
+
+    drawAvatar(p1X, avatarY, avatarR, spec.p1Emoji || "💗", "#6ec3ff", "#4a90e2");
+    drawAvatar(p2X, avatarY, avatarR, spec.p2Emoji || "💗", "#ff9ecf", "#e0569f");
+
+    // Small heart between the two avatars.
+    ctx.fillStyle = white;
+    _heartPath(ctx, W / 2, avatarY - 34, 70, 64);
+    ctx.fill();
+
+    // Name/date pills under each avatar.
+    function drawPill(cx, cy, label, sub) {
+      ctx.font = "700 32px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+      const labelW = ctx.measureText(label).width;
+      ctx.font = "400 28px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+      const subW = sub ? ctx.measureText(sub).width : 0;
+      const pillW = Math.max(labelW, subW) + 56;
+      const pillH = sub ? 108 : 70;
+      _roundRectPath(ctx, cx - pillW / 2, cy, pillW, pillH, 18);
+      ctx.fillStyle = "rgba(255,255,255,0.95)";
+      ctx.fill();
+      ctx.fillStyle = "#7a1942";
+      ctx.font = "700 32px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+      ctx.fillText(label, cx, cy + 44);
+      if (sub) {
+        ctx.fillStyle = "#c2185b";
+        ctx.font = "400 26px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+        ctx.fillText(sub, cx, cy + 86);
+      }
+    }
+    drawPill(p1X, avatarY + avatarR + 26, spec.p1Label || "Person 1", spec.p1Sub || "");
+    drawPill(p2X, avatarY + avatarR + 26, spec.p2Label || "Person 2", spec.p2Sub || "");
+
+    // Big percentage heart.
+    const bigHeartCenterY = 900;
+    const bigHeartW = 560, bigHeartH = 500;
+    ctx.save();
+    ctx.shadowColor = "rgba(0,0,0,0.25)";
+    ctx.shadowBlur = 30;
+    ctx.shadowOffsetY = 10;
+    const heartGrad = ctx.createLinearGradient(0, bigHeartCenterY - bigHeartH / 2, 0, bigHeartCenterY + bigHeartH / 2);
+    heartGrad.addColorStop(0, hotPink);
+    heartGrad.addColorStop(1, deepPink);
+    ctx.fillStyle = heartGrad;
+    _heartPath(ctx, W / 2, bigHeartCenterY - bigHeartH / 2, bigHeartW, bigHeartH);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.fillStyle = white;
+    ctx.font = "700 36px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.fillText(spec.overallLabel || "Compatibility", W / 2, bigHeartCenterY - 60);
+    ctx.font = "800 108px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.fillText((spec.overall != null ? spec.overall : "--") + "%", W / 2, bigHeartCenterY + 40);
+
+    // Five-heart rating row, filled proportionally to the overall score.
+    const filledHearts = Math.max(0, Math.min(5, Math.round(((spec.overall || 0) / 100) * 5)));
+    const miniSize = 36, miniGap = 48;
+    const miniStartX = W / 2 - (miniGap * 4) / 2;
+    for (let i = 0; i < 5; i++) {
+      const hx = miniStartX + i * miniGap;
+      const hy = bigHeartCenterY + 110;
+      ctx.fillStyle = i < filledHearts ? white : "rgba(255,255,255,0.35)";
+      _heartPath(ctx, hx, hy, miniSize, miniSize);
+      ctx.fill();
+    }
+
+    // Supportive tagline below the heart.
+    let taglineBottom = bigHeartCenterY + 190;
+    if (spec.tagline) {
+      ctx.fillStyle = "#7a1942";
+      ctx.font = "italic 600 34px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+      const lines = _wrapCanvasText(ctx, spec.tagline, W - 220).slice(0, 3);
+      const boxPadY = 24, lineH = 42;
+      const boxH = lines.length * lineH + boxPadY * 2;
+      const boxY = bigHeartCenterY + 180;
+      _roundRectPath(ctx, 90, boxY, W - 180, boxH, 20);
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
+      ctx.fill();
+      ctx.fillStyle = "#7a1942";
+      let ty = boxY + boxPadY + 30;
+      lines.forEach(function (line) {
+        ctx.fillText(line, W / 2, ty);
+        ty += lineH;
+      });
+      taglineBottom = boxY + boxH;
+    }
+
+    // Footer — always clear of the tagline box, however many lines it wrapped to.
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
+    ctx.font = "600 36px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.fillText("mybirthsign.com", W / 2, Math.max(H - 70, taglineBottom + 54));
+
+    canvas.toBlob(function (blob) { resolve(blob); }, "image/png");
+    });
+  });
+}
+
+// Dispatches to the right card-drawing function based on `spec.cardType`
+// ("compat" for the pink relationship card, otherwise the default zodiac
+// card), so callers of shareBlockHtml()/wireShareRows() don't need to care
+// which drawing routine backs a given result's image.
+function _buildCardBlob(spec) {
+  return spec && spec.cardType === "compat" ? _buildCompatCardBlob(spec) : _buildShareCardBlob(spec);
+}
+
 function _shareInnerHtml() {
   const options = _SHARE_NETWORKS.map(function (net) {
     // Facebook/Telegram are real <a target="_blank"> links (href is filled
@@ -517,7 +738,7 @@ function wireShareRows(root) {
       row.parentElement.classList.contains("share-card-block") &&
       row.parentElement.querySelector(".share-card-img");
     if (previewImg && !previewImg.src) {
-      _buildShareCardBlob(cardSpec).then(function (blob) {
+      _buildCardBlob(cardSpec).then(function (blob) {
         if (blob) previewImg.src = URL.createObjectURL(blob);
       });
     }
@@ -633,7 +854,7 @@ function wireShareRows(root) {
           }, delay || 0);
         }
 
-        _buildShareCardBlob(cardSpec).then(function (blob) {
+        _buildCardBlob(cardSpec).then(function (blob) {
           if (!blob) {
             resetLabel(imageFailedLabel, 0);
             setTimeout(function () { if (imageLabelEl) imageLabelEl.textContent = imageLabel; }, 2200);
