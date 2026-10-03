@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>What's Your Birthday Zodiac? Free Lucky Sign Checker | MyBirthSign</title>
+<link rel="canonical" href="https://mybirthsign.com/">
+<meta property="og:url" content="https://mybirthsign.com/">
+<meta name="description" content="Enter your birthday to instantly discover your Chinese zodiac animal, element, lucky numbers, colors, compatibility, and career fit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Google AdSense: replace ca-pub-XXXXXXXXXXXXXXXX with your own Publisher ID after approval -->
+<!--
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+-->
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo">✨ MyBirthSign</a>
+    <nav>
+      <a href="index.html" data-i18n="nav_checker">Checker</a>
+      <a href="compatibility.html" data-i18n="nav_compatibility">Compatibility</a>
+      <a href="wedding-date.html" data-i18n="nav_wedding">Wedding Dates</a>
+      <a href="business-partner.html" data-i18n="nav_business">Business Partner</a>
+      <a href="animals.html" data-i18n="nav_animals">Zodiac Guide</a>
+      <a href="blog.html" data-i18n="nav_blog">Blog</a>
+      <details class="nav-dropdown">
+        <summary data-i18n="nav_more">More</summary>
+        <div class="nav-dropdown-menu">
+          <a href="about.html" data-i18n="nav_about">About</a>
+          <a href="contact.html" data-i18n="nav_contact">Contact</a>
+        </div>
+      </details>
+      <span class="lang-toggle">
+        <a href="#" data-lang-switch="en" data-i18n="lang_toggle_en">EN</a>
+        <a href="#" data-lang-switch="km" data-i18n="lang_toggle_km">ខ្មែរ</a>
+      </span>
+    </nav>
+  </div>
+</header>
+
+<section class="hero container">
+  <h1 data-i18n="hero_title">What Does Your Birthday Say About You?</h1>
+  <p data-i18n="hero_subtitle">Enter your date of birth to reveal your zodiac animal, element, lucky numbers, and more.</p>
+</section>
+
+<div class="today-strip container">
+  <div>
+    <div class="label" data-i18n="today_label">Today</div>
+    <div class="value" id="today-date">—</div>
+  </div>
+  <div>
+    <div class="label" data-i18n="today_number_label">Today's Number</div>
+    <div class="value" id="today-number">—</div>
+  </div>
+</div>
+
+<form id="birthday-form" class="checker-form container">
+  <label for="dob" data-i18n="dob_label">Your date of birth</label>
+  <input type="date" lang="en" id="dob" name="dob" required min="1920-01-01" max="2026-12-31">
+  <button type="submit" data-i18n="reveal_button">Reveal My Sign</button>
+</form>
+
+<div id="result" class="container"></div>
+
+<!-- Ad slot: place an AdSense <ins class="adsbygoogle"> unit here after approval -->
+<div class="ad-slot container">Ad space</div>
+
+<section class="compat-section container">
+  <h2 data-i18n="compat_heading">Check Compatibility</h2>
+  <p class="compat-intro" data-i18n="compat_intro">See how two birthdays match up — for a relationship or a business partnership.</p>
+
+  <form id="compat-form" class="checker-form compat-form">
+    <div class="compat-row">
+      <div>
+        <label for="dob-a" data-i18n="doba_label">Person A's date of birth</label>
+        <input type="date" lang="en" id="dob-a" name="dob-a" required min="1920-01-01" max="2026-12-31">
+      </div>
+      <div>
+        <label for="dob-b" data-i18n="dobb_label">Person B's date of birth</label>
+        <input type="date" lang="en" id="dob-b" name="dob-b" required min="1920-01-01" max="2026-12-31">
+      </div>
+    </div>
+
+    <fieldset class="context-toggle">
+      <legend data-i18n="relationship_legend">Relationship type</legend>
+      <label class="radio-option">
+        <input type="radio" name="context" value="romantic" checked> <span data-i18n="romantic_option">Romantic Partner</span>
+      </label>
+      <label class="radio-option">
+        <input type="radio" name="context" value="business"> <span data-i18n="business_option">Business Partner</span>
+      </label>
+    </fieldset>
+
+    <button type="submit" data-i18n="compat_submit">Check Compatibility</button>
+  </form>
+
+  <div id="compat-result"></div>
+</section>
+
+<div class="ad-slot container">Ad space</div>
+
+<section class="content-section container">
+  <h2 data-i18n="how_heading">How This Works</h2>
+  <p data-i18n="how_p1">
+    Your birth year maps to one of 12 zodiac animals and one of 5 elements, following the
+    traditional East Asian zodiac cycle. The animal reflects personality traits that are said
+    to repeat every 12 years, while the element adds a layer of flavor that repeats every 10 years —
+    together giving a unique 60-year combination (for example, "Earth Dragon" or "Water Tiger").
+  </p>
+  <p data-i18n="how_p2">
+    This tool is designed for fun and self-reflection. Birthdays in late January or February may
+    fall right around the lunar new year cutoff, which can shift the result by one year in some
+    traditional systems — we note this when it applies.
+  </p>
+</section>
+
+<section class="content-section container">
+  <h2 data-i18n="blog_heading">From the Blog</h2>
+  <p><a href="blog.html" data-i18n="blog_link">Read more about zodiac compatibility, yearly forecasts, and the five elements →</a></p>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <a href="about.html" data-i18n="footer_about">About</a> ·
+    <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a> ·
+    <a href="contact.html" data-i18n="footer_contact">Contact</a>
+    <p data-i18n="footer_copyright">&copy; 2026 MyBirthSign. For entertainment purposes only.</p>
+  </div>
+</footer>
+
+<script src="js/i18n.js"></script>
+<script src="js/zodiac-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

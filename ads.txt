@@ -1,0 +1,7 @@
+# ads.txt for mybirthsign.com
+# This file authorizes Google AdSense to sell ad inventory on this domain.
+# Replace pub-0000000000000000 below with your actual AdSense Publisher ID
+# (find it in your AdSense account under Account > Account information —
+# it looks like "pub-1234567890123456"), then make sure this file is served
+# at the domain root: https://mybirthsign.com/ads.txt
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0

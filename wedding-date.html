@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Wedding Date Picker — Best Months by Zodiac Compatibility | MyBirthSign</title>
+<link rel="canonical" href="https://mybirthsign.com/wedding-date.html">
+<meta property="og:url" content="https://mybirthsign.com/wedding-date.html">
+<meta name="description" content="Enter both birthdays and a year to find which months traditionally pair best with your zodiac signs for a wedding date.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Google AdSense: replace ca-pub-XXXXXXXXXXXXXXXX with your own Publisher ID after approval -->
+<!--
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+-->
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo">✨ MyBirthSign</a>
+    <nav>
+      <a href="index.html" data-i18n="nav_checker">Checker</a>
+      <a href="compatibility.html" data-i18n="nav_compatibility">Compatibility</a>
+      <a href="wedding-date.html" data-i18n="nav_wedding">Wedding Dates</a>
+      <a href="business-partner.html" data-i18n="nav_business">Business Partner</a>
+      <a href="animals.html" data-i18n="nav_animals">Zodiac Guide</a>
+      <a href="blog.html" data-i18n="nav_blog">Blog</a>
+      <details class="nav-dropdown">
+        <summary data-i18n="nav_more">More</summary>
+        <div class="nav-dropdown-menu">
+          <a href="about.html" data-i18n="nav_about">About</a>
+          <a href="contact.html" data-i18n="nav_contact">Contact</a>
+        </div>
+      </details>
+      <span class="lang-toggle">
+        <a href="#" data-lang-switch="en" data-i18n="lang_toggle_en">EN</a>
+        <a href="#" data-lang-switch="km" data-i18n="lang_toggle_km">ខ្មែរ</a>
+      </span>
+    </nav>
+  </div>
+</header>
+
+<section class="hero container">
+  <h1 data-i18n="wedding_hero_title">Wedding Date Picker</h1>
+  <p data-i18n="wedding_hero_subtitle">Enter both birthdays and a year, and we'll rate each month by how well it sits with both of your zodiac signs — a fun, traditional-pattern starting point for picking your date.</p>
+</section>
+
+<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
+
+<form id="wedding-form" class="checker-form compat-form container">
+  <div class="compat-row">
+    <div>
+      <label for="dob-a" data-i18n="doba_label">Person A's date of birth</label>
+      <input type="date" lang="en" id="dob-a" name="dob-a" required min="1920-01-01" max="2026-12-31">
+    </div>
+    <div>
+      <label for="dob-b" data-i18n="dobb_label">Person B's date of birth</label>
+      <input type="date" lang="en" id="dob-b" name="dob-b" required min="1920-01-01" max="2026-12-31">
+    </div>
+  </div>
+  <div style="margin-bottom: 16px; text-align: left;">
+    <label for="wedding-year" data-i18n="wedding_year_label">Year you're planning to marry</label>
+    <input type="number" id="wedding-year" name="wedding-year" required min="2026" max="2040" step="1" value="2026"
+      style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); background:#0f0b1f; color:var(--text); font-size:1rem;">
+  </div>
+  <div style="margin-bottom: 16px; text-align: left;">
+    <label for="wedding-region" data-i18n="wedding_region_label">Your general climate region</label>
+    <select id="wedding-region" name="wedding-region"
+      style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); background:#0f0b1f; color:var(--text); font-size:1rem;">
+      <option value="tropical" selected data-i18n="region_tropical">Tropical / near the equator (e.g. Cambodia, Southeast Asia)</option>
+      <option value="northern" data-i18n="region_northern">Northern Hemisphere (e.g. USA, Europe, China)</option>
+      <option value="southern" data-i18n="region_southern">Southern Hemisphere (e.g. Australia, South Africa, South America)</option>
+    </select>
+  </div>
+  <button type="submit" data-i18n="wedding_submit">Find Good Months</button>
+</form>
+
+<div id="wedding-result" class="container"></div>
+
+<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
+
+<section class="content-section container">
+  <p style="text-align:center;"><a href="compatibility.html" data-i18n="compat_page_cta">Check your own sign →</a></p>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <a href="about.html" data-i18n="footer_about">About</a> ·
+    <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a> ·
+    <a href="contact.html" data-i18n="footer_contact">Contact</a>
+    <p data-i18n="footer_copyright">&copy; 2026 MyBirthSign. For entertainment purposes only.</p>
+  </div>
+</footer>
+
+<script src="js/i18n.js"></script>
+<script src="js/zodiac-data.js"></script>
+<script src="js/wedding.js"></script>
+</body>
+</html>

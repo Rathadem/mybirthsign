@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Business Partnership Compatibility Calculator — Chinese Zodiac | MyBirthSign</title>
+<link rel="canonical" href="https://mybirthsign.com/business-partner.html">
+<meta property="og:url" content="https://mybirthsign.com/business-partner.html">
+<meta name="description" content="Enter two birthdays to get a detailed business partnership compatibility report based on the Chinese zodiac and the Five Elements.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Google AdSense: replace ca-pub-XXXXXXXXXXXXXXXX with your own Publisher ID after approval -->
+<!--
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+-->
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo">✨ MyBirthSign</a>
+    <nav>
+      <a href="index.html" data-i18n="nav_checker">Checker</a>
+      <a href="compatibility.html" data-i18n="nav_compatibility">Compatibility</a>
+      <a href="wedding-date.html" data-i18n="nav_wedding">Wedding Dates</a>
+      <a href="business-partner.html" data-i18n="nav_business">Business Partner</a>
+      <a href="animals.html" data-i18n="nav_animals">Zodiac Guide</a>
+      <a href="blog.html" data-i18n="nav_blog">Blog</a>
+      <details class="nav-dropdown">
+        <summary data-i18n="nav_more">More</summary>
+        <div class="nav-dropdown-menu">
+          <a href="about.html" data-i18n="nav_about">About</a>
+          <a href="contact.html" data-i18n="nav_contact">Contact</a>
+        </div>
+      </details>
+      <span class="lang-toggle">
+        <a href="#" data-lang-switch="en" data-i18n="lang_toggle_en">EN</a>
+        <a href="#" data-lang-switch="km" data-i18n="lang_toggle_km">ខ្មែរ</a>
+      </span>
+    </nav>
+  </div>
+</header>
+
+<section class="hero container biz-hero">
+  <h1 data-i18n="biz_hero_title">💼 Business Partnership Compatibility</h1>
+  <p data-i18n="biz_hero_subtitle">Chinese Zodiac • Five Elements • Business Personality</p>
+</section>
+
+<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
+
+<section class="biz-section container" id="biz-form-section">
+  <form id="biz-form" class="biz-form" novalidate>
+    <div class="biz-people-grid">
+      <fieldset class="biz-person-card">
+        <legend data-i18n="biz_person1_legend">Person 1</legend>
+        <label for="biz-p1-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
+        <input type="date" lang="en" id="biz-p1-dob" name="biz-p1-dob" required>
+
+        <label for="biz-p1-time" data-i18n="biz_time_label">Birth time (optional)</label>
+        <input type="time" lang="en" id="biz-p1-time" name="biz-p1-time">
+      </fieldset>
+
+      <fieldset class="biz-person-card">
+        <legend data-i18n="biz_person2_legend">Person 2</legend>
+        <label for="biz-p2-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
+        <input type="date" lang="en" id="biz-p2-dob" name="biz-p2-dob" required>
+
+        <label for="biz-p2-time" data-i18n="biz_time_label">Birth time (optional)</label>
+        <input type="time" lang="en" id="biz-p2-time" name="biz-p2-time">
+      </fieldset>
+    </div>
+
+    <p id="biz-form-error" class="biz-form-error" role="alert" hidden></p>
+
+    <button type="submit" class="biz-submit" data-i18n="biz_submit">💼 Calculate Business Compatibility</button>
+    <p class="biz-privacy-note" data-i18n="biz_privacy_note">Birth information is used to generate this reading and is not required to be stored. Calculations are performed in your own browser.</p>
+  </form>
+
+  <div id="biz-result"></div>
+</section>
+
+<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
+
+<section class="content-section container">
+  <p style="text-align:center;"><a href="compatibility.html" data-i18n="biz_page_cta">Try our romance &amp; general compatibility calculator →</a></p>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <a href="about.html" data-i18n="footer_about">About</a> ·
+    <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a> ·
+    <a href="contact.html" data-i18n="footer_contact">Contact</a>
+    <p data-i18n="footer_copyright">&copy; 2026 MyBirthSign. For entertainment purposes only.</p>
+  </div>
+</footer>
+
+<script src="js/i18n.js"></script>
+<script src="js/zodiac-data.js"></script>
+<script src="js/business-data.js"></script>
+<script src="js/business-calculator.js"></script>
+</body>
+</html>
