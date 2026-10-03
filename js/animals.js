@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="overview-text">${overview}</p>
           <p><strong>${S.careers_heading}:</strong> ${careers}</p>
         </details>
-        <a class="animal-cta" href="index.html">${S.animals_cta}</a>
+        <a class="animal-cta" href="checker.html">${S.animals_cta}</a>
       </div>
     `;
   }).join("");
