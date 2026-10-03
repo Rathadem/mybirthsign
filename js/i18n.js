@@ -218,7 +218,7 @@ const KM_LIFE_PATH_INFO = {
 const UI_STRINGS = {
   en: {
     nav_checker: "Home",
-    nav_checker_page: "Checker",
+    nav_checker_page: "MyBirthSign",
     nav_tools: "Horoscope",
     nav_animals: "Zodiac Guide",
     nav_compatibility: "Compatibility",
@@ -466,7 +466,7 @@ const UI_STRINGS = {
   },
   km: {
     nav_checker: "ទំព័រដើម",
-    nav_checker_page: "ឧបករណ៍ពិនិត្យ",
+    nav_checker_page: "ជោគជតារាសីខ្ញុំ",
     nav_tools: "ជោគជតារាសី",
     nav_animals: "មគ្គុទ្ទេសក៍និមិត្តសញ្ញា",
     nav_compatibility: "គួរស្រករ",
