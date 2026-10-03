@@ -92,30 +92,47 @@ function wireShareRows(root) {
       a.href = links[a.getAttribute("data-share-net")];
     });
 
+    function openPopover() {
+      document.querySelectorAll(".share-popover").forEach(function (p) { p.hidden = true; });
+      pop.hidden = false;
+      btn.setAttribute("aria-expanded", "true");
+    }
+
+    function togglePopover() {
+      const isOpen = !pop.hidden;
+      document.querySelectorAll(".share-popover").forEach(function (p) { p.hidden = true; });
+      pop.hidden = isOpen;
+      btn.setAttribute("aria-expanded", String(!isOpen));
+    }
+
     if (btn && pop) {
       btn.addEventListener("click", function (e) {
         e.stopPropagation();
         if (navigator.share) {
-          // navigator.share() can throw *synchronously* (not just reject its
-          // promise) when the page is embedded somewhere that blocks the Web
-          // Share API via Permissions-Policy (e.g. a sandboxed preview
-          // iframe). Without this try/catch that exception would abort the
-          // click handler entirely, so the button would look like it does
-          // nothing. Fall back to the popover instead.
+          // navigator.share() can fail two different ways when the page is
+          // embedded somewhere that blocks the Web Share API via
+          // Permissions-Policy (e.g. a sandboxed preview iframe): it can
+          // throw *synchronously*, or it can return a promise that *rejects
+          // asynchronously* with no visible share sheet ever appearing.
+          // Either way, without handling both cases the button just looks
+          // like it does nothing — so fall back to the manual popover both
+          // times, unless the rejection was the user deliberately cancelling
+          // the native share sheet (AbortError).
           try {
             const sharePromise = navigator.share({ title: title, url: url });
             if (sharePromise && typeof sharePromise.catch === "function") {
-              sharePromise.catch(function () { /* user cancelled or it failed silently */ });
+              sharePromise.catch(function (err) {
+                if (err && err.name === "AbortError") return;
+                openPopover();
+              });
             }
             return;
           } catch (err) {
-            // fall through to the manual popover below
+            openPopover();
+            return;
           }
         }
-        const isOpen = !pop.hidden;
-        document.querySelectorAll(".share-popover").forEach(function (p) { p.hidden = true; });
-        pop.hidden = isOpen;
-        btn.setAttribute("aria-expanded", String(!isOpen));
+        togglePopover();
       });
     }
 
