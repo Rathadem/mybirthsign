@@ -35,6 +35,16 @@ document.addEventListener("DOMContentLoaded", function () {
     todayNumberEl.textContent = sum;
   }
 
+  const heroBtn = document.getElementById("hero-reveal-btn");
+  if (heroBtn && form) {
+    heroBtn.addEventListener("click", function () {
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(function () {
+        if (dobInput) dobInput.focus();
+      }, 400);
+    });
+  }
+
   if (!form) return;
 
   form.addEventListener("submit", function (e) {
