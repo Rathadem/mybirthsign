@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const compatibleDisplay = getTrianglePartners(animal).map((a) => (lang === "km" ? KM_ANIMAL_NAMES[a] : a));
 
     return `
-      <div class="animal-card">
+      <div class="animal-card" id="animal-${animal.toLowerCase()}">
         <div class="animal-card-head">
           <span class="result-emoji">${ZODIAC_EMOJI[animal]}</span>
           <h2>${animalDisplay}</h2>

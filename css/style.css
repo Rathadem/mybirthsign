@@ -535,6 +535,16 @@ article.post.post-wide {
 }
 .fortune-card p strong { color: var(--text); font-weight: normal; }
 
+.fortune-learn-more {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+.fortune-learn-more:hover { text-decoration: underline; }
+
 @media (max-width: 760px) {
   .fortune-grid { grid-template-columns: repeat(2, 1fr); }
 }
