@@ -50,6 +50,12 @@
   <p data-i18n="checker_hero_subtitle">Enter your date of birth to find your zodiac animal, element, lucky numbers, colors, and a personalized reading.</p>
 </section>
 
+<form id="birthday-form" class="checker-form container">
+  <label for="dob" data-i18n="dob_label">Your date of birth</label>
+  <input type="date" lang="en" id="dob" name="dob" required min="1920-01-01" max="2026-12-31">
+  <button type="submit" data-i18n="reveal_button">Reveal My Sign</button>
+</form>
+
 <div class="today-strip container">
   <div>
     <div class="label" data-i18n="today_label">Today</div>
@@ -60,12 +66,6 @@
     <div class="value" id="today-number">—</div>
   </div>
 </div>
-
-<form id="birthday-form" class="checker-form container">
-  <label for="dob" data-i18n="dob_label">Your date of birth</label>
-  <input type="date" lang="en" id="dob" name="dob" required min="1920-01-01" max="2026-12-31">
-  <button type="submit" data-i18n="reveal_button">Reveal My Sign</button>
-</form>
 
 <div id="result" class="container"></div>
 
