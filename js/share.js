@@ -75,11 +75,33 @@ function _imageIconHtml() {
 
 // Wraps `text` onto lines no wider than `maxWidth` on the given 2D context
 // (which must already have its font set), returning an array of lines.
+//
+// Splits on whitespace first, but scripts like Khmer often have no spaces
+// within a whole clause — a single "word" there can be far wider than the
+// card itself. So any word that alone doesn't fit gets broken
+// character-by-character as a fallback, instead of being left to overflow.
 function _wrapCanvasText(ctx, text, maxWidth) {
-  const words = String(text).split(/\s+/);
+  const words = String(text).split(/\s+/).filter(Boolean);
   const lines = [];
   let line = "";
+
   words.forEach(function (word) {
+    if (ctx.measureText(word).width > maxWidth) {
+      if (line) { lines.push(line); line = ""; }
+      let chunk = "";
+      for (const ch of word) {
+        const test = chunk + ch;
+        if (ctx.measureText(test).width > maxWidth && chunk) {
+          lines.push(chunk);
+          chunk = ch;
+        } else {
+          chunk = test;
+        }
+      }
+      line = chunk;
+      return;
+    }
+
     const test = line ? line + " " + word : word;
     if (ctx.measureText(test).width > maxWidth && line) {
       lines.push(line);
@@ -240,12 +262,18 @@ function _buildShareCardBlob(spec) {
     if (spec.badge) {
       const maxPillTextWidth = W - 160;
       let badgeFontPx = 34;
-      let badgeLines;
-      do {
+      let badgeLines = [];
+      // Shrink the font (down to a floor) and allow up to 3 lines until the
+      // text fits — _wrapCanvasText now also breaks unspaced scripts like
+      // Khmer character-by-character, so this always terminates.
+      while (true) {
         ctx.font = "600 " + badgeFontPx + "px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-        badgeLines = _wrapCanvasText(ctx, spec.badge, maxPillTextWidth).slice(0, 2);
+        badgeLines = _wrapCanvasText(ctx, spec.badge, maxPillTextWidth).slice(0, 3);
+        const stillOverflowing = badgeLines.some(function (l) { return ctx.measureText(l).width > maxPillTextWidth; });
+        if (!stillOverflowing || badgeFontPx <= 20) break;
         badgeFontPx -= 2;
-      } while (badgeFontPx >= 22 && badgeLines.some(function (l) { return ctx.measureText(l).width > maxPillTextWidth; }));
+      }
+      // ctx.font is already set to the size that was actually used above.
 
       const lineH = badgeFontPx + 2 + 30;
       const padX = 32;
@@ -276,7 +304,7 @@ function _buildShareCardBlob(spec) {
     if (spec.subheading) {
       ctx.fillStyle = "#b4a9d6";
       ctx.font = "400 38px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      const subLines = _wrapCanvasText(ctx, spec.subheading, W - 200).slice(0, 2);
+      const subLines = _wrapCanvasText(ctx, spec.subheading, W - 200).slice(0, 3);
       subLines.forEach(function (line) {
         ctx.fillText(line, W / 2, y);
         y += 50;
