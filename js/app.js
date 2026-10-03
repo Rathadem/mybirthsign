@@ -36,12 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const heroBtn = document.getElementById("hero-reveal-btn");
-  if (heroBtn && form) {
+  if (heroBtn) {
     heroBtn.addEventListener("click", function () {
-      form.scrollIntoView({ behavior: "smooth", block: "start" });
-      setTimeout(function () {
-        if (dobInput) dobInput.focus();
-      }, 400);
+      window.location.href = "checker.html";
     });
   }
 
