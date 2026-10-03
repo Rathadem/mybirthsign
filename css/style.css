@@ -1399,3 +1399,148 @@ footer.site-footer a { margin: 0 10px; color: var(--text-muted); }
   cursor: pointer;
 }
 .biz-reset-btn:hover { background: rgba(198, 161, 91, 0.1); }
+
+/* Custom bilingual (EN/Khmer) calendar date-picker — replaces the native
+   <input type="date"> popup, which the browser/OS always renders in its own
+   locale regardless of the page language. See js/datepicker.js. */
+.kdp {
+  position: relative;
+  margin-bottom: 16px;
+}
+.kdp-native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.kdp .kdp-display {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0f0b1f;
+  color: var(--text);
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.kdp .kdp-display:hover,
+.kdp-open .kdp-display {
+  border-color: var(--accent);
+}
+.kdp-display-text { flex: 1; }
+.kdp-empty .kdp-display-text::before {
+  content: attr(data-placeholder);
+  color: var(--text-muted);
+}
+.kdp-empty .kdp-display-text {
+  color: var(--text-muted);
+}
+.kdp-display-icon {
+  color: var(--accent);
+  display: flex;
+  flex-shrink: 0;
+}
+.kdp-popup {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 300px;
+  max-width: 92vw;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  padding: 12px;
+}
+.kdp-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.kdp-header .kdp-nav {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+}
+.kdp-header .kdp-nav:hover { border-color: var(--accent); color: var(--accent); }
+.kdp-month-select,
+.kdp-year-select {
+  flex: 1;
+  min-width: 0;
+  background: #0f0b1f;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 2px;
+  font-size: 0.8rem;
+}
+.kdp-month-select { flex: 1.6; }
+.kdp-year-select { flex: 0 0 64px; }
+.kdp-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-bottom: 4px;
+}
+.kdp-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.kdp-grid .kdp-day {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  border-radius: 6px;
+  padding: 7px 0;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.kdp-grid .kdp-day:hover:not(:disabled) { background: rgba(212, 175, 55, 0.16); }
+.kdp-grid .kdp-day-blank { visibility: hidden; cursor: default; }
+.kdp-grid .kdp-day-disabled { color: var(--text-muted); opacity: 0.35; cursor: not-allowed; }
+.kdp-grid .kdp-day-today { box-shadow: inset 0 0 0 1px var(--accent-soft); }
+.kdp-grid .kdp-day-selected {
+  background: var(--accent);
+  color: #1a1430;
+  font-weight: bold;
+}
+.kdp-grid .kdp-day-selected:hover { background: #e6c35f; }
+.kdp-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.kdp-footer .kdp-clear,
+.kdp-footer .kdp-today {
+  background: transparent;
+  border: none;
+  color: var(--accent-soft);
+  font-weight: bold;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+.kdp-footer .kdp-clear:hover,
+.kdp-footer .kdp-today:hover { text-decoration: underline; }
