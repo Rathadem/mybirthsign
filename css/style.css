@@ -319,7 +319,7 @@ nav a:hover { color: var(--accent); }
   z-index: 20;
   display: flex;
   flex-direction: column;
-  min-width: 170px;
+  min-width: 200px;
   background: var(--bg-card);
   border: 1px solid var(--accent-soft);
   border-radius: 10px;
@@ -328,7 +328,10 @@ nav a:hover { color: var(--accent); }
 }
 .share-popover[hidden] { display: none; }
 .share-option {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
   text-align: left;
   background: none;
   border: none;
@@ -341,6 +344,8 @@ nav a:hover { color: var(--accent); }
   text-decoration: none;
 }
 .share-option:hover { background: rgba(212, 175, 55, 0.12); color: var(--accent); }
+.share-net-icon { flex-shrink: 0; }
+.share-option-label { flex: 1; }
 
 .lunar-note {
   font-size: 0.78rem;
