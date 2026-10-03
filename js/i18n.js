@@ -800,12 +800,11 @@ function applyStaticTranslations() {
 
   // Native <input type="date"> pickers follow the nearest `lang` attribute
   // for their calendar locale/numerals AND for the displayed field order.
-  // Keep them Gregorian/English numerals always (so the picker UI doesn't
-  // flip into Khmer numerals), but switch the field order: "en-US" reads
-  // mm/dd/yyyy, while "en-GB" reads dd/mm/yyyy — the order Cambodians
-  // normally use — so Khmer-language visitors see dd/mm/yyyy.
+  // Pin every date field to "en-GB" (dd/mm/yyyy) in both languages, and
+  // keep Gregorian/English numerals always (so the picker UI doesn't flip
+  // into Khmer numerals when the page does).
   document.querySelectorAll('input[type="date"]').forEach(function (el) {
-    el.setAttribute("lang", lang === "km" ? "en-GB" : "en-US");
+    el.setAttribute("lang", "en-GB");
   });
 }
 
