@@ -149,6 +149,8 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
+        ${shareRowHtml(headingText)}
+
         <div class="wedding-top-picks">
           <h3>${S.wedding_top_picks_heading}</h3>
           ${topPicksHtml}
@@ -176,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <p class="disclaimer">${S.wedding_disclaimer}</p>
       </div>
     `;
+    wireShareRows(resultBox);
     resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 });

@@ -342,6 +342,8 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
+        ${shareRowHtml(p1Name + " + " + p2Name)}
+
         <h3 class="biz-subheading">${S.biz_summary_heading || "🧧 Business Partnership Summary"}</h3>
         <div class="biz-summary-box">
           <p><strong>${p1Name}:</strong> ${animalName(bziA.animal)} · ${elementName(bziA.element)} · ${isKm ? (bziA.yinYang === "Yang" ? "យ៉ាង" : "យិន") : bziA.yinYang}</p>
@@ -435,6 +437,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <button type="button" id="biz-reset-btn" class="biz-reset-btn">${S.biz_reset || "🔄 Analyze Another Partnership"}</button>
       </div>
     `;
+    wireShareRows(resultBox);
 
     const resetBtn = document.getElementById("biz-reset-btn");
     if (resetBtn) {

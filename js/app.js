@@ -164,6 +164,8 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
+        ${shareRowHtml(elementDisplay + " " + animalDisplay)}
+
         <p class="lunar-note">${lunarNote}</p>
 
         ${todayLuckHtml}
@@ -233,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <p class="disclaimer">${S.disclaimer}</p>
       </div>
     `;
+    wireShareRows(resultBox);
     resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
 
     // Fetch a personalized AI-written reading. Falls back to the static
@@ -366,6 +369,8 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
+        ${shareRowHtml(animalADisplay + " + " + animalBDisplay)}
+
         <h3 class="compat-label">${compatLabel} — ${contextLabel}</h3>
         <div class="compat-stars">${starDisplay}</div>
 
@@ -373,6 +378,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <p class="disclaimer">${S.compat_disclaimer}</p>
       </div>
     `;
+    wireShareRows(compatResult);
     compatResult.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 });
