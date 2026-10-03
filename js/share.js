@@ -438,9 +438,29 @@ function _buildCompatCardBlob(spec) {
     // Two person "avatar" circles with a small heart between them.
     const avatarY = 330;
     const avatarR = 130;
-    const avatarGap = 280;
+    const avatarGap = 260;
     const p1X = W / 2 - avatarGap / 2;
     const p2X = W / 2 + avatarGap / 2;
+
+    // A few short motion-streak lines trailing behind an avatar, on the side
+    // away from where it's running (`dir`: +1 = running rightward, so the
+    // streaks trail off to its left, and vice versa) — a simple cue that
+    // reads as "running" rather than just standing in place.
+    function drawMotionStreaks(cx, cy, r, dir) {
+      const trailX = cx - dir * (r + 18);
+      ctx.save();
+      ctx.lineCap = "round";
+      [-46, 0, 46].forEach(function (dy, i) {
+        const len = 54 - i * 6;
+        ctx.strokeStyle = "rgba(255,255,255," + (0.55 - i * 0.12) + ")";
+        ctx.lineWidth = 7 - i;
+        ctx.beginPath();
+        ctx.moveTo(trailX, cy + dy);
+        ctx.lineTo(trailX - dir * len, cy + dy * 0.7);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
 
     // `mirror` horizontally flips just the emoji glyph (not the circle or its
     // border), so the two avatars visually turn toward each other/the heart
@@ -473,7 +493,11 @@ function _buildCompatCardBlob(spec) {
 
     // Person 1 faces right (toward the heart/Person 2); Person 2 is mirrored
     // so it faces left (toward the heart/Person 1) — the two end up facing
-    // each other regardless of the emoji's own default orientation.
+    // each other regardless of the emoji's own default orientation. Motion
+    // streaks trail behind each one so the pair reads as running toward
+    // each other rather than just standing face to face.
+    drawMotionStreaks(p1X, avatarY, avatarR, 1);
+    drawMotionStreaks(p2X, avatarY, avatarR, -1);
     drawAvatar(p1X, avatarY, avatarR, spec.p1Emoji || "💗", "#6ec3ff", "#4a90e2", false);
     drawAvatar(p2X, avatarY, avatarR, spec.p2Emoji || "💗", "#ff9ecf", "#e0569f", true);
 
