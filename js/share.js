@@ -368,6 +368,20 @@ function shareRowHtml(title, cardSpec) {
   return '<div class="share-row"' + attrs + '>' + _shareInnerHtml() + '</div>';
 }
 
+// Like shareRowHtml(), but also shows the branded card itself (the same
+// image the "Share image" button generates) right on the page, so people
+// can see — and admire — the card before they ever open the share menu.
+function shareBlockHtml(title, cardSpec) {
+  return (
+    '<div class="share-card-block">' +
+      '<div class="share-card-wrap"><img class="share-card-img" alt="' +
+        (title ? String(title).replace(/"/g, "&quot;") : "Zodiac result card") +
+      '" loading="lazy"></div>' +
+      shareRowHtml(title, cardSpec) +
+    '</div>'
+  );
+}
+
 let _shareOutsideClickWired = false;
 function _ensureShareOutsideClickHandler() {
   if (_shareOutsideClickWired) return;
@@ -466,6 +480,19 @@ function wireShareRows(root) {
       try { cardSpec = JSON.parse(cardAttr); } catch (e) { cardSpec = null; }
     }
     if (!cardSpec) cardSpec = { emoji: "🔮", heading: title, subheading: "mybirthsign.com" };
+
+    // If this row is wrapped in a .share-card-block (shareBlockHtml()), it
+    // has a visible <img class="share-card-img"> placeholder — render the
+    // same branded card the "Share image" button would produce, right on
+    // the page, so people see it before they ever open the share menu.
+    const previewImg = row.parentElement &&
+      row.parentElement.classList.contains("share-card-block") &&
+      row.parentElement.querySelector(".share-card-img");
+    if (previewImg && !previewImg.src) {
+      _buildShareCardBlob(cardSpec).then(function (blob) {
+        if (blob) previewImg.src = URL.createObjectURL(blob);
+      });
+    }
 
     const btn = row.querySelector(".share-btn");
     const label = row.querySelector(".share-btn-label");
