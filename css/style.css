@@ -451,6 +451,56 @@ article.post {
 article.post h1 { color: var(--accent); }
 article.post p { color: var(--text); }
 
+/* --- Daily fortune grid (per-animal good/avoid cards) --- */
+article.post.post-wide {
+  max-width: 920px;
+}
+.fortune-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 24px 0 10px;
+}
+.fortune-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.fortune-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.fortune-emoji { font-size: 1.6rem; line-height: 1; }
+.fortune-card h3 { margin: 0; font-size: 1.05rem; color: var(--text); flex: 1; }
+.fortune-tier {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.fortune-tier-great { color: var(--bg); background: var(--accent); }
+.fortune-tier-good { color: var(--bg); background: var(--accent-soft); }
+.fortune-tier-ordinary { color: var(--text-muted); border-color: var(--border); }
+.fortune-tier-caution { color: #f3d6dd; background: #c9607a; }
+.fortune-card p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.fortune-card p strong { color: var(--text); font-weight: normal; }
+
+@media (max-width: 760px) {
+  .fortune-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .fortune-grid { grid-template-columns: 1fr; }
+}
+
 /* --- Zodiac animal guide --- */
 .animal-grid {
   max-width: 1000px;
