@@ -7,7 +7,22 @@ document.addEventListener("DOMContentLoaded", function () {
     return lang === "km" ? "km-KH" : "en-US";
   }
 
+  // Many mobile browsers ship with reduced ICU data and silently fall back
+  // to English when asked to format a date in "km-KH", instead of throwing.
+  // So for Khmer we format manually with known-good month/weekday names
+  // rather than relying on the browser's Intl support.
+  const KM_WEEKDAYS = ["អាទិត្យ", "ច័ន្ទ", "អង្គារ", "ពុធ", "ព្រហស្បតិ៍", "សុក្រ", "សៅរ៍"];
+  const KM_MONTHS = ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"];
+
   function localeDate(date, lang, opts) {
+    if (lang === "km") {
+      const segments = [];
+      if (opts.weekday) segments.push("ថ្ងៃ" + KM_WEEKDAYS[date.getDay()]);
+      if (opts.day) segments.push("ទី" + date.getDate());
+      if (opts.month) segments.push("ខែ" + KM_MONTHS[date.getMonth()]);
+      if (opts.year) segments.push("ឆ្នាំ" + date.getFullYear());
+      return segments.join(" ");
+    }
     try {
       return date.toLocaleDateString(dateLocale(lang), opts);
     } catch (e) {
