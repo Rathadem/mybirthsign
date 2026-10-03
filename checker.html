@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<title>Business Partnership Compatibility Calculator — Chinese Zodiac | MyBirthSign</title>
-<link rel="canonical" href="https://mybirthsign.com/business-partner.html">
-<meta property="og:url" content="https://mybirthsign.com/business-partner.html">
-<meta name="description" content="Enter two birthdays to get a detailed business partnership compatibility report based on the Chinese zodiac and the Five Elements.">
+<title>Chinese Zodiac Checker — Find Your Animal & Element | MyBirthSign</title>
+<link rel="canonical" href="https://mybirthsign.com/checker.html">
+<meta property="og:url" content="https://mybirthsign.com/checker.html">
+<meta name="description" content="Enter your date of birth to find your Chinese zodiac animal, element, lucky numbers, colors, and get a free personalized reading.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
@@ -45,48 +45,51 @@
   </div>
 </header>
 
-<section class="hero container biz-hero">
-  <h1 data-i18n="biz_hero_title">💼 Business Partnership Compatibility</h1>
-  <p data-i18n="biz_hero_subtitle">Chinese Zodiac • Five Elements • Business Personality</p>
+<section class="hero container">
+  <h1 data-i18n="checker_hero_title">Chinese Zodiac Checker</h1>
+  <p data-i18n="checker_hero_subtitle">Enter your date of birth to find your zodiac animal, element, lucky numbers, colors, and a personalized reading.</p>
 </section>
 
-<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
+<div class="today-strip container">
+  <div>
+    <div class="label" data-i18n="today_label">Today</div>
+    <div class="value" id="today-date">—</div>
+  </div>
+  <div>
+    <div class="label" data-i18n="today_number_label">Today's Number</div>
+    <div class="value" id="today-number">—</div>
+  </div>
+</div>
 
-<section class="biz-section container" id="biz-form-section">
-  <form id="biz-form" class="biz-form" novalidate>
-    <div class="biz-people-grid">
-      <fieldset class="biz-person-card">
-        <legend data-i18n="biz_person1_legend">Person 1</legend>
-        <label for="biz-p1-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
-        <input type="date" lang="en" id="biz-p1-dob" name="biz-p1-dob" required>
+<form id="birthday-form" class="checker-form container">
+  <label for="dob" data-i18n="dob_label">Your date of birth</label>
+  <input type="date" lang="en" id="dob" name="dob" required min="1920-01-01" max="2026-12-31">
+  <button type="submit" data-i18n="reveal_button">Reveal My Sign</button>
+</form>
 
-        <label for="biz-p1-time" data-i18n="biz_time_label">Birth time (optional)</label>
-        <input type="time" lang="en" id="biz-p1-time" name="biz-p1-time">
-      </fieldset>
+<div id="result" class="container"></div>
 
-      <fieldset class="biz-person-card">
-        <legend data-i18n="biz_person2_legend">Person 2</legend>
-        <label for="biz-p2-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
-        <input type="date" lang="en" id="biz-p2-dob" name="biz-p2-dob" required>
-
-        <label for="biz-p2-time" data-i18n="biz_time_label">Birth time (optional)</label>
-        <input type="time" lang="en" id="biz-p2-time" name="biz-p2-time">
-      </fieldset>
-    </div>
-
-    <p id="biz-form-error" class="biz-form-error" role="alert" hidden></p>
-
-    <button type="submit" class="biz-submit" data-i18n="biz_submit">💼 Calculate Business Compatibility</button>
-    <p class="biz-privacy-note" data-i18n="biz_privacy_note">Birth information is used to generate this reading and is not required to be stored. Calculations are performed in your own browser.</p>
-  </form>
-
-  <div id="biz-result"></div>
-</section>
-
-<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
+<!-- Ad slot: place an AdSense <ins class="adsbygoogle"> unit here after approval -->
+<div class="ad-slot container">Ad space</div>
 
 <section class="content-section container">
-  <p style="text-align:center;"><a href="compatibility.html" data-i18n="biz_page_cta">Try our romance &amp; general compatibility calculator →</a></p>
+  <h2 data-i18n="how_heading">How This Works</h2>
+  <p data-i18n="how_p1">
+    Your birth year maps to one of 12 zodiac animals and one of 5 elements, following the
+    traditional East Asian zodiac cycle. The animal reflects personality traits that are said
+    to repeat every 12 years, while the element adds a layer of flavor that repeats every 10 years —
+    together giving a unique 60-year combination (for example, "Earth Dragon" or "Water Tiger").
+  </p>
+  <p data-i18n="how_p2">
+    This tool is designed for fun and self-reflection. Birthdays in late January or February may
+    fall right around the lunar new year cutoff, which can shift the result by one year in some
+    traditional systems — we note this when it applies.
+  </p>
+</section>
+
+<section class="content-section container">
+  <h2 data-i18n="blog_heading">From the Blog</h2>
+  <p><a href="blog.html" data-i18n="blog_link">Read more about zodiac compatibility, yearly forecasts, and the five elements →</a></p>
 </section>
 
 <footer class="site-footer">
@@ -100,7 +103,6 @@
 
 <script src="js/i18n.js"></script>
 <script src="js/zodiac-data.js"></script>
-<script src="js/business-data.js"></script>
-<script src="js/business-calculator.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
