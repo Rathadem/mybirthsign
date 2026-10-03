@@ -467,7 +467,7 @@ const UI_STRINGS = {
   km: {
     nav_checker: "ទំព័រដើម",
     nav_checker_page: "ឧបករណ៍ពិនិត្យ",
-    nav_tools: "ឧបករណ៍",
+    nav_tools: "ជោគជតារាសី",
     nav_animals: "មគ្គុទ្ទេសក៍និមិត្តសញ្ញា",
     nav_compatibility: "គួរស្រករ",
     nav_wedding: "ថ្ងៃមង្គល",
