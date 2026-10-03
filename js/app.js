@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
           <div class="result-block">
             <h3>${S.lucky_colors}</h3>
-            <p>${luckyColors.join(", ")}</p>
+            <p>${renderLuckyColorChips(luckyColors, info.luckyColors)}</p>
           </div>
           <div class="result-block">
             <h3>${S.lucky_days}</h3>

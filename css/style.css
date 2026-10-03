@@ -586,6 +586,20 @@ article.post.post-wide {
   color: var(--accent-soft);
 }
 .animal-meta p { margin: 0; color: var(--text); font-size: 0.88rem; }
+.color-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 8px 4px 0;
+}
+.color-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(241, 236, 255, 0.35);
+  flex-shrink: 0;
+}
 .animal-details { margin-bottom: 14px; }
 .animal-details summary {
   cursor: pointer;

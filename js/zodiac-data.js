@@ -13,6 +13,40 @@ const ZODIAC_EMOJI = {
   Horse:"🐎", Goat:"🐐", Monkey:"🐒", Rooster:"🐓", Dog:"🐕", Pig:"🐖"
 };
 
+// Hex swatch for each lucky color name (keyed by the English color word,
+// since luckyColors/KM_ANIMAL_INFO.luckyColors are always in the same
+// order per animal regardless of displayed language).
+const LUCKY_COLOR_HEX = {
+  blue: "#3b82f6",
+  gold: "#d4af37",
+  green: "#22c55e",
+  white: "#f5f5f5",
+  yellow: "#eab308",
+  gray: "#9ca3af",
+  orange: "#f97316",
+  pink: "#ec4899",
+  red: "#ef4444",
+  purple: "#a855f7",
+  silver: "#c7ccd1",
+  black: "#1a1a1a",
+  brown: "#92400e"
+};
+
+// Builds "<dot> Label, <dot> Label, ..." markup for a list of lucky colors.
+// englishColors gives the color key for each swatch (order-matched);
+// displayColors gives the label text to show (may be a different language).
+function renderLuckyColorChips(displayColors, englishColors) {
+  return displayColors.map(function (label, i) {
+    const hex = LUCKY_COLOR_HEX[(englishColors[i] || "").toLowerCase()] || "#888";
+    return (
+      '<span class="color-chip">' +
+        '<span class="color-dot" style="background:' + hex + '"></span>' +
+        label +
+      "</span>"
+    );
+  }).join("");
+}
+
 const ELEMENTS = ["Wood","Fire","Earth","Metal","Water"];
 
 const ELEMENT_INFO = {

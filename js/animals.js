@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <p class="animal-traits">${traits}</p>
         <div class="animal-meta">
           <div><h3>${S.lucky_numbers}</h3><p>${info.luckyNumbers.join(", ")}</p></div>
-          <div><h3>${S.lucky_colors}</h3><p>${luckyColors.join(", ")}</p></div>
+          <div><h3>${S.lucky_colors}</h3><p>${renderLuckyColorChips(luckyColors, info.luckyColors)}</p></div>
           <div><h3>${S.lucky_days}</h3><p>${luckyDays.join(", ")}</p></div>
           <div><h3>${S.best_matches}</h3><p>${compatibleDisplay.join(", ")}</p></div>
         </div>
