@@ -994,6 +994,12 @@ footer.site-footer a { margin: 0 10px; color: var(--text-muted); }
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
+.rc-result-title {
+  text-align: center;
+  font-size: 1.4rem;
+  margin: 0 0 18px;
+  color: var(--accent);
+}
 .rc-pair-header {
   display: flex;
   align-items: center;

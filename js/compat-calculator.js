@@ -468,6 +468,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     resultBox.innerHTML = `
       <div class="rc-result-card">
+        <h2 class="rc-result-title">${S.rc_hero_title || "💞 Relationship Compatibility Calculator"}</h2>
         <div class="rc-pair-header">
           <div class="rc-pair-person">
             <span class="rc-pair-symbol">${signA.symbol}${chineseA ? " " + ZODIAC_EMOJI[chineseA.animal] : ""}</span>
