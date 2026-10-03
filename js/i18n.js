@@ -17,6 +17,15 @@ const KM_ANIMAL_NAMES = {
   Horse: "មមី", Goat: "មមែ", Monkey: "វក", Rooster: "រកា", Dog: "ច", Pig: "កុរ"
 };
 
+// The everyday Khmer word for each animal (what you'd call it in normal
+// speech), as opposed to KM_ANIMAL_NAMES above, which holds the traditional
+// zodiac-cycle year names (e.g. "មមី" for the Horse year). Used for the
+// "ឆ្នាំ{year name} ធាតុ {element} សត្វ{common name}" result heading.
+const KM_ANIMAL_COMMON_NAMES = {
+  Rat: "កណ្ដុរ", Ox: "គោ", Tiger: "ខ្លា", Rabbit: "ទន្សាយ", Dragon: "នាគ", Snake: "ពស់",
+  Horse: "សេះ", Goat: "ពពែ", Monkey: "ស្វា", Rooster: "មាន់", Dog: "ឆ្កែ", Pig: "ជ្រូក"
+};
+
 const KM_ELEMENT_NAMES = {
   Wood: "ឈើ", Fire: "ភ្លើង", Earth: "ដី", Metal: "លោហធាតុ", Water: "ទឹក"
 };
@@ -823,6 +832,7 @@ const ZodiacI18N = {
   applyStaticTranslations: applyStaticTranslations,
   initLangToggle: initLangToggle,
   KM_ANIMAL_NAMES: KM_ANIMAL_NAMES,
+  KM_ANIMAL_COMMON_NAMES: KM_ANIMAL_COMMON_NAMES,
   KM_ELEMENT_NAMES: KM_ELEMENT_NAMES,
   KM_ANIMAL_INFO: KM_ANIMAL_INFO,
   KM_ELEMENT_INFO: KM_ELEMENT_INFO,
@@ -842,6 +852,7 @@ if (typeof window !== "undefined") {
   window.fmt = fmt;
   window.UI_STRINGS = UI_STRINGS;
   window.KM_ANIMAL_NAMES = KM_ANIMAL_NAMES;
+  window.KM_ANIMAL_COMMON_NAMES = KM_ANIMAL_COMMON_NAMES;
   window.KM_ELEMENT_NAMES = KM_ELEMENT_NAMES;
   window.KM_ANIMAL_INFO = KM_ANIMAL_INFO;
   window.KM_ELEMENT_INFO = KM_ELEMENT_INFO;

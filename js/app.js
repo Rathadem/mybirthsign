@@ -65,6 +65,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const animalDisplay = lang === "km" ? KM_ANIMAL_NAMES[animal] : animal;
     const elementDisplay = lang === "km" ? KM_ELEMENT_NAMES[element] : element;
+    // In Khmer, spell the result out as "ឆ្នាំ{zodiac year name} ធាតុ
+    // {element} សត្វ{everyday animal name}" (e.g. "ឆ្នាំមមី ធាតុ ភ្លើង
+    // សត្វសេះ") rather than the terser "{element} {animal}" used in English.
+    const resultHeading = lang === "km"
+      ? "ឆ្នាំ" + animalDisplay + " ធាតុ " + elementDisplay + " សត្វ" + KM_ANIMAL_COMMON_NAMES[animal]
+      : elementDisplay + " " + animalDisplay;
 
     const trianglePartners = getTrianglePartners(animal);
     const trianglePartnersDisplay = trianglePartners.map((a) => (lang === "km" ? KM_ANIMAL_NAMES[a] : a));
@@ -159,12 +165,12 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="result-header">
           <span class="result-emoji">${ZODIAC_EMOJI[animal]}</span>
           <div>
-            <h2>${elementDisplay} ${animalDisplay}</h2>
+            <h2>${resultHeading}</h2>
             <p class="result-sub">${bornSub}</p>
           </div>
         </div>
 
-        ${shareBlockHtml(elementDisplay + " " + animalDisplay, { emoji: ZODIAC_EMOJI[animal], heading: elementDisplay + " " + animalDisplay, subheading: bornSub, badge: S[verdictKey] })}
+        ${shareBlockHtml(resultHeading, { emoji: ZODIAC_EMOJI[animal], heading: resultHeading, subheading: bornSub, badge: S[verdictKey] })}
 
         <p class="lunar-note">${lunarNote}</p>
 
