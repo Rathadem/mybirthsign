@@ -65,11 +65,26 @@ function _copyIconHtml() {
 
 function _shareInnerHtml() {
   const options = _SHARE_NETWORKS.map(function (net) {
+    // Facebook/Telegram are real <a target="_blank"> links (href is filled
+    // in by wireShareRows() right away, before the row can be interacted
+    // with) rather than a window.open() call from a click handler, because
+    // plain anchor-tag navigation is far more reliably allowed than a
+    // scripted popup inside constrained contexts like a sandboxed artifact
+    // preview or a mobile browser's popup blocker — a window.open() call
+    // there can silently do nothing even on a direct, synchronous tap.
+    if (net.copyOnly) {
+      return (
+        '<button type="button" class="share-option" data-share-net="' + net.id + '">' +
+          _brandIconHtml(net) +
+          '<span class="share-option-label">' + net.label + '</span>' +
+        '</button>'
+      );
+    }
     return (
-      '<button type="button" class="share-option" data-share-net="' + net.id + '">' +
+      '<a class="share-option" data-share-net="' + net.id + '" href="#" target="_blank" rel="noopener">' +
         _brandIconHtml(net) +
         '<span class="share-option-label">' + net.label + '</span>' +
-      '</button>'
+      '</a>'
     );
   }).join("");
 
@@ -111,6 +126,22 @@ function _ensureShareOutsideClickHandler() {
       }
     });
   });
+}
+
+function _openInNewTab(url) {
+  // A real, temporary <a target="_blank"> click is more reliably allowed
+  // than a scripted window.open() call in constrained contexts (a
+  // sandboxed artifact preview, some mobile browsers' popup blockers),
+  // since it's genuine anchor-tag navigation rather than a popup the
+  // browser has to specifically permit for scripts.
+  const a = document.createElement("a");
+  a.href = url;
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 function _copyToClipboard(text) {
@@ -209,35 +240,37 @@ function wireShareRows(root) {
       });
     }
 
-    row.querySelectorAll("[data-share-net]").forEach(function (optBtn) {
-      const netId = optBtn.getAttribute("data-share-net");
+    const shareUrls = {
+      facebook: "https://www.facebook.com/sharer/sharer.php?u=" + encodedUrl,
+      telegram: "https://t.me/share/url?url=" + encodedUrl + "&text=" + encodedTitle
+    };
+
+    row.querySelectorAll("[data-share-net]").forEach(function (optEl) {
+      const netId = optEl.getAttribute("data-share-net");
       const net = _SHARE_NETWORKS.filter(function (n) { return n.id === netId; })[0];
       if (!net) return;
 
-      optBtn.addEventListener("click", function () {
-        if (net.id === "facebook") {
-          window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodedUrl, "_blank", "noopener");
-          return;
-        }
-        if (net.id === "telegram") {
-          window.open("https://t.me/share/url?url=" + encodedUrl + "&text=" + encodedTitle, "_blank", "noopener");
-          return;
-        }
-        if (net.copyOnly) {
-          // No public web intent exists for sharing an arbitrary link
-          // straight into Instagram or TikTok, so copy the link and open
-          // the app/site so the person can paste it themselves.
-          _copyToClipboard(url);
-          const labelEl = optBtn.querySelector(".share-option-label");
-          const original = labelEl ? labelEl.textContent : "";
-          if (labelEl) labelEl.textContent = pasteTpl.replace("{network}", net.label);
-          window.open(net.appUrl, "_blank", "noopener");
-          setTimeout(function () {
-            if (labelEl) labelEl.textContent = original;
-            pop.hidden = true;
-            btn.setAttribute("aria-expanded", "false");
-          }, 2200);
-        }
+      if (!net.copyOnly) {
+        // Set the real href right away (before the row can be tapped) so
+        // these behave as plain link navigation, not a scripted popup.
+        optEl.setAttribute("href", shareUrls[net.id]);
+        return;
+      }
+
+      // No public web intent exists for sharing an arbitrary link straight
+      // into Instagram or TikTok, so copy the link and open the app/site
+      // so the person can paste it themselves.
+      optEl.addEventListener("click", function () {
+        _copyToClipboard(url);
+        const labelEl = optEl.querySelector(".share-option-label");
+        const original = labelEl ? labelEl.textContent : "";
+        if (labelEl) labelEl.textContent = pasteTpl.replace("{network}", net.label);
+        _openInNewTab(net.appUrl);
+        setTimeout(function () {
+          if (labelEl) labelEl.textContent = original;
+          pop.hidden = true;
+          btn.setAttribute("aria-expanded", "false");
+        }, 2200);
       });
     });
 
