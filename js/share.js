@@ -92,6 +92,38 @@ function _wrapCanvasText(ctx, text, maxWidth) {
   return lines;
 }
 
+// A faint, muted strip of all 12 zodiac animals used as a decorative motif
+// near the bottom of the share card, reinforcing the zodiac theme and
+// filling what would otherwise be empty space.
+const _ZODIAC_MOTIF = ["🐀", "🐂", "🐅", "🐇", "🐉", "🐍", "🐎", "🐐", "🐒", "🐓", "🐕", "🐖"];
+
+function _roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  if (ctx.roundRect) {
+    ctx.roundRect(x, y, w, h, r);
+  } else {
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+}
+
+// Deterministic pseudo-random generator (mulberry32) so the scattered
+// starfield looks the same every time rather than flickering between
+// re-renders of the same result.
+function _seededRandom(seed) {
+  let t = seed;
+  return function () {
+    t |= 0; t = (t + 0x6d2b79f5) | 0;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 // Draws a branded, portrait "share card" graphic (animal/result headline,
 // subheading, optional badge, site wordmark) and resolves with a PNG Blob.
 // `spec`: { emoji, heading, subheading, badge }
@@ -102,84 +134,165 @@ function _buildShareCardBlob(spec) {
     canvas.width = W;
     canvas.height = H;
     const ctx = canvas.getContext("2d");
+    const gold = "#d4af37";
+    const paleGold = "#e9d28a";
 
-    // Background
-    const bg = ctx.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, "#150f2b");
-    bg.addColorStop(1, "#0f0b1f");
+    // Background: a deep night-sky gradient, richer at the edges.
+    const bg = ctx.createRadialGradient(W / 2, H * 0.4, 80, W / 2, H * 0.5, H * 0.85);
+    bg.addColorStop(0, "#1c1440");
+    bg.addColorStop(0.55, "#140f2e");
+    bg.addColorStop(1, "#0b0820");
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
 
+    // Scattered faint stars for texture (deterministic per render).
+    const rand = _seededRandom(42);
+    for (let i = 0; i < 90; i++) {
+      const sx = rand() * W;
+      const sy = rand() * H;
+      const r = rand() * 1.8 + 0.4;
+      ctx.beginPath();
+      ctx.arc(sx, sy, r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(233,210,138," + (0.12 + rand() * 0.25).toFixed(2) + ")";
+      ctx.fill();
+    }
+
     // Soft decorative glow behind the emoji
-    const glow = ctx.createRadialGradient(W / 2, 430, 40, W / 2, 430, 420);
-    glow.addColorStop(0, "rgba(212,175,55,0.25)");
+    const glow = ctx.createRadialGradient(W / 2, 460, 40, W / 2, 460, 420);
+    glow.addColorStop(0, "rgba(212,175,55,0.28)");
     glow.addColorStop(1, "rgba(212,175,55,0)");
     ctx.fillStyle = glow;
     ctx.fillRect(0, 0, W, H);
 
-    // Card border
-    ctx.strokeStyle = "rgba(212,175,55,0.5)";
+    // Outer card border with inset hairline for a framed, layered look.
+    _roundRectPath(ctx, 28, 28, W - 56, H - 56, 28);
+    ctx.strokeStyle = "rgba(212,175,55,0.55)";
     ctx.lineWidth = 3;
-    ctx.strokeRect(24, 24, W - 48, H - 48);
+    ctx.stroke();
+    _roundRectPath(ctx, 42, 42, W - 84, H - 84, 20);
+    ctx.strokeStyle = "rgba(212,175,55,0.22)";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Small diamond flourishes in each corner of the outer border.
+    [[28, 28], [W - 28, 28], [28, H - 28], [W - 28, H - 28]].forEach(function (pt) {
+      ctx.save();
+      ctx.translate(pt[0], pt[1]);
+      ctx.rotate(Math.PI / 4);
+      ctx.fillStyle = gold;
+      ctx.fillRect(-7, -7, 14, 14);
+      ctx.restore();
+    });
 
     ctx.textAlign = "center";
 
+    // Eyebrow label
+    ctx.fillStyle = "rgba(180,169,214,0.85)";
+    ctx.font = "600 26px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.save();
+    ctx.letterSpacing = "4px";
+    ctx.fillText("CHINESE ZODIAC READING", W / 2, 108);
+    ctx.restore();
+
     // Site wordmark
-    ctx.fillStyle = "#d4af37";
-    ctx.font = "600 34px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
-    ctx.fillText("☾ MYBIRTHSIGN", W / 2, 130);
+    ctx.fillStyle = gold;
+    ctx.font = "600 36px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.fillText("☾ MYBIRTHSIGN", W / 2, 160);
+
+    // Thin rule under the wordmark
+    ctx.strokeStyle = "rgba(212,175,55,0.35)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 70, 186);
+    ctx.lineTo(W / 2 + 70, 186);
+    ctx.stroke();
+
+    // Ring around the big emoji
+    ctx.beginPath();
+    ctx.arc(W / 2, 460, 215, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(212,175,55,0.45)";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(W / 2, 460, 232, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(212,175,55,0.2)";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
 
     // Big emoji
-    ctx.font = "280px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
-    ctx.fillText(spec.emoji || "🔮", W / 2, 540);
+    ctx.font = "260px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.fillText(spec.emoji || "🔮", W / 2, 565);
 
     // Heading (wraps up to 2 lines)
-    ctx.fillStyle = "#f1ecff";
-    ctx.font = "700 72px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+    ctx.fillStyle = "#f6f2ff";
+    ctx.font = "700 72px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
     const headingLines = _wrapCanvasText(ctx, spec.heading || "", W - 160).slice(0, 2);
-    let y = 700;
+    let y = 745;
     headingLines.forEach(function (line) {
       ctx.fillText(line, W / 2, y);
       y += 86;
     });
 
-    // Optional badge pill (e.g. a luck verdict or star rating)
+    // Optional badge pill (e.g. a luck verdict or star rating). Wraps onto
+    // up to 2 lines (shrinking the font if it's still too wide) so long
+    // text — a full sentence, or a longer script like Khmer — never
+    // overflows the card.
     if (spec.badge) {
-      ctx.font = "600 34px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
-      const padX = 28;
-      const textW = ctx.measureText(spec.badge).width;
-      const pillW = textW + padX * 2;
-      const pillH = 64;
+      const maxPillTextWidth = W - 160;
+      let badgeFontPx = 34;
+      let badgeLines;
+      do {
+        ctx.font = "600 " + badgeFontPx + "px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+        badgeLines = _wrapCanvasText(ctx, spec.badge, maxPillTextWidth).slice(0, 2);
+        badgeFontPx -= 2;
+      } while (badgeFontPx >= 22 && badgeLines.some(function (l) { return ctx.measureText(l).width > maxPillTextWidth; }));
+
+      const lineH = badgeFontPx + 2 + 30;
+      const padX = 32;
+      const padY = 22;
+      const widest = badgeLines.reduce(function (m, l) { return Math.max(m, ctx.measureText(l).width); }, 0);
+      const pillW = Math.min(widest + padX * 2, W - 100);
+      const pillH = badgeLines.length * lineH + padY * 2 - 14;
       const pillX = W / 2 - pillW / 2;
-      const pillY = y + 10;
-      ctx.fillStyle = "rgba(212,175,55,0.18)";
-      ctx.beginPath();
-      if (ctx.roundRect) {
-        ctx.roundRect(pillX, pillY, pillW, pillH, pillH / 2);
-      } else {
-        ctx.rect(pillX, pillY, pillW, pillH);
-      }
+      const pillY = y + 16;
+      ctx.fillStyle = "rgba(212,175,55,0.16)";
+      _roundRectPath(ctx, pillX, pillY, pillW, pillH, pillH / 2 > 40 ? 24 : pillH / 2);
       ctx.fill();
-      ctx.strokeStyle = "#d4af37";
+      ctx.strokeStyle = gold;
       ctx.lineWidth = 2;
       ctx.stroke();
-      ctx.fillStyle = "#d4af37";
-      ctx.fillText(spec.badge, W / 2, pillY + pillH / 2 + 12);
-      y = pillY + pillH + 40;
+      ctx.fillStyle = paleGold;
+      let by = pillY + padY + badgeFontPx * 0.72;
+      badgeLines.forEach(function (line) {
+        ctx.fillText(line, W / 2, by);
+        by += lineH;
+      });
+      y = pillY + pillH + 46;
     } else {
-      y += 20;
+      y += 24;
     }
 
     // Subheading (wraps up to 2 lines)
     if (spec.subheading) {
       ctx.fillStyle = "#b4a9d6";
-      ctx.font = "400 38px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+      ctx.font = "400 38px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
       const subLines = _wrapCanvasText(ctx, spec.subheading, W - 200).slice(0, 2);
       subLines.forEach(function (line) {
         ctx.fillText(line, W / 2, y);
         y += 50;
       });
     }
+
+    // Decorative zodiac motif strip, filling the space above the footer.
+    ctx.font = "54px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.globalAlpha = 0.22;
+    const motifY = H - 232;
+    const motifGap = 72;
+    const motifStartX = W / 2 - (motifGap * (_ZODIAC_MOTIF.length - 1)) / 2;
+    _ZODIAC_MOTIF.forEach(function (emoji, i) {
+      ctx.fillText(emoji, motifStartX + i * motifGap, motifY);
+    });
+    ctx.globalAlpha = 1;
 
     // Footer
     ctx.strokeStyle = "rgba(180,169,214,0.3)";
@@ -188,9 +301,12 @@ function _buildShareCardBlob(spec) {
     ctx.moveTo(W / 2 - 120, H - 150);
     ctx.lineTo(W / 2 + 120, H - 150);
     ctx.stroke();
-    ctx.fillStyle = "#d4af37";
-    ctx.font = "600 36px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
-    ctx.fillText("mybirthsign.com", W / 2, H - 90);
+    ctx.fillStyle = gold;
+    ctx.font = "600 38px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.fillText("mybirthsign.com", W / 2, H - 98);
+    ctx.fillStyle = "rgba(180,169,214,0.75)";
+    ctx.font = "400 26px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    ctx.fillText("Find your own zodiac sign, free", W / 2, H - 62);
 
     canvas.toBlob(function (blob) { resolve(blob); }, "image/png");
   });
