@@ -442,7 +442,11 @@ function _buildCompatCardBlob(spec) {
     const p1X = W / 2 - avatarGap / 2;
     const p2X = W / 2 + avatarGap / 2;
 
-    function drawAvatar(cx, cy, r, emoji, colorA, colorB) {
+    // `mirror` horizontally flips just the emoji glyph (not the circle or its
+    // border), so the two avatars visually turn toward each other/the heart
+    // between them instead of both facing whichever way their emoji glyph
+    // happens to be drawn by default.
+    function drawAvatar(cx, cy, r, emoji, colorA, colorB, mirror) {
       const grad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
       grad.addColorStop(0, colorA);
       grad.addColorStop(1, colorB);
@@ -455,11 +459,23 @@ function _buildCompatCardBlob(spec) {
       ctx.stroke();
       ctx.fillStyle = white;
       ctx.font = (r * 1.05) + "px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      ctx.fillText(emoji, cx, cy + r * 0.36);
+      if (mirror) {
+        ctx.save();
+        ctx.translate(cx, 0);
+        ctx.scale(-1, 1);
+        ctx.translate(-cx, 0);
+        ctx.fillText(emoji, cx, cy + r * 0.36);
+        ctx.restore();
+      } else {
+        ctx.fillText(emoji, cx, cy + r * 0.36);
+      }
     }
 
-    drawAvatar(p1X, avatarY, avatarR, spec.p1Emoji || "💗", "#6ec3ff", "#4a90e2");
-    drawAvatar(p2X, avatarY, avatarR, spec.p2Emoji || "💗", "#ff9ecf", "#e0569f");
+    // Person 1 faces right (toward the heart/Person 2); Person 2 is mirrored
+    // so it faces left (toward the heart/Person 1) — the two end up facing
+    // each other regardless of the emoji's own default orientation.
+    drawAvatar(p1X, avatarY, avatarR, spec.p1Emoji || "💗", "#6ec3ff", "#4a90e2", false);
+    drawAvatar(p2X, avatarY, avatarR, spec.p2Emoji || "💗", "#ff9ecf", "#e0569f", true);
 
     // Small heart between the two avatars.
     ctx.fillStyle = white;
