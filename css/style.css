@@ -189,6 +189,32 @@ nav a:hover { color: var(--accent); }
 }
 .hero-cta:hover { background: #e6c35f; transform: translateY(-1px); }
 
+.quick-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 28px auto 6px;
+  padding: 0 20px;
+}
+
+.quick-link-btn {
+  display: inline-block;
+  border: 1.5px solid var(--accent);
+  color: var(--text);
+  text-decoration: none;
+  padding: 10px 24px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.quick-link-btn:hover {
+  background: var(--accent);
+  color: #1a1430;
+  transform: translateY(-1px);
+}
+
 .today-strip {
   background: var(--bg-card);
   border: 1px solid var(--border);
