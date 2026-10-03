@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
-        ${shareRowHtml(headingText)}
+        ${shareRowHtml(headingText, { emoji: "💍", heading: headingText, subheading: animalADisplay + " & " + animalBDisplay })}
 
         <div class="wedding-top-picks">
           <h3>${S.wedding_top_picks_heading}</h3>

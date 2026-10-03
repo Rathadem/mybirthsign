@@ -63,6 +63,139 @@ function _copyIconHtml() {
   );
 }
 
+function _imageIconHtml() {
+  return (
+    '<svg class="share-net-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<rect x="3" y="3" width="18" height="18" rx="2"></rect>' +
+      '<circle cx="9" cy="9" r="2"></circle>' +
+      '<path d="m21 15-5-5L5 21"></path>' +
+    '</svg>'
+  );
+}
+
+// Wraps `text` onto lines no wider than `maxWidth` on the given 2D context
+// (which must already have its font set), returning an array of lines.
+function _wrapCanvasText(ctx, text, maxWidth) {
+  const words = String(text).split(/\s+/);
+  const lines = [];
+  let line = "";
+  words.forEach(function (word) {
+    const test = line ? line + " " + word : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  });
+  if (line) lines.push(line);
+  return lines;
+}
+
+// Draws a branded, portrait "share card" graphic (animal/result headline,
+// subheading, optional badge, site wordmark) and resolves with a PNG Blob.
+// `spec`: { emoji, heading, subheading, badge }
+function _buildShareCardBlob(spec) {
+  return new Promise(function (resolve) {
+    const W = 1080, H = 1350;
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
+
+    // Background
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, "#150f2b");
+    bg.addColorStop(1, "#0f0b1f");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Soft decorative glow behind the emoji
+    const glow = ctx.createRadialGradient(W / 2, 430, 40, W / 2, 430, 420);
+    glow.addColorStop(0, "rgba(212,175,55,0.25)");
+    glow.addColorStop(1, "rgba(212,175,55,0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, W, H);
+
+    // Card border
+    ctx.strokeStyle = "rgba(212,175,55,0.5)";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(24, 24, W - 48, H - 48);
+
+    ctx.textAlign = "center";
+
+    // Site wordmark
+    ctx.fillStyle = "#d4af37";
+    ctx.font = "600 34px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+    ctx.fillText("☾ MYBIRTHSIGN", W / 2, 130);
+
+    // Big emoji
+    ctx.font = "280px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+    ctx.fillText(spec.emoji || "🔮", W / 2, 540);
+
+    // Heading (wraps up to 2 lines)
+    ctx.fillStyle = "#f1ecff";
+    ctx.font = "700 72px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+    const headingLines = _wrapCanvasText(ctx, spec.heading || "", W - 160).slice(0, 2);
+    let y = 700;
+    headingLines.forEach(function (line) {
+      ctx.fillText(line, W / 2, y);
+      y += 86;
+    });
+
+    // Optional badge pill (e.g. a luck verdict or star rating)
+    if (spec.badge) {
+      ctx.font = "600 34px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+      const padX = 28;
+      const textW = ctx.measureText(spec.badge).width;
+      const pillW = textW + padX * 2;
+      const pillH = 64;
+      const pillX = W / 2 - pillW / 2;
+      const pillY = y + 10;
+      ctx.fillStyle = "rgba(212,175,55,0.18)";
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(pillX, pillY, pillW, pillH, pillH / 2);
+      } else {
+        ctx.rect(pillX, pillY, pillW, pillH);
+      }
+      ctx.fill();
+      ctx.strokeStyle = "#d4af37";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = "#d4af37";
+      ctx.fillText(spec.badge, W / 2, pillY + pillH / 2 + 12);
+      y = pillY + pillH + 40;
+    } else {
+      y += 20;
+    }
+
+    // Subheading (wraps up to 2 lines)
+    if (spec.subheading) {
+      ctx.fillStyle = "#b4a9d6";
+      ctx.font = "400 38px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+      const subLines = _wrapCanvasText(ctx, spec.subheading, W - 200).slice(0, 2);
+      subLines.forEach(function (line) {
+        ctx.fillText(line, W / 2, y);
+        y += 50;
+      });
+    }
+
+    // Footer
+    ctx.strokeStyle = "rgba(180,169,214,0.3)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 120, H - 150);
+    ctx.lineTo(W / 2 + 120, H - 150);
+    ctx.stroke();
+    ctx.fillStyle = "#d4af37";
+    ctx.font = "600 36px system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+    ctx.fillText("mybirthsign.com", W / 2, H - 90);
+
+    canvas.toBlob(function (blob) { resolve(blob); }, "image/png");
+  });
+}
+
 function _shareInnerHtml() {
   const options = _SHARE_NETWORKS.map(function (net) {
     // Facebook/Telegram are real <a target="_blank"> links (href is filled
@@ -97,6 +230,10 @@ function _shareInnerHtml() {
       '<span class="share-btn-label"></span>' +
     '</button>' +
     '<div class="share-popover" hidden>' +
+      '<button type="button" class="share-option share-image">' +
+        _imageIconHtml() +
+        '<span class="share-option-label share-image-label"></span>' +
+      '</button>' +
       options +
       '<button type="button" class="share-option share-copy">' +
         _copyIconHtml() +
@@ -106,9 +243,13 @@ function _shareInnerHtml() {
   );
 }
 
-function shareRowHtml(title) {
+function shareRowHtml(title, cardSpec) {
   const safeTitle = title ? String(title).replace(/"/g, "&quot;") : "";
-  return '<div class="share-row" data-share-title="' + safeTitle + '">' + _shareInnerHtml() + '</div>';
+  let attrs = ' data-share-title="' + safeTitle + '"';
+  if (cardSpec) {
+    attrs += ' data-share-card="' + JSON.stringify(cardSpec).replace(/"/g, "&quot;") + '"';
+  }
+  return '<div class="share-row"' + attrs + '>' + _shareInnerHtml() + '</div>';
 }
 
 let _shareOutsideClickWired = false;
@@ -144,6 +285,17 @@ function _openInNewTab(url) {
   document.body.removeChild(a);
 }
 
+function _downloadBlob(blob, filename) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () { URL.revokeObjectURL(a.href); }, 30000);
+}
+
 function _copyToClipboard(text) {
   function fallbackCopy() {
     const ta = document.createElement("textarea");
@@ -170,6 +322,10 @@ function wireShareRows(root) {
   const copyLabel = S.share_copy_link || "Copy link";
   const copiedLabel = S.share_copied || "Link copied!";
   const pasteTpl = S.share_paste_note_tpl || "Link copied — paste it in {network}";
+  const imageLabel = S.share_image_option || "Share image";
+  const imagePreparingLabel = S.share_image_preparing || "Preparing image…";
+  const imageSavedLabel = S.share_image_saved || "Image saved!";
+  const imageFailedLabel = S.share_image_failed || "Couldn't create the image";
 
   scope.querySelectorAll(".share-row:not([data-share-wired])").forEach(function (row) {
     row.setAttribute("data-share-wired", "true");
@@ -188,13 +344,23 @@ function wireShareRows(root) {
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
 
+    let cardSpec = null;
+    const cardAttr = row.getAttribute("data-share-card");
+    if (cardAttr) {
+      try { cardSpec = JSON.parse(cardAttr); } catch (e) { cardSpec = null; }
+    }
+    if (!cardSpec) cardSpec = { emoji: "🔮", heading: title, subheading: "mybirthsign.com" };
+
     const btn = row.querySelector(".share-btn");
     const label = row.querySelector(".share-btn-label");
     const pop = row.querySelector(".share-popover");
     const copyBtn = row.querySelector(".share-copy");
     const copyLabelEl = copyBtn && copyBtn.querySelector(".share-copy-label");
+    const imageBtn = row.querySelector(".share-image");
+    const imageLabelEl = imageBtn && imageBtn.querySelector(".share-image-label");
     if (label) label.textContent = shareLabel;
     if (copyLabelEl) copyLabelEl.textContent = copyLabel;
+    if (imageLabelEl) imageLabelEl.textContent = imageLabel;
 
     function openPopover() {
       document.querySelectorAll(".share-popover").forEach(function (p) { p.hidden = true; });
@@ -281,6 +447,57 @@ function wireShareRows(root) {
         setTimeout(function () {
           if (copyLabelEl) copyLabelEl.textContent = copyLabel;
         }, 1800);
+      });
+    }
+
+    if (imageBtn) {
+      imageBtn.addEventListener("click", function () {
+        if (imageLabelEl) imageLabelEl.textContent = imagePreparingLabel;
+        imageBtn.disabled = true;
+
+        function resetLabel(text, delay) {
+          setTimeout(function () {
+            if (imageLabelEl) imageLabelEl.textContent = text;
+            imageBtn.disabled = false;
+          }, delay || 0);
+        }
+
+        _buildShareCardBlob(cardSpec).then(function (blob) {
+          if (!blob) {
+            resetLabel(imageFailedLabel, 0);
+            setTimeout(function () { if (imageLabelEl) imageLabelEl.textContent = imageLabel; }, 2200);
+            return;
+          }
+          const file = new File([blob], "mybirthsign-result.png", { type: "image/png" });
+
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              const sharePromise = navigator.share({ files: [file], title: title });
+              if (sharePromise && typeof sharePromise.catch === "function") {
+                sharePromise
+                  .then(function () { resetLabel(imageLabel, 0); })
+                  .catch(function (err) {
+                    if (err && err.name === "AbortError") { resetLabel(imageLabel, 0); return; }
+                    _downloadBlob(blob, "mybirthsign-result.png");
+                    if (imageLabelEl) imageLabelEl.textContent = imageSavedLabel;
+                    resetLabel(imageLabel, 2200);
+                  });
+                return;
+              }
+              resetLabel(imageLabel, 0);
+              return;
+            } catch (err) {
+              // fall through to a direct download below
+            }
+          }
+
+          _downloadBlob(blob, "mybirthsign-result.png");
+          if (imageLabelEl) imageLabelEl.textContent = imageSavedLabel;
+          resetLabel(imageLabel, 2200);
+        }).catch(function () {
+          resetLabel(imageFailedLabel, 0);
+          setTimeout(function () { if (imageLabelEl) imageLabelEl.textContent = imageLabel; }, 2200);
+        });
       });
     }
   });

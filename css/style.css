@@ -344,8 +344,15 @@ nav a:hover { color: var(--accent); }
   text-decoration: none;
 }
 .share-option:hover { background: rgba(212, 175, 55, 0.12); color: var(--accent); }
+.share-option:disabled { opacity: 0.6; cursor: default; }
 .share-net-icon { flex-shrink: 0; }
 .share-option-label { flex: 1; }
+.share-image {
+  font-weight: 600;
+  border-bottom: 1px solid rgba(180, 169, 214, 0.25);
+  border-radius: 6px 6px 0 0;
+  margin-bottom: 4px;
+}
 
 .lunar-note {
   font-size: 0.78rem;

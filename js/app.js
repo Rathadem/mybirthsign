@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
-        ${shareRowHtml(elementDisplay + " " + animalDisplay)}
+        ${shareRowHtml(elementDisplay + " " + animalDisplay, { emoji: ZODIAC_EMOJI[animal], heading: elementDisplay + " " + animalDisplay, subheading: bornSub, badge: S[verdictKey] })}
 
         <p class="lunar-note">${lunarNote}</p>
 
@@ -369,7 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
-        ${shareRowHtml(animalADisplay + " + " + animalBDisplay)}
+        ${shareRowHtml(animalADisplay + " + " + animalBDisplay, { emoji: ZODIAC_EMOJI[za.animal] + " " + ZODIAC_EMOJI[zb.animal], heading: animalADisplay + " + " + animalBDisplay, subheading: compatLabel + " — " + contextLabel, badge: starDisplay })}
 
         <h3 class="compat-label">${compatLabel} — ${contextLabel}</h3>
         <div class="compat-stars">${starDisplay}</div>

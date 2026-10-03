@@ -342,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
-        ${shareRowHtml(p1Name + " + " + p2Name)}
+        ${shareRowHtml(p1Name + " + " + p2Name, { emoji: ZODIAC_EMOJI[bziA.animal] + " 🤝 " + ZODIAC_EMOJI[bziB.animal], heading: p1Name + " + " + p2Name, subheading: CATEGORY_LABEL[top[0][0]] + " · " + CATEGORY_LABEL[top[1][0]] })}
 
         <h3 class="biz-subheading">${S.biz_summary_heading || "🧧 Business Partnership Summary"}</h3>
         <div class="biz-summary-box">
