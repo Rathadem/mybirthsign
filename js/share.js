@@ -96,8 +96,21 @@ function wireShareRows(root) {
       btn.addEventListener("click", function (e) {
         e.stopPropagation();
         if (navigator.share) {
-          navigator.share({ title: title, url: url }).catch(function () {});
-          return;
+          // navigator.share() can throw *synchronously* (not just reject its
+          // promise) when the page is embedded somewhere that blocks the Web
+          // Share API via Permissions-Policy (e.g. a sandboxed preview
+          // iframe). Without this try/catch that exception would abort the
+          // click handler entirely, so the button would look like it does
+          // nothing. Fall back to the popover instead.
+          try {
+            const sharePromise = navigator.share({ title: title, url: url });
+            if (sharePromise && typeof sharePromise.catch === "function") {
+              sharePromise.catch(function () { /* user cancelled or it failed silently */ });
+            }
+            return;
+          } catch (err) {
+            // fall through to the manual popover below
+          }
         }
         const isOpen = !pop.hidden;
         document.querySelectorAll(".share-popover").forEach(function (p) { p.hidden = true; });
