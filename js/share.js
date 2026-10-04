@@ -186,10 +186,21 @@ function _seededRandom(seed) {
 // animal highlighted in the strip. Without it (a combined emoji, like the
 // wedding ring or a two-animal "+" pairing), the original emoji rendering
 // is used unchanged.
+//
+// Also waits for webfonts (document.fonts.ready) before measuring or
+// drawing any text: if "Noto Sans Khmer" is still loading when we
+// measureText() for the heading/badge/subheading, the canvas silently
+// measures with a narrower fallback font, then draws the real (wider)
+// Khmer glyphs a moment later once the webfont finishes loading -- so
+// text that was wrapped/sized for the narrow fallback overflows past the
+// card's edges. Waiting first keeps the measurement and the draw using
+// the same, final font (same fix already used in _buildCompatCardBlob).
 function _buildShareCardBlob(spec) {
   const animalKey = spec.animal ? String(spec.animal).toLowerCase() : null;
   const badgesPromise = animalKey ? _loadZodiacBadges() : Promise.resolve(null);
-  return badgesPromise.then(function (badges) {
+  const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  return Promise.all([badgesPromise, fontsReady]).then(function (results) {
+  const badges = results[0];
   return new Promise(function (resolve) {
     const W = 1080, H = 1350;
     const canvas = document.createElement("canvas");
