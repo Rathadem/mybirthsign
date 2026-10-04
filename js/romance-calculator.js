@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const weaknesses = (info && info.weaknesses) || "";
     return `
       <div class="romance-profile-card">
-        <img class="romance-profile-badge" src="images/zodiac-badges/${bzi.animal.toLowerCase()}.webp" alt="" loading="lazy" width="72" height="72">
+        <img class="romance-profile-badge" src="images/zodiac-romance/${bzi.animal.toLowerCase()}.jpg" alt="" loading="lazy" width="72" height="72">
         <h3>${name}</h3>
         <p class="romance-profile-sub">${elementName(bzi.element)} ${animalName(bzi.animal)} · ☯️ ${yinYangWord(bzi.yinYang)}</p>
         <p class="romance-profile-overview">${(info && info.overview) || ""}</p>
@@ -343,13 +343,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         <div class="romance-pair-row">
           <div class="romance-zodiac-circle">
-            <div class="romance-zodiac-ring"><img src="images/zodiac-badges/${bziA.animal.toLowerCase()}.webp" alt="${animalName(bziA.animal)}" width="88" height="88" loading="lazy"></div>
+            <div class="romance-zodiac-ring"><img src="images/zodiac-romance/${bziA.animal.toLowerCase()}.jpg" alt="${animalName(bziA.animal)}" width="88" height="88" loading="lazy"></div>
             <p class="romance-zodiac-name">${animalName(bziA.animal)}</p>
             <p class="romance-zodiac-sub">${p1Label} · ${bziA.birthYear} · ${elementName(bziA.element)}</p>
           </div>
           <div class="romance-link-heart">💗<span class="romance-ray romance-ray-l"></span><span class="romance-ray romance-ray-r"></span></div>
           <div class="romance-zodiac-circle">
-            <div class="romance-zodiac-ring"><img src="images/zodiac-badges/${bziB.animal.toLowerCase()}.webp" alt="${animalName(bziB.animal)}" width="88" height="88" loading="lazy"></div>
+            <div class="romance-zodiac-ring"><img src="images/zodiac-romance/${bziB.animal.toLowerCase()}.jpg" alt="${animalName(bziB.animal)}" width="88" height="88" loading="lazy"></div>
             <p class="romance-zodiac-name">${animalName(bziB.animal)}</p>
             <p class="romance-zodiac-sub">${p2Label} · ${bziB.birthYear} · ${elementName(bziB.element)}</p>
           </div>
