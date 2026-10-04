@@ -307,6 +307,23 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   margin-bottom: 16px;
 }
 .result-emoji { font-size: 3rem; }
+.result-badge {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+}
+.sign-line-badge {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: -7px;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
 .result-header h2 { margin: 0; color: var(--accent); }
 .result-sub { margin: 4px 0 0; color: var(--text-muted); font-size: 0.9rem; }
 
@@ -1206,7 +1223,8 @@ footer.site-footer a { margin: 0 10px; color: var(--text-muted); }
   border-bottom: 1px solid var(--border);
 }
 .rc-pair-person { min-width: 120px; }
-.rc-pair-symbol { font-size: 2.4rem; display: block; }
+.rc-pair-symbol { display: flex; align-items: center; justify-content: center; gap: 6px; }
+.rc-pair-glyph { font-size: 2.4rem; }
 .rc-pair-heart { font-size: 1.8rem; }
 .rc-pair-lifepath { color: var(--accent); font-size: 0.85rem; margin-top: 4px; }
 
@@ -1459,7 +1477,6 @@ footer.site-footer a { margin: 0 10px; color: var(--text-muted); }
   position: relative;
 }
 .biz-pair-person { min-width: 140px; }
-.biz-pair-symbol { font-size: 2.4rem; display: block; }
 .biz-pair-link { font-size: 1.6rem; }
 .biz-pair-sub { color: var(--biz-gold); font-size: 0.82rem; margin-top: 4px; }
 

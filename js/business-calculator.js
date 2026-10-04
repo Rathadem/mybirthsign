@@ -330,13 +330,13 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="biz-result-card">
         <div class="biz-pair-header">
           <div class="biz-pair-person">
-            <span class="biz-pair-symbol">${ZODIAC_EMOJI[bziA.animal]}</span>
+            <img class="result-badge" src="images/zodiac-badges/${bziA.animal.toLowerCase()}.webp" alt="" loading="lazy" width="56" height="56">
             <div><strong>${p1Name}</strong></div>
             <div class="biz-pair-sub">${isKm ? KM_ELEMENT_NAMES[bziA.element] + " " + KM_ANIMAL_NAMES[bziA.animal] : bziA.element + " " + bziA.animal} · ${yinYangLabel(bziA.yinYang)}</div>
           </div>
           <div class="biz-pair-link">🤝</div>
           <div class="biz-pair-person">
-            <span class="biz-pair-symbol">${ZODIAC_EMOJI[bziB.animal]}</span>
+            <img class="result-badge" src="images/zodiac-badges/${bziB.animal.toLowerCase()}.webp" alt="" loading="lazy" width="56" height="56">
             <div><strong>${p2Name}</strong></div>
             <div class="biz-pair-sub">${isKm ? KM_ELEMENT_NAMES[bziB.element] + " " + KM_ANIMAL_NAMES[bziB.animal] : bziB.element + " " + bziB.animal} · ${yinYangLabel(bziB.yinYang)}</div>
           </div>
@@ -356,14 +356,14 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="biz-two-col">
           <div class="biz-profile-card">
             <h3>${p1Name}</h3>
-            <p class="biz-sign-line">${ZODIAC_EMOJI[bziA.animal]} <strong>${elementName(bziA.element)} ${animalName(bziA.animal)}</strong></p>
+            <p class="biz-sign-line"><img class="sign-line-badge" src="images/zodiac-badges/${bziA.animal.toLowerCase()}.webp" alt="" loading="lazy" width="28" height="28"> <strong>${elementName(bziA.element)} ${animalName(bziA.animal)}</strong></p>
             <p class="biz-bazi-line">${bziA.stem.name} ${bziA.stem.hanzi} (${S.biz_heavenly_stem_label || "Heavenly Stem"}) · ${bziA.branch.name} ${bziA.branch.hanzi} (${S.biz_earthly_branch_label || "Earthly Branch"}) · ${isKm ? (bziA.yinYang === "Yang" ? "យ៉ាង" : "យិន") : bziA.yinYang}</p>
             <p class="biz-born-sub">${cnyNoteA}</p>
             <p>${(isKm && typeof KM_ELEMENT_INFO !== "undefined" ? KM_ELEMENT_INFO : ELEMENT_INFO)[bziA.element].blurb}</p>
           </div>
           <div class="biz-profile-card">
             <h3>${p2Name}</h3>
-            <p class="biz-sign-line">${ZODIAC_EMOJI[bziB.animal]} <strong>${elementName(bziB.element)} ${animalName(bziB.animal)}</strong></p>
+            <p class="biz-sign-line"><img class="sign-line-badge" src="images/zodiac-badges/${bziB.animal.toLowerCase()}.webp" alt="" loading="lazy" width="28" height="28"> <strong>${elementName(bziB.element)} ${animalName(bziB.animal)}</strong></p>
             <p class="biz-bazi-line">${bziB.stem.name} ${bziB.stem.hanzi} (${S.biz_heavenly_stem_label || "Heavenly Stem"}) · ${bziB.branch.name} ${bziB.branch.hanzi} (${S.biz_earthly_branch_label || "Earthly Branch"}) · ${isKm ? (bziB.yinYang === "Yang" ? "យ៉ាង" : "យិន") : bziB.yinYang}</p>
             <p class="biz-born-sub">${cnyNoteB}</p>
             <p>${(isKm && typeof KM_ELEMENT_INFO !== "undefined" ? KM_ELEMENT_INFO : ELEMENT_INFO)[bziB.element].blurb}</p>

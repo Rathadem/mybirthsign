@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
     resultBox.innerHTML = `
       <div class="result-card">
         <div class="result-header">
-          <span class="result-emoji">${ZODIAC_EMOJI[animal]}</span>
+          <img class="result-badge" src="images/zodiac-badges/${animal.toLowerCase()}.webp" alt="" loading="lazy" width="64" height="64">
           <div>
             <h2>${resultHeading}</h2>
             <p class="result-sub">${bornSub}</p>
@@ -380,12 +380,12 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="card compat-card">
         <div class="compat-pair">
           <div class="compat-person">
-            <span class="result-emoji">${ZODIAC_EMOJI[za.animal]}</span>
+            <img class="result-badge" src="images/zodiac-badges/${za.animal.toLowerCase()}.webp" alt="" loading="lazy" width="64" height="64">
             <p>${elementADisplay} ${animalADisplay}</p>
           </div>
           <div class="compat-plus">+</div>
           <div class="compat-person">
-            <span class="result-emoji">${ZODIAC_EMOJI[zb.animal]}</span>
+            <img class="result-badge" src="images/zodiac-badges/${zb.animal.toLowerCase()}.webp" alt="" loading="lazy" width="64" height="64">
             <p>${elementBDisplay} ${animalBDisplay}</p>
           </div>
         </div>

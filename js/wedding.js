@@ -139,12 +139,12 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="card compat-card">
         <div class="compat-pair">
           <div class="compat-person">
-            <span class="result-emoji">${ZODIAC_EMOJI[za.animal]}</span>
+            <img class="result-badge" src="images/zodiac-badges/${za.animal.toLowerCase()}.webp" alt="" loading="lazy" width="64" height="64">
             <p>${animalADisplay}</p>
           </div>
           <div class="compat-plus">+</div>
           <div class="compat-person">
-            <span class="result-emoji">${ZODIAC_EMOJI[zb.animal]}</span>
+            <img class="result-badge" src="images/zodiac-badges/${zb.animal.toLowerCase()}.webp" alt="" loading="lazy" width="64" height="64">
             <p>${animalBDisplay}</p>
           </div>
         </div>

@@ -498,13 +498,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         <div class="rc-pair-header">
           <div class="rc-pair-person">
-            <span class="rc-pair-symbol">${signA.symbol}${chineseA ? " " + ZODIAC_EMOJI[chineseA.animal] : ""}</span>
+            <span class="rc-pair-symbol"><span class="rc-pair-glyph">${signA.symbol}</span>${chineseA ? `<img class="result-badge" src="images/zodiac-badges/${chineseA.animal.toLowerCase()}.webp" alt="" loading="lazy" width="48" height="48">` : ""}</span>
             <div><strong>${p1Name}</strong><br>${signName(signA)}${chineseA ? " · " + (isKm ? KM_ANIMAL_NAMES[chineseA.animal] : chineseA.animal) : ""}</div>
             <div class="rc-pair-lifepath">${S.rc_life_path_label || "Life Path"} ${masterDisplay(numA.lifePath)}</div>
           </div>
           <div class="rc-pair-heart">❤️</div>
           <div class="rc-pair-person">
-            <span class="rc-pair-symbol">${signB.symbol}${chineseB ? " " + ZODIAC_EMOJI[chineseB.animal] : ""}</span>
+            <span class="rc-pair-symbol"><span class="rc-pair-glyph">${signB.symbol}</span>${chineseB ? `<img class="result-badge" src="images/zodiac-badges/${chineseB.animal.toLowerCase()}.webp" alt="" loading="lazy" width="48" height="48">` : ""}</span>
             <div><strong>${p2Name}</strong><br>${signName(signB)}${chineseB ? " · " + (isKm ? KM_ANIMAL_NAMES[chineseB.animal] : chineseB.animal) : ""}</div>
             <div class="rc-pair-lifepath">${S.rc_life_path_label || "Life Path"} ${masterDisplay(numB.lifePath)}</div>
           </div>
@@ -535,12 +535,12 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="rc-two-col">
           <div class="rc-profile-card">
             <h3>${S.rc_chinese_zodiac_heading || "Chinese Zodiac"} — ${p1Name}</h3>
-            <p class="rc-sign-line">${ZODIAC_EMOJI[chineseA.animal]} <strong>${isKm ? KM_ELEMENT_NAMES[chineseA.element] + " " + KM_ANIMAL_NAMES[chineseA.animal] : chineseA.element + " " + chineseA.animal}</strong></p>
+            <p class="rc-sign-line"><img class="sign-line-badge" src="images/zodiac-badges/${chineseA.animal.toLowerCase()}.webp" alt="" loading="lazy" width="28" height="28"> <strong>${isKm ? KM_ELEMENT_NAMES[chineseA.element] + " " + KM_ANIMAL_NAMES[chineseA.animal] : chineseA.element + " " + chineseA.animal}</strong></p>
             <p class="rc-born-sub">${fmt(S.born_sub_tpl || "Born {date} — Year of the {year}", { date: fmtDate(dob1), year: chineseA.zodiacYear })}</p>
           </div>
           <div class="rc-profile-card">
             <h3>${S.rc_chinese_zodiac_heading || "Chinese Zodiac"} — ${p2Name}</h3>
-            <p class="rc-sign-line">${ZODIAC_EMOJI[chineseB.animal]} <strong>${isKm ? KM_ELEMENT_NAMES[chineseB.element] + " " + KM_ANIMAL_NAMES[chineseB.animal] : chineseB.element + " " + chineseB.animal}</strong></p>
+            <p class="rc-sign-line"><img class="sign-line-badge" src="images/zodiac-badges/${chineseB.animal.toLowerCase()}.webp" alt="" loading="lazy" width="28" height="28"> <strong>${isKm ? KM_ELEMENT_NAMES[chineseB.element] + " " + KM_ANIMAL_NAMES[chineseB.animal] : chineseB.element + " " + chineseB.animal}</strong></p>
             <p class="rc-born-sub">${fmt(S.born_sub_tpl || "Born {date} — Year of the {year}", { date: fmtDate(dob2), year: chineseB.zodiacYear })}</p>
           </div>
         </div>
