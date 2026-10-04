@@ -13,17 +13,32 @@
 // Scroll-position fix: browsers sometimes restore the scroll position a page
 // had the last time it was open (back/forward cache, or scroll restoration
 // on reload), which can land a fresh page-to-page link click part-way down
-// the new page instead of at the top. Force every plain navigation (one with
-// no #anchor in the URL) to start at the top, while leaving real anchor
-// links (e.g. animals.html#animal-pig) free to scroll to their target.
+// the new page instead of at the top -- hiding the header entirely if the
+// restored position happens to match its height. Force every plain
+// navigation (one with no #anchor in the URL) to start at the top, while
+// leaving real anchor links (e.g. animals.html#animal-pig) free to scroll to
+// their target.
+//
+// A single pageshow-time scrollTo isn't always enough: some mobile browsers
+// re-apply their own remembered scroll position *after* pageshow fires, and
+// the Khmer web font finishing its (async) load can reflow the page and
+// nudge the scroll position again. So this re-asserts scroll-to-top on
+// several events/timings rather than just once.
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
-window.addEventListener("pageshow", function () {
+function zsForceScrollTop() {
   if (!window.location.hash) {
     window.scrollTo(0, 0);
   }
+}
+window.addEventListener("pageshow", zsForceScrollTop);
+window.addEventListener("load", function () {
+  zsForceScrollTop();
+  setTimeout(zsForceScrollTop, 50);
+  setTimeout(zsForceScrollTop, 300);
 });
+document.addEventListener("DOMContentLoaded", zsForceScrollTop);
 
 // ---------------------------------------------------------------------------
 // Animal / element display names
