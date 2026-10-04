@@ -733,14 +733,14 @@ section.content-section h2 {
 
 /* Zodiac animals grid */
 .bv2-zodiac-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
-.bv2-zodiac-card { display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 0 0 18px; text-align: center; text-decoration: none; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.bv2-zodiac-card { display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 22px 14px 18px; text-align: center; text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
 .bv2-zodiac-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,0,0,0.35); border-color: var(--accent); }
 .bv2-zodiac-card .animal-badge { margin: 0 auto 12px; }
-.bv2-zodiac-img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 15%; display: block; margin: 0 0 14px; transition: transform 0.25s ease; }
-.bv2-zodiac-card:hover .bv2-zodiac-img { transform: scale(1.05); }
-.bv2-zodiac-card h3 { margin: 0 0 2px; padding: 0 14px; color: var(--text); font-size: 1rem; font-family: 'Playfair Display', Georgia, serif; }
-.bv2-zodiac-khmer { color: var(--accent-soft); font-size: 0.85rem; margin: 0 0 8px; padding: 0 14px; }
-.bv2-zodiac-card p.bv2-zodiac-trait { color: var(--text-muted); font-size: 0.82rem; margin: 0 0 10px; padding: 0 14px; min-height: 2.6em; }
+.bv2-zodiac-img { width: 112px; height: 112px; object-fit: contain; display: block; margin: 0 auto 12px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45)); transition: transform 0.25s ease; }
+.bv2-zodiac-card:hover .bv2-zodiac-img { transform: scale(1.08); }
+.bv2-zodiac-card h3 { margin: 0 0 2px; color: var(--text); font-size: 1rem; font-family: 'Playfair Display', Georgia, serif; }
+.bv2-zodiac-khmer { color: var(--accent-soft); font-size: 0.85rem; margin: 0 0 8px; }
+.bv2-zodiac-card p.bv2-zodiac-trait { color: var(--text-muted); font-size: 0.82rem; margin: 0 0 10px; min-height: 2.6em; }
 .bv2-zodiac-explore { color: var(--accent); font-size: 0.82rem; font-weight: 700; }
 
 /* Chinese zodiac info editorial section */
@@ -860,6 +860,7 @@ article.post.post-wide {
 }
 .animal-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
 .animal-card-head .result-emoji { font-size: 2.2rem; }
+.animal-card-badge { width: 56px; height: 56px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.4)); }
 .animal-card-head h2 { margin: 0; color: var(--accent); font-size: 1.2rem; }
 .animal-traits { color: var(--text); margin: 0 0 14px; font-size: 0.95rem; }
 .animal-meta {

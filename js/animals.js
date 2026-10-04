@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return `
       <div class="animal-card" id="animal-${animal.toLowerCase()}">
         <div class="animal-card-head">
-          <span class="result-emoji">${ZODIAC_EMOJI[animal]}</span>
+          <img class="animal-card-badge" src="images/zodiac-badges/${animal.toLowerCase()}.webp" alt="" loading="lazy" width="64" height="64">
           <h2>${animalDisplay}</h2>
         </div>
         <p class="animal-traits">${traits}</p>
