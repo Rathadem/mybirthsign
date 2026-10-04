@@ -119,6 +119,37 @@ function _wrapCanvasText(ctx, text, maxWidth) {
 // filling what would otherwise be empty space.
 const _ZODIAC_MOTIF = ["🐀", "🐂", "🐅", "🐇", "🐉", "🐍", "🐎", "🐐", "🐒", "🐓", "🐕", "🐖"];
 
+// Same 12 animals, in the same order, as lowercase keys matching the
+// circular badge artwork filenames -- used so the share card can draw the
+// real illustrated badges instead of emoji glyphs, both for the big "hero"
+// icon and the decorative motif strip.
+const _ZODIAC_BADGE_ORDER = ["rat", "ox", "tiger", "rabbit", "dragon", "snake", "horse", "goat", "monkey", "rooster", "dog", "pig"];
+
+function _loadImage(src) {
+  return new Promise(function (resolve) {
+    const img = new Image();
+    img.onload = function () { resolve(img); };
+    img.onerror = function () { resolve(null); };
+    img.src = src;
+  });
+}
+
+// Loads (and caches) all 12 circular zodiac badge images once, keyed by
+// lowercase animal name, so repeated share-card renders don't re-fetch them.
+let _zodiacBadgeImagesPromise = null;
+function _loadZodiacBadges() {
+  if (!_zodiacBadgeImagesPromise) {
+    _zodiacBadgeImagesPromise = Promise.all(
+      _ZODIAC_BADGE_ORDER.map(function (a) { return _loadImage("images/zodiac-badges/" + a + ".webp"); })
+    ).then(function (imgs) {
+      const map = {};
+      _ZODIAC_BADGE_ORDER.forEach(function (a, i) { map[a] = imgs[i]; });
+      return map;
+    });
+  }
+  return _zodiacBadgeImagesPromise;
+}
+
 function _roundRectPath(ctx, x, y, w, h, r) {
   ctx.beginPath();
   if (ctx.roundRect) {
@@ -148,8 +179,17 @@ function _seededRandom(seed) {
 
 // Draws a branded, portrait "share card" graphic (animal/result headline,
 // subheading, optional badge, site wordmark) and resolves with a PNG Blob.
-// `spec`: { emoji, heading, subheading, badge }
+// `spec`: { emoji, heading, subheading, badge, animal }
+// When `spec.animal` is given (a single zodiac animal name, any case), the
+// big hero icon and the decorative motif strip are drawn from the real
+// circular badge illustrations instead of emoji glyphs, with the current
+// animal highlighted in the strip. Without it (a combined emoji, like the
+// wedding ring or a two-animal "+" pairing), the original emoji rendering
+// is used unchanged.
 function _buildShareCardBlob(spec) {
+  const animalKey = spec.animal ? String(spec.animal).toLowerCase() : null;
+  const badgesPromise = animalKey ? _loadZodiacBadges() : Promise.resolve(null);
+  return badgesPromise.then(function (badges) {
   return new Promise(function (resolve) {
     const W = 1080, H = 1350;
     const canvas = document.createElement("canvas");
@@ -241,9 +281,20 @@ function _buildShareCardBlob(spec) {
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Big emoji
-    ctx.font = "260px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.fillText(spec.emoji || "🔮", W / 2, 565);
+    // Big hero icon: the real illustrated badge when we have one, else the
+    // original emoji glyph.
+    if (animalKey && badges && badges[animalKey]) {
+      const heroR = 205;
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(W / 2, 460, heroR, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.drawImage(badges[animalKey], W / 2 - heroR, 460 - heroR, heroR * 2, heroR * 2);
+      ctx.restore();
+    } else {
+      ctx.font = "260px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+      ctx.fillText(spec.emoji || "🔮", W / 2, 565);
+    }
 
     // Heading (wraps up to 2 lines)
     ctx.fillStyle = "#f6f2ff";
@@ -311,16 +362,36 @@ function _buildShareCardBlob(spec) {
       });
     }
 
-    // Decorative zodiac motif strip, filling the space above the footer.
-    ctx.font = "54px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.globalAlpha = 0.22;
+    // Decorative zodiac motif strip, filling the space above the footer --
+    // the real badge illustrations (current animal highlighted) when we
+    // have them, else the original faint emoji row.
     const motifY = H - 232;
     const motifGap = 72;
-    const motifStartX = W / 2 - (motifGap * (_ZODIAC_MOTIF.length - 1)) / 2;
-    _ZODIAC_MOTIF.forEach(function (emoji, i) {
-      ctx.fillText(emoji, motifStartX + i * motifGap, motifY);
-    });
-    ctx.globalAlpha = 1;
+    if (animalKey && badges) {
+      const motifStartX = W / 2 - (motifGap * (_ZODIAC_BADGE_ORDER.length - 1)) / 2;
+      _ZODIAC_BADGE_ORDER.forEach(function (a, i) {
+        const img = badges[a];
+        if (!img) return;
+        const isCurrent = a === animalKey;
+        const s = isCurrent ? 68 : 46;
+        ctx.save();
+        ctx.globalAlpha = isCurrent ? 1 : 0.38;
+        if (isCurrent) {
+          ctx.shadowColor = "rgba(212,175,55,0.9)";
+          ctx.shadowBlur = 14;
+        }
+        ctx.drawImage(img, motifStartX + i * motifGap - s / 2, motifY - s / 2, s, s);
+        ctx.restore();
+      });
+    } else {
+      ctx.font = "54px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+      ctx.globalAlpha = 0.22;
+      const motifStartX = W / 2 - (motifGap * (_ZODIAC_MOTIF.length - 1)) / 2;
+      _ZODIAC_MOTIF.forEach(function (emoji, i) {
+        ctx.fillText(emoji, motifStartX + i * motifGap, motifY);
+      });
+      ctx.globalAlpha = 1;
+    }
 
     // Footer
     ctx.strokeStyle = "rgba(180,169,214,0.3)";
@@ -337,6 +408,7 @@ function _buildShareCardBlob(spec) {
     ctx.fillText("Find your own zodiac sign, free", W / 2, H - 62);
 
     canvas.toBlob(function (blob) { resolve(blob); }, "image/png");
+  });
   });
 }
 

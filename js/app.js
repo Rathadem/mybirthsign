@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
-        ${shareBlockHtml(resultHeading, { emoji: ZODIAC_EMOJI[animal], heading: resultHeading, subheading: bornSub, badge: S[verdictKey] })}
+        ${shareBlockHtml(resultHeading, { emoji: ZODIAC_EMOJI[animal], animal: animal, heading: resultHeading, subheading: bornSub, badge: S[verdictKey] })}
 
         <p class="lunar-note">${lunarNote}</p>
 
