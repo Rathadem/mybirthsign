@@ -860,10 +860,53 @@ function initLangToggle() {
   });
 }
 
+// Mobile hamburger menu: below the --nav-collapse-width breakpoint (see
+// css/style.css), the header's <nav> collapses into a dropdown panel
+// toggled by a hamburger button. Above that width the button is hidden by
+// CSS and this is a no-op (the nav displays inline as before).
+function initNavToggle() {
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector("header.site-header nav");
+  if (!toggle || !nav) return;
+
+  function closeMenu() {
+    nav.classList.remove("nav-open");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+
+  toggle.addEventListener("click", function () {
+    const isOpen = nav.classList.toggle("nav-open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  // Close the menu after a nav link is actually followed (not a <summary>
+  // that just opens a "Tools"/"More" submenu, and not the EN/KM language
+  // switch, which stays on the same page).
+  nav.querySelectorAll("a").forEach(function (a) {
+    a.addEventListener("click", function () {
+      if (!a.hasAttribute("data-lang-switch")) closeMenu();
+    });
+  });
+
+  // Close if the person taps/clicks outside the open menu.
+  document.addEventListener("click", function (e) {
+    if (nav.classList.contains("nav-open") && !nav.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  // Collapsing back to desktop width (e.g. rotating a tablet) shouldn't
+  // leave the mobile panel stuck open underneath the now-inline nav.
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 640) closeMenu();
+  });
+}
+
 if (typeof document !== "undefined") {
   document.addEventListener("DOMContentLoaded", function () {
     applyStaticTranslations();
     initLangToggle();
+    initNavToggle();
   });
 }
 

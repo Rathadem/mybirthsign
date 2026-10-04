@@ -156,6 +156,75 @@ nav a:hover { color: var(--accent); }
   background: rgba(255,255,255,0.06);
 }
 
+/* Mobile hamburger menu. Above 640px the toggle button is hidden and the
+   nav displays inline exactly as before; at or below it, the nav collapses
+   into a dropdown panel the button shows/hides (see js/i18n.js initNavToggle). */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 36px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--text-muted);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 640px) {
+  .nav-toggle { display: flex; }
+  header.site-header nav {
+    display: none;
+    flex-basis: 100%;
+    order: 3;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  header.site-header nav.nav-open { display: flex; }
+  header.site-header nav a,
+  header.site-header nav .nav-dropdown {
+    margin-left: 0;
+    width: 100%;
+  }
+  header.site-header nav a {
+    padding: 10px 4px;
+  }
+  header.site-header nav .nav-dropdown > summary {
+    padding: 10px 4px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  header.site-header nav .nav-dropdown-menu {
+    position: static;
+    box-shadow: none;
+    border: none;
+    background: rgba(255,255,255,0.03);
+    margin: 2px 0 2px 12px;
+    width: calc(100% - 12px);
+  }
+  header.site-header nav .lang-toggle {
+    margin: 10px 0 2px;
+  }
+}
+
 .hero {
   text-align: center;
   padding: 24px 0 30px;
