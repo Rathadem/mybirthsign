@@ -64,24 +64,24 @@
 </header>
 
 <section class="romance-section container romance-hero">
-  <h1>💞 Chinese Zodiac Compatibility Calculator</h1>
-  <p>Enter two birth dates to reveal a complete Chinese Zodiac compatibility reading — love, friendship, business, financial, communication, attraction, and long-term potential.<br><span lang="km">បញ្ចូលកាលបរិច្ឆេទកំណើតអ្នកទាំងពីរ ដើម្បីទទួលបានលទ្ធផលភាពស៊ីគ្នាតាមនិមិត្តសញ្ញាចិនពេញលេញ។</span></p>
+  <h1 data-i18n="romance_hero_title">💞 Chinese Zodiac Compatibility Calculator</h1>
+  <p data-i18n="romance_hero_subtitle">Enter two birth dates to reveal a complete Chinese Zodiac compatibility reading — love, friendship, business, financial, communication, attraction, and long-term potential.</p>
 </section>
 
 <section class="romance-section container" id="romance-form-section">
   <form id="romance-form" class="romance-form" novalidate>
     <div class="compat-row">
       <div>
-        <label for="romance-p1-dob">Person 1 — Date of birth</label>
+        <label for="romance-p1-dob" data-i18n="romance_p1_dob_label">Person 1 — Date of birth</label>
         <input type="date" lang="en-GB" id="romance-p1-dob" name="romance-p1-dob" required min="1900-01-01">
       </div>
       <div>
-        <label for="romance-p2-dob">Person 2 — Date of birth</label>
+        <label for="romance-p2-dob" data-i18n="romance_p2_dob_label">Person 2 — Date of birth</label>
         <input type="date" lang="en-GB" id="romance-p2-dob" name="romance-p2-dob" required min="1900-01-01">
       </div>
     </div>
     <p id="romance-form-error" class="romance-form-error" role="alert" hidden></p>
-    <button type="submit" class="romance-submit-btn">❤️ Reveal Our Compatibility</button>
+    <button type="submit" class="romance-submit-btn" data-i18n="romance_submit_btn">❤️ Reveal Our Compatibility</button>
   </form>
 
   <div id="romance-result"></div>
