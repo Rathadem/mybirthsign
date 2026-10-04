@@ -947,13 +947,14 @@ footer.site-footer a { margin: 0 10px; color: var(--text-muted); }
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 24px;
-  margin-bottom: 24px;
+  padding: 18px;
+  max-width: 640px;
+  margin: 0 auto 24px;
 }
 .rc-people-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 14px;
 }
 @media (max-width: 640px) {
   .rc-people-grid { grid-template-columns: 1fr; }
@@ -961,7 +962,7 @@ footer.site-footer a { margin: 0 10px; color: var(--text-muted); }
 .rc-person-card {
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 18px;
+  padding: 14px;
   background: rgba(255, 255, 255, 0.02);
 }
 .rc-person-card legend {
@@ -972,7 +973,7 @@ footer.site-footer a { margin: 0 10px; color: var(--text-muted); }
 }
 .rc-person-card label {
   display: block;
-  margin-top: 12px;
+  margin-top: 9px;
   margin-bottom: 4px;
   font-size: 0.85rem;
   color: var(--text-muted);
