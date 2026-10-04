@@ -1830,3 +1830,284 @@ footer.site-footer a { margin: 0 10px; color: var(--text-muted); }
 }
 .kdp-footer .kdp-clear:hover,
 .kdp-footer .kdp-today:hover { text-decoration: underline; }
+
+/* ===========================================================================
+   Romance Compatibility ("MyBirthSign Compatibility") — scoped pink/gold
+   theme for the Chinese Zodiac Love Compatibility feature on
+   compatibility.html. Prefixed .romance-* throughout so it never touches
+   any other page's styling.
+   =========================================================================== */
+:root {
+  --romance-pink-light: #F8A1C4;
+  --romance-pink: #FF6FA5;
+  --romance-pink-deep: #E91E63;
+  --romance-pink-darker: #C2185B;
+  --romance-gold: #D4AF37;
+  --romance-gold-light: #FFD76A;
+  --romance-white: #FFFFFF;
+  --romance-text-dark: #8E1748;
+}
+
+.romance-section { max-width: 920px; }
+
+.romance-hero {
+  text-align: center;
+  padding: 10px 0 4px;
+}
+.romance-hero h1 {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, var(--romance-pink-deep), var(--romance-gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.romance-hero p { color: var(--text-muted); max-width: 640px; margin: 0 auto; }
+
+.romance-form {
+  background: linear-gradient(160deg, rgba(248, 161, 196, 0.12), rgba(10, 8, 20, 0.0));
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.romance-form .compat-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.romance-form .compat-row > div { flex: 1; min-width: 200px; }
+.romance-submit-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #3a0a1e;
+  background: linear-gradient(135deg, var(--romance-gold-light), var(--romance-gold));
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.romance-submit-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(212, 175, 55, 0.45); }
+
+/* --- the result card itself ------------------------------------------- */
+.romance-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(165deg, var(--romance-pink-light) 0%, var(--romance-pink) 45%, var(--romance-pink-deep) 100%);
+  border: 2px solid var(--romance-gold);
+  border-radius: 24px;
+  padding: 32px 20px 28px;
+  color: var(--romance-text-dark);
+  box-shadow: 0 18px 50px rgba(194, 24, 91, 0.35), inset 0 0 40px rgba(255, 255, 255, 0.15);
+}
+.romance-card h2, .romance-card h3 { color: var(--romance-text-dark); }
+.romance-card .share-row { margin: 18px auto; justify-content: center; display: flex; }
+
+.romance-floating-hearts { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.romance-floating-hearts span {
+  position: absolute;
+  bottom: -40px;
+  font-size: 1.4rem;
+  opacity: 0.55;
+  animation: romanceFloatUp 9s linear infinite;
+}
+.romance-floating-hearts span:nth-child(1) { left: 6%; animation-delay: 0s; font-size: 1.1rem; }
+.romance-floating-hearts span:nth-child(2) { left: 22%; animation-delay: 1.5s; font-size: 1.6rem; }
+.romance-floating-hearts span:nth-child(3) { left: 40%; animation-delay: 3s; font-size: 1rem; }
+.romance-floating-hearts span:nth-child(4) { left: 58%; animation-delay: 0.8s; font-size: 1.3rem; }
+.romance-floating-hearts span:nth-child(5) { left: 75%; animation-delay: 4s; font-size: 1.2rem; }
+.romance-floating-hearts span:nth-child(6) { left: 90%; animation-delay: 2.2s; font-size: 1.5rem; }
+@keyframes romanceFloatUp {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.4; }
+  100% { transform: translateY(-620px) rotate(25deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .romance-floating-hearts span { animation: none; display: none; }
+}
+
+.romance-pair-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 4vw, 28px);
+  margin-bottom: 18px;
+  flex-wrap: nowrap;
+}
+.romance-zodiac-circle { text-align: center; flex: 0 1 auto; min-width: 0; }
+.romance-zodiac-ring {
+  width: clamp(70px, 24vw, 120px);
+  height: clamp(70px, 24vw, 120px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0%, #ffe3ef 55%, var(--romance-pink) 100%);
+  border: 3px solid var(--romance-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4), 0 8px 24px rgba(142, 23, 72, 0.3);
+  animation: romanceRingGlow 3.2s ease-in-out infinite;
+}
+.romance-zodiac-ring img { width: 70%; height: 70%; object-fit: contain; border-radius: 50%; }
+@keyframes romanceRingGlow {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(255,255,255,0.4), 0 8px 24px rgba(142,23,72,0.3); }
+  50% { box-shadow: 0 0 0 7px rgba(255, 215, 106, 0.5), 0 8px 30px rgba(142,23,72,0.4); }
+}
+.romance-zodiac-name { font-weight: bold; font-size: clamp(0.85rem, 3vw, 1.1rem); margin: 2px 0; }
+.romance-zodiac-sub { font-size: clamp(0.68rem, 2.4vw, 0.82rem); color: var(--romance-text-dark); opacity: 0.85; margin: 0; }
+
+.romance-link-heart {
+  position: relative;
+  font-size: clamp(1.4rem, 6vw, 2.2rem);
+  flex: 0 0 auto;
+  animation: romancePulse 1.6s ease-in-out infinite;
+}
+@keyframes romancePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+.romance-ray { display: none; }
+
+.romance-big-heart {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin: 8px auto 4px;
+}
+.romance-big-heart-glyph {
+  font-size: clamp(3.2rem, 14vw, 5.5rem);
+  filter: drop-shadow(0 10px 18px rgba(142, 23, 72, 0.45));
+  animation: romancePulse 2.4s ease-in-out infinite;
+  line-height: 1;
+}
+.romance-big-heart-score {
+  position: relative;
+  margin-top: -2.4em;
+  font-weight: bold;
+  font-size: clamp(1.1rem, 5vw, 1.6rem);
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(142, 23, 72, 0.6);
+}
+.romance-big-heart-label { margin: 6px 0 2px; font-weight: 600; opacity: 0.9; }
+.romance-hearts-row { display: flex; justify-content: center; gap: 4px; font-size: 1.3rem; margin-top: 4px; }
+.romance-heart-pip { opacity: 0.9; }
+
+.romance-summary-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 18px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 720px;
+  box-shadow: 0 8px 24px rgba(142, 23, 72, 0.18);
+}
+.romance-summary-card h2 { margin-top: 0; font-size: 1.2rem; }
+
+.romance-section-heading {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-size: 1.15rem;
+  margin: 28px 0 14px;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(142, 23, 72, 0.5);
+}
+
+.romance-cat-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+.romance-cat-card {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(142, 23, 72, 0.15);
+}
+.romance-cat-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.romance-cat-ring {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 auto;
+}
+.romance-cat-ring-inner {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: bold; color: var(--romance-pink-darker);
+}
+.romance-cat-head h3 { margin: 0; font-size: 0.98rem; }
+.romance-cat-card p { font-size: 0.86rem; margin: 6px 0; line-height: 1.5; }
+.romance-cat-strengths strong { color: #1a7a3a; }
+.romance-cat-challenges strong { color: var(--romance-pink-darker); }
+.romance-cat-advice strong { color: var(--romance-gold); }
+
+.romance-profile-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.romance-profile-card {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(142, 23, 72, 0.15);
+}
+.romance-profile-badge { border-radius: 50%; border: 2px solid var(--romance-gold); margin-bottom: 8px; }
+.romance-profile-sub { color: var(--romance-pink-darker); font-weight: 600; font-size: 0.88rem; }
+.romance-profile-overview, .romance-profile-element, .romance-profile-list { font-size: 0.84rem; text-align: left; }
+
+.romance-overall-card {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  background: linear-gradient(160deg, #fff 0%, #ffeef5 100%);
+  border: 2px solid var(--romance-gold);
+  border-radius: 20px;
+  padding: 26px 20px;
+  margin-top: 22px;
+  box-shadow: 0 10px 30px rgba(142, 23, 72, 0.25);
+}
+.romance-overall-card h2 { font-size: 1.2rem; margin-top: 0; }
+.romance-overall-score {
+  font-size: clamp(2.2rem, 8vw, 3rem);
+  font-weight: bold;
+  background: linear-gradient(135deg, var(--romance-pink-deep), var(--romance-gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.romance-overall-rating { font-weight: bold; margin-bottom: 10px; }
+.romance-disclaimer { font-size: 0.74rem; opacity: 0.7; margin-top: 10px; }
+
+.romance-actions-row { text-align: center; margin-top: 20px; position: relative; z-index: 1; }
+.romance-reset-btn {
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--romance-pink-darker);
+  box-shadow: 0 4px 14px rgba(142, 23, 72, 0.25);
+}
+.romance-reset-btn:hover { background: #fff; }
+
+.romance-form-error { color: #fff; background: var(--romance-pink-darker); padding: 8px 14px; border-radius: 10px; font-size: 0.88rem; }
+
+/* Mobile: never allow horizontal scroll — shrink, never stack, the circles */
+@media (max-width: 480px) {
+  .romance-card { padding: 24px 12px 20px; border-radius: 18px; }
+  .romance-pair-row { gap: 6px; }
+  .romance-zodiac-ring { width: clamp(64px, 26vw, 92px); height: clamp(64px, 26vw, 92px); border-width: 2px; }
+}

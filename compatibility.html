@@ -8,10 +8,18 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<title>Relationship Compatibility Calculator — Astrology & Numerology | MyBirthSign</title>
+<title>Chinese Zodiac Compatibility Calculator | MyBirthSign</title>
 <link rel="canonical" href="https://mybirthsign.com/compatibility.html">
+<meta name="description" content="Check Chinese Zodiac compatibility between two people using birth dates. Discover love, friendship, business, communication, and long-term compatibility.">
+<meta property="og:type" content="website">
 <meta property="og:url" content="https://mybirthsign.com/compatibility.html">
-<meta name="description" content="Enter two birthdays to get a full relationship compatibility report based on Western sun signs and numerology life path numbers.">
+<meta property="og:title" content="Chinese Zodiac Compatibility Calculator | MyBirthSign">
+<meta property="og:description" content="Check Chinese Zodiac compatibility between two people using birth dates. Discover love, friendship, business, communication, and long-term compatibility.">
+<meta property="og:image" content="https://mybirthsign.com/images/og-compatibility.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Chinese Zodiac Compatibility Calculator | MyBirthSign">
+<meta name="twitter:description" content="Check Chinese Zodiac compatibility between two people using birth dates. Discover love, friendship, business, communication, and long-term compatibility.">
+<meta name="twitter:image" content="https://mybirthsign.com/images/og-compatibility.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
 <link rel="stylesheet" href="css/style.css">
@@ -55,8 +63,34 @@
   </div>
 </header>
 
+<section class="romance-section container romance-hero">
+  <h1>💞 Chinese Zodiac Compatibility Calculator</h1>
+  <p>Enter two birth dates to reveal a complete Chinese Zodiac compatibility reading — love, friendship, business, financial, communication, attraction, and long-term potential.<br><span lang="km">បញ្ចូលកាលបរិច្ឆេទកំណើតអ្នកទាំងពីរ ដើម្បីទទួលបានលទ្ធផលភាពស៊ីគ្នាតាមនិមិត្តសញ្ញាចិនពេញលេញ។</span></p>
+</section>
+
+<section class="romance-section container" id="romance-form-section">
+  <form id="romance-form" class="romance-form" novalidate>
+    <div class="compat-row">
+      <div>
+        <label for="romance-p1-dob">Person 1 — Date of birth</label>
+        <input type="date" lang="en-GB" id="romance-p1-dob" name="romance-p1-dob" required min="1900-01-01">
+      </div>
+      <div>
+        <label for="romance-p2-dob">Person 2 — Date of birth</label>
+        <input type="date" lang="en-GB" id="romance-p2-dob" name="romance-p2-dob" required min="1900-01-01">
+      </div>
+    </div>
+    <p id="romance-form-error" class="romance-form-error" role="alert" hidden></p>
+    <button type="submit" class="romance-submit-btn">❤️ Reveal Our Compatibility</button>
+  </form>
+
+  <div id="romance-result"></div>
+</section>
+
+<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
+
 <section class="hero container rc-hero">
-  <h1 data-i18n="rc_hero_title">💞 Relationship Compatibility Calculator</h1>
+  <h2>💞 Prefer Western Astrology &amp; Numerology?</h2>
   <p data-i18n="rc_hero_subtitle">Enter both birthdays to get a full compatibility report — Western sun signs, numerology life path numbers, and an 11-part relationship breakdown.</p>
 </section>
 
@@ -168,7 +202,9 @@
 <script src="js/datepicker.js"></script>
 <script src="js/share.js"></script>
 <script src="js/western-data.js"></script>
+<script src="js/business-data.js"></script>
 <script src="js/compat-calculator.js"></script>
+<script src="js/romance-calculator.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
