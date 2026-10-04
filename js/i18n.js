@@ -10,6 +10,22 @@
 //   ZodiacI18N.applyStaticTranslations(), ZodiacI18N.initLangToggle(), ZodiacI18N.fmt()
 
 // ---------------------------------------------------------------------------
+// Scroll-position fix: browsers sometimes restore the scroll position a page
+// had the last time it was open (back/forward cache, or scroll restoration
+// on reload), which can land a fresh page-to-page link click part-way down
+// the new page instead of at the top. Force every plain navigation (one with
+// no #anchor in the URL) to start at the top, while leaving real anchor
+// links (e.g. animals.html#animal-pig) free to scroll to their target.
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+window.addEventListener("pageshow", function () {
+  if (!window.location.hash) {
+    window.scrollTo(0, 0);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Animal / element display names
 // ---------------------------------------------------------------------------
 const KM_ANIMAL_NAMES = {
