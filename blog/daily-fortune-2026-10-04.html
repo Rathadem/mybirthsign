@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<title>What's Your Birthday Zodiac? Free Lucky Sign Checker | MyBirthSign</title>
-<link rel="canonical" href="https://mybirthsign.com/">
-<meta property="og:url" content="https://mybirthsign.com/">
-<meta name="description" content="Enter your birthday to instantly discover your Chinese zodiac animal, element, lucky numbers, colors, compatibility, and career fit.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<title>Today's Fortune for Each Zodiac Animal — October 4, 2026</title>
+<link rel="canonical" href="https://mybirthsign.com/blog/daily-fortune-2026-10-04.html">
+<meta property="og:url" content="https://mybirthsign.com/blog/daily-fortune-2026-10-04.html">
+<meta name="description" content="What today is good for, and what to watch out for, broken down by all 12 Chinese zodiac animals.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="../css/style.css">
 
 <!-- Google AdSense: replace ca-pub-XXXXXXXXXXXXXXXX with your own Publisher ID after approval -->
 <!--
@@ -21,25 +21,25 @@
 
 <header class="site-header">
   <div class="container">
-    <a href="index.html" class="logo"><svg class="logo-mark" width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="13" cy="13" r="11.5" fill="none" stroke="var(--accent)" stroke-width="1.1"/><path d="M16.4 7.1a6.1 6.1 0 1 0 0 11.8 7.1 7.1 0 1 1 0-11.8Z" fill="var(--accent)"/><path d="M8.8 14.4l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9.9-2Z" fill="var(--accent-soft)"/></svg><span class="logo-text">MyBirthSign</span></a>
+    <a href="../index.html" class="logo"><svg class="logo-mark" width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="13" cy="13" r="11.5" fill="none" stroke="var(--accent)" stroke-width="1.1"/><path d="M16.4 7.1a6.1 6.1 0 1 0 0 11.8 7.1 7.1 0 1 1 0-11.8Z" fill="var(--accent)"/><path d="M8.8 14.4l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9.9-2Z" fill="var(--accent-soft)"/></svg><span class="logo-text">MyBirthSign</span></a>
     <nav>
-      <a href="index.html" data-i18n="nav_checker">Checker</a>
+      <a href="../index.html" data-i18n="nav_checker">Checker</a>
       <details class="nav-dropdown">
         <summary data-i18n="nav_tools">Tools</summary>
         <div class="nav-dropdown-menu">
-          <a href="checker.html" data-i18n="nav_checker_page">Checker</a>
-          <a href="compatibility.html" data-i18n="nav_compatibility">Compatibility</a>
-          <a href="wedding-date.html" data-i18n="nav_wedding">Wedding Dates</a>
-          <a href="business-partner.html" data-i18n="nav_business">Business Partner</a>
+          <a href="../checker.html" data-i18n="nav_checker_page">Checker</a>
+          <a href="../compatibility.html" data-i18n="nav_compatibility">Compatibility</a>
+          <a href="../wedding-date.html" data-i18n="nav_wedding">Wedding Dates</a>
+          <a href="../business-partner.html" data-i18n="nav_business">Business Partner</a>
         </div>
       </details>
-      <a href="animals.html" data-i18n="nav_animals">Zodiac Guide</a>
-      <a href="blog.html" data-i18n="nav_blog">Blog</a>
+      <a href="../animals.html" data-i18n="nav_animals">Zodiac Guide</a>
+      <a href="../blog.html" data-i18n="nav_blog">Blog</a>
       <details class="nav-dropdown">
         <summary data-i18n="nav_more">More</summary>
         <div class="nav-dropdown-menu">
-          <a href="about.html" data-i18n="nav_about">About</a>
-          <a href="contact.html" data-i18n="nav_contact">Contact</a>
+          <a href="../about.html" data-i18n="nav_about">About</a>
+          <a href="../contact.html" data-i18n="nav_contact">Contact</a>
         </div>
       </details>
       <span class="lang-toggle">
@@ -50,33 +50,21 @@
   </div>
 </header>
 
-<section class="hero container">
-  <h1 data-i18n="hero_title">What Does Your Birthday Say About You?</h1>
-  <p data-i18n="hero_subtitle">Enter your date of birth to reveal your zodiac animal, element, lucky numbers, and more.</p>
-  <button type="button" id="hero-reveal-btn" class="hero-cta" data-i18n="hero_cta_button">MyBirthSign</button>
-</section>
-
-<section class="quick-links container">
-  <a href="compatibility.html" class="quick-link-btn" data-i18n="nav_compatibility">Compatibility</a>
-  <a href="wedding-date.html" class="quick-link-btn" data-i18n="nav_wedding">Wedding Dates</a>
-  <a href="business-partner.html" class="quick-link-btn" data-i18n="nav_business">Business Partner</a>
-</section>
-
-<div class="today-strip container">
-  <div>
-    <div class="label" data-i18n="today_label">Today</div>
-    <div class="value" id="today-date">—</div>
-  </div>
-  <div>
-    <div class="label" data-i18n="today_number_label">Today's Number</div>
-    <div class="value" id="today-number">—</div>
-  </div>
-</div>
-
 <div data-lang-content="en">
-<section class="content-section container" style="max-width: 920px; margin-top: 10px;">
-  <h2>Today's Fortune for Each Zodiac Animal</h2>
-  <p class="compat-intro">What today is good for, and what to watch out for, broken down by all 12 signs.</p>
+<article class="post post-wide container">
+  <h1>Today's Fortune for Each Zodiac Animal — October 4, 2026</h1>
+
+  <div class="share-row" data-share></div>
+
+  <div class="ad-slot">Ad space</div>
+
+  <p>
+    Every day sits differently with each of the 12 zodiac animals, based on the weekday, the
+    day's number, and how the day relates to this month's traditional animal. Here's how today
+    lines up for all twelve signs — what it's good for, and the one thing worth watching out
+    for, based on that animal's usual soft spot.
+  </p>
+
   <div class="fortune-grid">
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -86,7 +74,7 @@
       </div>
       <p><strong>Good for:</strong> Big decisions, bold moves, saying what's on your mind.</p>
       <p><strong>Avoid:</strong> Can be restless or overly cautious with money and trust. Even on a great day, that's worth keeping an eye on so you don't overreach.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-rat.html">Learn more about Rat →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-rat.html">Learn more about Rat →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -96,7 +84,7 @@
       </div>
       <p><strong>Good for:</strong> Steady follow-through on something already in motion.</p>
       <p><strong>Avoid:</strong> Can come across as proud or impatient with limitations. Easy to let that slide on a day this smooth — don't drop your guard completely.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-dragon.html">Learn more about Dragon →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-dragon.html">Learn more about Dragon →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -106,7 +94,7 @@
       </div>
       <p><strong>Good for:</strong> Steady follow-through on something already in motion.</p>
       <p><strong>Avoid:</strong> Can be mischievous or struggle to focus on one thing. Easy to let that slide on a day this smooth — don't drop your guard completely.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-monkey.html">Learn more about Monkey →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-monkey.html">Learn more about Monkey →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -116,7 +104,7 @@
       </div>
       <p><strong>Good for:</strong> Routine tasks — nothing special pulling for or against you today.</p>
       <p><strong>Avoid:</strong> Can be stubborn and slow to adapt to sudden change. Nothing's pushing it to extremes today, but it's worth noticing.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-ox.html">Learn more about Ox →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-ox.html">Learn more about Ox →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -126,7 +114,7 @@
       </div>
       <p><strong>Good for:</strong> Routine tasks — nothing special pulling for or against you today.</p>
       <p><strong>Avoid:</strong> Can be impulsive or impatient with slower-moving people. Nothing's pushing it to extremes today, but it's worth noticing.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-tiger.html">Learn more about Tiger →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-tiger.html">Learn more about Tiger →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -136,7 +124,7 @@
       </div>
       <p><strong>Good for:</strong> Routine tasks — nothing special pulling for or against you today.</p>
       <p><strong>Avoid:</strong> Can be overly cautious and avoid necessary confrontation. Nothing's pushing it to extremes today, but it's worth noticing.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-rabbit.html">Learn more about Rabbit →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-rabbit.html">Learn more about Rabbit →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -146,7 +134,7 @@
       </div>
       <p><strong>Good for:</strong> Routine tasks — nothing special pulling for or against you today.</p>
       <p><strong>Avoid:</strong> Can be secretive or prone to overthinking. Nothing's pushing it to extremes today, but it's worth noticing.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-snake.html">Learn more about Snake →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-snake.html">Learn more about Snake →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -156,7 +144,7 @@
       </div>
       <p><strong>Good for:</strong> Routine tasks — nothing special pulling for or against you today.</p>
       <p><strong>Avoid:</strong> Can be indecisive or overly dependent on others. Nothing's pushing it to extremes today, but it's worth noticing.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-goat.html">Learn more about Goat →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-goat.html">Learn more about Goat →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -166,7 +154,7 @@
       </div>
       <p><strong>Good for:</strong> Routine tasks — nothing special pulling for or against you today.</p>
       <p><strong>Avoid:</strong> Can be overly critical or blunt with others. Nothing's pushing it to extremes today, but it's worth noticing.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-rooster.html">Learn more about Rooster →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-rooster.html">Learn more about Rooster →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -176,7 +164,7 @@
       </div>
       <p><strong>Good for:</strong> Routine tasks — nothing special pulling for or against you today.</p>
       <p><strong>Avoid:</strong> Can be anxious or overly suspicious of new situations. Nothing's pushing it to extremes today, but it's worth noticing.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-dog.html">Learn more about Dog →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-dog.html">Learn more about Dog →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -186,7 +174,7 @@
       </div>
       <p><strong>Good for:</strong> Routine tasks — nothing special pulling for or against you today.</p>
       <p><strong>Avoid:</strong> Can be overly trusting or indulgent. Nothing's pushing it to extremes today, but it's worth noticing.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-pig.html">Learn more about Pig →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-pig.html">Learn more about Pig →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -196,17 +184,28 @@
       </div>
       <p><strong>Good for:</strong> Low-key tasks only. Worth skipping anything high-stakes if you can.</p>
       <p><strong>Avoid:</strong> Can be impatient or struggle to commit long-term. Today's a day that tendency can bite — build in a pause before any big call.</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-horse.html">Learn more about Horse →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-horse.html">Learn more about Horse →</a>
     </div>
   </div>
-  <p class="disclaimer">For entertainment purposes only. <a href="blog/daily-fortune-2026-10-04.html">Read today's full fortune post</a>.</p>
-</section>
+
+  <p class="disclaimer">For entertainment purposes only. Don't know your sign yet? Use the <a href="../index.html">checker tool</a> to find it.</p>
+</article>
 </div>
 
 <div data-lang-content="km">
-<section class="content-section container" style="max-width: 920px; margin-top: 10px;">
-  <h2>សំណាងប្រចាំថ្ងៃសម្រាប់សត្វនិមិត្តសញ្ញានីមួយៗ</h2>
-  <p class="compat-intro">អ្វីដែលថ្ងៃនេះល្អសម្រាប់ និងអ្វីដែលគួរប្រុងប្រយ័ត្ន — បែងចែកតាមសញ្ញាទាំង១២។</p>
+<article class="post post-wide container">
+  <h1>សំណាងប្រចាំថ្ងៃសម្រាប់សត្វនិមិត្តសញ្ញានីមួយៗ — ថ្ងៃទី៤ ខែតុលា ឆ្នាំ២០២៦</h1>
+
+  <div class="share-row" data-share></div>
+
+  <div class="ad-slot">ទំនេរសម្រាប់ផ្សាយពាណិជ្ជកម្ម</div>
+
+  <p>
+    ថ្ងៃនីមួយៗប៉ះពាល់ខុសៗគ្នាចំពោះសត្វនិមិត្តសញ្ញាទាំង១២ អាស្រ័យលើថ្ងៃនៃសប្តាហ៍ លេខប្រចាំថ្ងៃ និងទំនាក់ទំនង
+    រវាងថ្ងៃនេះ និងសត្វនិមិត្តសញ្ញាប្រចាំខែតាមប្រពៃណី។ នេះជារបៀបដែលថ្ងៃនេះទាក់ទងនឹងសញ្ញាទាំង១២ — អ្វីដែល
+    ល្អសម្រាប់ និងចំណុចមួយដែលគួរប្រុងប្រយ័ត្ន ដោយផ្អែកលើចំណុចខ្សោយធម្មតារបស់សត្វនោះ។
+  </p>
+
   <div class="fortune-grid">
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -216,7 +215,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> ការសម្រេចចិត្តធំៗ ការផ្លាស់ប្តូរយ៉ាងក្លាហាន និងការនិយាយអ្វីដែលគិតក្នុងចិត្ត។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលមិនស្ងប់ស្ងាត់ ឬប្រុងប្រយ័ត្នខ្លាំងពេកចំពោះប្រាក់កាស និងទំនុកចិត្ត។ ទោះជាថ្ងៃល្អក៏ដោយ ទំនោរនេះនៅតែសមនឹងប្រុងប្រយ័ត្ន កុំឱ្យលើសកំរិត។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-rat.html">ស្វែងយល់បន្ថែមអំពីជូត →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-rat.html">ស្វែងយល់បន្ថែមអំពីជូត →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -226,7 +225,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> ការបន្តធ្វើកិច្ចការដែលកំពុងដំណើរការស្រាប់ដោយស្ថិរភាព។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលមើលទៅអំនួត ឬអត់ធ្មត់ទាបចំពោះដែនកំណត់។ ងាយនឹងធ្វេសប្រហែសទំនោរនេះនៅថ្ងៃដ៏រលូនបែបនេះ — កុំបន្ធូរអារម្មណ៍ពេក។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-dragon.html">ស្វែងយល់បន្ថែមអំពីរោង →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-dragon.html">ស្វែងយល់បន្ថែមអំពីរោង →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -236,7 +235,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> ការបន្តធ្វើកិច្ចការដែលកំពុងដំណើរការស្រាប់ដោយស្ថិរភាព។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលលេងកំប្លែងពេក ឬពិបាកផ្តោតលើរឿងតែមួយ។ ងាយនឹងធ្វេសប្រហែសទំនោរនេះនៅថ្ងៃដ៏រលូនបែបនេះ — កុំបន្ធូរអារម្មណ៍ពេក។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-monkey.html">ស្វែងយល់បន្ថែមអំពីវក →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-monkey.html">ស្វែងយល់បន្ថែមអំពីវក →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -246,7 +245,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលរឹងរូស និងយឺតក្នុងការសម្របខ្លួនទៅនឹងការផ្លាស់ប្តូរភ្លាមៗ។ មិនមានអ្វីជំរុញវាខ្លាំងនៅថ្ងៃនេះទេ ប៉ុន្តែគួរកត់សម្គាល់។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-ox.html">ស្វែងយល់បន្ថែមអំពីឆ្លូវ →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-ox.html">ស្វែងយល់បន្ថែមអំពីឆ្លូវ →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -256,7 +255,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលប្រញាប់ប្រញាល់ ឬអត់ធ្មត់ពេកចំពោះអ្នកធ្វើការយឺត។ មិនមានអ្វីជំរុញវាខ្លាំងនៅថ្ងៃនេះទេ ប៉ុន្តែគួរកត់សម្គាល់។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-tiger.html">ស្វែងយល់បន្ថែមអំពីខាល →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-tiger.html">ស្វែងយល់បន្ថែមអំពីខាល →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -266,7 +265,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលប្រុងប្រយ័ត្នខ្លាំងពេក និងចៀសវាងការប្រឈមមុខដែលចាំបាច់។ មិនមានអ្វីជំរុញវាខ្លាំងនៅថ្ងៃនេះទេ ប៉ុន្តែគួរកត់សម្គាល់។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-rabbit.html">ស្វែងយល់បន្ថែមអំពីថោះ →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-rabbit.html">ស្វែងយល់បន្ថែមអំពីថោះ →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -276,7 +275,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលសម្ងាត់ខ្លួន ឬគិតច្រើនពេក។ មិនមានអ្វីជំរុញវាខ្លាំងនៅថ្ងៃនេះទេ ប៉ុន្តែគួរកត់សម្គាល់។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-snake.html">ស្វែងយល់បន្ថែមអំពីម្សាញ់ →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-snake.html">ស្វែងយល់បន្ថែមអំពីម្សាញ់ →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -286,7 +285,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលស្ទាក់ស្ទើរក្នុងការសម្រេចចិត្ត ឬពឹងផ្អែកលើអ្នកដទៃពេក។ មិនមានអ្វីជំរុញវាខ្លាំងនៅថ្ងៃនេះទេ ប៉ុន្តែគួរកត់សម្គាល់។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-goat.html">ស្វែងយល់បន្ថែមអំពីមមែ →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-goat.html">ស្វែងយល់បន្ថែមអំពីមមែ →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -296,7 +295,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលថ្លែងយោបល់រិះគន់ខ្លាំង ឬត្រង់ពេក។ មិនមានអ្វីជំរុញវាខ្លាំងនៅថ្ងៃនេះទេ ប៉ុន្តែគួរកត់សម្គាល់។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-rooster.html">ស្វែងយល់បន្ថែមអំពីរកា →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-rooster.html">ស្វែងយល់បន្ថែមអំពីរកា →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -306,7 +305,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលព្រួយបារម្ភ ឬសង្ស័យស្ថានភាពថ្មីពេក។ មិនមានអ្វីជំរុញវាខ្លាំងនៅថ្ងៃនេះទេ ប៉ុន្តែគួរកត់សម្គាល់។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-dog.html">ស្វែងយល់បន្ថែមអំពីច →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-dog.html">ស្វែងយល់បន្ថែមអំពីច →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -316,7 +315,7 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលជឿគេពេក ឬធ្វេសប្រហែសខ្លួនឯង។ មិនមានអ្វីជំរុញវាខ្លាំងនៅថ្ងៃនេះទេ ប៉ុន្តែគួរកត់សម្គាល់។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-pig.html">ស្វែងយល់បន្ថែមអំពីកុរ →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-pig.html">ស្វែងយល់បន្ថែមអំពីកុរ →</a>
     </div>
     <div class="fortune-card">
       <div class="fortune-card-head">
@@ -326,83 +325,24 @@
       </div>
       <p><strong>ល្អសម្រាប់៖</strong> កិច្ចការស្រាលៗប៉ុណ្ណោះ។ ប្រសិនបើអាច គួរជៀសវាងការសម្រេចចិត្តសំខាន់ៗ។</p>
       <p><strong>ជៀសវាង៖</strong> ជួនកាលប្រញាប់ប្រញាល់ ឬពិបាកក្នុងការសន្យារយៈពេលវែង។ ថ្ងៃនេះទំនោរនេះអាចប៉ះពាល់អ្នកបាន — សូមគិតឱ្យបានល្អិតល្អន់មុននឹងសម្រេចចិត្តធំៗ។</p>
-      <a class="fortune-learn-more" href="blog/zodiac-year-horse.html">ស្វែងយល់បន្ថែមអំពីមមី →</a>
+      <a class="fortune-learn-more" href="../blog/zodiac-year-horse.html">ស្វែងយល់បន្ថែមអំពីមមី →</a>
     </div>
   </div>
-  <p class="disclaimer">សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។ <a href="blog/daily-fortune-2026-10-04.html">អានប្រកាសពេញលេញថ្ងៃនេះ</a>។</p>
-</section>
+
+  <p class="disclaimer">សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។ មិនទាន់ដឹងសញ្ញារបស់អ្នកទេឬ? ប្រើ<a href="../index.html">ឧបករណ៍ពិនិត្យ</a>ដើម្បីរកវា។</p>
+</article>
 </div>
-
-<!-- Ad slot: place an AdSense <ins class="adsbygoogle"> unit here after approval -->
-<div class="ad-slot container">Ad space</div>
-
-<section class="compat-section container">
-  <h2 data-i18n="compat_heading">Check Compatibility</h2>
-  <p class="compat-intro" data-i18n="compat_intro">See how two birthdays match up — for a relationship or a business partnership.</p>
-
-  <form id="compat-form" class="checker-form compat-form">
-    <div class="compat-row">
-      <div>
-        <label for="dob-a" data-i18n="doba_label">Person A's date of birth</label>
-        <input type="date" lang="en-GB" id="dob-a" name="dob-a" required min="1920-01-01" max="2026-12-31">
-      </div>
-      <div>
-        <label for="dob-b" data-i18n="dobb_label">Person B's date of birth</label>
-        <input type="date" lang="en-GB" id="dob-b" name="dob-b" required min="1920-01-01" max="2026-12-31">
-      </div>
-    </div>
-
-    <fieldset class="context-toggle">
-      <legend data-i18n="relationship_legend">Relationship type</legend>
-      <label class="radio-option">
-        <input type="radio" name="context" value="romantic" checked> <span data-i18n="romantic_option">Romantic Partner</span>
-      </label>
-      <label class="radio-option">
-        <input type="radio" name="context" value="business"> <span data-i18n="business_option">Business Partner</span>
-      </label>
-    </fieldset>
-
-    <button type="submit" data-i18n="compat_submit">Check Compatibility</button>
-  </form>
-
-  <div id="compat-result"></div>
-</section>
-
-<div class="ad-slot container">Ad space</div>
-
-<section class="content-section container">
-  <h2 data-i18n="how_heading">How This Works</h2>
-  <p data-i18n="how_p1">
-    Your birth year maps to one of 12 zodiac animals and one of 5 elements, following the
-    traditional East Asian zodiac cycle. The animal reflects personality traits that are said
-    to repeat every 12 years, while the element adds a layer of flavor that repeats every 10 years —
-    together giving a unique 60-year combination (for example, "Earth Dragon" or "Water Tiger").
-  </p>
-  <p data-i18n="how_p2">
-    This tool is designed for fun and self-reflection. Birthdays in late January or February may
-    fall right around the lunar new year cutoff, which can shift the result by one year in some
-    traditional systems — we note this when it applies.
-  </p>
-</section>
-
-<section class="content-section container">
-  <h2 data-i18n="blog_heading">From the Blog</h2>
-  <p><a href="blog.html" data-i18n="blog_link">Read more about zodiac compatibility, yearly forecasts, and the five elements →</a></p>
-</section>
 
 <footer class="site-footer">
   <div class="container">
-    <a href="about.html" data-i18n="footer_about">About</a> ·
-    <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a> ·
-    <a href="contact.html" data-i18n="footer_contact">Contact</a>
+    <a href="../about.html" data-i18n="footer_about">About</a> ·
+    <a href="../privacy.html" data-i18n="footer_privacy">Privacy Policy</a> ·
+    <a href="../contact.html" data-i18n="footer_contact">Contact</a>
     <p data-i18n="footer_copyright">&copy; 2026 MyBirthSign. For entertainment purposes only.</p>
   </div>
 </footer>
 
-<script src="js/i18n.js"></script>
-<script src="js/zodiac-data.js"></script>
-<script src="js/datepicker.js"></script>
-<script src="js/share.js"></script>
-<script src="js/app.js"></script>
+<script src="../js/i18n.js"></script>
+<script src="../js/share.js"></script>
 </body>
 </html>
