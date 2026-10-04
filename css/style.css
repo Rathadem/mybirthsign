@@ -942,6 +942,7 @@ footer.site-footer a { margin: 0 10px; color: var(--text-muted); }
   border-radius: var(--radius);
   padding: 22px 24px;
 }
+.rc-hero h1 { font-size: 1.9rem; }
 .rc-section { max-width: var(--max-width); }
 .rc-form {
   background: var(--bg-card);
