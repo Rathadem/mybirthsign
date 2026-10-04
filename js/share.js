@@ -73,6 +73,23 @@ function _imageIconHtml() {
   );
 }
 
+// measureText().width only reports a glyph run's *advance* width. Scripts
+// with stacked/subscript consonant clusters -- Khmer chief among them --
+// routinely paint ink that extends further right (or left) than that
+// advance, because a tall conjunct cluster's visual bounding box is wider
+// than the cursor distance it advances by. A line that "fits" by .width
+// alone can still paint past the card edge once the real font (with real
+// complex-script shaping) draws it, even though the exact same measurement
+// looked safe moments earlier with the exact same font loaded. Using the
+// actual bounding box (when the browser supports it) catches that overhang;
+// .width is kept as a floor for browsers that don't report it (returns 0).
+function _textInkWidth(ctx, text) {
+  const m = ctx.measureText(text);
+  const left = m.actualBoundingBoxLeft || 0;
+  const right = m.actualBoundingBoxRight || 0;
+  return Math.max(m.width, left + right);
+}
+
 // Wraps `text` onto lines no wider than `maxWidth` on the given 2D context
 // (which must already have its font set), returning an array of lines.
 //
@@ -86,12 +103,12 @@ function _wrapCanvasText(ctx, text, maxWidth) {
   let line = "";
 
   words.forEach(function (word) {
-    if (ctx.measureText(word).width > maxWidth) {
+    if (_textInkWidth(ctx, word) > maxWidth) {
       if (line) { lines.push(line); line = ""; }
       let chunk = "";
       for (const ch of word) {
         const test = chunk + ch;
-        if (ctx.measureText(test).width > maxWidth && chunk) {
+        if (_textInkWidth(ctx, test) > maxWidth && chunk) {
           lines.push(chunk);
           chunk = ch;
         } else {
@@ -103,7 +120,7 @@ function _wrapCanvasText(ctx, text, maxWidth) {
     }
 
     const test = line ? line + " " + word : word;
-    if (ctx.measureText(test).width > maxWidth && line) {
+    if (_textInkWidth(ctx, test) > maxWidth && line) {
       lines.push(line);
       line = word;
     } else {
@@ -203,26 +220,81 @@ function _buildShareCardBlob(spec) {
   const badges = results[0];
   return new Promise(function (resolve) {
     const W = 1080, H = 1350;
+
+    // --- Layout pass -------------------------------------------------
+    // Work out how tall the heading/badge-pill/subheading block actually
+    // needs to be *before* sizing the real canvas, using a throwaway
+    // context purely for measurement (nothing here is drawn). The card's
+    // lower elements (the zodiac motif strip, the footer) were originally
+    // pinned to fixed pixel offsets from the bottom, on the assumption that
+    // block would always be short -- true for compact English copy, but
+    // Khmer text routinely wraps to 2 lines (e.g. the "Born {date} · Zodiac
+    // year {year}" subheading), which ran straight into the motif strip
+    // below it. Measuring first lets the canvas grow to fit instead.
+    const mctx = document.createElement("canvas").getContext("2d");
+    mctx.textAlign = "center";
+
+    mctx.font = "700 72px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+    const headingLines = _wrapCanvasText(mctx, spec.heading || "", W - 160).slice(0, 2);
+    let layoutY = 745;
+    layoutY += headingLines.length * 86;
+
+    let badgeFontPx = 34, badgeLines = [], pillW = 0, pillH = 0, pillY = 0;
+    if (spec.badge) {
+      const maxPillTextWidth = W - 160;
+      while (true) {
+        mctx.font = "600 " + badgeFontPx + "px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+        badgeLines = _wrapCanvasText(mctx, spec.badge, maxPillTextWidth).slice(0, 3);
+        const stillOverflowing = badgeLines.some(function (l) { return _textInkWidth(mctx, l) > maxPillTextWidth; });
+        if (!stillOverflowing || badgeFontPx <= 20) break;
+        badgeFontPx -= 2;
+      }
+      const lineH = badgeFontPx + 2 + 30;
+      const padX = 32, padY = 22;
+      const widest = badgeLines.reduce(function (m, l) { return Math.max(m, _textInkWidth(mctx, l)); }, 0);
+      pillW = Math.min(widest + padX * 2, W - 100);
+      pillH = badgeLines.length * lineH + padY * 2 - 14;
+      pillY = layoutY + 16;
+      layoutY = pillY + pillH + 46;
+    } else {
+      layoutY += 24;
+    }
+
+    let subLines = [];
+    if (spec.subheading) {
+      mctx.font = "400 38px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
+      subLines = _wrapCanvasText(mctx, spec.subheading, W - 200).slice(0, 3);
+      layoutY += subLines.length * 50;
+    }
+
+    // Default layout assumes the block above ends by ~1118px (H - 232),
+    // leaving room for the motif strip and footer below. Grow the canvas
+    // by whatever extra the real content needs past that, so everything
+    // below shifts down together instead of colliding.
+    const extraH = Math.max(0, (layoutY + 50) - (H - 232));
+    const H2 = H + extraH;
+    // --- End layout pass ----------------------------------------------
+
     const canvas = document.createElement("canvas");
     canvas.width = W;
-    canvas.height = H;
+    canvas.height = H2;
     const ctx = canvas.getContext("2d");
     const gold = "#d4af37";
     const paleGold = "#e9d28a";
 
     // Background: a deep night-sky gradient, richer at the edges.
-    const bg = ctx.createRadialGradient(W / 2, H * 0.4, 80, W / 2, H * 0.5, H * 0.85);
+    const bg = ctx.createRadialGradient(W / 2, H2 * 0.4, 80, W / 2, H2 * 0.5, H2 * 0.85);
     bg.addColorStop(0, "#1c1440");
     bg.addColorStop(0.55, "#140f2e");
     bg.addColorStop(1, "#0b0820");
     ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, W, H2);
 
     // Scattered faint stars for texture (deterministic per render).
     const rand = _seededRandom(42);
     for (let i = 0; i < 90; i++) {
       const sx = rand() * W;
-      const sy = rand() * H;
+      const sy = rand() * H2;
       const r = rand() * 1.8 + 0.4;
       ctx.beginPath();
       ctx.arc(sx, sy, r, 0, Math.PI * 2);
@@ -235,20 +307,20 @@ function _buildShareCardBlob(spec) {
     glow.addColorStop(0, "rgba(212,175,55,0.28)");
     glow.addColorStop(1, "rgba(212,175,55,0)");
     ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, W, H2);
 
     // Outer card border with inset hairline for a framed, layered look.
-    _roundRectPath(ctx, 28, 28, W - 56, H - 56, 28);
+    _roundRectPath(ctx, 28, 28, W - 56, H2 - 56, 28);
     ctx.strokeStyle = "rgba(212,175,55,0.55)";
     ctx.lineWidth = 3;
     ctx.stroke();
-    _roundRectPath(ctx, 42, 42, W - 84, H - 84, 20);
+    _roundRectPath(ctx, 42, 42, W - 84, H2 - 84, 20);
     ctx.strokeStyle = "rgba(212,175,55,0.22)";
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
     // Small diamond flourishes in each corner of the outer border.
-    [[28, 28], [W - 28, 28], [28, H - 28], [W - 28, H - 28]].forEach(function (pt) {
+    [[28, 28], [W - 28, 28], [28, H2 - 28], [W - 28, H2 - 28]].forEach(function (pt) {
       ctx.save();
       ctx.translate(pt[0], pt[1]);
       ctx.rotate(Math.PI / 4);
@@ -307,44 +379,35 @@ function _buildShareCardBlob(spec) {
       ctx.fillText(spec.emoji || "🔮", W / 2, 565);
     }
 
-    // Heading (wraps up to 2 lines)
+    // Heading / badge pill / subheading all draw inside a hard horizontal
+    // clip, matched to the card's safe inner area (inside the gold border).
+    // This is a belt-and-suspenders guarantee on top of the wrapping below:
+    // even if a particular script's glyphs paint wider than measureText()
+    // reports (Khmer's stacked consonant clusters can render ink past their
+    // own advance width -- see _textInkWidth), the clip makes it physically
+    // impossible for text to spill past the card's edge, whatever the cause.
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(64, 0, W - 128, H2);
+    ctx.clip();
+
+    // Heading (lines already computed in the layout pass above)
     ctx.fillStyle = "#f6f2ff";
     ctx.font = "700 72px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    const headingLines = _wrapCanvasText(ctx, spec.heading || "", W - 160).slice(0, 2);
     let y = 745;
     headingLines.forEach(function (line) {
       ctx.fillText(line, W / 2, y);
       y += 86;
     });
 
-    // Optional badge pill (e.g. a luck verdict or star rating). Wraps onto
-    // up to 2 lines (shrinking the font if it's still too wide) so long
-    // text — a full sentence, or a longer script like Khmer — never
-    // overflows the card.
+    // Optional badge pill (e.g. a luck verdict or star rating). Lines,
+    // font size, and pill box were already worked out in the layout pass
+    // above so the canvas could be sized to fit; just draw them here.
     if (spec.badge) {
-      const maxPillTextWidth = W - 160;
-      let badgeFontPx = 34;
-      let badgeLines = [];
-      // Shrink the font (down to a floor) and allow up to 3 lines until the
-      // text fits — _wrapCanvasText now also breaks unspaced scripts like
-      // Khmer character-by-character, so this always terminates.
-      while (true) {
-        ctx.font = "600 " + badgeFontPx + "px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-        badgeLines = _wrapCanvasText(ctx, spec.badge, maxPillTextWidth).slice(0, 3);
-        const stillOverflowing = badgeLines.some(function (l) { return ctx.measureText(l).width > maxPillTextWidth; });
-        if (!stillOverflowing || badgeFontPx <= 20) break;
-        badgeFontPx -= 2;
-      }
-      // ctx.font is already set to the size that was actually used above.
-
+      ctx.font = "600 " + badgeFontPx + "px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
       const lineH = badgeFontPx + 2 + 30;
-      const padX = 32;
       const padY = 22;
-      const widest = badgeLines.reduce(function (m, l) { return Math.max(m, ctx.measureText(l).width); }, 0);
-      const pillW = Math.min(widest + padX * 2, W - 100);
-      const pillH = badgeLines.length * lineH + padY * 2 - 14;
       const pillX = W / 2 - pillW / 2;
-      const pillY = y + 16;
       ctx.fillStyle = "rgba(212,175,55,0.16)";
       _roundRectPath(ctx, pillX, pillY, pillW, pillH, pillH / 2 > 40 ? 24 : pillH / 2);
       ctx.fill();
@@ -362,21 +425,23 @@ function _buildShareCardBlob(spec) {
       y += 24;
     }
 
-    // Subheading (wraps up to 2 lines)
+    // Subheading (lines already computed in the layout pass above)
     if (spec.subheading) {
       ctx.fillStyle = "#b4a9d6";
       ctx.font = "400 38px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      const subLines = _wrapCanvasText(ctx, spec.subheading, W - 200).slice(0, 3);
       subLines.forEach(function (line) {
         ctx.fillText(line, W / 2, y);
         y += 50;
       });
     }
 
+    ctx.restore();
+
     // Decorative zodiac motif strip, filling the space above the footer --
     // the real badge illustrations (current animal highlighted) when we
-    // have them, else the original faint emoji row.
-    const motifY = H - 232;
+    // have them, else the original faint emoji row. Anchored to H2 (which
+    // already grew to clear the block above) rather than the original fixed H.
+    const motifY = H2 - 232;
     const motifGap = 72;
     if (animalKey && badges) {
       const motifStartX = W / 2 - (motifGap * (_ZODIAC_BADGE_ORDER.length - 1)) / 2;
@@ -408,15 +473,15 @@ function _buildShareCardBlob(spec) {
     ctx.strokeStyle = "rgba(180,169,214,0.3)";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(W / 2 - 120, H - 150);
-    ctx.lineTo(W / 2 + 120, H - 150);
+    ctx.moveTo(W / 2 - 120, H2 - 150);
+    ctx.lineTo(W / 2 + 120, H2 - 150);
     ctx.stroke();
     ctx.fillStyle = gold;
     ctx.font = "600 38px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.fillText("mybirthsign.com", W / 2, H - 98);
+    ctx.fillText("mybirthsign.com", W / 2, H2 - 98);
     ctx.fillStyle = "rgba(180,169,214,0.75)";
     ctx.font = "400 26px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.fillText("Find your own zodiac sign, free", W / 2, H - 62);
+    ctx.fillText("Find your own zodiac sign, free", W / 2, H2 - 62);
 
     canvas.toBlob(function (blob) { resolve(blob); }, "image/png");
   });
@@ -592,9 +657,9 @@ function _buildCompatCardBlob(spec) {
     // Name/date pills under each avatar.
     function drawPill(cx, cy, label, sub) {
       ctx.font = "700 32px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      const labelW = ctx.measureText(label).width;
+      const labelW = _textInkWidth(ctx, label);
       ctx.font = "400 28px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      const subW = sub ? ctx.measureText(sub).width : 0;
+      const subW = sub ? _textInkWidth(ctx, sub) : 0;
       const pillW = Math.max(labelW, subW) + 56;
       const pillH = sub ? 108 : 70;
       _roundRectPath(ctx, cx - pillW / 2, cy, pillW, pillH, 18);
@@ -659,10 +724,15 @@ function _buildCompatCardBlob(spec) {
       ctx.fill();
       ctx.fillStyle = "#7a1942";
       let ty = boxY + boxPadY + 30;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(102, 0, W - 204, H);
+      ctx.clip();
       lines.forEach(function (line) {
         ctx.fillText(line, W / 2, ty);
         ty += lineH;
       });
+      ctx.restore();
       taglineBottom = boxY + boxH;
     }
 
