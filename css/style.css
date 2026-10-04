@@ -618,6 +618,158 @@ section.content-section h2 {
   .blog-grid { grid-template-columns: 1fr; }
 }
 
+/* ===== Blog page v2 — premium zodiac magazine redesign ===== */
+.page-blog header.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(15, 11, 31, 0.94);
+  backdrop-filter: blur(8px);
+}
+
+.bv2-hero {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 76px 20px 64px;
+  background: radial-gradient(ellipse at 50% -20%, #27204a 0%, #150f29 55%, #0f0b1f 100%);
+  border-bottom: 1px solid var(--border);
+}
+.bv2-hero-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+}
+.bv2-hero-content { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; }
+.bv2-hero h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 3rem;
+  margin: 0 0 14px;
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+.bv2-hero p { color: var(--text-muted); font-size: 1.15rem; max-width: 540px; margin: 0 auto 28px; }
+.bv2-hero-cta {
+  display: inline-block;
+  background: var(--accent);
+  color: #1a1430;
+  text-decoration: none;
+  padding: 14px 34px;
+  border-radius: 999px;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.bv2-hero-cta:hover { background: #e6c35f; transform: translateY(-2px); }
+
+/* Featured article — enhanced */
+.bv2-featured {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 28px;
+  align-items: center;
+  background: linear-gradient(135deg, var(--bg-card) 0%, #201a3a 100%);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 30px;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.bv2-featured:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); border-color: var(--accent-soft); }
+.bv2-featured::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 100% 0%, rgba(212,175,55,0.14), transparent 55%);
+  pointer-events: none;
+}
+.bv2-featured-art {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  background: radial-gradient(circle at 30% 30%, #342a5c, #15102a 75%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+}
+.bv2-featured-art svg { width: 56%; height: 56%; }
+.bv2-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.bv2-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+.bv2-tag-new { background: rgba(212,175,55,0.18); color: var(--accent); }
+.bv2-tag-cat { background: rgba(155,127,212,0.18); color: var(--accent-soft); }
+.bv2-featured h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.7rem; margin: 0 0 10px; color: var(--text); border: none; padding: 0; }
+.bv2-featured p { color: var(--text-muted); margin: 0 0 14px; max-width: 60ch; }
+.bv2-featured-meta { display: flex; gap: 14px; flex-wrap: wrap; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; }
+.bv2-featured-btn { display: inline-block; background: var(--accent); color: #1a1430; text-decoration: none; padding: 10px 24px; border-radius: 999px; font-weight: bold; font-size: 0.92rem; }
+
+/* Section shells */
+.bv2-section { max-width: 1120px; margin: 64px auto; padding: 0 20px; }
+.bv2-section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 26px; gap: 14px; flex-wrap: wrap; }
+.bv2-section-head h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.9rem; margin: 0; border: none; padding: 0; color: var(--text); }
+.bv2-view-all { color: var(--accent-soft); text-decoration: none; font-weight: 600; font-size: 0.92rem; white-space: nowrap; }
+.bv2-view-all:hover { color: var(--accent); }
+
+/* Popular guides */
+.bv2-guides-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.bv2-guide-card { display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.bv2-guide-card:hover { transform: translateY(-4px); box-shadow: 0 14px 32px rgba(0,0,0,0.38); border-color: var(--accent-soft); }
+.bv2-guide-art { height: 110px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: transform 0.25s ease; }
+.bv2-guide-card:hover .bv2-guide-art { transform: scale(1.08); }
+.bv2-guide-body { padding: 18px 20px 22px; }
+.bv2-guide-body h3 { margin: 0 0 8px; color: var(--text); font-size: 1.08rem; font-family: 'Playfair Display', Georgia, serif; }
+.bv2-guide-body p { margin: 0 0 10px; color: var(--text-muted); font-size: 0.92rem; }
+.bv2-guide-link { color: var(--accent); font-size: 0.85rem; font-weight: 700; }
+
+/* Zodiac animals grid */
+.bv2-zodiac-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.bv2-zodiac-card { display: block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 14px; text-align: center; text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.bv2-zodiac-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,0,0,0.35); border-color: var(--accent); }
+.bv2-zodiac-card .animal-badge { margin: 0 auto 12px; }
+.bv2-zodiac-card h3 { margin: 0 0 2px; color: var(--text); font-size: 1rem; font-family: 'Playfair Display', Georgia, serif; }
+.bv2-zodiac-khmer { color: var(--accent-soft); font-size: 0.85rem; margin: 0 0 8px; }
+.bv2-zodiac-card p.bv2-zodiac-trait { color: var(--text-muted); font-size: 0.82rem; margin: 0 0 10px; min-height: 2.6em; }
+.bv2-zodiac-explore { color: var(--accent); font-size: 0.82rem; font-weight: 700; }
+
+/* Chinese zodiac info editorial section */
+.bv2-info-section { max-width: 1120px; margin: 64px auto 70px; padding: 0 20px; }
+.bv2-info-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; background: var(--bg-card); border: 1px solid var(--border); border-radius: 22px; padding: 44px; }
+.bv2-info-grid h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.9rem; margin: 0 0 16px; border: none; padding: 0; }
+.bv2-info-grid p { color: var(--text-muted); margin: 0 0 14px; }
+.bv2-info-grid ul { color: var(--text-muted); margin: 0 0 20px; padding-left: 20px; }
+.bv2-info-grid li { margin-bottom: 6px; }
+.bv2-info-btn { display: inline-block; border: 1.5px solid var(--accent); color: var(--text); text-decoration: none; padding: 11px 26px; border-radius: 999px; font-weight: 600; font-size: 0.92rem; transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease; }
+.bv2-info-btn:hover { background: var(--accent); color: #1a1430; transform: translateY(-1px); }
+.bv2-info-art { display: flex; align-items: center; justify-content: center; }
+.bv2-info-art svg { width: 100%; height: auto; max-width: 260px; }
+
+@media (max-width: 900px) {
+  .bv2-guides-grid { grid-template-columns: repeat(2, 1fr); }
+  .bv2-zodiac-grid { grid-template-columns: repeat(3, 1fr); }
+  .bv2-info-grid { grid-template-columns: 1fr; padding: 32px 24px; }
+  .bv2-info-art { order: -1; }
+  .bv2-info-art svg { max-width: 180px; }
+}
+
+@media (max-width: 640px) {
+  .bv2-hero { padding: 52px 20px 44px; }
+  .bv2-hero h1 { font-size: 2.1rem; }
+  .bv2-hero p { font-size: 1rem; }
+  .bv2-featured { grid-template-columns: 1fr; padding: 22px; }
+  .bv2-featured-art { aspect-ratio: 16/9; }
+  .bv2-guides-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .bv2-zodiac-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .bv2-section { margin: 44px auto; }
+  .bv2-section-head h2 { font-size: 1.5rem; }
+}
+
 article.post {
   max-width: 700px;
   margin: 0 auto 50px;
