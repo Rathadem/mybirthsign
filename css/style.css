@@ -2617,3 +2617,21 @@ footer.site-footer p { margin: 8px 0 0; color: #d9d0f2; }
 .chk-page .chk-form .chk-field .kdp { height: 50px; }
 /* Khmer hero title: ornate display face (Moul), title only */
 html[lang="km"] .chk-h1 { font-family: "Moul", "Noto Sans Khmer", serif; font-weight: 400; font-size: clamp(1.5rem, 4vw, 2.5rem); line-height: 1.5; letter-spacing: 0; }
+/* Khmer: nicer typography across the checker page */
+html[lang="km"] body.chk-page,
+html[lang="km"] .chk-page .checker-form button,
+html[lang="km"] .chk-page .chk-btn,
+html[lang="km"] .chk-page .lang-toggle,
+html[lang="km"] .chk-page .kdp,
+html[lang="km"] .chk-page .kdp button,
+html[lang="km"] .chk-page select { font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; }
+html[lang="km"] .chk-page { line-height: 1.7; }
+html[lang="km"] .chk-page h2, html[lang="km"] .chk-page h3, html[lang="km"] .chk-page .chk-animal,
+html[lang="km"] .chk-page .chk-eyebrow, html[lang="km"] .chk-page .chk-tile-v, html[lang="km"] .chk-page .chk-cta h2,
+html[lang="km"] .chk-page .chk-explore h2, html[lang="km"] .chk-page .chk-foot-brand, html[lang="km"] .chk-page .chk-card h3,
+html[lang="km"] .chk-page .result-header h2, html[lang="km"] .chk-page .chk-seo h2 {
+  font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; font-weight: 700; font-style: normal; line-height: 1.45; }
+html[lang="km"] .chk-page .chk-animal { font-size: clamp(2.2rem, 5vw, 3.6rem); }
+html[lang="km"] .chk-page .chk-sub, html[lang="km"] .chk-page .chk-desc, html[lang="km"] .chk-page .chk-list,
+html[lang="km"] .chk-page .chk-seo p, html[lang="km"] .chk-page .chk-seo li { line-height: 1.8; }
+html[lang="km"] .chk-page .chk-h1 { font-family: "Moul", "Kantumruy Pro", "Noto Sans Khmer", serif; }
