@@ -2403,3 +2403,16 @@ body.biz-page {
   .bg-dis-t { max-width: none; border-right: 0; padding: 0 0 8px; }
 }
 @media (max-width: 560px) { .bg-wide .bg-body { text-align: left; width: 100%; } .bg-wide h3 { text-align: center; } }
+.bg-ico { filter: none; }
+.bg-art {
+  display: block; width: 100%; max-height: 150px; object-fit: contain; margin: 0 auto;
+  mix-blend-mode: lighten;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent), linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent), linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
+  mask-composite: intersect;
+}
+.bg-grid4 .bg-ico { margin: 2px 0 10px; }
+.bg-wide .bg-ico { width: 175px; flex: none; }
+.bg-wide .bg-art { max-height: 160px; }
+@media (max-width: 560px) { .bg-wide .bg-ico { width: 180px; margin: 0 auto; } }
