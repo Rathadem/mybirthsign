@@ -2607,3 +2607,6 @@ footer.site-footer p { margin: 8px 0 0; color: #d9d0f2; }
 @media (max-width: 600px) {
   footer.site-footer { padding-top: 120px; background-position: 42% 40%; }
 }
+.chk-hero { padding-bottom: 28px; margin-bottom: 0; }
+.chk-page .today-strip { margin-top: 14px; margin-bottom: 18px; }
+@media (max-width: 600px) { .chk-hero { padding-bottom: 22px; } }
