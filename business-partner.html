@@ -19,7 +19,7 @@
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939402104083173" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="biz-page">
 
 <header class="site-header">
   <div class="container">
@@ -55,41 +55,50 @@
   </div>
 </header>
 
-<section class="hero container biz-hero">
-  <h1 data-i18n="biz_hero_title">💼 Business Partnership Compatibility</h1>
-  <p data-i18n="biz_hero_subtitle">Chinese Zodiac • Five Elements • Business Personality</p>
+<section class="biz-hero-v2" id="biz-form-section">
+  <div class="biz-hero-inner container">
+    <h1 class="biz-h1">
+      <span class="biz-h1-a" data-i18n="biz_h1_a">Chinese Zodiac</span>
+      <span class="biz-h1-b" data-i18n="biz_h1_b">Business Partner</span>
+      <span class="biz-h1-a" data-i18n="biz_h1_c">Compatibility</span>
+    </h1>
+    <p class="biz-hero-sub" data-i18n="biz_hero_sub2">Compare Two Birth Dates for Business Compatibility</p>
+    <p class="biz-hero-desc" data-i18n="biz_hero_desc">Discover how two Chinese zodiac signs may work together in business, including teamwork, communication, leadership, financial approach, and growth potential.</p>
+
+    <form id="biz-form" class="biz-form" novalidate>
+      <div class="biz-people-grid">
+        <fieldset class="biz-person-card">
+          <legend data-i18n="biz_person1_legend">Person 1</legend>
+          <label for="biz-p1-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
+          <input type="date" lang="en-GB" id="biz-p1-dob" name="biz-p1-dob" required>
+          <details class="biz-time-opt">
+            <summary data-i18n="biz_time_toggle">Add birth time (optional)</summary>
+            <label for="biz-p1-time" data-i18n="biz_time_label">Birth time (optional)</label>
+            <input type="time" lang="en" id="biz-p1-time" name="biz-p1-time">
+          </details>
+        </fieldset>
+
+        <fieldset class="biz-person-card">
+          <legend data-i18n="biz_person2_legend">Person 2</legend>
+          <label for="biz-p2-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
+          <input type="date" lang="en-GB" id="biz-p2-dob" name="biz-p2-dob" required>
+          <details class="biz-time-opt">
+            <summary data-i18n="biz_time_toggle">Add birth time (optional)</summary>
+            <label for="biz-p2-time" data-i18n="biz_time_label">Birth time (optional)</label>
+            <input type="time" lang="en" id="biz-p2-time" name="biz-p2-time">
+          </details>
+        </fieldset>
+      </div>
+
+      <p id="biz-form-error" class="biz-form-error" role="alert" hidden></p>
+
+      <button type="submit" class="biz-submit" data-i18n="biz_submit">Check Business Compatibility →</button>
+      <p class="biz-privacy-note" data-i18n="biz_privacy_note">Birth information is used to generate this reading and is not required to be stored. Calculations are performed in your own browser.</p>
+    </form>
+  </div>
 </section>
 
-<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
-
-<section class="biz-section container" id="biz-form-section">
-  <form id="biz-form" class="biz-form" novalidate>
-    <div class="biz-people-grid">
-      <fieldset class="biz-person-card">
-        <legend data-i18n="biz_person1_legend">Person 1</legend>
-        <label for="biz-p1-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
-        <input type="date" lang="en-GB" id="biz-p1-dob" name="biz-p1-dob" required>
-
-        <label for="biz-p1-time" data-i18n="biz_time_label">Birth time (optional)</label>
-        <input type="time" lang="en" id="biz-p1-time" name="biz-p1-time">
-      </fieldset>
-
-      <fieldset class="biz-person-card">
-        <legend data-i18n="biz_person2_legend">Person 2</legend>
-        <label for="biz-p2-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
-        <input type="date" lang="en-GB" id="biz-p2-dob" name="biz-p2-dob" required>
-
-        <label for="biz-p2-time" data-i18n="biz_time_label">Birth time (optional)</label>
-        <input type="time" lang="en" id="biz-p2-time" name="biz-p2-time">
-      </fieldset>
-    </div>
-
-    <p id="biz-form-error" class="biz-form-error" role="alert" hidden></p>
-
-    <button type="submit" class="biz-submit" data-i18n="biz_submit">💼 Calculate Business Compatibility</button>
-    <p class="biz-privacy-note" data-i18n="biz_privacy_note">Birth information is used to generate this reading and is not required to be stored. Calculations are performed in your own browser.</p>
-  </form>
-
+<section class="biz-section container biz-result-wrap">
   <div id="biz-result"></div>
 </section>
 
