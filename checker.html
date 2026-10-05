@@ -19,7 +19,7 @@
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939402104083173" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="chk-page">
 
 <header class="site-header">
   <div class="container">
@@ -56,16 +56,17 @@
   </div>
 </header>
 
-<section class="hero container">
-  <h1 data-i18n="checker_hero_title">Khmer/Chinese Zodiac Horoscope</h1>
-  <p data-i18n="checker_hero_subtitle">Enter your date of birth to find your zodiac animal, element, lucky numbers, colors, and a personalized reading.</p>
+<section class="chk-hero">
+  <div class="container chk-hero-inner">
+    <h1 class="chk-h1" data-i18n="checker_hero_title">Khmer/Chinese Zodiac Horoscope</h1>
+    <p class="chk-sub" data-i18n="checker_hero_subtitle">Enter your date of birth to find your zodiac animal, element, lucky numbers, colors, and a personalized reading.</p>
+    <form id="birthday-form" class="checker-form chk-form">
+      <label for="dob" data-i18n="dob_label">Your date of birth</label>
+      <input type="date" lang="en-GB" id="dob" name="dob" required min="1920-01-01" max="2026-12-31">
+      <button type="submit" data-i18n="reveal_button">Reveal My Sign</button>
+    </form>
+  </div>
 </section>
-
-<form id="birthday-form" class="checker-form container">
-  <label for="dob" data-i18n="dob_label">Your date of birth</label>
-  <input type="date" lang="en-GB" id="dob" name="dob" required min="1920-01-01" max="2026-12-31">
-  <button type="submit" data-i18n="reveal_button">Reveal My Sign</button>
-</form>
 
 <div class="today-strip container">
   <div>

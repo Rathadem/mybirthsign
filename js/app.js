@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
     resultBox.innerHTML = `
       <div class="result-card">
         <div class="result-header">
-          <img class="result-badge" src="images/zodiac-badges/${animal.toLowerCase()}.webp" alt="" loading="lazy" width="64" height="64">
+          <div class="chk-medal"><img class="chk-medal-animal" src="images/business/animals/${animal.toLowerCase()}.webp" alt="" width="120" height="120"><img class="chk-medal-el" src="images/business/el-${element.toLowerCase()}.webp" alt="" width="44" height="44"></div>
           <div>
             <h2>${resultHeading}</h2>
             <p class="result-sub">${bornSub}</p>

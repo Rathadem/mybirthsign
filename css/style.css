@@ -2423,3 +2423,39 @@ body.biz-page {
 .bg-grid4 .bg-card .bg-ico { order: 2; margin: 0 0 12px; }
 .bg-grid4 .bg-card .bg-body > p, .bg-grid4 .bg-card .bg-body > ul { order: 3; }
 @media (max-width: 960px) { .bg-grid4 .bg-card h3 { min-height: 0; } }
+
+/* ===== Checker page redesign (night-temple look) ===== */
+body.chk-page { background: #0b081f; }
+.chk-hero {
+  background:
+    linear-gradient(90deg, rgba(11,8,31,.94) 0%, rgba(11,8,31,.78) 42%, rgba(11,8,31,.15) 100%),
+    linear-gradient(180deg, rgba(11,8,31,0) 70%, #0b081f 100%),
+    url("../images/business/angkor-hero.webp") 78% 52% / cover no-repeat;
+  padding: 56px 0 64px; border-bottom: 1px solid #3b2d6e; margin-bottom: 28px;
+}
+.chk-h1 { margin: 0 0 12px; text-align: left; font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 5.2vw, 3.2rem); line-height: 1.1;
+  background: linear-gradient(180deg, #fff3cf, #e7c27a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.chk-sub { max-width: 560px; color: #e3dcf7; margin: 0 0 22px; text-align: left; line-height: 1.55; }
+.chk-page .chk-form { max-width: 460px; margin: 0; text-align: left;
+  background: rgba(14,10,38,.78); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.2); border-radius: 18px; padding: 20px; }
+.chk-page .chk-form label { color: #fff; font-weight: 600; font-size: .92rem; }
+.chk-page .chk-form .kdp .kdp-display { background: #fff; color: #1d1a33; border-color: transparent; }
+.chk-page .chk-form .kdp .kdp-display-icon { color: #6b5aa8; }
+.chk-page .chk-form .kdp-empty .kdp-display-text,
+.chk-page .chk-form .kdp-empty .kdp-display-text::before { color: #8a84a6; }
+.chk-page .chk-form button { width: 100%; background: linear-gradient(90deg, #ff7eb6, #ff9fc9); color: #2a0f24; padding: 14px; font-size: 1.05rem; margin-top: 4px; }
+.chk-page .chk-form button:hover { filter: brightness(1.08); background: linear-gradient(90deg, #ff7eb6, #ff9fc9); }
+.chk-page .result-card { background: linear-gradient(180deg, #1a1340, #120d30); border-color: #e7c27a55; color: #f1ecff; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+.chk-page .result-header { display: flex; align-items: center; gap: 20px; }
+.chk-page .result-header h2 { color: #e7c27a; font-family: Georgia, serif; margin: 0 0 4px; }
+.chk-page .result-block { background: rgba(255,255,255,.04); border: 1px solid #3b2d6e; border-radius: 14px; }
+.chk-page .result-block h3 { color: #e7c27a; }
+.chk-medal { position: relative; flex: 0 0 auto; width: 120px; height: 120px; }
+.chk-medal-animal { width: 120px; height: 120px; border-radius: 50%; display: block; filter: drop-shadow(0 4px 14px rgba(231,194,122,.35)); }
+.chk-medal-el { position: absolute; right: -6px; bottom: -4px; width: 44px; height: 44px; border-radius: 50%; background: #120d30; border: 2px solid #e7c27a; padding: 3px; box-sizing: border-box; }
+@media (max-width: 600px) {
+  .chk-hero { padding: 36px 0 44px; background-position: 70% 52%; }
+  .chk-page .result-header { flex-direction: column; text-align: center; }
+}
