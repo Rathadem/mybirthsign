@@ -2111,3 +2111,31 @@ footer.site-footer a { margin: 0 10px; color: var(--text-muted); }
   .romance-pair-row { gap: 6px; }
   .romance-zodiac-ring { width: clamp(64px, 26vw, 92px); height: clamp(64px, 26vw, 92px); border-width: 2px; }
 }
+
+/* ===========================================================================
+   Reusable CTA banner (used on guide/article pages to link into a
+   calculator tool). Generic — not scoped to any one page's theme.
+   =========================================================================== */
+.cta-banner {
+  background: linear-gradient(135deg, rgba(198, 161, 91, 0.12), rgba(10, 22, 40, 0.4));
+  border: 1px solid var(--biz-gold, var(--accent));
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  text-align: center;
+  margin: 32px 0;
+}
+.cta-banner p { margin: 0 0 16px; color: var(--text-muted); }
+.cta-banner-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--biz-gold, var(--accent)), #8a6d3b);
+  color: #0a1628;
+  font-weight: bold;
+  font-size: 1.05rem;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.cta-banner-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(198, 161, 91, 0.3); color: #0a1628; }
+
+.zbc-example-card .fortune-card-head { margin-bottom: 6px; }

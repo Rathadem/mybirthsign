@@ -391,6 +391,7 @@ const UI_STRINGS = {
     biz_disclaimer: "Chinese astrology and the Five Elements are traditional belief systems intended for cultural exploration, entertainment, and self-reflection. They are not scientifically validated methods for predicting business performance, personality, financial outcomes, or partnership success. Real business decisions should be based on qualifications, experience, financial analysis, contracts, and professional advice.",
     biz_reset: "🔄 Analyze Another Partnership",
     biz_page_cta: "Try our romance & general compatibility calculator →",
+    biz_guide_cta: "Read our full guide: Chinese Zodiac Business Compatibility →",
 
     wedding_hero_title: "Wedding Date Picker",
     wedding_hero_subtitle: "Enter both birthdays and a year, and we'll rate each month by how well it sits with both of your zodiac signs — a fun, traditional-pattern starting point for picking your date.",
@@ -666,6 +667,7 @@ const UI_STRINGS = {
     biz_disclaimer: "តារាសាស្ត្រចិន និងធាតុទាំងប្រាំគឺជាប្រព័ន្ធជំនឿបែបប្រពៃណីដែលមានគោលបំណងសម្រាប់ការស្វែងយល់វប្បធម៌ ការកម្សាន្ត និងការពិចារណាខ្លួនឯង។ វាមិនមែនជាវិធីសាស្ត្រវិទ្យាសាស្ត្រដែលបានបញ្ជាក់សម្រាប់ទស្សន៍ទាយការអនុវត្តអាជីវកម្ម បុគ្គលិកលក្ខណៈ លទ្ធផលហិរញ្ញវត្ថុ ឬភាពជោគជ័យនៃភាពជាដៃគូឡើយ។ ការសម្រេចចិត្តអាជីវកម្មពិតប្រាកដគួរផ្អែកលើគុណវុឌ្ឍិ បទពិសោធន៍ ការវិភាគហិរញ្ញវត្ថុ កិច្ចសន្យា និងការប្រឹក្សាវិជ្ជាជីវៈ។",
     biz_reset: "🔄 វិភាគភាពជាដៃគូមួយទៀត",
     biz_page_cta: "សាកល្បងឧបករណ៍គណនាភាពសមស្របស្នេហា និងទូទៅរបស់យើង →",
+    biz_guide_cta: "អានការណែនាំពេញលេញ៖ ភាពសមស្របអាជីវកម្មតាមនិមិត្តសញ្ញាចិន →",
 
     wedding_hero_title: "ជ្រើសរើសថ្ងៃមង្គលការ",
     wedding_hero_subtitle: "បញ្ចូលថ្ងៃខែឆ្នាំកំណើតទាំងពីរ និងឆ្នាំ យើងនឹងវាយតម្លៃខែនីមួយៗតាមភាពសមស្របជាមួយនិមិត្តសញ្ញាទាំងពីររបស់អ្នក — ជាចំណុចចាប់ផ្តើមកម្សាន្តតាមបែបប្រពៃណីសម្រាប់ការជ្រើសរើសកាលបរិច្ឆេទរបស់អ្នក។",
