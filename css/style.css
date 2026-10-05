@@ -2327,3 +2327,5 @@ body.biz-page {
 .biz-page .biz-hero-v2 .kdp-empty .kdp-display-text,
 .biz-page .biz-hero-v2 .kdp-empty .kdp-display-text::before { color: #8a84a6; }
 .biz-result-wrap { margin-top: 28px; }
+.biz-ov-chip .biz-ov-yearico { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+.biz-ov-medal img { background: #c9962f; }
