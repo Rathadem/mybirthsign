@@ -2416,3 +2416,10 @@ body.biz-page {
 .bg-wide .bg-ico { width: 175px; flex: none; }
 .bg-wide .bg-art { max-height: 160px; }
 @media (max-width: 560px) { .bg-wide .bg-ico { width: 180px; margin: 0 auto; } }
+/* cards 1-4: title on top, then icon, then text (as in the mockup) */
+.bg-grid4 .bg-card { display: flex; flex-direction: column; }
+.bg-grid4 .bg-card .bg-body { display: contents; }
+.bg-grid4 .bg-card h3 { order: 1; margin: 2px 0 10px; padding: 0 6px; min-height: 3.2em; display: flex; align-items: center; justify-content: center; }
+.bg-grid4 .bg-card .bg-ico { order: 2; margin: 0 0 12px; }
+.bg-grid4 .bg-card .bg-body > p, .bg-grid4 .bg-card .bg-body > ul { order: 3; }
+@media (max-width: 960px) { .bg-grid4 .bg-card h3 { min-height: 0; } }
