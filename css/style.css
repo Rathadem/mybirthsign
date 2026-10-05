@@ -2639,3 +2639,10 @@ html[lang="km"] .chk-page .chk-h1 { font-family: "Moul", "Kantumruy Pro", "Noto 
 .chk-page .chk-form .kdp-popup { bottom: auto; top: calc(100% + 8px); box-shadow: 0 14px 36px rgba(0,0,0,.55); z-index: 60; }
 .chk-page .chk-hero { position: relative; z-index: 5; }
 html[lang="km"] .chk-page .chk-h1 { margin-bottom: 18px; }
+/* Khmer hero title: more breathing room, no clipped marks, lighter size */
+html[lang="km"] .chk-page .chk-h1 {
+  font-size: clamp(1.35rem, 3.3vw, 2.1rem); line-height: 1.85; padding: .15em .1em .25em; margin: 0 0 22px;
+  background: linear-gradient(180deg, #fff6dc 10%, #f0cf86 100%); -webkit-background-clip: text; background-clip: text; overflow: visible;
+}
+html[lang="km"] .chk-page .chk-sub { margin-top: 0; line-height: 1.9; }
+@media (max-width: 600px) { html[lang="km"] .chk-page .chk-h1 { font-size: 1.3rem; line-height: 1.9; } }
