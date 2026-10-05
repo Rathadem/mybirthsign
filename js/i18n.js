@@ -498,7 +498,7 @@ const UI_STRINGS = {
     today_luck_verdict_caution: "Overall: take it easy today and avoid big decisions if you can.",
 
     dob_label: "Your date of birth",
-    reveal_button: "Find My Zodiac Sign →",
+    reveal_button: "My Horoscope",
     hero_cta_button: "MyBirthSign",
 
     compat_heading: "Check Compatibility",
@@ -814,7 +814,7 @@ const UI_STRINGS = {
     today_luck_verdict_caution: "សរុប៖ ថ្ងៃនេះគួរធ្វើអ្វីៗដោយធម្មតា និងជៀសវាងការសម្រេចចិត្តធំៗបើអាចធ្វើបាន។",
 
     dob_label: "ថ្ងៃខែឆ្នាំកំណើតរបស់អ្នក",
-    reveal_button: "បង្ហាញនិមិត្តសញ្ញារបស់ខ្ញុំ",
+    reveal_button: "ហោរាសាស្ត្ររបស់ខ្ញុំ",
     hero_cta_button: "ថ្ងៃ​កំណើត​របស់ខ្ញុំ",
 
     compat_heading: "ពិនិត្យភាពសមស្រប",
