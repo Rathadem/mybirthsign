@@ -345,6 +345,7 @@ const UI_STRINGS = {
     rc_pair_header_tpl: "{p1} {symbol1} {p1sign}  ❤️  {p2} {symbol2} {p2sign}",
 
     nav_business: "Business Partner",
+    nav_business_guide: "Business Guide",
     biz_hero_title: "💼 Business Partnership Compatibility",
     biz_hero_subtitle: "Chinese Zodiac • Five Elements • Business Personality",
     biz_person1_legend: "Person 1",
@@ -392,7 +393,7 @@ const UI_STRINGS = {
     biz_reset: "🔄 Analyze Another Partnership",
     biz_page_cta: "Try our romance & general compatibility calculator →",
     biz_guide_cta: "Read our full guide: Chinese Zodiac Business Compatibility →",
-    biz_h1_a: "Chinese Zodiac",
+    biz_h1_a: "Horoscope",
     biz_h1_b: "Business Partner",
     biz_h1_c: "Compatibility",
     biz_hero_sub2: "Compare Two Birth Dates for Business Compatibility",
@@ -648,6 +649,7 @@ const UI_STRINGS = {
     rc_pair_header_tpl: "{p1} {symbol1} {p1sign}  ❤️  {p2} {symbol2} {p2sign}",
 
     nav_business: "ដៃគូអាជីវកម្ម",
+    nav_business_guide: "មគ្គុទ្ទេសក៍អាជីវកម្ម",
     biz_hero_title: "💼 ភាពសមស្របដៃគូអាជីវកម្ម",
     biz_hero_subtitle: "រាសន៍ចិន • ធាតុទាំងប្រាំ • បុគ្គលិកលក្ខណៈអាជីវកម្ម",
     biz_person1_legend: "អ្នកទី១",
@@ -695,7 +697,7 @@ const UI_STRINGS = {
     biz_reset: "🔄 វិភាគភាពជាដៃគូមួយទៀត",
     biz_page_cta: "សាកល្បងឧបករណ៍គណនាភាពសមស្របស្នេហា និងទូទៅរបស់យើង →",
     biz_guide_cta: "អានការណែនាំពេញលេញ៖ ភាពសមស្របអាជីវកម្មតាមនិមិត្តសញ្ញាចិន →",
-    biz_h1_a: "រាសន៍ចិន",
+    biz_h1_a: "ហោរាសាស្ត្រ",
     biz_h1_b: "ដៃគូអាជីវកម្ម",
     biz_h1_c: "ភាពសមស្រប",
     biz_hero_sub2: "ប្រៀបធៀបថ្ងៃកំណើតពីរសម្រាប់ភាពសមស្របអាជីវកម្ម",

@@ -2327,3 +2327,99 @@ body.biz-page {
 .biz-page .biz-hero-v2 .kdp-empty .kdp-display-text,
 .biz-page .biz-hero-v2 .kdp-empty .kdp-display-text::before { color: #8a84a6; }
 .biz-result-wrap { margin-top: 28px; }
+.biz-ov-chip .biz-ov-yearico { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+.biz-ov-medal img { background: #c9962f; }
+
+/* --- Business Partners Guidelines section --- */
+.biz-guide {
+  position: relative; margin-top: 40px; padding: 48px 0 56px;
+  background:
+    linear-gradient(180deg, rgba(11, 8, 31, 0.82), rgba(11, 8, 31, 0.6) 22%, rgba(11, 8, 31, 0.35) 45%, rgba(11, 8, 31, 0.6)),
+    url("../images/business/guidelines-bg.webp") center / cover no-repeat;
+  border-top: 1px solid var(--biz-border); border-bottom: 1px solid var(--biz-border);
+}
+.biz-guide-inner { max-width: 1060px; }
+.bg-head { text-align: center; margin-bottom: 26px; }
+.bg-head h2 {
+  margin: 0 0 8px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.9rem, 5vw, 3.1rem); line-height: 1.1;
+  background: linear-gradient(180deg, #fff6d6, #e0a93b); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.bg-sub { color: #fff; font-weight: 600; margin: 0 0 12px; font-size: 1.05rem; }
+.bg-intro { max-width: 720px; margin: 0 auto; color: #e3dcf7; line-height: 1.6; }
+.bg-grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 14px; }
+.bg-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.bg-card, .bg-panel, .bg-dis {
+  position: relative; border: 1px solid rgba(231, 194, 122, 0.55); border-radius: 14px;
+  background: linear-gradient(160deg, rgba(34, 22, 78, 0.88), rgba(14, 10, 38, 0.9));
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+.bg-card { padding: 18px 16px 16px; }
+.bg-num {
+  position: absolute; top: -12px; left: -8px; width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-family: Georgia, serif; font-weight: 700;
+  color: #ffe9a8; background: #1a1340; border: 2px solid #e7c27a;
+}
+.bg-ico { font-size: 2.6rem; text-align: center; margin: 4px 0 8px; filter: drop-shadow(0 0 10px rgba(255, 200, 100, 0.35)); }
+.bg-card h3 { margin: 0 0 8px; text-align: center; font-family: Georgia, serif; font-size: 1.1rem; color: #f3d28a; }
+.bg-card p { margin: 0 0 8px; font-size: 0.9rem; line-height: 1.5; color: #f1ecff; }
+.bg-card ul { margin: 0; padding-left: 0; list-style: none; }
+.bg-card li { position: relative; padding-left: 16px; font-size: 0.88rem; margin-bottom: 3px; color: #f1ecff; }
+.bg-card li::before { content: ""; position: absolute; left: 2px; top: 0.55em; width: 6px; height: 6px; border-radius: 50%; background: #e7c27a; }
+.bg-wide { display: flex; gap: 14px; align-items: center; padding: 18px 16px 16px 24px; }
+.bg-wide .bg-ico { font-size: 3.4rem; margin: 0; flex: none; }
+.bg-wide .bg-body { flex: 1; min-width: 0; }
+.bg-wide h3 { text-align: left; }
+.bg-panel { padding: 18px 18px 14px; }
+.bg-panel h3 { margin: 0 0 12px; font-family: Georgia, serif; font-size: 1.3rem; color: #f3d28a; }
+.bg-rows { display: flex; flex-direction: column; gap: 8px; }
+.bg-row {
+  display: grid; grid-template-columns: 34px 150px 1fr; gap: 10px; align-items: center;
+  padding: 9px 12px; border: 1px solid rgba(231, 194, 122, 0.3); border-radius: 10px; background: rgba(255, 255, 255, 0.03);
+  font-size: 0.9rem; color: #f1ecff;
+}
+.bg-row b { color: #f3d28a; font-family: Georgia, serif; font-weight: 600; }
+.bg-rico { font-size: 1.4rem; text-align: center; }
+.bg-tips { list-style: none; margin: 0; padding: 0; }
+.bg-tips li { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; font-size: 0.92rem; color: #f1ecff; }
+.bg-tick {
+  flex: none; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #ffd36b, #e0a93b); color: #3a2400; font-weight: 700; font-size: 0.8rem;
+}
+.bg-dis { display: grid; grid-template-columns: auto 1fr; gap: 0 20px; align-items: center; padding: 16px 20px; }
+.bg-dis-t { font-family: Georgia, serif; font-size: 1.2rem; color: #f3d28a; max-width: 150px; padding-right: 20px; border-right: 1px solid rgba(231, 194, 122, 0.4); }
+.bg-dis p { margin: 0; font-size: 0.88rem; line-height: 1.55; color: #e3dcf7; }
+@media (max-width: 960px) {
+  .bg-grid4 { grid-template-columns: 1fr 1fr; }
+  .bg-grid2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .biz-guide { padding: 36px 0 44px; }
+  .bg-grid4 { grid-template-columns: 1fr; }
+  .bg-wide { flex-direction: column; text-align: center; }
+  .bg-wide h3 { text-align: center; }
+  .bg-row { grid-template-columns: 30px 1fr; }
+  .bg-row span:last-child { grid-column: 2; font-size: 0.82rem; color: #b6aad6; }
+  .bg-dis { grid-template-columns: 1fr; }
+  .bg-dis-t { max-width: none; border-right: 0; padding: 0 0 8px; }
+}
+@media (max-width: 560px) { .bg-wide .bg-body { text-align: left; width: 100%; } .bg-wide h3 { text-align: center; } }
+.bg-ico { filter: none; }
+.bg-art {
+  display: block; width: 100%; max-height: 150px; object-fit: contain; margin: 0 auto;
+  mix-blend-mode: lighten;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent), linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent), linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
+  mask-composite: intersect;
+}
+.bg-grid4 .bg-ico { margin: 2px 0 10px; }
+.bg-wide .bg-ico { width: 175px; flex: none; }
+.bg-wide .bg-art { max-height: 160px; }
+@media (max-width: 560px) { .bg-wide .bg-ico { width: 180px; margin: 0 auto; } }
+/* cards 1-4: title on top, then icon, then text (as in the mockup) */
+.bg-grid4 .bg-card { display: flex; flex-direction: column; }
+.bg-grid4 .bg-card .bg-body { display: contents; }
+.bg-grid4 .bg-card h3 { order: 1; margin: 2px 0 10px; padding: 0 6px; min-height: 3.2em; display: flex; align-items: center; justify-content: center; }
+.bg-grid4 .bg-card .bg-ico { order: 2; margin: 0 0 12px; }
+.bg-grid4 .bg-card .bg-body > p, .bg-grid4 .bg-card .bg-body > ul { order: 3; }
+@media (max-width: 960px) { .bg-grid4 .bg-card h3 { min-height: 0; } }

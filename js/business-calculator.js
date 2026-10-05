@@ -274,12 +274,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const slug = bzi.animal.toLowerCase();
     return `
       <div class="biz-ov-person">
-        <div class="biz-ov-medal"><img src="images/zodiac-badges/${slug}.webp" alt="${animalName(bzi.animal)}" width="104" height="104" loading="lazy"></div>
+        <div class="biz-ov-medal"><img src="images/business/animals/${slug}.webp" alt="${animalName(bzi.animal)}" width="104" height="104" loading="lazy"></div>
         <div class="biz-ov-animal">${animalName(bzi.animal)}</div>
         <div class="biz-ov-chips">
           <span class="biz-ov-chip"><img src="images/business/el-${bzi.element.toLowerCase()}.webp" alt="" width="30" height="30" loading="lazy"><span><b>${elementName(bzi.element)}</b><small>${S.biz_ov_el_label || "Element"}</small></span></span>
           <span class="biz-ov-chip"><span class="biz-ov-yy">\u262F</span><span><b>${isKm ? (bzi.yinYang === "Yang" ? "\u1799\u17C9\u17B6\u1784" : "\u1799\u17B7\u1793") : bzi.yinYang}</b><small>${name}</small></span></span>
-          <span class="biz-ov-chip"><span class="biz-ov-yy">\uD83D\uDCC5</span><span><b>${bzi.zodiacYear}</b><small>${S.biz_ov_year_label || "Zodiac Year"}</small></span></span>
+          <span class="biz-ov-chip"><img class="biz-ov-yearico" src="images/business/animals/${slug}.webp" alt="" width="30" height="30" loading="lazy"><span><b>${bzi.zodiacYear}</b><small>${S.biz_ov_year_label || "Zodiac Year"}</small></span></span>
         </div>
       </div>`;
   }
