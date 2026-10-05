@@ -2459,3 +2459,5 @@ body.chk-page { background: #0b081f; }
   .chk-hero { padding: 36px 0 44px; background-position: 70% 52%; }
   .chk-page .result-header { flex-direction: column; text-align: center; }
 }
+.chk-page .chk-form .kdp { margin-bottom: 8px; }
+.chk-page .chk-form input[type="date"] { margin-bottom: 0; }
