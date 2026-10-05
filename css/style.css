@@ -2573,3 +2573,15 @@ body.chk-page footer.chk-footer {
   .chk-list li { text-align: left; }
   body.chk-page footer.chk-footer { padding-top: 100px; }
 }
+.chk-field .kdp, .chk-field .kdp-display { width: 100%; box-sizing: border-box; }
+.chk-field input[type="date"] { width: 100%; }
+.chk-list-kv .color-chip { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
+.chk-list-kv .color-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.chk-four .chk-card { align-self: start; }
+.chk-page .chk-form .chk-field { flex: 1 1 auto; width: 100%; max-width: none; }
+.chk-page .chk-form .chk-field .kdp { width: 100%; }
+.chk-h1 { text-shadow: none; filter: drop-shadow(0 2px 12px rgba(0,0,0,.7)); }
+.chk-page .chk-form .kdp .kdp-display { width: 100%; min-height: 50px; box-sizing: border-box; }
+.chk-page .chk-form .chk-field .kdp { margin-bottom: 0; }
+body.chk-page footer.chk-footer { background: linear-gradient(180deg,#0b081f 0%,rgba(11,8,31,.15) 30%,rgba(11,8,31,.6) 55%,rgba(11,8,31,.9) 100%), url("../images/checker/footer-bg.webp") center bottom / cover no-repeat; }
+.chk-four .chk-card { align-self: stretch; }
