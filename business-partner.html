@@ -19,7 +19,7 @@
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939402104083173" crossorigin="anonymous"></script>
 </head>
-<body class="biz-page">
+<body>
 
 <header class="site-header">
   <div class="container">
@@ -56,76 +56,42 @@
   </div>
 </header>
 
-<section class="biz-hero-v2" id="biz-form-section">
-  <div class="biz-hero-inner container">
-    <h1 class="biz-h1">
-      <span class="biz-h1-a" data-i18n="biz_h1_a">Horoscope</span>
-      <span class="biz-h1-b" data-i18n="biz_h1_b">Business Partner</span>
-      <span class="biz-h1-a" data-i18n="biz_h1_c">Compatibility</span>
-    </h1>
-    <p class="biz-hero-sub" data-i18n="biz_hero_sub2">Compare Two Birth Dates for Business Compatibility</p>
-    <p class="biz-hero-desc" data-i18n="biz_hero_desc">Discover how two Chinese zodiac signs may work together in business, including teamwork, communication, leadership, financial approach, and growth potential.</p>
-
-    <form id="biz-form" class="biz-form" novalidate>
-      <div class="biz-people-grid">
-        <fieldset class="biz-person-card">
-          <legend data-i18n="biz_person1_legend">Person 1</legend>
-          <label for="biz-p1-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
-          <input type="date" lang="en-GB" id="biz-p1-dob" name="biz-p1-dob" required>
-          <details class="biz-time-opt">
-            <summary data-i18n="biz_time_toggle">Add birth time (optional)</summary>
-            <label for="biz-p1-time" data-i18n="biz_time_label">Birth time (optional)</label>
-            <input type="time" lang="en" id="biz-p1-time" name="biz-p1-time">
-          </details>
-        </fieldset>
-
-        <fieldset class="biz-person-card">
-          <legend data-i18n="biz_person2_legend">Person 2</legend>
-          <label for="biz-p2-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
-          <input type="date" lang="en-GB" id="biz-p2-dob" name="biz-p2-dob" required>
-          <details class="biz-time-opt">
-            <summary data-i18n="biz_time_toggle">Add birth time (optional)</summary>
-            <label for="biz-p2-time" data-i18n="biz_time_label">Birth time (optional)</label>
-            <input type="time" lang="en" id="biz-p2-time" name="biz-p2-time">
-          </details>
-        </fieldset>
-      </div>
-
-      <p id="biz-form-error" class="biz-form-error" role="alert" hidden></p>
-
-      <button type="submit" class="biz-submit" data-i18n="biz_submit">Check Business Compatibility →</button>
-      <p class="biz-privacy-note" data-i18n="biz_privacy_note">Birth information is used to generate this reading and is not required to be stored. Calculations are performed in your own browser.</p>
-    </form>
-  </div>
+<section class="hero container biz-hero">
+  <h1 data-i18n="biz_hero_title">💼 Business Partnership Compatibility</h1>
+  <p data-i18n="biz_hero_subtitle">Chinese Zodiac • Five Elements • Business Personality</p>
 </section>
 
-<section class="biz-section container biz-result-wrap">
+<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
+
+<section class="biz-section container" id="biz-form-section">
+  <form id="biz-form" class="biz-form" novalidate>
+    <div class="biz-people-grid">
+      <fieldset class="biz-person-card">
+        <legend data-i18n="biz_person1_legend">Person 1</legend>
+        <label for="biz-p1-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
+        <input type="date" lang="en-GB" id="biz-p1-dob" name="biz-p1-dob" required>
+
+        <label for="biz-p1-time" data-i18n="biz_time_label">Birth time (optional)</label>
+        <input type="time" lang="en" id="biz-p1-time" name="biz-p1-time">
+      </fieldset>
+
+      <fieldset class="biz-person-card">
+        <legend data-i18n="biz_person2_legend">Person 2</legend>
+        <label for="biz-p2-dob" data-i18n="biz_dob_label_req">Date of birth (required)</label>
+        <input type="date" lang="en-GB" id="biz-p2-dob" name="biz-p2-dob" required>
+
+        <label for="biz-p2-time" data-i18n="biz_time_label">Birth time (optional)</label>
+        <input type="time" lang="en" id="biz-p2-time" name="biz-p2-time">
+      </fieldset>
+    </div>
+
+    <p id="biz-form-error" class="biz-form-error" role="alert" hidden></p>
+
+    <button type="submit" class="biz-submit" data-i18n="biz_submit">💼 Calculate Business Compatibility</button>
+    <p class="biz-privacy-note" data-i18n="biz_privacy_note">Birth information is used to generate this reading and is not required to be stored. Calculations are performed in your own browser.</p>
+  </form>
+
   <div id="biz-result"></div>
-</section>
-
-<section class="biz-guide" aria-label="Business Partners Guidelines">
-<div class="container biz-guide-inner">
-  <div data-lang-content="en">
-    <header class="bg-head"><h2>Business Partners Guidelines</h2><p class="bg-sub">How to Use Chinese Zodiac Business Compatibility</p><p class="bg-intro">Chinese zodiac compatibility can be used as a traditional cultural framework for reflection on how two people may approach teamwork, communication, leadership, and business relationships. It should not be treated as a prediction of financial success.</p></header>
-    <div class="bg-grid4"><div class="bg-card"><span class="bg-num">1</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/scroll.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>Understand Each Partner</h3><p>Review each person's zodiac animal, element, Yin or Yang, traditional personality traits, strengths and weaknesses.</p></div></div><div class="bg-card"><span class="bg-num">2</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/working.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>Compare Working Styles</h3><p>Consider how each partner approaches:</p><ul><li>Leadership</li><li>Communication</li><li>Decision-making</li><li>Risk</li><li>Planning</li><li>Problem-solving</li></ul></div></div><div class="bg-card"><span class="bg-num">3</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/puzzle.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>Identify Complementary Strengths</h3><p>A strong partnership doesn't require two people to be identical. Look for complementary strengths such as strategy, leadership, operations, sales, finance, and networking.</p></div></div><div class="bg-card"><span class="bg-num">4</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/challenges.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>Discuss Potential Challenges</h3><p>Talk openly about:</p><ul><li>Money management</li><li>Business responsibilities</li><li>Decision-making authority</li><li>Risk tolerance</li><li>Communication expectations</li><li>Long-term goals</li></ul></div></div></div>
-    <div class="bg-grid2"><div class="bg-card bg-wide"><span class="bg-num">5</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/roles.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>Define Business Roles</h3><p>Before starting a business together, clearly establish:</p><ul><li>Who makes which decisions</li><li>Who manages finances</li><li>Who handles operations</li><li>Who manages sales/marketing</li><li>How profits and expenses are handled</li></ul></div></div><div class="bg-card bg-wide"><span class="bg-num">6</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/trust.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>Build Trust</h3><p>Zodiac compatibility is only one traditional perspective. Successful partnerships also depend on trust, communication, shared goals, experience, and responsible business planning.</p></div></div></div>
-    <div class="bg-grid2 bg-lower">
-      <div class="bg-panel"><h3>Business Partnership Checklist</h3><div class="bg-rows"><div class="bg-row"><span class="bg-rico">🎯</span><b>Goals</b><span>What are we trying to achieve?</span></div><div class="bg-row"><span class="bg-rico">💰</span><b>Finances</b><span>How will money be managed?</span></div><div class="bg-row"><span class="bg-rico">👑</span><b>Leadership</b><span>Who handles major decisions?</span></div><div class="bg-row"><span class="bg-rico">💬</span><b>Communication</b><span>How will disagreements be handled?</span></div><div class="bg-row"><span class="bg-rico">📋</span><b>Responsibilities</b><span>Who is responsible for what?</span></div><div class="bg-row"><span class="bg-rico">📈</span><b>Growth</b><span>What is our long-term plan?</span></div></div></div>
-      <div class="bg-panel"><h3>💡 Key Tips for a Successful Business Partnership</h3><ul class="bg-tips"><li><span class="bg-tick">✓</span>Be honest and open with each other</li><li><span class="bg-tick">✓</span>Combine different strengths and skills</li><li><span class="bg-tick">✓</span>Set clear goals and expectations</li><li><span class="bg-tick">✓</span>Communicate regularly</li><li><span class="bg-tick">✓</span>Manage money responsibly</li><li><span class="bg-tick">✓</span>Respect each other's working style</li><li><span class="bg-tick">✓</span>Be flexible and willing to compromise</li><li><span class="bg-tick">✓</span>Focus on long-term growth</li></ul></div>
-    </div>
-    <div class="bg-dis"><div class="bg-dis-t">⚠️ Important Disclaimer</div><p>Traditional Chinese zodiac compatibility is provided for entertainment, cultural exploration, and personal reflection. It cannot predict business success, financial outcomes, or whether a partnership will succeed. Always make business decisions based on practical research, professional advice, and your own judgment.</p></div>
-  </div>
-  <div data-lang-content="km">
-    <header class="bg-head"><h2>គោលការណ៍ណែនាំសម្រាប់ដៃគូអាជីវកម្ម</h2><p class="bg-sub">របៀបប្រើប្រាស់ភាពសមស្របអាជីវកម្មតាមរាសន៍ចិន</p><p class="bg-intro">ភាពសមស្របតាមរាសន៍ចិនអាចប្រើជាក្របខណ្ឌវប្បធម៌បែបប្រពៃណីសម្រាប់ពិចារណាអំពីរបៀបដែលមនុស្សពីរនាក់អាចធ្វើការជាក្រុម ប្រាស្រ័យទាក់ទង ដឹកនាំ និងមានទំនាក់ទំនងអាជីវកម្ម។ វាមិនគួរត្រូវបានចាត់ទុកជាការទស្សន៍ទាយអំពីភាពជោគជ័យផ្នែកហិរញ្ញវត្ថុឡើយ។</p></header>
-    <div class="bg-grid4"><div class="bg-card"><span class="bg-num">1</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/scroll.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>យល់ដឹងពីដៃគូម្នាក់ៗ</h3><p>ពិនិត្យសត្វរាសី ធាតុ យិន ឬយ៉ាង លក្ខណៈបុគ្គលិកលក្ខណៈបែបប្រពៃណី ភាពខ្លាំង និងភាពខ្សោយរបស់ម្នាក់ៗ។</p></div></div><div class="bg-card"><span class="bg-num">2</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/working.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>ប្រៀបធៀបរបៀបធ្វើការ</h3><p>ពិចារណាពីវិធីសាស្ត្ររបស់ដៃគូម្នាក់ៗ៖</p><ul><li>ភាពជាអ្នកដឹកនាំ</li><li>ការប្រាស្រ័យទាក់ទង</li><li>ការសម្រេចចិត្ត</li><li>ហានិភ័យ</li><li>ការធ្វើផែនការ</li><li>ការដោះស្រាយបញ្ហា</li></ul></div></div><div class="bg-card"><span class="bg-num">3</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/puzzle.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>កំណត់ភាពខ្លាំងបំពេញគ្នា</h3><p>ភាពជាដៃគូខ្លាំងមិនតម្រូវឱ្យមនុស្សពីរនាក់ដូចគ្នាទេ។ ស្វែងរកភាពខ្លាំងបំពេញគ្នា ដូចជាយុទ្ធសាស្ត្រ ភាពជាអ្នកដឹកនាំ ប្រតិបត្តិការ ការលក់ ហិរញ្ញវត្ថុ និងការបង្កើតបណ្តាញទំនាក់ទំនង។</p></div></div><div class="bg-card"><span class="bg-num">4</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/challenges.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>ពិភាក្សាបញ្ហាប្រឈមដែលអាចមាន</h3><p>និយាយដោយបើកចំហអំពី៖</p><ul><li>ការគ្រប់គ្រងប្រាក់</li><li>ទំនួលខុសត្រូវអាជីវកម្ម</li><li>សិទ្ធិសម្រេចចិត្ត</li><li>កម្រិតទទួលយកហានិភ័យ</li><li>ការរំពឹងទុកផ្នែកទំនាក់ទំនង</li><li>គោលដៅរយៈពេលវែង</li></ul></div></div></div>
-    <div class="bg-grid2"><div class="bg-card bg-wide"><span class="bg-num">5</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/roles.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>កំណត់តួនាទីអាជីវកម្ម</h3><p>មុនចាប់ផ្តើមអាជីវកម្មជាមួយគ្នា ត្រូវបង្កើតឱ្យច្បាស់៖</p><ul><li>អ្នកណាសម្រេចចិត្តអ្វី</li><li>អ្នកណាគ្រប់គ្រងហិរញ្ញវត្ថុ</li><li>អ្នកណាទទួលបន្ទុកប្រតិបត្តិការ</li><li>អ្នកណាគ្រប់គ្រងការលក់/ទីផ្សារ</li><li>របៀបគ្រប់គ្រងប្រាក់ចំណេញ និងចំណាយ</li></ul></div></div><div class="bg-card bg-wide"><span class="bg-num">6</span><div class="bg-ico"><img class="bg-art" src="images/business/guide/trust.webp" alt="" loading="lazy"></div><div class="bg-body"><h3>កសាងទំនុកចិត្ត</h3><p>ភាពសមស្របតាមរាសន៍គឺជាទស្សនៈបែបប្រពៃណីតែមួយប៉ុណ្ណោះ។ ភាពជាដៃគូជោគជ័យក៏ពឹងផ្អែកលើទំនុកចិត្ត ការប្រាស្រ័យទាក់ទង គោលដៅរួម បទពិសោធន៍ និងផែនការអាជីវកម្មប្រកបដោយទំនួលខុសត្រូវ។</p></div></div></div>
-    <div class="bg-grid2 bg-lower">
-      <div class="bg-panel"><h3>បញ្ជីត្រួតពិនិត្យភាពជាដៃគូអាជីវកម្ម</h3><div class="bg-rows"><div class="bg-row"><span class="bg-rico">🎯</span><b>គោលដៅ</b><span>តើយើងព្យាយាមសម្រេចអ្វី?</span></div><div class="bg-row"><span class="bg-rico">💰</span><b>ហិរញ្ញវត្ថុ</b><span>តើប្រាក់នឹងត្រូវគ្រប់គ្រងដូចម្តេច?</span></div><div class="bg-row"><span class="bg-rico">👑</span><b>ភាពជាអ្នកដឹកនាំ</b><span>អ្នកណាសម្រេចចិត្តសំខាន់ៗ?</span></div><div class="bg-row"><span class="bg-rico">💬</span><b>ការប្រាស្រ័យទាក់ទង</b><span>តើយើងដោះស្រាយការមិនចុះសម្រុងគ្នាដូចម្តេច?</span></div><div class="bg-row"><span class="bg-rico">📋</span><b>ទំនួលខុសត្រូវ</b><span>អ្នកណាទទួលខុសត្រូវអ្វី?</span></div><div class="bg-row"><span class="bg-rico">📈</span><b>ការរីកចម្រើន</b><span>តើផែនការរយៈពេលវែងរបស់យើងជាអ្វី?</span></div></div></div>
-      <div class="bg-panel"><h3>💡 គន្លឹះសំខាន់ៗសម្រាប់ភាពជាដៃគូអាជីវកម្មជោគជ័យ</h3><ul class="bg-tips"><li><span class="bg-tick">✓</span>ស្មោះត្រង់ និងបើកចំហជាមួយគ្នា</li><li><span class="bg-tick">✓</span>បញ្ចូលភាពខ្លាំង និងជំនាញខុសគ្នា</li><li><span class="bg-tick">✓</span>កំណត់គោលដៅ និងការរំពឹងទុកច្បាស់លាស់</li><li><span class="bg-tick">✓</span>ប្រាស្រ័យទាក់ទងជាប្រចាំ</li><li><span class="bg-tick">✓</span>គ្រប់គ្រងប្រាក់ប្រកបដោយទំនួលខុសត្រូវ</li><li><span class="bg-tick">✓</span>គោរពរបៀបធ្វើការរបស់គ្នា</li><li><span class="bg-tick">✓</span>បត់បែន និងរួចរាល់ក្នុងការសម្របសម្រួល</li><li><span class="bg-tick">✓</span>ផ្តោតលើការរីកចម្រើនរយៈពេលវែង</li></ul></div>
-    </div>
-    <div class="bg-dis"><div class="bg-dis-t">⚠️ ការបដិសេធសំខាន់</div><p>ភាពសមស្របតាមរាសន៍ចិនបែបប្រពៃណីត្រូវបានផ្តល់ជូនសម្រាប់ការកម្សាន្ត ការស្វែងយល់វប្បធម៌ និងការពិចារណាផ្ទាល់ខ្លួន។ វាមិនអាចទស្សន៍ទាយភាពជោគជ័យអាជីវកម្ម លទ្ធផលហិរញ្ញវត្ថុ ឬថាតើភាពជាដៃគូនឹងជោគជ័យឬអត់បានទេ។ ចូរធ្វើការសម្រេចចិត្តអាជីវកម្មផ្អែកលើការស្រាវជ្រាវជាក់ស្តែង ការប្រឹក្សាវិជ្ជាជីវៈ និងការវិនិច្ឆ័យរបស់អ្នកផ្ទាល់ជានិច្ច។</p></div>
-  </div>
-</div>
 </section>
 
 <div class="ad-slot container" data-i18n="ad_space">Ad space</div>
