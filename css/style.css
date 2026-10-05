@@ -2615,3 +2615,5 @@ footer.site-footer p { margin: 8px 0 0; color: #d9d0f2; }
 .chk-page .chk-form button[type="submit"] { margin-top: 31px; }
 @media (max-width: 600px) { .chk-page .chk-form button[type="submit"] { margin-top: 4px; } }
 .chk-page .chk-form .chk-field .kdp { height: 50px; }
+/* Khmer hero title: ornate display face (Moul), title only */
+html[lang="km"] .chk-h1 { font-family: "Moul", "Noto Sans Khmer", serif; font-weight: 400; font-size: clamp(1.5rem, 4vw, 2.5rem); line-height: 1.5; letter-spacing: 0; }
