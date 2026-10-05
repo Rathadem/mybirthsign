@@ -2461,3 +2461,115 @@ body.chk-page { background: #0b081f; }
 }
 .chk-page .chk-form .kdp { margin-bottom: 8px; }
 .chk-page .chk-form input[type="date"] { margin-bottom: 0; }
+
+/* ===== Checker redesign v2 (brief + mockup) ===== */
+body.chk-page { --gold:#e7c27a; --navy:#0b081f; --card:#120d30; --line:#3b2d6e; color:#f1ecff; }
+.chk-hero {
+  background: linear-gradient(180deg, rgba(11,8,31,.55) 0%, rgba(11,8,31,.35) 45%, #0b081f 100%),
+    url("../images/checker/hero-bg.webp") center top / cover no-repeat;
+  padding: 44px 0 56px; border-bottom: 0; margin-bottom: 18px; text-align: center;
+}
+.chk-h1 { text-align: center; text-shadow: 0 2px 18px rgba(0,0,0,.7); font-size: clamp(2rem, 5.4vw, 3.4rem);
+  background: linear-gradient(180deg,#fff,#f6e2b0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.chk-sub { margin: 0 auto 26px; text-align: center; max-width: 640px; color: #fff; text-shadow: 0 1px 10px rgba(0,0,0,.8); font-size: 1.1rem; }
+.chk-page .chk-form { max-width: 760px; margin: 0 auto; padding: 18px 22px; border: 1px solid #e7c27a88; background: rgba(11,8,31,.82); text-align: left; }
+.chk-form-row { display: flex; gap: 16px; align-items: flex-end; }
+.chk-field { flex: 1; min-width: 0; }
+.chk-page .chk-form label { display: block; margin-bottom: 6px; color: #fff; }
+.chk-page .chk-form button { width: auto; flex: 0 0 auto; min-height: 50px; margin: 0; padding: 0 28px; background: linear-gradient(90deg,#ff5fa5,#8a5cff); color: #fff; font-size: 1.05rem; box-shadow: 0 6px 22px rgba(255,95,165,.35); }
+.chk-page .chk-form button:hover { background: linear-gradient(90deg,#ff74b2,#9b73ff); filter: none; }
+.chk-page .chk-form button:focus-visible, .chk-btn:focus-visible, .chk-animal-link:focus-visible, .chk-faq-item summary:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.chk-page .chk-form .kdp { margin: 0; }
+.chk-hint { margin: 12px 0 0; font-size: .88rem; color: #d9d0f2; }
+
+.chk-wrap { max-width: 1040px; }
+.chk-hero-card {
+  display: grid; grid-template-columns: 250px 1fr 250px; gap: 26px; align-items: center;
+  background: linear-gradient(135deg, rgba(26,19,64,.92), rgba(12,8,34,.95)); border: 1.5px solid #e7c27a99; border-radius: 22px;
+  padding: 26px; box-shadow: 0 0 0 4px rgba(231,194,122,.08), 0 14px 50px rgba(0,0,0,.5); margin: 0 0 18px;
+}
+.chk-medal-lg { position: relative; }
+.chk-medal-lg img { width: 100%; height: auto; display: block; border-radius: 50%; filter: drop-shadow(0 8px 26px rgba(231,194,122,.4)); }
+.chk-kanji { position: absolute; right: -6px; top: -4px; font: 700 2.6rem/1 "Noto Serif SC","Songti SC","SimSun",serif; color: var(--gold); text-shadow: 0 2px 10px #000; }
+.chk-eyebrow { margin: 0; font: italic 1.1rem Georgia,serif; color: #f3d28a; }
+.chk-animal { margin: 0; font: 700 clamp(2.6rem,6vw,4.4rem)/1.05 Georgia,serif; background: linear-gradient(180deg,#fff3cf,#d9a441); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.chk-years { margin: 8px 0 10px; padding-top: 10px; border-top: 1px solid #e7c27a55; color: #fff; font-size: .98rem; }
+.chk-desc { margin: 0; color: #e9e2ff; line-height: 1.6; }
+.chk-tiles { display: grid; gap: 10px; }
+.chk-tile { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid #e7c27a66; border-radius: 12px; background: rgba(8,6,26,.7); }
+.chk-tile-ico { flex: 0 0 38px; height: 38px; display: grid; place-items: center; color: var(--gold); }
+.chk-tile-ico svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.chk-tile-ico img { width: 38px; height: 38px; border-radius: 50%; }
+.chk-tile-l { font-size: .8rem; color: #d9d0f2; }
+.chk-tile-v { font: 700 1.3rem Georgia,serif; color: #f6dc9e; line-height: 1.15; }
+.chk-tile-s { font-size: .8rem; color: #d9d0f2; }
+
+.chk-four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+.chk-card { border-radius: 18px; padding: 18px 16px 20px; border: 1.5px solid; color: #f4efff; }
+.chk-card h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font: 700 1.15rem Georgia,serif; color: #f6e3b2; }
+.chk-card h3 img { mix-blend-mode: lighten; flex: 0 0 auto; }
+.chk-c-pers { background: linear-gradient(180deg,#14246a,#0e1440); border-color: #5b8dff99; }
+.chk-c-love { background: linear-gradient(180deg,#5a1650,#2c0b2c); border-color: #ff7eb699; }
+.chk-c-career { background: linear-gradient(180deg,#5a3a0c,#2a1a08); border-color: #e7a64a99; }
+.chk-c-luck { background: linear-gradient(180deg,#0f4a22,#082613); border-color: #4fd26f99; }
+.chk-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: .95rem; line-height: 1.4; }
+.chk-list li { position: relative; padding-left: 26px; }
+.chk-list li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 18px; height: 18px; border-radius: 50%; background: var(--gold); color: #1a1430; font-size: .72rem; font-weight: 900; display: grid; place-items: center; }
+.chk-list-kv li span { display: block; font-size: .78rem; color: #cdbfee; }
+.chk-card p { margin: 0; line-height: 1.55; }
+
+.chk-cta { display: flex; align-items: center; gap: 20px; padding: 16px 24px; border: 1.5px solid #e7c27a99; border-radius: 18px;
+  background: linear-gradient(90deg, rgba(60,18,70,.9), rgba(24,14,56,.95)); }
+.chk-cta-art { mix-blend-mode: lighten; width: 120px; height: auto; flex: 0 0 auto; }
+.chk-cta-text { flex: 1; }
+.chk-cta h2 { margin: 0 0 4px; font: 700 1.6rem Georgia,serif; color: #fff; border: 0; padding: 0; }
+.chk-cta p { margin: 0; color: #e3dcf7; }
+.chk-btn { display: inline-flex; align-items: center; min-height: 50px; padding: 0 28px; border-radius: 999px; background: linear-gradient(90deg,#ff5fa5,#8a5cff); color: #fff; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.chk-btn:hover { filter: brightness(1.1); }
+
+.chk-explore { text-align: center; margin-top: 30px; }
+.chk-explore h2 { font: 700 1.5rem Georgia,serif; color: #f6e3b2; border: 0; margin-bottom: 18px; }
+.chk-animals { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(12, 1fr); gap: 10px; }
+.chk-animal-link { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 6px 2px; color: #f1ecff; text-decoration: none; font-weight: 600; font-size: .9rem; border-radius: 12px; }
+.chk-animal-link img { width: 100%; max-width: 72px; height: auto; border-radius: 50%; transition: transform .15s; }
+.chk-animal-link:hover img { transform: translateY(-3px) scale(1.05); }
+
+.chk-seo { max-width: 840px; margin-top: 36px; }
+.chk-seo h2 { color: #f6e3b2; font-family: Georgia,serif; margin: 28px 0 10px; }
+.chk-seo p, .chk-seo li { color: #e3dcf7; line-height: 1.7; }
+.chk-seo a { color: #f3d28a; }
+.chk-faq-item { border: 1px solid var(--line); border-radius: 12px; background: rgba(26,19,64,.6); margin-bottom: 10px; }
+.chk-faq-item summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: #fff; min-height: 24px; }
+.chk-faq-item p { margin: 0; padding: 0 16px 16px; }
+.chk-disclaimer { margin-top: 26px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; font-size: .88rem; color: #cdbfee !important; }
+.chk-page .chk-details { max-width: 1040px; }
+.chk-page .result-card.chk-details { margin-bottom: 18px; }
+
+body.chk-page footer.chk-footer {
+  margin-top: 40px; padding: 150px 0 28px; text-align: center; border: 0; color: #f1ecff;
+  background: linear-gradient(180deg,#0b081f 0%,rgba(11,8,31,.2) 35%,rgba(11,8,31,.7) 100%), url("../images/checker/footer-bg.webp") center bottom / cover no-repeat;
+}
+.chk-footer p { text-shadow: 0 1px 8px #000; }
+.chk-foot-brand { font: 700 1.6rem Georgia,serif; color: #f6e3b2; margin: 0; }
+.chk-foot-tag { margin: 4px 0 14px; }
+.chk-foot-links { margin-bottom: 12px; line-height: 2; }
+.chk-footer a { color: #f3d28a; text-shadow: 0 1px 8px #000; }
+
+@media (max-width: 900px) {
+  .chk-hero-card { grid-template-columns: 1fr; text-align: center; }
+  .chk-medal-lg { width: min(70%, 300px); margin: 0 auto; }
+  .chk-tiles { grid-template-columns: 1fr 1fr; }
+  .chk-four { grid-template-columns: 1fr 1fr; }
+  .chk-animals { grid-template-columns: repeat(6, 1fr); }
+}
+@media (max-width: 600px) {
+  .chk-form-row { flex-direction: column; align-items: stretch; }
+  .chk-page .chk-form button { width: 100%; }
+  .chk-four { grid-template-columns: 1fr; }
+  .chk-cta { flex-direction: column; text-align: center; }
+  .chk-btn { width: 100%; justify-content: center; }
+  .chk-animals { grid-template-columns: repeat(4, 1fr); }
+  .chk-tiles { grid-template-columns: 1fr; }
+  .chk-list li { text-align: left; }
+  body.chk-page footer.chk-footer { padding-top: 100px; }
+}

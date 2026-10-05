@@ -175,16 +175,61 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     `;
 
-    resultBox.innerHTML = `
-      <div class="result-card">
-        <div class="result-header">
-          <div class="chk-medal"><img class="chk-medal-animal" src="images/business/animals/${animal.toLowerCase()}.webp" alt="" width="120" height="120"><img class="chk-medal-el" src="images/business/el-${element.toLowerCase()}.webp" alt="" width="44" height="44"></div>
-          <div>
-            <h2>${resultHeading}</h2>
-            <p class="result-sub">${bornSub}</p>
-          </div>
+    // --- Redesigned result: hero card + four info cards ---
+    const X = (typeof CHECKER_EXTRA !== "undefined" && CHECKER_EXTRA[animal]) || null;
+    const slug = animal.toLowerCase();
+    const li = (arr) => '<ul class="chk-list">' + arr.map((t) => "<li>" + t + "</li>").join("") + "</ul>";
+    const yinyang = X ? (X.yin === "Yang" ? S.chk_yang : S.chk_yin) : "";
+    const yearsList = nearbyYearsForAnimal(animal, 1990, 12).filter((y) => y >= 1950 && y <= 2031).join(", ");
+    const useEn = lang !== "km" && X;
+    const persBody = useEn ? li(X.personality) : "<p>" + traits + "</p>";
+    const loveTitle = useEn ? S.chk_love : S.watch_out;
+    const loveBody = useEn ? li(X.love) : "<p>" + weaknesses + "</p>";
+    const careerBody = useEn ? li(X.career) : "<p>" + careers + "</p>";
+    const luckRows = [
+      [S.lucky_numbers, info.luckyNumbers.join(", ")],
+      [S.lucky_colors, renderLuckyColorChips(luckyColors, info.luckyColors)]
+    ];
+    if (useEn) luckRows.push([S.chk_directions, X.directions], [S.chk_months, X.months]);
+    else luckRows.push([S.lucky_days, luckyDays.join(", ")]);
+    luckRows.push([S.best_matches, trianglePartnersDisplay.join(", ")], [S.needs_patience, clashAnimalDisplay]);
+    const luckBody = '<ul class="chk-list chk-list-kv">' + luckRows.map((r) => "<li><span>" + r[0] + "</span> " + r[1] + "</li>").join("") + "</ul>";
+    const ICO = {
+      cal: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h2M12 14h2M16 14h0M8 17.5h2M12 17.5h2"/></svg>',
+      yy: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5a4.75 4.75 0 0 1 0 9.5 4.75 4.75 0 0 0 0 9.5" /><circle cx="12" cy="7.25" r="1.2" fill="currentColor"/><circle cx="12" cy="16.75" r="1.2" fill="currentColor" stroke="none"/></svg>',
+      star: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 3.5l2 8.5 8.5 0-8.5 0-2 8.5-2-8.5-8.5 0 8.5 0z"/></svg>'
+    };
+    const tile = (ico, label, value, sub) =>
+      '<div class="chk-tile"><span class="chk-tile-ico">' + ico + '</span><div><div class="chk-tile-l">' + label + '</div><div class="chk-tile-v">' + value + "</div>" + (sub ? '<div class="chk-tile-s">' + sub + "</div>" : "") + "</div></div>";
+    const topHtml = `
+      <section class="chk-hero-card" aria-labelledby="chk-res-h">
+        <div class="chk-medal-lg">
+          <img src="images/business/animals/${slug}.webp" alt="Golden ${animal} Chinese zodiac medallion" width="320" height="320">
+          ${X ? `<span class="chk-kanji" lang="zh" aria-hidden="true">${X.kanji}</span>` : ""}
         </div>
+        <div class="chk-hero-copy">
+          <p class="chk-eyebrow">${S.chk_your_sign}</p>
+          <h2 id="chk-res-h" class="chk-animal">${animalDisplay}</h2>
+          <p class="chk-years">${yearsList}</p>
+          <p class="chk-desc">${traits}</p>
+        </div>
+        <div class="chk-tiles">
+          ${tile(ICO.cal, S.chk_birth_year, date.getFullYear())}
+          ${tile('<img src="images/business/el-' + element.toLowerCase() + '.webp" alt="" width="40" height="40">', S.chk_element, elementDisplay)}
+          ${X ? tile(ICO.yy, S.chk_yinyang, yinyang) : ""}
+          ${tile(ICO.star, S.chk_zodiac_year, zodiacYear, resultHeading)}
+        </div>
+      </section>
+      <div class="chk-four">
+        <article class="chk-card chk-c-pers"><h3><img src="images/checker/personality.webp" alt="" width="39" height="36">${S.chk_personality}</h3>${persBody}</article>
+        <article class="chk-card chk-c-love"><h3><img src="images/checker/love.webp" alt="" width="33" height="35">${loveTitle}</h3>${loveBody}</article>
+        <article class="chk-card chk-c-career"><h3><img src="images/checker/career.webp" alt="" width="37" height="30">${S.chk_career}</h3>${careerBody}</article>
+        <article class="chk-card chk-c-luck"><h3><img src="images/checker/luck.webp" alt="" width="32" height="32">${S.chk_luck}</h3>${luckBody}</article>
+      </div>
+    `;
 
+    resultBox.innerHTML = topHtml + `
+      <div class="result-card chk-details">
         ${shareBlockHtml(resultHeading, { emoji: ZODIAC_EMOJI[animal], animal: animal, heading: resultHeading, subheading: bornSub, badge: S[verdictKey] })}
 
         <p class="lunar-note">${lunarNote}</p>
@@ -210,37 +255,9 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
 
         <div class="result-grid">
-          <div class="result-block">
-            <h3>${S.strengths}</h3>
-            <p>${traits}</p>
-          </div>
-          <div class="result-block">
+          <div class="result-block" style="grid-column: 1 / -1;">
             <h3>${S.watch_out}</h3>
             <p>${weaknesses}</p>
-          </div>
-          <div class="result-block">
-            <h3>${S.lucky_numbers}</h3>
-            <p>${info.luckyNumbers.join(", ")}</p>
-          </div>
-          <div class="result-block">
-            <h3>${S.lucky_colors}</h3>
-            <p>${renderLuckyColorChips(luckyColors, info.luckyColors)}</p>
-          </div>
-          <div class="result-block">
-            <h3>${S.lucky_days}</h3>
-            <p>${luckyDays.join(", ")}</p>
-          </div>
-          <div class="result-block">
-            <h3>${S.best_matches}</h3>
-            <p>${trianglePartnersDisplay.join(", ")}</p>
-          </div>
-          <div class="result-block">
-            <h3>${S.needs_patience}</h3>
-            <p>${clashAnimalDisplay}</p>
-          </div>
-          <div class="result-block" style="grid-column: 1 / -1;">
-            <h3>${S.careers_heading}</h3>
-            <p>${careers}</p>
           </div>
         </div>
 

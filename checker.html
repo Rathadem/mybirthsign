@@ -8,13 +8,19 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<title>Chinese Zodiac Checker — Find Your Animal & Element | MyBirthSign</title>
+<title>What Is My Chinese Zodiac Sign? | Chinese Zodiac Checker | MyBirthSign</title>
 <link rel="canonical" href="https://mybirthsign.com/checker.html">
 <meta property="og:url" content="https://mybirthsign.com/checker.html">
-<meta name="description" content="Enter your date of birth to find your Chinese zodiac animal, element, lucky numbers, colors, and get a free personalized reading.">
+<meta name="description" content="Find your Chinese zodiac sign by date of birth. Discover your zodiac animal, element, Yin/Yang, personality traits, love compatibility, career characteristics, and traditional lucky associations.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
+<meta property="og:title" content="What Is My Chinese Zodiac Sign? | MyBirthSign">
+<meta property="og:description" content="Enter your date of birth to discover your Chinese zodiac animal, element, personality, and more.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0b081f">
+<link rel="preload" as="image" href="images/checker/hero-bg.webp">
 <link rel="stylesheet" href="css/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebPage", "name": "What Is My Chinese Zodiac Sign?", "url": "https://mybirthsign.com/checker.html", "description": "Find your Chinese zodiac sign by date of birth."}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://mybirthsign.com/"}, {"@type": "ListItem", "position": 2, "name": "Zodiac Checker", "item": "https://mybirthsign.com/checker.html"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is my Chinese zodiac sign?", "acceptedAnswer": {"@type": "Answer", "text": "Your Chinese zodiac sign is the animal linked to your Chinese zodiac year, which runs from one Lunar New Year to the next. Enter your date of birth in the checker above and it will show your animal, element and Yin/Yang polarity."}}, {"@type": "Question", "name": "How do I find my Chinese zodiac animal?", "acceptedAnswer": {"@type": "Answer", "text": "The twelve animals repeat in a fixed cycle: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog and Pig. The cycle is tied to the Chinese zodiac year, not the calendar year, so the easiest way to be sure is to use a checker that looks up the real Lunar New Year date for your birth year."}}, {"@type": "Question", "name": "Why does my zodiac sign change if I was born in January or February?", "acceptedAnswer": {"@type": "Answer", "text": "The Chinese zodiac year begins on the Lunar New Year, which falls between about 21 January and 20 February. If your birthday comes before that date, you belong to the previous zodiac year and its animal. For example, someone born on 10 January 1990 is a Snake, not a Horse."}}, {"@type": "Question", "name": "What are the five Chinese zodiac elements?", "acceptedAnswer": {"@type": "Answer", "text": "The five elements are Wood, Fire, Earth, Metal and Water. Each element covers two consecutive years, and the pattern repeats every ten years. Combined with the twelve animals, they form a 60-year cycle, so a Wood Rat and a Water Rat are described a little differently."}}, {"@type": "Question", "name": "What does Yin and Yang mean in the Chinese zodiac?", "acceptedAnswer": {"@type": "Answer", "text": "Yin and Yang are two complementary polarities in Chinese philosophy. In the zodiac, the animals alternate between them: Rat, Tiger, Dragon, Horse, Monkey and Dog are traditionally Yang (active, outward), while Ox, Rabbit, Snake, Goat, Rooster and Pig are Yin (receptive, inward)."}}, {"@type": "Question", "name": "What is my Chinese zodiac element?", "acceptedAnswer": {"@type": "Answer", "text": "Your element depends on the last digit of your Chinese zodiac year: 0 and 1 are Metal, 2 and 3 are Water, 4 and 5 are Wood, 6 and 7 are Fire, and 8 and 9 are Earth. The checker works this out for you automatically."}}, {"@type": "Question", "name": "Can I use my Chinese zodiac sign for compatibility?", "acceptedAnswer": {"@type": "Answer", "text": "Many people enjoy comparing signs with a partner, friend or business partner. Traditional lore groups the animals into friendly triangles and notes a few challenging pairings, but it is a cultural tradition, not a guarantee. Try the compatibility checker for a fun, reflective comparison."}}, {"@type": "Question", "name": "Is Chinese zodiac astrology scientifically proven?", "acceptedAnswer": {"@type": "Answer", "text": "No. The Chinese zodiac is a traditional cultural system, and there is no scientific evidence that it predicts personality or the future. We present it for entertainment, cultural exploration and personal reflection."}}]}]}</script>
 
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939402104083173" crossorigin="anonymous"></script>
@@ -56,14 +62,20 @@
   </div>
 </header>
 
+<main id="main">
 <section class="chk-hero">
   <div class="container chk-hero-inner">
-    <h1 class="chk-h1" data-i18n="checker_hero_title">Khmer/Chinese Zodiac Horoscope</h1>
-    <p class="chk-sub" data-i18n="checker_hero_subtitle">Enter your date of birth to find your zodiac animal, element, lucky numbers, colors, and a personalized reading.</p>
+    <h1 class="chk-h1" data-i18n="checker_hero_title">What Is My Chinese Zodiac Sign?</h1>
+    <p class="chk-sub" data-i18n="checker_hero_subtitle">Enter your date of birth to discover your Chinese zodiac animal, element, personality, and more.</p>
     <form id="birthday-form" class="checker-form chk-form">
-      <label for="dob" data-i18n="dob_label">Your date of birth</label>
-      <input type="date" lang="en-GB" id="dob" name="dob" required min="1920-01-01" max="2026-12-31">
-      <button type="submit" data-i18n="reveal_button">Reveal My Sign</button>
+      <div class="chk-form-row">
+        <div class="chk-field">
+          <label for="dob" data-i18n="dob_label">Date of Birth</label>
+          <input type="date" lang="en-GB" id="dob" name="dob" required min="1920-01-01" max="2026-12-31">
+        </div>
+        <button type="submit" data-i18n="reveal_button">Find My Zodiac Sign →</button>
+      </div>
+      <p class="chk-hint" data-i18n="chk_form_hint">Your birth date determines your Chinese zodiac sign, element, and traditional zodiac characteristics.</p>
     </form>
   </div>
 </section>
@@ -79,36 +91,91 @@
   </div>
 </div>
 
-<div id="result" class="container"></div>
+<div id="result" class="container chk-wrap" aria-live="polite"></div>
 
-<!-- Ad slot: place an AdSense <ins class="adsbygoogle"> unit here after approval -->
+<section class="container chk-wrap">
+  <div class="chk-cta">
+    <img class="chk-cta-art" src="images/checker/hearts.webp" alt="" width="176" height="89" loading="lazy">
+    <div class="chk-cta-text">
+      <h2 data-i18n="chk_cta_title">Check Your Compatibility</h2>
+      <p data-i18n="chk_cta_sub">Find out how well you match with a partner, friend, or business partner.</p>
+    </div>
+    <a class="chk-btn" href="compatibility.html" data-i18n="chk_cta_btn">Check Compatibility →</a>
+  </div>
+</section>
+
+<section class="container chk-wrap chk-explore" aria-labelledby="chk-explore-h">
+  <h2 id="chk-explore-h" data-i18n="chk_explore_title">Explore All 12 Chinese Zodiac Signs</h2>
+  <ul class="chk-animals" id="chk-animals"></ul>
+</section>
+
 <div class="ad-slot container">Ad space</div>
 
-<section class="content-section container">
-  <h2 data-i18n="how_heading">How This Works</h2>
-  <p data-i18n="how_p1">
-    Your birth year maps to one of 12 zodiac animals and one of 5 elements, following the
-    traditional East Asian zodiac cycle. The animal reflects personality traits that are said
-    to repeat every 12 years, while the element adds a layer of flavor that repeats every 10 years —
-    together giving a unique 60-year combination (for example, "Earth Dragon" or "Water Tiger").
-  </p>
-  <p data-i18n="how_p2">
-    This tool is designed for fun and self-reflection. Birthdays in late January or February may
-    fall right around the lunar new year cutoff, which can shift the result by one year in some
-    traditional systems — we note this when it applies.
-  </p>
-</section>
+<div class="chk-seo container">
+<div data-lang-content="en">
+  <section>
+    <h2>How Does the Chinese Zodiac Work?</h2>
+    <p>The Chinese zodiac is a repeating twelve-year cycle in which each year is represented by an animal: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog and Pig. Tradition says your animal reflects temperament and outlook, and the same cycle is celebrated across China, Vietnam, Korea and Cambodia, where many families mark the lunar new year with food, family visits and temple blessings.</p>
+    <p>Crucially, the cycle follows the lunar calendar, not January 1. Each zodiac year begins on the Lunar New Year, a date that moves between late January and mid-February. That is why this checker compares your birthday with the actual Lunar New Year date for your birth year instead of simply using the calendar year.</p>
+  </section>
+  <section>
+    <h2>The Five Chinese Zodiac Elements</h2>
+    <p>Alongside the twelve animals, each year carries one of five elements. Every element covers two consecutive years, so the full animal-and-element pattern repeats every sixty years.</p>
+    <ul>
+      <li><strong>Wood</strong> – growth, creativity and generosity.</li>
+      <li><strong>Fire</strong> – passion, energy and enthusiasm.</li>
+      <li><strong>Earth</strong> – stability, patience and practicality.</li>
+      <li><strong>Metal</strong> – determination, discipline and clarity.</li>
+      <li><strong>Water</strong> – adaptability, intuition and communication.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Chinese Zodiac Personality Traits</h2>
+    <p>Traditional interpretations associate each animal with a set of characteristics. Horses are said to love freedom, Oxen to be dependable, and Dragons to be bold. These are cultural archetypes that many people enjoy as prompts for self-reflection, not fixed rules about who you are. Your element and Yin/Yang polarity add further nuance to the description.</p>
+  </section>
+  <section>
+    <h2>Chinese Zodiac Compatibility</h2>
+    <p>Traditional lore groups the twelve animals into four friendly triangles and notes a handful of challenging pairings. Many people use this as a conversation starter when thinking about a partner, friend or business partner. Ready to compare two signs? Try our <a href="compatibility.html">Chinese zodiac compatibility checker</a>, or look at <a href="business-partner.html">business partner compatibility</a>.</p>
+  </section>
+  <section>
+    <h2>Chinese Zodiac Years</h2>
+    <p>The Chinese zodiac year does not always begin on 1 January. It starts on the Lunar New Year, so anyone born in January or early February may belong to the previous animal's year. Browse the <a href="animals.html">Zodiac Guide</a> to see every animal with its recent years, or read the year-by-year guides such as the <a href="blog/zodiac-year-horse.html">Year of the Horse</a>.</p>
+  </section>
+  <section class="chk-faq">
+    <h2>Frequently Asked Questions</h2>
+    <details class="chk-faq-item"><summary>What is my Chinese zodiac sign?</summary><p>Your Chinese zodiac sign is the animal linked to your Chinese zodiac year, which runs from one Lunar New Year to the next. Enter your date of birth in the checker above and it will show your animal, element and Yin/Yang polarity.</p></details>
+    <details class="chk-faq-item"><summary>How do I find my Chinese zodiac animal?</summary><p>The twelve animals repeat in a fixed cycle: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog and Pig. The cycle is tied to the Chinese zodiac year, not the calendar year, so the easiest way to be sure is to use a checker that looks up the real Lunar New Year date for your birth year.</p></details>
+    <details class="chk-faq-item"><summary>Why does my zodiac sign change if I was born in January or February?</summary><p>The Chinese zodiac year begins on the Lunar New Year, which falls between about 21 January and 20 February. If your birthday comes before that date, you belong to the previous zodiac year and its animal. For example, someone born on 10 January 1990 is a Snake, not a Horse.</p></details>
+    <details class="chk-faq-item"><summary>What are the five Chinese zodiac elements?</summary><p>The five elements are Wood, Fire, Earth, Metal and Water. Each element covers two consecutive years, and the pattern repeats every ten years. Combined with the twelve animals, they form a 60-year cycle, so a Wood Rat and a Water Rat are described a little differently.</p></details>
+    <details class="chk-faq-item"><summary>What does Yin and Yang mean in the Chinese zodiac?</summary><p>Yin and Yang are two complementary polarities in Chinese philosophy. In the zodiac, the animals alternate between them: Rat, Tiger, Dragon, Horse, Monkey and Dog are traditionally Yang (active, outward), while Ox, Rabbit, Snake, Goat, Rooster and Pig are Yin (receptive, inward).</p></details>
+    <details class="chk-faq-item"><summary>What is my Chinese zodiac element?</summary><p>Your element depends on the last digit of your Chinese zodiac year: 0 and 1 are Metal, 2 and 3 are Water, 4 and 5 are Wood, 6 and 7 are Fire, and 8 and 9 are Earth. The checker works this out for you automatically.</p></details>
+    <details class="chk-faq-item"><summary>Can I use my Chinese zodiac sign for compatibility?</summary><p>Many people enjoy comparing signs with a partner, friend or business partner. Traditional lore groups the animals into friendly triangles and notes a few challenging pairings, but it is a cultural tradition, not a guarantee. Try the compatibility checker for a fun, reflective comparison.</p></details>
+    <details class="chk-faq-item"><summary>Is Chinese zodiac astrology scientifically proven?</summary><p>No. The Chinese zodiac is a traditional cultural system, and there is no scientific evidence that it predicts personality or the future. We present it for entertainment, cultural exploration and personal reflection.</p></details>
+  </section>
+</div>
+<div data-lang-content="km">
+  <section>
+    <h2 data-i18n="how_heading">How This Works</h2>
+    <p data-i18n="how_p1"></p>
+    <p data-i18n="how_p2"></p>
+  </section>
+</div>
+<p class="chk-disclaimer" data-i18n="chk_disclaimer">Chinese zodiac interpretations are based on traditional cultural beliefs and are provided for entertainment, cultural exploration, and personal reflection. They should not be considered scientific predictions or professional advice.</p>
+</div>
 
 <section class="content-section container">
   <h2 data-i18n="blog_heading">From the Blog</h2>
   <p><a href="blog.html" data-i18n="blog_link">Read more about zodiac compatibility, yearly forecasts, and the five elements →</a></p>
 </section>
+</main>
 
-<footer class="site-footer">
+<footer class="site-footer chk-footer">
   <div class="container">
-    <a href="about.html" data-i18n="footer_about">About</a> ·
-    <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a> ·
-    <a href="contact.html" data-i18n="footer_contact">Contact</a>
+    <p class="chk-foot-brand">MyBirthSign</p>
+    <p class="chk-foot-tag">Chinese Zodiac • Compatibility • Business Partners • Zodiac Guides</p>
+    <nav class="chk-foot-links" aria-label="Footer">
+      <a href="index.html">Home</a> · <a href="checker.html">Zodiac Checker</a> · <a href="compatibility.html">Compatibility</a> · <a href="business-partner.html">Business Partners</a> · <a href="animals.html">Zodiac Guide</a> · <a href="blog.html">Blog</a> · <a href="about.html">About</a> · <a href="contact.html">Contact</a> · <a href="privacy.html">Privacy Policy</a>
+    </nav>
     <p data-i18n="footer_copyright">&copy; 2026 MyBirthSign. For entertainment purposes only.</p>
   </div>
 </footer>
@@ -117,6 +184,8 @@
 <script src="js/zodiac-data.js"></script>
 <script src="js/datepicker.js"></script>
 <script src="js/share.js"></script>
+<script src="js/checker-extra.js"></script>
 <script src="js/app.js"></script>
+<script src="js/checker-page.js"></script>
 </body>
 </html>
