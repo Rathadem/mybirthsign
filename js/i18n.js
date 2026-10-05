@@ -345,6 +345,7 @@ const UI_STRINGS = {
     rc_pair_header_tpl: "{p1} {symbol1} {p1sign}  ❤️  {p2} {symbol2} {p2sign}",
 
     nav_business: "Business Partner",
+    nav_business_guide: "Business Guide",
     biz_hero_title: "💼 Business Partnership Compatibility",
     biz_hero_subtitle: "Chinese Zodiac • Five Elements • Business Personality",
     biz_person1_legend: "Person 1",
@@ -648,6 +649,7 @@ const UI_STRINGS = {
     rc_pair_header_tpl: "{p1} {symbol1} {p1sign}  ❤️  {p2} {symbol2} {p2sign}",
 
     nav_business: "ដៃគូអាជីវកម្ម",
+    nav_business_guide: "មគ្គុទ្ទេសក៍អាជីវកម្ម",
     biz_hero_title: "💼 ភាពសមស្របដៃគូអាជីវកម្ម",
     biz_hero_subtitle: "រាសន៍ចិន • ធាតុទាំងប្រាំ • បុគ្គលិកលក្ខណៈអាជីវកម្ម",
     biz_person1_legend: "អ្នកទី១",
