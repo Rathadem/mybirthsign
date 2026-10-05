@@ -2635,3 +2635,7 @@ html[lang="km"] .chk-page .chk-animal { font-size: clamp(2.2rem, 5vw, 3.6rem); }
 html[lang="km"] .chk-page .chk-sub, html[lang="km"] .chk-page .chk-desc, html[lang="km"] .chk-page .chk-list,
 html[lang="km"] .chk-page .chk-seo p, html[lang="km"] .chk-page .chk-seo li { line-height: 1.8; }
 html[lang="km"] .chk-page .chk-h1 { font-family: "Moul", "Kantumruy Pro", "Noto Sans Khmer", serif; }
+/* Checker: open the calendar downward so it never covers the title (esp. the taller Khmer title) */
+.chk-page .chk-form .kdp-popup { bottom: auto; top: calc(100% + 8px); box-shadow: 0 14px 36px rgba(0,0,0,.55); z-index: 60; }
+.chk-page .chk-hero { position: relative; z-index: 5; }
+html[lang="km"] .chk-page .chk-h1 { margin-bottom: 18px; }
