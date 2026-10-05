@@ -245,6 +245,94 @@ document.addEventListener("DOMContentLoaded", function () {
   const CHALLENGE_TOPICS_EN = ["Ownership", "Money", "Workload", "Decision authority", "Business strategy", "Hiring", "Expansion", "Personal withdrawals", "Debt", "Exit strategy"];
   const CHALLENGE_TOPICS_KM = ["កម្មសិទ្ធិ", "ប្រាក់កាស", "បន្ទុកការងារ", "សិទ្ធិសម្រេចចិត្ត", "យុទ្ធសាស្ត្រអាជីវកម្ម", "ការជួលបុគ្គលិក", "ការពង្រីក", "ការដកប្រាក់ផ្ទាល់ខ្លួន", "បំណុល", "យុទ្ធសាស្ត្រចាកចេញ"];
 
+  // --- mockup-style result overview ---------------------------------------
+  const OV_CARDS = [
+    ["trust", "\uD83E\uDD1D", "biz_ov_c_partnership", "Partnership"],
+    ["communication", "\uD83D\uDCAC", "biz_ov_c_communication", "Communication"],
+    ["leadership", "\uD83D\uDC51", "biz_ov_c_leadership", "Leadership"],
+    ["finance", "\uD83E\uDE99", "biz_ov_c_finance", "Financial Potential"],
+    ["decision", "\uD83C\uDFAF", "biz_ov_c_decision", "Decision Making"],
+    ["growth", "\uD83D\uDCC8", "biz_ov_c_growth", "Growth Potential"]
+  ];
+  function descFor(score) {
+    if (score >= 75) return S.biz_ov_d_high || "Strong match in this area.";
+    if (score >= 55) return S.biz_ov_d_mid || "Workable with clear agreements.";
+    return S.biz_ov_d_low || "Needs deliberate structure.";
+  }
+  function starsHtml(overall) {
+    const val = overall / 20;
+    let out = "";
+    for (let i = 1; i <= 5; i++) {
+      let cls = "biz-star";
+      if (val >= i - 0.25) cls += " full";
+      else if (val >= i - 0.75) cls += " half";
+      out += `<span class="${cls}">\u2605</span>`;
+    }
+    return `<div class="biz-ov-stars" aria-hidden="true">${out}</div>`;
+  }
+  function personHtml(name, bzi) {
+    const slug = bzi.animal.toLowerCase();
+    return `
+      <div class="biz-ov-person">
+        <div class="biz-ov-medal"><img src="images/business/animals/${slug}.webp" alt="${animalName(bzi.animal)}" width="104" height="104" loading="lazy"></div>
+        <div class="biz-ov-animal">${animalName(bzi.animal)}</div>
+        <div class="biz-ov-chips">
+          <span class="biz-ov-chip"><img src="images/business/el-${bzi.element.toLowerCase()}.webp" alt="" width="30" height="30" loading="lazy"><span><b>${elementName(bzi.element)}</b><small>${S.biz_ov_el_label || "Element"}</small></span></span>
+          <span class="biz-ov-chip"><span class="biz-ov-yy">\u262F</span><span><b>${isKm ? (bzi.yinYang === "Yang" ? "\u1799\u17C9\u17B6\u1784" : "\u1799\u17B7\u1793") : bzi.yinYang}</b><small>${name}</small></span></span>
+          <span class="biz-ov-chip"><img class="biz-ov-yearico" src="images/business/animals/${slug}.webp" alt="" width="30" height="30" loading="lazy"><span><b>${bzi.zodiacYear}</b><small>${S.biz_ov_year_label || "Zodiac Year"}</small></span></span>
+        </div>
+      </div>`;
+  }
+  function overviewHtml(p1Name, p2Name, bziA, bziB, scores, top, bottom, elRel, bizA, bizB) {
+    const vals = Object.values(scores);
+    const overall = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+    const deg = Math.round(overall * 3.6);
+    const harmKey = elRel.tier === "high" ? "biz_ov_harm_high" : (elRel.tier === "low" ? "biz_ov_harm_low" : "biz_ov_harm_mid");
+    const harmDef = elRel.tier === "high" ? "Strong Business Harmony" : (elRel.tier === "low" ? "Needs Deliberate Balance" : "Balanced Business Harmony");
+    const strongest = Object.entries(scores).sort((a, b) => b[1] - a[1]).slice(0, 4);
+    const weakest = Object.entries(scores).sort((a, b) => a[1] - b[1]).slice(0, 4);
+    const li = (e, mark, cls) => `<li><span class="biz-ov-mark ${cls}">${mark}</span><span>${CATEGORY_LABEL[e[0]]} <em>${e[1]}%</em></span></li>`;
+    return `
+      <h2 class="biz-ov-title"><span>${S.biz_ov_title || "Your Business Compatibility Result"}</span></h2>
+      <div class="biz-ov-main">
+        ${personHtml(p1Name, bziA)}
+        <div class="biz-ov-score">
+          <div class="biz-ov-ring" style="--deg:${deg}deg">
+            <div class="biz-ov-ring-inner"><strong>${overall}<sup>%</sup></strong><span>${S.biz_ov_match || "Business Match"}</span></div>
+          </div>
+          ${starsHtml(overall)}
+        </div>
+        ${personHtml(p2Name, bziB)}
+      </div>
+      <div class="biz-ov-cards">
+        ${OV_CARDS.map(function (c) {
+          const sc = scores[c[0]];
+          return `<div class="biz-ov-card"><div class="biz-ov-ico">${c[1]}</div><div class="biz-ov-pct">${sc}%</div><div class="biz-ov-lbl">${S[c[2]] || c[3]}</div><p>${descFor(sc)}</p></div>`;
+        }).join("")}
+      </div>
+      <div class="biz-ov-trio">
+        <div class="biz-ov-box good"><h3>${S.biz_ov_strengths || "Business Strengths"}</h3><ul>${strongest.map(function (e) { return li(e, "\u2713", "ok"); }).join("")}</ul></div>
+        <div class="biz-ov-box warn"><h3>${S.biz_ov_challenges || "Potential Challenges"}</h3><ul>${weakest.map(function (e) { return li(e, "!", "bad"); }).join("")}</ul></div>
+        <div class="biz-ov-box roles"><h3>${S.biz_ov_roles || "Best Business Roles"}</h3>
+          <h4>${p1Name} (${animalName(bziA.animal)})</h4><div class="biz-ov-tags">${bizA.roles.map(function (r) { return `<span class="r1">${r}</span>`; }).join("")}</div>
+          <h4>${p2Name} (${animalName(bziB.animal)})</h4><div class="biz-ov-tags">${bizB.roles.map(function (r) { return `<span class="r2">${r}</span>`; }).join("")}</div>
+        </div>
+      </div>
+      <div class="biz-ov-elem">
+        <div class="biz-ov-elem-main">
+          <h3>\u262F ${S.biz_ov_elem_title || "Element Compatibility"}</h3>
+          <div class="biz-ov-elem-pair">
+            <div><img src="images/business/el-${bziA.element.toLowerCase()}.webp" alt="" width="64" height="64" loading="lazy"><span>${elementName(bziA.element)}</span></div>
+            <i>\u2192</i>
+            <div><img src="images/business/el-${bziB.element.toLowerCase()}.webp" alt="" width="64" height="64" loading="lazy"><span>${elementName(bziB.element)}</span></div>
+          </div>
+        </div>
+        <div class="biz-ov-elem-note"><h4>${S[harmKey] || harmDef}</h4><p>${elRel.note}</p></div>
+        <p class="biz-ov-disc">${S.biz_ov_disclaimer || "These interpretations are based on traditional Chinese zodiac and element concepts and are for entertainment and personal reflection only."}</p>
+      </div>
+    `;
+  }
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     clearError();
@@ -328,19 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     resultBox.innerHTML = `
       <div class="biz-result-card">
-        <div class="biz-pair-header">
-          <div class="biz-pair-person">
-            <img class="result-badge" src="images/zodiac-badges/${bziA.animal.toLowerCase()}.webp" alt="" loading="lazy" width="56" height="56">
-            <div><strong>${p1Name}</strong></div>
-            <div class="biz-pair-sub">${isKm ? KM_ELEMENT_NAMES[bziA.element] + " " + KM_ANIMAL_NAMES[bziA.animal] : bziA.element + " " + bziA.animal} · ${yinYangLabel(bziA.yinYang)}</div>
-          </div>
-          <div class="biz-pair-link">🤝</div>
-          <div class="biz-pair-person">
-            <img class="result-badge" src="images/zodiac-badges/${bziB.animal.toLowerCase()}.webp" alt="" loading="lazy" width="56" height="56">
-            <div><strong>${p2Name}</strong></div>
-            <div class="biz-pair-sub">${isKm ? KM_ELEMENT_NAMES[bziB.element] + " " + KM_ANIMAL_NAMES[bziB.animal] : bziB.element + " " + bziB.animal} · ${yinYangLabel(bziB.yinYang)}</div>
-          </div>
-        </div>
+        ${overviewHtml(p1Name, p2Name, bziA, bziB, scores, top, bottom, elRel, bizA, bizB)}
 
         ${shareRowHtml(p1Name + " + " + p2Name, { emoji: ZODIAC_EMOJI[bziA.animal] + " 🤝 " + ZODIAC_EMOJI[bziB.animal], heading: p1Name + " + " + p2Name, subheading: CATEGORY_LABEL[top[0][0]] + " · " + CATEGORY_LABEL[top[1][0]] })}
 
