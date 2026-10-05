@@ -2589,3 +2589,21 @@ body.chk-page footer.chk-footer { background: linear-gradient(180deg,#0b081f 0%,
 .chk-four .chk-card .chk-art { display: block; width: calc(100% + 32px); max-width: none; height: auto; margin: auto -16px 0; padding-top: 14px; box-sizing: content-box;
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 38%); mask-image: linear-gradient(180deg, transparent 0, #000 38%); }
 .chk-four .chk-card > :not(h3):not(.chk-art) { margin-bottom: 14px; }
+
+/* --- Footer skyline (all pages) --- */
+footer.site-footer {
+  position: relative;
+  margin-top: 48px;
+  padding: 170px 0 30px;
+  border-top: 0;
+  color: #e9e2ff;
+  background:
+    linear-gradient(180deg, #0f0b1f 0%, rgba(15, 11, 31, 0) 32%, rgba(15, 11, 31, 0.5) 68%, rgba(15, 11, 31, 0.88) 100%),
+    url("../images/footer-skyline.webp") center 40% / cover no-repeat;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+footer.site-footer a { color: #f3d28a; }
+footer.site-footer p { margin: 8px 0 0; color: #d9d0f2; }
+@media (max-width: 600px) {
+  footer.site-footer { padding-top: 120px; background-position: 42% 40%; }
+}
