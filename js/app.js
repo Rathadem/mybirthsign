@@ -58,17 +58,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (!form) return;
-  let sampleMode = false;
-  if (document.body.classList.contains("chk-page")) setTimeout(function () { form.dispatchEvent(new CustomEvent("chk-sample")); }, 0);
-  form.addEventListener("chk-sample", function () {
-    sampleMode = true;
-    try { form.dispatchEvent(new Event("submit", { cancelable: true })); } finally { sampleMode = false; }
-  });
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    const sample = sampleMode;
-    const value = sample ? "1990-05-15" : dobInput.value;
+    const value = dobInput.value;
     if (!value) return;
 
     const lang = getLang();
@@ -235,10 +228,6 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     `;
 
-    if (sample) {
-      resultBox.innerHTML = '<p class="chk-sample">' + S.chk_sample_note + "</p>" + topHtml;
-      return;
-    }
     resultBox.innerHTML = topHtml + `
       <div class="result-card chk-details">
         ${shareBlockHtml(resultHeading, { emoji: ZODIAC_EMOJI[animal], animal: animal, heading: resultHeading, subheading: bornSub, badge: S[verdictKey] })}
