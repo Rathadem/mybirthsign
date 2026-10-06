@@ -2971,3 +2971,6 @@ body.chk-page footer.chk-footer {
 }
 footer.site-footer p, .chk-footer p { color: #b9afd6; text-shadow: none; }
 @media (max-width: 600px) { footer.site-footer, body.chk-page footer.chk-footer { padding-top: 64px; } }
+
+/* Business Partner: link section without background image */
+.biz-page .biz-after { background: none; }
