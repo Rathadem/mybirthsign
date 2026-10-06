@@ -2840,3 +2840,24 @@ html[lang="km"] .cmp-page .chk-h1 { font-size: clamp(1.4rem, 4.4vw, 2.4rem); }
 }
 .cmp-lead { padding: 10px 16px; border-radius: 14px; background: rgba(11,8,31,.5); }
 .chk-card h3 img.chk-ico-new { mix-blend-mode: normal; width: 36px; height: 36px; }
+
+/* Business Partner hero: one-line title, everything centred */
+.biz-hero-v2 {
+  background:
+    linear-gradient(180deg, rgba(11, 8, 31, 0.72) 0%, rgba(11, 8, 31, 0.5) 55%, rgba(11, 8, 31, 0.88) 100%),
+    url("../images/business/angkor-hero.webp") 78% 52% / cover no-repeat;
+}
+.biz-hero-inner { text-align: center; }
+.biz-h1 { text-align: center; white-space: nowrap; font-size: clamp(0.82rem, 4.1vw, 2.7rem); line-height: 1.2; }
+.biz-h1 span { display: inline; }
+.biz-hero-sub, .biz-hero-desc { text-align: center; }
+.biz-hero-desc { margin-left: auto; margin-right: auto; }
+.biz-page .biz-hero-v2 .biz-form { margin-left: auto; margin-right: auto; }
+@media (max-width: 640px) {
+  .biz-hero-v2 {
+    background:
+      linear-gradient(180deg, rgba(11, 8, 31, 0.9) 0%, rgba(11, 8, 31, 0.7) 55%, rgba(11, 8, 31, 0.92) 100%),
+      url("../images/business/angkor-hero.webp") 70% 40% / cover no-repeat;
+  }
+}
+html[lang="km"] .biz-h1 { font-size: clamp(0.78rem, 3.5vw, 2.2rem); }
