@@ -30,3 +30,9 @@
   from = "/zodiac-guide"
   to = "/animals.html"
   status = 200
+
+# Speed: let browsers reuse images for a day (they are not fingerprinted, so keep it short).
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
