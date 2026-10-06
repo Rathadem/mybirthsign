@@ -301,7 +301,7 @@ function body(lang) {
   const byZodiac = ORDER.map((a, i) => ({ a, i, tier: tierOf(a) }));
 
   return `<div class="fx-body">
-<section class="fx-hero" aria-labelledby="fx-h1-${lang}">
+<section class="fx-hero fx-hero--${A.toLowerCase()}" aria-labelledby="fx-h1-${lang}">
   <div class="fx-hero-in">
     <h1 id="fx-h1-${lang}">${t.h1a ? `<small>${t.h1a.trim()}</small>` : ""}<span>${t.h1b}</span></h1>
     <p class="fx-sub">${t.sub}</p>

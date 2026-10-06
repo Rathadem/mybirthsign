@@ -42,6 +42,18 @@ html[lang="km"] .fx-page h1, html[lang="km"] .fx-page h2, html[lang="km"] .fx-pa
   radial-gradient(ellipse 34% 62% at 50% 46%, rgba(11, 8, 32, .78), rgba(11, 8, 32, 0) 100%),
   linear-gradient(180deg, rgba(11, 8, 32, .1) 0%, rgba(11, 8, 32, 0) 55%, rgba(11, 8, 32, .9) 100%); }
 .fx-hero-in { max-width: 1120px; margin: 0 auto; padding: 38px 20px 50px; }
+/* hero art follows the day animal (Ox keeps the default Ox-and-moon scene) */
+.fx-hero--rat { background-image: url("../images/fortune/hero-rat.webp"); }
+.fx-hero--tiger { background-image: url("../images/fortune/hero-tiger.webp"); }
+.fx-hero--rabbit { background-image: url("../images/fortune/hero-rabbit.webp"); }
+.fx-hero--dragon { background-image: url("../images/fortune/hero-dragon.webp"); }
+.fx-hero--snake { background-image: url("../images/fortune/hero-snake.webp"); }
+.fx-hero--horse { background-image: url("../images/fortune/hero-horse.webp"); }
+.fx-hero--goat { background-image: url("../images/fortune/hero-goat.webp"); }
+.fx-hero--monkey { background-image: url("../images/fortune/hero-monkey.webp"); }
+.fx-hero--rooster { background-image: url("../images/fortune/hero-rooster.webp"); }
+.fx-hero--dog { background-image: url("../images/fortune/hero-dog.webp"); }
+.fx-hero--pig { background-image: url("../images/fortune/hero-pig.webp"); }
 .fx-eyebrow { margin: 0 0 6px; font-size: .74rem; letter-spacing: .24em; text-transform: uppercase; color: var(--fx-gold); }
 html[lang="km"] .fx-eyebrow { letter-spacing: .02em; text-transform: none; font-size: .9rem; }
 .fx-hero h1 { margin: 0 0 8px; color: #fff; text-shadow: 0 2px 30px rgba(240, 111, 178, .5); }
@@ -211,6 +223,7 @@ html[lang="km"] .fx-sign h4 { letter-spacing: 0; text-transform: none; font-size
 @media (max-width: 640px) {
   .fx-gframe, .fx-cta { border-width: 24px 24px; border-image-width: 24px 24px; }
   .fx-hero { background-size: auto 400px; background-position: 14% top; background-color: #0b0820; }
+  .fx-hero:not(.fx-hero--ox) { background-position: 0 top; }
   .fx-hero::before { background: linear-gradient(180deg, rgba(11, 8, 32, .0) 0%, rgba(11, 8, 32, .55) 230px, rgba(11, 8, 32, .95) 400px); }
   .fx-hero-in { padding: 190px 16px 34px; }
   .fx-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
