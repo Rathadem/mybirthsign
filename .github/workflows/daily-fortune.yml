@@ -49,7 +49,7 @@ jobs:
           fi
           git config user.name "daily-fortune-bot"
           git config user.email "daily-fortune-bot@users.noreply.github.com"
-          git add blog sitemap.xml blog.html
+          git add blog sitemap.xml blog.html index.html
           git commit -m "Daily fortune: $(date -u +%F)"
           git pull --rebase origin main
           git push origin HEAD:main
