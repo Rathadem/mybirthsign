@@ -23,3 +23,10 @@
   to = "https://mybirthsign.com/:splat"
   status = 301
   force = true
+
+# Pretty URL for the zodiac guide page (file is animals.html). Rewrite, not redirect,
+# so static files such as robots.txt / sitemap.xml are never affected.
+[[redirects]]
+  from = "/zodiac-guide"
+  to = "/animals.html"
+  status = 200
