@@ -123,3 +123,22 @@ const CHECKER_KM_WORDS = {
 function checkerKmWords(str) {
   return str.split(", ").map(function (w) { return CHECKER_KM_WORDS[w] || w; }).join(", ");
 }
+
+// "This year" outlook shown under the animal description. Framed as traditional
+// guidance for entertainment only. Tier comes from the relationship between the
+// visitor's animal and the animal of the CURRENT zodiac year (computed from today's
+// date, so it updates itself every Lunar New Year).
+const CHECKER_OUTLOOK = {
+  en: {
+    triangle: ["This year looks favorable for you — a good time to plan a new car, a home move, or a bold step forward.", "Traditionally, luck supports big plans, so choose carefully and act with confidence."],
+    same: ["Your own sign's year is traditionally a time to take extra care with big commitments.", "Keep plans steady, avoid rushing purchases like a car or a house, and look after your health and savings."],
+    clash: ["This year is traditionally a more challenging one for your sign, so be careful with big purchases.", "Hold off on a new car or house if you can, save more, and avoid risky moves."],
+    neutral: ["This year is traditionally steady for you — neither especially lucky nor unlucky.", "It suits sensible plans such as a modest purchase, but avoid rushing big decisions."]
+  },
+  km: {
+    triangle: ["ឆ្នាំនេះមើលទៅអំណោយផលសម្រាប់អ្នក — ជាពេលល្អក្នុងការគ្រោងទិញឡាន ផ្ទះថ្មី ឬចាប់ផ្តើមជំហានធំៗ។", "តាមប្រពៃណី សំណាងគាំទ្រផែនការធំៗ ដូច្នេះសូមជ្រើសរើសដោយប្រុងប្រយ័ត្ន ហើយធ្វើដោយទំនុកចិត្ត។"],
+    same: ["ឆ្នាំរាសីរបស់អ្នកផ្ទាល់ តាមប្រពៃណីគឺជាពេលដែលគួរប្រុងប្រយ័ត្នបន្ថែមចំពោះការសម្រេចចិត្តធំៗ។", "រក្សាផែនការឱ្យមានស្ថិរភាព ជៀសវាងការប្រញាប់ទិញឡាន ឬផ្ទះ ហើយថែរក្សាសុខភាព និងប្រាក់សន្សំ។"],
+    clash: ["ឆ្នាំនេះតាមប្រពៃណីមានបញ្ហាប្រឈមជាងសម្រាប់រាសីរបស់អ្នក — គួរប្រុងប្រយ័ត្នចំពោះការទិញធំៗ។", "ប្រសិនបើអាច សូមពន្យារពេលទិញឡាន ឬផ្ទះថ្មី សន្សំឱ្យបានច្រើនជាង ហើយជៀសវាងជំហានប្រថុយប្រថាន។"],
+    neutral: ["ឆ្នាំនេះតាមប្រពៃណីមានស្ថិរភាពសម្រាប់អ្នក — មិនសំណាងពិសេស ហើយក៏មិនអាក្រក់ដែរ។", "សមស្របសម្រាប់ផែនការសមហេតុផល ដូចជាការទិញតូចតាច ប៉ុន្តែជៀសវាងការប្រញាប់សម្រេចចិត្តធំៗ។"]
+  }
+};

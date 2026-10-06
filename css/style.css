@@ -2840,3 +2840,12 @@ html[lang="km"] .cmp-page .chk-h1 { font-size: clamp(1.4rem, 4.4vw, 2.4rem); }
 }
 .cmp-lead { padding: 10px 16px; border-radius: 14px; background: rgba(11,8,31,.5); }
 .chk-card h3 img.chk-ico-new { mix-blend-mode: normal; width: 36px; height: 36px; }
+
+/* "This year" outlook under the animal description */
+.chk-outlook { list-style: none; margin: 14px 0 0; padding: 12px 14px; display: grid; gap: 6px; border-radius: 12px; border: 1px solid #e7c27a66; background: rgba(8, 6, 26, .6); }
+.chk-outlook li { position: relative; padding-left: 24px; line-height: 1.55; color: #f1ecff; font-size: .95rem; }
+.chk-outlook li::before { content: "★"; position: absolute; left: 0; top: 0; color: var(--gold, #e7c27a); }
+.chk-outlook-clash li::before, .chk-outlook-same li::before { content: "!"; font-weight: 800; left: 5px; color: #ffb36b; }
+.chk-outlook-triangle { border-color: #4fd26f88; }
+.chk-outlook-clash, .chk-outlook-same { border-color: #e7a64a88; }
+html[lang="km"] .chk-page .chk-outlook li { line-height: 1.85; }

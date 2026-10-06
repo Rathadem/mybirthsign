@@ -205,6 +205,14 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     const tile = (ico, label, value, sub) =>
       '<div class="chk-tile"><span class="chk-tile-ico">' + ico + '</span><div><div class="chk-tile-l">' + label + '</div><div class="chk-tile-v">' + value + "</div>" + (sub ? '<div class="chk-tile-s">' + sub + "</div>" : "") + "</div></div>";
+    let outlookHtml = "";
+    if (typeof CHECKER_OUTLOOK !== "undefined") {
+      const nowAnimal = getZodiac(new Date()).animal;
+      const rel = getCompatibilityType(animal, nowAnimal);
+      const tier = rel === "same" ? "same" : (rel === "triangle" ? "triangle" : (rel === "clash" ? "clash" : "neutral"));
+      const lines = (CHECKER_OUTLOOK[lang] || CHECKER_OUTLOOK.en)[tier];
+      outlookHtml = '<ul class="chk-outlook chk-outlook-' + tier + '">' + lines.map((t) => "<li>" + t + "</li>").join("") + "</ul>";
+    }
     const topHtml = `
       <section class="chk-hero-card" aria-labelledby="chk-res-h">
         <div class="chk-medal-lg">
@@ -216,6 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <h2 id="chk-res-h" class="chk-animal">${lang === "km" ? "ឆ្នាំ" + animalDisplay + " សត្វ" + KM_ANIMAL_COMMON_NAMES[animal] : animalDisplay}</h2>
           <p class="chk-years">${yearsList}</p>
           <p class="chk-desc">${traits}</p>
+          ${outlookHtml}
         </div>
         <div class="chk-tiles">
           ${tile(ICO.cal, S.chk_birth_year, date.getFullYear())}
