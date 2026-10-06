@@ -74,7 +74,7 @@
     <h1 id="pf-h1-en"><strong>Year of the Tiger</strong> <span class="pf-han" lang="zh-Hant" aria-hidden="true">虎</span></h1>
     <p class="pf-years">1962 • 1974 • 1986 • 1998 • 2010 • 2022 • 2034</p>
     <p class="fx-sub">People born in the Year of the Tiger are traditionally associated with courage, confidence, independence, and determination.</p>
-    <div class="pf-cta-row"><a class="fx-btn" href="/checker">🐯 Check if You're a Tiger →</a><a class="fx-btn fx-btn-rose" href="/compatibility">💗 Check Compatibility →</a></div>
+    <div class="pf-cta-row"><a class="fx-btn" href="/checker">🐅 Check if You're a Tiger →</a><a class="fx-btn fx-btn-rose" href="/compatibility">💗 Check Compatibility →</a></div>
   </div>
 </section>
 
@@ -174,7 +174,7 @@
       <aside class="pf-spirit" aria-labelledby="pf-sp-en">
         <div class="fx-gframe pf-spirit-in">
           <h2 id="pf-sp-en">The Spirit of the Tiger</h2>
-          <div class="pf-moon"><img src="../images/profile/spirit-tiger.webp" width="520" height="462" alt="A golden Tiger in front of a glowing full moon" loading="lazy" decoding="async"></div>
+          <div class="pf-moon"><img src="../images/profile/spirit-tiger.webp" width="520" height="462" alt="An ornate golden Tiger with lotus flowers" loading="lazy" decoding="async"></div>
           <p>The Tiger traditionally represents courage, strength, confidence, and determination.</p>
         </div>
       </aside>
@@ -287,7 +287,7 @@
     <h1 id="pf-h1-km"><strong>ឆ្នាំខាល (ខ្លា)</strong> <span class="pf-han" lang="zh-Hant" aria-hidden="true">虎</span></h1>
     <p class="pf-years">1962 • 1974 • 1986 • 1998 • 2010 • 2022 • 2034</p>
     <p class="fx-sub">អ្នកដែលកើតក្នុងឆ្នាំខាល តាមប្រពៃណីរាសីចិន ត្រូវបានផ្សារភ្ជាប់ជាមួយនឹងភាពក្លាហាន ទំនុកចិត្ត និងភាពឯករាជ្យ។</p>
-    <div class="pf-cta-row"><a class="fx-btn" href="/checker">🐯 ពិនិត្យថាតើអ្នកជាឆ្នាំខាលឬទេ →</a><a class="fx-btn fx-btn-rose" href="/compatibility">💗 ពិនិត្យភាពសមស្រប →</a></div>
+    <div class="pf-cta-row"><a class="fx-btn" href="/checker">🐅 ពិនិត្យថាតើអ្នកជាឆ្នាំខាលឬទេ →</a><a class="fx-btn fx-btn-rose" href="/compatibility">💗 ពិនិត្យភាពសមស្រប →</a></div>
   </div>
 </section>
 
@@ -387,7 +387,7 @@
       <aside class="pf-spirit" aria-labelledby="pf-sp-km">
         <div class="fx-gframe pf-spirit-in">
           <h2 id="pf-sp-km">វិញ្ញាណនៃខាល</h2>
-          <div class="pf-moon"><img src="../images/profile/spirit-tiger.webp" width="520" height="462" alt="រូបខាលមាសក្រោមព្រះច័ន្ទពេញបូណ៌មី" loading="lazy" decoding="async"></div>
+          <div class="pf-moon"><img src="../images/profile/spirit-tiger.webp" width="520" height="462" alt="រូបសត្វខាលក្នុងសំពត់មាសជាមួយផ្កាឈូក" loading="lazy" decoding="async"></div>
           <p>តាមប្រពៃណី ខាលតំណាងឱ្យភាពក្លាហាន កម្លាំង ទំនុកចិត្ត និងការតាំងចិត្ត។</p>
         </div>
       </aside>
@@ -513,7 +513,7 @@ function tier(a,d){if(a===d)return"great";if(TRI.some(function(t){return t.index
 var d=day();
 document.querySelectorAll("[data-today]").forEach(function(el){var a=el.getAttribute("data-animal"),l=el.getAttribute("data-lang"),t=T[l][tier(a,d)];
 var line=el.querySelector("[data-today-line]");if(!line)return;
-line.textContent=l==="km"?"ថ្ងៃនេះជាថ្ងៃរបស់ឆ្នាំ"+KM[d]+" — សម្រាប់"+KM[a]+" វាជា"+t+"។":"Today is "+(/^[AEIOU]/.test(d)?"an ":"a ")+d+" day — for the "+a+" it is a "+t+".";});
+line.textContent=l==="km"?"ថ្ងៃនេះជាថ្ងៃរបស់ឆ្នាំ"+KM[d]+" — សម្រាប់"+KM[a]+" វាជា"+t+"។":"Today is "+(/^[AEIOU]/.test(d)?"an ":"a ")+d+" day — for the "+a+" it is "+(/^[AEIOU]/.test(t)?"an ":"a ")+t+".";});
 })();</script>
 </body>
 </html>
