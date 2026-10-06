@@ -3189,3 +3189,5 @@ footer.site-footer:not(.hm-footer) p { font-size: .9rem; }
 footer.site-footer:not(.hm-footer) a { padding: 7px 6px; line-height: 1.3; }
 .share-btn { min-height: 40px; padding: 8px 16px; }
 .bv2-view-all { display: inline-block; padding: 8px 0; }
+/* Empty "Ad space" placeholders hidden until real ad units are added (remove this rule to restore) */
+.ad-slot { display: none !important; }
