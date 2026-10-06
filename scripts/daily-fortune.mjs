@@ -194,7 +194,7 @@ const T = {
   km: {
     eyebrow: "ជោគជតារាសីប្រចាំថ្ងៃ · MyBirthSign", h1a: "", h1b: "ជោគជតារាសីប្រចាំថ្ងៃនេះ",
     sub: "ស្វែងរកអ្វីដែលថ្ងៃនេះនាំមកសម្រាប់សត្វនិមិត្តសញ្ញាទាំង១២។",
-    dayWord: (n) => `ថ្ងៃ${n}`, favors: (l) => `ថ្ងៃនេះថាមពលសមស្របបំផុតជាមួយ <strong>${l}</strong>`,
+    dayWord: (n) => `ថ្ងៃនេះ ជាថ្ងៃរបស់ឆ្នាំ${n}`, favors: (l) => `ថ្ងៃនេះថាមពលសមស្របបំផុតជាមួយ <strong>${l}</strong>`,
     care: (n) => `<strong>${n}</strong> — ត្រូវការការប្រុងប្រយ័ត្នបន្ថែមបន្តិចថ្ងៃនេះ`,
     langAria: "ភាសា",
     energyTitle: "ថាមពលនិមិត្តសញ្ញាថ្ងៃនេះ", best: "ទទួលបានការគាំទ្របំផុត", extra: "ត្រូវការការប្រុងប្រយ័ត្នបន្ថែម", overall: "ថាមពលរួម",
@@ -288,7 +288,8 @@ function body(lang) {
   const A = dayAnimal, dateTxt = isKm ? dateKM : dateEN;
   const favorsList = andJoin(bestList.map(nm), lang), careList = andJoin(cautionList.map(nm), lang);
   const energy = ENERGY[lang][A].join(" • ");
-  const traitLine = firstSentence(isKm ? KM_INFO[A].traits : INFO[A].traits, lang);
+  const KM_TRAIT_LINE = { Ox: "ទុកចិត្តបាន ស្មោះត្រង់ និងឧស្សាហ៍ព្យាយាម។" };   // wording supplied by the site owner
+  const traitLine = isKm && KM_TRAIT_LINE[A] ? KM_TRAIT_LINE[A] : firstSentence(isKm ? KM_INFO[A].traits : INFO[A].traits, lang);
   // Sign of the day (always the day animal = "great"): three good-for lines from the existing bank, starting at the one its card shows.
   const gbank = GOOD_FOR[lang].great, aIdx = ORDER.indexOf(A);
   const goodBullets = [0, 1, 2].map((k) => gbank[((dayNumber + aIdx) % gbank.length + k) % gbank.length]);
@@ -302,7 +303,6 @@ function body(lang) {
   return `<div class="fx-body">
 <section class="fx-hero" aria-labelledby="fx-h1-${lang}">
   <div class="fx-hero-in">
-    <p class="fx-eyebrow">${t.eyebrow}</p>
     <h1 id="fx-h1-${lang}">${t.h1a ? `<small>${t.h1a.trim()}</small>` : ""}<span>${t.h1b}</span></h1>
     <p class="fx-sub">${t.sub}</p>
     <p class="fx-date">${CAL}<time datetime="${iso}">${esc(dateTxt)}</time><span class="fx-wd">${esc(wd)}</span></p>
@@ -310,13 +310,6 @@ function body(lang) {
     <div class="fx-chips">
       <p class="fx-chip">${I.great.replace("<svg", '<svg style="color:#f6dc9b"')}<span>${t.favors(esc(favorsList))}</span></p>
       <p class="fx-chip fx-chip-care">${I.caution.replace("<svg", '<svg style="color:#ff8aa5"')}<span>${t.care(esc(careList))}</span></p>
-    </div>
-    <div class="fx-hero-tools">
-      <span class="fx-langs" role="group" aria-label="${t.langAria}">
-        <a href="#" data-lang-switch="en"${isKm ? "" : ' aria-current="true"'}>EN</a>
-        <a href="#" data-lang-switch="km"${isKm ? ' aria-current="true"' : ""}>ខ្មែរ</a>
-      </span>
-      <div class="share-row" data-share></div>
     </div>
   </div>
 </section>

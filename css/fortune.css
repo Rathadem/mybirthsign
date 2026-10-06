@@ -230,3 +230,8 @@ html[lang="km"] .fx-sign h4 { letter-spacing: 0; text-transform: none; font-size
 }
 @media (max-width: 420px) { .fx-grid { grid-template-columns: 1fr 1fr; } .fx-sign p { font-size: .78rem; } .fx-tools { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .fx-page * { transition: none !important; } }
+
+/* Khmer headings run wider than Latin ones: keep them on one or two balanced lines */
+html[lang="km"] .fx-hero h1 span { font-size: clamp(1.7rem, 6.2vw, 3.6rem); text-wrap: balance; }
+html[lang="km"] .fx-energy-day { font-size: clamp(1.25rem, 4.4vw, 2.1rem); text-wrap: balance; }
+html[lang="km"] .fx-pill { font-size: clamp(.95rem, 3.6vw, 1.15rem); }
