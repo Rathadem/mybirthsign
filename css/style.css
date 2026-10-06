@@ -2840,3 +2840,18 @@ html[lang="km"] .cmp-page .chk-h1 { font-size: clamp(1.4rem, 4.4vw, 2.4rem); }
 }
 .cmp-lead { padding: 10px 16px; border-radius: 14px; background: rgba(11,8,31,.5); }
 .chk-card h3 img.chk-ico-new { mix-blend-mode: normal; width: 36px; height: 36px; }
+
+/* Business Partner: tidy ad slot + related-link cards under the guidelines */
+.biz-page .ad-slot { margin: 22px auto 10px; max-width: 760px; }
+.biz-page .biz-more { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 860px; margin: 0 auto 34px; padding: 10px 20px 0; }
+.biz-page .biz-more a {
+  display: flex; align-items: center; justify-content: center; text-align: center; min-height: 72px; padding: 14px 20px;
+  border: 1px solid rgba(231, 194, 122, 0.55); border-radius: 16px;
+  background: linear-gradient(180deg, rgba(36, 24, 84, 0.85), rgba(14, 10, 38, 0.92));
+  color: #f6dc9e; font-weight: 700; line-height: 1.5; text-decoration: none;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.biz-page .biz-more a:hover { transform: translateY(-2px); border-color: #e7c27a; box-shadow: 0 10px 26px rgba(231, 194, 122, 0.18); }
+.biz-page .biz-more a:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+@media (max-width: 640px) { .biz-page .biz-more { grid-template-columns: 1fr; } }
