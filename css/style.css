@@ -2646,3 +2646,26 @@ html[lang="km"] .chk-page .chk-h1 {
 }
 html[lang="km"] .chk-page .chk-sub { margin-top: 0; line-height: 1.9; }
 @media (max-width: 600px) { html[lang="km"] .chk-page .chk-h1 { font-size: 1.3rem; line-height: 1.9; } }
+/* Zodiac explorer detail panel */
+.chk-animal-link.is-active img { box-shadow: 0 0 0 3px #e7c27a, 0 0 18px rgba(231,194,122,.6); }
+.chk-animal-link.is-active { color: #f6dc9e; }
+.chk-detail { text-align: left; margin: 18px auto 0; max-width: 900px; padding: 20px; border: 1.5px solid #e7c27a99; border-radius: 18px;
+  background: linear-gradient(135deg, rgba(26,19,64,.95), rgba(12,8,34,.97)); box-shadow: 0 10px 36px rgba(0,0,0,.45); position: relative; }
+.chk-d-head { display: flex; gap: 16px; align-items: center; padding-right: 36px; }
+.chk-d-head img { border-radius: 50%; flex: 0 0 auto; filter: drop-shadow(0 4px 14px rgba(231,194,122,.35)); }
+.chk-d-head h3 { margin: 0 0 4px; font: 700 1.7rem Georgia, serif; color: #f6e3b2; }
+.chk-d-kanji { font: 700 1.3rem "Noto Serif SC","Songti SC",serif; color: #e7c27a; }
+.chk-d-head p { margin: 0 0 4px; color: #e9e2ff; line-height: 1.55; }
+.chk-d-years { color: #fff !important; }
+.chk-d-close { position: absolute; top: 10px; right: 12px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid #e7c27a66; background: transparent; color: #f6e3b2; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+.chk-d-close:hover { background: rgba(231,194,122,.15); }
+.chk-d-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #3b2d6e; }
+.chk-d-grid h4 { margin: 0 0 8px; color: #e7c27a; font-size: .95rem; }
+.chk-d-grid ul { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 8px; }
+.chk-d-row { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border: 1px solid #3b2d6e; border-radius: 12px; background: rgba(255,255,255,.04); }
+.chk-d-row img { width: 44px; height: 44px; border-radius: 50%; }
+.chk-d-row strong { display: block; color: #fff; }
+.chk-d-row span { font-size: .9rem; color: #d9d0f2; }
+.chk-d-guide { display: inline-block; margin-top: 4px; color: #f3d28a; font-weight: 600; }
+@media (max-width: 600px) { .chk-d-grid { grid-template-columns: 1fr; } .chk-d-head { align-items: flex-start; } .chk-d-head img { width: 64px; height: 64px; } }
+html[lang="km"] .chk-page .chk-d-head h3, html[lang="km"] .chk-page .chk-d-grid h4 { font-family: "Kantumruy Pro","Noto Sans Khmer",sans-serif; }
