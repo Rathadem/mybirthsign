@@ -1,0 +1,262 @@
+/* MyBirthSign — Daily Fortune page (premium night-sky design). Scoped to body.fx-page. */
+.fx-page {
+  --fx-gold: #e7c27a;
+  --fx-gold-hi: #f6dc9b;
+  --fx-pink: #f06fb2;
+  --fx-ink: #0b0820;
+  --fx-glass: rgba(28, 20, 62, 0.62);
+  --fx-line: rgba(231, 194, 122, 0.38);
+  background:
+    radial-gradient(1200px 520px at 80% -120px, rgba(122, 72, 190, 0.35), transparent 70%),
+    radial-gradient(900px 500px at 0% 30%, rgba(240, 111, 178, 0.10), transparent 70%),
+    #0b0820;
+}
+.fx-page .fx-wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+.fx-page section { scroll-margin-top: 16px; }
+.fx-page h1, .fx-page h2, .fx-page h3 { font-family: Georgia, "Times New Roman", "Noto Sans Khmer", serif; line-height: 1.25; }
+html[lang="km"] .fx-page h1, html[lang="km"] .fx-page h2, html[lang="km"] .fx-page h3 { font-family: "Noto Sans Khmer", "Khmer OS", sans-serif; line-height: 1.6; }
+.fx-page a:focus-visible, .fx-page summary:focus-visible, .fx-page button:focus-visible {
+  outline: 2px solid var(--fx-gold-hi); outline-offset: 3px; border-radius: 8px;
+}
+
+/* ---------- section headings ---------- */
+.fx-head { text-align: center; margin: 0 auto 26px; max-width: 760px; }
+.fx-head h2 { margin: 0 0 8px; font-size: clamp(1.45rem, 3.6vw, 2.05rem); color: var(--fx-gold-hi); letter-spacing: .3px; }
+.fx-head p { margin: 0; color: #cfc6ee; font-size: 1rem; }
+.fx-orn { display: block; width: 150px; height: 14px; margin: 10px auto 0; opacity: .9; }
+.fx-sec { margin: 64px auto 0; }
+
+/* ---------- hero ---------- */
+.fx-hero {
+  position: relative; isolation: isolate; overflow: hidden; margin: 0 0 8px;
+  background: #0b0820 url("../images/fortune/hero-night.webp") 78% 30% / cover no-repeat;
+  border-bottom: 1px solid var(--fx-line);
+}
+.fx-hero::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(11, 8, 32, .92) 0%, rgba(11, 8, 32, .74) 38%, rgba(11, 8, 32, .18) 72%, rgba(11, 8, 32, 0) 100%),
+    linear-gradient(180deg, rgba(11, 8, 32, .25) 0%, rgba(11, 8, 32, 0) 40%, rgba(11, 8, 32, .85) 100%);
+}
+.fx-hero-in { padding: 54px 20px 64px; max-width: 1120px; margin: 0 auto; }
+.fx-hero-copy { max-width: 560px; }
+.fx-eyebrow { margin: 0 0 12px; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--fx-gold); }
+html[lang="km"] .fx-eyebrow { letter-spacing: .04em; text-transform: none; font-size: .9rem; }
+.fx-hero h1 {
+  margin: 0 0 12px; font-size: clamp(2rem, 6.2vw, 3.5rem); font-weight: 700; color: #fff;
+  text-shadow: 0 2px 30px rgba(240, 111, 178, .45);
+}
+.fx-hero h1 span { color: var(--fx-gold-hi); }
+.fx-sub { margin: 0 0 20px; font-size: clamp(1rem, 2.4vw, 1.15rem); color: #e6def8; }
+.fx-date { margin: 0; font: 700 clamp(1.5rem, 4.6vw, 2.2rem)/1.2 Georgia, serif; color: var(--fx-gold-hi); }
+html[lang="km"] .fx-date { font-family: "Noto Sans Khmer", sans-serif; line-height: 1.6; }
+.fx-weekday { margin: 2px 0 16px; color: #bfb4e2; font-size: .95rem; }
+.fx-pill {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 999px; margin: 0 0 18px;
+  font-weight: 700; font-size: 1.05rem; color: #2a1c05;
+  background: linear-gradient(135deg, #f6dc9b, #d4af37 60%, #b88b25);
+  box-shadow: 0 0 0 1px rgba(255, 238, 190, .6) inset, 0 6px 26px rgba(212, 175, 55, .38);
+}
+.fx-lines { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 8px; }
+.fx-lines li { display: flex; gap: 10px; align-items: flex-start; font-size: 1.02rem; color: #f1ecff; }
+.fx-lines svg { flex: none; width: 20px; height: 20px; margin-top: 3px; }
+.fx-lines strong { color: var(--fx-gold-hi); font-weight: 700; }
+.fx-hero-tools { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.fx-langs {
+  display: inline-flex; border: 1px solid var(--fx-line); border-radius: 999px; overflow: hidden;
+  background: rgba(11, 8, 32, .55); backdrop-filter: blur(6px);
+}
+.fx-langs a {
+  display: inline-block; padding: 8px 18px; min-height: 40px; color: #e6def8; text-decoration: none; font-size: .95rem;
+  font-family: "Noto Sans Khmer", Georgia, sans-serif;
+}
+.fx-langs a[aria-current="true"], .fx-langs a.active { background: rgba(231, 194, 122, .2); color: var(--fx-gold-hi); font-weight: 700; }
+.fx-hero .share-row { margin: 0; }
+
+/* ---------- glass cards ---------- */
+.fx-card {
+  position: relative; border: 1px solid var(--fx-line); border-radius: 20px; background: var(--fx-glass);
+  backdrop-filter: blur(8px); box-shadow: 0 14px 44px rgba(3, 1, 18, .5), 0 0 0 1px rgba(255, 255, 255, .04) inset;
+}
+
+/* ---------- today's energy ---------- */
+.fx-energy { padding: 30px 26px 24px; }
+.fx-energy-top { text-align: center; margin-bottom: 22px; }
+.fx-energy-top h2 { margin: 0 0 6px; font-size: clamp(1.35rem, 3.4vw, 1.9rem); color: var(--fx-gold-hi); }
+.fx-energy-day { margin: 0; font: 700 clamp(1.6rem, 5vw, 2.4rem)/1.2 Georgia, serif; color: #fff; text-shadow: 0 0 26px rgba(240, 111, 178, .55); }
+html[lang="km"] .fx-energy-day { font-family: "Noto Sans Khmer", sans-serif; line-height: 1.6; }
+.fx-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.fx-stat { border: 1px solid rgba(231, 194, 122, .28); border-radius: 16px; padding: 16px 16px 14px; background: rgba(11, 8, 32, .45); }
+.fx-stat h3 { margin: 0 0 8px; font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; color: var(--fx-gold); display: flex; gap: 8px; align-items: center; }
+html[lang="km"] .fx-stat h3 { letter-spacing: 0; text-transform: none; font-size: .95rem; }
+.fx-stat h3 svg { width: 18px; height: 18px; flex: none; }
+.fx-stat p { margin: 0; font-size: 1.12rem; color: #fff; font-weight: 700; }
+.fx-stat-care { border-color: rgba(240, 111, 178, .4); }
+.fx-stat-care h3 { color: #f6a7cf; }
+.fx-fine { margin: 18px 0 0; text-align: center; font-size: .86rem; color: #bdb2e0; }
+
+/* ---------- sign of the day ---------- */
+.fx-feature {
+  display: grid; grid-template-columns: minmax(180px, 300px) 1fr; gap: 0; overflow: hidden;
+  border-color: rgba(246, 220, 155, .7);
+  box-shadow: 0 0 0 1px rgba(246, 220, 155, .25) inset, 0 0 60px rgba(212, 175, 55, .22), 0 16px 50px rgba(3, 1, 18, .55);
+}
+.fx-feature-art {
+  position: relative; display: grid; place-items: center; padding: 26px 18px;
+  background: radial-gradient(circle at 50% 40%, rgba(246, 220, 155, .5) 0%, rgba(240, 111, 178, .18) 42%, rgba(11, 8, 32, 0) 72%);
+}
+.fx-feature-art img { width: min(100%, 240px); height: auto; filter: drop-shadow(0 10px 28px rgba(0, 0, 0, .55)); }
+.fx-feature-body { padding: 28px 30px 28px 10px; }
+.fx-kicker { margin: 0 0 6px; font-size: .9rem; letter-spacing: .12em; text-transform: uppercase; color: var(--fx-gold); }
+html[lang="km"] .fx-kicker { letter-spacing: 0; text-transform: none; font-size: 1rem; }
+.fx-feature-body h2 { margin: 0 0 4px; font-size: clamp(1.7rem, 4.4vw, 2.5rem); color: #fff; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.fx-feature-lead { margin: 6px 0 16px; color: #e6def8; font-size: 1.05rem; }
+.fx-two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+.fx-two h3 { margin: 0 0 6px; font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; color: var(--fx-gold); }
+html[lang="km"] .fx-two h3 { letter-spacing: 0; text-transform: none; font-size: .95rem; }
+.fx-two ul { margin: 0; padding: 0 0 0 18px; color: #f1ecff; font-size: .98rem; }
+.fx-two li { margin: 0 0 5px; }
+.fx-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 10px 24px; border-radius: 999px;
+  font-weight: 700; font-size: 1rem; text-decoration: none; color: #2a1c05;
+  background: linear-gradient(135deg, #f6dc9b, #d4af37 60%, #b88b25); box-shadow: 0 8px 26px rgba(212, 175, 55, .3);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.fx-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(212, 175, 55, .45); }
+.fx-btn-ghost { color: var(--fx-gold-hi); background: rgba(11, 8, 32, .5); border: 1px solid var(--fx-line); box-shadow: none; }
+.fx-btn-ghost:hover { box-shadow: 0 0 22px rgba(231, 194, 122, .25); }
+
+/* ---------- tier badges ---------- */
+.fx-tier {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 13px 5px 10px; border-radius: 999px;
+  font-size: .85rem; font-weight: 700; line-height: 1.3; border: 1px solid transparent; white-space: nowrap;
+}
+.fx-tier svg { width: 16px; height: 16px; flex: none; }
+.fx-tier-great { color: #2a1c05; background: linear-gradient(135deg, #f6dc9b, #d4af37); box-shadow: 0 0 20px rgba(246, 220, 155, .55); }
+.fx-tier-good { color: #f6dc9b; background: rgba(212, 175, 55, .16); border-color: rgba(231, 194, 122, .6); }
+.fx-tier-ordinary { color: #d6cdf0; background: rgba(255, 255, 255, .06); border-color: rgba(255, 255, 255, .22); }
+.fx-tier-caution { color: #ffd3e7; background: rgba(240, 111, 178, .14); border-color: rgba(240, 111, 178, .5); }
+
+/* ---------- 12-sign grid ---------- */
+.fx-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; list-style: none; margin: 0; padding: 0; }
+.fx-sign {
+  position: relative; display: flex; flex-direction: column; padding: 20px 20px 18px; border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, .14); background: rgba(24, 17, 54, .62); backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(3, 1, 18, .4);
+}
+.fx-sign-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.fx-sign-head img { width: 72px; height: 72px; flex: none; border-radius: 50%; }
+.fx-sign-head h3 { margin: 0 0 6px; font-size: 1.35rem; color: #fff; }
+.fx-sign h4 { margin: 0 0 3px; font-size: .74rem; letter-spacing: .15em; text-transform: uppercase; color: var(--fx-gold); font-family: Georgia, serif; }
+html[lang="km"] .fx-sign h4 { letter-spacing: 0; text-transform: none; font-size: .9rem; font-family: "Noto Sans Khmer", sans-serif; }
+.fx-sign p { margin: 0 0 12px; font-size: .95rem; color: #ece6ff; line-height: 1.6; }
+.fx-sign .fx-more { margin-top: auto; padding-top: 4px; color: var(--fx-gold-hi); text-decoration: none; font-weight: 700; font-size: .95rem; min-height: 32px; display: inline-flex; align-items: center; }
+.fx-sign .fx-more:hover { text-decoration: underline; }
+.fx-sign-great { border-color: rgba(246, 220, 155, .85); background: linear-gradient(160deg, rgba(70, 50, 20, .55), rgba(28, 20, 62, .7)); box-shadow: 0 0 0 1px rgba(246, 220, 155, .3) inset, 0 0 46px rgba(246, 220, 155, .3), 0 12px 34px rgba(3, 1, 18, .5); }
+.fx-sign-great .fx-sign-head img { width: 84px; height: 84px; box-shadow: 0 0 26px rgba(246, 220, 155, .6); }
+.fx-sign-good { border-color: rgba(231, 194, 122, .5); box-shadow: 0 0 26px rgba(231, 194, 122, .14), 0 10px 30px rgba(3, 1, 18, .4); }
+.fx-sign-ordinary { background: rgba(17, 13, 40, .72); }
+.fx-sign-caution { border-color: rgba(240, 111, 178, .45); box-shadow: 0 0 26px rgba(240, 111, 178, .12), 0 10px 30px rgba(3, 1, 18, .4); }
+
+/* ---------- guidance ---------- */
+.fx-guides { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.fx-guide { padding: 22px 20px; display: flex; flex-direction: column; }
+.fx-guide-ico { font-size: 1.9rem; line-height: 1; margin-bottom: 10px; }
+.fx-guide h3 { margin: 0 0 8px; font-size: 1.15rem; color: var(--fx-gold-hi); }
+.fx-guide p { margin: 0 0 14px; color: #e6def8; font-size: .95rem; line-height: 1.6; }
+.fx-guide a { margin-top: auto; color: var(--fx-gold-hi); font-weight: 700; text-decoration: none; min-height: 32px; display: inline-flex; align-items: center; }
+.fx-guide a:hover { text-decoration: underline; }
+
+/* ---------- CTA ---------- */
+.fx-cta {
+  position: relative; isolation: isolate; overflow: hidden; text-align: center; padding: 64px 22px;
+  border: 1px solid var(--fx-line); border-radius: 26px;
+  background: #0b0820 url("../images/fortune/cta-frame.webp") center / cover no-repeat;
+  box-shadow: 0 0 70px rgba(122, 72, 190, .3), 0 20px 60px rgba(3, 1, 18, .6);
+}
+.fx-cta::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse at 50% 50%, rgba(11, 8, 32, .78) 0%, rgba(11, 8, 32, .5) 60%, rgba(11, 8, 32, .25) 100%); }
+.fx-cta h2 { margin: 0 0 10px; font-size: clamp(1.6rem, 4.6vw, 2.5rem); color: #fff; text-shadow: 0 2px 24px rgba(240, 111, 178, .5); }
+.fx-cta p { margin: 0 auto 24px; max-width: 560px; color: #efe9ff; font-size: 1.08rem; }
+.fx-cta .fx-btn { font-size: 1.1rem; padding: 13px 34px; }
+
+/* ---------- animals nav ---------- */
+.fx-animals { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; list-style: none; margin: 0; padding: 0; }
+.fx-animals a {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 84px; padding: 12px 6px; text-decoration: none;
+  color: #f1ecff; border: 1px solid var(--fx-line); border-radius: 16px; background: rgba(28, 20, 62, .55); font-weight: 700; font-size: .98rem;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.fx-animals a span { font-size: 1.7rem; line-height: 1.1; }
+.fx-animals a:hover { transform: translateY(-2px); border-color: var(--fx-gold-hi); box-shadow: 0 0 24px rgba(231, 194, 122, .25); }
+.fx-animals a.is-today { border-color: rgba(246, 220, 155, .9); box-shadow: 0 0 24px rgba(246, 220, 155, .3); }
+
+/* ---------- article ---------- */
+.fx-article { max-width: 820px; margin: 64px auto 0; padding: 30px 28px; }
+.fx-article h2 { margin: 0 0 14px; font-size: clamp(1.4rem, 3.4vw, 1.9rem); color: var(--fx-gold-hi); }
+.fx-article p { margin: 0 0 14px; color: #ece6ff; line-height: 1.8; }
+.fx-article .fx-disc { margin: 20px 0 0; padding: 14px 16px; border-left: 3px solid var(--fx-gold); background: rgba(11, 8, 32, .5); border-radius: 0 12px 12px 0; font-size: .92rem; color: #cfc6ee; }
+
+/* ---------- FAQ ---------- */
+.fx-faq { max-width: 820px; margin: 0 auto; display: grid; gap: 10px; }
+.fx-faq details { border: 1px solid var(--fx-line); border-radius: 16px; background: var(--fx-glass); overflow: hidden; }
+.fx-faq summary { list-style: none; cursor: pointer; padding: 16px 52px 16px 18px; position: relative; font-weight: 700; color: #fff; font-size: 1.02rem; min-height: 52px; }
+.fx-faq summary::-webkit-details-marker { display: none; }
+.fx-faq summary::after { content: "+"; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 1.5rem; color: var(--fx-gold-hi); font-weight: 400; }
+.fx-faq details[open] summary::after { content: "\2212"; }
+.fx-faq details[open] summary { color: var(--fx-gold-hi); }
+.fx-faq details p { margin: 0; padding: 0 18px 18px; color: #e6def8; line-height: 1.75; }
+
+/* ---------- related tools ---------- */
+.fx-tools { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; list-style: none; margin: 0; padding: 0; }
+.fx-tools a { display: flex; flex-direction: column; gap: 6px; height: 100%; padding: 20px 16px; text-decoration: none; color: #f1ecff; border: 1px solid var(--fx-line); border-radius: 18px; background: rgba(28, 20, 62, .6); transition: transform .15s ease, box-shadow .15s ease; }
+.fx-tools a:hover { transform: translateY(-2px); box-shadow: 0 0 28px rgba(231, 194, 122, .22); }
+.fx-tools .fx-t-ico { font-size: 1.9rem; line-height: 1.1; }
+.fx-tools strong { color: var(--fx-gold-hi); font-size: 1.02rem; line-height: 1.35; }
+.fx-tools small { color: #cfc6ee; font-size: .88rem; line-height: 1.5; }
+
+.fx-page .ad-slot { max-width: 760px; margin: 40px auto 0; background: rgba(255, 255, 255, .03); }
+
+/* ---------- footer on this page ---------- */
+.fx-page footer.site-footer {
+  position: relative; isolation: isolate; margin-top: 72px; padding: 56px 0 36px; border-top: 1px solid var(--fx-line);
+  background: #0b0820 url("../images/footer-skyline.webp") center bottom / cover no-repeat;
+}
+.fx-page footer.site-footer::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(11, 8, 32, .94) 0%, rgba(11, 8, 32, .72) 100%); }
+
+/* ---------- tablet ---------- */
+@media (max-width: 1024px) {
+  .fx-guides { grid-template-columns: repeat(2, 1fr); }
+  .fx-tools { grid-template-columns: repeat(3, 1fr); }
+  .fx-animals { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 860px) {
+  .fx-grid { grid-template-columns: repeat(2, 1fr); }
+  .fx-feature { grid-template-columns: 1fr; }
+  .fx-feature-body { padding: 0 22px 26px; }
+  .fx-feature-art { padding: 22px 18px 6px; }
+  .fx-feature-art img { width: min(60%, 200px); }
+  .fx-trio { grid-template-columns: 1fr; }
+}
+/* ---------- mobile ---------- */
+@media (max-width: 600px) {
+  .fx-hero { background-position: 70% 0; background-size: auto 150%; }
+  .fx-hero::before { background: linear-gradient(180deg, rgba(11, 8, 32, .35) 0%, rgba(11, 8, 32, .78) 60%, rgba(11, 8, 32, .96) 100%); }
+  .fx-hero-in { padding: 34px 18px 36px; }
+  .fx-sec { margin-top: 48px; }
+  .fx-grid, .fx-guides { grid-template-columns: 1fr; }
+  .fx-animals { grid-template-columns: repeat(3, 1fr); }
+  .fx-tools { grid-template-columns: 1fr 1fr; }
+  .fx-two { grid-template-columns: 1fr; gap: 12px; }
+  .fx-energy { padding: 22px 16px 18px; }
+  .fx-cta { padding: 44px 16px; border-radius: 20px; }
+  .fx-article { padding: 22px 18px; }
+  .fx-sign { padding: 16px 16px 14px; }
+  .fx-sign-head img { width: 60px; height: 60px; }
+  .fx-sign-great .fx-sign-head img { width: 68px; height: 68px; }
+  .fx-btn { width: 100%; }
+}
+@media (max-width: 380px) { .fx-tools { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .fx-page * { transition: none !important; } }
+
+/* buttons don't inherit the page font by default, which breaks Khmer in the share button */
+.fx-page .share-btn, .fx-page .share-pop button { font-family: inherit; }
