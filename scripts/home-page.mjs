@@ -262,11 +262,6 @@ ${u.guides.map(([img, cat, t, d, h]) => `      <li><a class="hm-gc" href="${h}">
     </section>
   </div>
 
-  <section class="fx-sec hm-cross" aria-label="${km ? "ពិធីមង្គលការ និងដៃគូអាជីវកម្ម" : "Wedding and business tools"}">
-    <div class="fx-gframe"><img src="images/wedding/lotus-pink.webp" width="190" height="96" alt="" loading="lazy"><h2>${esc(u.crossH1)}</h2><p>${esc(u.crossP1)}</p><a class="fx-btn" href="/wedding-date">${esc(u.crossB1)}</a></div>
-    <div class="fx-gframe"><img src="images/wedding/lotus-gold.webp" width="190" height="96" alt="" loading="lazy"><h2>${esc(u.crossH2)}</h2><p>${esc(u.crossP2)}</p><a class="fx-btn fx-btn-rose" href="/business-partner">${esc(u.crossB2)}</a></div>
-  </section>
-
   <section class="fx-sec" id="blog" aria-labelledby="${ID("bl")}">
     <div class="fx-head"><h2 id="${ID("bl")}">${esc(u.blogH)}</h2>${ICON.orn}</div>
     <ul class="hm-posts">
