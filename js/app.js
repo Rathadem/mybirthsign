@@ -212,8 +212,8 @@ document.addEventListener("DOMContentLoaded", function () {
           ${X ? `<span class="chk-kanji" lang="zh" aria-hidden="true">${X.kanji}</span>` : ""}
         </div>
         <div class="chk-hero-copy">
-          <p class="chk-eyebrow">${lang === "km" ? "ឆ្នាំ" + animalDisplay : S.chk_your_sign}</p>
-          <h2 id="chk-res-h" class="chk-animal">${lang === "km" ? KM_ANIMAL_COMMON_NAMES[animal] : animalDisplay}</h2>
+          ${lang === "km" ? "" : `<p class="chk-eyebrow">${S.chk_your_sign}</p>`}
+          <h2 id="chk-res-h" class="chk-animal">${lang === "km" ? "ឆ្នាំ" + animalDisplay + " សត្វ" : animalDisplay}</h2>
           <p class="chk-years">${yearsList}</p>
           <p class="chk-desc">${traits}</p>
         </div>
