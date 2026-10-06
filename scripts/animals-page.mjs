@@ -78,8 +78,8 @@ const UI = {
     introH: "Meet the 12 Chinese Zodiac Animals",
     introP: "The Chinese zodiac is a traditional system based on a repeating cycle of 12 animal signs. Your zodiac animal is traditionally determined by your birth year, with Lunar New Year boundaries affecting people born in January or February.",
     noteP: "Not sure which animal you are? Use our Zodiac Checker.", noteB: "Check My Zodiac →",
-    gridH: "All 12 Chinese Zodiac Animals", gridP: "Choose your zodiac animal to explore its personality, element, lucky signs, and compatibility.",
-    lPers: "Personality", lElem: "Element", lComp: "Compatibility", lYears: "Birth Years", yearOf: (n) => `Year of the ${n}`, explore: (n) => `Explore ${n} →`,
+    gridH: "All 12 Chinese Zodiac Animals", gridP: "Choose your zodiac animal to explore its personality, lucky signs, and compatibility. Each Chinese zodiac animal appears with different elements across the traditional 60-year cycle. Your exact element depends on your birth year.",
+    lPers: "Personality", lElem: "Element", elVar: "Element varies by year", lComp: "Compatibility", lYears: "Birth Years", yearOf: (n) => `Year of the ${n}`, explore: (n) => `Explore ${n} →`,
     el: { Wood: "Wood", Fire: "Fire", Earth: "Earth", Metal: "Metal", Water: "Water" },
     ctaH: "Which Chinese Zodiac Animal Are You?", ctaP: "Enter your birthday to discover your Chinese zodiac animal.", ctaB: "🔮 Find My Zodiac Sign",
     cycH: "How the 12-Year Zodiac Cycle Works", cycP1: "The zodiac repeats every 12 years.", cycP2: "Your birth year determines the traditional zodiac animal, but people born around January or February should check the Lunar New Year boundary.", cycB: "Check Your Zodiac →",
@@ -100,8 +100,8 @@ const UI = {
     introH: "ស្គាល់សត្វរាសីទាំង១២",
     introP: "រាសីជាប្រព័ន្ធប្រពៃណីដែលផ្អែកលើវដ្តនៃសត្វនិមិត្តសញ្ញា១២ដែលវិលជាប់ជានិច្ច។ សត្វរាសីរបស់អ្នកតាមប្រពៃណីត្រូវបានកំណត់ដោយឆ្នាំកំណើត ហើយថ្ងៃចូលឆ្នាំចន្ទគតិមានឥទ្ធិពលលើអ្នកដែលកើតក្នុងខែមករា ឬកុម្ភៈ។",
     noteP: "មិនប្រាកដថាអ្នកជាសត្វអ្វី? សូមប្រើម៉ាស៊ីនពិនិត្យរាសីរបស់យើង។", noteB: "ពិនិត្យរាសីរបស់ខ្ញុំ →",
-    gridH: "សត្វរាសីទាំង១២", gridP: "ជ្រើសរើសសត្វរាសីរបស់អ្នក ដើម្បីស្វែងយល់អំពីបុគ្គលិកលក្ខណៈ ធាតុ សំណាង និងភាពសមស្រប។",
-    lPers: "បុគ្គលិកលក្ខណៈ", lElem: "ធាតុ", lComp: "ភាពសមស្រប", lYears: "ឆ្នាំកំណើត", yearOf: (n) => `ឆ្នាំ${n}`, explore: (n) => `ស្វែងយល់ឆ្នាំ${n} →`,
+    gridH: "សត្វរាសីទាំង១២", gridP: "ជ្រើសរើសសត្វរាសីរបស់អ្នក ដើម្បីស្វែងយល់អំពីបុគ្គលិកលក្ខណៈ សំណាង និងភាពសមស្រប។ សត្វរាសីនីមួយៗមានធាតុខុសៗគ្នាក្នុងវដ្តប្រពៃណី ៦០ ឆ្នាំ។ ធាតុពិតប្រាកដរបស់អ្នកអាស្រ័យលើឆ្នាំកំណើតរបស់អ្នក។",
+    lPers: "បុគ្គលិកលក្ខណៈ", lElem: "ធាតុ", elVar: "ធាតុប្លែកគ្នាតាមឆ្នាំ", lComp: "ភាពសមស្រប", lYears: "ឆ្នាំកំណើត", yearOf: (n) => `ឆ្នាំ${n}`, explore: (n) => `ស្វែងយល់ឆ្នាំ${n} →`,
     el: KM_ELEM,
     ctaH: "តើអ្នកជាសត្វរាសីអ្វី?", ctaP: "បញ្ចូលថ្ងៃកំណើតរបស់អ្នក ដើម្បីស្វែងរកសត្វរាសីរបស់អ្នក។", ctaB: "🔮 ស្វែងរកនិមិត្តសញ្ញារបស់ខ្ញុំ",
     cycH: "របៀបដែលវដ្តរាសី១២ឆ្នាំដំណើរការ", cycP1: "រាសីវិលជុំរៀងរាល់ ១២ឆ្នាំម្តង។", cycP2: "ឆ្នាំកំណើតរបស់អ្នកកំណត់សត្វរាសីតាមប្រពៃណី ប៉ុន្តែអ្នកដែលកើតក្នុងខែមករា ឬកុម្ភៈ គួរពិនិត្យថ្ងៃចូលឆ្នាំចន្ទគតិ។", cycB: "ពិនិត្យរាសីរបស់អ្នក →",
@@ -155,7 +155,7 @@ function body(lang) {
           </a>
           <dl>
             <dt>${esc(u.lPers)}</dt><dd>${esc(keywords(a, km))}</dd>
-            <dt>${esc(u.lElem)}</dt><dd>${esc(u.el[BRANCH_ELEMENT[a]])}</dd>
+            <dt>${esc(u.lElem)}</dt><dd>${esc(u.elVar)}</dd>
             <dt>${esc(u.lComp)}</dt><dd>${esc(partners(a).map((x) => nm(x, km)).join(" • "))}</dd>
             <dt>${esc(u.lYears)}</dt><dd class="an-yrs">${yrs.join(" • ")}</dd>
           </dl>
