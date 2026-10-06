@@ -2840,3 +2840,6 @@ html[lang="km"] .cmp-page .chk-h1 { font-size: clamp(1.4rem, 4.4vw, 2.4rem); }
 }
 .cmp-lead { padding: 10px 16px; border-radius: 14px; background: rgba(11,8,31,.5); }
 .chk-card h3 img.chk-ico-new { mix-blend-mode: normal; width: 36px; height: 36px; }
+
+/* Zodiac-year tile: animal/element heading on a single line */
+.chk-page .chk-tile-one { display: block; white-space: nowrap; font-size: clamp(.82rem, 1.5vw, 1.05rem); line-height: 1.3; }

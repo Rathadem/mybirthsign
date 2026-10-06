@@ -221,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
           ${tile(ICO.cal, S.chk_birth_year, date.getFullYear())}
           ${tile('<img src="images/business/el-' + element.toLowerCase() + '.webp" alt="" width="40" height="40">', S.chk_element, elementDisplay)}
           ${X ? tile(ICO.yy, S.chk_yinyang, yinyang) : ""}
-          ${tile(ICO.star, S.chk_zodiac_year, resultHeading, "")}
+          ${tile(ICO.star, S.chk_zodiac_year, '<span class="chk-tile-one">' + resultHeading + "</span>", "")}
         </div>
       </section>
       <div class="chk-four">
