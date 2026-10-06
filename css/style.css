@@ -2840,3 +2840,10 @@ html[lang="km"] .cmp-page .chk-h1 { font-size: clamp(1.4rem, 4.4vw, 2.4rem); }
 }
 .cmp-lead { padding: 10px 16px; border-radius: 14px; background: rgba(11,8,31,.5); }
 .chk-card h3 img.chk-ico-new { mix-blend-mode: normal; width: 36px; height: 36px; }
+
+/* ===== Site-wide background: Angkor night scene ===== */
+body, body.chk-page, body.biz-page {
+  background: #051144 url("../images/site-bg.webp") top center / 100% auto no-repeat;
+}
+.hero h1, .hero p { text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85); }
+.hero p { color: #fff; }
