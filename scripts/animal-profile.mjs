@@ -137,6 +137,42 @@ const COPY = {
       spiritText: "តាមប្រពៃណី ខាលតំណាងឱ្យភាពក្លាហាន កម្លាំង ទំនុកចិត្ត និងការតាំងចិត្ត។",
     },
   },
+  Rat: {
+    en: {
+      eyebrow: "CHINESE ZODIAC", h1: "Year of the Rat",
+      intro: "People born in the Year of the Rat are traditionally associated with quick wit, resourcefulness, and a sociable nature.",
+      ovText: "The Rat is the first animal in the Chinese zodiac and is traditionally associated with quick wit, resourcefulness, and sociability.",
+      traits: [["bolt", "Quick-witted"], ["compass", "Resourceful"], ["user", "Sociable"], ["star", "Observant"], ["shield", "Adaptable"], ["spark", "Charming"]],
+      cards: {
+        strengths: ["Quick-witted and clever", "Resourceful problem-solver", "Sociable and good with people", "Notices opportunities others miss", "Adapts well to change"],
+        challenges: ["Can be restless", "Can be overly cautious with money", "May be slow to trust", "Can overthink decisions"],
+        love: ["Charming and attentive", "Needs trust to open up", "Loyal to those they let in", "Appreciates a steady partner", "Traditionally well matched with Dragon and Monkey"],
+        career: ["Business and entrepreneurship", "Writing", "Research", "Trading and finance", "Spotting opportunities early"],
+        money: ["Resourceful with opportunities", "Tends to be careful with money", "Enjoys clever solutions", "Benefits from planning ahead", "Balance caution with confidence"],
+        health: ["Traditional interpretations often associate the Rat with a busy, restless energy.", "Balance busy days with rest.", "Healthy routines can support overall well-being."],
+      },
+      moneyNote: "Traditional zodiac interpretation only — not financial advice.",
+      healthNote: "General lifestyle interpretation only — not medical advice.",
+      spiritText: "The Rat traditionally represents cleverness, resourcefulness, and quick thinking — the sign that opens the zodiac cycle.",
+    },
+    km: {
+      eyebrow: "ជោគជតារាសី", h1: "ឆ្នាំជូត",
+      intro: "អ្នកដែលកើតក្នុងឆ្នាំជូត តាមប្រពៃណីរាសី ត្រូវបានផ្សារភ្ជាប់ជាមួយនឹងភាពឆ្លាតវៃ ភាពចេះរកឱកាស និងចូលចិត្តសេពគប់។",
+      ovText: "ជូតជាសត្វទី១ក្នុងរង្វង់រាសី ហើយតាមប្រពៃណីត្រូវបានផ្សារភ្ជាប់ជាមួយភាពឆ្លាតវៃ ភាពចេះរកឱកាស និងចូលចិត្តសេពគប់។",
+      traits: [["bolt", "ឆ្លាតវៃ"], ["compass", "ចេះរកឱកាស"], ["user", "ចូលចិត្តសេពគប់"], ["star", "ចេះសង្កេត"], ["shield", "ចេះសម្របខ្លួន"], ["spark", "ទាក់ទាញ"]],
+      cards: {
+        strengths: ["ឆ្លាតវៃ និងមានប្រាជ្ញា", "ចេះដោះស្រាយបញ្ហា", "ចូលចិត្តសេពគប់ និងចេះនិយាយស្តី", "ចេះរកឱកាសដែលអ្នកដទៃមើលមិនឃើញ", "ចេះសម្របខ្លួនទៅនឹងការផ្លាស់ប្តូរ"],
+        challenges: ["ជួនកាលមិនស្ងប់ស្ងាត់", "ជួនកាលប្រុងប្រយ័ត្នខ្លាំងពេកចំពោះប្រាក់កាស", "អាចយឺតក្នុងការទុកចិត្តអ្នកដទៃ", "អាចគិតច្រើនពេកមុនសម្រេចចិត្ត"],
+        love: ["ទាក់ទាញ និងយកចិត្តទុកដាក់", "ត្រូវការទំនុកចិត្តដើម្បីបើកចិត្ត", "ស្មោះត្រង់ចំពោះអ្នកដែលខ្លួនទុកចិត្ត", "ពេញចិត្តដៃគូដែលមានស្ថិរភាព", "តាមប្រពៃណីត្រូវគ្នាជាមួយរោង និងវក"],
+        career: ["អាជីវកម្ម និងការបង្កើតអាជីវកម្ម", "ការសរសេរ", "ការស្រាវជ្រាវ", "ការជួញដូរ និងហិរញ្ញវត្ថុ", "ចេះមើលឃើញឱកាសមុនគេ"],
+        money: ["ចេះរកឱកាស", "ជាធម្មតាប្រុងប្រយ័ត្នចំពោះប្រាក់កាស", "ចូលចិត្តដំណោះស្រាយឆ្លាតវៃ", "ផែនការជាមុនជួយបាន", "ធ្វើឱ្យមានតុល្យភាពរវាងការប្រុងប្រយ័ត្ន និងទំនុកចិត្ត"],
+        health: ["តាមប្រពៃណី ជូតតែងត្រូវបានផ្សារភ្ជាប់ជាមួយថាមពលសកម្ម និងមិនសូវស្ងប់។", "ធ្វើឱ្យមានតុល្យភាពរវាងថ្ងៃដែលរវល់ និងការសម្រាក។", "ទម្លាប់ល្អអាចជួយគាំទ្រសុខុមាលភាពទូទៅ។"],
+      },
+      moneyNote: "ការបកស្រាយតាមប្រពៃណីរាសីប៉ុណ្ណោះ — មិនមែនជាដំបូន្មានហិរញ្ញវត្ថុទេ។",
+      healthNote: "ការបកស្រាយទូទៅប៉ុណ្ណោះ — មិនមែនជាដំបូន្មានវេជ្ជសាស្ត្រទេ។",
+      spiritText: "តាមប្រពៃណី ជូតតំណាងឱ្យភាពឆ្លាតវៃ ភាពចេះរកឱកាស និងការគិតរហ័ស — ជាសត្វដែលបើកវដ្តរាសី។",
+    },
+  },
 };
 if (!COPY[A]) { console.error(`No page copy for ${A} yet (add it to COPY in scripts/animal-profile.mjs).`); process.exit(1); }
 
@@ -162,7 +198,7 @@ const UI = {
     moreH: (n) => `More About the ${n}`,
     todayH: (n) => `Today's Fortune for ${n}`, todayLink: "See the full daily fortune for all 12 signs →",
     todayTier: { great: "Great Day", good: "Good Day", ordinary: "Ordinary Day", caution: "Take It Easy" },
-    todayLine: (d, t) => `Today is a ${d} day — for you it is a ${t}.`,
+    todayLine: (d, t) => `Today is a ${d} day — for you it is ${/^[AEIOU]/i.test(t) ? "an" : "a"} ${t}.`,
     ctaH: (n) => `Are You a ${n}?`, ctaP: "Enter your birthday to discover your Chinese zodiac animal, element, lucky signs, and more.", ctaB: "🔮 Check My Zodiac Sign →",
     faqH: "Frequently Asked Questions", toolsH: "Explore MyBirthSign",
     tools: [["🔮", "Chinese Zodiac Checker", "Find your animal and element", "/checker"], ["💗", "Compatibility Calculator", "Check love, friendship and more", "/compatibility"], ["💍", "Wedding Date Picker", "Find auspicious dates", "/wedding-date"], ["💼", "Business Partner Compatibility", "See if you work well together", "/business-partner"], ["📚", "Chinese Zodiac Guide", "Learn about all 12 animals", "../animals.html"]],
@@ -172,25 +208,25 @@ const UI = {
   km: {
     nav: [["overview", "home", "ទិដ្ឋភាពទូទៅ"], ["personality", "user", "បុគ្គលិកលក្ខណៈ"], ["elements", "leaf", "ធាតុ"], ["lucky", "clover", "សំណាង"], ["compat", "heart", "ភាពសមស្រប"], ["career", "brief", "អាជីព"], ["love", "heart", "ស្នេហា"], ["health", "health", "សុខភាព"]],
     navLabel: (n) => `ផ្នែកនៃ${n}`,
-    btnCheck: () => `ពិនិត្យថាតើអ្នកជាឆ្នាំខាលឬទេ →`, btnCompat: "ពិនិត្យភាពសមស្រប →",
-    ovH: () => "ទិដ្ឋភាពទូទៅនៃឆ្នាំខាល", traitsH: "លក្ខណៈសំខាន់ៗ", yearsH: () => "ឆ្នាំរាសីរបស់ខាល",
+    btnCheck: () => `ពិនិត្យថាតើអ្នកជាឆ្នាំ¤T¤ឬទេ →`, btnCompat: "ពិនិត្យភាពសមស្រប →",
+    ovH: () => "ទិដ្ឋភាពទូទៅនៃឆ្នាំ¤T¤", traitsH: "លក្ខណៈសំខាន់ៗ", yearsH: () => "ឆ្នាំរាសីរបស់¤T¤",
     yearsNote: "ប្រសិនបើអ្នកកើតក្នុងខែមករា ឬកុម្ភៈ សូមពិនិត្យថ្ងៃចូលឆ្នាំចន្ទគតិ ដើម្បីបញ្ជាក់ឆ្នាំរាសីរបស់អ្នក។", yearsBtn: "ពិនិត្យឆ្នាំកំណើតរបស់ខ្ញុំ →",
-    luckyH: () => "សំណាងរបស់ខាល", colors: "ពណ៌សំណាង", numbers: "លេខសំណាង", days: "ថ្ងៃសំណាង",
-    elH: () => "ធាតុរបស់ខាល", elNote: "ធាតុទាំងប្រាំបន្ថែមស្រទាប់មួយទៀតដល់ប្រព័ន្ធរាសីតាមប្រពៃណី។ ធាតុរបស់អ្នកអាស្រ័យលើឆ្នាំកំណើតរបស់អ្នក។", elBtn: "ស្វែងយល់ធាតុទាំងប្រាំ →", elName: (e) => `ខាល${e}`,
+    luckyH: () => "សំណាងរបស់¤T¤", colors: "ពណ៌សំណាង", numbers: "លេខសំណាង", days: "ថ្ងៃសំណាង",
+    elH: () => "ធាតុរបស់¤T¤", elNote: "ធាតុទាំងប្រាំបន្ថែមស្រទាប់មួយទៀតដល់ប្រព័ន្ធរាសីតាមប្រពៃណី។ ធាតុរបស់អ្នកអាស្រ័យលើឆ្នាំកំណើតរបស់អ្នក។", elBtn: "ស្វែងយល់ធាតុទាំងប្រាំ →", elName: (e) => `¤T¤${e}`,
     elN: KM_ELEM,
     compH: "ភាពសមស្របល្អបំផុត", bestL: "ដៃគូល្អបំផុត", supL: "ដៃគូជួយគាំទ្រ", chalL: "ដៃគូប្រឈម", compBtn: "មើលមគ្គុទ្ទេសក៍ភាពសមស្របពេញលេញ →",
-    persH: () => "បុគ្គលិកលក្ខណៈខាលលម្អិត",
+    persH: () => "បុគ្គលិកលក្ខណៈ¤T¤លម្អិត",
     cardT: { strengths: "ចំណុចខ្លាំង", challenges: "បញ្ហាប្រឈម", love: "ស្នេហា និងទំនាក់ទំនង", career: "អាជីព និងការងារ", money: "លុយកាក់ និងទ្រព្យសម្បត្តិ", health: "សុខភាព" },
-    spiritH: () => "វិញ្ញាណនៃខាល",
-    deepH: () => "ស្វែងយល់ឱ្យកាន់តែជ្រៅអំពីខាល", deepSub: "ព័ត៌មានទាំងអស់ដែលមគ្គុទ្ទេសក៍ MyBirthSign មានអំពីឆ្នាំនេះ។",
+    spiritH: () => "វិញ្ញាណនៃ¤T¤",
+    deepH: () => "ស្វែងយល់ឱ្យកាន់តែជ្រៅអំពី¤T¤", deepSub: "ព័ត៌មានទាំងអស់ដែលមគ្គុទ្ទេសក៍ MyBirthSign មានអំពីឆ្នាំនេះ។",
     careersLead: "មុខរបរដែលសមស្រប", loveCta: "ពិនិត្យភាពសមស្របស្នេហា →",
-    gridH: "ភាពសមស្របរាសីទាំង១២", gridP: () => "មើលថាតើខាលត្រូវគ្នាជាមួយសត្វទាំង១២យ៉ាងដូចម្តេចតាមប្រពៃណី។",
+    gridH: "ភាពសមស្របរាសីទាំង១២", gridP: () => "មើលថាតើ¤T¤ត្រូវគ្នាជាមួយសត្វទាំង១២យ៉ាងដូចម្តេចតាមប្រពៃណី។",
     cat: { same: "ឆ្នាំរបស់អ្នក", triangle: "ល្អ", support: "ជួយគាំទ្រ", neutral: "ធម្មតា", clash: "ប្រឈម" },
-    moreH: () => "ព័ត៌មានបន្ថែមអំពីខាល",
-    todayH: () => "សំណាងប្រចាំថ្ងៃរបស់ខាល", todayLink: "មើលសំណាងប្រចាំថ្ងៃសម្រាប់និមិត្តសញ្ញាទាំង១២ →",
+    moreH: () => "ព័ត៌មានបន្ថែមអំពី¤T¤",
+    todayH: () => "សំណាងប្រចាំថ្ងៃរបស់¤T¤", todayLink: "មើលសំណាងប្រចាំថ្ងៃសម្រាប់និមិត្តសញ្ញាទាំង១២ →",
     todayTier: { great: "ថ្ងៃល្អខ្លាំង", good: "ថ្ងៃល្អ", ordinary: "ថ្ងៃធម្មតា", caution: "ថ្ងៃគួរប្រយ័ត្ន" },
-    todayLine: (d, t) => `ថ្ងៃនេះជាថ្ងៃរបស់ឆ្នាំ${d} — សម្រាប់ខាល វាជា${t}។`,
-    ctaH: () => "តើអ្នកជាខាលឬទេ?", ctaP: "បញ្ចូលថ្ងៃកំណើតរបស់អ្នក ដើម្បីស្វែងរកសត្វនិមិត្តសញ្ញា ធាតុ និងសំណាងរបស់អ្នក។", ctaB: "🔮 ពិនិត្យនិមិត្តសញ្ញារបស់ខ្ញុំ →",
+    todayLine: (d, t) => `ថ្ងៃនេះជាថ្ងៃរបស់ឆ្នាំ${d} — សម្រាប់¤T¤ វាជា${t}។`,
+    ctaH: () => "តើអ្នកជា¤T¤ឬទេ?", ctaP: "បញ្ចូលថ្ងៃកំណើតរបស់អ្នក ដើម្បីស្វែងរកសត្វនិមិត្តសញ្ញា ធាតុ និងសំណាងរបស់អ្នក។", ctaB: "🔮 ពិនិត្យនិមិត្តសញ្ញារបស់ខ្ញុំ →",
     faqH: "សំណួរដែលសួរញឹកញាប់", toolsH: "ស្វែងរកឧបករណ៍ MyBirthSign",
     tools: [["🔮", "ម៉ាស៊ីនពិនិត្យរាសី", "ស្វែងរកសត្វ និងធាតុរបស់អ្នក", "/checker"], ["💗", "គណនាភាពសមស្រប", "ពិនិត្យស្នេហា មិត្តភាព និងផ្សេងទៀត", "/compatibility"], ["💍", "ជ្រើសរើសថ្ងៃរៀបការ", "ស្វែងរកថ្ងៃមង្គល", "/wedding-date"], ["💼", "ភាពសមស្របដៃគូអាជីវកម្ម", "មើលថាតើអ្នកធ្វើការជាមួយគ្នាបានល្អទេ", "/business-partner"], ["📚", "មគ្គុទ្ទេសក៍រាសី", "ស្វែងយល់អំពីសត្វទាំង១២", "../animals.html"]],
     disc: "សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។ ការបកស្រាយរាសីជាប្រពៃណី និងវប្បធម៌ មិនត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រទេ។",
@@ -205,12 +241,12 @@ function faqs(lang) {
   const colors = lang === "km" ? km.luckyColors : info.luckyColors.map((c) => c[0].toUpperCase() + c.slice(1));
   const elList = ELEMENTS.filter((e) => elementYears[e].length).map((e) => (lang === "km" ? `${KM_ELEM[e]}៖ ` : `${e}: `) + elementYears[e].join(", ")).join(lang === "km" ? " · " : " · ");
   if (lang === "km") return [
-    [`តើឆ្នាំខាលគឺឆ្នាំអ្វីខ្លះ?`, `ឆ្នាំខាលរួមមាន ${years.join(", ")}។ រង្វង់រាសីដដែលៗរៀងរាល់ ១២ឆ្នាំម្តង ហើយឆ្នាំរាសីចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចន្ទគតិ មិនមែនថ្ងៃទី១ មករាទេ។`],
-    [`តើបុគ្គលិកលក្ខណៈអ្វីខ្លះដែលផ្សារភ្ជាប់នឹងខាល?`, `តាមប្រពៃណី ខាលត្រូវបានផ្សារភ្ជាប់ជាមួយភាពក្លាហាន ទំនុកចិត្ត ឯករាជ្យភាព និងការតាំងចិត្ត។ ${km.traits}`],
-    [`តើពណ៌សំណាងរបស់ខាលជាអ្វី?`, `ពណ៌សំណាងរបស់ខាលក្នុងមគ្គុទ្ទេសក៍របស់យើងគឺ ${colors.join(", ")}។`],
-    [`តើលេខសំណាងរបស់ខាលជាអ្វី?`, `លេខសំណាងរបស់ខាលគឺ ${info.luckyNumbers.join(", ")}។`],
-    [`តើសត្វណាខ្លះត្រូវគ្នាជាមួយខាល?`, `ត្រូវគ្នាបំផុតជាមួយ ${nmL(best).join(", ")} (ក្រុមតែមួយ)។ ${nmL(support).join(", ")} ក៏ត្រូវបានរាប់ជាដៃគូជួយគាំទ្រក្នុងមគ្គុទ្ទេសក៍របស់យើង។ ${nmL(clash).join(", ")} អាចមានភាពប្រឈមជាងគេ។`],
-    [`តើខាលរបស់ខ្ញុំជាធាតុអ្វី?`, `ធាតុអាស្រ័យលើឆ្នាំកំណើតរបស់អ្នក — ${elList}។ ប្រើម៉ាស៊ីនពិនិត្យរាសីដើម្បីបញ្ជាក់ឆ្នាំរបស់អ្នក។`],
+    [`តើឆ្នាំ¤T¤គឺឆ្នាំអ្វីខ្លះ?`, `ឆ្នាំ¤T¤រួមមាន ${years.join(", ")}។ រង្វង់រាសីដដែលៗរៀងរាល់ ១២ឆ្នាំម្តង ហើយឆ្នាំរាសីចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចន្ទគតិ មិនមែនថ្ងៃទី១ មករាទេ។`],
+    [`តើបុគ្គលិកលក្ខណៈអ្វីខ្លះដែលផ្សារភ្ជាប់នឹង¤T¤?`, `តាមប្រពៃណី ¤T¤ត្រូវបានផ្សារភ្ជាប់ជាមួយភាពក្លាហាន ទំនុកចិត្ត ឯករាជ្យភាព និងការតាំងចិត្ត។ ${km.traits}`],
+    [`តើពណ៌សំណាងរបស់¤T¤ជាអ្វី?`, `ពណ៌សំណាងរបស់¤T¤ក្នុងមគ្គុទ្ទេសក៍របស់យើងគឺ ${colors.join(", ")}។`],
+    [`តើលេខសំណាងរបស់¤T¤ជាអ្វី?`, `លេខសំណាងរបស់¤T¤គឺ ${info.luckyNumbers.join(", ")}។`],
+    [`តើសត្វណាខ្លះត្រូវគ្នាជាមួយ¤T¤?`, `ត្រូវគ្នាបំផុតជាមួយ ${nmL(best).join(", ")} (ក្រុមតែមួយ)។ ${nmL(support).join(", ")} ក៏ត្រូវបានរាប់ជាដៃគូជួយគាំទ្រក្នុងមគ្គុទ្ទេសក៍របស់យើង។ ${nmL(clash).join(", ")} អាចមានភាពប្រឈមជាងគេ។`],
+    [`តើ¤T¤របស់ខ្ញុំជាធាតុអ្វី?`, `ធាតុអាស្រ័យលើឆ្នាំកំណើតរបស់អ្នក — ${elList}។ ប្រើម៉ាស៊ីនពិនិត្យរាសីដើម្បីបញ្ជាក់ឆ្នាំរបស់អ្នក។`],
     [`តើឆ្នាំរាសីចាប់ផ្តើមថ្ងៃទី១ មករាឬទេ?`, `ទេ។ ឆ្នាំរាសីចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចន្ទគតិ ដែលធ្លាក់នៅចន្លោះចុងខែមករា និងពាក់កណ្តាលខែកុម្ភៈ។ ប្រសិនបើអ្នកកើតក្នុងខែទាំងពីរនេះ សូមពិនិត្យជាមួយម៉ាស៊ីនពិនិត្យរបស់យើង។`],
     [`តើបុគ្គលិកលក្ខណៈតាមរាសីត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រឬទេ?`, `មិនបានទេ។ ការបកស្រាយរាសីជាប្រពៃណី និងវប្បធម៌ ហើយមិនត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រទេ។ សូមប្រើវាសម្រាប់ការកម្សាន្ត និងការស្វែងយល់ប៉ុណ្ណោះ។`],
   ];
@@ -257,7 +293,7 @@ function body(lang) {
     <h1 id="pf-h1-${lang}"><strong>${esc(c.h1)}</strong> <span class="pf-han" lang="zh-Hant" aria-hidden="true">${HAN[A]}</span></h1>
     <p class="pf-years">${yrs}</p>
     <p class="fx-sub">${esc(c.intro)}</p>
-    <div class="pf-cta-row"><a class="fx-btn" href="${CHK}">${A === "Tiger" ? "🐯" : EMOJI[A]} ${esc(u.btnCheck(n))}</a><a class="fx-btn fx-btn-rose" href="/compatibility">💗 ${esc(u.btnCompat)}</a></div>
+    <div class="pf-cta-row"><a class="fx-btn" href="${CHK}">${EMOJI[A]} ${esc(u.btnCheck(n))}</a><a class="fx-btn fx-btn-rose" href="/compatibility">💗 ${esc(u.btnCompat)}</a></div>
   </div>
 </section>
 
@@ -322,7 +358,7 @@ ${ELEMENTS.map((e) => `        <li class="pf-el pf-el-${e.toLowerCase()}"><img s
       <aside class="pf-spirit" aria-labelledby="pf-sp-${lang}">
         <div class="fx-gframe pf-spirit-in">
           <h2 id="pf-sp-${lang}">${esc(u.spiritH(n))}</h2>
-          <div class="pf-moon"><img src="../images/profile/spirit-${slug}.webp" width="520" height="462" alt="${isKm ? "រូបខាលមាសក្រោមព្រះច័ន្ទពេញបូណ៌មី" : "A golden Tiger in front of a glowing full moon"}" loading="lazy" decoding="async"></div>
+          <div class="pf-moon"><img src="../images/profile/spirit-${slug}.webp" width="520" height="462" alt="${isKm ? `រូបសត្វ${KM_NAMES[A]}ក្នុងសំពត់មាសជាមួយផ្កាឈូក` : `An ornate golden ${A} with lotus flowers`}" loading="lazy" decoding="async"></div>
           <p>${esc(c.spiritText)}</p>
         </div>
       </aside>
@@ -353,11 +389,11 @@ ${ORDER.map((b) => { const t = typeOf(b); return `        <li class="pf-g pf-g-$
       <div class="fx-gframe pf-more">
         <h2 id="pf-mr-${lang}">${esc(u.moreH(n))}</h2>
         <ul>
-          <li><a href="#love">${ICON.heart}<span>${isKm ? "ខាលក្នុងស្នេហា និងទំនាក់ទំនង" : `${n} in Love &amp; Relationships`}</span></a></li>
-          <li><a href="#career">${ICON.brief}<span>${isKm ? "ខាលក្នុងអាជីព និងការងារ" : `${n} in Career &amp; Work`}</span></a></li>
-          <li><a href="#money">${ICON.coins}<span>${isKm ? "ខាលក្នុងលុយកាក់ និងទ្រព្យសម្បត្តិ" : `${n} in Money &amp; Wealth`}</span></a></li>
-          <li><a href="#elements">${ICON.leaf}<span>${isKm ? "ខាល និងធាតុផ្សេងៗ" : `${n} &amp; Different Elements`}</span></a></li>
-          <li><a href="/compatibility">${ICON.heart}<span>${isKm ? "ភាពសមស្របរបស់ខាល" : `${n} Compatibility`}</span></a></li>
+          <li><a href="#love">${ICON.heart}<span>${isKm ? "¤T¤ក្នុងស្នេហា និងទំនាក់ទំនង" : `${n} in Love &amp; Relationships`}</span></a></li>
+          <li><a href="#career">${ICON.brief}<span>${isKm ? "¤T¤ក្នុងអាជីព និងការងារ" : `${n} in Career &amp; Work`}</span></a></li>
+          <li><a href="#money">${ICON.coins}<span>${isKm ? "¤T¤ក្នុងលុយកាក់ និងទ្រព្យសម្បត្តិ" : `${n} in Money &amp; Wealth`}</span></a></li>
+          <li><a href="#elements">${ICON.leaf}<span>${isKm ? "¤T¤ និងធាតុផ្សេងៗ" : `${n} &amp; Different Elements`}</span></a></li>
+          <li><a href="/compatibility">${ICON.heart}<span>${isKm ? "ភាពសមស្របរបស់¤T¤" : `${n} Compatibility`}</span></a></li>
           <li><a href="../animals.html">${ICON.star}<span>${isKm ? "មគ្គុទ្ទេសក៍សត្វទាំង១២" : "All 12 Zodiac Animals"}</span></a></li>
           <li><a href="../blog.html">${ICON.spark}<span>${isKm ? "អត្ថបទផ្សេងទៀត" : "More from the Blog"}</span></a></li>
         </ul>
@@ -425,7 +461,7 @@ const tpl = read("scripts/animal-profile-template.html");
 const out = tpl.replace(/\{\{TITLE\}\}/g, esc(TITLE)).replace(/\{\{URL\}\}/g, URL_).replace(/\{\{DESC\}\}/g, esc(DESC)).replace(/\{\{OG_IMAGE\}\}/g, OG)
   .replace("{{JSONLD}}", jsonld.replace(/</g, "\\u003c")).replace("{{BODY_EN}}", () => body("en")).replace("{{BODY_KM}}", () => body("km"))
   .replace("{{TODAY_JS}}", () => `<script>${todayScript()}</script>`);
-fs.writeFileSync(path.join(ROOT, `blog/zodiac-year-${slug}.html`), out);
+fs.writeFileSync(path.join(ROOT, `blog/zodiac-year-${slug}.html`), out.replace(/¤T¤/g, KM_NAMES[A]));
 console.log(`Wrote blog/zodiac-year-${slug}.html  (years ${years.join(", ")}; best ${best.join("/")}; supportive ${support.join("/") || "-"}; clash ${clash.join("/")})`);
 
 // Day animal for "today" uses exactly the Daily Fortune generator's rule (12-day cycle from the Julian Day Number, Asia/Phnom_Penh date).
@@ -440,6 +476,6 @@ function tier(a,d){if(a===d)return"great";if(TRI.some(function(t){return t.index
 var d=day();
 document.querySelectorAll("[data-today]").forEach(function(el){var a=el.getAttribute("data-animal"),l=el.getAttribute("data-lang"),t=T[l][tier(a,d)];
 var line=el.querySelector("[data-today-line]");if(!line)return;
-line.textContent=l==="km"?"ថ្ងៃនេះជាថ្ងៃរបស់ឆ្នាំ"+KM[d]+" — សម្រាប់"+KM[a]+" វាជា"+t+"។":"Today is "+(/^[AEIOU]/.test(d)?"an ":"a ")+d+" day — for the "+a+" it is a "+t+".";});
+line.textContent=l==="km"?"ថ្ងៃនេះជាថ្ងៃរបស់ឆ្នាំ"+KM[d]+" — សម្រាប់"+KM[a]+" វាជា"+t+"។":"Today is "+(/^[AEIOU]/.test(d)?"an ":"a ")+d+" day — for the "+a+" it is "+(/^[AEIOU]/.test(t)?"an ":"a ")+t+".";});
 })();`;
 }
