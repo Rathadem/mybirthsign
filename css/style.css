@@ -3163,3 +3163,29 @@ html[lang="km"] .wed-pct, html[lang="km"] .wed-m-name, html[lang="km"] .wed-m-ra
   .wed-cal { grid-template-columns: repeat(2, 1fr); }
   .wed-why, .wed-plan, .wed-tools { grid-template-columns: 1fr; }
 }
+
+/* ---- layout audit fixes (Oct 2026) ---- */
+/* About / Contact / Privacy titles are now <h1>; keep the previous <h2> look */
+section.content-section h1 { color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 8px; font-size: 1.5em; margin: .83em 0; }
+/* Blog hero: keep the decorative moon from sitting behind the title */
+.bv2-hero-art > circle:nth-of-type(-n+2) { transform: translate(200px, 6px); }
+/* Comfortable tap targets for footer links */
+footer.site-footer a { display: inline-block; padding: 9px 6px; margin: 0 4px; }
+.hm-footer a, footer.site-footer.hm-footer a { display: inline-block; padding: 6px 0; }
+/* Pill buttons never overflow their container; text re-centres when it wraps */
+.bv2-info-btn { max-width: 100%; text-align: center; line-height: 1.4; }
+@media (max-width: 480px) { .bv2-info-btn { padding: 11px 18px; font-size: .88rem; } }
+/* "From the Blog" block on tool pages: align with the article column and make the link a clear button */
+.chk-seo ~ section.content-section.container { max-width: 800px; }
+@media (min-width: 900px) { .chk-seo ~ section.content-section.container { padding-inline: 0; } }
+.chk-seo ~ section.content-section.container p > a:only-child { display: inline-block; border: 1.5px solid var(--accent); border-radius: 999px; padding: 10px 22px; text-decoration: none; font-weight: 600; line-height: 1.4; color: var(--text); }
+.chk-seo ~ section.content-section.container p > a:only-child:hover { background: var(--accent); color: #1a1430; }
+@media (max-width: 600px) { .bv2-hero-art > circle:nth-of-type(-n+2) { opacity: .3; } }
+/* Footer link rows: spacing instead of text separators, so no dangling dots when the row wraps */
+footer.site-footer:not(.hm-footer) .container { font-size: 0; }
+footer.site-footer:not(.hm-footer) a { font-size: .95rem; margin: 0 6px; }
+footer.site-footer:not(.hm-footer) p { font-size: .9rem; }
+.chk-seo ~ section.content-section.container p > a:only-child, .bv2-info-btn { text-wrap: balance; }
+footer.site-footer:not(.hm-footer) a { padding: 7px 6px; line-height: 1.3; }
+.share-btn { min-height: 40px; padding: 8px 16px; }
+.bv2-view-all { display: inline-block; padding: 8px 0; }
