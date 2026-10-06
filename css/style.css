@@ -2855,3 +2855,12 @@ html[lang="km"] .cmp-page .chk-h1 { font-size: clamp(1.4rem, 4.4vw, 2.4rem); }
 .biz-page .biz-more a:hover { transform: translateY(-2px); border-color: #e7c27a; box-shadow: 0 10px 26px rgba(231, 194, 122, 0.18); }
 .biz-page .biz-more a:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 @media (max-width: 640px) { .biz-page .biz-more { grid-template-columns: 1fr; } }
+
+/* Business Partner: night-sky background for the area under the guidelines (ad slot + link cards) */
+.biz-page .biz-after {
+  padding: 8px 0 44px;
+  background:
+    linear-gradient(180deg, #0b081f 0, rgba(11,8,31,.55) 80px, rgba(11,8,31,.15) 55%, rgba(11,8,31,.55) 100%),
+    #0b081f url("../images/business/guidelines-bg2.webp") center bottom / cover no-repeat;
+}
+.biz-page .biz-after .ad-slot { background: rgba(11, 8, 31, 0.55); }
