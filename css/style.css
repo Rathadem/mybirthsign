@@ -2980,3 +2980,30 @@ body.chk-page.cmp-page .cmp-hero { background: none; border-bottom: 0; }
 body.chk-page.cmp-page .cmp-result { background: linear-gradient(180deg, rgba(11,8,31,.7), rgba(11,8,31,.86)); }
 body.chk-page.cmp-page footer.chk-footer { background: none; border-top: 1px solid rgba(231,194,122,.18); padding-top: 40px; margin-top: 0; }
 @media (max-width: 700px) { body.chk-page.cmp-page { background-size: cover; } }
+/* Business Partner: plain background (no images), solid dark like the rest of the site */
+body.biz-page .biz-hero-v2,
+body.biz-page .biz-guide,
+body.biz-page .biz-after,
+body.biz-page footer.site-footer {
+  background: none;
+  border-top: 0;
+}
+body.biz-page .biz-guide { background: none; }
+body.biz-page .biz-after .ad-slot { background: rgba(255,255,255,.03); }
+body.biz-page footer.site-footer { padding-top: 40px; margin-top: 0; border-top: 1px solid rgba(231,194,122,.18); }
+
+/* Business Partner: one night-sky image behind the whole page */
+body.biz-page {
+  background: #0b0a2a url("../images/business/page-bg.webp") center top / 100% 100% no-repeat;
+}
+@media (max-width: 700px) { body.biz-page { background-size: cover; } }
+
+/* Clean header over image backgrounds (Compatibility + Business Partner) */
+body.cmp-page header.site-header,
+body.biz-page header.site-header {
+  padding: 16px 0;
+  background: rgba(11, 8, 31, 0.9);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(231, 194, 122, 0.22);
+}
