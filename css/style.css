@@ -2846,3 +2846,6 @@ html[lang="km"] .cmp-page .chk-h1 { font-size: clamp(1.4rem, 4.4vw, 2.4rem); }
   background: linear-gradient(180deg, rgba(11,8,31,.45) 0%, rgba(11,8,31,.25) 45%, #0b081f 100%),
     url("../images/compat/hero-bg.webp") center top / cover no-repeat;
 }
+.cmp-result {
+  background: linear-gradient(180deg, rgba(11,8,31,.62), rgba(11,8,31,.88)), url("../images/compat/hero-bg.webp") center 30% / cover no-repeat;
+}
