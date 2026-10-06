@@ -234,7 +234,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     resultBox.innerHTML = topHtml + `
       <div class="result-card chk-details">
-        ${shareBlockHtml(resultHeading, { emoji: ZODIAC_EMOJI[animal], animal: animal, heading: resultHeading, subheading: bornSub, badge: S[verdictKey] })}
 
         <p class="lunar-note">${lunarNote}</p>
 
