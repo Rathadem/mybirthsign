@@ -2974,3 +2974,20 @@ footer.site-footer p, .chk-footer p { color: #b9afd6; text-shadow: none; }
 
 /* Business Partner: link section without background image */
 .biz-page .biz-after { background: none; }
+
+/* Business Partner: ornate gold frame around the two link buttons */
+.biz-page .biz-more {
+  border: 0;
+  border-style: solid;
+  border-color: transparent;
+  border-width: 64px 70px;
+  border-image: url("../images/business/gold-frame.webp") 240 / 64px 70px stretch;
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  padding: 0 4px;
+  max-width: 1000px;
+}
+@media (max-width: 640px) {
+  .biz-page .biz-more { border-width: 44px 40px; border-image-width: 44px 40px; margin-left: 8px; margin-right: 8px; padding: 0; }
+}
