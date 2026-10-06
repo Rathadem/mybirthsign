@@ -92,7 +92,7 @@ const UI = {
     toolsH: "Explore MyBirthSign Tools",
     tools: [
       ["images/checker/art-love.webp", "Chinese Zodiac Compatibility", "See how two birth dates traditionally match in love, friendship, and business.", "Check Compatibility →", "/compatibility"],
-      ["images/compat/hero-bg.webp", "Wedding Date Picker", "Explore traditionally favorable wedding months based on both zodiac signs.", "Find a Good Date →", "/wedding-date"],
+      ["images/compat/hero-bg-card.webp", "Wedding Date Picker", "Explore traditionally favorable wedding months based on both zodiac signs.", "Find a Good Date →", "/wedding-date"],
       ["images/checker/art-career.webp", "Business Partner Match", "Compare two birth dates for traditional Chinese zodiac business compatibility.", "Check Business Match →", "/business-partner"],
       ["images/checker/art-pers.webp", "Zodiac Guide", "Learn about the 12 animals, elements, lucky signs and more.", "Explore Guide →", "/zodiac-guide"],
     ],
