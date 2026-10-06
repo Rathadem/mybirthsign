@@ -79,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   const levelIdx = (s) => (s >= 85 ? 0 : s >= 70 ? 1 : s >= 55 ? 2 : 3);
 
+  const HEART_PATH = "M100 168 C 30 112 6 78 6 48 C 6 22 26 6 50 6 C 72 6 90 18 100 36 C 110 18 128 6 150 6 C 174 6 194 22 194 48 C 194 78 170 112 100 168 Z";
   const LOTUS = { excellent: "green", good: "pink", workable: "gold", avoid: "gold" };
   const STARS = { excellent: 5, good: 4, workable: 3, avoid: 2 };
   const starsHtml = (n) => '<span class="wed-stars" role="img" aria-label="' + esc(fill(T.starsLabel, { n: n })) + '">' + "★".repeat(n) + "☆".repeat(5 - n) + "</span>";
@@ -137,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<img class="wed-guide-top" src="images/wedding/frame-top.webp" alt="" width="348" height="108" loading="eager">' +
       '<h2 id="wed-guide-h" class="wed-guide-h">' + esc(T.guideH) + "</h2>" +
       '<div class="wed-stage">' + partnerCard(T.partner1, A) +
-      '<div class="wed-core"><div class="wed-heartwrap"><img src="images/wedding/heart.webp" alt="" width="194" height="86" loading="eager">' +
+      '<div class="wed-core"><div class="wed-heartwrap"><svg viewBox="0 0 200 176" aria-hidden="true"><defs><linearGradient id="wedg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5fa5"/><stop offset="1" stop-color="#8a5cff"/></linearGradient></defs><path d="' + HEART_PATH + '" fill="rgba(20,12,52,.88)" stroke="url(#wedg)" stroke-width="5"/><path d="' + HEART_PATH + '" fill="none" stroke="#e7c27a" stroke-width="1.5" transform="translate(100 88) scale(.93) translate(-100 -88)"/></svg>' +
       '<div class="wed-pct" id="wed-pct" aria-label="' + score + '%">' + score + "%</div></div>" +
       '<p class="wed-harmony-h">' + esc(T.harmonyH) + '</p><p class="wed-level">' + esc(lvl) + "</p></div>" +
       partnerCard(T.partner2, B) + "</div>" +
