@@ -2861,3 +2861,8 @@ html[lang="km"] .cmp-page .chk-h1 { font-size: clamp(1.4rem, 4.4vw, 2.4rem); }
   }
 }
 html[lang="km"] .biz-h1 { font-size: clamp(0.78rem, 3.5vw, 2.2rem); }
+
+/* Business Partner: no empty gap/double line between the hero and the guidelines before a result exists */
+.biz-hero-v2 { border-bottom: 0; }
+.biz-result-wrap:has(#biz-result:empty) { margin-top: 0; }
+.biz-result-wrap:has(#biz-result:empty) + .biz-guide { margin-top: 0; }
