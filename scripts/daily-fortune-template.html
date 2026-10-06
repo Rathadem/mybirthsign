@@ -8,19 +8,34 @@
 <link rel="canonical" href="{{URL}}">
 <meta property="og:url" content="{{URL}}">
 <meta name="description" content="{{DESC}}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="MyBirthSign">
+<meta property="og:title" content="{{TITLE}}">
+<meta property="og:description" content="{{DESC}}">
+<meta property="og:image" content="{{OG_IMAGE}}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{TITLE}}">
+<meta name="twitter:description" content="{{DESC}}">
+<meta name="twitter:image" content="{{OG_IMAGE}}">
+<meta name="theme-color" content="#0b0820">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Kantumruy+Pro:wght@400;600;700&family=Moul&display=swap">
 <link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/fortune.css">
+<script type="application/ld+json">{{JSONLD}}</script>
 
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939402104083173" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="fx-page">
 
 <header class="site-header">
   <div class="container">
     <a href="../index.html" class="logo"><svg class="logo-mark" width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="13" cy="13" r="11.5" fill="none" stroke="var(--accent)" stroke-width="1.1"/><path d="M16.4 7.1a6.1 6.1 0 1 0 0 11.8 7.1 7.1 0 1 1 0-11.8Z" fill="var(--accent)"/><path d="M8.8 14.4l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9.9-2Z" fill="var(--accent-soft)"/></svg><span class="logo-text">MyBirthSign</span></a>
-    <nav>
+    <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="site-nav">
       <a href="../index.html" data-i18n="nav_checker">Checker</a>
       <details class="nav-dropdown">
         <summary data-i18n="nav_tools">Tools</summary>
@@ -49,37 +64,15 @@
   </div>
 </header>
 
+<main>
 <div data-lang-content="en">
-<article class="post post-wide container">
-  <h1>{{H1_EN}}</h1>
-
-  <div class="share-row" data-share></div>
-
-  <div class="ad-slot">Ad space</div>
-
-  {{INTRO_EN}}
-
-  {{CARDS_EN}}
-
-  <p class="disclaimer">For entertainment purposes only. Don't know your sign yet? Use the <a href="../index.html">checker tool</a> to find it.</p>
-</article>
+{{BODY_EN}}
 </div>
 
 <div data-lang-content="km">
-<article class="post post-wide container">
-  <h1>{{H1_KM}}</h1>
-
-  <div class="share-row" data-share></div>
-
-  <div class="ad-slot">ទំនេរសម្រាប់ផ្សាយពាណិជ្ជកម្ម</div>
-
-  {{INTRO_KM}}
-
-  {{CARDS_KM}}
-
-  <p class="disclaimer">សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។ មិនទាន់ដឹងសញ្ញារបស់អ្នកទេឬ? ប្រើ<a href="../index.html">ឧបករណ៍ពិនិត្យ</a>ដើម្បីរកវា។</p>
-</article>
+{{BODY_KM}}
 </div>
+</main>
 
 <footer class="site-footer">
   <div class="container">

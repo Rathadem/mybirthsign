@@ -85,7 +85,7 @@ const RANK = { great: 0, good: 1, ordinary: 2, caution: 3 };
 
 // ---------------------------------------------------------------- copy banks
 const TIER_LABEL = {
-  en: { great: "Great day", good: "Good day", ordinary: "Ordinary day", caution: "Take it easy" },
+  en: { great: "Great Day", good: "Good Day", ordinary: "Ordinary Day", caution: "Take It Easy" },
   km: { great: "ថ្ងៃល្អខ្លាំង", good: "ថ្ងៃល្អ", ordinary: "ថ្ងៃធម្មតា", caution: "ថ្ងៃគួរប្រុងប្រយ័ត្ន" },
 };
 const GOOD_FOR = {
@@ -127,31 +127,10 @@ const dateKM = `ថ្ងៃទី${kmNum(D)} ខែ${KM_MONTHS[M - 1]} ឆ្�
 const dateFullEN = `${weekday}, ${dateEN}`;
 const dateFullKM = `${KM_DAYS[weekday]} ទី${kmNum(D)} ខែ${KM_MONTHS[M - 1]} ឆ្នាំ${kmNum(Y)}`;
 
-// ---------------------------------------------------------------- cards
+// ---------------------------------------------------------------- helpers
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const pick = (arr, animalIdx) => arr[(dayNumber + animalIdx) % arr.length];
 const sorted = ORDER.map((a, i) => ({ a, i, tier: tierOf(a) })).sort((x, y) => RANK[x.tier] - RANK[y.tier] || x.i - y.i);
-
-function cards(lang) {
-  const isKm = lang === "km";
-  const labelGood = isKm ? "ល្អសម្រាប់៖" : "Good for:", labelAvoid = isKm ? "ជៀសវាង៖" : "Avoid:";
-  const body = sorted.map(({ a, i, tier }) => {
-    const name = isKm ? KM_NAMES[a] : a;
-    const weak = (isKm ? KM_INFO[a].weaknesses : INFO[a].weaknesses).trim();
-    const more = isKm ? `ស្វែងយល់បន្ថែមអំពី${name} →` : `Learn more about ${a} →`;
-    return `    <div class="fortune-card">
-      <div class="fortune-card-head">
-        <span class="fortune-emoji">${EMOJI[a]}</span>
-        <h3>${esc(name)}</h3>
-        <span class="fortune-tier fortune-tier-${tier}">${TIER_LABEL[lang][tier]}</span>
-      </div>
-      <p><strong>${labelGood}</strong> ${esc(pick(GOOD_FOR[lang][tier], i))}</p>
-      <p><strong>${labelAvoid}</strong> ${esc(weak)} ${esc(pick(AVOID_NOTE[lang][tier], i + 1))}</p>
-      <a class="fortune-learn-more" href="../blog/zodiac-year-${a.toLowerCase()}.html">${more}</a>
-    </div>`;
-  }).join("\n");
-  return `<div class="fortune-grid">\n${body}\n  </div>`;
-}
 
 const names = (list, lang) => list.map((a) => (lang === "km" ? KM_NAMES[a] : a)).join(lang === "km" ? " " : ", ");
 const bestList = sorted.filter((c) => c.tier === "great" || c.tier === "good").map((c) => c.a);
@@ -170,6 +149,280 @@ const introKM = `<p>
     ដោយផ្អែកលើចំណុចខ្សោយធម្មតារបស់សត្វនោះ។
   </p>`;
 
+// ---------------------------------------------------------------- page copy
+const UI = extractConst(i18n, "UI_STRINGS");
+const ENERGY = {   // three-word "overall energy" of each day animal (presentation copy only)
+  en: { Rat: ["Quick", "Resourceful", "Social"], Ox: ["Steady", "Practical", "Focused"], Tiger: ["Bold", "Energetic", "Decisive"], Rabbit: ["Gentle", "Calm", "Diplomatic"], Dragon: ["Confident", "Ambitious", "Radiant"], Snake: ["Wise", "Intuitive", "Composed"], Horse: ["Free", "Lively", "Adventurous"], Goat: ["Gentle", "Creative", "Caring"], Monkey: ["Playful", "Clever", "Adaptable"], Rooster: ["Precise", "Organized", "Proud"], Dog: ["Loyal", "Honest", "Protective"], Pig: ["Generous", "Warm", "Easygoing"] },
+  km: { Rat: ["រហ័សរហួន", "ប៉ិនប្រសប់", "រួសរាយ"], Ox: ["ស្ថិរភាព", "ជាក់ស្តែង", "ផ្តោតអារម្មណ៍"], Tiger: ["ក្លាហាន", "សកម្ម", "ឆាប់សម្រេច"], Rabbit: ["ទន់ភ្លន់", "ស្ងប់ស្ងាត់", "ចេះសម្របសម្រួល"], Dragon: ["ទំនុកចិត្ត", "មហិច្ឆតា", "ភ្លឺស្វាង"], Snake: ["ឈ្លាសវៃ", "យល់ដឹងដោយវិចារណញាណ", "ស្ងប់ស្ងាត់"], Horse: ["សេរី", "រស់រវើក", "ចូលចិត្តផ្សងព្រេង"], Goat: ["ទន់ភ្លន់", "ច្នៃប្រឌិត", "យកចិត្តទុកដាក់"], Monkey: ["រីករាយ", "ឆ្លាត", "សម្របខ្លួនបាន"], Rooster: ["ច្បាស់លាស់", "មានរបៀប", "មានមោទនភាព"], Dog: ["ស្មោះស្ម័គ្រ", "ស្មោះត្រង់", "ការពារ"], Pig: ["ចិត្តទូលាយ", "កក់ក្តៅ", "ងាយស្រួល"] },
+};
+const andJoin = (arr, lang) => arr.length < 2 ? arr.join("") : lang === "km" ? arr.slice(0, -1).join(" ") + " និង " + arr[arr.length - 1] : arr.slice(0, -1).join(", ") + " & " + arr[arr.length - 1];
+const T = {
+  en: {
+    eyebrow: "Daily Fortune · MyBirthSign", h1a: "Today's Chinese", h1b: "Zodiac Fortune",
+    sub: "Discover what today brings for all 12 Chinese zodiac animals.",
+    dayWord: (n) => `${n} Day`, favors: (l) => `Today's energy favors <strong>${l}</strong>`,
+    care: (n) => `<strong>${n}</strong> — Take a little extra care today`,
+    langAria: "Language", shareHint: "",
+    energyTitle: "Today's Zodiac Energy", best: "Best Supported", extra: "Extra Care", overall: "Overall Energy",
+    fine: "Based on traditional Chinese zodiac interpretations. For entertainment and self-reflection.",
+    sotd: "🌟 Sign of the Day", sotdLead: (n) => `Today is especially supportive for the ${n}.`,
+    goodFor: "Good For", watchOut: "Watch Out For", goodForUp: "Good for", watchUp: "Watch out for",
+    learn: (n) => `Learn More About ${n} →`, view: (n) => `View ${n} Guide →`,
+    gridH: "Daily Fortune for All 12 Chinese Zodiac Animals", gridP: "Find your sign and see what today brings.",
+    guideH: "Today's Guidance", guideP: "Today's zodiac energy can be viewed through different areas of life. These are simple prompts for reflection, not predictions.",
+    guides: [
+      ["❤️", "Love", "Notice how today's energy shapes the way you listen and connect with someone close.", "/compatibility", "Check compatibility →"],
+      ["💼", "Career", "A good moment to review your priorities and see where steady effort fits best.", "/business-partner", "Check a business partner →"],
+      ["💰", "Money", "Think about spending and saving calmly. This is reflection, not financial advice.", "../animals.html", "Read the zodiac guide →"],
+      ["🤝", "Relationships", "Family, friends and colleagues — notice who you can lean on and who needs your patience.", "/checker", "Find your sign →"],
+    ],
+    ctaH: "Don't Know Your Chinese Zodiac Sign?", ctaP: "Enter your birthday and discover your zodiac animal, element, lucky numbers and more.", ctaB: "✨ Find My Zodiac Sign",
+    allH: "Explore All 12 Chinese Zodiac Animals", allP: "Tap an animal to read its full guide.",
+    artH: (d) => `Chinese Zodiac Daily Fortune for ${d}`,
+    artP2: "Use this page as a gentle daily check-in. Find your sign in the grid, read what the day is good for, and note the one soft spot worth watching. If you don't know your sign yet, the zodiac checker will tell you in seconds.",
+    disc: "This daily fortune is based on traditional Chinese zodiac interpretations and is intended for entertainment and self-reflection. It is not scientific or financial advice.",
+    faqH: "Frequently Asked Questions",
+    toolsH: "Explore MyBirthSign", toolsP: "More free tools for your zodiac sign.",
+    tools: [
+      ["🔮", "Chinese Zodiac Checker", "Find your animal and element from your birthday.", "/checker"],
+      ["💞", "Compatibility Calculator", "See how two signs get along.", "/compatibility"],
+      ["💍", "Wedding Date Picker", "Find favorable months for a wedding.", "/wedding-date"],
+      ["💼", "Business Partner Compatibility", "Compare two partners' signs.", "/business-partner"],
+      ["📚", "Chinese Zodiac Guide", "Read about all 12 animals.", "../animals.html"],
+    ],
+  },
+  km: {
+    eyebrow: "ជោគជតារាសីប្រចាំថ្ងៃ · MyBirthSign", h1a: "", h1b: "ជោគជតារាសីប្រចាំថ្ងៃនេះ",
+    sub: "ស្វែងរកអ្វីដែលថ្ងៃនេះនាំមកសម្រាប់សត្វនិមិត្តសញ្ញាទាំង១២។",
+    dayWord: (n) => `ថ្ងៃនេះ ជាថ្ងៃរបស់ឆ្នាំ${n}`, favors: (l) => `ថ្ងៃនេះថាមពលសមស្របបំផុតជាមួយ <strong>${l}</strong>`,
+    care: (n) => `<strong>${n}</strong> — ត្រូវការការប្រុងប្រយ័ត្នបន្ថែមបន្តិចថ្ងៃនេះ`,
+    langAria: "ភាសា",
+    energyTitle: "ថាមពលនិមិត្តសញ្ញាថ្ងៃនេះ", best: "ទទួលបានការគាំទ្របំផុត", extra: "ត្រូវការការប្រុងប្រយ័ត្នបន្ថែម", overall: "ថាមពលរួម",
+    fine: "ផ្អែកលើការបកស្រាយតាមប្រពៃណី។ សម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ។",
+    sotd: "🌟 សត្វនិមិត្តសញ្ញាប្រចាំថ្ងៃ", sotdLead: (n) => `ថ្ងៃនេះគាំទ្រ${n}ជាពិសេស។`,
+    goodFor: "ល្អសម្រាប់", watchOut: "គួរប្រុងប្រយ័ត្ន", goodForUp: "ល្អសម្រាប់", watchUp: "គួរប្រុងប្រយ័ត្ន",
+    learn: (n) => `ស្វែងយល់បន្ថែមអំពី${n} →`, view: (n) => `មើលព័ត៌មាន${n} →`,
+    gridH: "ជោគជតារាសីប្រចាំថ្ងៃសម្រាប់សត្វនិមិត្តសញ្ញាទាំង១២", gridP: "រកសញ្ញារបស់អ្នក ហើយមើលថាថ្ងៃនេះនាំអ្វីមក។",
+    guideH: "ការណែនាំថ្ងៃនេះ", guideP: "ថាមពលនិមិត្តសញ្ញាថ្ងៃនេះអាចមើលតាមផ្នែកផ្សេងៗនៃជីវិត។ នេះគ្រាន់តែជាចំណុចសម្រាប់ឆ្លុះបញ្ចាំង មិនមែនជាការទស្សន៍ទាយទេ។",
+    guides: [
+      ["❤️", "ស្នេហា", "សង្កេតមើលពីរបៀបដែលថាមពលថ្ងៃនេះប៉ះពាល់ដល់ការស្តាប់ និងការតភ្ជាប់ជាមួយមនុស្សជិតស្និទ្ធ។", "/compatibility", "ពិនិត្យភាពជាគូ →"],
+      ["💼", "ការងារ", "ពេលល្អក្នុងការពិនិត្យអាទិភាពរបស់អ្នក ហើយមើលថាកន្លែងណាសមនឹងការខិតខំប្រឹងប្រែងជាប់លាប់។", "/business-partner", "ពិនិត្យដៃគូអាជីវកម្ម →"],
+      ["💰", "ហិរញ្ញវត្ថុ", "គិតអំពីការចំណាយ និងការសន្សំដោយចិត្តស្ងប់។ នេះជាការឆ្លុះបញ្ចាំង មិនមែនជាដំបូន្មានហិរញ្ញវត្ថុទេ។", "../animals.html", "អានមគ្គុទ្ទេសក៍ →"],
+      ["🤝", "ទំនាក់ទំនង", "គ្រួសារ មិត្តភក្តិ និងមិត្តរួមការងារ — សង្កេតមើលអ្នកដែលអ្នកអាចពឹងពាក់បាន និងអ្នកដែលត្រូវការការអត់ធ្មត់ពីអ្នក។", "/checker", "រកសញ្ញារបស់អ្នក →"],
+    ],
+    ctaH: "មិនទាន់ដឹងសត្វនិមិត្តសញ្ញារបស់អ្នកទេឬ?", ctaP: "បញ្ចូលថ្ងៃកំណើតរបស់អ្នក ហើយស្វែងរកសត្វនិមិត្តសញ្ញា ធាតុ លេខសំណាង និងច្រើនទៀត។", ctaB: "✨ រកសត្វនិមិត្តសញ្ញារបស់ខ្ញុំ",
+    allH: "ស្វែងយល់សត្វនិមិត្តសញ្ញាទាំង១២", allP: "ចុចលើសត្វមួយ ដើម្បីអានមគ្គុទ្ទេសក៍ពេញលេញ។",
+    artH: (d) => `ជោគជតារាសីប្រចាំថ្ងៃ ${d}`,
+    artP2: "ប្រើទំព័រនេះជាការត្រួតពិនិត្យប្រចាំថ្ងៃដ៏ស្រាល។ រកសញ្ញារបស់អ្នកក្នុងតារាង អានអ្វីដែលថ្ងៃនេះល្អសម្រាប់ ហើយកត់សម្គាល់ចំណុចខ្សោយមួយដែលគួរប្រុងប្រយ័ត្ន។ ប្រសិនបើអ្នកមិនទាន់ដឹងសញ្ញារបស់អ្នក ឧបករណ៍ពិនិត្យនឹងប្រាប់អ្នកក្នុងរយៈពេលតែប៉ុន្មានវិនាទី។",
+    disc: "ជោគជតារាសីប្រចាំថ្ងៃនេះផ្អែកលើការបកស្រាយតាមប្រពៃណី ហើយមានគោលបំណងសម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ។ វាមិនមែនជាដំបូន្មានវិទ្យាសាស្ត្រ ឬហិរញ្ញវត្ថុទេ។",
+    faqH: "សំណួរដែលសួរញឹកញាប់",
+    toolsH: "ស្វែងយល់ MyBirthSign", toolsP: "ឧបករណ៍ឥតគិតថ្លៃបន្ថែមសម្រាប់សត្វនិមិត្តសញ្ញារបស់អ្នក។",
+    tools: [
+      ["🔮", "ឧបករណ៍ពិនិត្យសត្វនិមិត្តសញ្ញា", "រកសត្វ និងធាតុរបស់អ្នកពីថ្ងៃកំណើត។", "/checker"],
+      ["💞", "ម៉ាស៊ីនគណនាភាពជាគូ", "មើលថាសញ្ញាពីរចុះសម្រុងគ្នាប៉ុណ្ណា។", "/compatibility"],
+      ["💍", "ជ្រើសរើសថ្ងៃមង្គល", "រកខែសមស្របសម្រាប់ពិធីមង្គលការ។", "/wedding-date"],
+      ["💼", "ភាពសមស្របដៃគូអាជីវកម្ម", "ប្រៀបធៀបសញ្ញារបស់ដៃគូទាំងពីរ។", "/business-partner"],
+      ["📚", "មគ្គុទ្ទេសក៍សត្វនិមិត្តសញ្ញា", "អានអំពីសត្វទាំង១២។", "../animals.html"],
+    ],
+  },
+};
+function faqs(lang, dateTxt) {
+  const A = dayAnimal, nm = (a) => (lang === "km" ? KM_NAMES[a] : a);
+  const others = bestList.filter((a) => a !== A);
+  if (lang === "km") return [
+    ["តើសត្វនិមិត្តសញ្ញាប្រចាំថ្ងៃនេះជាអ្វី?", `ថ្ងៃនេះ ${dateTxt} ជាថ្ងៃ${nm(A)} ក្នុងវដ្តថ្ងៃ១២ តាមប្រពៃណី។`],
+    ["តើសញ្ញាណាខ្លះសមស្របបំផុតជាមួយថាមពលថ្ងៃនេះ?", `${nm(A)} ជាសញ្ញាប្រចាំថ្ងៃ ហើយ ${andJoin(others.map(nm), "km")} ស្ថិតក្នុងក្រុមមិត្តភក្តិតែមួយ ដូច្នេះតាមប្រពៃណីទទួលបានការគាំទ្រល្អបំផុតថ្ងៃនេះ។`],
+    ["តើសញ្ញាណាគួរប្រុងប្រយ័ត្នជាងគេថ្ងៃនេះ?", `${andJoin(cautionList.map(nm), "km")} ជាសញ្ញាដែលនៅទល់មុខ${nm(A)}ក្នុងវដ្ត ដូច្នេះតាមប្រពៃណីត្រូវការការប្រុងប្រយ័ត្នបន្ថែមបន្តិច។`],
+    ["តើជោគជតារាសីប្រចាំថ្ងៃគណនាដោយរបៀបណា?", "រាល់ថ្ងៃក្នុងប្រតិទិនត្រូវបានកំណត់ជាសត្វមួយក្នុងចំណោមសត្វទាំង១២ តាមវដ្តដែលវិលជុំ ដោយរាប់ពីកាលបរិច្ឆេទយោងថេរមួយ។ បន្ទាប់មកសញ្ញានីមួយៗត្រូវបានប្រៀបធៀបនឹងសត្វប្រចាំថ្ងៃ៖ សត្វដូចគ្នាគឺថ្ងៃល្អខ្លាំង សញ្ញាក្នុងក្រុមមិត្តភក្តិតែមួយគឺថ្ងៃល្អ សញ្ញាដែលនៅទល់មុខគឺថ្ងៃគួរប្រុងប្រយ័ត្ន ហើយសញ្ញាផ្សេងទៀតគឺថ្ងៃធម្មតា។"],
+    ["តើថ្ងៃកំណើតរបស់ខ្ញុំប៉ះពាល់ដល់សត្វនិមិត្តសញ្ញារបស់ខ្ញុំទេ?", "បាទ/ចាស។ សត្វរបស់អ្នកអនុវត្តតាមឆ្នាំតាមច័ន្ទគតិ ដែលចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចិន (ប្រហែលចន្លោះថ្ងៃទី២១ មករា ដល់ថ្ងៃទី២០ កុម្ភៈ) មិនមែនថ្ងៃទី១ មករាទេ។ ប្រសិនបើអ្នកកើតនៅខែមករា ឬដើមខែកុម្ភៈ សូមប្រើឧបករណ៍ពិនិត្យដើម្បីប្រាកដ។"],
+    ["តើជោគជតារាសីមានភស្តុតាងវិទ្យាសាស្ត្រទេ?", "មិនមានទេ។ និមិត្តសញ្ញាទាំងនេះជាប្រព័ន្ធវប្បធម៌ប្រពៃណី ហើយគ្មានភស្តុតាងវិទ្យាសាស្ត្រថាវាអាចទស្សន៍ទាយអត្តចរិត ឬអនាគតបានទេ។ យើងបង្ហាញវាសម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ។"],
+  ];
+  return [
+    ["What is today's Chinese zodiac animal?", `Today, ${dateTxt}, is a ${A} day in the traditional 12-day cycle.`],
+    ["Which zodiac signs are most compatible with today's energy?", `${A} is the sign of the day, and ${andJoin(others, "en")} share its triangle of friends, so they are traditionally the best supported today.`],
+    ["Which Chinese zodiac sign should be more careful today?", `${andJoin(cautionList, "en")}, the sign directly opposite ${A} in the cycle, is traditionally asked to take a little extra care today.`],
+    ["How is Chinese zodiac daily fortune calculated?", "Each calendar day is assigned one of the 12 animals in a repeating cycle, counted from a fixed reference date. Each sign is then compared with the day's animal: the same animal has a Great Day, signs in the same triangle of friends have a Good Day, the sign directly opposite should Take It Easy, and every other sign has an Ordinary Day."],
+    ["Does my birth date affect my Chinese zodiac sign?", "Yes. Your sign follows the lunar-calendar zodiac year, which starts at Lunar New Year (between about January 21 and February 20) rather than on January 1. If you were born in January or early February, use the zodiac checker to be sure."],
+    ["Is Chinese zodiac fortune scientifically proven?", "No. The zodiac is a traditional cultural system, and there is no scientific evidence that it predicts personality or the future. We present it for entertainment and self-reflection."],
+  ];
+}
+
+// ---------------------------------------------------------------- icons (inline SVG, so status never relies on colour alone)
+const I = {
+  great: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8Z"/></svg>',
+  good: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m12 2.8 2.7 5.9 6.4.7-4.8 4.3 1.4 6.3L12 16.7 6.3 20l1.4-6.3L2.9 9.4l6.4-.7L12 2.8Z"/></svg>',
+  ordinary: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="currentColor" d="M12 3a9 9 0 0 0 0 18 4.5 4.5 0 0 0 0-9 4.5 4.5 0 0 1 0-9Z"/></svg>',
+  caution: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3.5 21.5 20h-19L12 3.5Z"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 10v4.5M12 17.4v.1"/></svg>',
+  moon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>',
+  orn: '<svg class="fx-orn" viewBox="0 0 150 14" aria-hidden="true"><path d="M2 7h56M92 7h56" stroke="#e7c27a" stroke-width="1" opacity=".8"/><path d="M75 1.5c2.2 3 2.2 8 0 11-2.2-3-2.2-8 0-11ZM68 7c3-1.8 5-1.8 7 0-2 1.8-4 1.8-7 0ZM82 7c-3-1.8-5-1.8-7 0 2 1.8 4 1.8 7 0Z" fill="#e7c27a"/></svg>',
+};
+
+// ---------------------------------------------------------------- page body
+const slugOf = (a) => a.toLowerCase();
+const guideHref = (a) => `../blog/zodiac-year-${slugOf(a)}.html`;
+const med = (a, size, cls = "") => `<img class="fx-med ${cls}" src="../images/fortune/med-${slugOf(a)}.webp" width="${size}" height="${size}" alt="" loading="lazy" decoding="async">`;
+const firstSentence = (s, lang) => { const m = s.trim().match(lang === "km" ? /^[^។]+។?/ : /^[^.]+\.?/); return m ? m[0].trim() : s.trim(); };
+const CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v11.5A1.5 1.5 0 0 1 19 20H5a1.5 1.5 0 0 1-1.5-1.5V7A1.5 1.5 0 0 1 5 5.5ZM3.5 10h17M8 3.5v4M16 3.5v4"/></svg>';
+const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#3fae6b"/><path d="m7.5 12.3 3.2 3.2 5.8-6.4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const WARN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#e0566b"/><path d="M12 7v6M12 16.5v.1" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg>';
+
+function signCard(c, lang, t) {
+  const { a, i, tier } = c, isKm = lang === "km", name = isKm ? KM_NAMES[a] : a;
+  const weak = (isKm ? KM_INFO[a].weaknesses : INFO[a].weaknesses).trim();
+  return `<li class="fx-sign fx-sign-${tier}">
+        <div class="fx-sign-head">
+          ${med(a, 76)}
+          <h3>${esc(name)}</h3>
+          <span class="fx-tier fx-tier-${tier}">${I[tier]}${esc(TIER_LABEL[lang][tier])}</span>
+        </div>
+        <h4>${t.goodFor}</h4>
+        <p>${esc(pick(GOOD_FOR[lang][tier], i))}</p>
+        <h4>${t.watchOut}</h4>
+        <p>${esc(weak)} ${esc(pick(AVOID_NOTE[lang][tier], i + 1))}</p>
+        <a class="fx-more" href="${guideHref(a)}">${esc(t.view(name))}</a>
+      </li>`;
+}
+
+function body(lang) {
+  const isKm = lang === "km", t = T[lang], nm = (a) => (isKm ? KM_NAMES[a] : a);
+  const A = dayAnimal, dateTxt = isKm ? dateKM : dateEN;
+  const favorsList = andJoin(bestList.map(nm), lang), careList = andJoin(cautionList.map(nm), lang);
+  const energy = ENERGY[lang][A].join(" • ");
+  const KM_TRAIT_LINE = { Ox: "ទុកចិត្តបាន ស្មោះត្រង់ និងឧស្សាហ៍ព្យាយាម។" };   // wording supplied by the site owner
+  const traitLine = isKm && KM_TRAIT_LINE[A] ? KM_TRAIT_LINE[A] : firstSentence(isKm ? KM_INFO[A].traits : INFO[A].traits, lang);
+  // Sign of the day (always the day animal = "great"): three good-for lines from the existing bank, starting at the one its card shows.
+  const gbank = GOOD_FOR[lang].great, aIdx = ORDER.indexOf(A);
+  const goodBullets = [0, 1, 2].map((k) => gbank[((dayNumber + aIdx) % gbank.length + k) % gbank.length]);
+  const weakA = (isKm ? KM_INFO[A].weaknesses : INFO[A].weaknesses).trim();
+  const watchBullets = [weakA, pick(AVOID_NOTE[lang].great, aIdx + 1)];
+  const faqItems = faqs(lang, dateTxt);
+  const introP = isKm ? introKM : introEN;
+  const wd = isKm ? KM_DAYS[weekday] : weekday;
+  const byZodiac = ORDER.map((a, i) => ({ a, i, tier: tierOf(a) }));
+
+  return `<div class="fx-body">
+<section class="fx-hero fx-hero--${A.toLowerCase()}" aria-labelledby="fx-h1-${lang}">
+  <div class="fx-hero-in">
+    <h1 id="fx-h1-${lang}">${t.h1a ? `<small>${t.h1a.trim()}</small>` : ""}<span>${t.h1b}</span></h1>
+    <p class="fx-sub">${t.sub}</p>
+    <p class="fx-date">${CAL}<time datetime="${iso}">${esc(dateTxt)}</time><span class="fx-wd">${esc(wd)}</span></p>
+    <p class="fx-pill"><span aria-hidden="true">${EMOJI[A]}</span> ${esc(t.dayWord(nm(A)))}</p>
+    <div class="fx-chips">
+      <p class="fx-chip">${I.great.replace("<svg", '<svg style="color:#f6dc9b"')}<span>${t.favors(esc(favorsList))}</span></p>
+      <p class="fx-chip fx-chip-care">${I.caution.replace("<svg", '<svg style="color:#ff8aa5"')}<span>${t.care(esc(careList))}</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="fx-wrap">
+  <section class="fx-sec fx-sec-first" aria-labelledby="fx-en-${lang}">
+    <div class="fx-gframe fx-energy">
+      <div class="fx-energy-main">
+        ${med(A, 150, "fx-med-xl")}
+        <div>
+          <h2 id="fx-en-${lang}">${t.energyTitle}</h2>
+          <p class="fx-energy-day">${EMOJI[A]} ${esc(t.dayWord(nm(A)))}</p>
+          <p class="fx-energy-desc">${esc(traitLine)}</p>
+        </div>
+      </div>
+      <div class="fx-trio">
+        <div class="fx-stat"><h3>${I.great}${t.best}</h3>
+          <ul class="fx-meds">${bestList.map((a) => `<li>${med(a, 52)}<span>${esc(nm(a))}</span></li>`).join("")}</ul></div>
+        <div class="fx-stat fx-stat-care"><h3>${I.caution}${t.extra}</h3>
+          <ul class="fx-meds">${cautionList.map((a) => `<li>${med(a, 52)}<span>${esc(nm(a))}</span></li>`).join("")}</ul></div>
+        <div class="fx-stat"><h3>${I.moon}${t.overall}</h3>
+          <p class="fx-energy-words">${esc(energy)}</p></div>
+      </div>
+      <p class="fx-fine">${t.fine}</p>
+    </div>
+  </section>
+
+  <div class="fx-duo">
+    <section aria-labelledby="fx-sotd-${lang}">
+      <div class="fx-gframe fx-feature">
+        <div class="fx-feature-art"><img src="../images/zodiac/${slugOf(A)}.webp" width="360" height="542" alt="${esc(isKm ? nm(A) : A + " zodiac animal")}" loading="lazy" decoding="async"></div>
+        <div class="fx-feature-body">
+          <p class="fx-kicker">${t.sotd}</p>
+          <h2 id="fx-sotd-${lang}">${esc(nm(A))}</h2>
+          <p><span class="fx-tier fx-tier-great">${I.great}${esc(TIER_LABEL[lang].great)}</span></p>
+          <p class="fx-feature-lead">${esc(t.sotdLead(nm(A)))}</p>
+          <div class="fx-two">
+            <div><h3>${t.goodFor}</h3><ul class="fx-ticks">${goodBullets.map((s) => `<li>${CHECK}<span>${esc(s)}</span></li>`).join("")}</ul></div>
+            <div><h3>${t.watchOut}</h3><ul class="fx-ticks">${watchBullets.map((s) => `<li>${WARN}<span>${esc(s)}</span></li>`).join("")}</ul></div>
+          </div>
+          <a class="fx-btn" href="${guideHref(A)}">${esc(t.learn(nm(A)))}</a>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="fx-guide-${lang}">
+      <div class="fx-gframe fx-guidepanel">
+        <h2 id="fx-guide-${lang}">${t.guideH}</h2>
+        <p class="fx-guide-intro">${t.guideP}</p>
+        <div class="fx-guides">
+${t.guides.map((g) => `          <div class="fx-guide"><div class="fx-guide-ico" aria-hidden="true">${g[0]}</div><div><h3>${g[1]}</h3><p>${esc(g[2])}</p><a href="${g[3]}">${esc(g[4])}</a></div></div>`).join("\n")}
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="fx-sec" aria-labelledby="fx-grid-${lang}">
+    <div class="fx-head"><h2 id="fx-grid-${lang}">${t.gridH}</h2>${I.orn}<p>${t.gridP}</p></div>
+    <ul class="fx-grid">
+${byZodiac.map((c) => "      " + signCard(c, lang, t)).join("\n")}
+    </ul>
+  </section>
+
+  <div class="ad-slot">${isKm ? "ទំនេរសម្រាប់ផ្សាយពាណិជ្ជកម្ម" : "Ad space"}</div>
+
+  <section class="fx-sec" aria-labelledby="fx-cta-${lang}">
+    <div class="fx-cta">
+      <img class="fx-lotus fx-lotus-l" src="../images/wedding/lotus-pink.webp" width="190" height="96" alt="" loading="lazy">
+      <img class="fx-lotus fx-lotus-r" src="../images/wedding/lotus-gold.webp" width="190" height="96" alt="" loading="lazy">
+      <h2 id="fx-cta-${lang}">${t.ctaH}</h2>
+      <p>${t.ctaP}</p>
+      <a class="fx-btn" href="/checker">${t.ctaB}</a>
+    </div>
+  </section>
+
+  <section class="fx-sec" aria-labelledby="fx-all-${lang}">
+    <div class="fx-head"><h2 id="fx-all-${lang}">${t.allH}</h2>${I.orn}<p>${t.allP}</p></div>
+    <div class="fx-gframe fx-animalsbox">
+      <ul class="fx-animals">
+${ORDER.map((a) => `        <li><a href="${guideHref(a)}"${a === A ? ' class="is-today"' : ""}>${med(a, 64)}<span>${esc(nm(a))}</span></a></li>`).join("\n")}
+      </ul>
+    </div>
+  </section>
+
+  <article class="fx-article fx-gframe">
+    <h2>${esc(t.artH(dateTxt))}</h2>
+    ${introP}
+    <p>${t.artP2}</p>
+    <p class="fx-disc">${t.disc}</p>
+  </article>
+
+  <div class="fx-duo fx-duo-bottom">
+    <section aria-labelledby="fx-faq-${lang}">
+      <div class="fx-gframe fx-faqpanel">
+        <h2 id="fx-faq-${lang}">${t.faqH}</h2>
+        <div class="fx-faq">
+${faqItems.map(([q, a]) => `          <details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("\n")}
+        </div>
+      </div>
+    </section>
+    <section aria-labelledby="fx-tools-${lang}">
+      <div class="fx-gframe fx-toolspanel">
+        <h2 id="fx-tools-${lang}">${t.toolsH}</h2>
+        <ul class="fx-tools">
+${t.tools.map((x) => `          <li><a href="${x[3]}"><span class="fx-t-ico" aria-hidden="true">${x[0]}</span><strong>${esc(x[1])}</strong><small>${esc(x[2])}</small></a></li>`).join("\n")}
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>
+</div>`;
+}
+
 // ---------------------------------------------------------------- write post
 const slug = `daily-fortune-${iso}`;
 const postPath = `blog/${slug}.html`;
@@ -178,16 +431,31 @@ if (exists && !FORCE) {
   console.log(`${postPath} already exists — nothing to do (use --force to regenerate).`);
 } else {
   const url = `https://mybirthsign.com/blog/${slug}.html`;
+  const title = `Chinese Zodiac Daily Fortune — ${dateEN} | MyBirthSign`;
+  const desc = "Discover today's Chinese zodiac fortune for all 12 zodiac animals, including the best signs for the day, signs needing extra care, and traditional daily guidance.";
+  const ogImage = "https://mybirthsign.com/images/fortune/hero-night.webp";
+  const faqEN = faqs("en", dateEN);
+  const jsonld = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "Article", headline: `Chinese Zodiac Daily Fortune for ${dateEN}`, description: desc, datePublished: iso, dateModified: iso, image: ogImage,
+        mainEntityOfPage: url, inLanguage: "en", author: { "@type": "Organization", name: "MyBirthSign", url: "https://mybirthsign.com/" },
+        publisher: { "@type": "Organization", name: "MyBirthSign", url: "https://mybirthsign.com/" } },
+      { "@type": "BreadcrumbList", itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://mybirthsign.com/" },
+        { "@type": "ListItem", position: 2, name: "Blog", item: "https://mybirthsign.com/blog" },
+        { "@type": "ListItem", position: 3, name: `Daily Fortune ${dateEN}`, item: url } ] },
+      { "@type": "FAQPage", mainEntity: faqEN.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) },
+    ],
+  }).replace(/</g, "\\u003c");
   const html = read("scripts/daily-fortune-template.html")
-    .replaceAll("{{TITLE}}", `Today's Fortune for Each Zodiac Animal — ${dateEN}`)
+    .replaceAll("{{TITLE}}", esc(title))
     .replaceAll("{{URL}}", url)
-    .replaceAll("{{DESC}}", `What ${weekday}, ${dateEN} is good for, and what to watch out for, for all 12 Chinese zodiac animals. Today is a ${dayAnimal} day.`)
-    .replaceAll("{{H1_EN}}", `Today's Fortune for Each Zodiac Animal — ${dateEN}`)
-    .replaceAll("{{H1_KM}}", `សំណាងប្រចាំថ្ងៃសម្រាប់សត្វនិមិត្តសញ្ញានីមួយៗ — ${dateKM}`)
-    .replaceAll("{{INTRO_EN}}", introEN)
-    .replaceAll("{{INTRO_KM}}", introKM)
-    .replaceAll("{{CARDS_EN}}", cards("en"))
-    .replaceAll("{{CARDS_KM}}", cards("km"));
+    .replaceAll("{{DESC}}", esc(desc))
+    .replaceAll("{{OG_IMAGE}}", ogImage)
+    .replace("{{JSONLD}}", () => jsonld)
+    .replace("{{BODY_EN}}", () => body("en"))
+    .replace("{{BODY_KM}}", () => body("km"));
   if (/\{\{\w+\}\}/.test(html)) throw new Error("Unfilled placeholder in template output");
   write(postPath, html);
   console.log(`Wrote ${postPath} — ${dayAnimal} day (great: ${sorted.filter((c) => c.tier === "great").map((c) => c.a)}, caution: ${cautionList}).`);
