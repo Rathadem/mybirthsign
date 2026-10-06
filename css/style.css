@@ -2923,3 +2923,34 @@ html[lang="km"] .biz-h1 { font-size: clamp(0.78rem, 3.5vw, 2.2rem); }
       url("../images/business/angkor-hero.webp") 70% 40% / cover no-repeat;
   }
 }
+/* Business Partner: tidy ad slot + related-link cards under the guidelines */
+.biz-page .ad-slot { margin: 22px auto 10px; max-width: 760px; }
+.biz-page .biz-more {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 860px; margin: 0 auto 34px; padding: 18px;
+  border: 1.5px solid rgba(231, 194, 122, 0.7); border-radius: 22px;
+  background: rgba(11, 8, 31, 0.6);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  box-shadow: 0 0 0 4px rgba(231, 194, 122, 0.07), 0 14px 40px rgba(0, 0, 0, 0.4);
+}
+.biz-page .biz-more a {
+  display: flex; align-items: center; justify-content: center; text-align: center; min-height: 72px; padding: 14px 20px;
+  border: 0; border-radius: 16px;
+  background: linear-gradient(135deg, #e63e8c 0%, #7b52f0 100%);
+  color: #fff; font-weight: 700; line-height: 1.5; text-decoration: none;
+  box-shadow: 0 8px 22px rgba(138, 92, 255, 0.35);
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.biz-page .biz-more a:hover { transform: translateY(-2px); filter: brightness(1.08); box-shadow: 0 10px 26px rgba(255, 95, 165, 0.4); }
+.biz-page .biz-more a:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+@media (max-width: 640px) { .biz-page .biz-more { grid-template-columns: 1fr; margin-left: 16px; margin-right: 16px; padding: 14px; } }
+
+/* Business Partner: night-sky background for the area under the guidelines (ad slot + link cards) */
+.biz-page .biz-after {
+  padding: 8px 0 44px;
+  background:
+    linear-gradient(180deg, #0b081f 0, rgba(11,8,31,.55) 80px, rgba(11,8,31,.15) 50%, rgba(15,11,31,.7) 82%, #0f0b1f 100%),
+    #0b081f url("../images/business/guidelines-bg2.webp") center bottom / cover no-repeat;
+}
+.biz-page .biz-after .ad-slot { background: rgba(11, 8, 31, 0.55); }
+
+.biz-page .biz-after + .site-footer { margin-top: 0; }
