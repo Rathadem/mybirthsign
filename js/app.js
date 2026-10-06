@@ -181,19 +181,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const li = (arr) => '<ul class="chk-list">' + arr.map((t) => "<li>" + t + "</li>").join("") + "</ul>";
     const yinyang = X ? (X.yin === "Yang" ? S.chk_yang : S.chk_yin) : "";
     const yearsList = nearbyYearsForAnimal(animal, 1990, 12).filter((y) => y >= 1950 && y <= 2031).join(", ");
-    const useEn = lang !== "km" && X;
-    const persBody = useEn ? li(X.personality) : "<p>" + traits + "</p>";
-    const loveTitle = useEn ? S.chk_love : S.watch_out;
-    const loveBody = useEn ? li(X.love) : "<p>" + weaknesses + "</p>";
-    const careerBody = useEn ? li(X.career) : "<p>" + careers + "</p>";
+    const XK = typeof CHECKER_EXTRA_KM !== "undefined" ? CHECKER_EXTRA_KM[animal] : null;
+    const XL = lang === "km" ? XK : X;
+    const useEn = !!XL;
+    const persBody = useEn ? li(XL.personality) : "<p>" + traits + "</p>";
+    const loveTitle = S.chk_love;
+    const loveBody = useEn ? li(XL.love) : "<p>" + weaknesses + "</p>";
+    const careerBody = useEn ? li(XL.career) : "<p>" + careers + "</p>";
+    const dirText = lang === "km" ? checkerKmWords(X.directions) : X.directions;
+    const monthText = lang === "km" ? checkerKmWords(X.months) : X.months;
     const luckRows = [
       [S.lucky_numbers, info.luckyNumbers.join(", ")],
       [S.lucky_colors, renderLuckyColorChips(luckyColors, info.luckyColors)]
     ];
-    if (useEn) luckRows.push([S.chk_directions, X.directions], [S.chk_months, X.months]);
+    if (X) luckRows.push([S.chk_directions, dirText], [S.chk_months, monthText]);
     else luckRows.push([S.lucky_days, luckyDays.join(", ")]);
     luckRows.push([S.best_matches, trianglePartnersDisplay.join(", ")], [S.needs_patience, clashAnimalDisplay]);
-    const luckBody = '<ul class="chk-list chk-list-kv">' + luckRows.map((r) => "<li><span>" + r[0] + "</span> " + r[1] + "</li>").join("") + "</ul>";
+    const luckBody = '<ul class="chk-list chk-list-kv">' + luckRows.map((r) => "<li><div><span>" + r[0] + "</span> " + r[1] + "</div></li>").join("") + "</ul>";
     const ICO = {
       cal: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h2M12 14h2M16 14h0M8 17.5h2M12 17.5h2"/></svg>',
       yy: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5a4.75 4.75 0 0 1 0 9.5 4.75 4.75 0 0 0 0 9.5" /><circle cx="12" cy="7.25" r="1.2" fill="currentColor"/><circle cx="12" cy="16.75" r="1.2" fill="currentColor" stroke="none"/></svg>',
@@ -204,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const topHtml = `
       <section class="chk-hero-card" aria-labelledby="chk-res-h">
         <div class="chk-medal-lg">
-          <img src="images/business/animals/${slug}.webp" alt="Golden ${animal} Chinese zodiac medallion" width="320" height="320">
+          <img src="images/business/animals/${slug}.webp" alt="Golden ${animal} zodiac medallion" width="320" height="320">
           ${X ? `<span class="chk-kanji" lang="zh" aria-hidden="true">${X.kanji}</span>` : ""}
         </div>
         <div class="chk-hero-copy">
@@ -230,7 +234,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     resultBox.innerHTML = topHtml + `
       <div class="result-card chk-details">
-        ${shareBlockHtml(resultHeading, { emoji: ZODIAC_EMOJI[animal], animal: animal, heading: resultHeading, subheading: bornSub, badge: S[verdictKey] })}
 
         <p class="lunar-note">${lunarNote}</p>
 
