@@ -231,7 +231,19 @@ html[lang="km"] .fx-sign h4 { letter-spacing: 0; text-transform: none; font-size
 @media (max-width: 420px) { .fx-grid { grid-template-columns: 1fr 1fr; } .fx-sign p { font-size: .78rem; } .fx-tools { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .fx-page * { transition: none !important; } }
 
-/* Khmer headings run wider than Latin ones: keep them on one or two balanced lines */
-html[lang="km"] .fx-hero h1 span { font-size: clamp(1.7rem, 6.2vw, 3.6rem); text-wrap: balance; }
-html[lang="km"] .fx-energy-day { font-size: clamp(1.25rem, 4.4vw, 2.1rem); text-wrap: balance; }
-html[lang="km"] .fx-pill { font-size: clamp(.95rem, 3.6vw, 1.15rem); }
+/* Khmer typography: Kantumruy Pro for text and small headings, Moul (traditional display face) for the big titles */
+html[lang="km"] .fx-page { --km-body: "Kantumruy Pro", "Noto Sans Khmer", "Khmer OS", sans-serif; --km-display: "Moul", "Kantumruy Pro", "Noto Sans Khmer", serif; }
+html[lang="km"] .fx-page,
+html[lang="km"] .fx-page h3, html[lang="km"] .fx-page h4, html[lang="km"] .fx-page .fx-btn, html[lang="km"] .fx-page .fx-tier,
+html[lang="km"] .fx-page .fx-date, html[lang="km"] .fx-page .fx-energy-day, html[lang="km"] .fx-page .fx-kicker,
+html[lang="km"] .fx-page .fx-langs a, html[lang="km"] .fx-page .share-btn { font-family: var(--km-body); }
+html[lang="km"] .fx-page h1, html[lang="km"] .fx-page h2 { font-family: var(--km-display); font-weight: 400; line-height: 1.9; letter-spacing: 0; }
+html[lang="km"] .fx-hero h1 span { font-size: clamp(1.45rem, 5.4vw, 3.1rem); text-wrap: balance; padding: .05em 0; }
+html[lang="km"] .fx-head h2 { font-size: clamp(1.15rem, 3.2vw, 1.8rem); text-wrap: balance; }
+html[lang="km"] .fx-energy h2, html[lang="km"] .fx-guidepanel h2, html[lang="km"] .fx-faqpanel h2, html[lang="km"] .fx-toolspanel h2 { font-size: clamp(1.05rem, 2.6vw, 1.4rem); }
+html[lang="km"] .fx-feature-body h2 { font-size: clamp(1.4rem, 3.4vw, 2rem); }
+html[lang="km"] .fx-cta h2 { font-size: clamp(1.15rem, 3.4vw, 1.9rem); text-wrap: balance; }
+html[lang="km"] .fx-article h2 { font-size: clamp(1.05rem, 2.8vw, 1.45rem); text-wrap: balance; }
+html[lang="km"] .fx-energy-day { font-weight: 700; font-size: clamp(1.2rem, 4.2vw, 2rem); text-wrap: balance; line-height: 1.6; }
+html[lang="km"] .fx-pill { font-weight: 700; font-size: clamp(.95rem, 3.6vw, 1.15rem); }
+html[lang="km"] .fx-sign h3 { font-weight: 700; }
