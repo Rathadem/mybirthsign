@@ -83,6 +83,17 @@ document.addEventListener("DOMContentLoaded", function () {
     // In Khmer, spell the result out as "ឆ្នាំ{zodiac year name} ធាតុ
     // {element} សត្វ{everyday animal name}" (e.g. "ឆ្នាំមមី ធាតុ ភ្លើង
     // សត្វសេះ") rather than the terser "{element} {animal}" used in English.
+    // Age today, in whole years and months
+    const nowD = new Date();
+    let ageY = nowD.getFullYear() - date.getFullYear();
+    let ageM = nowD.getMonth() - date.getMonth();
+    if (nowD.getDate() < date.getDate()) ageM -= 1;
+    if (ageM < 0) { ageY -= 1; ageM += 12; }
+    if (ageY < 0) { ageY = 0; ageM = 0; }
+    const kmDigits = (n) => String(n).replace(/\d/g, (d) => "០១២៣៤៥៦៧៨៩"[d]);
+    const ageText = lang === "km"
+      ? "អាយុ " + kmDigits(ageY) + " ឆ្នាំ " + kmDigits(ageM) + " ខែ"
+      : "Age: " + ageY + (ageY === 1 ? " year " : " years ") + ageM + (ageM === 1 ? " month" : " months");
     const resultHeading = lang === "km"
       ? "ឆ្នាំ" + animalDisplay + " ធាតុ " + elementDisplay + " សត្វ" + KM_ANIMAL_COMMON_NAMES[animal]
       : elementDisplay + " " + animalDisplay;
@@ -204,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
       star: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 3.5l2 8.5 8.5 0-8.5 0-2 8.5-2-8.5-8.5 0 8.5 0z"/></svg>'
     };
     const tile = (ico, label, value, sub) =>
-      '<div class="chk-tile"><span class="chk-tile-ico">' + ico + '</span><div><div class="chk-tile-l">' + label + '</div><div class="chk-tile-v">' + value + "</div>" + (sub ? '<div class="chk-tile-s">' + sub + "</div>" : "") + "</div></div>";
+      '<div class="chk-tile"><span class="chk-tile-ico">' + ico + '</span><div>' + (label ? '<div class="chk-tile-l">' + label + '</div>' : "") + '<div class="chk-tile-v">' + value + "</div>" + (sub ? '<div class="chk-tile-s">' + sub + "</div>" : "") + "</div></div>";
     let outlookHtml = "";
     if (typeof CHECKER_OUTLOOK !== "undefined") {
       const nowAnimal = getZodiac(new Date()).animal;
@@ -241,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
           ${tile(ICO.cal, S.chk_birth_year, date.getFullYear())}
           ${tile('<img src="images/business/el-' + element.toLowerCase() + '.webp" alt="" width="40" height="40">', S.chk_element, elementDisplay)}
           ${X ? tile(ICO.yy, S.chk_yinyang, yinyang) : ""}
-          ${tile(ICO.star, S.chk_zodiac_year, zodiacYear, resultHeading)}
+          ${tile(ICO.star, "", '<span class="chk-tile-one">' + ageText + "</span>", "")}
         </div>
       </section>
       <div class="chk-four">

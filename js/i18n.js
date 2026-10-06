@@ -797,7 +797,7 @@ const UI_STRINGS = {
     chk_same_sign: "សត្វដូចគ្នា (យល់គ្នាជ្រៅ ប៉ុន្តែប្រយ័ត្នការប្រកួតប្រជែង)",
     chk_full_guide: "អានមគ្គុទ្ទេសក៍ពេញលេញ →",
     chk_close: "បិទ",
-    chk_birth_year: "ឆ្នាំកំណើត", chk_element: "ធាតុ", chk_yinyang: "យិន / យ៉ាង", chk_zodiac_year: "ឆ្នាំចិន",
+    chk_birth_year: "ឆ្នាំកំណើត", chk_element: "ធាតុ", chk_yinyang: "យិន / យ៉ាង", chk_zodiac_year: "",
     chk_yang: "យ៉ាង", chk_yin: "យិន",
     chk_personality: "បុគ្គលិកលក្ខណៈ", chk_love: "ស្នេហា និងទំនាក់ទំនង", chk_career: "អាជីព និងការងារ", chk_luck: "សំណាង និងប្រពៃណី",
     chk_directions: "ទិសសំណាង", chk_months: "ខែល្អ",
