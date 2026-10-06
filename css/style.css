@@ -2669,3 +2669,5 @@ html[lang="km"] .chk-page .chk-sub { margin-top: 0; line-height: 1.9; }
 .chk-d-guide { display: inline-block; margin-top: 4px; color: #f3d28a; font-weight: 600; }
 @media (max-width: 600px) { .chk-d-grid { grid-template-columns: 1fr; } .chk-d-head { align-items: flex-start; } .chk-d-head img { width: 64px; height: 64px; } }
 html[lang="km"] .chk-page .chk-d-head h3, html[lang="km"] .chk-page .chk-d-grid h4 { font-family: "Kantumruy Pro","Noto Sans Khmer",sans-serif; }
+/* Checker: calendar opens upward (above the field) again */
+.chk-page .chk-form .kdp-popup { top: auto; bottom: calc(100% + 8px); box-shadow: 0 -12px 32px rgba(0,0,0,.55); }
