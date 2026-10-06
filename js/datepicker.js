@@ -28,7 +28,7 @@
 
   const STR = {
     en: { clear: "Clear", today: "Today", placeholder: "dd/mm/yyyy" },
-    km: { clear: "សម្អាត", today: "ថ្ងៃនេះ", placeholder: "dd/mm/yyyy" }
+    km: { clear: "សម្អាត", today: "ថ្ងៃនេះ", placeholder: "ថថ/ខខ/ឆឆឆឆ" }
   };
 
   function lang() {
