@@ -123,3 +123,49 @@ const CHECKER_KM_WORDS = {
 function checkerKmWords(str) {
   return str.split(", ").map(function (w) { return CHECKER_KM_WORDS[w] || w; }).join(", ");
 }
+
+// "This year" outlook shown under the animal description. Framed as traditional
+// guidance for entertainment only. Tier comes from the relationship between the
+// visitor's animal and the animal of the CURRENT zodiac year (computed from today's
+// date, so it updates itself every Lunar New Year).
+const CHECKER_OUTLOOK = {
+  en: {
+    triangle: ["This year looks favorable for you — a good time to plan a new car, a home move, or a bold step forward.", "Traditionally, luck supports big plans, so choose carefully and act with confidence."],
+    same: ["Your own sign's year is traditionally a time to take extra care with big commitments.", "Keep plans steady, avoid rushing purchases like a car or a house, and look after your health and savings."],
+    clash: ["This year is traditionally a more challenging one for your sign, so be careful with big purchases.", "Hold off on a new car or house if you can, save more, and avoid risky moves."],
+    neutral: ["This year is traditionally an ordinary one for you — no big luck, but no big obstacles either.", "Results will depend mostly on your own effort and money habits, so small purchases and gradual improvements fit best; think carefully before any big decision."]
+  },
+  km: {
+    triangle: ["ឆ្នាំនេះមើលទៅអំណោយផលសម្រាប់អ្នក — ជាពេលល្អក្នុងការគ្រោងទិញឡាន ផ្ទះថ្មី ឬចាប់ផ្តើមជំហានធំៗ។", "តាមប្រពៃណី សំណាងគាំទ្រផែនការធំៗ ដូច្នេះសូមជ្រើសរើសដោយប្រុងប្រយ័ត្ន ហើយធ្វើដោយទំនុកចិត្ត។"],
+    same: ["ឆ្នាំរាសីរបស់អ្នកផ្ទាល់ តាមប្រពៃណីគឺជាពេលដែលគួរប្រុងប្រយ័ត្នបន្ថែមចំពោះការសម្រេចចិត្តធំៗ។", "រក្សាផែនការឱ្យមានស្ថិរភាព ជៀសវាងការប្រញាប់ទិញឡាន ឬផ្ទះ ហើយថែរក្សាសុខភាព និងប្រាក់សន្សំ។"],
+    clash: ["ឆ្នាំនេះតាមប្រពៃណីមានបញ្ហាប្រឈមជាងសម្រាប់រាសីរបស់អ្នក — គួរប្រុងប្រយ័ត្នចំពោះការទិញធំៗ។", "ប្រសិនបើអាច សូមពន្យារពេលទិញឡាន ឬផ្ទះថ្មី សន្សំឱ្យបានច្រើនជាង ហើយជៀសវាងជំហានប្រថុយប្រថាន។"],
+    neutral: ["ឆ្នាំនេះតាមប្រពៃណីជាឆ្នាំធម្មតាសម្រាប់អ្នក — គ្មានសំណាងធំ ហើយក៏គ្មានឧបសគ្គធំដែរ។", "លទ្ធផលភាគច្រើនអាស្រ័យលើការខិតខំ និងការគ្រប់គ្រងលុយរបស់អ្នកផ្ទាល់ ដូច្នេះការទិញតូចតាច និងការកែលម្អជីវភាពបន្តិចម្តងៗសមស្របជាង ហើយគួរពិចារណាឱ្យបានល្អមុនសម្រេចចិត្តធំៗ។"]
+  }
+};
+
+// "This year's luck" box (replaces the day-by-day luck box). Same four tiers as
+// CHECKER_OUTLOOK: triangle (favorable), neutral (steady), same (own sign's year), clash (careful).
+const CHECKER_YEARLUCK = {
+  en: {
+    heading: "This Year's Luck for You",
+    intro: "Reading {year} (year of the {ya}) against your {a} sign:",
+    verdict: { triangle: "good", neutral: "ordinary", same: "caution", clash: "caution" },
+    tiers: {
+      triangle: { items: ["Money: good chances to grow your savings or make a planned purchase.", "Work: new opportunities and supportive people; a good year to take the lead.", "Health and relationships: steady energy and warm support from those close to you."], summary: "Overall: a favorable year — move forward with confidence, but stay sensible." },
+      neutral: { items: ["Money: income and spending stay ordinary. Save gradually, keep an emergency fund, and buy what you need rather than counting on a windfall or a lucky break.", "Work: slow, steady progress that follows your effort. Don't expect a sudden promotion or big change — consistent work and learning one useful skill will pay off over time.", "Health and relationships: sleep, food and time with family matter more than luck. Keep regular habits, check in with the people close to you, and don't put off check-ups."], summary: "Overall: an ordinary, steady year — results depend more on your effort and planning than on luck, so small, consistent steps work best." },
+      same: { items: ["Money: avoid impulse spending and big risks; keep a reserve.", "Work: steady progress beats big changes; double-check your commitments.", "Health and relationships: rest well, watch your health, and be patient with loved ones."], summary: "Overall: a year for caution and consolidation — slow and steady wins." },
+      clash: { items: ["Money: delay big purchases like a car or a house and save more.", "Work: expect some friction; stay flexible and avoid risky moves.", "Health and relationships: look after your health and stay calm in disagreements."], summary: "Overall: a more challenging year — patience and care will carry you through." }
+    }
+  },
+  km: {
+    heading: "សំណាងឆ្នាំនេះសម្រាប់អ្នក",
+    intro: "ប្រៀបធៀបឆ្នាំ {year} (ឆ្នាំ{ya}) ជាមួយរាសី{a}របស់អ្នក៖",
+    verdict: { triangle: "good", neutral: "ordinary", same: "caution", clash: "caution" },
+    tiers: {
+      triangle: { items: ["លុយកាក់៖ មានឱកាសល្អក្នុងការបង្កើនប្រាក់សន្សំ ឬទិញរបស់ដែលបានគ្រោងទុក។", "ការងារ៖ មានឱកាសថ្មីៗ និងមនុស្សគាំទ្រ ជាឆ្នាំល្អក្នុងការដឹកនាំ។", "សុខភាព និងទំនាក់ទំនង៖ មានថាមពលស្ថិរភាព និងការគាំទ្រកក់ក្តៅពីមនុស្សជិតស្និទ្ធ។"], summary: "សរុប៖ ជាឆ្នាំអំណោយផល — ឆ្ពោះទៅមុខដោយទំនុកចិត្ត ប៉ុន្តែនៅតែត្រូវសមហេតុផល។" },
+      neutral: { items: ["លុយកាក់៖ ចំណូលចំណាយនៅធម្មតា — សន្សំបន្តិចម្តងៗ រក្សាទុកប្រាក់បម្រុងសម្រាប់ពេលចាំបាច់ ហើយទិញតែរបស់ដែលត្រូវការ ជាជាងរំពឹងលើសំណាងធំ។", "ការងារ៖ រីកចម្រើនយឺតៗតាមការខិតខំរបស់អ្នក — កុំរំពឹងការដំឡើងតំណែង ឬការផ្លាស់ប្តូរធំភ្លាមៗ ការខិតខំជាប្រចាំ និងការរៀនជំនាញមានប្រយោជន៍មួយនឹងផ្តល់ផលល្អតាមពេលវេលា។", "សុខភាព និងទំនាក់ទំនង៖ ការគេង ការញ៉ាំ និងពេលជាមួយគ្រួសារសំខាន់ជាងសំណាង — រក្សាទម្លាប់ជាប្រចាំ សួរសុខទុក្ខមនុស្សជិតខាង ហើយកុំពន្យារការពិនិត្យសុខភាព។"], summary: "សរុប៖ ជាឆ្នាំធម្មតា និងមានស្ថិរភាព — លទ្ធផលអាស្រ័យលើការខិតខំ និងផែនការរបស់អ្នកជាងសំណាង ដូច្នេះជំហានតូចៗជាប់លាប់ល្អបំផុត។" },
+      same: { items: ["លុយកាក់៖ ជៀសវាងការចាយដោយមិនបានគិត និងហានិភ័យធំៗ ហើយរក្សាទុកប្រាក់បម្រុង។", "ការងារ៖ ដំណើរការបន្តិចម្តងៗល្អជាងការផ្លាស់ប្តូរធំៗ ត្រូវពិនិត្យកិច្ចសន្យាម្តងទៀត។", "សុខភាព និងទំនាក់ទំនង៖ សម្រាកឱ្យបានល្អ ថែសុខភាព ហើយអត់ធ្មត់ចំពោះមនុស្សជាទីស្រឡាញ់។"], summary: "សរុប៖ ជាឆ្នាំសម្រាប់ការប្រុងប្រយ័ត្ន និងការបង្រួបបង្រួម — យឺតៗតែជាប់លាប់ទើបឈ្នះ។" },
+      clash: { items: ["លុយកាក់៖ ពន្យារពេលការទិញធំៗ ដូចជាឡាន ឬផ្ទះ ហើយសន្សំឱ្យបានច្រើន។", "ការងារ៖ រំពឹងថាមានការតានតឹងខ្លះ ត្រូវបត់បែន ហើយជៀសវាងជំហានប្រថុយប្រថាន។", "សុខភាព និងទំនាក់ទំនង៖ ថែរក្សាសុខភាព ហើយរក្សាភាពស្ងប់ស្ងាត់នៅពេលមិនចុះសម្រុងគ្នា។"], summary: "សរុប៖ ជាឆ្នាំដែលមានបញ្ហាប្រឈមជាង — ការអត់ធ្មត់ និងការប្រុងប្រយ័ត្ននឹងនាំអ្នកឆ្លងកាត់។" }
+    }
+  }
+};

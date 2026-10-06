@@ -205,6 +205,26 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     const tile = (ico, label, value, sub) =>
       '<div class="chk-tile"><span class="chk-tile-ico">' + ico + '</span><div><div class="chk-tile-l">' + label + '</div><div class="chk-tile-v">' + value + "</div>" + (sub ? '<div class="chk-tile-s">' + sub + "</div>" : "") + "</div></div>";
+    let outlookHtml = "";
+    if (typeof CHECKER_OUTLOOK !== "undefined") {
+      const nowAnimal = getZodiac(new Date()).animal;
+      const rel = getCompatibilityType(animal, nowAnimal);
+      const tier = rel === "same" ? "same" : (rel === "triangle" ? "triangle" : (rel === "clash" ? "clash" : "neutral"));
+      const lines = (CHECKER_OUTLOOK[lang] || CHECKER_OUTLOOK.en)[tier];
+      outlookHtml = " " + lines.join(" ");
+    }
+    let yearLuckHtml = "";
+    if (typeof CHECKER_YEARLUCK !== "undefined") {
+      const YL = CHECKER_YEARLUCK[lang] || CHECKER_YEARLUCK.en;
+      const nowZ = getZodiac(new Date());
+      const rel2 = getCompatibilityType(animal, nowZ.animal);
+      const tier2 = rel2 === "same" ? "same" : (rel2 === "triangle" ? "triangle" : (rel2 === "clash" ? "clash" : "neutral"));
+      const T2 = YL.tiers[tier2];
+      const nm = (a) => (lang === "km" ? KM_ANIMAL_NAMES[a] : a);
+      const introTxt = YL.intro.replace("{year}", nowZ.zodiacYear).replace("{ya}", nm(nowZ.animal)).replace("{a}", nm(animal));
+      yearLuckHtml = '<div class="today-luck-card"><h3>' + YL.heading + '</h3><p class="today-luck-intro">' + introTxt + '</p><ul class="today-luck-list">' +
+        T2.items.map((t) => "<li>" + t + "</li>").join("") + '</ul><p class="today-luck-verdict today-luck-verdict-' + YL.verdict[tier2] + '">' + T2.summary + "</p></div>";
+    }
     const topHtml = `
       <section class="chk-hero-card" aria-labelledby="chk-res-h">
         <div class="chk-medal-lg">
@@ -215,7 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
           ${lang === "km" ? "" : `<p class="chk-eyebrow">${S.chk_your_sign}</p>`}
           <h2 id="chk-res-h" class="chk-animal">${lang === "km" ? "ឆ្នាំ" + animalDisplay + " សត្វ" + KM_ANIMAL_COMMON_NAMES[animal] : animalDisplay}</h2>
           <p class="chk-years">${yearsList}</p>
-          <p class="chk-desc">${traits}</p>
+          <p class="chk-desc">${traits}${outlookHtml}</p>
         </div>
         <div class="chk-tiles">
           ${tile(ICO.cal, S.chk_birth_year, date.getFullYear())}
@@ -237,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         <p class="lunar-note">${lunarNote}</p>
 
-        ${todayLuckHtml}
+        ${yearLuckHtml || todayLuckHtml}
 
         <p class="overview-text">${overview}</p>
         <p class="overview-text">${elOverview}</p>
