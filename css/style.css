@@ -2971,3 +2971,149 @@ body.chk-page footer.chk-footer {
 }
 footer.site-footer p, .chk-footer p { color: #b9afd6; text-shadow: none; }
 @media (max-width: 600px) { footer.site-footer, body.chk-page footer.chk-footer { padding-top: 64px; } }
+
+/* ==========================================================================
+   Wedding Date page (body.wed-page) — Khmer night, lotus + gold
+   ========================================================================== */
+.wed-page .chk-hero { padding-bottom: 28px; }
+.wed-support { max-width: 640px; margin: 4px auto 22px; text-align: center; color: #e9e2ff; text-shadow: 0 1px 10px rgba(0,0,0,.85); line-height: 1.6; }
+.wed-page .wed-form {
+  max-width: 860px; margin: 0 auto; padding: 22px 26px 18px; border-radius: 22px; text-align: left;
+  border: 1.5px solid rgba(231,194,122,.55); background: rgba(11,8,31,.8);
+  box-shadow: 0 0 0 4px rgba(231,194,122,.07), 0 14px 50px rgba(0,0,0,.5);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.wed-form-h { display: flex; align-items: center; gap: 14px; margin: 0 0 18px; border: 0; padding: 0; text-align: center; font: 700 clamp(1.15rem, 2.6vw, 1.45rem) Georgia, serif; color: #f6e3b2; }
+.wed-form-h::before, .wed-form-h::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(231,194,122,.7)); }
+.wed-form-h::after { transform: scaleX(-1); }
+.wed-dob-row { display: grid; grid-template-columns: 1fr 104px 1fr; align-items: end; gap: 6px; }
+.wed-heart { display: grid; place-items: center; height: 50px; }
+.wed-heart img { width: 97px; height: auto; filter: drop-shadow(0 0 10px rgba(255,95,165,.6)); animation: cmpBeat 2.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .wed-heart img { animation: none; } }
+.wed-opt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.wed-page .wed-form .chk-field { min-width: 0; width: 100%; max-width: none; }
+.wed-page .wed-form label { display: block; margin: 0 0 6px; color: #fff; font-weight: 700; font-size: .92rem; }
+.wed-select {
+  display: block; width: 100%; box-sizing: border-box; height: 50px; padding: 0 40px 0 14px; border-radius: 12px;
+  border: 1px solid rgba(231,194,122,.45); color: #1d1a33; font: inherit; font-size: 1rem; cursor: pointer;
+  background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' fill='none' stroke='%236b5aa8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 14px center;
+  appearance: none; -webkit-appearance: none; text-overflow: ellipsis;
+}
+.wed-select:focus-visible { outline: 3px solid #e7c27a; outline-offset: 2px; }
+.wed-page .wed-form button[type="submit"] { display: block; width: 100%; max-width: 380px; margin: 20px auto 0; min-height: 52px; }
+.wed-page .chk-hint { text-align: center; }
+.wed-page .cmp-error { margin-top: 14px; }
+.wed-wrap { max-width: 1060px; }
+.wed-wrap:empty { display: none; }
+
+/* result: guide panel with the gold lotus-heart frame */
+.wed-guide {
+  position: relative; isolation: isolate; margin: 74px 0 26px; padding: 0 12px; text-align: center;
+  border: 0 solid transparent; border-width: 62px 56px;
+  border-image: url("../images/wedding/frame.webp") 190 / 62px 56px stretch;
+  background: none;
+  color: #ece6ff;
+}
+.wed-guide::before { content: ""; position: absolute; inset: -20px -30px; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 50%, rgba(46,28,104,.75) 0%, rgba(26,16,64,.45) 45%, rgba(11,8,31,0) 72%); }
+.wed-guide-top { position: absolute; left: 50%; top: -112px; transform: translateX(-50%); width: min(340px, 70%); height: auto; pointer-events: none; }
+.wed-guide-h { margin: 6px 0 14px; border: 0; font: 700 clamp(1.5rem, 3.4vw, 2.1rem) Georgia, serif; color: #f6e3b2; }
+.wed-stage { display: grid; grid-template-columns: 1fr minmax(190px, 230px) 1fr; gap: 14px; align-items: center; }
+.wed-partner { text-align: center; }
+.wed-partner-l { margin: 0; color: #cfc6ea; font-size: .9rem; letter-spacing: .04em; }
+.wed-medal img { width: clamp(110px, 14vw, 150px); height: auto; filter: drop-shadow(0 0 16px rgba(255,190,90,.35)); }
+.wed-partner-a { margin: 4px 0 6px; border: 0; padding: 0; font: 700 1.6rem Georgia, serif; color: #ffe3a3; }
+.wed-partner-meta { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 3px; }
+.wed-partner-meta li { display: flex; justify-content: center; gap: 8px; font-size: .92rem; }
+.wed-partner-meta span { color: #b6aad6; }
+.wed-partner-meta b { color: #fff; }
+.wed-partner-t { margin: 0 auto; max-width: 300px; font-size: .88rem; line-height: 1.6; color: #d8d0f1; }
+.wed-partner-t b { color: #ffd98a; }
+.wed-core { text-align: center; }
+.wed-heartwrap { position: relative; width: min(100%, 175px); margin: 0 auto; }
+.wed-heartwrap svg { display: block; width: 100%; height: auto; filter: drop-shadow(0 0 14px rgba(255,95,165,.4)); }
+.wed-pct { position: absolute; left: 0; right: 0; top: 30%; text-align: center; font: 700 clamp(1.7rem, 5vw, 2.3rem)/1 Georgia, serif; color: #fff; text-shadow: 0 2px 14px rgba(255,95,165,.8); }
+.wed-harmony-h { margin: 8px 0 2px; color: #b6aad6; font-size: .85rem; }
+.wed-level { margin: 0; font: 700 1.2rem Georgia, serif; color: #ffe3a3; }
+.wed-harmony-note { margin: 16px auto 4px; max-width: 640px; font-size: .88rem; color: #bfb5de; font-style: italic; }
+
+/* 12-month calendar */
+.wed-months, .wed-dates { margin-bottom: 28px; }
+.wed-lead { max-width: 680px; margin: -8px auto 18px; text-align: center; color: #e3dcf7; line-height: 1.6; }
+.wed-cal { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.wed-m {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px 12px; text-align: center; border-radius: 16px;
+  border: 1.5px solid rgba(231,194,122,.5); background: linear-gradient(180deg, rgba(60,40,10,.55), rgba(20,12,6,.8)); color: #f1ecff;
+}
+.wed-m img { width: 64px; height: auto; margin: 2px 0; }
+.wed-m-name { font: 700 1rem Georgia, serif; color: #fff; }
+.wed-m-rate { font: 700 1rem Georgia, serif; color: #ffd98a; }
+.wed-m-note { font-size: .82rem; line-height: 1.45; color: #dcd4f3; }
+.wed-m-sub { font-size: .74rem; line-height: 1.35; color: #a99ccb; margin-top: auto; }
+.wed-m-excellent { border-color: rgba(80,230,140,.65); background: linear-gradient(180deg, rgba(10,70,45,.75), rgba(5,28,22,.9)); }
+.wed-m-excellent .wed-m-rate { color: #7dffb0; }
+.wed-m-good { border-color: rgba(255,95,190,.6); background: linear-gradient(180deg, rgba(80,12,70,.7), rgba(30,8,36,.9)); }
+.wed-m-good .wed-m-rate { color: #ff9ad8; }
+.wed-m-workable .wed-m-rate { color: #ffd98a; }
+.wed-m-avoid { border-color: rgba(190,180,215,.35); background: linear-gradient(180deg, rgba(40,34,60,.7), rgba(18,14,32,.9)); }
+.wed-m-avoid img { filter: grayscale(.85) brightness(.8); }
+.wed-m-avoid .wed-m-rate { color: #c9c1e0; }
+
+/* recommended dates */
+.wed-dlist { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.wed-d { padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(231,194,122,.45); background: linear-gradient(160deg, rgba(34,22,78,.9), rgba(14,10,38,.92)); }
+.wed-d-date { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+.wed-d-date b { font: 700 1.1rem Georgia, serif; color: #fff; flex: 1 1 100%; }
+.wed-stars { color: #ffcf5a; letter-spacing: 2px; font-size: 1.05rem; }
+.wed-d-rate { color: #7dffb0; font-weight: 700; }
+.wed-d-good .wed-d-rate { color: #ff9ad8; }
+.wed-d p { margin: 8px 0 0; font-size: .9rem; line-height: 1.55; color: #dcd4f3; }
+.wed-none { text-align: center; color: #e3dcf7; padding: 14px; border: 1px dashed rgba(231,194,122,.4); border-radius: 12px; }
+
+.wed-table-box { margin: 0 0 24px; border: 1px solid #3b2d6e; border-radius: 14px; background: rgba(14,10,38,.85); padding: 4px 14px; }
+.wed-table-box > summary { cursor: pointer; padding: 12px 0; font-weight: 700; color: #f6e3b2; }
+.wed-table-box .disclaimer { margin: 10px 0 12px; }
+
+/* info sections */
+.wed-sec { margin-bottom: 30px; }
+.wed-why, .wed-plan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.wed-why-card, .wed-plan-card { position: relative; padding: 18px 16px; border-radius: 16px; border: 1px solid rgba(231,194,122,.45); background: linear-gradient(160deg, rgba(34,22,78,.88), rgba(14,10,38,.92)); color: #e3dcf7; }
+.wed-why-card h3, .wed-plan-card h3 { margin: 0 0 6px; border: 0; padding: 0; font: 700 1.05rem Georgia, serif; color: #ffe3a3; }
+.wed-why-card p, .wed-plan-card p { margin: 0; font-size: .92rem; line-height: 1.6; }
+.wed-plan-card { padding-top: 24px; }
+.wed-plan-n { position: absolute; top: -12px; left: 14px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font: 700 .95rem Georgia, serif; color: #ffe9a8; background: #1a1340; border: 2px solid #e7c27a; }
+.wed-tools { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.wed-tool { display: flex; flex-direction: column; gap: 4px; padding: 16px; min-height: 44px; text-decoration: none; border-radius: 16px; border: 1px solid rgba(231,194,122,.45); background: linear-gradient(135deg, rgba(120,30,110,.45), rgba(60,40,140,.5)); color: #fff; transition: transform .15s, filter .15s; }
+.wed-tool strong { font: 700 1.02rem Georgia, serif; color: #ffe3a3; }
+.wed-tool span { font-size: .88rem; color: #e3dcf7; }
+.wed-tool:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.wed-tool:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.wed-disclaimer { margin-top: 22px; padding: 16px 18px; border-radius: 14px; border: 1px solid rgba(231,194,122,.5); background: rgba(231,194,122,.07); line-height: 1.7; }
+html[lang="km"] .wed-lead, html[lang="km"] .wed-support, html[lang="km"] .wed-m-note, html[lang="km"] .wed-d p, html[lang="km"] .wed-why-card p, html[lang="km"] .wed-plan-card p, html[lang="km"] .wed-partner-t { line-height: 1.9; }
+html[lang="km"] .wed-pct, html[lang="km"] .wed-m-name, html[lang="km"] .wed-m-rate { font-family: "Noto Sans Khmer", Georgia, serif; }
+
+@media (max-width: 1000px) {
+  .wed-cal { grid-template-columns: repeat(4, 1fr); }
+  .wed-why, .wed-plan { grid-template-columns: repeat(2, 1fr); }
+  .wed-tools { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  .wed-stage { grid-template-columns: 1fr; gap: 18px; }
+  .wed-guide { border-width: 50px 34px; border-image-width: 50px 34px; margin-top: 64px; }
+  .wed-guide-top { top: -96px; width: min(300px, 80%); }
+  .wed-guide-h { margin-top: 0; }
+  .wed-dob-row { grid-template-columns: 1fr; gap: 10px; }
+  .wed-heart { height: 52px; }
+  .wed-heart img { width: 84px; }
+  .wed-opt-row { grid-template-columns: 1fr; }
+  .wed-dlist { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .wed-cal { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .wed-m { padding: 10px 4px; }
+  .wed-m-note { font-size: .74rem; }
+  .wed-page .wed-form { padding: 18px 16px 16px; }
+}
+@media (max-width: 480px) {
+  .wed-cal { grid-template-columns: repeat(2, 1fr); }
+  .wed-why, .wed-plan, .wed-tools { grid-template-columns: 1fr; }
+}

@@ -8,18 +8,26 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<title>Wedding Date Picker — Best Months by Zodiac Compatibility | MyBirthSign</title>
+<title>Chinese Zodiac Wedding Date Calculator | Find Favorable Wedding Dates | MyBirthSign</title>
 <link rel="canonical" href="https://mybirthsign.com/wedding-date">
+<meta name="description" content="Find traditionally favorable wedding months and dates using both partners&#x27; Chinese zodiac signs, elements, and planned wedding year.">
+<meta property="og:type" content="website">
 <meta property="og:url" content="https://mybirthsign.com/wedding-date">
-<meta name="description" content="Enter both birthdays and a year to find which months traditionally pair best with your zodiac signs for a wedding date.">
+<meta property="og:title" content="Chinese Zodiac Wedding Date Calculator | Find Favorable Wedding Dates | MyBirthSign">
+<meta property="og:description" content="Find traditionally favorable wedding months and dates using both partners&#x27; Chinese zodiac signs, elements, and planned wedding year.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chinese Zodiac Wedding Date Calculator | Find Favorable Wedding Dates | MyBirthSign">
+<meta name="twitter:description" content="Find traditionally favorable wedding months and dates using both partners&#x27; Chinese zodiac signs, elements, and planned wedding year.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Kantumruy+Pro:wght@400;600;700&family=Moul&display=swap">
 <link rel="stylesheet" href="css/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebPage", "name": "Chinese Zodiac Wedding Date Calculator", "url": "https://mybirthsign.com/wedding-date", "description": "Find traditionally favorable wedding months and dates using both partners' Chinese zodiac signs, elements, and planned wedding year."}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does the Chinese zodiac wedding date calculator work?", "acceptedAnswer": {"@type": "Answer", "text": "It finds each partner's zodiac animal from their birth date, then rates each month of your wedding year by how that month's traditional animal relates to both of your animals. It also shows an overall harmony figure from your animals, elements and Yin/Yang."}}, {"@type": "Question", "name": "Why do both partners' birthdays matter?", "acceptedAnswer": {"@type": "Answer", "text": "A month is only rated well when it suits both of you. A month that matches one partner but clashes with the other is rated lower."}}, {"@type": "Question", "name": "Why does the wedding year matter?", "acceptedAnswer": {"@type": "Answer", "text": "The year decides which calendar months and Saturdays are shown, and which holidays fall nearby. The zodiac year also changes at Lunar New Year, so planning around it can matter."}}, {"@type": "Question", "name": "Does the Chinese Lunar New Year affect the calculation?", "acceptedAnswer": {"@type": "Answer", "text": "Yes for birth dates: someone born in January or early February may belong to the previous animal year, so each birth date is checked against the actual Lunar New Year date."}}, {"@type": "Question", "name": "Can the calculator recommend a specific wedding date?", "acceptedAnswer": {"@type": "Answer", "text": "It suggests Saturdays within your best months. It does not claim individual lucky days, because the tool does not calculate lunar day-by-day calendars."}}, {"@type": "Question", "name": "Are Chinese zodiac wedding dates scientifically proven?", "acceptedAnswer": {"@type": "Answer", "text": "No. They are a cultural tradition, shared here for entertainment and reflection. No scientific evidence shows that a wedding month affects a marriage."}}, {"@type": "Question", "name": "Should I use the recommended date as the only factor when choosing my wedding date?", "acceptedAnswer": {"@type": "Answer", "text": "No. Venue, budget, weather, family and guests matter far more in practice. Use the result as one input and decide together."}}]}]}</script>
 
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939402104083173" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="chk-page wed-page">
 
 <header class="site-header">
   <div class="container">
@@ -55,65 +63,91 @@
     </nav>
   </div>
 </header>
+<main id="main">
+<section class="chk-hero wed-hero">
+  <div class="container chk-hero-inner">
+    <h1 class="chk-h1" data-wed="title">Chinese Zodiac Wedding Date Calculator</h1>
+    <p class="chk-sub" data-wed="sub">Find traditionally favorable wedding months based on both partners&#x27; Chinese zodiac signs.</p>
+    <p class="wed-support" data-wed="support">Enter both birth dates and your planned wedding year to explore traditionally favorable months and dates based on Chinese zodiac patterns.</p>
+    <form id="wedding-form" class="checker-form chk-form wed-form" novalidate>
+      <h2 class="wed-form-h"><span data-wed="formH">Find Your Wedding Date</span></h2>
+      <div class="wed-dob-row">
+        <div class="chk-field">
+          <label for="dob-a" data-wed="p1">Partner 1 Date of Birth</label>
+          <input type="date" lang="en-GB" id="dob-a" name="dob-a" required min="1920-01-01" max="2026-12-31">
+        </div>
+        <div class="wed-heart" aria-hidden="true"><img src="images/wedding/heart.webp" alt="" width="97" height="43"></div>
+        <div class="chk-field">
+          <label for="dob-b" data-wed="p2">Partner 2 Date of Birth</label>
+          <input type="date" lang="en-GB" id="dob-b" name="dob-b" required min="1920-01-01" max="2026-12-31">
+        </div>
+      </div>
+      <div class="wed-opt-row">
+        <div class="chk-field">
+          <label for="wedding-year" data-wed="yearL">Wedding Year</label>
+          <select id="wedding-year" name="wedding-year" class="wed-select" required><option value="2026">2026</option><option value="2027" selected>2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option><option value="2031">2031</option><option value="2032">2032</option><option value="2033">2033</option><option value="2034">2034</option><option value="2035">2035</option><option value="2036">2036</option><option value="2037">2037</option><option value="2038">2038</option><option value="2039">2039</option><option value="2040">2040</option></select>
+        </div>
+        <div class="chk-field">
+          <label for="wedding-region" data-wed="regionL">General Climate Region</label>
+          <select id="wedding-region" name="wedding-region" class="wed-select">
+            <option value="tropical" selected data-i18n="region_tropical">Tropical / near the equator (e.g. Cambodia, Southeast Asia)</option>
+            <option value="northern" data-i18n="region_northern">Northern Hemisphere (e.g. USA, Europe, China)</option>
+            <option value="southern" data-i18n="region_southern">Southern Hemisphere (e.g. Australia, South Africa, South America)</option>
+          </select>
+        </div>
+      </div>
+      <p id="wed-error" class="cmp-error" role="alert" hidden></p>
+      <button type="submit" data-wed="submit">Find Best Wedding Dates →</button>
+      <p class="chk-hint" data-wed="hint">No names or birth time needed. Everything is calculated in your browser.</p>
+    </form>
+  </div>
+</section>
 
-<section class="hero container">
-  <h1 data-i18n="wedding_hero_title">Wedding Date Picker</h1>
-  <p data-i18n="wedding_hero_subtitle">Enter both birthdays and a year, and we'll rate each month by how well it sits with both of your zodiac signs — a fun, traditional-pattern starting point for picking your date.</p>
+<div id="wedding-result" class="container chk-wrap wed-wrap" aria-live="polite"></div>
+
+<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
+
+<section class="container chk-wrap wed-sec" aria-labelledby="wed-why-h">
+  <h2 id="wed-why-h" class="cmp-h2" data-wed="whyH">Why These Wedding Dates?</h2>
+  <p class="wed-lead" data-wed="whyIntro">The calculator uses traditional patterns only. Here is exactly what goes into each result.</p>
+  <div class="wed-why" id="wed-why"><article class="wed-why-card"><h3>Chinese zodiac animals</h3><p>Each partner&#x27;s birth date is checked against the real Lunar New Year date to find their animal. Each month also carries a traditional animal.</p></article><article class="wed-why-card"><h3>Month ratings</h3><p>A month rates Excellent when its animal sits in the same compatibility triangle as both of you, and Take Care when it clashes with either of you.</p></article><article class="wed-why-card"><h3>Zodiac elements</h3><p>Wood, Fire, Earth, Metal and Water feed into the overall harmony figure, based on whether your elements nourish or restrain each other.</p></article><article class="wed-why-card"><h3>Yin and Yang</h3><p>Zodiac years alternate between Yin and Yang. Different polarities add a little balance to the harmony figure.</p></article><article class="wed-why-card"><h3>Wedding year</h3><p>The year you choose sets the calendar months and Saturdays shown, plus nearby holidays such as Lunar New Year.</p></article><article class="wed-why-card"><h3>Traditional, not scientific</h3><p>These are cultural interpretations. Treat them as a starting point for conversation, not a rule.</p></article></div>
+</section>
+
+<section class="container chk-wrap wed-sec" aria-labelledby="wed-plan-h">
+  <h2 id="wed-plan-h" class="cmp-h2" data-wed="planH">Wedding Date Planning Guidelines</h2>
+  <div class="wed-plan" id="wed-plan"><article class="wed-plan-card"><span class="wed-plan-n" aria-hidden="true">1</span><h3>Consider Both Partners</h3><p>Choose a date that works well for both people.</p></article><article class="wed-plan-card"><span class="wed-plan-n" aria-hidden="true">2</span><h3>Consider Family Traditions</h3><p>Some families may follow additional cultural traditions.</p></article><article class="wed-plan-card"><span class="wed-plan-n" aria-hidden="true">3</span><h3>Check Venue Availability</h3><p>A favorable traditional date still needs to work practically.</p></article><article class="wed-plan-card"><span class="wed-plan-n" aria-hidden="true">4</span><h3>Consider Weather</h3><p>Use the selected climate region when planning outdoor events.</p></article><article class="wed-plan-card"><span class="wed-plan-n" aria-hidden="true">5</span><h3>Consider Your Guests</h3><p>Make sure the date is convenient for important family members and guests.</p></article><article class="wed-plan-card"><span class="wed-plan-n" aria-hidden="true">6</span><h3>Make the Final Decision Together</h3><p>The calculator should be a starting point, not the only factor.</p></article></div>
+</section>
+
+<section class="container chk-wrap wed-sec" aria-labelledby="wed-tools-h">
+  <h2 id="wed-tools-h" class="cmp-h2" data-wed="toolsH">Related Tools</h2>
+  <div class="wed-tools" id="wed-tools"><a class="wed-tool" href="checker.html"><strong>Chinese Zodiac Checker</strong><span>Check your Chinese zodiac sign.</span></a><a class="wed-tool" href="compatibility.html"><strong>Compatibility Calculator</strong><span>Compare two birth dates.</span></a><a class="wed-tool" href="business-partner.html"><strong>Business Partner Compatibility</strong><span>Explore traditional business compatibility.</span></a><a class="wed-tool" href="animals.html"><strong>Chinese Zodiac Guide</strong><span>Learn about all 12 zodiac animals.</span></a></div>
 </section>
 
 <div class="ad-slot container" data-i18n="ad_space">Ad space</div>
 
-<div class="container">
-<form id="wedding-form" class="checker-form compat-form">
-  <div class="compat-row">
-    <div>
-      <label for="dob-a" data-i18n="doba_label">Person A's date of birth</label>
-      <input type="date" lang="en-GB" id="dob-a" name="dob-a" required min="1920-01-01" max="2026-12-31">
-    </div>
-    <div>
-      <label for="dob-b" data-i18n="dobb_label">Person B's date of birth</label>
-      <input type="date" lang="en-GB" id="dob-b" name="dob-b" required min="1920-01-01" max="2026-12-31">
-    </div>
-  </div>
-  <div style="margin-bottom: 16px; text-align: left;">
-    <label for="wedding-year" data-i18n="wedding_year_label">Year you're planning to marry</label>
-    <input type="number" id="wedding-year" name="wedding-year" required min="2026" max="2040" step="1" value="2026"
-      style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); background:#0f0b1f; color:var(--text); font-size:1rem;">
-  </div>
-  <div style="margin-bottom: 16px; text-align: left;">
-    <label for="wedding-region" data-i18n="wedding_region_label">Your general climate region</label>
-    <select id="wedding-region" name="wedding-region"
-      style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); background:#0f0b1f; color:var(--text); font-size:1rem;">
-      <option value="tropical" selected data-i18n="region_tropical">Tropical / near the equator (e.g. Cambodia, Southeast Asia)</option>
-      <option value="northern" data-i18n="region_northern">Northern Hemisphere (e.g. USA, Europe, China)</option>
-      <option value="southern" data-i18n="region_southern">Southern Hemisphere (e.g. Australia, South Africa, South America)</option>
-    </select>
-  </div>
-  <button type="submit" data-i18n="wedding_submit">Find Good Months</button>
-</form>
+<div class="chk-seo container">
+  <h2 class="cmp-h2" data-wed="faqH">Frequently Asked Questions</h2>
+  <div id="wed-faq"><details class="chk-faq-item"><summary>How does the Chinese zodiac wedding date calculator work?</summary><p>It finds each partner&#x27;s zodiac animal from their birth date, then rates each month of your wedding year by how that month&#x27;s traditional animal relates to both of your animals. It also shows an overall harmony figure from your animals, elements and Yin/Yang.</p></details><details class="chk-faq-item"><summary>Why do both partners&#x27; birthdays matter?</summary><p>A month is only rated well when it suits both of you. A month that matches one partner but clashes with the other is rated lower.</p></details><details class="chk-faq-item"><summary>Why does the wedding year matter?</summary><p>The year decides which calendar months and Saturdays are shown, and which holidays fall nearby. The zodiac year also changes at Lunar New Year, so planning around it can matter.</p></details><details class="chk-faq-item"><summary>Does the Chinese Lunar New Year affect the calculation?</summary><p>Yes for birth dates: someone born in January or early February may belong to the previous animal year, so each birth date is checked against the actual Lunar New Year date.</p></details><details class="chk-faq-item"><summary>Can the calculator recommend a specific wedding date?</summary><p>It suggests Saturdays within your best months. It does not claim individual lucky days, because the tool does not calculate lunar day-by-day calendars.</p></details><details class="chk-faq-item"><summary>Are Chinese zodiac wedding dates scientifically proven?</summary><p>No. They are a cultural tradition, shared here for entertainment and reflection. No scientific evidence shows that a wedding month affects a marriage.</p></details><details class="chk-faq-item"><summary>Should I use the recommended date as the only factor when choosing my wedding date?</summary><p>No. Venue, budget, weather, family and guests matter far more in practice. Use the result as one input and decide together.</p></details></div>
+  <p class="chk-disclaimer wed-disclaimer" data-wed="disclaimer">Chinese zodiac wedding-date recommendations are based on traditional cultural interpretations and are provided for entertainment, cultural exploration, and personal reflection. They are not scientifically proven and should not be considered a guarantee of marriage success or a substitute for practical wedding planning.</p>
 </div>
+</main>
 
-<div id="wedding-result" class="container"></div>
-
-<div class="ad-slot container" data-i18n="ad_space">Ad space</div>
-
-<section class="content-section container">
-  <p style="text-align:center;"><a href="checker.html" data-i18n="compat_page_cta">Check your own sign →</a></p>
-</section>
-
-<footer class="site-footer">
+<footer class="site-footer chk-footer">
   <div class="container">
-    <a href="about.html" data-i18n="footer_about">About</a> ·
-    <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a> ·
-    <a href="contact.html" data-i18n="footer_contact">Contact</a>
+    <p class="chk-foot-brand">MyBirthSign</p>
+    <p class="chk-foot-tag">Chinese Zodiac • Compatibility • Business Partners • Zodiac Guides</p>
+    <nav class="chk-foot-links" aria-label="Footer">
+      <a href="index.html">Home</a> · <a href="checker.html">Zodiac Checker</a> · <a href="compatibility.html">Compatibility</a> · <a href="business-partner.html">Business Partners</a> · <a href="animals.html">Zodiac Guide</a> · <a href="blog.html">Blog</a> · <a href="about.html" data-i18n="footer_about">About</a> · <a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a> · <a href="contact.html" data-i18n="footer_contact">Contact</a>
+    </nav>
     <p data-i18n="footer_copyright">&copy; 2026 MyBirthSign. For entertainment purposes only.</p>
   </div>
 </footer>
-
 <script src="js/i18n.js"></script>
 <script src="js/zodiac-data.js"></script>
+<script src="js/business-data.js"></script>
 <script src="js/datepicker.js"></script>
 <script src="js/share.js"></script>
+<script src="js/wedding-text.js"></script>
 <script src="js/wedding.js"></script>
 </body>
 </html>
