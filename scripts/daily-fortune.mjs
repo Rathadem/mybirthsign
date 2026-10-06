@@ -20,6 +20,7 @@ import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
@@ -486,3 +487,6 @@ blog = blog.replace(/(<a class="bv2-featured" href="blog\/daily-fortune-[^"]+">\
 let dateIdx = 0;
 blog = blog.replace(/(<div class="bv2-featured-meta">\s*<span>)([^<]*)(<\/span>)/g, (m, a, _old, c) => a + (dateIdx++ === 0 ? dateFullEN : dateFullKM) + c);
 if (blog !== before) { write("blog.html", blog); console.log("blog.html feature updated"); }
+
+// ---------------------------------------------------------------- homepage "From the MyBirthSign Blog" list
+execFileSync(process.execPath, [path.join(ROOT, "scripts/home-page.mjs")], { stdio: "inherit" });

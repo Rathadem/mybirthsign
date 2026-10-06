@@ -455,3 +455,15 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+
+// Deep link from the homepage "Find my sign" card: /checker?dob=YYYY-MM-DD fills the date and runs the normal checker.
+document.addEventListener("DOMContentLoaded", function () {
+  const f = document.getElementById("birthday-form");
+  const i = document.getElementById("dob");
+  if (!f || !i) return;
+  const q = new URLSearchParams(window.location.search).get("dob");
+  if (!q || !/^\d{4}-\d{2}-\d{2}$/.test(q)) return;
+  i.value = q;
+  i.dispatchEvent(new Event("change", { bubbles: true }));
+  f.dispatchEvent(new Event("submit", { cancelable: true }));
+});
