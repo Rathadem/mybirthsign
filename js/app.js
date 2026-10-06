@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", function () {
           ${lang === "km" ? "" : `<p class="chk-eyebrow">${S.chk_your_sign}</p>`}
           <h2 id="chk-res-h" class="chk-animal">${lang === "km" ? "ឆ្នាំ" + animalDisplay + " សត្វ" + KM_ANIMAL_COMMON_NAMES[animal] : animalDisplay}</h2>
           <p class="chk-years">${yearsList}</p>
-          <p class="chk-desc">${traits}${outlookHtml}</p>
+          <p class="chk-desc">${traits}${(typeof CHECKER_TRAITS_MORE !== "undefined" && CHECKER_TRAITS_MORE[lang] && CHECKER_TRAITS_MORE[lang][animal]) ? " " + CHECKER_TRAITS_MORE[lang][animal] : ""}${outlookHtml}</p>
         </div>
         <div class="chk-tiles">
           ${tile(ICO.cal, S.chk_birth_year, date.getFullYear())}
