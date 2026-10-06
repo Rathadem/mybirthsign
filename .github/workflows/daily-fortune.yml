@@ -1,0 +1,55 @@
+name: Daily zodiac fortune
+
+# Publishes "Today's Fortune for Each Zodiac Animal" every day.
+# 17:10 UTC is 00:10 the next morning in Cambodia (UTC+7), so the new day's post is ready at midnight there.
+on:
+  schedule:
+    - cron: "10 17 * * *"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Date to generate (YYYY-MM-DD). Leave empty for today (Asia/Phnom_Penh)."
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-fortune
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate today's fortune post
+        env:
+          FORTUNE_DATE: ${{ github.event.inputs.date }}
+          FORTUNE_TZ: Asia/Phnom_Penh
+        run: |
+          if [ -n "$FORTUNE_DATE" ]; then
+            node scripts/daily-fortune.mjs --date "$FORTUNE_DATE"
+          else
+            node scripts/daily-fortune.mjs
+          fi
+
+      - name: Commit and push (Netlify deploys on push)
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Nothing new to publish."
+            exit 0
+          fi
+          git config user.name "daily-fortune-bot"
+          git config user.email "daily-fortune-bot@users.noreply.github.com"
+          git add blog sitemap.xml blog.html
+          git commit -m "Daily fortune: $(date -u +%F)"
+          git pull --rebase origin main
+          git push origin HEAD:main
