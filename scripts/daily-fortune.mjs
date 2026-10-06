@@ -158,7 +158,7 @@ const ENERGY = {   // three-word "overall energy" of each day animal (presentati
 const andJoin = (arr, lang) => arr.length < 2 ? arr.join("") : lang === "km" ? arr.slice(0, -1).join(" ") + " និង " + arr[arr.length - 1] : arr.slice(0, -1).join(", ") + " & " + arr[arr.length - 1];
 const T = {
   en: {
-    eyebrow: "Daily Fortune · MyBirthSign", h1a: "Today's ", h1b: "Chinese Zodiac Fortune",
+    eyebrow: "Daily Fortune · MyBirthSign", h1a: "Today's Chinese", h1b: "Zodiac Fortune",
     sub: "Discover what today brings for all 12 Chinese zodiac animals.",
     dayWord: (n) => `${n} Day`, favors: (l) => `Today's energy favors <strong>${l}</strong>`,
     care: (n) => `<strong>${n}</strong> — Take a little extra care today`,
@@ -168,7 +168,7 @@ const T = {
     sotd: "🌟 Sign of the Day", sotdLead: (n) => `Today is especially supportive for the ${n}.`,
     goodFor: "Good For", watchOut: "Watch Out For", goodForUp: "Good for", watchUp: "Watch out for",
     learn: (n) => `Learn More About ${n} →`, view: (n) => `View ${n} Guide →`,
-    gridH: "All 12 Signs Today", gridP: "Ordered from most to least supported by today's energy.",
+    gridH: "Daily Fortune for All 12 Chinese Zodiac Animals", gridP: "Find your sign and see what today brings.",
     guideH: "Today's Guidance", guideP: "Today's zodiac energy can be viewed through different areas of life. These are simple prompts for reflection, not predictions.",
     guides: [
       ["❤️", "Love", "Notice how today's energy shapes the way you listen and connect with someone close.", "/compatibility", "Check compatibility →"],
@@ -202,7 +202,7 @@ const T = {
     sotd: "🌟 សត្វនិមិត្តសញ្ញាប្រចាំថ្ងៃ", sotdLead: (n) => `ថ្ងៃនេះគាំទ្រ${n}ជាពិសេស។`,
     goodFor: "ល្អសម្រាប់", watchOut: "គួរប្រុងប្រយ័ត្ន", goodForUp: "ល្អសម្រាប់", watchUp: "គួរប្រុងប្រយ័ត្ន",
     learn: (n) => `ស្វែងយល់បន្ថែមអំពី${n} →`, view: (n) => `មើលព័ត៌មាន${n} →`,
-    gridH: "សត្វនិមិត្តសញ្ញាទាំង១២ថ្ងៃនេះ", gridP: "តម្រៀបពីទទួលបានការគាំទ្រច្រើនបំផុតទៅតិចបំផុត។",
+    gridH: "ជោគជតារាសីប្រចាំថ្ងៃសម្រាប់សត្វនិមិត្តសញ្ញាទាំង១២", gridP: "រកសញ្ញារបស់អ្នក ហើយមើលថាថ្ងៃនេះនាំអ្វីមក។",
     guideH: "ការណែនាំថ្ងៃនេះ", guideP: "ថាមពលនិមិត្តសញ្ញាថ្ងៃនេះអាចមើលតាមផ្នែកផ្សេងៗនៃជីវិត។ នេះគ្រាន់តែជាចំណុចសម្រាប់ឆ្លុះបញ្ចាំង មិនមែនជាការទស្សន៍ទាយទេ។",
     guides: [
       ["❤️", "ស្នេហា", "សង្កេតមើលពីរបៀបដែលថាមពលថ្ងៃនេះប៉ះពាល់ដល់ការស្តាប់ និងការតភ្ជាប់ជាមួយមនុស្សជិតស្និទ្ធ។", "/compatibility", "ពិនិត្យភាពជាគូ →"],
@@ -260,32 +260,35 @@ const I = {
 // ---------------------------------------------------------------- page body
 const slugOf = (a) => a.toLowerCase();
 const guideHref = (a) => `../blog/zodiac-year-${slugOf(a)}.html`;
-const badge = (a) => `../images/zodiac-badges/${slugOf(a)}.webp`;
+const med = (a, size, cls = "") => `<img class="fx-med ${cls}" src="../images/fortune/med-${slugOf(a)}.webp" width="${size}" height="${size}" alt="" loading="lazy" decoding="async">`;
+const firstSentence = (s, lang) => { const m = s.trim().match(lang === "km" ? /^[^។]+។?/ : /^[^.]+\.?/); return m ? m[0].trim() : s.trim(); };
+const CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v11.5A1.5 1.5 0 0 1 19 20H5a1.5 1.5 0 0 1-1.5-1.5V7A1.5 1.5 0 0 1 5 5.5ZM3.5 10h17M8 3.5v4M16 3.5v4"/></svg>';
+const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#3fae6b"/><path d="m7.5 12.3 3.2 3.2 5.8-6.4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const WARN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#e0566b"/><path d="M12 7v6M12 16.5v.1" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg>';
 
 function signCard(c, lang, t) {
   const { a, i, tier } = c, isKm = lang === "km", name = isKm ? KM_NAMES[a] : a;
   const weak = (isKm ? KM_INFO[a].weaknesses : INFO[a].weaknesses).trim();
-  return `<li class="fx-sign fx-sign-${tier}" id="sign-${slugOf(a)}-${lang}">
-      <div class="fx-sign-head">
-        <img src="${badge(a)}" width="72" height="72" alt="${esc(isKm ? name : a + " zodiac animal")}" loading="lazy" decoding="async">
-        <div>
-          <h3>${EMOJI[a]} ${esc(name)}</h3>
+  return `<li class="fx-sign fx-sign-${tier}">
+        <div class="fx-sign-head">
+          ${med(a, 76)}
+          <h3>${esc(name)}</h3>
           <span class="fx-tier fx-tier-${tier}">${I[tier]}${esc(TIER_LABEL[lang][tier])}</span>
         </div>
-      </div>
-      <h4>${t.goodFor}</h4>
-      <p>${esc(pick(GOOD_FOR[lang][tier], i))}</p>
-      <h4>${t.watchOut}</h4>
-      <p>${esc(weak)} ${esc(pick(AVOID_NOTE[lang][tier], i + 1))}</p>
-      <a class="fx-more" href="${guideHref(a)}">${esc(t.view(name))}</a>
-    </li>`;
+        <h4>${t.goodFor}</h4>
+        <p>${esc(pick(GOOD_FOR[lang][tier], i))}</p>
+        <h4>${t.watchOut}</h4>
+        <p>${esc(weak)} ${esc(pick(AVOID_NOTE[lang][tier], i + 1))}</p>
+        <a class="fx-more" href="${guideHref(a)}">${esc(t.view(name))}</a>
+      </li>`;
 }
 
 function body(lang) {
   const isKm = lang === "km", t = T[lang], nm = (a) => (isKm ? KM_NAMES[a] : a);
-  const A = dayAnimal, dateTxt = isKm ? dateKM : dateEN, h2dateTxt = dateTxt;
+  const A = dayAnimal, dateTxt = isKm ? dateKM : dateEN;
   const favorsList = andJoin(bestList.map(nm), lang), careList = andJoin(cautionList.map(nm), lang);
   const energy = ENERGY[lang][A].join(" • ");
+  const traitLine = firstSentence(isKm ? KM_INFO[A].traits : INFO[A].traits, lang);
   // Sign of the day (always the day animal = "great"): three good-for lines from the existing bank, starting at the one its card shows.
   const gbank = GOOD_FOR[lang].great, aIdx = ORDER.indexOf(A);
   const goodBullets = [0, 1, 2].map((k) => gbank[((dayNumber + aIdx) % gbank.length + k) % gbank.length]);
@@ -293,84 +296,96 @@ function body(lang) {
   const watchBullets = [weakA, pick(AVOID_NOTE[lang].great, aIdx + 1)];
   const faqItems = faqs(lang, dateTxt);
   const introP = isKm ? introKM : introEN;
-  const langOther = isKm ? "en" : "km";
   const wd = isKm ? KM_DAYS[weekday] : weekday;
+  const byZodiac = ORDER.map((a, i) => ({ a, i, tier: tierOf(a) }));
 
   return `<div class="fx-body">
 <section class="fx-hero" aria-labelledby="fx-h1-${lang}">
   <div class="fx-hero-in">
-    <div class="fx-hero-copy">
-      <p class="fx-eyebrow">${t.eyebrow}</p>
-      <h1 id="fx-h1-${lang}">${t.h1a}<span>${t.h1b}</span></h1>
-      <p class="fx-sub">${t.sub}</p>
-      <p class="fx-date"><time datetime="${iso}">${esc(dateTxt)}</time></p>
-      <p class="fx-weekday">${esc(wd)}</p>
-      <p class="fx-pill"><span aria-hidden="true">${EMOJI[A]}</span> ${esc(t.dayWord(nm(A)))}</p>
-      <ul class="fx-lines">
-        <li>${I.good.replace("<svg", '<svg style="color:#e7c27a"')}<span>${t.favors(esc(favorsList))}</span></li>
-        <li>${I.caution.replace("<svg", '<svg style="color:#f6a7cf"')}<span>${t.care(esc(careList))}</span></li>
-      </ul>
-      <div class="fx-hero-tools">
-        <span class="fx-langs" role="group" aria-label="${t.langAria}">
-          <a href="#" data-lang-switch="en"${isKm ? "" : ' aria-current="true"'}>EN</a>
-          <a href="#" data-lang-switch="km"${isKm ? ' aria-current="true"' : ""}>ខ្មែរ</a>
-        </span>
-        <div class="share-row" data-share></div>
-      </div>
+    <p class="fx-eyebrow">${t.eyebrow}</p>
+    <h1 id="fx-h1-${lang}">${t.h1a ? `<small>${t.h1a.trim()}</small>` : ""}<span>${t.h1b}</span></h1>
+    <p class="fx-sub">${t.sub}</p>
+    <p class="fx-date">${CAL}<time datetime="${iso}">${esc(dateTxt)}</time><span class="fx-wd">${esc(wd)}</span></p>
+    <p class="fx-pill"><span aria-hidden="true">${EMOJI[A]}</span> ${esc(t.dayWord(nm(A)))}</p>
+    <div class="fx-chips">
+      <p class="fx-chip">${I.great.replace("<svg", '<svg style="color:#f6dc9b"')}<span>${t.favors(esc(favorsList))}</span></p>
+      <p class="fx-chip fx-chip-care">${I.caution.replace("<svg", '<svg style="color:#ff8aa5"')}<span>${t.care(esc(careList))}</span></p>
+    </div>
+    <div class="fx-hero-tools">
+      <span class="fx-langs" role="group" aria-label="${t.langAria}">
+        <a href="#" data-lang-switch="en"${isKm ? "" : ' aria-current="true"'}>EN</a>
+        <a href="#" data-lang-switch="km"${isKm ? ' aria-current="true"' : ""}>ខ្មែរ</a>
+      </span>
+      <div class="share-row" data-share></div>
     </div>
   </div>
 </section>
 
 <div class="fx-wrap">
-  <section class="fx-sec" aria-labelledby="fx-en-${lang}" style="margin-top:36px">
-    <div class="fx-card fx-energy">
-      <div class="fx-energy-top">
-        <h2 id="fx-en-${lang}">${t.energyTitle}</h2>
-        <p class="fx-energy-day">${EMOJI[A]} ${esc(t.dayWord(nm(A)))}</p>
+  <section class="fx-sec fx-sec-first" aria-labelledby="fx-en-${lang}">
+    <div class="fx-gframe fx-energy">
+      <div class="fx-energy-main">
+        ${med(A, 150, "fx-med-xl")}
+        <div>
+          <h2 id="fx-en-${lang}">${t.energyTitle}</h2>
+          <p class="fx-energy-day">${EMOJI[A]} ${esc(t.dayWord(nm(A)))}</p>
+          <p class="fx-energy-desc">${esc(traitLine)}</p>
+        </div>
       </div>
       <div class="fx-trio">
-        <div class="fx-stat"><h3>${I.good}${t.best}</h3><p>${esc(bestList.map(nm).join(" • "))}</p></div>
-        <div class="fx-stat fx-stat-care"><h3>${I.caution}${t.extra}</h3><p>${esc(cautionList.map(nm).join(" • "))}</p></div>
-        <div class="fx-stat"><h3>${I.moon}${t.overall}</h3><p>${esc(energy)}</p></div>
+        <div class="fx-stat"><h3>${I.great}${t.best}</h3>
+          <ul class="fx-meds">${bestList.map((a) => `<li>${med(a, 52)}<span>${esc(nm(a))}</span></li>`).join("")}</ul></div>
+        <div class="fx-stat fx-stat-care"><h3>${I.caution}${t.extra}</h3>
+          <ul class="fx-meds">${cautionList.map((a) => `<li>${med(a, 52)}<span>${esc(nm(a))}</span></li>`).join("")}</ul></div>
+        <div class="fx-stat"><h3>${I.moon}${t.overall}</h3>
+          <p class="fx-energy-words">${esc(energy)}</p></div>
       </div>
       <p class="fx-fine">${t.fine}</p>
     </div>
   </section>
 
-  <section class="fx-sec" aria-labelledby="fx-sotd-${lang}">
-    <div class="fx-card fx-feature">
-      <div class="fx-feature-art"><img src="../images/zodiac/${slugOf(A)}.webp" width="360" height="542" alt="${esc(isKm ? nm(A) : A + " zodiac animal")}" loading="lazy" decoding="async"></div>
-      <div class="fx-feature-body">
-        <p class="fx-kicker">${t.sotd}</p>
-        <h2 id="fx-sotd-${lang}">${EMOJI[A]} ${esc(nm(A))} <span class="fx-tier fx-tier-great">${I.great}${esc(TIER_LABEL[lang].great)}</span></h2>
-        <p class="fx-feature-lead">${esc(t.sotdLead(nm(A)))}</p>
-        <div class="fx-two">
-          <div><h3>${t.goodFor}</h3><ul>${goodBullets.map((s) => `<li>${esc(s)}</li>`).join("")}</ul></div>
-          <div><h3>${t.watchOut}</h3><ul>${watchBullets.map((s) => `<li>${esc(s)}</li>`).join("")}</ul></div>
+  <div class="fx-duo">
+    <section aria-labelledby="fx-sotd-${lang}">
+      <div class="fx-gframe fx-feature">
+        <div class="fx-feature-art"><img src="../images/zodiac/${slugOf(A)}.webp" width="360" height="542" alt="${esc(isKm ? nm(A) : A + " zodiac animal")}" loading="lazy" decoding="async"></div>
+        <div class="fx-feature-body">
+          <p class="fx-kicker">${t.sotd}</p>
+          <h2 id="fx-sotd-${lang}">${esc(nm(A))}</h2>
+          <p><span class="fx-tier fx-tier-great">${I.great}${esc(TIER_LABEL[lang].great)}</span></p>
+          <p class="fx-feature-lead">${esc(t.sotdLead(nm(A)))}</p>
+          <div class="fx-two">
+            <div><h3>${t.goodFor}</h3><ul class="fx-ticks">${goodBullets.map((s) => `<li>${CHECK}<span>${esc(s)}</span></li>`).join("")}</ul></div>
+            <div><h3>${t.watchOut}</h3><ul class="fx-ticks">${watchBullets.map((s) => `<li>${WARN}<span>${esc(s)}</span></li>`).join("")}</ul></div>
+          </div>
+          <a class="fx-btn" href="${guideHref(A)}">${esc(t.learn(nm(A)))}</a>
         </div>
-        <a class="fx-btn" href="${guideHref(A)}">${esc(t.learn(nm(A)))}</a>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section aria-labelledby="fx-guide-${lang}">
+      <div class="fx-gframe fx-guidepanel">
+        <h2 id="fx-guide-${lang}">${t.guideH}</h2>
+        <p class="fx-guide-intro">${t.guideP}</p>
+        <div class="fx-guides">
+${t.guides.map((g) => `          <div class="fx-guide"><div class="fx-guide-ico" aria-hidden="true">${g[0]}</div><div><h3>${g[1]}</h3><p>${esc(g[2])}</p><a href="${g[3]}">${esc(g[4])}</a></div></div>`).join("\n")}
+        </div>
+      </div>
+    </section>
+  </div>
 
   <section class="fx-sec" aria-labelledby="fx-grid-${lang}">
     <div class="fx-head"><h2 id="fx-grid-${lang}">${t.gridH}</h2>${I.orn}<p>${t.gridP}</p></div>
     <ul class="fx-grid">
-${sorted.map((c) => "    " + signCard(c, lang, t)).join("\n")}
+${byZodiac.map((c) => "      " + signCard(c, lang, t)).join("\n")}
     </ul>
   </section>
 
   <div class="ad-slot">${isKm ? "ទំនេរសម្រាប់ផ្សាយពាណិជ្ជកម្ម" : "Ad space"}</div>
 
-  <section class="fx-sec" aria-labelledby="fx-guide-${lang}">
-    <div class="fx-head"><h2 id="fx-guide-${lang}">${t.guideH}</h2>${I.orn}<p>${t.guideP}</p></div>
-    <div class="fx-guides">
-${t.guides.map((g) => `      <div class="fx-card fx-guide"><div class="fx-guide-ico" aria-hidden="true">${g[0]}</div><h3>${g[1]}</h3><p>${esc(g[2])}</p><a href="${g[3]}">${esc(g[4])}</a></div>`).join("\n")}
-    </div>
-  </section>
-
   <section class="fx-sec" aria-labelledby="fx-cta-${lang}">
     <div class="fx-cta">
+      <img class="fx-lotus fx-lotus-l" src="../images/wedding/lotus-pink.webp" width="190" height="96" alt="" loading="lazy">
+      <img class="fx-lotus fx-lotus-r" src="../images/wedding/lotus-gold.webp" width="190" height="96" alt="" loading="lazy">
       <h2 id="fx-cta-${lang}">${t.ctaH}</h2>
       <p>${t.ctaP}</p>
       <a class="fx-btn" href="/checker">${t.ctaB}</a>
@@ -379,31 +394,38 @@ ${t.guides.map((g) => `      <div class="fx-card fx-guide"><div class="fx-guide-
 
   <section class="fx-sec" aria-labelledby="fx-all-${lang}">
     <div class="fx-head"><h2 id="fx-all-${lang}">${t.allH}</h2>${I.orn}<p>${t.allP}</p></div>
-    <ul class="fx-animals">
-${ORDER.map((a) => `      <li><a href="${guideHref(a)}"${a === A ? ' class="is-today"' : ""}><span aria-hidden="true">${EMOJI[a]}</span>${esc(nm(a))}</a></li>`).join("\n")}
-    </ul>
+    <div class="fx-gframe fx-animalsbox">
+      <ul class="fx-animals">
+${ORDER.map((a) => `        <li><a href="${guideHref(a)}"${a === A ? ' class="is-today"' : ""}>${med(a, 64)}<span>${esc(nm(a))}</span></a></li>`).join("\n")}
+      </ul>
+    </div>
   </section>
 
-  <article class="fx-card fx-article">
-    <h2>${esc(t.artH(h2dateTxt))}</h2>
+  <article class="fx-article fx-gframe">
+    <h2>${esc(t.artH(dateTxt))}</h2>
     ${introP}
     <p>${t.artP2}</p>
     <p class="fx-disc">${t.disc}</p>
   </article>
 
-  <section class="fx-sec" aria-labelledby="fx-faq-${lang}">
-    <div class="fx-head"><h2 id="fx-faq-${lang}">${t.faqH}</h2>${I.orn}</div>
-    <div class="fx-faq">
-${faqItems.map(([q, a]) => `      <details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("\n")}
-    </div>
-  </section>
-
-  <section class="fx-sec" aria-labelledby="fx-tools-${lang}">
-    <div class="fx-head"><h2 id="fx-tools-${lang}">${t.toolsH}</h2>${I.orn}<p>${t.toolsP}</p></div>
-    <ul class="fx-tools">
-${t.tools.map((x) => `      <li><a href="${x[3]}"><span class="fx-t-ico" aria-hidden="true">${x[0]}</span><strong>${esc(x[1])}</strong><small>${esc(x[2])}</small></a></li>`).join("\n")}
-    </ul>
-  </section>
+  <div class="fx-duo fx-duo-bottom">
+    <section aria-labelledby="fx-faq-${lang}">
+      <div class="fx-gframe fx-faqpanel">
+        <h2 id="fx-faq-${lang}">${t.faqH}</h2>
+        <div class="fx-faq">
+${faqItems.map(([q, a]) => `          <details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("\n")}
+        </div>
+      </div>
+    </section>
+    <section aria-labelledby="fx-tools-${lang}">
+      <div class="fx-gframe fx-toolspanel">
+        <h2 id="fx-tools-${lang}">${t.toolsH}</h2>
+        <ul class="fx-tools">
+${t.tools.map((x) => `          <li><a href="${x[3]}"><span class="fx-t-ico" aria-hidden="true">${x[0]}</span><strong>${esc(x[1])}</strong><small>${esc(x[2])}</small></a></li>`).join("\n")}
+        </ul>
+      </div>
+    </section>
+  </div>
 </div>
 </div>`;
 }
