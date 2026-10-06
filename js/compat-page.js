@@ -180,10 +180,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return '<li class="cmp-el' + (on ? " is-on" : "") + '"><img src="images/business/el-' + e.toLowerCase() + '.webp" alt="" width="56" height="56" loading="lazy"><b>' + esc(eName(e)) + "</b><span>" + esc(T.five[e]) + "</span></li>";
     }).join("");
 
-    const shareText = (isKm ? names.A + " + " + names.B : A.animal + " + " + B.animal) + " — " + overall + "%";
-    const shareHtml = typeof shareRowHtml === "function"
-      ? shareRowHtml(shareText, { cardType: "compat", emoji: ZODIAC_EMOJI[A.animal] + " 💞 " + ZODIAC_EMOJI[B.animal], heading: isKm ? names.A + " + " + names.B : A.animal + " + " + B.animal, subheading: lvl + " — " + overall + "%", badge: overall + "%" })
-      : "";
 
     out.innerHTML =
       '<section class="cmp-result" aria-labelledby="cmp-res-h">' +
@@ -194,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="cmp-pct" id="cmp-pct" aria-label="' + overall + '%">0%</div></div>' +
       '<p class="cmp-level">' + esc(lvl) + "</p></div>" + personCard(T.p2, B) + "</div>" +
       '<p class="cmp-desc-lg">' + esc(desc) + "</p>" +
-      '<p class="cmp-note">' + esc(T.score_note) + "</p>" + shareHtml + "</section>" +
+      '<p class="cmp-note">' + esc(T.score_note) + "</p>" + "</section>" +
 
       '<section class="cmp-scores" aria-label="' + esc(T.result_h) + '">' + cards + "</section>" +
 
