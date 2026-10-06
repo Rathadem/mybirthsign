@@ -2972,6 +2972,52 @@ body.chk-page footer.chk-footer {
 footer.site-footer p, .chk-footer p { color: #b9afd6; text-shadow: none; }
 @media (max-width: 600px) { footer.site-footer, body.chk-page footer.chk-footer { padding-top: 64px; } }
 
+/* Business Partner: link section without background image */
+.biz-page .biz-after { background: none; }
+
+/* Business Partner: ornate gold frame around the two link buttons */
+.biz-page .biz-more {
+  border: 0;
+  border-style: solid;
+  border-color: transparent;
+  border-width: 64px 70px;
+  border-image: url("../images/business/gold-frame.webp") 240 / 64px 70px stretch;
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  padding: 0 4px;
+  max-width: 1000px;
+}
+@media (max-width: 640px) {
+  .biz-page .biz-more { border-width: 44px 40px; border-image-width: 44px 40px; margin-left: 8px; margin-right: 8px; padding: 0; }
+}
+/* Khmer: guidelines heading was clipped (tight line-height + gradient text clip) */
+html[lang="km"] .bg-head h2 {
+  font-family: "Moul", "Noto Sans Khmer", serif; font-weight: 400;
+  font-size: clamp(1.35rem, 4vw, 2.3rem);
+  line-height: 1.8; padding: 0.15em 0.1em; margin-bottom: 4px;
+  overflow: visible; overflow-wrap: anywhere;
+}
+html[lang="km"] .bg-sub { line-height: 1.8; }
+html[lang="km"] .bg-intro { line-height: 1.9; }
+/* Compatibility: optional gender select + gender notes in the result */
+.cmp-page .cmp-gender {
+  display: block; width: 100%; box-sizing: border-box; margin-top: 8px; height: 42px; padding: 0 38px 0 14px;
+  border-radius: 12px; border: 1px solid rgba(231, 194, 122, 0.35);
+  background: rgba(255, 255, 255, 0.07) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' fill='none' stroke='%23e7c27a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 14px center;
+  color: #ece6ff; font: inherit; font-size: 0.95rem; appearance: none; -webkit-appearance: none; cursor: pointer;
+}
+.cmp-page .cmp-gender:focus-visible { outline: 2px solid #e7c27a; outline-offset: 2px; }
+.cmp-page .cmp-gender option { color: #1d1a33; background: #fff; }
+.cmp-gender-panel .cmp-gcards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0 12px; }
+.cmp-gcard { padding: 16px; border-radius: 14px; border: 1px solid rgba(231, 194, 122, 0.4); background: rgba(255, 255, 255, 0.04); }
+.cmp-gcard h3 { margin: 0 0 8px; font-size: 1.05rem; color: #ffe3a3; }
+.cmp-gcard p { margin: 0 0 8px; font-size: 0.95rem; }
+.cmp-gcard p:last-child { margin-bottom: 0; }
+.cmp-gcard b { color: #ffd98a; font-weight: 600; }
+.cmp-gtry { padding: 12px 14px; border-radius: 12px; background: rgba(231, 194, 122, 0.1); border-left: 3px solid #e7c27a; margin-bottom: 0 !important; }
+html[lang="km"] .cmp-gcard p, html[lang="km"] .cmp-gtry { line-height: 1.9; }
+@media (max-width: 640px) { .cmp-gender-panel .cmp-gcards { grid-template-columns: 1fr; } }
 /* ==========================================================================
    Wedding Date page (body.wed-page) — Khmer night, lotus + gold
    ========================================================================== */
@@ -3116,49 +3162,4 @@ html[lang="km"] .wed-pct, html[lang="km"] .wed-m-name, html[lang="km"] .wed-m-ra
 @media (max-width: 480px) {
   .wed-cal { grid-template-columns: repeat(2, 1fr); }
   .wed-why, .wed-plan, .wed-tools { grid-template-columns: 1fr; }
-/* Business Partner: link section without background image */
-.biz-page .biz-after { background: none; }
-
-/* Business Partner: ornate gold frame around the two link buttons */
-.biz-page .biz-more {
-  border: 0;
-  border-style: solid;
-  border-color: transparent;
-  border-width: 64px 70px;
-  border-image: url("../images/business/gold-frame.webp") 240 / 64px 70px stretch;
-  border-radius: 0;
-  box-shadow: none;
-  background: none;
-  padding: 0 4px;
-  max-width: 1000px;
 }
-@media (max-width: 640px) {
-  .biz-page .biz-more { border-width: 44px 40px; border-image-width: 44px 40px; margin-left: 8px; margin-right: 8px; padding: 0; }
-}
-/* Khmer: guidelines heading was clipped (tight line-height + gradient text clip) */
-html[lang="km"] .bg-head h2 {
-  font-family: "Moul", "Noto Sans Khmer", serif; font-weight: 400;
-  font-size: clamp(1.35rem, 4vw, 2.3rem);
-  line-height: 1.8; padding: 0.15em 0.1em; margin-bottom: 4px;
-  overflow: visible; overflow-wrap: anywhere;
-}
-html[lang="km"] .bg-sub { line-height: 1.8; }
-html[lang="km"] .bg-intro { line-height: 1.9; }
-/* Compatibility: optional gender select + gender notes in the result */
-.cmp-page .cmp-gender {
-  display: block; width: 100%; box-sizing: border-box; margin-top: 8px; height: 42px; padding: 0 38px 0 14px;
-  border-radius: 12px; border: 1px solid rgba(231, 194, 122, 0.35);
-  background: rgba(255, 255, 255, 0.07) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' fill='none' stroke='%23e7c27a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 14px center;
-  color: #ece6ff; font: inherit; font-size: 0.95rem; appearance: none; -webkit-appearance: none; cursor: pointer;
-}
-.cmp-page .cmp-gender:focus-visible { outline: 2px solid #e7c27a; outline-offset: 2px; }
-.cmp-page .cmp-gender option { color: #1d1a33; background: #fff; }
-.cmp-gender-panel .cmp-gcards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0 12px; }
-.cmp-gcard { padding: 16px; border-radius: 14px; border: 1px solid rgba(231, 194, 122, 0.4); background: rgba(255, 255, 255, 0.04); }
-.cmp-gcard h3 { margin: 0 0 8px; font-size: 1.05rem; color: #ffe3a3; }
-.cmp-gcard p { margin: 0 0 8px; font-size: 0.95rem; }
-.cmp-gcard p:last-child { margin-bottom: 0; }
-.cmp-gcard b { color: #ffd98a; font-weight: 600; }
-.cmp-gtry { padding: 12px 14px; border-radius: 12px; background: rgba(231, 194, 122, 0.1); border-left: 3px solid #e7c27a; margin-bottom: 0 !important; }
-html[lang="km"] .cmp-gcard p, html[lang="km"] .cmp-gtry { line-height: 1.9; }
-@media (max-width: 640px) { .cmp-gender-panel .cmp-gcards { grid-template-columns: 1fr; } }
