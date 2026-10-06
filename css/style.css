@@ -2956,3 +2956,18 @@ html[lang="km"] .biz-h1 { font-size: clamp(0.78rem, 3.5vw, 2.2rem); }
 .biz-page .biz-after .ad-slot { background: rgba(11, 8, 31, 0.55); }
 
 .biz-page .biz-after + .site-footer { margin-top: 0; }
+
+/* Footer: dark, blends with the site background (skyline only a faint silhouette) */
+footer.site-footer,
+body.chk-page footer.chk-footer {
+  margin-top: 40px;
+  padding: 84px 0 32px;
+  background:
+    linear-gradient(180deg, #0f0b1f 0%, rgba(15, 11, 31, 0.8) 40%, rgba(13, 9, 29, 0.93) 100%),
+    url("../images/footer-skyline.webp") center 55% / cover no-repeat,
+    #0f0b1f;
+  text-shadow: none;
+  border-top: 1px solid rgba(231, 194, 122, 0.18);
+}
+footer.site-footer p, .chk-footer p { color: #b9afd6; text-shadow: none; }
+@media (max-width: 600px) { footer.site-footer, body.chk-page footer.chk-footer { padding-top: 64px; } }
