@@ -465,7 +465,7 @@ const UI_STRINGS = {
     hero_subtitle: "Enter your date of birth to reveal your zodiac animal, element, lucky numbers, and more.",
 
     checker_hero_title: "What Is My Zodiac Sign?",
-    checker_hero_subtitle: "Enter your date of birth to discover your Chinese zodiac animal, element, personality, and more.",
+    checker_hero_subtitle: "Enter your date of birth to discover your zodiac animal, element, personality, and more.",
     chk_form_hint: "Your birth date determines your Chinese zodiac sign, element, and traditional zodiac characteristics.",
     chk_sample_note: "Example result shown below — enter your date of birth above to see your own sign.",
     chk_your_sign: "Your Chinese Zodiac Sign",
