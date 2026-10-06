@@ -4,7 +4,7 @@
 // NOTE: the Khmer text should be reviewed by a native speaker.
 const CMP_TEXT = {
 en: {
-  title: "Chinese Zodiac Compatibility Calculator",
+  title: "Zodiac Compatibility Calculator",
   sub: "Compare two birth dates to discover your Chinese zodiac compatibility in love, friendship, business, and more.",
   desc: "Enter two dates of birth to explore traditional Chinese zodiac compatibility, including personality dynamics, communication, trust, and overall harmony.",
   p1: "Person 1", p2: "Person 2", dob: "Date of Birth",
