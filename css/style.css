@@ -2983,3 +2983,9 @@ body.biz-page footer.site-footer {
 body.biz-page .biz-guide { background: none; }
 body.biz-page .biz-after .ad-slot { background: rgba(255,255,255,.03); }
 body.biz-page footer.site-footer { padding-top: 40px; margin-top: 0; border-top: 1px solid rgba(231,194,122,.18); }
+
+/* Business Partner: one night-sky image behind the whole page */
+body.biz-page {
+  background: #0b0a2a url("../images/business/page-bg.webp") center top / 100% 100% no-repeat;
+}
+@media (max-width: 700px) { body.biz-page { background-size: cover; } }
