@@ -2863,4 +2863,11 @@ html[lang="km"] .cmp-page .cmp-person-a { font-size: clamp(1.25rem, 3vw, 1.6rem)
   .cmp-stage { gap: 10px; }
   .cmp-medal img { width: 96px; }
   .cmp-heartwrap { width: 150px; }
+/* Compatibility hero: Angkor lotus-lake night background */
+.cmp-hero {
+  background: linear-gradient(180deg, rgba(11,8,31,.45) 0%, rgba(11,8,31,.25) 45%, #0b081f 100%),
+    url("../images/compat/hero-bg.webp") center top / cover no-repeat;
+}
+.cmp-result {
+  background: linear-gradient(180deg, rgba(11,8,31,.62), rgba(11,8,31,.88)), url("../images/compat/hero-bg.webp") center 30% / cover no-repeat;
 }
