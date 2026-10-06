@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function hashSeed(str) { let h = 0; for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0; return h; }
   const jitter = (seed, key) => (hashSeed(seed + "|" + key) % 11) - 5;
-  const BASE = { high: 86, medium: 64, low: 42 };
+  const BASE = { high: 86, medium: 68, low: 52 };
   const clamp = (n) => Math.max(15, Math.min(97, Math.round(n)));
   const ANIMAL_TIER = { same: "high", triangle: "high", neutral: "medium", clash: "low" };
   const WEIGHTS = {
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const reset = document.getElementById("cmp-reset");
     if (reset) reset.addEventListener("click", function () {
-      form.reset(); out.innerHTML = "";
+      form.reset(); setDates("", ""); out.innerHTML = "";
       try { const u = new URL(window.location.href); u.searchParams.delete("person1"); u.searchParams.delete("person2"); window.history.replaceState(null, "", u.pathname + u.search); } catch (e) { }
       form.scrollIntoView({ behavior: "smooth", block: "center" });
     });
@@ -241,13 +241,28 @@ document.addEventListener("DOMContentLoaded", function () {
     render(a, b);
   });
 
+  function setDates(a, b) {
+    [["cmp-dob1", a], ["cmp-dob2", b]].forEach(function (x) {
+      const el = document.getElementById(x[0]);
+      el.value = x[1];
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+      // keep the custom date picker's visible text in sync with the value
+      const kdp = el.closest(".kdp") || (el.parentNode && el.parentNode.querySelector(".kdp"));
+      const txt = kdp && kdp.querySelector(".kdp-display-text");
+      if (txt) {
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(x[1]);
+        txt.textContent = m ? m[3] + "/" + m[2] + "/" + m[1] : "";
+        kdp.classList.toggle("kdp-empty", !m);
+      }
+    });
+  }
+
   (function autoLoad() {
     try {
       const p = new URLSearchParams(window.location.search);
       const a = p.get("person1"), b = p.get("person2");
       if (a && b && parse(a) && parse(b)) {
-        document.getElementById("cmp-dob1").value = a;
-        document.getElementById("cmp-dob2").value = b;
+        setDates(a, b);
         render(a, b);
       }
     } catch (e) { /* best effort */ }
