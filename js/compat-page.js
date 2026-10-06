@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const lang = typeof getLang === "function" ? getLang() : "en";
   const isKm = lang === "km";
   const T = (typeof CMP_TEXT !== "undefined" && (CMP_TEXT[lang] || CMP_TEXT.en)) || {};
+  const G = (typeof CMP_GENDER !== "undefined" && (CMP_GENDER[lang] || CMP_GENDER.en)) || null;
   const ANIMALS = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
   const ELEMS = ["Wood", "Fire", "Earth", "Metal", "Water"];
   const aName = (a) => (isKm && typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[a] : a);
@@ -33,6 +34,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const lab1 = document.getElementById("cmp-l1"), lab2 = document.getElementById("cmp-l2");
   if (lab1) lab1.textContent = T.p1 + " — " + T.dob;
   if (lab2) lab2.textContent = T.p2 + " — " + T.dob;
+
+  if (G) ["cmp-g1", "cmp-g2"].forEach(function (id) {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.setAttribute("aria-label", G.label);
+    Array.prototype.forEach.call(sel.options, function (o) { o.textContent = G.opts[o.value]; });
+  });
 
   const ul = document.getElementById("cmp-animals");
   if (ul) ul.innerHTML = ANIMALS.map(function (a) { return zodiacAnimal(a); }).join("");
@@ -106,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const HEART_PATH = "M100 168 C 30 112 6 78 6 48 C 6 22 26 6 50 6 C 72 6 90 18 100 36 C 110 18 128 6 150 6 C 174 6 194 22 194 48 C 194 78 170 112 100 168 Z";
 
-  function personCard(label, bz) {
+  function personCard(label, bz, g) {
     const yy = bz.yinYang === "Yang" ? T.yang : T.yin;
     return '<div class="cmp-person">' +
       '<p class="cmp-person-l">' + esc(label) + "</p>" +
@@ -115,14 +123,16 @@ document.addEventListener("DOMContentLoaded", function () {
       '<ul class="cmp-person-meta">' +
       "<li><span>" + T.year + "</span><b>" + bz.zodiacYear + "</b></li>" +
       "<li><span>" + T.element + "</span><b>" + esc(eName(bz.element)) + "</b></li>" +
-      "<li><span>" + T.yy + "</span><b>" + esc(yy) + "</b></li></ul></div>";
+      "<li><span>" + T.yy + "</span><b>" + esc(yy) + "</b></li>" +
+      (G && g ? "<li><span>" + esc(G.meta) + "</span><b>" + esc(G.who[g]) + "</b></li>" : "") + "</ul></div>";
   }
 
   function focusList(arr) {
     return '<ul class="cmp-focus">' + arr.map(function (f) { return "<li><strong>" + esc(f[0]) + "</strong><span>" + esc(f[1]) + "</span></li>"; }).join("") + "</ul>";
   }
 
-  function render(raw1, raw2) {
+  function render(raw1, raw2, g1, g2) {
+    g1 = g1 === "f" || g1 === "m" ? g1 : ""; g2 = g2 === "f" || g2 === "m" ? g2 : "";
     const d1 = parse(raw1), d2 = parse(raw2);
     if (!d1 || !d2) { showErr(T.err_invalid); return; }
     const end = new Date(); end.setHours(23, 59, 59, 999);
@@ -181,16 +191,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }).join("");
 
 
+    function genderSection() {
+      if (!G || (!g1 && !g2)) return "";
+      const combo = g1 && g2 ? (g1 === g2 ? g1 + g1 : "fm") : "";
+      const card = function (g, who, me, other, pl) {
+        const title = g ? fill(G.cardTitle, { W: G.who[g], AN: aName(me) }) : fill(G.cardTitleN, { P: pl, AN: aName(me) });
+        return '<div class="cmp-gcard"><h3>' + esc(title) + "</h3>" +
+          "<p><b>" + esc(G.showH) + ":</b> " + esc(G.show[me]) + "</p>" +
+          "<p><b>" + esc(G.needH) + ":</b> " + esc(G.need[other]) + "</p></div>";
+      };
+      return '<section class="cmp-panel cmp-gender-panel"><h2 class="cmp-h3">' + esc(G.h) + "</h2>" +
+        (combo ? "<p>" + esc(fill(G.combo[combo], names)) + "</p>" : "") +
+        '<div class="cmp-gcards">' + card(g1, "A", A.animal, B.animal, T.p1) + card(g2, "B", B.animal, A.animal, T.p2) + "</div>" +
+        '<p class="cmp-gtry">' + esc(G.tryIt[relType]) + "</p></section>";
+    }
+
     out.innerHTML =
       '<section class="cmp-result" aria-labelledby="cmp-res-h">' +
       '<h2 id="cmp-res-h" class="cmp-h2">' + esc(T.result_h) + "</h2>" +
-      '<div class="cmp-stage">' + personCard(T.p1, A) +
+      '<div class="cmp-stage">' + personCard(T.p1, A, g1) +
       '<div class="cmp-core"><div class="cmp-heartwrap">' +
       '<svg viewBox="0 0 200 176" aria-hidden="true"><defs><linearGradient id="cmpg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5fa5"/><stop offset="1" stop-color="#8a5cff"/></linearGradient></defs><path d="' + HEART_PATH + '" fill="rgba(20,12,52,.88)" stroke="url(#cmpg)" stroke-width="5"/><path d="' + HEART_PATH + '" fill="none" stroke="#e7c27a" stroke-width="1.5" transform="translate(100 88) scale(.93) translate(-100 -88)"/></svg>' +
       '<div class="cmp-pct" id="cmp-pct" aria-label="' + overall + '%">0%</div></div>' +
-      '<p class="cmp-level">' + esc(lvl) + "</p></div>" + personCard(T.p2, B) + "</div>" +
+      '<p class="cmp-level">' + esc(lvl) + "</p></div>" + personCard(T.p2, B, g2) + "</div>" +
       '<p class="cmp-desc-lg">' + esc(desc) + "</p>" +
       "</section>" +
+
+      genderSection() +
 
       '<section class="cmp-scores" aria-label="' + esc(T.result_h) + '">' + cards + "</section>" +
 
@@ -218,13 +245,15 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const url = new URL(window.location.href);
       url.searchParams.set("person1", raw1); url.searchParams.set("person2", raw2);
+      if (g1) url.searchParams.set("g1", g1); else url.searchParams.delete("g1");
+      if (g2) url.searchParams.set("g2", g2); else url.searchParams.delete("g2");
       window.history.replaceState(null, "", url.pathname + url.search);
     } catch (e) { /* best effort */ }
 
     const reset = document.getElementById("cmp-reset");
     if (reset) reset.addEventListener("click", function () {
       form.reset(); setDates("", ""); out.innerHTML = "";
-      try { const u = new URL(window.location.href); u.searchParams.delete("person1"); u.searchParams.delete("person2"); window.history.replaceState(null, "", u.pathname + u.search); } catch (e) { }
+      try { const u = new URL(window.location.href); u.searchParams.delete("person1"); u.searchParams.delete("person2"); u.searchParams.delete("g1"); u.searchParams.delete("g2"); window.history.replaceState(null, "", u.pathname + u.search); } catch (e) { }
       form.scrollIntoView({ behavior: "smooth", block: "center" });
     });
     out.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -234,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     const a = document.getElementById("cmp-dob1").value, b = document.getElementById("cmp-dob2").value;
     if (!a || !b) { showErr(T.err_required); return; }
-    render(a, b);
+    render(a, b, (document.getElementById("cmp-g1") || {}).value, (document.getElementById("cmp-g2") || {}).value);
   });
 
   function setDates(a, b) {
@@ -259,7 +288,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const a = p.get("person1"), b = p.get("person2");
       if (a && b && parse(a) && parse(b)) {
         setDates(a, b);
-        render(a, b);
+        const ga = p.get("g1") || "", gb = p.get("g2") || "";
+        const s1 = document.getElementById("cmp-g1"), s2 = document.getElementById("cmp-g2");
+        if (s1) s1.value = ga === "f" || ga === "m" ? ga : "";
+        if (s2) s2.value = gb === "f" || gb === "m" ? gb : "";
+        render(a, b, s1 && s1.value, s2 && s2.value);
       }
     } catch (e) { /* best effort */ }
   })();
