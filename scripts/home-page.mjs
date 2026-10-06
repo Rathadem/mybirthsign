@@ -92,7 +92,7 @@ const UI = {
     toolsH: "Explore MyBirthSign Tools",
     tools: [
       ["images/checker/art-love.webp", "Chinese Zodiac Compatibility", "See how two birth dates traditionally match in love, friendship, and business.", "Check Compatibility →", "/compatibility"],
-      ["images/compat/hero-bg.webp", "Wedding Date Picker", "Explore traditionally favorable wedding months based on both zodiac signs.", "Find a Good Date →", "/wedding-date"],
+      ["images/compat/hero-bg-card.webp", "Wedding Date Picker", "Explore traditionally favorable wedding months based on both zodiac signs.", "Find a Good Date →", "/wedding-date"],
       ["images/checker/art-career.webp", "Business Partner Match", "Compare two birth dates for traditional Chinese zodiac business compatibility.", "Check Business Match →", "/business-partner"],
       ["images/checker/art-pers.webp", "Zodiac Guide", "Learn about the 12 animals, elements, lucky signs and more.", "Explore Guide →", "/zodiac-guide"],
     ],
@@ -168,7 +168,6 @@ function body(lang) {
       <div class="pf-cta-row"><a class="fx-btn" href="/checker">${esc(u.btnFind)}</a><a class="fx-btn fx-btn-rose" href="/compatibility">${esc(u.btnCompat)}</a></div>
       <ul class="hm-benefits">${u.benefits.map(([i, t]) => `<li><span class="hm-bi">${ICON[i]}</span><span>${esc(t)}</span></li>`).join("")}</ul>
     </div>
-    <div class="an-hero-art"><img class="an-wheel" src="images/profile/zodiac-wheel-480.webp" srcset="images/profile/zodiac-wheel-480.webp 480w, images/profile/zodiac-wheel.webp 900w" sizes="(max-width: 820px) 80vw, 480px" width="900" height="900" alt="${km ? "កង់រាសីទាំង ១២ ជុំវិញយិន-យ៉ាង" : "Chinese zodiac wheel with all 12 animals around a gold yin-yang"}" fetchpriority="high"></div>
   </div>
 </section>
 </div>`;
@@ -393,7 +392,6 @@ const pageHtml = `<!DOCTYPE html>
 <meta name="twitter:description" content="${esc(DESC)}">
 <meta name="twitter:image" content="${OG}">
 <meta name="theme-color" content="#0b0820">
-<link rel="preload" as="image" href="images/profile/zodiac-wheel-480.webp" imagesrcset="images/profile/zodiac-wheel-480.webp 480w, images/profile/zodiac-wheel.webp 900w" imagesizes="(max-width: 820px) 80vw, 480px">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Kantumruy+Pro:wght@400;600;700&family=Moul&display=swap">
 <link rel="stylesheet" href="css/style.css">
