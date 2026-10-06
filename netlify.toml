@@ -4,3 +4,22 @@
 
 [functions]
   node_bundler = "esbuild"
+
+# Canonical host: send www (and plain http) to https://mybirthsign.com with a permanent redirect.
+[[redirects]]
+  from = "https://www.mybirthsign.com/*"
+  to = "https://mybirthsign.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.mybirthsign.com/*"
+  to = "https://mybirthsign.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://mybirthsign.com/*"
+  to = "https://mybirthsign.com/:splat"
+  status = 301
+  force = true
