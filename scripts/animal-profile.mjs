@@ -174,6 +174,8 @@ const COPY = {
     },
   },
 };
+import { EXTRA } from "./profile-copy.mjs";
+Object.assign(COPY, EXTRA);
 if (!COPY[A]) { console.error(`No page copy for ${A} yet (add it to COPY in scripts/animal-profile.mjs).`); process.exit(1); }
 
 // ---------------------------------------------------------------- shared UI strings
