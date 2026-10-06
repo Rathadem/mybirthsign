@@ -172,7 +172,7 @@ function body(lang) {
       <p class="fx-sub">${esc(u.sub)}</p>
       <div class="pf-cta-row"><a class="fx-btn" href="/checker">${esc(u.btnFind)}</a><a class="fx-btn fx-btn-rose" href="/compatibility">${esc(u.btnCompat)}</a></div>
     </div>
-    <div class="an-hero-art" aria-hidden="false"><div class="an-moon"></div>${ring("an-ring-hero", 120)}</div>
+    <div class="an-hero-art"><img class="an-wheel" src="images/profile/zodiac-wheel.webp" width="900" height="900" alt="${esc(u.h1)}: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog and Pig around a gold yin-yang"></div>
   </div>
 </section>
 

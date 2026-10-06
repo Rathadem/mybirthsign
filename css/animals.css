@@ -131,3 +131,5 @@ html[lang="km"] .an-intro h2, html[lang="km"] .an-duo h2 { font-size: clamp(1.1r
   radial-gradient(circle at 30% 30%, rgba(190, 130, 40, .28) 0 7%, transparent 8%), radial-gradient(circle at 62% 24%, rgba(190, 130, 40, .22) 0 5%, transparent 6%),
   radial-gradient(circle at 54% 62%, rgba(190, 130, 40, .26) 0 9%, transparent 10%), radial-gradient(circle at 26% 66%, rgba(190, 130, 40, .2) 0 5%, transparent 6%), radial-gradient(circle at 74% 52%, rgba(190, 130, 40, .2) 0 4%, transparent 5%),
   radial-gradient(circle at 38% 34%, #fff6c8 0, #f7d77f 38%, #e0a83e 100%); }
+
+.an-wheel{display:block;width:100%;height:auto;border-radius:50%;filter:drop-shadow(0 0 40px rgba(246,200,90,.45))}
