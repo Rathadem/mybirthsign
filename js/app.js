@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
       star: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 3.5l2 8.5 8.5 0-8.5 0-2 8.5-2-8.5-8.5 0 8.5 0z"/></svg>'
     };
     const tile = (ico, label, value, sub) =>
-      '<div class="chk-tile"><span class="chk-tile-ico">' + ico + '</span><div><div class="chk-tile-l">' + label + '</div><div class="chk-tile-v">' + value + "</div>" + (sub ? '<div class="chk-tile-s">' + sub + "</div>" : "") + "</div></div>";
+      '<div class="chk-tile"><span class="chk-tile-ico">' + ico + '</span><div>' + (label ? '<div class="chk-tile-l">' + label + '</div>' : "") + '<div class="chk-tile-v">' + value + "</div>" + (sub ? '<div class="chk-tile-s">' + sub + "</div>" : "") + "</div></div>";
     const topHtml = `
       <section class="chk-hero-card" aria-labelledby="chk-res-h">
         <div class="chk-medal-lg">
