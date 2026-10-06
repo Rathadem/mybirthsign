@@ -87,7 +87,7 @@ const UI = {
     sub: "Uncover your personality, compatibility, lucky signs, and more based on your birth date.",
     btnFind: "✨ Check My Zodiac Sign →", btnCompat: "💗 Check Compatibility →",
     benefits: [["star", "Personality Insights"], ["heart", "Love Compatibility"], ["brief", "Career Guidance"], ["lotus", "Lucky Signs & Elements"]],
-    todayH: "Today's Chinese Zodiac Fortune", todayP: "A quick look at how the day treats each of the 12 signs.", todayB: "View Today's Full Fortune →",
+    todayH: "Today's Chinese Zodiac Fortune", todayP: "A quick look at how the day treats each of the 12 signs.", todayB: "View Today's Full Fortune →", todayNote: "For entertainment and self-reflection only. Daily ratings are based on traditional Chinese zodiac day relationships and are not scientific predictions.",
     animalsH: "Explore the 12 Chinese Zodiac Animals", animalsP: "Choose an animal to learn about its personality, years, elements, lucky signs and compatibility.", animalsB: "View All Animals →",
     toolsH: "Explore MyBirthSign Tools",
     tools: [
@@ -118,7 +118,7 @@ const UI = {
     sub: "ស្វែងយល់ពីបុគ្គលិកលក្ខណៈ ភាពត្រូវគ្នា សំណាង និងព័ត៌មានផ្សេងៗ តាមថ្ងៃ ខែ ឆ្នាំកំណើតរបស់អ្នក។",
     btnFind: "🔮 ពិនិត្យរាសីរបស់ខ្ញុំ", btnCompat: "💗 ពិនិត្យភាពត្រូវគ្នា",
     benefits: [["star", "ការយល់ដឹងអំពីបុគ្គលិកលក្ខណៈ"], ["heart", "ភាពត្រូវគ្នាក្នុងស្នេហា"], ["brief", "ការណែនាំអាជីព"], ["lotus", "សំណាង និងធាតុ"]],
-    todayH: "ជោគជតារាសីប្រចាំថ្ងៃនេះ", todayP: "មើលរហ័សថាថ្ងៃនេះប្រព្រឹត្តចំពោះសត្វរាសីទាំង ១២ យ៉ាងណា។", todayB: "មើលជោគជតារាសីថ្ងៃនេះពេញលេញ →",
+    todayH: "ជោគជតារាសីប្រចាំថ្ងៃនេះ", todayP: "មើលរហ័សថាថ្ងៃនេះប្រព្រឹត្តចំពោះសត្វរាសីទាំង ១២ យ៉ាងណា។", todayB: "មើលជោគជតារាសីថ្ងៃនេះពេញលេញ →", todayNote: "សម្រាប់ការកំសាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ។ ការវាយតម្លៃប្រចាំថ្ងៃផ្អែកលើទំនាក់ទំនងថ្ងៃ-សត្វរាសីតាមប្រពៃណី ហើយមិនមែនជាការព្យាករណ៍វិទ្យាសាស្ត្រទេ។",
     animalsH: "ស្វែងយល់សត្វរាសីទាំង ១២", animalsP: "ជ្រើសរើសសត្វមួយ ដើម្បីស្វែងយល់អំពីបុគ្គលិកលក្ខណៈ ឆ្នាំកំណើត ធាតុ សំណាង និងភាពត្រូវគ្នា។", animalsB: "មើលសត្វរាសីទាំងអស់ →",
     toolsH: "ឧបករណ៍របស់ MyBirthSign",
     tools: [
@@ -199,6 +199,7 @@ function partA(lang) {   // fortune, animals, tools
 ${ORDER.map(card).join("\n")}
     </ul>
     <p class="hm-center"><a class="fx-btn" href="${latestPost.file}" data-hm-fulllink>${esc(u.todayB)}</a></p>
+    <p class="hm-note">${esc(u.todayNote)}</p>
   </section>
 
   <section class="fx-sec" id="animals" aria-labelledby="${ID("an")}">
@@ -327,6 +328,7 @@ const COMPAT = `<div class="fx-wrap">
         </fieldset>
         <button type="submit" class="fx-btn" data-i18n="compat_submit">Check Compatibility</button>
       </form>
+      <p class="hm-note">${T("Traditional compatibility is for entertainment and cultural interest, not a prediction of how a relationship will go.", "ភាពត្រូវគ្នាតាមប្រពៃណីសម្រាប់ការកំសាន្ត និងវប្បធម៌ប៉ុណ្ណោះ មិនមែនជាការព្យាករណ៍ពីទំនាក់ទំនងទេ។")}</p>
       <div id="compat-result" class="hm-result" aria-live="polite"></div>
     </div>
   </section>
