@@ -2840,3 +2840,13 @@ html[lang="km"] .cmp-page .chk-h1 { font-size: clamp(1.4rem, 4.4vw, 2.4rem); }
 }
 .cmp-lead { padding: 10px 16px; border-radius: 14px; background: rgba(11,8,31,.5); }
 .chk-card h3 img.chk-ico-new { mix-blend-mode: normal; width: 36px; height: 36px; }
+
+/* Business guidelines: softly blurred background (content stays sharp) */
+.biz-guide { background: #0b081f; overflow: hidden; isolation: isolate; }
+.biz-guide::before {
+  content: ""; position: absolute; inset: -14px; z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(11, 8, 31, 0.82), rgba(11, 8, 31, 0.6) 22%, rgba(11, 8, 31, 0.35) 45%, rgba(11, 8, 31, 0.6)),
+    url("../images/business/guidelines-bg.webp") center / cover no-repeat;
+  filter: blur(3px);
+}
