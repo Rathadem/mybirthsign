@@ -4,7 +4,7 @@
 /* ---------- hero: text left, moon + ring of 12 animals right ---------- */
 .an-hero.fx-hero { background-image: radial-gradient(ellipse at 75% 45%, #1a1346 0%, #0b0820 70%); background-color: #0b0820; text-align: left; }
 .an-hero.fx-hero::before { background: linear-gradient(90deg, rgba(11, 8, 32, .78) 0%, rgba(11, 8, 32, .35) 55%, rgba(11, 8, 32, .15) 100%), linear-gradient(180deg, rgba(11, 8, 32, 0) 60%, rgba(11, 8, 32, .9) 100%); }
-.an-hero-in { max-width: 1240px; margin: 0 auto; padding: 36px 20px 44px; display: grid; grid-template-columns: 1fr minmax(320px, 520px); gap: 24px; align-items: center; }
+.an-hero-in { max-width: 1240px; margin: 0 auto; padding: 36px 20px 44px; display: grid; grid-template-columns: 1fr; gap: 24px; align-items: center; }
 .an-hero-text .fx-eyebrow { margin-bottom: 6px; }
 .an-hero h1 { margin: 0 0 12px; }
 .an-hero h1 strong { display: block; font-size: clamp(2.3rem, 5.6vw, 4rem); line-height: 1.12; font-weight: 700;
