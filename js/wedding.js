@@ -200,13 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="wedding-table-wrap"><table class="wedding-table"><thead><tr><th>' + esc(T.colMonth) + "</th><th>" + esc(T.colAnimal) + "</th><th>" + esc(T.colRating) + "</th><th>" + esc(T.colWhy) + "</th><th>" + esc(T.colSeason) + "</th><th>" + esc(T.colHol) + "</th></tr></thead><tbody>" + tableRows + "</tbody></table></div>" +
       '<p class="disclaimer">' + esc(S.wedding_disclaimer || "") + "</p></details>";
 
-    const shareHeading = fill(T.shareHeading, { year: year });
-    const share = typeof shareRowHtml === "function"
-      ? shareRowHtml(shareHeading, { emoji: "💍", heading: shareHeading, subheading: aName(A.animal) + " & " + aName(B.animal) })
-      : "";
-
-    resultBox.innerHTML = guide + share + months + dates + table;
-    if (typeof wireShareRows === "function") wireShareRows(resultBox);
+    resultBox.innerHTML = guide + months + dates + table;
     resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 });
