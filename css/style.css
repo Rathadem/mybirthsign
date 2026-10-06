@@ -2971,3 +2971,15 @@ body.chk-page footer.chk-footer {
 }
 footer.site-footer p, .chk-footer p { color: #b9afd6; text-shadow: none; }
 @media (max-width: 600px) { footer.site-footer, body.chk-page footer.chk-footer { padding-top: 64px; } }
+
+/* Business Partner: plain background (no images), solid dark like the rest of the site */
+body.biz-page .biz-hero-v2,
+body.biz-page .biz-guide,
+body.biz-page .biz-after,
+body.biz-page footer.site-footer {
+  background: none;
+  border-top: 0;
+}
+body.biz-page .biz-guide { background: none; }
+body.biz-page .biz-after .ad-slot { background: rgba(255,255,255,.03); }
+body.biz-page footer.site-footer { padding-top: 40px; margin-top: 0; border-top: 1px solid rgba(231,194,122,.18); }
