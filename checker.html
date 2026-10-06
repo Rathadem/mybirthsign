@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://mybirthsign.com/checker.html">
 <meta name="description" content="Find your Chinese zodiac sign by date of birth. Discover your zodiac animal, element, Yin/Yang, personality traits, love compatibility, career characteristics, and traditional lucky associations.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Kantumruy+Pro:wght@400;500;600;700&family=Moul&display=swap">
 <meta property="og:title" content="What Is My Chinese Zodiac Sign? | MyBirthSign">
 <meta property="og:description" content="Enter your date of birth to discover your Chinese zodiac animal, element, personality, and more.">
 <meta property="og:type" content="website">
@@ -73,7 +73,7 @@
           <label for="dob" data-i18n="dob_label">Date of Birth</label>
           <input type="date" lang="en-GB" id="dob" name="dob" required min="1920-01-01" max="2026-12-31">
         </div>
-        <button type="submit" data-i18n="reveal_button">Find My Zodiac Sign →</button>
+        <button type="submit" data-i18n="reveal_button">My Horoscope</button>
       </div>
       <p class="chk-hint" data-i18n="chk_form_hint">Your birth date determines your Chinese zodiac sign, element, and traditional zodiac characteristics.</p>
     </form>
@@ -107,6 +107,7 @@
 <section class="container chk-wrap chk-explore" aria-labelledby="chk-explore-h">
   <h2 id="chk-explore-h" data-i18n="chk_explore_title">Explore All 12 Chinese Zodiac Signs</h2>
   <ul class="chk-animals" id="chk-animals"></ul>
+  <div id="chk-animal-detail" class="chk-detail" aria-live="polite" hidden></div>
 </section>
 
 <div class="ad-slot container">Ad space</div>

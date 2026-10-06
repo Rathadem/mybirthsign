@@ -420,3 +420,4 @@ document.addEventListener("DOMContentLoaded", function () {
     compatResult.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 });
+
