@@ -2900,3 +2900,26 @@ html[lang="km"] .biz-h1 { font-size: clamp(0.78rem, 3.5vw, 2.2rem); }
 @media (max-width: 640px) { .biz-hero-v2 { padding-bottom: 16px; } }
 .biz-page .biz-hero-v2 .biz-form { margin-bottom: 0; }
 .biz-hero-v2 { padding-bottom: 14px; }
+/* Business guidelines: blossom-and-clouds night background */
+.biz-guide { background: linear-gradient(180deg, rgba(11,8,31,.6) 0, rgba(11,8,31,.4) 230px, rgba(11,8,31,0) 330px), #0b081f url("../images/business/guidelines-bg2.webp") center top / cover no-repeat; }
+
+/* Business Partner: soft blend from the hero into the guidelines (no hard seam) */
+.biz-hero-v2 {
+  background:
+    linear-gradient(180deg, rgba(11, 8, 31, 0.72) 0%, rgba(11, 8, 31, 0.5) 45%, rgba(11, 8, 31, 0.85) 82%, #0b081f 100%),
+    url("../images/business/angkor-hero.webp") 78% 52% / cover no-repeat;
+  border-bottom: 0;
+}
+.biz-guide {
+  border-top: 0;
+  background:
+    linear-gradient(180deg, #0b081f 0, rgba(11,8,31,.78) 70px, rgba(11,8,31,.4) 200px, rgba(11,8,31,0) 330px),
+    #0b081f url("../images/business/guidelines-bg2.webp") center top / cover no-repeat;
+}
+@media (max-width: 640px) {
+  .biz-hero-v2 {
+    background:
+      linear-gradient(180deg, rgba(11, 8, 31, 0.9) 0%, rgba(11, 8, 31, 0.7) 50%, rgba(11, 8, 31, 0.92) 82%, #0b081f 100%),
+      url("../images/business/angkor-hero.webp") 70% 40% / cover no-repeat;
+  }
+}
