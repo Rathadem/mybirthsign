@@ -2671,3 +2671,14 @@ html[lang="km"] .chk-page .chk-sub { margin-top: 0; line-height: 1.9; }
 html[lang="km"] .chk-page .chk-d-head h3, html[lang="km"] .chk-page .chk-d-grid h4 { font-family: "Kantumruy Pro","Noto Sans Khmer",sans-serif; }
 /* Checker: calendar opens upward (above the field) again */
 .chk-page .chk-form .kdp-popup { top: auto; bottom: calc(100% + 8px); box-shadow: 0 -12px 32px rgba(0,0,0,.55); }
+/* Checker: smaller calendar popup */
+.chk-page .chk-form .kdp-popup { width: 244px; padding: 8px; border-radius: 10px; }
+.chk-page .kdp-header { margin-bottom: 6px; gap: 4px; }
+.chk-page .kdp-header .kdp-nav { width: 22px; height: 22px; font-size: .9rem; }
+.chk-page .kdp-month-select, .chk-page .kdp-year-select { font-size: .72rem; padding: 3px 1px; }
+.chk-page .kdp-year-select { flex-basis: 56px; }
+.chk-page .kdp-weekdays { font-size: .66rem; margin-bottom: 2px; }
+.chk-page .kdp-grid { gap: 1px; }
+.chk-page .kdp-grid .kdp-day { padding: 4px 0; font-size: .76rem; }
+.chk-page .kdp-footer { margin-top: 6px; padding-top: 6px; }
+.chk-page .kdp-footer .kdp-clear, .chk-page .kdp-footer .kdp-today { font-size: .76rem; padding: 2px 4px; }
