@@ -213,6 +213,18 @@ document.addEventListener("DOMContentLoaded", function () {
       const lines = (CHECKER_OUTLOOK[lang] || CHECKER_OUTLOOK.en)[tier];
       outlookHtml = " " + lines.join(" ");
     }
+    let yearLuckHtml = "";
+    if (typeof CHECKER_YEARLUCK !== "undefined") {
+      const YL = CHECKER_YEARLUCK[lang] || CHECKER_YEARLUCK.en;
+      const nowZ = getZodiac(new Date());
+      const rel2 = getCompatibilityType(animal, nowZ.animal);
+      const tier2 = rel2 === "same" ? "same" : (rel2 === "triangle" ? "triangle" : (rel2 === "clash" ? "clash" : "neutral"));
+      const T2 = YL.tiers[tier2];
+      const nm = (a) => (lang === "km" ? KM_ANIMAL_NAMES[a] : a);
+      const introTxt = YL.intro.replace("{year}", nowZ.zodiacYear).replace("{ya}", nm(nowZ.animal)).replace("{a}", nm(animal));
+      yearLuckHtml = '<div class="today-luck-card"><h3>' + YL.heading + '</h3><p class="today-luck-intro">' + introTxt + '</p><ul class="today-luck-list">' +
+        T2.items.map((t) => "<li>" + t + "</li>").join("") + '</ul><p class="today-luck-verdict today-luck-verdict-' + YL.verdict[tier2] + '">' + T2.summary + "</p></div>";
+    }
     const topHtml = `
       <section class="chk-hero-card" aria-labelledby="chk-res-h">
         <div class="chk-medal-lg">
@@ -245,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         <p class="lunar-note">${lunarNote}</p>
 
-        ${todayLuckHtml}
+        ${yearLuckHtml || todayLuckHtml}
 
         <p class="overview-text">${overview}</p>
         <p class="overview-text">${elOverview}</p>
