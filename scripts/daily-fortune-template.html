@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<title>{{TITLE}}</title>
+<link rel="canonical" href="{{URL}}">
+<meta property="og:url" content="{{URL}}">
+<meta name="description" content="{{DESC}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&display=swap">
+<link rel="stylesheet" href="../css/style.css">
+
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939402104083173" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="logo"><svg class="logo-mark" width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="13" cy="13" r="11.5" fill="none" stroke="var(--accent)" stroke-width="1.1"/><path d="M16.4 7.1a6.1 6.1 0 1 0 0 11.8 7.1 7.1 0 1 1 0-11.8Z" fill="var(--accent)"/><path d="M8.8 14.4l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9.9-2Z" fill="var(--accent-soft)"/></svg><span class="logo-text">MyBirthSign</span></a>
+    <nav>
+      <a href="../index.html" data-i18n="nav_checker">Checker</a>
+      <details class="nav-dropdown">
+        <summary data-i18n="nav_tools">Tools</summary>
+        <div class="nav-dropdown-menu">
+          <a href="../checker.html" data-i18n="nav_checker_page">Checker</a>
+          <a href="../compatibility.html" data-i18n="nav_compatibility">Compatibility</a>
+          <a href="../wedding-date.html" data-i18n="nav_wedding">Wedding Dates</a>
+          <a href="../business-partner.html" data-i18n="nav_business">Business Partner</a>
+          <a href="../chinese-zodiac-business-compatibility/" data-i18n="nav_business_guide">Business Guide</a>
+        </div>
+      </details>
+      <a href="../animals.html" data-i18n="nav_animals">Zodiac Guide</a>
+      <a href="../blog.html" data-i18n="nav_blog">Blog</a>
+      <details class="nav-dropdown">
+        <summary data-i18n="nav_more">More</summary>
+        <div class="nav-dropdown-menu">
+          <a href="../about.html" data-i18n="nav_about">About</a>
+          <a href="../contact.html" data-i18n="nav_contact">Contact</a>
+        </div>
+      </details>
+      <span class="lang-toggle">
+        <a href="#" data-lang-switch="en" data-i18n="lang_toggle_en">EN</a>
+        <a href="#" data-lang-switch="km" data-i18n="lang_toggle_km">ខ្មែរ</a>
+      </span>
+    </nav>
+  </div>
+</header>
+
+<div data-lang-content="en">
+<article class="post post-wide container">
+  <h1>{{H1_EN}}</h1>
+
+  <div class="share-row" data-share></div>
+
+  <div class="ad-slot">Ad space</div>
+
+  {{INTRO_EN}}
+
+  {{CARDS_EN}}
+
+  <p class="disclaimer">For entertainment purposes only. Don't know your sign yet? Use the <a href="../index.html">checker tool</a> to find it.</p>
+</article>
+</div>
+
+<div data-lang-content="km">
+<article class="post post-wide container">
+  <h1>{{H1_KM}}</h1>
+
+  <div class="share-row" data-share></div>
+
+  <div class="ad-slot">ទំនេរសម្រាប់ផ្សាយពាណិជ្ជកម្ម</div>
+
+  {{INTRO_KM}}
+
+  {{CARDS_KM}}
+
+  <p class="disclaimer">សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។ មិនទាន់ដឹងសញ្ញារបស់អ្នកទេឬ? ប្រើ<a href="../index.html">ឧបករណ៍ពិនិត្យ</a>ដើម្បីរកវា។</p>
+</article>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <a href="../about.html" data-i18n="footer_about">About</a> ·
+    <a href="../privacy.html" data-i18n="footer_privacy">Privacy Policy</a> ·
+    <a href="../contact.html" data-i18n="footer_contact">Contact</a>
+    <p data-i18n="footer_copyright">&copy; 2026 MyBirthSign. For entertainment purposes only.</p>
+  </div>
+</footer>
+
+<script src="../js/i18n.js"></script>
+<script src="../js/share.js"></script>
+</body>
+</html>
