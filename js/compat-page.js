@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="cmp-pct" id="cmp-pct" aria-label="' + overall + '%">0%</div></div>' +
       '<p class="cmp-level">' + esc(lvl) + "</p></div>" + personCard(T.p2, B) + "</div>" +
       '<p class="cmp-desc-lg">' + esc(desc) + "</p>" +
-      '<p class="cmp-note">' + esc(T.score_note) + "</p>" + "</section>" +
+      "</section>" +
 
       '<section class="cmp-scores" aria-label="' + esc(T.result_h) + '">' + cards + "</section>" +
 
