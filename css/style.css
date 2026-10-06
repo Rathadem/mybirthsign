@@ -3135,3 +3135,12 @@ html[lang="km"] .wed-pct, html[lang="km"] .wed-m-name, html[lang="km"] .wed-m-ra
 @media (max-width: 640px) {
   .biz-page .biz-more { border-width: 44px 40px; border-image-width: 44px 40px; margin-left: 8px; margin-right: 8px; padding: 0; }
 }
+/* Khmer: guidelines heading was clipped (tight line-height + gradient text clip) */
+html[lang="km"] .bg-head h2 {
+  font-family: "Moul", "Noto Sans Khmer", serif; font-weight: 400;
+  font-size: clamp(1.35rem, 4vw, 2.3rem);
+  line-height: 1.8; padding: 0.15em 0.1em; margin-bottom: 4px;
+  overflow: visible; overflow-wrap: anywhere;
+}
+html[lang="km"] .bg-sub { line-height: 1.8; }
+html[lang="km"] .bg-intro { line-height: 1.9; }
