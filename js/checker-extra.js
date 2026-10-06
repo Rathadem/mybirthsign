@@ -123,3 +123,35 @@ const CHECKER_KM_WORDS = {
 function checkerKmWords(str) {
   return str.split(", ").map(function (w) { return CHECKER_KM_WORDS[w] || w; }).join(", ");
 }
+
+// CHECKER_TRAITS_MORE: one extra descriptive sentence per animal shown under the main traits.
+const CHECKER_TRAITS_MORE = {
+  en: {
+    "Rat": "Rats read people well, spot opportunities early and find a way out of tight spots — just remember to rest and not overthink.",
+    "Ox": "Oxen are dependable and keep their word, and they finish what they start even when it takes a long time.",
+    "Tiger": "Tigers have strong drive, love to lead and protect the people they care about, but decide best when calm rather than in the heat of the moment.",
+    "Rabbit": "Rabbits prefer calm, peaceful surroundings, listen well and build relationships that last.",
+    "Dragon": "Dragons are confident and inspire others, but listening to the people around them helps big plans succeed in the long run.",
+    "Snake": "Snakes have strong intuition, like to study things in depth before deciding, and keep a secret well.",
+    "Horse": "Horses love to travel, meet new people and learn new things, but clear goals stop their energy from scattering.",
+    "Goat": "Goats are gentle, creative and caring, and do their best work in a calm, supportive setting.",
+    "Monkey": "Monkeys are quick-witted, solve problems in fresh ways and adapt easily, but do best when they focus on one thing at a time.",
+    "Rooster": "Roosters like order, work with care and speak plainly, but should allow others to be imperfect too.",
+    "Dog": "Dogs are loyal, protect their friends and family and have a strong sense of fairness, but should worry less and trust themselves more.",
+    "Pig": "Pigs are generous, love to share and enjoy life, but should be careful not to trust too quickly or overspend."
+},
+  km: {
+    "Rat": "ជូតចេះទាក់ទងមនុស្សបានល្អ ឃើញឱកាសមុនគេ ហើយចេះរកផ្លូវចេញពីបញ្ហា ប៉ុន្តែគួរសម្រាកឱ្យគ្រប់គ្រាន់ កុំគិតច្រើនពេក។",
+    "Ox": "ឆ្លូវជាមនុស្សដែលទុកចិត្តបាន រក្សាពាក្យសន្យា ហើយតែងតែបញ្ចប់អ្វីដែលបានចាប់ផ្តើម ទោះត្រូវការពេលយូរក៏ដោយ។",
+    "Tiger": "ខាលមានសន្ទុះខ្លាំង ចូលចិត្តបើកផ្លូវ និងការពារអ្នកដែលខ្លួនស្រឡាញ់ ប៉ុន្តែសម្រេចចិត្តបានល្អជាងនៅពេលចិត្តស្ងប់ មិនមែនដោយអារម្មណ៍ភ្លាមៗ។",
+    "Rabbit": "ថោះចូលចិត្តភាពស្ងប់ស្ងាត់ និងបរិយាកាសសុខសាន្ត ជាអ្នកស្តាប់ល្អ ហើយចេះបង្កើតទំនាក់ទំនងដែលមានតម្លៃយូរអង្វែង។",
+    "Dragon": "រោងមានទំនុកចិត្តខ្លាំង ហើយតែងបំផុសគំនិតអ្នកដទៃ ប៉ុន្តែការស្តាប់មតិអ្នកជុំវិញ ជួយឱ្យផែនការធំៗទទួលបានជោគជ័យយូរអង្វែង។",
+    "Snake": "ម្សាញ់មានវិចារណញាណល្អ ចូលចិត្តសិក្សាឱ្យស៊ីជម្រៅមុនធ្វើការសម្រេចចិត្ត ហើយចេះរក្សាការសម្ងាត់។",
+    "Horse": "មមីចូលចិត្តធ្វើដំណើរ ជួបមនុស្សថ្មី និងរៀនអ្វីថ្មីៗ ប៉ុន្តែការកំណត់គោលដៅឱ្យច្បាស់ ជួយកុំឱ្យថាមពលខ្ចាត់ខ្ចាយ។",
+    "Goat": "មមែមានចិត្តទន់ភ្លន់ ច្នៃប្រឌិត និងយកចិត្តទុកដាក់ចំពោះអ្នកដទៃ ហើយធ្វើការបានល្អបំផុតក្នុងបរិយាកាសស្ងប់ស្ងាត់ និងជួយគាំទ្រគ្នា។",
+    "Monkey": "វកឆ្លាតរហ័ស ចេះដោះស្រាយបញ្ហាតាមវិធីថ្មី និងសម្របខ្លួនបានឆាប់ ប៉ុន្តែធ្វើបានល្អជាងនៅពេលផ្តោតលើរឿងមួយៗ។",
+    "Rooster": "រកាចូលចិត្តភាពមានរបៀបរៀបរយ ធ្វើការដោយយកចិត្តទុកដាក់ និងនិយាយត្រង់ៗ ប៉ុន្តែគួរទទួលយកភាពមិនល្អឥតខ្ចោះរបស់អ្នកដទៃផងដែរ។",
+    "Dog": "ចស្មោះត្រង់ ការពារមិត្តភក្តិ និងគ្រួសារ ហើយមានយុត្តិធម៌ ប៉ុន្តែគួរបារម្ភតិចជាងនេះ ហើយទុកចិត្តខ្លួនឯងឱ្យបានច្រើនជាងនេះ។",
+    "Pig": "កុរមានចិត្តទូលាយ ចូលចិត្តចែករំលែក និងរីករាយជាមួយជីវិត ប៉ុន្តែគួរប្រុងប្រយ័ត្នកុំជឿអ្នកដទៃលឿនពេក ឬចំណាយហួសប្រមាណ។"
+}
+};
