@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const topHtml = `
       <section class="chk-hero-card" aria-labelledby="chk-res-h">
         <div class="chk-medal-lg">
-          <img src="images/business/animals/${slug}.webp" alt="Golden ${animal} Chinese zodiac medallion" width="320" height="320">
+          <img src="images/business/animals/${slug}.webp" alt="Golden ${animal} zodiac medallion" width="320" height="320">
           ${X ? `<span class="chk-kanji" lang="zh" aria-hidden="true">${X.kanji}</span>` : ""}
         </div>
         <div class="chk-hero-copy">

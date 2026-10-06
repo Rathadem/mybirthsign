@@ -466,9 +466,9 @@ const UI_STRINGS = {
 
     checker_hero_title: "What Is My Zodiac Sign?",
     checker_hero_subtitle: "Enter your date of birth to discover your zodiac animal, element, personality, and more.",
-    chk_form_hint: "Your birth date determines your Chinese zodiac sign, element, and traditional zodiac characteristics.",
+    chk_form_hint: "Your birth date determines your zodiac sign, element, and traditional zodiac characteristics.",
     chk_sample_note: "Example result shown below — enter your date of birth above to see your own sign.",
-    chk_your_sign: "Your Chinese Zodiac Sign",
+    chk_your_sign: "Your Zodiac Sign",
     chk_animal_years: "Birth years",
     chk_same_sign: "Same sign (deep understanding, watch for rivalry)",
     chk_full_guide: "Read the full guide →",
@@ -480,8 +480,8 @@ const UI_STRINGS = {
     chk_cta_title: "Check Your Compatibility",
     chk_cta_sub: "Find out how well you match with a partner, friend, or business partner.",
     chk_cta_btn: "Check Compatibility →",
-    chk_explore_title: "Explore All 12 Chinese Zodiac Signs",
-    chk_disclaimer: "Chinese zodiac interpretations are based on traditional cultural beliefs and are provided for entertainment, cultural exploration, and personal reflection. They should not be considered scientific predictions or professional advice.",
+    chk_explore_title: "Explore All 12 Zodiac Signs",
+    chk_disclaimer: "Zodiac interpretations are based on traditional cultural beliefs and are provided for entertainment, cultural exploration, and personal reflection. They should not be considered scientific predictions or professional advice.",
 
     today_label: "Today",
     today_number_label: "Today's Number",
