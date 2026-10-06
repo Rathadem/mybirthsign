@@ -224,7 +224,6 @@ document.addEventListener("DOMContentLoaded", function () {
           <h2 id="chk-res-h" class="chk-animal">${lang === "km" ? "ឆ្នាំ" + animalDisplay + " សត្វ" + KM_ANIMAL_COMMON_NAMES[animal] : animalDisplay}</h2>
           <p class="chk-years">${yearsList}</p>
           <p class="chk-desc">${traits}</p>
-          ${outlookHtml}
         </div>
         <div class="chk-tiles">
           ${tile(ICO.cal, S.chk_birth_year, date.getFullYear())}
@@ -246,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         <p class="lunar-note">${lunarNote}</p>
 
-        ${todayLuckHtml}
+        ${outlookHtml ? `<div class="today-luck-card">${outlookHtml}</div>` : todayLuckHtml}
 
         <p class="overview-text">${overview}</p>
         <p class="overview-text">${elOverview}</p>
