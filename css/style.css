@@ -2971,3 +2971,12 @@ body.chk-page footer.chk-footer {
 }
 footer.site-footer p, .chk-footer p { color: #b9afd6; text-shadow: none; }
 @media (max-width: 600px) { footer.site-footer, body.chk-page footer.chk-footer { padding-top: 64px; } }
+
+/* Compatibility: night-lake blossom image behind the whole page */
+body.chk-page.cmp-page {
+  background: #0b0a2a url("../images/compat/page-bg.webp") center top / 100% 100% no-repeat;
+}
+body.chk-page.cmp-page .cmp-hero { background: none; border-bottom: 0; }
+body.chk-page.cmp-page .cmp-result { background: linear-gradient(180deg, rgba(11,8,31,.7), rgba(11,8,31,.86)); }
+body.chk-page.cmp-page footer.chk-footer { background: none; border-top: 1px solid rgba(231,194,122,.18); padding-top: 40px; margin-top: 0; }
+@media (max-width: 700px) { body.chk-page.cmp-page { background-size: cover; } }
