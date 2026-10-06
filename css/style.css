@@ -2520,7 +2520,7 @@ body.chk-page { --gold:#e7c27a; --navy:#0b081f; --card:#120d30; --line:#3b2d6e; 
 
 .chk-cta { display: flex; align-items: center; gap: 20px; padding: 16px 24px; border: 1.5px solid #e7c27a99; border-radius: 18px;
   background: linear-gradient(90deg, rgba(60,18,70,.9), rgba(24,14,56,.95)); }
-.chk-cta-art { mix-blend-mode: lighten; width: 120px; height: auto; flex: 0 0 auto; }
+.chk-cta-art { width: 130px; height: auto; flex: 0 0 auto; }
 .chk-cta-text { flex: 1; }
 .chk-cta h2 { margin: 0 0 4px; font: 700 1.6rem Georgia,serif; color: #fff; border: 0; padding: 0; }
 .chk-cta p { margin: 0; color: #e3dcf7; }
