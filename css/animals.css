@@ -2,7 +2,7 @@
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- hero: text left, moon + ring of 12 animals right ---------- */
-.an-hero.fx-hero { background-image: url("../images/fortune/hero-night.webp"); background-position: right top; background-size: cover; text-align: left; }
+.an-hero.fx-hero { background-image: radial-gradient(ellipse at 75% 45%, #1a1346 0%, #0b0820 70%); background-color: #0b0820; text-align: left; }
 .an-hero.fx-hero::before { background: linear-gradient(90deg, rgba(11, 8, 32, .78) 0%, rgba(11, 8, 32, .35) 55%, rgba(11, 8, 32, .15) 100%), linear-gradient(180deg, rgba(11, 8, 32, 0) 60%, rgba(11, 8, 32, .9) 100%); }
 .an-hero-in { max-width: 1240px; margin: 0 auto; padding: 36px 20px 44px; display: grid; grid-template-columns: 1fr minmax(320px, 520px); gap: 24px; align-items: center; }
 .an-hero-text .fx-eyebrow { margin-bottom: 6px; }
@@ -132,4 +132,4 @@ html[lang="km"] .an-intro h2, html[lang="km"] .an-duo h2 { font-size: clamp(1.1r
   radial-gradient(circle at 54% 62%, rgba(190, 130, 40, .26) 0 9%, transparent 10%), radial-gradient(circle at 26% 66%, rgba(190, 130, 40, .2) 0 5%, transparent 6%), radial-gradient(circle at 74% 52%, rgba(190, 130, 40, .2) 0 4%, transparent 5%),
   radial-gradient(circle at 38% 34%, #fff6c8 0, #f7d77f 38%, #e0a83e 100%); }
 
-.an-wheel{display:block;width:100%;height:auto;border-radius:50%;filter:drop-shadow(0 0 40px rgba(246,200,90,.45))}
+.an-wheel{display:block;width:100%;height:auto;border-radius:50%}
