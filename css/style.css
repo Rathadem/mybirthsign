@@ -2682,3 +2682,14 @@ html[lang="km"] .chk-page .chk-d-head h3, html[lang="km"] .chk-page .chk-d-grid 
 .chk-page .kdp-grid .kdp-day { padding: 4px 0; font-size: .76rem; }
 .chk-page .kdp-footer { margin-top: 6px; padding-top: 6px; }
 .chk-page .kdp-footer .kdp-clear, .chk-page .kdp-footer .kdp-today { font-size: .76rem; padding: 2px 4px; }
+/* Checker: four cards with evenly distributed, same-length text blocks */
+.chk-four .chk-card > .chk-list { flex: 1 1 auto; grid-auto-rows: 1fr; align-content: stretch; gap: 6px; margin-bottom: 12px; }
+.chk-four .chk-card > .chk-list > li { display: flex; align-items: center; padding-left: 28px; min-height: 2.6em; }
+.chk-four .chk-card > .chk-list > li::before { top: 50%; transform: translateY(-50%); }
+.chk-list-kv li > div > span:first-child { display: inline; font-size: inherit; color: #cdbfee; margin-right: 4px; }
+.chk-list-kv li > div > span:first-child::after { content: ":"; }
+.chk-list-kv li { line-height: 1.35; }
+.chk-list-kv li > * , .chk-list-kv li { flex-wrap: wrap; }
+
+.chk-four .chk-card > .chk-list > li { min-height: 2.3em; }
+.chk-four .chk-card > .chk-list { gap: 4px; }

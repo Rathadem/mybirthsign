@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (X) luckRows.push([S.chk_directions, dirText], [S.chk_months, monthText]);
     else luckRows.push([S.lucky_days, luckyDays.join(", ")]);
     luckRows.push([S.best_matches, trianglePartnersDisplay.join(", ")], [S.needs_patience, clashAnimalDisplay]);
-    const luckBody = '<ul class="chk-list chk-list-kv">' + luckRows.map((r) => "<li><span>" + r[0] + "</span> " + r[1] + "</li>").join("") + "</ul>";
+    const luckBody = '<ul class="chk-list chk-list-kv">' + luckRows.map((r) => "<li><div><span>" + r[0] + "</span> " + r[1] + "</div></li>").join("") + "</ul>";
     const ICO = {
       cal: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h2M12 14h2M16 14h0M8 17.5h2M12 17.5h2"/></svg>',
       yy: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5a4.75 4.75 0 0 1 0 9.5 4.75 4.75 0 0 0 0 9.5" /><circle cx="12" cy="7.25" r="1.2" fill="currentColor"/><circle cx="12" cy="16.75" r="1.2" fill="currentColor" stroke="none"/></svg>',
