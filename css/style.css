@@ -3200,3 +3200,6 @@ html[lang="km"] [data-lang-content="en"] { display: none; }
 footer.site-footer, body.chk-page footer.chk-footer, .fx-page footer.site-footer, .hm-final { background-image: none !important; background-color: #0b0820 !important; }
 body.chk-page footer.chk-footer { padding-top: 48px; margin-top: 32px; border-top: 1px solid rgba(231, 194, 122, .18); text-shadow: none; }
 .hm-final-in { padding-bottom: 60px; }
+
+/* Business Partner page: photo backgrounds removed (hero + guidelines) for a lighter, cleaner page */
+.biz-hero-v2, .biz-guide { background-image: none !important; background-color: #0b081f !important; }
