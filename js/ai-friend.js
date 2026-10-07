@@ -16,18 +16,18 @@
   /* ------------------------------------------------------------------ strings */
   var UI = {
     en: {
-      title: "Kru Toch", sub: "MyBirthSign AI Friend",
+      title: "Kru Toch ✨", sub: "Your Friendly Zodiac Guide",
       placeholder: "Type your message…", send: "Send message", close: "Close chat",
       newChat: "Start a new chat", micStart: "Start voice input", micStop: "Stop voice input",
       micDenied: "Voice input isn't available right now. You can type instead. 😊",
       log: "Conversation", quick: "Quick actions",
-      note: "Kru Toch, the MyBirthSign AI Friend, is an AI, not a person. Chinese zodiac readings are traditional interpretations for entertainment.",
+      note: "Kru Toch is MyBirthSign's AI zodiac guide, not a person. Chinese zodiac readings are traditional interpretations for entertainment.",
       chips: [["zodiac", "🐉 My Zodiac"], ["love", "❤️ Love & Compatibility"], ["business", "💼 Business Partner"], ["wedding", "💍 Wedding Date"], ["learn", "📖 Learn About Zodiac"]],
-      hello: "Hi, my friend! 👋 Welcome to MyBirthSign.\nI'm here to help you discover your Chinese zodiac, explore compatibility, business partnerships, wedding dates, and more.\n\nWhat's your name? 😊",
+      hello: "Hi, my friend! 👋 I'm Kru Toch ✨\nI'm your friendly zodiac guide at MyBirthSign.\n\nI can help you discover your Chinese zodiac, explore love compatibility, business partnerships, wedding dates, and more. 😊\n\nWhat's your name?",
       nice: "Nice to meet you, {NAME}! 😊\nAnd what's your date of birth? 📅",
       niceKnown: "What would you like to explore today? Your zodiac, love, a business partner, a wedding date, or anything you're curious about. ✨",
-      great: "Great! I have your birthday as {DATE}. 🎉\n\nWhat would you like to explore today?\n\n🐉 My Chinese Zodiac\n❤️ Love & Compatibility\n💼 Business Partner\n💍 Wedding Date\n\nOr just tell me what you're curious about.",
-      ambiguous: "I want to get this right! 😊 Is that {A} or {B}?",
+      great: "Nice! 😊 I have your birthday as {DATE}.\nWould you like to discover your Chinese zodiac, personality, compatibility, business partnership, or something else?",
+      ambiguous: "Just to make sure I have it right 😊 — do you mean {A} or {B}?",
       badDate: "Hmm, I couldn't quite read that date. 🤔 Could you write it like 1 January 1989?",
       rangeDate: "I can work with birth dates from 1900 up to today. 📅 Could you double-check the year?",
       nameAsk: "By the way, what's your name? 😊",
@@ -45,18 +45,18 @@
       fmtShort: function (d, m, M) { return d + " " + M[m - 1]; }
     },
     km: {
-      title: "គ្រួតូច", sub: "មិត្ត AI ផ្កាយកំណើត",
+      title: "គ្រូតូច ✨", sub: "អ្នកណែនាំរាសីដ៏រួសរាយរបស់អ្នក",
       placeholder: "វាយសាររបស់អ្នក…", send: "ផ្ញើសារ", close: "បិទការជជែក",
       newChat: "ចាប់ផ្តើមការជជែកថ្មី", micStart: "ចាប់ផ្តើមនិយាយ", micStop: "ឈប់ស្តាប់",
       micDenied: "ឥឡូវនេះមិនអាចប្រើសំឡេងបានទេ។ អ្នកអាចវាយអក្សរជំនួសបាន។ 😊",
       log: "ការសន្ទនា", quick: "ជម្រើសរហ័ស",
-      note: "គ្រួតូចជាមិត្ត AI ជាកម្មវិធីបញ្ញាសិប្បនិម្មិត មិនមែនមនុស្សពិតទេ។ ការទស្សន៍ទាយរាសីជាការបកស្រាយតាមប្រពៃណី សម្រាប់ការកំសាន្ត។",
+      note: "គ្រូតូចជាមិត្ត AI ជាកម្មវិធីបញ្ញាសិប្បនិម្មិត មិនមែនមនុស្សពិតទេ។ ការទស្សន៍ទាយរាសីជាការបកស្រាយតាមប្រពៃណី សម្រាប់ការកំសាន្ត។",
       chips: [["zodiac", "🐉 រាសីរបស់ខ្ញុំ"], ["love", "❤️ ស្នេហា និងភាពត្រូវគ្នា"], ["business", "💼 ដៃគូអាជីវកម្ម"], ["wedding", "💍 ថ្ងៃរៀបការ"], ["learn", "📖 ស្វែងយល់អំពីរាសី"]],
-      hello: "សួស្តីមិត្តជាទីស្រឡាញ់! 👋 សូមស្វាគមន៍មកកាន់ផ្កាយកំណើត។\nខ្ញុំនៅទីនេះដើម្បីជួយអ្នកស្វែងយល់អំពីរាសីឆ្នាំកំណើត ភាពត្រូវគ្នា ដៃគូអាជីវកម្ម ថ្ងៃរៀបការ និងច្រើនទៀត។\n\nតើអ្នកឈ្មោះអ្វី? 😊",
+      hello: "សួស្តី! 👋 ខ្ញុំគឺ គ្រូតូច ✨\nI'm your friendly zodiac guide at MyBirthSign.\n\nI can help you discover your Chinese zodiac, explore love compatibility, business partnerships, wedding dates, and more. 😊\n\nWhat's your name?",
       nice: "រីករាយដែលបានស្គាល់អ្នក {NAME}! 😊\nតើថ្ងៃខែឆ្នាំកំណើតរបស់អ្នកនៅពេលណា? 📅",
       niceKnown: "ថ្ងៃនេះអ្នកចង់ស្វែងយល់អ្វី? រាសីរបស់អ្នក ស្នេហា ដៃគូអាជីវកម្ម ថ្ងៃរៀបការ ឬអ្វីដែលអ្នកចង់ដឹង។ ✨",
-      great: "ល្អណាស់! ខ្ញុំកត់ទុកថា ថ្ងៃកំណើតរបស់អ្នកគឺ {DATE}។ 🎉\n\nថ្ងៃនេះអ្នកចង់ស្វែងយល់អ្វី?\n\n🐉 រាសីរបស់ខ្ញុំ\n❤️ ស្នេហា និងភាពត្រូវគ្នា\n💼 ដៃគូអាជីវកម្ម\n💍 ថ្ងៃរៀបការ\n\nឬប្រាប់ខ្ញុំអ្វីដែលអ្នកចង់ដឹងក៏បាន។",
-      ambiguous: "ខ្ញុំចង់ឱ្យត្រឹមត្រូវ! 😊 តើជា {A} ឬ {B}?",
+      great: "ល្អណាស់! 😊 ខ្ញុំកត់ទុកថា ថ្ងៃកំណើតរបស់អ្នកគឺ {DATE}។\nតើអ្នកចង់ស្វែងយល់អំពីរាសីចិន បុគ្គលិកលក្ខណៈ ភាពត្រូវគ្នា ដៃគូអាជីវកម្ម ឬអ្វីផ្សេងទៀត?",
+      ambiguous: "សូមបញ្ជាក់ឱ្យប្រាកដ 😊 — តើអ្នកចង់និយាយថា {A} ឬ {B}?",
       badDate: "ហ៊ឹម ខ្ញុំអានថ្ងៃខែនេះមិនទាន់ច្បាស់ទេ។ 🤔 តើអ្នកអាចសរសេរដូចជា ១ មករា ១៩៨៩ បានទេ?",
       rangeDate: "ខ្ញុំអាចជួយបានសម្រាប់ថ្ងៃកំណើតពីឆ្នាំ ១៩០០ ដល់បច្ចុប្បន្ន។ 📅 សូមពិនិត្យឆ្នាំម្តងទៀត។",
       nameAsk: "ហើយអ្នកឈ្មោះអ្វី? 😊",
@@ -120,6 +120,16 @@
     return out;
   }
 
+  /* Is m/d before that year's Lunar New Year? Uses the site's own CNY table when the page has it;
+     otherwise treats January and February as "could be either side" so we ask rather than guess. */
+  function beforeLNY(y, m, d) {
+    var cny = null;
+    try { if (typeof CNY_DATES !== "undefined" && CNY_DATES[y]) cny = CNY_DATES[y]; } catch (e) { /* ignore */ }
+    if (!cny) return m <= 2 ? "jan-feb:" + m + "-" + d : "after";
+    var cm = +cny.slice(0, 2), cd = +cny.slice(3, 5);
+    return (m < cm || (m === cm && d < cd)) ? "before" : "after";
+  }
+
   /* Returns null (no date in the text) or {status:'ok'|'ambiguous'|'invalid'|'range', ...}.
      Never guesses an ambiguous day/month order. */
   function parseBirthDate(raw) {
@@ -170,6 +180,12 @@
       var a = +m[1], b = +m[2], yy = +m[3];
       // The site's date format is dd/mm/yyyy, so 03/04/1989 is 3 April 1989 (never asked twice).
       // Only when the second number cannot be a month (e.g. 12/25/1990) is it read as month/day.
+      if (a <= 12 && b <= 12 && a !== b) {
+        // Both readings are real dates. Only ask when swapping day and month would change the zodiac sign.
+        var r1 = check(yy, b, a), r2 = check(yy, a, b);
+        if (r1.status === "ok" && r2.status === "ok" && beforeLNY(yy, b, a) !== beforeLNY(yy, a, b))
+          return { status: "ambiguous", y: yy, options: [{ d: a, m: b }, { d: b, m: a }] };
+      }
       if (b <= 12) return check(yy, b, a);
       if (a <= 12) return check(yy, a, b);
       return { status: "invalid" };
@@ -233,21 +249,44 @@
 
   function linkSet(intent, L) { return (UI[L].links[intent] || []).map(function (x) { return { text: x[0], href: x[1] }; }); }
 
+  var FIRST_RE = /\b(first|1st|former|the first one|option a)\b|ទីមួយ|ទី១|第一|最初|첫|แรก|primer|premier|erste|primo|pertama|पहला/i;
+  var SECOND_RE = /\b(second|2nd|latter|the second one|option b|other one)\b|ទីពីរ|ទី២|第二|二番|두 번째|ที่สอง|segundo|deuxième|zweite|secondo|kedua|ikalawa|दूसरा|thứ hai/i;
+  function pickPending(text, pend) {
+    var low = asciiDigits(text).toLowerCase(), pick = null;
+    ["en", "km"].forEach(function (Lx) {
+      var tx = UI[Lx];
+      pend.options.forEach(function (o, idx) {
+        var label = asciiDigits(tx.fmtShort(o.d, o.m, tx.months)).toLowerCase();
+        if (!pick && (low.indexOf(label) >= 0 || (low.indexOf(String.fromCharCode(97 + idx)) === 0 && low.length < 3))) pick = o;
+      });
+    });
+    if (!pick && SECOND_RE.test(low)) pick = pend.options[1];
+    if (!pick && FIRST_RE.test(low)) pick = pend.options[0];
+    if (!pick) {
+      // just a month name ("December") that matches only one of the two options
+      var hits = pend.options.filter(function (o) {
+        return [UI.en.months[o.m - 1], UI.km.months[o.m - 1]].some(function (n) { return low.indexOf(n.toLowerCase()) >= 0; });
+      });
+      if (hits.length === 1) pick = hits[0];
+    }
+    if (!pick) {
+      var again = parseBirthDate(text); // or they typed a full, clear date
+      if (again && again.status === "ok") pick = { d: again.d, m: again.m, y: again.y };
+    }
+    return pick;
+  }
+
   // brain(text, ctx) -> Promise<{ parts: [{text, links?}] }>.  Phase 3 swaps this out.
   function guideBrain(text, ctx) {
     var mem = ctx.mem, L = replyLang(text), t = UI[L], parts = [], intent = ctx.intent || detectIntent(text);
 
     // 1) a pending "which date did you mean?" answer
     if (mem.pending) {
-      var pend = mem.pending, pick = null, low = asciiDigits(text).toLowerCase();
-      pend.options.forEach(function (o, idx) {
-        var label = asciiDigits(t.fmtShort(o.d, o.m, t.months)).toLowerCase();
-        if (low.indexOf(label) >= 0 || low.indexOf(String.fromCharCode(97 + idx)) === 0 && low.length < 3) pick = o;
-      });
-      if (!pick) {
-        // maybe they typed a full new date
-        var again = parseBirthDate(text);
-        if (again && again.status === "ok") pick = { d: again.d, m: again.m, y: again.y };
+      var pend = mem.pending, pick = pickPending(text, pend);
+      if (pick && pend.forPartner) {
+        mem.partner = { y: pick.y || pend.y, m: pick.m, d: pick.d }; mem.pending = null;
+        var tp = mem.topic && t[mem.topic] ? mem.topic : "love";
+        return Promise.resolve({ parts: [{ text: t[tp], links: linkSet(tp, L) }] }); // offline fallback; apiBrain normally handles this
       }
       if (pick) {
         mem.dob = { y: pend.y, m: pick.m, d: pick.d };
@@ -317,24 +356,44 @@
   var API_URL = "/.netlify/functions/ai-friend";
   function apiBrain(text, ctx) {
     var mem = ctx.mem, intent = ctx.intent || detectIntent(text);
-    var pd = mem.pending ? null : parseBirthDate(text);
-    // a second, clear date while the topic involves two people = the partner's birthday (the visitor's own stays)
     var pairTopic = (intent || mem.topic) === "love" || (intent || mem.topic) === "business" || (intent || mem.topic) === "wedding";
-    if (mem.dob && pd && pd.status === "ok" && (pairTopic || PARTNER_RE.test(text))) {
+    var pd = null, partnerPicked = false;
+    if (mem.pending && mem.pending.forPartner) {
+      // the visitor is answering "did you mean A or B?" about the partner's birthday
+      var pk = pickPending(text, mem.pending);
+      var pend = mem.pending; mem.pending = null;
+      if (pk) { mem.partner = { y: pk.y || pend.y, m: pk.m, d: pk.d }; partnerPicked = true; }
+    }
+    // visitor moved on without answering "which date did you mean?": drop the question, don't get stuck
+    if (mem.pending && !pickPending(text, mem.pending)) mem.pending = null;
+    if (!partnerPicked) pd = mem.pending ? null : parseBirthDate(text);
+    var partnerish = mem.dob && pd && (pairTopic || PARTNER_RE.test(text));
+    if (partnerish && pd.status === "ambiguous") {
+      // unclear partner date: ask which one, and remember the answer is for the partner (the visitor's own date stays)
+      var L = replyLang(text), t = UI[L], yy = L === "km" ? khDigits(pd.y) : pd.y;
+      mem.pending = { y: pd.y, options: pd.options, forPartner: true };
+      return Promise.resolve({ parts: [{ text: t.ambiguous.replace("{A}", t.fmtShort(pd.options[0].d, pd.options[0].m, t.months) + " " + yy).replace("{B}", t.fmtShort(pd.options[1].d, pd.options[1].m, t.months) + " " + yy) }] });
+    }
+    if (partnerish && pd.status === "ok") {
+      // a second, clear date while the topic involves two people = the partner's birthday (the visitor's own stays)
       mem.partner = { y: pd.y, m: pd.m, d: pd.d };
     } else if (mem.pending || pd) return guideBrain(text, ctx);
     // visitor gives only a year or an animal (no full birthday yet): remember it so Claude can give a base answer
     var an = pd ? "" : detectAnimal(text), shortMsg = text.trim().length <= 16;
-    if (!pd && !mem.dob) {
-      var sy = /(?:^|\D)((?:19|20)\d{2})(?:\D|$)/.exec(asciiDigits(text));
-      if (sy && text.length <= 90 && +sy[1] <= new Date().getFullYear()) mem.selfYear = +sy[1];
+    var aboutPartner = PARTNER_RE.test(text) || /\b(brother|sister|friend|boss|colleague|co-?founder|mother|father|mom|dad|son|daughter)\b|បងប្រុស|បងស្រី|ប្អូនប្រុស|ប្អូនស្រី|មិត្តភក្តិ|ម្តាយ|ឪពុក|កូន/i.test(text);
+    var yr = pd ? null : /(?:^|\D)((?:19|20)\d{2})(?:\D|$)/.exec(asciiDigits(text));
+    var yrOk = yr && +yr[1] <= new Date().getFullYear() && text.length <= 120;
+    if (!pd && !mem.partner && aboutPartner && (an || yrOk)) {
+      // "My wife is a Tiger" / "ប្រពន្ធខ្ញុំកើត 1990": this is about the other person, even before we know the visitor's own date
+      if (an) mem.partnerAnimal = an;
+      if (yrOk && (intent || mem.topic) !== "wedding") mem.partnerYear = +yr[1];
+    } else if (!pd && !mem.dob) {
+      if (yrOk && text.length <= 90) mem.selfYear = +yr[1];
       if (an && (shortMsg || SELF_MARKER.test(text))) mem.selfAnimal = an;
-    } else if (!pd && mem.dob && !mem.partner && an && pairTopic && (shortMsg || PARTNER_RE.test(text) || SELF_MARKER.test(text))) {
+    } else if (!pd && mem.dob && !mem.partner && an && pairTopic && (shortMsg || SELF_MARKER.test(text))) {
       mem.partnerAnimal = an;
-    }
-    if (!pd && mem.dob && !mem.partner && (intent || mem.topic) !== "wedding" && pairTopic) {
-      var py = /(?:^|\D)((?:19|20)\d{2})(?:\D|$)/.exec(asciiDigits(text));
-      if (py) mem.partnerYear = +py[1];
+    } else if (!pd && mem.dob && !mem.partner && yrOk && (intent || mem.topic) !== "wedding" && pairTopic) {
+      mem.partnerYear = +yr[1];
     }
     if (!pd) { var wy = /\b(20[2-3]\d)\b/.exec(text); if (wy && (intent || mem.topic) === "wedding") mem.weddingYear = +wy[1]; }
     if (!mem.name && !intent && extractName(text)) return guideBrain(text, ctx);

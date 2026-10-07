@@ -25,8 +25,8 @@
   }
 
   var STR = {
-    en: { label: "Kru Toch · MyBirthSign AI", short: "Kru Toch", aria: "Open chat with Kru Toch, the MyBirthSign AI Friend" },
-    km: { label: "គ្រួតូច · មិត្ត AI", short: "គ្រួតូច", aria: "បើកការជជែកជាមួយគ្រួតូច មិត្ត AI របស់ផ្កាយកំណើត" }
+    en: { label: "Kru Toch ✨ · Zodiac Guide", short: "Kru Toch ✨", aria: "Open chat with Kru Toch, your friendly AI zodiac guide" },
+    km: { label: "គ្រូតូច ✨ · អ្នកណែនាំរាសី", short: "គ្រូតូច ✨", aria: "បើកការជជែកជាមួយគ្រូតូច អ្នកណែនាំរាសី AI" }
   };
 
   /* Avatar: a friendly gold-ringed robot face with a crescent moon on its antenna. */
