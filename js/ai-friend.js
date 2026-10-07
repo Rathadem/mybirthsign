@@ -25,6 +25,7 @@
       chips: [["zodiac", "🐉 My Zodiac"], ["love", "❤️ Love & Compatibility"], ["business", "💼 Business Partner"], ["wedding", "💍 Wedding Date"], ["learn", "📖 Learn About Zodiac"]],
       hello: "Hi, my friend! 👋 Welcome to MyBirthSign.\nI'm here to help you discover your Chinese zodiac, explore compatibility, business partnerships, wedding dates, and more.\n\nWhat's your name? 😊",
       nice: "Nice to meet you, {NAME}! 😊\nAnd what's your date of birth? 📅",
+      niceKnown: "What would you like to explore today? Your zodiac, love, a business partner, a wedding date, or anything you're curious about. ✨",
       great: "Great! I have your birthday as {DATE}. 🎉\n\nWhat would you like to explore today?\n\n🐉 My Chinese Zodiac\n❤️ Love & Compatibility\n💼 Business Partner\n💍 Wedding Date\n\nOr just tell me what you're curious about.",
       ambiguous: "I want to get this right! 😊 Is that {A} or {B}?",
       badDate: "Hmm, I couldn't quite read that date. 🤔 Could you write it like 1 January 1989?",
@@ -53,6 +54,7 @@
       chips: [["zodiac", "🐉 រាសីរបស់ខ្ញុំ"], ["love", "❤️ ស្នេហា និងភាពត្រូវគ្នា"], ["business", "💼 ដៃគូអាជីវកម្ម"], ["wedding", "💍 ថ្ងៃរៀបការ"], ["learn", "📖 ស្វែងយល់អំពីរាសី"]],
       hello: "សួស្តីមិត្តជាទីស្រឡាញ់! 👋 សូមស្វាគមន៍មកកាន់ផ្កាយកំណើត។\nខ្ញុំនៅទីនេះដើម្បីជួយអ្នកស្វែងយល់អំពីរាសីឆ្នាំកំណើត ភាពត្រូវគ្នា ដៃគូអាជីវកម្ម ថ្ងៃរៀបការ និងច្រើនទៀត។\n\nតើអ្នកឈ្មោះអ្វី? 😊",
       nice: "រីករាយដែលបានស្គាល់អ្នក {NAME}! 😊\nតើថ្ងៃខែឆ្នាំកំណើតរបស់អ្នកនៅពេលណា? 📅",
+      niceKnown: "ថ្ងៃនេះអ្នកចង់ស្វែងយល់អ្វី? រាសីរបស់អ្នក ស្នេហា ដៃគូអាជីវកម្ម ថ្ងៃរៀបការ ឬអ្វីដែលអ្នកចង់ដឹង។ ✨",
       great: "ល្អណាស់! ខ្ញុំកត់ទុកថា ថ្ងៃកំណើតរបស់អ្នកគឺ {DATE}។ 🎉\n\nថ្ងៃនេះអ្នកចង់ស្វែងយល់អ្វី?\n\n🐉 រាសីរបស់ខ្ញុំ\n❤️ ស្នេហា និងភាពត្រូវគ្នា\n💼 ដៃគូអាជីវកម្ម\n💍 ថ្ងៃរៀបការ\n\nឬប្រាប់ខ្ញុំអ្វីដែលអ្នកចង់ដឹងក៏បាន។",
       ambiguous: "ខ្ញុំចង់ឱ្យត្រឹមត្រូវ! 😊 តើជា {A} ឬ {B}?",
       badDate: "ហ៊ឹម ខ្ញុំអានថ្ងៃខែនេះមិនទាន់ច្បាស់ទេ។ 🤔 តើអ្នកអាចសរសេរដូចជា ១ មករា ១៩៨៩ បានទេ?",
@@ -288,7 +290,10 @@
       var nm = extractName(text);
       if (nm) {
         mem.name = nm;
-        return Promise.resolve({ parts: [{ text: t.nice.replace("{NAME}", nm) }] });
+        var niceText = t.nice.replace("{NAME}", nm);
+        // birthday already given first: don't ask for it again, go straight to the options
+        if (mem.dob) niceText = niceText.split("\n")[0] + "\n" + t.niceKnown;
+        return Promise.resolve({ parts: [{ text: niceText }] });
       }
     }
 
