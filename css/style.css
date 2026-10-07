@@ -3200,3 +3200,10 @@ html[lang="km"] [data-lang-content="en"] { display: none; }
 footer.site-footer, body.chk-page footer.chk-footer, .fx-page footer.site-footer, .hm-final { background-image: none !important; background-color: #0b0820 !important; }
 body.chk-page footer.chk-footer { padding-top: 48px; margin-top: 32px; border-top: 1px solid rgba(231, 194, 122, .18); text-shadow: none; }
 .hm-final-in { padding-bottom: 60px; }
+
+/* Khmer typography, one consistent face: Kantumruy Pro for body text, buttons, forms and small headings (clearer at small sizes than Noto Sans Khmer).
+   Big page titles (h1/h2) keep their own display face (Moul). Noto Sans Khmer stays as the fallback. */
+html[lang="km"] body,
+html[lang="km"] :is(p, li, a, label, button, input, select, textarea, summary, dt, dd, h3, h4, h5, figcaption, th, td, small):not(:is(h1, h2) *):not(.logo) {
+  font-family: "Kantumruy Pro", "Noto Sans Khmer", "Khmer OS", sans-serif !important;
+}
