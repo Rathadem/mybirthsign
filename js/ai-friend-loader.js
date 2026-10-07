@@ -54,6 +54,7 @@
     ".mbs-ai-btn .mbs-ai-spark{color:#f6dc9b;margin-right:2px;}" +
     ".mbs-ai-btn .mbs-ai-s{display:none;}" +
     ".mbs-ai-btn[hidden]{display:none!important;}" +
+    ".mbs-ai-btn.mbs-ai-cont::before{content:'';position:absolute;top:4px;left:36px;width:12px;height:12px;border-radius:50%;background:#3ddc84;border:2px solid #2a1d63;}" +
     "@media (prefers-reduced-motion:no-preference){.mbs-ai-btn::after{content:'';position:absolute;inset:-2px;border-radius:999px;border:2px solid rgba(246,220,155,.55);animation:mbsAiPulse 3.2s ease-out 2s 2;pointer-events:none;}}" +
     "@keyframes mbsAiPulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.28);opacity:0}}" +
     "@media (max-width:480px){.mbs-ai-btn{min-height:50px;padding-right:15px}.mbs-ai-btn .mbs-ai-l{display:none}.mbs-ai-btn .mbs-ai-s{display:inline}}";
@@ -108,6 +109,7 @@
     ["pointerenter", "focus", "touchstart"].forEach(function (ev) { btn.addEventListener(ev, warm, { once: true, passive: true }); });
 
     btn.addEventListener("click", function () {
+      btn.classList.remove("mbs-ai-cont");
       load().then(function () { window.MBSAiFriend.toggle(btn); }).catch(function () {
         btn.setAttribute("aria-label", "Chat is unavailable right now. Please try again.");
       });
@@ -115,11 +117,17 @@
 
     window.__mbsAiLauncher = btn;
 
-    // coming back after a language switch with the chat open: open it again
+    // The chat was open on the previous page: keep it open here too, with the same conversation.
+    // Language switch: always reopen. Other pages: reopen beside the page on tablets/desktops; on phones the
+    // chat is full screen, so instead of covering the new page we mark the button "conversation waiting".
     try {
+      var phone = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
       if (sessionStorage.getItem("mbsAiReopen") === "1") {
         sessionStorage.removeItem("mbsAiReopen");
         load().then(function () { window.MBSAiFriend.open(btn); }).catch(function () {});
+      } else if (sessionStorage.getItem("mbsAiOpen") === "1") {
+        if (!phone) load().then(function () { window.MBSAiFriend.open(btn, { restore: true }); }).catch(function () {});
+        else { btn.classList.add("mbs-ai-cont"); warm(); }
       }
     } catch (e) { /* ignore */ }
   }

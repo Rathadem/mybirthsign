@@ -656,9 +656,11 @@
     }
   }
 
-  function open(from) {
+  function open(from, opts) {
     buildPanel();
     if (isOpen) return;
+    var restoring = !!(opts && opts.restore);
+    try { sessionStorage.setItem("mbsAiOpen", "1"); } catch (x) { /* ignore */ }
     opener = from || window.__mbsAiLauncher || document.activeElement;
     isOpen = true;
     panel.setAttribute("aria-modal", isPhone() ? "true" : "false");
@@ -668,14 +670,16 @@
     if (isPhone()) { savedOverflow = document.documentElement.style.overflow; document.documentElement.style.overflow = "hidden"; }
     onViewport();
     greet();
-    // phones: don't pop the keyboard straight away; desktop: focus the field
-    setTimeout(function () { (isPhone() ? titleEl : input).focus({ preventScroll: true }); }, 60);
+    // phones: don't pop the keyboard straight away; desktop: focus the field.
+    // Re-opened automatically on a new page: leave focus on the page itself.
+    if (!restoring) setTimeout(function () { (isPhone() ? titleEl : input).focus({ preventScroll: true }); }, 60);
   }
 
   function close() {
     if (!isOpen) return;
     if (micOn) stopVoice();
     isOpen = false;
+    try { sessionStorage.removeItem("mbsAiOpen"); } catch (x) { /* ignore */ }
     panel.setAttribute("data-open", "false");
     document.documentElement.style.overflow = savedOverflow;
     var l = window.__mbsAiLauncher;
@@ -685,7 +689,7 @@
   }
 
   // The site's language switch reloads the page. If the chat was open, bring it back afterwards
-  // (only for that case: ordinary page-to-page navigation never re-opens the chat over the page).
+  // on every screen size. (Ordinary page-to-page navigation is handled by the loader via "mbsAiOpen".)
   document.addEventListener("click", function (e) {
     var t = e.target && e.target.closest && e.target.closest("[data-lang-switch]");
     if (t && isOpen) { try { sessionStorage.setItem("mbsAiReopen", "1"); } catch (x) { /* ignore */ } }
