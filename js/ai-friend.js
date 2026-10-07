@@ -16,12 +16,12 @@
   /* ------------------------------------------------------------------ strings */
   var UI = {
     en: {
-      title: "MyBirthSign AI Friend", sub: "Ready to chat",
+      title: "Zodi", sub: "MyBirthSign AI Friend",
       placeholder: "Type your message…", send: "Send message", close: "Close chat",
       newChat: "Start a new chat", micStart: "Start voice input", micStop: "Stop voice input",
       micDenied: "Voice input isn't available right now. You can type instead. 😊",
       log: "Conversation", quick: "Quick actions",
-      note: "MyBirthSign AI Friend is an AI, not a person. Chinese zodiac readings are traditional interpretations for entertainment.",
+      note: "Zodi, the MyBirthSign AI Friend, is an AI, not a person. Chinese zodiac readings are traditional interpretations for entertainment.",
       chips: [["zodiac", "🐉 My Zodiac"], ["love", "❤️ Love & Compatibility"], ["business", "💼 Business Partner"], ["wedding", "💍 Wedding Date"], ["learn", "📖 Learn About Zodiac"]],
       hello: "Hi, my friend! 👋 Welcome to MyBirthSign.\nI'm here to help you discover your Chinese zodiac, explore compatibility, business partnerships, wedding dates, and more.\n\nWhat's your name? 😊",
       nice: "Nice to meet you, {NAME}! 😊\nAnd what's your date of birth? 📅",
@@ -44,7 +44,7 @@
       fmtShort: function (d, m, M) { return d + " " + M[m - 1]; }
     },
     km: {
-      title: "មិត្ត AI MyBirthSign", sub: "ត្រៀមជួយអ្នក",
+      title: "Zodi", sub: "មិត្ត AI MyBirthSign",
       placeholder: "វាយសាររបស់អ្នក…", send: "ផ្ញើសារ", close: "បិទការជជែក",
       newChat: "ចាប់ផ្តើមការជជែកថ្មី", micStart: "ចាប់ផ្តើមនិយាយ", micStop: "ឈប់ស្តាប់",
       micDenied: "ឥឡូវនេះមិនអាចប្រើសំឡេងបានទេ។ អ្នកអាចវាយអក្សរជំនួសបាន។ 😊",
