@@ -4,6 +4,8 @@
 
 [functions]
   node_bundler = "esbuild"
+  # the AI Friend reads the site's own calculation files so its answers use the real results
+  included_files = ["js/zodiac-data.js", "js/business-data.js", "js/mbs-engine.js"]
 
 # Canonical host: send www (and plain http) to https://mybirthsign.com with a permanent redirect.
 [[redirects]]

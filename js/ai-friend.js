@@ -302,10 +302,17 @@
   /* Phase 3: Claude brain. Names, birthdays and clarifications stay with the deterministic
      parser above (exact, free, instant). Everything else goes to the secure Netlify Function;
      if it is unreachable the scripted guide answers instead, so the chat never breaks. */
+  var PARTNER_RE = /partner|wife|husband|girlfriend|boyfriend|spouse|fianc|lover|ប្រពន្ធ|ប្តី|ប្ដី|សង្សារ|គូ|妻|夫|彼女|彼氏|아내|남편|vợ|chồng|pareja|esposa|marido|femme|mari|ehefrau|ehemann|moglie|marito|esposa|istri|suami|asawa|पत्नी|पति|ภรรยา|สามี/i;
   var API_URL = "/.netlify/functions/ai-friend";
   function apiBrain(text, ctx) {
     var mem = ctx.mem, intent = ctx.intent || detectIntent(text);
-    if (mem.pending || parseBirthDate(text)) return guideBrain(text, ctx);
+    var pd = mem.pending ? null : parseBirthDate(text);
+    // a second, clear date while the topic involves two people = the partner's birthday (the visitor's own stays)
+    var pairTopic = (intent || mem.topic) === "love" || (intent || mem.topic) === "business" || (intent || mem.topic) === "wedding";
+    if (mem.dob && pd && pd.status === "ok" && (pairTopic || PARTNER_RE.test(text))) {
+      mem.partner = { y: pd.y, m: pd.m, d: pd.d };
+    } else if (mem.pending || pd) return guideBrain(text, ctx);
+    if (!pd) { var wy = /\b(20[2-3]\d)\b/.exec(text); if (wy && (intent || mem.topic) === "wedding") mem.weddingYear = +wy[1]; }
     if (!mem.name && !intent && extractName(text)) return guideBrain(text, ctx);
     var msgs = ctx.history.map(function (m) { return { role: m.r === "user" ? "user" : "assistant", content: m.t }; });
     if (mem.topic === "" && intent) mem.topic = intent;
@@ -313,7 +320,7 @@
     var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 25000);
     return fetch(API_URL, {
       method: "POST", headers: { "content-type": "application/json" }, signal: ctl ? ctl.signal : undefined,
-      body: JSON.stringify({ messages: msgs, context: { name: mem.name, dob: mem.dob, topic: intent || mem.topic } })
+      body: JSON.stringify({ messages: msgs, context: { name: mem.name, dob: mem.dob, partner: mem.partner || null, weddingYear: mem.weddingYear || null, topic: intent || mem.topic } })
     }).then(function (r) {
       if (r.status === 429) return { rate: true };
       if (!r.ok) throw new Error("api " + r.status);
