@@ -218,3 +218,7 @@ html[lang="km"] .hm-find h2, html[lang="km"] .hm-cross h2 { line-height: 1.8; }
 /* lower the Find box a little so it sits clear of the hero edge */
 .hm-find { margin-top: 10px; }
 @media (max-width: 820px) { .hm-find { margin-top: 22px; } }
+
+/* gold frames on the home page: no black band inside or around the frame; the fill stops at the gold line */
+.hm-page .fx-gframe { background: none; box-shadow: none; }
+.hm-page .fx-gframe::before { display: block; inset: -28px -30px; z-index: -1; background: var(--fx-glass); border-radius: 2px; margin: 6px; }
