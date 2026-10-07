@@ -1,12 +1,11 @@
-/* MyBirthSign AI Friend — chat panel (Phase 2: interface only).
+/* MyBirthSign AI Friend — chat panel.
  *
  * Loaded on demand by js/ai-friend-loader.js the first time a visitor opens the chat.
  * It exposes window.MBSAiFriend { open, close, toggle, setBrain }.
  *
- * PHASE 2: replies come from a small built-in "guide" brain that only points the
- * visitor to the right MyBirthSign tool. It does not calculate anything and does not
- * call any API. In Phase 3 the brain is replaced (setBrain) by the secure Netlify
- * Function; in Phase 4 the real calculators are connected.
+ * PHASE 3: names, birthdays and clarifications are handled by the built-in parser; everything
+ * else goes to the secure Netlify Function /.netlify/functions/ai-friend (Claude). If that is
+ * unreachable the scripted guide answers. Phase 4 connects the real calculators.
  *
  * Safety: all visitor text is shown with textContent (never as HTML).
  */
@@ -300,7 +299,39 @@
     return Promise.resolve({ parts: [fb] });
   }
 
-  var brain = guideBrain;
+  /* Phase 3: Claude brain. Names, birthdays and clarifications stay with the deterministic
+     parser above (exact, free, instant). Everything else goes to the secure Netlify Function;
+     if it is unreachable the scripted guide answers instead, so the chat never breaks. */
+  var API_URL = "/.netlify/functions/ai-friend";
+  function apiBrain(text, ctx) {
+    var mem = ctx.mem, intent = ctx.intent || detectIntent(text);
+    if (mem.pending || parseBirthDate(text)) return guideBrain(text, ctx);
+    if (!mem.name && !intent && extractName(text)) return guideBrain(text, ctx);
+    var msgs = ctx.history.map(function (m) { return { role: m.r === "user" ? "user" : "assistant", content: m.t }; });
+    if (mem.topic === "" && intent) mem.topic = intent;
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 25000);
+    return fetch(API_URL, {
+      method: "POST", headers: { "content-type": "application/json" }, signal: ctl ? ctl.signal : undefined,
+      body: JSON.stringify({ messages: msgs, context: { name: mem.name, dob: mem.dob, topic: intent || mem.topic } })
+    }).then(function (r) {
+      if (r.status === 429) return { rate: true };
+      if (!r.ok) throw new Error("api " + r.status);
+      return r.json();
+    }).then(function (d) {
+      clearTimeout(timer);
+      if (d.rate) return { parts: [{ text: lang() === "km" ? "ចាំបន្តិចមិត្តអើយ 😊 សូមសាកល្បងម្តងទៀតក្នុងរយៈពេលមួយភ្លែតទៀត។" : "Let's slow down just a little, my friend 😊 Please try again in a minute." }] };
+      if (!d || !d.reply) throw new Error("empty");
+      if (intent) mem.topic = intent;
+      var links = intent ? linkSet(intent, replyLang(text)) : null;
+      return { parts: [{ text: d.reply, links: links && links.length ? links : undefined }] };
+    }).catch(function () {
+      clearTimeout(timer);
+      return guideBrain(text, ctx);
+    });
+  }
+
+  var brain = apiBrain;
 
   /* --------------------------------------------------------------- DOM */
   var panel, log, form, input, sendBtn, micBtn, quick, titleEl, subEl, noteEl, closeBtn, newBtn, srStatus;
