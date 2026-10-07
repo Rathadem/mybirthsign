@@ -317,6 +317,10 @@
     if (mem.dob && pd && pd.status === "ok" && (pairTopic || PARTNER_RE.test(text))) {
       mem.partner = { y: pd.y, m: pd.m, d: pd.d };
     } else if (mem.pending || pd) return guideBrain(text, ctx);
+    if (!pd && mem.dob && !mem.partner && (intent || mem.topic) !== "wedding" && pairTopic) {
+      var py = /(?:^|\D)((?:19|20)\d{2})(?:\D|$)/.exec(asciiDigits(text));
+      if (py) mem.partnerYear = +py[1];
+    }
     if (!pd) { var wy = /\b(20[2-3]\d)\b/.exec(text); if (wy && (intent || mem.topic) === "wedding") mem.weddingYear = +wy[1]; }
     if (!mem.name && !intent && extractName(text)) return guideBrain(text, ctx);
     var msgs = ctx.history.map(function (m) { return { role: m.r === "user" ? "user" : "assistant", content: m.t }; });
@@ -325,7 +329,7 @@
     var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 25000);
     return fetch(API_URL, {
       method: "POST", headers: { "content-type": "application/json" }, signal: ctl ? ctl.signal : undefined,
-      body: JSON.stringify({ messages: msgs, context: { name: mem.name, dob: mem.dob, partner: mem.partner || null, weddingYear: mem.weddingYear || null, topic: intent || mem.topic } })
+      body: JSON.stringify({ messages: msgs, context: { name: mem.name, dob: mem.dob, partner: mem.partner || null, partnerYear: mem.partnerYear || null, weddingYear: mem.weddingYear || null, topic: intent || mem.topic } })
     }).then(function (r) {
       if (r.status === 429) return { rate: true };
       if (!r.ok) throw new Error("api " + r.status);
