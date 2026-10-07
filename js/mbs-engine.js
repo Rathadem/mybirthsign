@@ -133,5 +133,27 @@ var MBSEngine = (function () {
     return r;
   }
 
-  return { zodiac: zodiac, love: love, business: business, wedding: wedding, parseIso: parseIso };
+  /* Daily Fortune: the same rule as scripts/daily-fortune.mjs (day animal from the Julian Day Number;
+     great = same animal, good = same triangle, caution = direct opposite, otherwise ordinary). */
+  var BRANCH_ORDER = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
+  var TIER_INFO = {
+    great: { label: "Great Day", goodFor: "Big decisions, bold moves, saying what's on your mind." },
+    good: { label: "Good Day", goodFor: "Steady follow-through on something already in motion." },
+    ordinary: { label: "Ordinary Day", goodFor: "Routine tasks, nothing special pulling for or against you today." },
+    caution: { label: "Take It Easy", goodFor: "Low-key tasks only. Worth skipping anything high-stakes if you can." }
+  };
+  function dayAnimal(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || "")); if (!m) return null;
+    var jdn = Math.floor(Date.UTC(+m[1], +m[2] - 1, +m[3]) / 86400000) + 2440588;
+    return BRANCH_ORDER[(jdn + 1) % 12];
+  }
+  function dailyLuck(isoToday, animal) {
+    var da = dayAnimal(isoToday), idx = BRANCH_ORDER.indexOf(animal);
+    if (!da || idx < 0) return null;
+    var tier = animal === da ? "great" : sameTriangle(animal, da) ? "good"
+      : Math.abs(idx - BRANCH_ORDER.indexOf(da)) === 6 ? "caution" : "ordinary";
+    return { date: isoToday, dayAnimal: da, visitorAnimal: animal, tier: tier, label: TIER_INFO[tier].label, traditionallyGoodFor: TIER_INFO[tier].goodFor };
+  }
+
+  return { zodiac: zodiac, love: love, business: business, wedding: wedding, dailyLuck: dailyLuck, dayAnimal: dayAnimal, parseIso: parseIso };
 })();

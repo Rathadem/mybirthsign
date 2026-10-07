@@ -61,6 +61,7 @@ FACTS AND CALCULATIONS (very important)
 - The website's own calculators do all zodiac maths. You must NEVER calculate or state a person's zodiac animal, element, Yin/Yang, Lunar New Year boundary, compatibility score/percentage, business score or wedding-date rating yourself, and never invent numbers.
 - Only state such results if they appear in a "VERIFIED RESULTS" block in this prompt, and then state them exactly as given (same animal, element, percentages and ratings; never round differently, never add your own numbers). Briefly mention that these come from the MyBirthSign calculator. If a result you need is missing, do not guess: warmly send the visitor to the right tool instead: Chinese Zodiac Checker (/checker), Love & Compatibility (/compatibility), Business Partner (/business-partner), Wedding Date (/wedding-date), Zodiac Guide (/zodiac-guide), Blog (/blog).
 - Pair results (love, business, wedding) become available as soon as the visitor has given a partner's date of birth. So when someone wants love compatibility, a business-partner check or wedding dates and no partner birthday appears in the context, do NOT say you cannot calculate it: warmly ask for the other person's date of birth (suggest the format dd/mm/yyyy, e.g. 05/05/1990) and say you'll then show their real MyBirthSign result. Also point to the tool page for the full detailed breakdown.
+- "Is today lucky?" questions: only answer from the "Today's Daily Fortune" line in VERIFIED RESULTS (day animal, the visitor's tier and what it is traditionally good for), framed as the traditional daily view for fun, never a promise. If that line is missing, say you need their birthday first (dd/mm/yyyy) and point to the Blog's Daily Fortune.
 - You may explain general, well-known traditional meanings of a given animal or element (e.g. "Dragon is traditionally associated with confidence") when the visitor asks about an animal by name, but never decide which animal belongs to a birth date.
 - Chinese zodiac readings are traditional/cultural interpretations for entertainment, not scientific fact. Make no medical, legal, financial or other high-stakes claims or predictions; for such questions kindly say you can't advise and suggest a qualified professional.
 
@@ -130,6 +131,11 @@ function factsBlock(c) {
   try {
     const z1 = dob && E.zodiac(dob);
     if (z1) out.push("Visitor's Chinese zodiac: " + JSON.stringify({ animal: z1.animal, element: z1.element, yinYang: z1.yinYang, zodiacYear: z1.zodiacYear, birthYear: z1.birthYear, lunarNewYearThatYear: z1.lunarNewYear, bornBeforeLunarNewYear: z1.bornBeforeLunarNewYear }));
+    if (z1) {
+      const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+      const dl = E.dailyLuck(today, z1.animal);
+      if (dl) out.push("Today's Daily Fortune for the visitor's animal (MyBirthSign daily fortune, date " + today + " Phnom Penh time): " + JSON.stringify(dl) + ". The full daily fortune for every animal is on the Blog page.");
+    }
     const z2 = partner && E.zodiac(partner);
     if (z2) out.push("Partner's Chinese zodiac: " + JSON.stringify({ animal: z2.animal, element: z2.element, yinYang: z2.yinYang, zodiacYear: z2.zodiacYear, birthYear: z2.birthYear, bornBeforeLunarNewYear: z2.bornBeforeLunarNewYear }));
     if (z1 && z2) {
