@@ -215,3 +215,6 @@ html[lang="km"] .hm-find h2, html[lang="km"] .hm-cross h2 { line-height: 1.8; }
   .hm-benefits li { padding: 2px 4px; font-size: .74rem; }
   .hm-find-form { padding: 14px; }
 }
+/* lower the Find box a little so it sits clear of the hero edge */
+.hm-find { margin-top: 10px; }
+@media (max-width: 820px) { .hm-find { margin-top: 22px; } }
