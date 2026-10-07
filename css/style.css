@@ -3207,3 +3207,6 @@ html[lang="km"] body,
 html[lang="km"] :is(p, li, a, label, button, input, select, textarea, summary, dt, dd, h3, h4, h5, figcaption, th, td, small):not(:is(h1, h2) *):not(.logo) {
   font-family: "Kantumruy Pro", "Noto Sans Khmer", "Khmer OS", sans-serif !important;
 }
+/* Khmer never takes letter-spacing (it breaks the letter clusters apart); the Business Partner title also gets the Moul title face like the other pages */
+html[lang="km"] h1, html[lang="km"] h2, html[lang="km"] .biz-hero-v2 h1 { letter-spacing: 0 !important; }
+html[lang="km"] .biz-hero-v2 h1 { font-family: "Moul", "Kantumruy Pro", "Noto Sans Khmer", serif !important; font-weight: 400; font-size: clamp(1.4rem, 4vw, 2.3rem); line-height: 1.7; text-wrap: balance; }
