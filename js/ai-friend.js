@@ -162,14 +162,14 @@
       return { status: "invalid" };
     }
 
-    // d/m/yyyy or m/d/yyyy
+    // dd/mm/yyyy (the site's format)
     m = s.match(/(?:^|\D)(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})(?:\D|$)/);
     if (m) {
       var a = +m[1], b = +m[2], yy = +m[3];
-      if (a > 12 && b <= 12) return check(yy, b, a);
-      if (b > 12 && a <= 12) return check(yy, a, b);
-      if (a === b) return check(yy, a, b);
-      if (a <= 12 && b <= 12) return { status: "ambiguous", y: yy, options: [{ d: a, m: b }, { d: b, m: a }] };
+      // The site's date format is dd/mm/yyyy, so 03/04/1989 is 3 April 1989 (never asked twice).
+      // Only when the second number cannot be a month (e.g. 12/25/1990) is it read as month/day.
+      if (b <= 12) return check(yy, b, a);
+      if (a <= 12) return check(yy, a, b);
       return { status: "invalid" };
     }
     return null;
