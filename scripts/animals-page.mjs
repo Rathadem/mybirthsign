@@ -281,6 +281,8 @@ let tpl = read("scripts/animal-profile-template.html");
 // the template lives one folder deep (blog/); this page is at the site root
 tpl = tpl.replace(/(href|src)="\.\.\//g, '$1="').replace('<link rel="stylesheet" href="css/profile.css">', '<link rel="stylesheet" href="css/profile.css">\n<link rel="stylesheet" href="css/animals.css">').replace('<body class="fx-page pf-page">', '<body class="fx-page pf-page an-page">').replace("\n{{TODAY_JS}}", "")
   .replace('<link rel="icon" type="image/svg+xml" href="favicon.svg">', '<link rel="icon" type="image/svg+xml" href="favicon.svg">\n<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">\n<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">\n<link rel="shortcut icon" href="favicon.ico">\n<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">');
+// only this page (not the 12 profile pages / daily posts that share the template) gets the AI Friend button
+tpl = tpl.replace("</body>", '<script src="js/ai-friend-loader.js" defer></script>\n</body>');
 const out = tpl.replace(/\{\{TITLE\}\}/g, esc(TITLE)).replace(/\{\{URL\}\}/g, URL_).replace(/\{\{DESC\}\}/g, esc(DESC)).replace(/\{\{OG_IMAGE\}\}/g, OG)
   .replace("{{JSONLD}}", jsonld.replace(/</g, "\\u003c")).replace("{{BODY_EN}}", () => body("en")).replace("{{BODY_KM}}", () => body("km"));
 fs.writeFileSync(path.join(ROOT, "animals.html"), out);
