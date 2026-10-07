@@ -367,7 +367,7 @@
     if (panel) return;
     panel = el("section", "mbs-ai-panel", { id: "mbs-ai-panel", role: "dialog", "aria-modal": "false", "aria-labelledby": "mbs-ai-title", "data-open": "false" });
 
-    var head = el("header", "mbs-ai-head");
+    var head = el("div", "mbs-ai-head");
     var av = el("span"); av.innerHTML = AVATAR_SVG(); head.appendChild(av.firstChild || av);
     var tt = el("div", "mbs-ai-title");
     titleEl = el("strong", "", { id: "mbs-ai-title", tabindex: "-1" });
