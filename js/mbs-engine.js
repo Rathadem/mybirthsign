@@ -153,6 +153,26 @@ var MBSEngine = (function () {
     };
   }
 
+  /* Animal only (the visitor just says "I'm a Rat"): facts straight from the site's own animal data (ANIMAL_INFO). */
+  function animalFacts(animal) {
+    if (BRANCH_ORDER.indexOf(animal) < 0 || typeof ANIMAL_INFO === "undefined" || !ANIMAL_INFO[animal]) return null;
+    var i = ANIMAL_INFO[animal];
+    return { animal: animal, traits: i.traits, weaknesses: i.weaknesses, bestMatches: i.compatible, clashesWith: i.clash,
+      careers: i.careers, luckyNumbers: i.luckyNumbers, luckyColors: i.luckyColors, luckyDays: i.luckyDays };
+  }
+  /* Two animals only: the traditional animal relationship (no percentage scores) and, with a year, the wedding-month ratings
+     (rateWeddingMonth only needs the two animals). */
+  function animalPair(a, b, year) {
+    if (BRANCH_ORDER.indexOf(a) < 0 || BRANCH_ORDER.indexOf(b) < 0) return null;
+    var r = { animal1: a, animal2: b, animalRelationship: getCompatibilityType(a, b) };
+    year = +year;
+    if (year >= 1900 && year <= 2100) {
+      r.weddingYear = year;
+      r.weddingMonths = MONTH_ANIMALS.map(function (ma, i) { var g = rateWeddingMonth(ma, a, b); return { month: i + 1, rating: g, ratingName: WED_RATING_NAME[g] }; });
+    }
+    return r;
+  }
+
   /* Daily Fortune: the same rule as scripts/daily-fortune.mjs (day animal from the Julian Day Number;
      great = same animal, good = same triangle, caution = direct opposite, otherwise ordinary). */
   var BRANCH_ORDER = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
@@ -175,5 +195,5 @@ var MBSEngine = (function () {
     return { date: isoToday, dayAnimal: da, visitorAnimal: animal, tier: tier, label: TIER_INFO[tier].label, traditionallyGoodFor: TIER_INFO[tier].goodFor };
   }
 
-  return { zodiac: zodiac, love: love, business: business, wedding: wedding, dailyLuck: dailyLuck, yearOnly: yearOnly, dayAnimal: dayAnimal, parseIso: parseIso };
+  return { zodiac: zodiac, love: love, business: business, wedding: wedding, dailyLuck: dailyLuck, yearOnly: yearOnly, animalFacts: animalFacts, animalPair: animalPair, dayAnimal: dayAnimal, parseIso: parseIso };
 })();

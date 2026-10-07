@@ -307,6 +307,12 @@
   /* Phase 3: Claude brain. Names, birthdays and clarifications stay with the deterministic
      parser above (exact, free, instant). Everything else goes to the secure Netlify Function;
      if it is unreachable the scripted guide answers instead, so the chat never breaks. */
+  var ANIMAL_WORDS = [
+    ["Rat", /\brat\b|ជូត|鼠/i], ["Ox", /\box\b|\bbuffalo\b|ឆ្លូវ|牛/i], ["Tiger", /\btiger\b|ខាល|虎/i], ["Rabbit", /\brabbit\b|\bhare\b|ថោះ|兔/i],
+    ["Dragon", /\bdragon\b|រោង|[龙龍]/i], ["Snake", /\bsnake\b|ម្សាញ់|蛇/i], ["Horse", /\bhorse\b|មមី|[马馬]/i], ["Goat", /\bgoat\b|\bsheep\b|\bram\b|មមែ|羊/i],
+    ["Monkey", /\bmonkey\b|វក|猴/i], ["Rooster", /\brooster\b|\bchicken\b|រកា|[鸡雞]/i], ["Dog", /\bdog\b|狗/i], ["Pig", /\bpig\b|\bboar\b|កុរ|[猪豬]/i]];
+  function detectAnimal(t) { var hit = ""; ANIMAL_WORDS.forEach(function (a) { if (!hit && a[1].test(t)) hit = a[0]; }); return hit; }
+  var SELF_MARKER = /\b(i am|i'm|im|my (?:sign|zodiac|animal|year)|born (?:in|as)|year of the)\b|ខ្ញុំ|ឆ្នាំ|我是|属|屬|生肖/i;
   var PARTNER_RE = /partner|wife|husband|girlfriend|boyfriend|spouse|fianc|lover|ប្រពន្ធ|ប្តី|ប្ដី|សង្សារ|គូ|妻|夫|彼女|彼氏|아내|남편|vợ|chồng|pareja|esposa|marido|femme|mari|ehefrau|ehemann|moglie|marito|esposa|istri|suami|asawa|पत्नी|पति|ภรรยา|สามี/i;
   var API_URL = "/.netlify/functions/ai-friend";
   function apiBrain(text, ctx) {
@@ -317,6 +323,15 @@
     if (mem.dob && pd && pd.status === "ok" && (pairTopic || PARTNER_RE.test(text))) {
       mem.partner = { y: pd.y, m: pd.m, d: pd.d };
     } else if (mem.pending || pd) return guideBrain(text, ctx);
+    // visitor gives only a year or an animal (no full birthday yet): remember it so Claude can give a base answer
+    var an = pd ? "" : detectAnimal(text), shortMsg = text.trim().length <= 16;
+    if (!pd && !mem.dob) {
+      var sy = /(?:^|\D)((?:19|20)\d{2})(?:\D|$)/.exec(asciiDigits(text));
+      if (sy && text.length <= 90 && +sy[1] <= new Date().getFullYear()) mem.selfYear = +sy[1];
+      if (an && (shortMsg || SELF_MARKER.test(text))) mem.selfAnimal = an;
+    } else if (!pd && mem.dob && !mem.partner && an && pairTopic && (shortMsg || PARTNER_RE.test(text) || SELF_MARKER.test(text))) {
+      mem.partnerAnimal = an;
+    }
     if (!pd && mem.dob && !mem.partner && (intent || mem.topic) !== "wedding" && pairTopic) {
       var py = /(?:^|\D)((?:19|20)\d{2})(?:\D|$)/.exec(asciiDigits(text));
       if (py) mem.partnerYear = +py[1];
@@ -329,7 +344,7 @@
     var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 25000);
     return fetch(API_URL, {
       method: "POST", headers: { "content-type": "application/json" }, signal: ctl ? ctl.signal : undefined,
-      body: JSON.stringify({ messages: msgs, context: { name: mem.name, dob: mem.dob, partner: mem.partner || null, partnerYear: mem.partnerYear || null, weddingYear: mem.weddingYear || null, topic: intent || mem.topic } })
+      body: JSON.stringify({ messages: msgs, context: { name: mem.name, dob: mem.dob, partner: mem.partner || null, partnerYear: mem.partnerYear || null, selfYear: mem.dob ? null : (mem.selfYear || null), selfAnimal: mem.dob ? null : (mem.selfAnimal || ""), partnerAnimal: mem.partnerAnimal || "", weddingYear: mem.weddingYear || null, topic: intent || mem.topic } })
     }).then(function (r) {
       if (r.status === 429) return { rate: true };
       if (!r.ok) throw new Error("api " + r.status);

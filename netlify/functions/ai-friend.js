@@ -61,6 +61,7 @@ FACTS AND CALCULATIONS (very important)
 - The website's own calculators do all zodiac maths. You must NEVER calculate or state a person's zodiac animal, element, Yin/Yang, Lunar New Year boundary, compatibility score/percentage, business score or wedding-date rating yourself, and never invent numbers.
 - Only state such results if they appear in a "VERIFIED RESULTS" block in this prompt, and then state them exactly as given (same animal, element, percentages and ratings; never round differently, never add your own numbers). Briefly mention that these come from the MyBirthSign calculator. If a result you need is missing, do not guess: warmly send the visitor to the right tool instead: Chinese Zodiac Checker (/checker), Love & Compatibility (/compatibility), Business Partner (/business-partner), Wedding Date (/wedding-date), Zodiac Guide (/zodiac-guide), Blog (/blog).
 - If the visitor only knows the partner's birth YEAR: use the "birth YEAR only" result. Explain kindly that the animal depends on Lunar New Year (give its date from the result), tell them which animal applies if the person was born on/after it and which if before, and share the traditional animal/element relationship for each case. (Describe "generates" as a supportive element pairing and "controls" as a restraining one, without saying which element acts on which.) Never give percentage scores from a year alone; invite the exact date (dd/mm/yyyy) for the real percentages.
+- PARTIAL INFO (only a birth year, or just a zodiac animal such as "I'm a Rat"): never refuse and never ask for the full date first. Give a genuinely useful BASE answer right away from the matching VERIFIED RESULTS (both possible animals for a year; traits, best matches, clashes, careers and lucky items for an animal; the animal-pair relationship and wedding-month ratings for two animals). Be clear these are general, based on the animal only. Then explain in one friendly line what the whole birthday adds (their exact animal and element and Yin/Yang, the Lunar New Year boundary, real percentage scores, and more specific suggestions) and invite the full date as dd/mm/yyyy, e.g. 05/05/1990. Do not pressure; the base answer must stand on its own.
 - Pair results (love, business, wedding) become available as soon as the visitor has given a partner's date of birth. So when someone wants love compatibility, a business-partner check or wedding dates and no partner birthday appears in the context, do NOT say you cannot calculate it: warmly ask for the other person's date of birth (suggest the format dd/mm/yyyy, e.g. 05/05/1990) and say you'll then show their real MyBirthSign result. Also point to the tool page for the full detailed breakdown.
 - "Is today lucky?" questions: only answer from the "Today's Daily Fortune" line in VERIFIED RESULTS (day animal, the visitor's tier and what it is traditionally good for), framed as the traditional daily view for fun, never a promise. If that line is missing, say you need their birthday first (dd/mm/yyyy) and point to the Blog's Daily Fortune.
 - You may explain general, well-known traditional meanings of a given animal or element (e.g. "Dragon is traditionally associated with confidence") when the visitor asks about an animal by name, but never decide which animal belongs to a birth date.
@@ -107,6 +108,10 @@ function contextBlock(c) {
   }
   const pd = c.partner;
   if (pd && Number.isInteger(pd.y) && Number.isInteger(pd.m) && Number.isInteger(pd.d)) lines.push("The visitor has also given a partner's date of birth (see VERIFIED RESULTS).");
+  const known = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
+  if (known.includes(c.selfAnimal)) lines.push("The visitor says their zodiac animal is " + c.selfAnimal + " (no birth date yet).");
+  if (known.includes(c.partnerAnimal)) lines.push("The visitor says the partner's zodiac animal is " + c.partnerAnimal + " (no birth date yet).");
+  if (parseInt(c.selfYear, 10) >= 1900 && parseInt(c.selfYear, 10) <= 2060 && !(c.dob && c.dob.y)) lines.push("The visitor knows only their own birth year: " + parseInt(c.selfYear, 10) + ".");
   const pyr = parseInt(c.partnerYear, 10);
   if (pyr >= 1900 && pyr <= 2060) lines.push("The visitor knows only the partner's birth year: " + pyr + " (see VERIFIED RESULTS).");
   const topics = ["zodiac", "love", "business", "wedding", "learn"];
@@ -141,6 +146,27 @@ function factsBlock(c) {
     }
     const z2 = partner && E.zodiac(partner);
     if (z2) out.push("Partner's Chinese zodiac: " + JSON.stringify({ animal: z2.animal, element: z2.element, yinYang: z2.yinYang, zodiacYear: z2.zodiacYear, birthYear: z2.birthYear, bornBeforeLunarNewYear: z2.bornBeforeLunarNewYear }));
+    const ANIMALS = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
+    const selfAnimal = ANIMALS.includes(c.selfAnimal) ? c.selfAnimal : "";
+    const partnerAnimal = ANIMALS.includes(c.partnerAnimal) ? c.partnerAnimal : "";
+    const sy = parseInt(c.selfYear, 10);
+    if (!z1 && sy >= 1900 && sy <= 2060) {
+      const yo = E.yearOnly(sy, null);
+      if (yo) {
+        out.push("Visitor knows only their birth YEAR (exact date unknown), from the MyBirthSign rules: " + JSON.stringify(yo));
+        [yo.ifBornOnOrAfterLunarNewYear.animal, yo.ifBornBeforeLunarNewYear.animal].filter((x, i, a) => a.indexOf(x) === i).forEach((an) => { const f = E.animalFacts(an); if (f) out.push("Animal facts (" + an + "): " + JSON.stringify(f)); });
+      }
+    }
+    if (!z1 && selfAnimal) { const f = E.animalFacts(selfAnimal); if (f) out.push("Visitor says their animal is " + selfAnimal + " (not verified from a birth date). Animal facts: " + JSON.stringify(f)); }
+    const myAnimal = (z1 && z1.animal) || selfAnimal;
+    if (!z2 && partnerAnimal) {
+      const f = E.animalFacts(partnerAnimal); if (f) out.push("Partner's animal (stated by the visitor, not verified from a birth date): " + JSON.stringify(f));
+      if (myAnimal) {
+        let wy = parseInt(c.weddingYear, 10); if (!(wy >= 2000 && wy <= 2100)) wy = new Date().getFullYear() + 1;
+        const r = E.animalPair(myAnimal, partnerAnimal, !topic || topic === "wedding" ? wy : 0);
+        if (r) out.push("Animals-only pair result (no percentage scores possible without exact birth dates): " + JSON.stringify(r));
+      }
+    }
     const py = parseInt(c.partnerYear, 10);
     if (z1 && !z2 && py >= 1900 && py <= 2060 && (!topic || topic === "love" || topic === "business")) {
       const yo = E.yearOnly(py, dob);
