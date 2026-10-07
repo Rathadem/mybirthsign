@@ -3195,3 +3195,8 @@ footer.site-footer:not(.hm-footer) a { padding: 7px 6px; line-height: 1.3; }
 /* Language blocks: show only the active language from the very first paint (JS used to hide the other one after load, which made the page jump) */
 html:not([lang="km"]) [data-lang-content="km"] { display: none; }
 html[lang="km"] [data-lang-content="en"] { display: none; }
+
+/* Footer backgrounds: skyline pictures removed (lighter pages). Plain dark footer instead. */
+footer.site-footer, body.chk-page footer.chk-footer, .fx-page footer.site-footer, .hm-final { background-image: none !important; background-color: #0b0820 !important; }
+body.chk-page footer.chk-footer { padding-top: 48px; margin-top: 32px; border-top: 1px solid rgba(231, 194, 122, .18); text-shadow: none; }
+.hm-final-in { padding-bottom: 60px; }
