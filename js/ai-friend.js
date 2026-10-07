@@ -16,12 +16,12 @@
   /* ------------------------------------------------------------------ strings */
   var UI = {
     en: {
-      title: "Zodi", sub: "MyBirthSign AI Friend",
+      title: "Kru Toch", sub: "MyBirthSign AI Friend",
       placeholder: "Type your message…", send: "Send message", close: "Close chat",
       newChat: "Start a new chat", micStart: "Start voice input", micStop: "Stop voice input",
       micDenied: "Voice input isn't available right now. You can type instead. 😊",
       log: "Conversation", quick: "Quick actions",
-      note: "Zodi, the MyBirthSign AI Friend, is an AI, not a person. Chinese zodiac readings are traditional interpretations for entertainment.",
+      note: "Kru Toch, the MyBirthSign AI Friend, is an AI, not a person. Chinese zodiac readings are traditional interpretations for entertainment.",
       chips: [["zodiac", "🐉 My Zodiac"], ["love", "❤️ Love & Compatibility"], ["business", "💼 Business Partner"], ["wedding", "💍 Wedding Date"], ["learn", "📖 Learn About Zodiac"]],
       hello: "Hi, my friend! 👋 Welcome to MyBirthSign.\nI'm here to help you discover your Chinese zodiac, explore compatibility, business partnerships, wedding dates, and more.\n\nWhat's your name? 😊",
       nice: "Nice to meet you, {NAME}! 😊\nAnd what's your date of birth? 📅",
@@ -44,14 +44,14 @@
       fmtShort: function (d, m, M) { return d + " " + M[m - 1]; }
     },
     km: {
-      title: "Zodi", sub: "មិត្ត AI MyBirthSign",
+      title: "គ្រួតូច", sub: "មិត្ត AI ផ្កាយកំណើត",
       placeholder: "វាយសាររបស់អ្នក…", send: "ផ្ញើសារ", close: "បិទការជជែក",
       newChat: "ចាប់ផ្តើមការជជែកថ្មី", micStart: "ចាប់ផ្តើមនិយាយ", micStop: "ឈប់ស្តាប់",
       micDenied: "ឥឡូវនេះមិនអាចប្រើសំឡេងបានទេ។ អ្នកអាចវាយអក្សរជំនួសបាន។ 😊",
       log: "ការសន្ទនា", quick: "ជម្រើសរហ័ស",
-      note: "មិត្ត AI នេះជាកម្មវិធីបញ្ញាសិប្បនិម្មិត មិនមែនមនុស្សពិតទេ។ ការទស្សន៍ទាយរាសីជាការបកស្រាយតាមប្រពៃណី សម្រាប់ការកំសាន្ត។",
+      note: "គ្រួតូចជាមិត្ត AI ជាកម្មវិធីបញ្ញាសិប្បនិម្មិត មិនមែនមនុស្សពិតទេ។ ការទស្សន៍ទាយរាសីជាការបកស្រាយតាមប្រពៃណី សម្រាប់ការកំសាន្ត។",
       chips: [["zodiac", "🐉 រាសីរបស់ខ្ញុំ"], ["love", "❤️ ស្នេហា និងភាពត្រូវគ្នា"], ["business", "💼 ដៃគូអាជីវកម្ម"], ["wedding", "💍 ថ្ងៃរៀបការ"], ["learn", "📖 ស្វែងយល់អំពីរាសី"]],
-      hello: "សួស្តីមិត្តជាទីស្រឡាញ់! 👋 សូមស្វាគមន៍មកកាន់ MyBirthSign។\nខ្ញុំនៅទីនេះដើម្បីជួយអ្នកស្វែងយល់អំពីរាសីឆ្នាំកំណើត ភាពត្រូវគ្នា ដៃគូអាជីវកម្ម ថ្ងៃរៀបការ និងច្រើនទៀត។\n\nតើអ្នកឈ្មោះអ្វី? 😊",
+      hello: "សួស្តីមិត្តជាទីស្រឡាញ់! 👋 សូមស្វាគមន៍មកកាន់ផ្កាយកំណើត។\nខ្ញុំនៅទីនេះដើម្បីជួយអ្នកស្វែងយល់អំពីរាសីឆ្នាំកំណើត ភាពត្រូវគ្នា ដៃគូអាជីវកម្ម ថ្ងៃរៀបការ និងច្រើនទៀត។\n\nតើអ្នកឈ្មោះអ្វី? 😊",
       nice: "រីករាយដែលបានស្គាល់អ្នក {NAME}! 😊\nតើថ្ងៃខែឆ្នាំកំណើតរបស់អ្នកនៅពេលណា? 📅",
       great: "ល្អណាស់! ខ្ញុំកត់ទុកថា ថ្ងៃកំណើតរបស់អ្នកគឺ {DATE}។ 🎉\n\nថ្ងៃនេះអ្នកចង់ស្វែងយល់អ្វី?\n\n🐉 រាសីរបស់ខ្ញុំ\n❤️ ស្នេហា និងភាពត្រូវគ្នា\n💼 ដៃគូអាជីវកម្ម\n💍 ថ្ងៃរៀបការ\n\nឬប្រាប់ខ្ញុំអ្វីដែលអ្នកចង់ដឹងក៏បាន។",
       ambiguous: "ខ្ញុំចង់ឱ្យត្រឹមត្រូវ! 😊 តើជា {A} ឬ {B}?",
