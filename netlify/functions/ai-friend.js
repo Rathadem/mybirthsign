@@ -39,7 +39,9 @@ const MAX_MESSAGES = 14;      // history sent to Claude
 const MAX_CHARS = 1200;       // per message
 const MAX_TOKENS = 800;       // reply cap
 const EFFORT = ["low", "medium", "high"].includes(process.env.ANTHROPIC_CHAT_EFFORT) ? process.env.ANTHROPIC_CHAT_EFFORT : "low";
-const TIMEOUT_MS = 22000;
+// Netlify stops synchronous functions after 10 s (26 s only on request for paid plans), so give up at 9 s and
+// let the chat fall back to its built-in guide instead of the visitor seeing a cut-off error.
+const TIMEOUT_MS = Math.min(Math.max(parseInt(process.env.AI_FRIEND_TIMEOUT_MS || "9000", 10) || 9000, 3000), 25000);
 const PER_MIN = 8;            // messages per minute per visitor
 const PER_DAY = parseInt(process.env.AI_FRIEND_DAILY_LIMIT || "60", 10);
 const ALLOWED_ORIGINS = [

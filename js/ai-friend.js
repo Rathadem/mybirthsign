@@ -400,7 +400,7 @@
     var msgs = ctx.history.map(function (m) { return { role: m.r === "user" ? "user" : "assistant", content: m.t }; });
     if (mem.topic === "" && intent) mem.topic = intent;
     var ctl = window.AbortController ? new AbortController() : null;
-    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 25000);
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 15000);
     return fetch(API_URL, {
       method: "POST", headers: { "content-type": "application/json" }, signal: ctl ? ctl.signal : undefined,
       body: JSON.stringify({ messages: msgs, context: { name: mem.name, dob: mem.dob, partner: mem.partner || null, partnerYear: mem.partnerYear || null, selfYear: mem.dob ? null : (mem.selfYear || null), selfAnimal: mem.dob ? null : (mem.selfAnimal || ""), partnerAnimal: mem.partnerAnimal || "", weddingYear: mem.weddingYear || null, topic: intent || mem.topic } })
