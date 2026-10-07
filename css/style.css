@@ -3191,3 +3191,7 @@ footer.site-footer:not(.hm-footer) a { padding: 7px 6px; line-height: 1.3; }
 .bv2-view-all { display: inline-block; padding: 8px 0; }
 /* Empty "Ad space" placeholders hidden until real ad units are added (remove this rule to restore) */
 .ad-slot { display: none !important; }
+
+/* Language blocks: show only the active language from the very first paint (JS used to hide the other one after load, which made the page jump) */
+html:not([lang="km"]) [data-lang-content="km"] { display: none; }
+html[lang="km"] [data-lang-content="en"] { display: none; }
