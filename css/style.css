@@ -3212,3 +3212,8 @@ html[lang="km"] h1, html[lang="km"] h2, html[lang="km"] .biz-hero-v2 h1 { letter
 html[lang="km"] .biz-hero-v2 h1 { font-family: "Moul", "Kantumruy Pro", "Noto Sans Khmer", serif !important; font-weight: 400; font-size: clamp(1.4rem, 4vw, 2.3rem); line-height: 1.7; text-wrap: balance; }
 /* Business Partner page: photo backgrounds removed (hero + guidelines) for a lighter, cleaner page */
 .biz-hero-v2, .biz-guide { background-image: none !important; background-color: #0b081f !important; }
+
+/* Business Partner: gold frame around the two bottom link buttons removed (lighter page) */
+.biz-page .biz-more { border: 0 !important; border-image: none !important; padding: 32px 16px !important; margin-left: auto; margin-right: auto; }
+@media (max-width: 640px) { .biz-page .biz-more { border-width: 0 !important; padding: 24px 16px !important; margin-left: 0; margin-right: 0; } }
+html[lang="km"] :is(a, button, label, p, li, span) { letter-spacing: 0 !important; }
