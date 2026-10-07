@@ -3210,3 +3210,5 @@ html[lang="km"] :is(p, li, a, label, button, input, select, textarea, summary, d
 /* Khmer never takes letter-spacing (it breaks the letter clusters apart); the Business Partner title also gets the Moul title face like the other pages */
 html[lang="km"] h1, html[lang="km"] h2, html[lang="km"] .biz-hero-v2 h1 { letter-spacing: 0 !important; }
 html[lang="km"] .biz-hero-v2 h1 { font-family: "Moul", "Kantumruy Pro", "Noto Sans Khmer", serif !important; font-weight: 400; font-size: clamp(1.4rem, 4vw, 2.3rem); line-height: 1.7; text-wrap: balance; }
+/* Business Partner page: photo backgrounds removed (hero + guidelines) for a lighter, cleaner page */
+.biz-hero-v2, .biz-guide { background-image: none !important; background-color: #0b081f !important; }
