@@ -225,6 +225,114 @@ nav a:hover { color: var(--accent); }
   }
 }
 
+/* ===== Header menu v2: slimmer, pill links, current page, neater dropdowns (all pages) ===== */
+header.site-header { padding: 12px 0; }
+header.site-header .logo { font-size: 1.25rem; }
+header.site-header .logo-mark { width: 24px; height: 24px; }
+header.site-header nav { display: flex; align-items: center; gap: 2px; }
+header.site-header nav > a,
+header.site-header nav .nav-dropdown > summary {
+  margin-left: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  transition: background-color .15s ease, color .15s ease;
+}
+header.site-header nav .nav-dropdown { margin-left: 0; }
+header.site-header nav > a:hover,
+header.site-header nav .nav-dropdown > summary:hover,
+header.site-header nav .nav-dropdown[open] > summary {
+  background: rgba(231, 194, 122, 0.10);
+  color: #f6dc9b;
+}
+header.site-header nav a[aria-current="page"],
+header.site-header nav .nav-dropdown.has-current > summary {
+  color: #f6dc9b;
+  background: rgba(231, 194, 122, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(231, 194, 122, 0.28);
+}
+header.site-header nav a:focus-visible,
+header.site-header nav summary:focus-visible { outline: 2px solid #f6dc9b; outline-offset: 2px; }
+header.site-header .nav-dropdown > summary::after { opacity: .7; margin-left: 2px; }
+header.site-header .nav-dropdown-menu {
+  top: calc(100% + 8px);
+  min-width: 200px;
+  padding: 6px;
+  background: #1b1437;
+  border: 1px solid rgba(231, 194, 122, 0.22);
+  border-radius: 14px;
+  box-shadow: 0 14px 34px rgba(5, 3, 18, 0.55);
+}
+header.site-header .nav-dropdown[open] .nav-dropdown-menu { animation: mbsNavIn .14s ease-out; }
+@keyframes mbsNavIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+header.site-header .nav-dropdown-menu a {
+  padding: 8px 12px;
+  border-radius: 9px;
+  font-size: 0.9rem;
+  color: #d9d2ee;
+}
+header.site-header .nav-dropdown-menu a:hover { background: rgba(231, 194, 122, 0.10); color: #f6dc9b; }
+header.site-header .nav-dropdown-menu a[aria-current="page"] { box-shadow: none; }
+header.site-header .lang-toggle { margin-left: 8px; padding: 2px 3px; gap: 2px; }
+header.site-header .lang-toggle a { padding: 2px 10px; font-size: 0.8rem; }
+@media (prefers-reduced-motion: reduce) { header.site-header .nav-dropdown[open] .nav-dropdown-menu { animation: none; } }
+
+@media (max-width: 640px) {
+  header.site-header { padding: 10px 0; }
+  header.site-header .logo { font-size: 1.15rem; }
+  header.site-header nav { display: none; }
+  header.site-header nav.nav-open { display: flex; }
+  .nav-toggle { width: 38px; height: 34px; border-color: rgba(231, 194, 122, 0.35); border-radius: 10px; }
+  .nav-toggle span { width: 16px; background: #f1e3bd; }
+  header.site-header nav {
+    margin-top: 10px;
+    padding: 6px;
+    gap: 1px;
+    border: 1px solid rgba(231, 194, 122, 0.18);
+    border-top: 1px solid rgba(231, 194, 122, 0.18);
+    border-radius: 16px;
+    background: rgba(22, 15, 46, 0.97);
+    box-shadow: 0 16px 36px rgba(5, 3, 18, 0.5);
+    align-items: stretch;
+  }
+  header.site-header nav > a,
+  header.site-header nav .nav-dropdown > summary {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+  }
+  header.site-header nav .nav-dropdown { width: 100%; }
+  header.site-header nav .nav-dropdown-menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin: 2px 0 6px;
+    width: 100%;
+    min-width: 0;
+    padding: 4px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    animation: none;
+  }
+  header.site-header nav .nav-dropdown-menu a {
+    width: auto;
+    padding: 8px 10px;
+    white-space: normal;
+    font-size: 0.86rem;
+    line-height: 1.35;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  header.site-header nav .lang-toggle {
+    align-self: center;
+    margin: 8px 0 4px;
+    width: auto;
+  }
+  header.site-header nav .lang-toggle a { width: auto; padding: 4px 16px; font-size: 0.85rem; }
+}
+
 .hero {
   text-align: center;
   padding: 24px 0 30px;
