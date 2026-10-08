@@ -183,3 +183,14 @@ html[lang="km"] .pf-years { letter-spacing: .02em; }
   .pf-hero.fx-hero::before { background: linear-gradient(180deg, rgba(11, 8, 32, 0) 0%, rgba(11, 8, 32, .35) 220px, rgba(11, 8, 32, .95) 330px); }
   .pf-hero .pf-hero-in { padding: 250px 16px 32px; }
 }
+
+/* Section menu: glide to the section and briefly glow it, so the jump is obvious
+   (some sections sit side by side, so the page itself may barely move). */
+html { scroll-behavior: smooth; }
+.pf-body [id]:target { animation: pfTargetGlow 1.6s ease-out 1; border-radius: 16px; }
+@keyframes pfTargetGlow {
+  0%   { box-shadow: 0 0 0 0 rgba(246, 220, 155, 0), 0 0 0 0 rgba(246, 220, 155, 0); }
+  20%  { box-shadow: 0 0 0 3px rgba(246, 220, 155, .85), 0 0 28px 6px rgba(231, 194, 122, .35); }
+  100% { box-shadow: 0 0 0 0 rgba(246, 220, 155, 0), 0 0 0 0 rgba(246, 220, 155, 0); }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .pf-body [id]:target { animation: none; outline: 2px solid rgba(246, 220, 155, .7); } }

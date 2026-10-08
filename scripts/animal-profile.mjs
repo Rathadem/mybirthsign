@@ -266,6 +266,14 @@ function faqs(lang) {
 
 // ---------------------------------------------------------------- body
 const CHK = "/checker";
+// The English and Khmer bodies sit on one page (one is hidden), so the Khmer section
+// IDs get a "-km" suffix. Otherwise the Khmer menu buttons jump to the hidden English copy.
+const SECTION_IDS = ["overview", "personality", "elements", "lucky", "compat", "career", "love", "health", "money"];
+function kmIds(html) {
+  const ids = SECTION_IDS.join("|");
+  return html.replace(new RegExp(`id="(${ids})"`, "g"), 'id="$1-km"').replace(new RegExp(`href="#(${ids})"`, "g"), 'href="#$1-km"');
+}
+
 function body(lang) {
   const u = UI[lang], c = COPY[A][lang], isKm = lang === "km";
   const n = isKm ? KM_NAMES[A] : A;
@@ -461,7 +469,7 @@ const jsonld = JSON.stringify([
 
 const tpl = read("scripts/animal-profile-template.html");
 const out = tpl.replace(/\{\{TITLE\}\}/g, esc(TITLE)).replace(/\{\{URL\}\}/g, URL_).replace(/\{\{DESC\}\}/g, esc(DESC)).replace(/\{\{OG_IMAGE\}\}/g, OG)
-  .replace("{{JSONLD}}", jsonld.replace(/</g, "\\u003c")).replace("{{BODY_EN}}", () => body("en")).replace("{{BODY_KM}}", () => body("km"))
+  .replace("{{JSONLD}}", jsonld.replace(/</g, "\\u003c")).replace("{{BODY_EN}}", () => body("en")).replace("{{BODY_KM}}", () => kmIds(body("km")))
   .replace("{{TODAY_JS}}", () => `<script>${todayScript()}</script>`);
 fs.writeFileSync(path.join(ROOT, `blog/zodiac-year-${slug}.html`), out.replace(/¤T¤/g, KM_NAMES[A]));
 console.log(`Wrote blog/zodiac-year-${slug}.html  (years ${years.join(", ")}; best ${best.join("/")}; supportive ${support.join("/") || "-"}; clash ${clash.join("/")})`);
