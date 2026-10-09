@@ -26,7 +26,11 @@ jobs:
         run: |
           if [ -z "$ANTHROPIC_API_KEY" ]; then echo "::warning::Add the ANTHROPIC_API_KEY repository secret to run this preview"; exit 0; fi
           D=$(TZ=Asia/Phnom_Penh date -d tomorrow +%F)
-          mkdir -p preview-out; node scripts/daily-data.mjs --date "$D" --out preview-out || cp /tmp/daily-data-rejected-*.json preview-out/ 2>/dev/null || true
+          mkdir -p preview-out
+          set +e; node scripts/daily-data.mjs --date "$D" --out preview-out > preview-out/log.txt 2>&1; rc=$?; set -e
+          cat preview-out/log.txt
+          grep -E "Claude error|NOT PUBLISHED|INVALID|Could not parse|valid:|usage|tokens" preview-out/log.txt | head -8 | cut -c1-400 | while IFS= read -r l; do echo "::warning::$l"; done
+          [ $rc -ne 0 ] && cp /tmp/daily-data-rejected-*.json preview-out/ 2>/dev/null || true
           ls -la preview-out || true
           [ -f "preview-out/$D.json" ] && node tests/daily-data-test.mjs "preview-out/$D.json"
       - uses: actions/upload-artifact@v4
