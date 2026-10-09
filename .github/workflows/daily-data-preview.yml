@@ -34,6 +34,18 @@ jobs:
           [ $rc -ne 0 ] && cp /tmp/daily-data-rejected-*.json preview-out/ 2>/dev/null || true
           ls -la preview-out || true
           [ -f "preview-out/$D.json" ] && node tests/daily-data-test.mjs "preview-out/$D.json"
+      - name: Show samples (test only)
+        if: always()
+        run: |
+          f=$(ls preview-out/20*.json 2>/dev/null | head -1); [ -z "$f" ] && exit 0
+          node -e '
+            const r=require("./"+process.argv[1]); const out=[];
+            out.push("DAY "+r.date+" day animal "+r.dayAnimal+" | highlights "+JSON.stringify(r.highlights).slice(0,350));
+            for (const a of ["Rat","Dragon","Horse"]) { const s=r.signs.find(x=>x.animal===a); if(!s) continue;
+              out.push(a+" ["+s.tier+"] "+s.label.en+" | lucky "+JSON.stringify(s.lucky));
+              out.push(a+" EN fortune: "+s.text.en.fortune); out.push(a+" EN love: "+s.text.en.love+" | advice: "+s.text.en.advice);
+              out.push(a+" KM fortune: "+s.text.km.fortune); }
+            out.slice(0,15).forEach(l=>console.log("::notice::"+l.replace(/\n/g," ").slice(0,900)));' "$f"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
