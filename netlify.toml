@@ -1,5 +1,7 @@
 [build]
   functions = "netlify/functions"
+  # link previews for shared results (netlify/edge-functions/share-preview.js)
+  edge_functions = "netlify/edge-functions"
   publish = "."
 
 [functions]

@@ -305,7 +305,7 @@ function signCard(c, lang, t) {
         <h4>${t.watchOut}</h4>
         <p>${esc(weak)} ${esc(pick(AVOID_NOTE[lang][tier], i + 1))}</p>`;
           const x = d.text[lang], L = d.lucky, D = DL[lang];
-          return `<p class="fx-sign-fortune">${esc(x.fortune)}</p>
+          return `<p class="fx-sign-fortune" data-sign="${a.toLowerCase()}">${esc(x.fortune)}</p>
         <p class="fx-sign-lucky"><span>${D.number} <strong>${isKm ? kmNum(L.number) : L.number}</strong></span><span>${D.color} <i class="fx-swatch" style="background:${L.color.hex}"></i><strong>${esc(L.color[lang])}</strong></span><span>${D.direction} <strong>${esc(L.direction[lang])}</strong></span><span>${D.time} <strong>${isKm ? kmNum(L.time) : L.time}</strong></span></p>
         <details class="fx-sign-more"><summary>${D.more}</summary>
           <h4>${D.love}</h4><p>${esc(x.love)}</p>
@@ -313,6 +313,7 @@ function signCard(c, lang, t) {
           <h4>${D.money}</h4><p>${esc(x.money)}</p>
           <h4>${t.watchOut}</h4><p>${esc(x.careful)}</p>
           <h4>${D.advice}</h4><p>${esc(x.advice)}</p>
+          <div class="fx-sign-share share-row" data-share-title="${esc(`${name} · ${TIER_LABEL[lang][tier]} — ${isKm ? dateKM : dateEN}`)}" data-share-url="/blog/daily-fortune-${iso}.html?sign=${a.toLowerCase()}" data-share-card="${esc(JSON.stringify({ animal: a, emoji: EMOJI[a], heading: `${name} · ${TIER_LABEL[lang][tier]}`, subheading: isKm ? dateKM : dateEN }))}"></div>
         </details>`;
         })()}
         <a class="fx-more" href="${guideHref(a)}">${esc(t.view(name))}</a>
@@ -404,7 +405,8 @@ ${t.guides.map((g) => `          <div class="fx-guide"><div class="fx-guide-ico"
 
   <section class="fx-sec" aria-labelledby="fx-grid-${lang}">
     <div class="fx-head"><h2 id="fx-grid-${lang}">${t.gridH}</h2>${I.orn}<p>${t.gridP}</p></div>
-    <ul class="fx-grid">
+    ${DATA ? `<div class="fx-day-share share-row" data-share-title="${esc(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html"></div>
+    ` : ""}<ul class="fx-grid">
 ${byZodiac.map((c) => "      " + signCard(c, lang, t)).join("\n")}
     </ul>
   </section>
@@ -495,7 +497,9 @@ if (exists && !FORCE) {
     .replaceAll("{{OG_IMAGE}}", ogImage)
     .replace("{{JSONLD}}", () => jsonld)
     .replace("{{BODY_EN}}", () => body("en"))
-    .replace("{{BODY_KM}}", () => body("km"));
+    .replace("{{BODY_KM}}", () => body("km"))
+    // shared sign link (?sign=rat): open that sign's card, scroll to it and glow briefly (only on pages with daily data)
+    .replace("</body>", () => DATA ? `<script>(function(){var m=/[?&]sign=([a-z]+)/.exec(location.search);if(!m)return;function go(){var l=document.documentElement.lang==="km"?"km":"en",c=document.querySelector('[data-lang-content="'+l+'"] [data-sign="'+m[1]+'"]')||document.querySelector('[data-sign="'+m[1]+'"]');if(!c)return;var li=c.closest(".fx-sign"),d=li&&li.querySelector("details");if(!li)return;if(!li.offsetParent){if(++n<40)setTimeout(go,100);return;}if(d)d.open=true;li.classList.add("fx-sign-hit");li.style.scrollMarginTop="16px";li.scrollIntoView({block:"start"});setTimeout(function(){li.scrollIntoView({block:"start"});},700);}var n=0;if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50);});else setTimeout(go,50);})();</script>\n</body>` : "</body>");
   if (/\{\{\w+\}\}/.test(html)) throw new Error("Unfilled placeholder in template output");
   write(postPath, html);
   console.log(`Wrote ${postPath} — ${dayAnimal} day (great: ${sorted.filter((c) => c.tier === "great").map((c) => c.a)}, caution: ${cautionList}).`);

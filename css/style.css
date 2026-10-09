@@ -3359,3 +3359,4 @@ html[lang="km"] .cs-sign figcaption { font-family: "Noto Sans Khmer", sans-serif
 .cs-note { text-align: center; color: #9d94c8; font-size: .82rem; }
 @media (max-width: 760px) { .cs-grid, .cs-grid-3 { grid-template-columns: 1fr; } }
 @media (max-width: 480px) { .cs-sign img { width: 84px; height: 84px; } .cs-and { display: none; } .cs-form label { flex-basis: 100%; max-width: none; } .cs-form .cs-go { width: 100%; } }
+.cmp-share, .cs-share { display: flex; justify-content: center; margin: 12px 0 4px; }

@@ -215,6 +215,10 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="cmp-pct" id="cmp-pct" aria-label="' + overall + '%">0%</div></div>' +
       '<p class="cmp-level">' + esc(lvl) + "</p></div>" + personCard(T.p2, B, g2) + "</div>" +
       '<p class="cmp-desc-lg">' + esc(desc) + "</p>" +
+      // share: the link carries the two ANIMALS only (never the birth dates); the image card is drawn on this device
+      (typeof shareRowHtml === "function" ? '<div class="cmp-share">' + shareRowHtml(aName(A.animal) + " + " + aName(B.animal) + " — " + overall + "%",
+        { cardType: "compat", emoji: (typeof ZODIAC_EMOJI !== "undefined" ? ZODIAC_EMOJI[A.animal] + " 💞 " + ZODIAC_EMOJI[B.animal] : "💞"), heading: aName(A.animal) + " + " + aName(B.animal), subheading: lvl + " — " + overall + "%", badge: overall + "%" },
+        "/compatibility?pair=" + A.animal.toLowerCase() + "-" + B.animal.toLowerCase() + "#compare") + "</div>" : "") +
       "</section>" +
 
       genderSection() +

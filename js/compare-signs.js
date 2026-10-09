@@ -104,7 +104,9 @@
       "</div>" +
       '<p class="cs-exact">' + esc(u.exact) + ' <a href="#cmp-form" class="cs-exact-btn">' + esc(u.exactBtn) + "</a></p>" +
       '<p class="cs-note">' + esc(u.note) + "</p>" +
-      '<div class="cs-share"></div>' +
+      '<div class="cs-share">' + (typeof shareRowHtml === "function" ? shareRowHtml(r.names.A + " + " + r.names.B + " — " + r.label,
+        { cardType: "compat", emoji: (typeof ZODIAC_EMOJI !== "undefined" ? ZODIAC_EMOJI[r.a] + " 💞 " + ZODIAC_EMOJI[r.b] : "💞"), heading: r.names.A + " + " + r.names.B, subheading: r.label, badge: "★".repeat(r.stars.romantic) },
+        "/compatibility?pair=" + r.a.toLowerCase() + "-" + r.b.toLowerCase() + "#compare") : "") + "</div>" +
       "</article>";
   }
 

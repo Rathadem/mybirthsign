@@ -899,6 +899,14 @@ const UI_STRINGS = {
 const LANG_STORAGE_KEY = "siteLang";
 
 function getLang() {
+  // a shared Khmer/English link (?lang=km / ?lang=en) opens in that language and remembers it
+  try {
+    const q = new URLSearchParams(window.location.search).get("lang");
+    if (q === "en" || q === "km") {
+      try { window.localStorage.setItem(LANG_STORAGE_KEY, q); } catch (e) { /* storage blocked */ }
+      return q;
+    }
+  } catch (e) { /* old browser */ }
   try {
     const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
     if (stored === "en" || stored === "km") return stored;
@@ -922,6 +930,11 @@ function setLang(lang) {
     // best effort only
   }
   if (typeof window !== "undefined" && window.location && typeof window.location.reload === "function") {
+    // drop a shared ?lang=… so the visitor's own choice wins after the reload
+    try {
+      const u = new URL(window.location.href);
+      if (u.searchParams.has("lang")) { u.searchParams.delete("lang"); window.location.replace(u.toString()); return; }
+    } catch (e) { /* fall back to a plain reload */ }
     window.location.reload();
   }
 }

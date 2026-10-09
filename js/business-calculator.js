@@ -418,7 +418,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="biz-result-card">
         ${overviewHtml(p1Name, p2Name, bziA, bziB, scores, top, bottom, elRel, bizA, bizB)}
 
-        ${shareRowHtml(p1Name + " + " + p2Name, { emoji: ZODIAC_EMOJI[bziA.animal] + " 🤝 " + ZODIAC_EMOJI[bziB.animal], heading: p1Name + " + " + p2Name, subheading: CATEGORY_LABEL[top[0][0]] + " · " + CATEGORY_LABEL[top[1][0]] })}
+        ${shareRowHtml(p1Name + " + " + p2Name, { emoji: ZODIAC_EMOJI[bziA.animal] + " 🤝 " + ZODIAC_EMOJI[bziB.animal], heading: p1Name + " + " + p2Name, subheading: CATEGORY_LABEL[top[0][0]] + " · " + CATEGORY_LABEL[top[1][0]] }, "/compatibility?pair=" + bziA.animal.toLowerCase() + "-" + bziB.animal.toLowerCase() + "#compare")}
 
         <h3 class="biz-subheading">${S.biz_summary_heading || "🧧 Business Partnership Summary"}</h3>
         <div class="biz-summary-box">

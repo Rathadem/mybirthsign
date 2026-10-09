@@ -801,9 +801,12 @@ function _shareInnerHtml() {
   );
 }
 
-function shareRowHtml(title, cardSpec) {
+// shareUrl (optional): the address of this specific result, e.g. "/compatibility?pair=rat-dragon".
+// It never contains birth dates or names; the visitor's language is added when they share.
+function shareRowHtml(title, cardSpec, shareUrl) {
   const safeTitle = title ? String(title).replace(/"/g, "&quot;") : "";
   let attrs = ' data-share-title="' + safeTitle + '"';
+  if (shareUrl) attrs += ' data-share-url="' + String(shareUrl).replace(/"/g, "&quot;") + '"';
   if (cardSpec) {
     attrs += ' data-share-card="' + JSON.stringify(cardSpec).replace(/"/g, "&quot;") + '"';
   }
@@ -813,13 +816,13 @@ function shareRowHtml(title, cardSpec) {
 // Like shareRowHtml(), but also shows the branded card itself (the same
 // image the "Share image" button generates) right on the page, so people
 // can see — and admire — the card before they ever open the share menu.
-function shareBlockHtml(title, cardSpec) {
+function shareBlockHtml(title, cardSpec, shareUrl) {
   return (
     '<div class="share-card-block">' +
       '<div class="share-card-wrap"><img class="share-card-img" alt="' +
         (title ? String(title).replace(/"/g, "&quot;") : "Zodiac result card") +
       '" loading="lazy"></div>' +
-      shareRowHtml(title, cardSpec) +
+      shareRowHtml(title, cardSpec, shareUrl) +
     '</div>'
   );
 }
@@ -886,6 +889,23 @@ function _copyToClipboard(text) {
   }
 }
 
+// The link that gets shared: the row's own result address if it has one (data-share-url),
+// otherwise this page without private details (birth dates in ?person1/?person2 are removed).
+// Khmer visitors share a Khmer link (?lang=km) so the preview and page open in Khmer.
+function _shareUrlFor(row, lang) {
+  let u;
+  try {
+    const own = row.getAttribute("data-share-url");
+    u = new URL(own || window.location.href, window.location.origin);
+    ["person1", "person2", "g1", "g2", "dob", "date", "name"].forEach(function (k) { u.searchParams.delete(k); });
+    if (lang === "km") u.searchParams.set("lang", "km"); else u.searchParams.delete("lang");
+    if (!own) u.hash = "";
+    return u.toString();
+  } catch (e) {
+    return window.location.href.split("#")[0];
+  }
+}
+
 function wireShareRows(root) {
   const scope = root || document;
   const lang = (typeof getLang === "function") ? getLang() : "en";
@@ -912,7 +932,7 @@ function wireShareRows(root) {
       const h1 = article && article.querySelector("h1");
       title = (h1 && h1.textContent.trim()) || document.title;
     }
-    const url = window.location.href.split("#")[0];
+    const url = _shareUrlFor(row, lang);
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
 

@@ -441,7 +441,7 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
-        ${shareRowHtml(animalADisplay + " + " + animalBDisplay, { emoji: ZODIAC_EMOJI[za.animal] + " " + ZODIAC_EMOJI[zb.animal], heading: animalADisplay + " + " + animalBDisplay, subheading: compatLabel + " — " + contextLabel, badge: starDisplay })}
+        ${shareRowHtml(animalADisplay + " + " + animalBDisplay, { emoji: ZODIAC_EMOJI[za.animal] + " " + ZODIAC_EMOJI[zb.animal], heading: animalADisplay + " + " + animalBDisplay, subheading: compatLabel + " — " + contextLabel, badge: starDisplay }, "/compatibility?pair=" + za.animal.toLowerCase() + "-" + zb.animal.toLowerCase() + "#compare")}
 
         <h3 class="compat-label">${compatLabel} — ${contextLabel}</h3>
         <div class="compat-stars">${starDisplay}</div>
