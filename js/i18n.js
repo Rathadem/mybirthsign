@@ -1000,9 +1000,30 @@ function initLangToggle() {
 // css/style.css), the header's <nav> collapses into a dropdown panel
 // toggled by a hamburger button. Above that width the button is hidden by
 // CSS and this is a no-op (the nav displays inline as before).
+// Highlight the menu item for the page being viewed (pretty URLs, .html and blog posts all count).
+function markCurrentNav() {
+  const nav = document.querySelector("header.site-header nav");
+  if (!nav) return;
+  const norm = function (p) {
+    p = String(p || "/").toLowerCase().replace(/\/index(\.html)?$/, "/").replace(/\.html$/, "").replace(/\/+$/, "");
+    if (p === "/zodiac-guide") p = "/animals";
+    return p || "/";
+  };
+  let here = norm(location.pathname);
+  if (here.indexOf("/blog/") === 0) here = "/blog";
+  nav.querySelectorAll("a[href]").forEach(function (a) {
+    if (a.hasAttribute("data-lang-switch")) return;
+    if (norm(a.pathname) !== here) return;
+    a.setAttribute("aria-current", "page");
+    const dd = a.closest(".nav-dropdown");
+    if (dd) dd.classList.add("has-current");
+  });
+}
+
 function initNavToggle() {
   const toggle = document.querySelector(".nav-toggle");
   const nav = document.querySelector("header.site-header nav");
+  try { markCurrentNav(); } catch (e) { /* never block the menu */ }
   if (!toggle || !nav) return;
 
   function closeMenu() {
