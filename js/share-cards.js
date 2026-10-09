@@ -145,16 +145,31 @@
   // Draw the content once on a tall transparent canvas, then place it on the chosen format:
   // portrait grows (1350 -> 1620) before anything is scaled; square / story keep their size, and the
   // content is scaled down only if it still does not fit; shorter content is centred vertically.
+  // Safari (iPhone / Mac) ignores textAlign "center" / "right" for some Khmer text, so every centred or
+  // right-aligned line is positioned by hand from its measured width instead.
+  function alignByHand(ctx) {
+    var raw = ctx.fillText;
+    ctx.fillText = function (t, x, y, maxW) {
+      var a = this.textAlign;
+      if (a === "center" || a === "right" || a === "end") {
+        var w = this.measureText(t).width;
+        this.textAlign = "left";
+        raw.call(this, t, a === "center" ? x - w / 2 : x - w, y);
+        this.textAlign = a;
+      } else if (maxW === undefined) raw.call(this, t, x, y); else raw.call(this, t, x, y, maxW);
+    };
+    return ctx;
+  }
   function render(L, note, format, body) {
     var F = FORMATS[format] || FORMATS.portrait;
     var opts = { compact: format === "square", story: format === "story" };
     var m = document.createElement("canvas"); m.width = W; m.height = 2300;
-    var mctx = m.getContext("2d");
+    var mctx = alignByHand(m.getContext("2d"));
     var end = Math.ceil(body(mctx, opts)) + 30;
     var H = F.h;
     if (F.grow) H = Math.max(F.h, Math.min(F.grow, Math.ceil((end + FOOT) / 10) * 10));
     var avail = H - FOOT, scale = Math.min(1, avail / end);
-    var c = document.createElement("canvas"); c.width = W; c.height = H; var ctx = c.getContext("2d");
+    var c = document.createElement("canvas"); c.width = W; c.height = H; var ctx = alignByHand(c.getContext("2d"));
     background(ctx, H);
     var dw = W * scale, dh = end * scale, dy = Math.max(0, (avail - dh) / 2 + (opts.story ? 20 : 0));   // short content sits in the middle, not at the top
     ctx.drawImage(m, 0, 0, W, end, (W - dw) / 2, dy, dw, dh);
