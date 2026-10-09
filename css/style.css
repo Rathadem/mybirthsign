@@ -3394,3 +3394,5 @@ html[lang="km"] .bv2-hero h1 { font-family: "Noto Sans Khmer", "Kantumruy Pro", 
 .chk-share .share-row, .pf-share { display: flex; justify-content: center; }
 .chk-share { margin: 18px 0 6px; }
 .pf-share { margin-top: 14px; }
+.biz-result-card > .share-row { justify-content: center; margin: 18px 0; }
+.chk-share { margin: 14px 0 18px; }

@@ -255,18 +255,18 @@ document.addEventListener("DOMContentLoaded", function () {
           ${tile(ICO.star, "", '<span class="chk-tile-one">' + ageText + "</span>", "")}
         </div>
       </section>
-      <div class="chk-four">
-        <article class="chk-card chk-c-pers"><h3><img src="images/checker/personality.webp" alt="" width="36" height="36" class="chk-ico-new">${S.chk_personality}</h3>${persBody}<img class="chk-art" src="images/checker/art-pers.webp" alt="" width="282" height="99" loading="lazy"></article>
-        <article class="chk-card chk-c-love"><h3><img src="images/checker/love.webp" alt="" width="36" height="36" class="chk-ico-new">${loveTitle}</h3>${loveBody}<img class="chk-art" src="images/checker/art-love.webp" alt="" width="282" height="99" loading="lazy"></article>
-        <article class="chk-card chk-c-career"><h3><img src="images/checker/career.webp" alt="" width="37" height="30">${S.chk_career}</h3>${careerBody}<img class="chk-art" src="images/checker/art-career.webp" alt="" width="282" height="99" loading="lazy"></article>
-        <article class="chk-card chk-c-luck"><h3><img src="images/checker/luck.webp" alt="" width="32" height="32">${S.chk_luck}</h3>${luckBody}<img class="chk-art" src="images/checker/art-luck.webp" alt="" width="282" height="99" loading="lazy"></article>
-      </div>
       <div class="chk-share">${typeof shareRowHtml === "function" ? shareRowHtml(
         (lang === "km" ? "ឆ្នាំ" + animalDisplay : elementDisplay + " " + animalDisplay) + " · MyBirthSign",
         { cardType: "sign", lang: lang, animal: animal, name: lang === "km" ? "ឆ្នាំ" + animalDisplay : animalDisplay,
           element: elementDisplay, elementLabel: S.chk_element, traits: traits, numbers: info.luckyNumbers, colors: luckyColors,
           matches: trianglePartnersDisplay, patience: clashAnimalDisplay },
         "/blog/zodiac-year-" + slug + ".html") : ""}</div>
+      <div class="chk-four">
+        <article class="chk-card chk-c-pers"><h3><img src="images/checker/personality.webp" alt="" width="36" height="36" class="chk-ico-new">${S.chk_personality}</h3>${persBody}<img class="chk-art" src="images/checker/art-pers.webp" alt="" width="282" height="99" loading="lazy"></article>
+        <article class="chk-card chk-c-love"><h3><img src="images/checker/love.webp" alt="" width="36" height="36" class="chk-ico-new">${loveTitle}</h3>${loveBody}<img class="chk-art" src="images/checker/art-love.webp" alt="" width="282" height="99" loading="lazy"></article>
+        <article class="chk-card chk-c-career"><h3><img src="images/checker/career.webp" alt="" width="37" height="30">${S.chk_career}</h3>${careerBody}<img class="chk-art" src="images/checker/art-career.webp" alt="" width="282" height="99" loading="lazy"></article>
+        <article class="chk-card chk-c-luck"><h3><img src="images/checker/luck.webp" alt="" width="32" height="32">${S.chk_luck}</h3>${luckBody}<img class="chk-art" src="images/checker/art-luck.webp" alt="" width="282" height="99" loading="lazy"></article>
+      </div>
     `;
 
     resultBox.innerHTML = topHtml + `
