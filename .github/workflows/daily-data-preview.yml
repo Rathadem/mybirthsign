@@ -25,6 +25,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           if [ -z "$ANTHROPIC_API_KEY" ]; then echo "::warning::Add the ANTHROPIC_API_KEY repository secret to run this preview"; exit 0; fi
+          node -e 'const k=process.env.ANTHROPIC_API_KEY;const t=k.trim();console.log("::warning::key check: starts with "+t.slice(0,13)+"… length "+t.length+(k!==t?" (HAS EXTRA SPACES/NEWLINES)":"")+(/\s/.test(t)?" (HAS SPACES INSIDE)":""))'
           D=$(TZ=Asia/Phnom_Penh date -d tomorrow +%F)
           mkdir -p preview-out
           set +e; node scripts/daily-data.mjs --date "$D" --out preview-out > preview-out/log.txt 2>&1; rc=$?; set -e
