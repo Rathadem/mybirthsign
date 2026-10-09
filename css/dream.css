@@ -1,5 +1,5 @@
 /* Dream Fortune (Checker page) — navy, indigo and gold, matching the result cards above it */
-.df { margin-top: 26px; margin-bottom: 30px; }
+.df { margin-top: 26px; margin-bottom: 8px; scroll-margin-top: 80px; }
 .df[hidden] { display: none; }
 .df-card {
   position: relative; overflow: hidden; text-align: center;
