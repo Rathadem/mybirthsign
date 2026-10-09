@@ -1059,8 +1059,25 @@ function initNavToggle() {
   });
 }
 
+// Phones: show the EN / ខ្មែរ switch in the top bar next to the menu button, so it is always
+// visible without opening the menu (CSS shows this copy only at phone width and hides the one
+// inside the menu there). Runs before applyStaticTranslations/initLangToggle so the copy gets
+// the same labels, highlight and click handling.
+function mountBarLangToggle() {
+  const header = document.querySelector("header.site-header");
+  const inner = header && header.querySelector("nav .lang-toggle");
+  const btn = header && header.querySelector(".nav-toggle");
+  if (!inner || !btn || header.querySelector(".lang-toggle-bar")) return;
+  const copy = inner.cloneNode(true);
+  copy.classList.add("lang-toggle-bar");
+  copy.setAttribute("role", "group");
+  copy.setAttribute("aria-label", "Language / ភាសា");
+  btn.parentNode.insertBefore(copy, btn);
+}
+
 if (typeof document !== "undefined") {
   document.addEventListener("DOMContentLoaded", function () {
+    try { mountBarLangToggle(); } catch (e) { /* the switch inside the menu still works */ }
     applyStaticTranslations();
     initLangToggle();
     initNavToggle();
