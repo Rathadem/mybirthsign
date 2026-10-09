@@ -284,6 +284,7 @@ const CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" strok
 const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#3fae6b"/><path d="m7.5 12.3 3.2 3.2 5.8-6.4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const WARN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#e0566b"/><path d="M12 7v6M12 16.5v.1" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg>';
 
+const attr = (v) => esc(v).replace(/"/g, "&quot;").replace(/'/g, "&#39;");   // safe inside attribute values
 const DL = {
   en: { love: "Love", career: "Career", money: "Money", number: "Number", color: "Color", direction: "Direction", time: "Time", advice: "Today's Advice", more: "Love · Work · Money", theme: "Today's Theme", loveHi: "Love highlight", bizHi: "Business highlight" },
   km: { love: "ស្នេហា", career: "ការងារ", money: "លុយកាក់", number: "លេខ", color: "ពណ៌", direction: "ទិស", time: "ម៉ោង", advice: "ដំបូន្មានថ្ងៃនេះ", more: "ស្នេហា · ការងារ · លុយ", theme: "ប្រធានបទថ្ងៃនេះ", loveHi: "ស្នេហាលេចធ្លោ", bizHi: "អាជីវកម្មលេចធ្លោ" },
@@ -313,7 +314,7 @@ function signCard(c, lang, t) {
           <h4>${D.money}</h4><p>${esc(x.money)}</p>
           <h4>${t.watchOut}</h4><p>${esc(x.careful)}</p>
           <h4>${D.advice}</h4><p>${esc(x.advice)}</p>
-          <div class="fx-sign-share share-row" data-share-title="${esc(`${name} · ${TIER_LABEL[lang][tier]} — ${isKm ? dateKM : dateEN}`)}" data-share-url="/blog/daily-fortune-${iso}.html?sign=${a.toLowerCase()}" data-share-card="${esc(JSON.stringify({ animal: a, emoji: EMOJI[a], heading: `${name} · ${TIER_LABEL[lang][tier]}`, subheading: isKm ? dateKM : dateEN }))}"></div>
+          <div class="fx-sign-share share-row" data-share-title="${attr(`${name} · ${TIER_LABEL[lang][tier]} — ${isKm ? dateKM : dateEN}`)}" data-share-url="/blog/daily-fortune-${iso}.html?sign=${a.toLowerCase()}" data-share-card="${attr(JSON.stringify({ cardType: "daily", lang, animal: a, name, tier, label: TIER_LABEL[lang][tier], date: isKm ? dateKM : dateEN, fortune: x.fortune, love: x.love, career: x.career, money: x.money, advice: x.advice, number: L.number, color: L.color[lang], colorHex: L.color.hex, direction: L.direction[lang], time: L.time }))}"></div>
         </details>`;
         })()}
         <a class="fx-more" href="${guideHref(a)}">${esc(t.view(name))}</a>
@@ -405,7 +406,7 @@ ${t.guides.map((g) => `          <div class="fx-guide"><div class="fx-guide-ico"
 
   <section class="fx-sec" aria-labelledby="fx-grid-${lang}">
     <div class="fx-head"><h2 id="fx-grid-${lang}">${t.gridH}</h2>${I.orn}<p>${t.gridP}</p></div>
-    ${DATA ? `<div class="fx-day-share share-row" data-share-title="${esc(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html"></div>
+    ${DATA ? `<div class="fx-day-share share-row" data-share-title="${attr(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html"></div>
     ` : ""}<ul class="fx-grid">
 ${byZodiac.map((c) => "      " + signCard(c, lang, t)).join("\n")}
     </ul>

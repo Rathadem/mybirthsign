@@ -750,7 +750,27 @@ function _buildCompatCardBlob(spec) {
 // ("compat" for the pink relationship card, otherwise the default zodiac
 // card), so callers of shareBlockHtml()/wireShareRows() don't need to care
 // which drawing routine backs a given result's image.
+// Rich daily-sign and two-sign cards live in js/share-cards.js, loaded only when someone taps
+// "Share image" (keeps every page light); other results use the cards drawn below.
+let _shareCardsLoading = null;
+function _loadShareCards() {
+  if (window.MBSShareCards) return Promise.resolve(window.MBSShareCards);
+  if (_shareCardsLoading) return _shareCardsLoading;
+  const me = document.querySelector('script[src*="share.js"]');
+  const src = (me ? me.src.replace(/share\.js.*$/, "") : "/js/") + "share-cards.js";
+  _shareCardsLoading = new Promise(function (resolve, reject) {
+    const s = document.createElement("script");
+    s.src = src; s.onload = function () { resolve(window.MBSShareCards); };
+    s.onerror = function () { _shareCardsLoading = null; reject(new Error("share cards unavailable")); };
+    document.head.appendChild(s);
+  });
+  return _shareCardsLoading;
+}
+
 function _buildCardBlob(spec) {
+  if (spec && (spec.cardType === "daily" || spec.cardType === "pair")) {
+    return _loadShareCards().then(function (m) { return m[spec.cardType](spec); });
+  }
   return spec && spec.cardType === "compat" ? _buildCompatCardBlob(spec) : _buildShareCardBlob(spec);
 }
 
