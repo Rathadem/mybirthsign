@@ -314,6 +314,8 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     `;
     wireShareRows(resultBox);
+    // Dream Fortune (js/dream-fortune.js) builds on this result; it gets the sign only, never the birth date
+    try { document.dispatchEvent(new CustomEvent("mbs:checker-result", { detail: { animal: animal, element: element, lang: lang } })); } catch (e) { /* optional */ }
     resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
 
     // Fetch a personalized AI-written reading. Falls back to the static

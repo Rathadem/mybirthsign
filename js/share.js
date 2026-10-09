@@ -58,7 +58,7 @@ const _ICON_DOWNLOAD = _svgIcon('<path d="M12 3v12"></path><path d="M7 10l5 5 5-
 const _ICON_MORE = _svgIcon('<circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"></line><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"></line>');
 
 const _ZODIAC = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
-const _CARD_TYPES = ["daily", "lucky", "sign", "pair", "love", "business", "article"];
+const _CARD_TYPES = ["daily", "lucky", "sign", "pair", "love", "business", "article", "dream"];
 
 // ---------------------------------------------------------------- image cards
 let _shareCardsLoading = null;
