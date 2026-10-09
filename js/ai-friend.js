@@ -354,6 +354,15 @@
   var SELF_MARKER = /\b(i am|i'm|im|my (?:sign|zodiac|animal|year)|born (?:in|as)|year of the)\b|ខ្ញុំ|ឆ្នាំ|我是|属|屬|生肖/i;
   var PARTNER_RE = /partner|wife|husband|girlfriend|boyfriend|spouse|fianc|lover|ប្រពន្ធ|ប្តី|ប្ដី|សង្សារ|គូ|妻|夫|彼女|彼氏|아내|남편|vợ|chồng|pareja|esposa|marido|femme|mari|ehefrau|ehemann|moglie|marito|esposa|istri|suami|asawa|पत्नी|पति|ภรรยา|สามี/i;
   var API_URL = "/.netlify/functions/ai-friend";
+  // true when a message is more than a birthday: a question mark, or a few words left after removing the date
+  function asksSomething(text) {
+    if (/[?？]/.test(text)) return true;
+    var rest = String(text).replace(/[0-9០-៩]+(?:\s*[\/.\-]\s*[0-9០-៩]+)*/g, " ")
+      .replace(/\b(i was born( on| in)?|i'm born|born( on| in)?|my (birthday|birth date|dob) is|birthday|dob|date of birth)\b/gi, " ")
+      .replace(/ខ្ញុំកើត(?:នៅ)?(?:ថ្ងៃទី)?|ថ្ងៃខែឆ្នាំកំណើត|ថ្ងៃកំណើត|កើតថ្ងៃ|ថ្ងៃទី|ខែ|ឆ្នាំ/g, " ");
+    var letters = 0; try { letters = (rest.match(/\p{L}/gu) || []).length; } catch (e) { letters = rest.replace(/[\s\d\W]/g, "").length; }
+    return letters >= 10;
+  }
   function apiBrain(text, ctx) {
     var mem = ctx.mem, intent = ctx.intent || detectIntent(text);
     var pairTopic = (intent || mem.topic) === "love" || (intent || mem.topic) === "business" || (intent || mem.topic) === "wedding";
@@ -377,7 +386,12 @@
     if (partnerish && pd.status === "ok") {
       // a second, clear date while the topic involves two people = the partner's birthday (the visitor's own stays)
       mem.partner = { y: pd.y, m: pd.m, d: pd.d };
-    } else if (mem.pending || pd) return guideBrain(text, ctx);
+    } else if (mem.pending || pd) {
+      // a clear birthday WITH a real question ("born 10/03/1989, what are my lucky numbers?"): keep the date and
+      // let Kru Toch answer the question; a bare date (or an unclear one) still gets the instant guide reply
+      if (!mem.pending && pd && pd.status === "ok" && asksSomething(text)) mem.dob = { y: pd.y, m: pd.m, d: pd.d };
+      else return guideBrain(text, ctx);
+    }
     // visitor gives only a year or an animal (no full birthday yet): remember it so Claude can give a base answer
     var an = pd ? "" : detectAnimal(text), shortMsg = text.trim().length <= 16;
     var aboutPartner = PARTNER_RE.test(text) || /\b(brother|sister|friend|boss|colleague|co-?founder|mother|father|mom|dad|son|daughter)\b|បងប្រុស|បងស្រី|ប្អូនប្រុស|ប្អូនស្រី|មិត្តភក្តិ|ម្តាយ|ឪពុក|កូន/i.test(text);
@@ -413,8 +427,8 @@
       if (d.rate) return { parts: [{ text: lang() === "km" ? "ចាំបន្តិចមិត្តអើយ 😊 សូមសាកល្បងម្តងទៀតក្នុងរយៈពេលមួយភ្លែតទៀត។" : "Let's slow down just a little, my friend 😊 Please try again in a minute." }] };
       if (!d || !d.reply) throw new Error("empty");
       if (intent) mem.topic = intent;
-      var links = intent ? linkSet(intent, replyLang(text)) : null;
-      return { parts: [{ text: d.reply, links: links && links.length ? links : undefined }] };
+      // Kru Toch answers in the chat; no extra "Open the … →" buttons under AI replies (the backup guide still has them)
+      return { parts: [{ text: d.reply }] };
     }).catch(function () {
       clearTimeout(timer);
       return guideBrain(text, ctx);
