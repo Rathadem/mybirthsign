@@ -94,6 +94,21 @@
 
 <div id="cmp-result" class="container chk-wrap cmp-wrap" aria-live="polite"></div>
 
+<section id="compare" class="container chk-wrap cmp-wrap cs-wrap" aria-labelledby="cs-h">
+  <h2 id="cs-h" class="cmp-h2" data-cs="h">Compare Two Signs</h2>
+  <p class="cs-lead" data-cs="p">Don't know the birthdays? Pick two zodiac animals to see their traditional match.</p>
+  <form id="cs-form" class="cs-form" novalidate>
+    <label><span data-cs="a">First sign</span>
+      <select id="cs-a" name="a"><option value="">Choose an animal</option><option>Rat</option><option>Ox</option><option>Tiger</option><option>Rabbit</option><option>Dragon</option><option>Snake</option><option>Horse</option><option>Goat</option><option>Monkey</option><option>Rooster</option><option>Dog</option><option>Pig</option></select></label>
+    <span class="cs-and" aria-hidden="true">&amp;</span>
+    <label><span data-cs="b">Second sign</span>
+      <select id="cs-b" name="b"><option value="">Choose an animal</option><option>Rat</option><option>Ox</option><option>Tiger</option><option>Rabbit</option><option>Dragon</option><option>Snake</option><option>Horse</option><option>Goat</option><option>Monkey</option><option>Rooster</option><option>Dog</option><option>Pig</option></select></label>
+    <button type="submit" class="chk-btn cs-go" data-cs="go">Compare Signs</button>
+  </form>
+  <p id="cs-error" class="cmp-error" role="alert" hidden></p>
+  <div id="cs-result" aria-live="polite"></div>
+</section>
+
 <section class="container chk-wrap chk-explore" aria-labelledby="cmp-explore-h">
   <h2 id="cmp-explore-h" data-cmp="exploreH">Explore All 12 Chinese Zodiac Signs</h2>
   <ul class="chk-animals" id="cmp-animals"><li><a class="chk-animal-link" href="animals.html#animal-rat"><img src="images/business/animals/rat.webp" alt="Rat" width="72" height="72" loading="lazy"><span>Rat</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-ox"><img src="images/business/animals/ox.webp" alt="Ox" width="72" height="72" loading="lazy"><span>Ox</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-tiger"><img src="images/business/animals/tiger.webp" alt="Tiger" width="72" height="72" loading="lazy"><span>Tiger</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-rabbit"><img src="images/business/animals/rabbit.webp" alt="Rabbit" width="72" height="72" loading="lazy"><span>Rabbit</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-dragon"><img src="images/business/animals/dragon.webp" alt="Dragon" width="72" height="72" loading="lazy"><span>Dragon</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-snake"><img src="images/business/animals/snake.webp" alt="Snake" width="72" height="72" loading="lazy"><span>Snake</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-horse"><img src="images/business/animals/horse.webp" alt="Horse" width="72" height="72" loading="lazy"><span>Horse</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-goat"><img src="images/business/animals/goat.webp" alt="Goat" width="72" height="72" loading="lazy"><span>Goat</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-monkey"><img src="images/business/animals/monkey.webp" alt="Monkey" width="72" height="72" loading="lazy"><span>Monkey</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-rooster"><img src="images/business/animals/rooster.webp" alt="Rooster" width="72" height="72" loading="lazy"><span>Rooster</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-dog"><img src="images/business/animals/dog.webp" alt="Dog" width="72" height="72" loading="lazy"><span>Dog</span></a></li><li><a class="chk-animal-link" href="animals.html#animal-pig"><img src="images/business/animals/pig.webp" alt="Pig" width="72" height="72" loading="lazy"><span>Pig</span></a></li></ul>
@@ -142,6 +157,7 @@
 <script src="js/compat-text.js"></script>
 <script src="js/compat-gender.js"></script>
 <script src="js/compat-page.js"></script>
+<script src="js/compare-signs.js"></script>
 <script src="js/app.js"></script>
 <script src="js/ai-friend-loader.js" defer></script>
 </body>

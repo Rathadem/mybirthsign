@@ -77,14 +77,14 @@
     btn.setAttribute("aria-haspopup", "dialog");
     btn.setAttribute("aria-expanded", "false");
     btn.setAttribute("aria-controls", "mbs-ai-panel");
-    btn.innerHTML = AVATAR + '<span class="mbs-ai-l"><span class="mbs-ai-spark" aria-hidden="true">✨</span>' + t.label + '</span><span class="mbs-ai-s">' + t.short + "</span>";
+    btn.innerHTML = AVATAR + '<span class="mbs-ai-l">' + t.label + '</span><span class="mbs-ai-s">' + t.short + "</span>";
     document.body.appendChild(btn);
 
     // keep the label in step with the site's language switch
     new MutationObserver(function () {
       var tt = STR[uiLang()];
       btn.setAttribute("aria-label", tt.aria);
-      btn.querySelector(".mbs-ai-l").lastChild.nodeValue = tt.label;
+      btn.querySelector(".mbs-ai-l").textContent = tt.label;
       btn.querySelector(".mbs-ai-s").textContent = tt.short;
     }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 

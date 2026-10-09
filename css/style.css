@@ -3325,3 +3325,37 @@ html[lang="km"] .biz-hero-v2 h1 { font-family: "Moul", "Kantumruy Pro", "Noto Sa
 .biz-page .biz-more { border: 0 !important; border-image: none !important; padding: 32px 16px !important; margin-left: auto; margin-right: auto; }
 @media (max-width: 640px) { .biz-page .biz-more { border-width: 0 !important; padding: 24px 16px !important; margin-left: 0; margin-right: 0; } }
 html[lang="km"] :is(a, button, label, p, li, span) { letter-spacing: 0 !important; }
+
+/* ===== Compare Two Signs (compatibility page) ===== */
+.cs-wrap { margin-top: 10px; }
+.cs-lead { text-align: center; color: #d9d2ee; margin: -8px auto 18px; max-width: 640px; }
+.cs-form { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 12px; padding: 18px; border-radius: 18px; border: 1.5px solid #3b2d6e; background: linear-gradient(180deg, rgba(26,19,64,.95), rgba(14,10,38,.97)); }
+.cs-form label { display: flex; flex-direction: column; gap: 6px; color: #f6e3b2; font-weight: 700; font-size: .9rem; min-width: 0; flex: 1 1 180px; max-width: 260px; }
+.cs-form select { width: 100%; min-height: 46px; padding: 8px 12px; border-radius: 12px; border: 1px solid #5a4796; background: #120c33; color: #fff; font: inherit; font-weight: 400; }
+.cs-and { color: #f6dc9b; font: 700 1.4rem Georgia, serif; padding-bottom: 8px; }
+.cs-form .cs-go { min-height: 46px; flex: 0 1 auto; }
+.cs-result { margin-top: 22px; }
+.cs-head { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
+.cs-sign { margin: 0; text-align: center; }
+.cs-sign img { width: 110px; height: 110px; border-radius: 50%; }
+.cs-sign figcaption { color: #f6e3b2; font: 700 1.1rem Georgia, serif; margin-top: 4px; }
+html[lang="km"] .cs-sign figcaption { font-family: "Noto Sans Khmer", sans-serif; }
+.cs-mid { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
+.cs-badge { padding: 6px 14px; border-radius: 999px; border: 1px solid rgba(246,220,155,.6); color: #f6dc9b; font-weight: 700; background: rgba(246,220,155,.08); text-align: center; }
+.cs-type-clash .cs-badge { color: #ff9aa8; border-color: rgba(240,111,130,.6); background: rgba(220,70,100,.1); }
+.cs-quick { margin: 4px 0 0; color: #b9b0de; font-size: .8rem; }
+.cs-stars { color: #ece6ff; font-size: .9rem; }
+.cs-stars span { color: #f6dc9b; letter-spacing: 1px; }
+.cs-stars i { color: rgba(246,220,155,.25); font-style: normal; }
+.cs-intro { max-width: 760px; margin: 0 auto 16px; text-align: center; line-height: 1.7; color: #ece6ff; }
+.cs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 14px; }
+.cs-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cs-grid .cmp-panel { margin: 0; }
+.cs-grid ul { margin: 0; padding-left: 18px; line-height: 1.6; }
+.cs-grid .cs-tips { list-style: none; padding: 0; display: grid; gap: 6px; }
+.cs-tips strong { color: #f6e3b2; }
+.cs-exact { text-align: center; color: #d9d2ee; margin: 6px 0; }
+.cs-exact-btn { display: inline-block; margin-left: 6px; color: #f6dc9b; font-weight: 700; }
+.cs-note { text-align: center; color: #9d94c8; font-size: .82rem; }
+@media (max-width: 760px) { .cs-grid, .cs-grid-3 { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .cs-sign img { width: 84px; height: 84px; } .cs-and { display: none; } .cs-form label { flex-basis: 100%; max-width: none; } .cs-form .cs-go { width: 100%; } }
