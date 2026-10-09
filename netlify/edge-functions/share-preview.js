@@ -7,7 +7,7 @@
 //   /blog/daily-fortune-YYYY-MM-DD.html?lang=km               the day's page in Khmer
 // Images are fixed public files (images/og/*.jpg), never generated per visitor.
 // If anything goes wrong the original page is served unchanged (config.onError = "bypass").
-import D from "./share-preview-data.js";
+import D from "../edge-lib/share-preview-data.js";
 
 const SITE = "https://mybirthsign.com";
 const BRAND = { en: "MyBirthSign", km: "ផ្កាយកំណើត" };

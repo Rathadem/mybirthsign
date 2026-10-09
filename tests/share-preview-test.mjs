@@ -6,9 +6,9 @@ let pass = 0, fail = 0; const ok = (n, c, x = "") => { if (c) pass++; else { fai
 const meta = (html, k) => { const m = new RegExp(`<meta (?:property|name)="${k}" content="([^"]*)"`).exec(html); return m && m[1]; };
 
 // 0) generated data is up to date with the site files
-const before = fs.readFileSync("netlify/edge-functions/share-preview-data.js", "utf8");
+const before = fs.readFileSync("netlify/edge-lib/share-preview-data.js", "utf8");
 execFileSync("node", ["scripts/share-preview-data.mjs"]);
-ok("edge data matches site data files", fs.readFileSync("netlify/edge-functions/share-preview-data.js", "utf8") === before);
+ok("edge data matches site data files", fs.readFileSync("netlify/edge-lib/share-preview-data.js", "utf8") === before);
 
 // 1) match type = site rule (getCompatibilityType in js/zodiac-data.js) for all 144 pairs
 const vm = await import("node:vm"); const ctx = vm.createContext({}); vm.runInContext(fs.readFileSync("js/zodiac-data.js", "utf8") + ";this.g=getCompatibilityType", ctx);
