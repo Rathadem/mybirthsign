@@ -99,6 +99,7 @@ en: {
   quickIntro: "Want a simpler star-rating style match instead? Use the quick check below.",
   faqH: "Frequently Asked Questions",
   faq: [
+    ["Can I compare two zodiac signs without birth dates?", "Yes. Use Compare Two Signs on this page to pick two zodiac animals and see their traditional match type, with notes on love, friendship, business, teamwork and money. For exact percentage scores, enter both birth dates, because the element and Yin or Yang of each birth year also count."],
     ["How is Chinese zodiac compatibility calculated?", "Traditional compatibility compares the zodiac animals of two people, then the elements and the Yin or Yang polarity of their zodiac years. Animals in the same triangle are considered naturally harmonious, direct opposites are considered a clash, and everything else is neutral. This calculator turns those traditional ideas into scores for entertainment and reflection."],
     ["Can two people with different zodiac signs be compatible?", "Yes. Most pairings are neither perfect nor doomed. A different sign can bring useful contrast, and how you communicate and treat each other matters far more than the animals."],
     ["Why does the Chinese Lunar New Year matter?", "The Chinese zodiac year begins on the Lunar New Year, not on 1 January. Someone born in January or early February may belong to the previous animal year, so this calculator checks each birth date against the actual Lunar New Year date."],
@@ -211,6 +212,7 @@ km: {
   quickIntro: "ចង់បានការផ្គូផ្គងបែបផ្កាយសាមញ្ញជាងនេះឬ? សូមប្រើការពិនិត្យរហ័សខាងក្រោម។",
   faqH: "សំណួរដែលសួរញឹកញាប់",
   faq: [
+    ["តើខ្ញុំអាចប្រៀបធៀបរាសីពីរដោយមិនដឹងថ្ងៃកំណើតបានទេ?", "បាន។ ប្រើផ្នែក \"ប្រៀបធៀបរាសីពីរ\" នៅលើទំព័រនេះ ដើម្បីជ្រើសរើសសត្វរាសីពីរ ហើយមើលប្រភេទភាពត្រូវគ្នាតាមប្រពៃណី រួមទាំងស្នេហា មិត្តភាព អាជីវកម្ម ការងារជាក្រុម និងលុយកាក់។ ដើម្បីទទួលបានពិន្ទុជាភាគរយពិតប្រាកដ សូមបញ្ចូលថ្ងៃកំណើតទាំងពីរ ព្រោះធាតុ និងយិន ឬយ៉ាងនៃឆ្នាំកំណើតនីមួយៗក៏សំខាន់ដែរ។"],
     ["តើភាពជាគូជោគជតារាសីត្រូវបានគណនាយ៉ាងដូចម្តេច?", "ភាពជាគូតាមប្រពៃណីប្រៀបធៀបសត្វរាសីរបស់មនុស្សពីរនាក់ បន្ទាប់មកធាតុ និងភាពយិន ឬយ៉ាងនៃឆ្នាំរាសីរបស់ពួកគេ។ សត្វក្នុងត្រីកោណតែមួយត្រូវបានចាត់ទុកថាសុខដុមដោយធម្មជាតិ សត្វទល់មុខគ្នាត្រូវបានចាត់ទុកថាប៉ះទង្គិច ហើយផ្សេងទៀតអព្យាក្រឹត។ កម្មវិធីនេះបំប្លែងគំនិតប្រពៃណីទាំងនេះទៅជាពិន្ទុសម្រាប់កម្សាន្ត និងការគិតពិចារណា។"],
     ["តើមនុស្សពីរនាក់ដែលមានរាសីខុសគ្នាអាចជាគូបានទេ?", "បាន។ គូភាគច្រើនមិនល្អឥតខ្ចោះ ហើយក៏មិនមែនអាក្រក់ទាំងស្រុងដែរ។ រាសីខុសគ្នាអាចនាំមកនូវភាពផ្ទុយគ្នាដែលមានប្រយោជន៍ ហើយរបៀបដែលអ្នកប្រាស្រ័យទាក់ទង និងប្រព្រឹត្តចំពោះគ្នាសំខាន់ជាងសត្វឆ្ងាយណាស់។"],
     ["ហេតុអ្វីបានជាចូលឆ្នាំចិនសំខាន់?", "ឆ្នាំរាសីចិនចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចិន មិនមែនថ្ងៃទី ១ មករាទេ។ អ្នកដែលកើតនៅខែមករា ឬដើមខែកុម្ភៈ អាចជាកម្មសិទ្ធិរបស់ឆ្នាំសត្វមុន ដូច្នេះកម្មវិធីនេះពិនិត្យថ្ងៃកំណើតនីមួយៗជាមួយកាលបរិច្ឆេទចូលឆ្នាំចិនពិតប្រាកដ។"],

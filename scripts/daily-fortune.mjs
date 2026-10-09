@@ -475,7 +475,9 @@ if (exists && !FORCE) {
 } else {
   const url = `https://mybirthsign.com/blog/${slug}.html`;
   const title = `Chinese Zodiac Daily Fortune — ${dateEN} | MyBirthSign`;
-  const desc = "Discover today's Chinese zodiac fortune for all 12 zodiac animals, including the best signs for the day, signs needing extra care, and traditional daily guidance.";
+  const desc = DATA
+    ? "Today's Chinese zodiac fortune for all 12 animals: love, career and money highlights, lucky numbers and colors, the best signs for the day and traditional daily advice."
+    : "Discover today's Chinese zodiac fortune for all 12 zodiac animals, including the best signs for the day, signs needing extra care, and traditional daily guidance.";
   const ogImage = "https://mybirthsign.com/images/fortune/hero-night.webp";
   const faqEN = faqs("en", dateEN);
   const jsonld = JSON.stringify({

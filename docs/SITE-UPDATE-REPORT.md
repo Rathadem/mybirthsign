@@ -1,0 +1,68 @@
+# MyBirthSign site update — report, tests, data handling, deploy & rollback
+
+Branch: `site-update` (built on `ai-friend`, which holds Kru Toch). Nothing here is live until the owner says "deploy".
+Design, layout, URLs and every existing calculation are unchanged; new features reuse existing styles and text.
+
+## What was added (by phase)
+
+| Phase | Feature | Main files |
+|---|---|---|
+| 1 | Daily data: one validated JSON per day (`/data/daily/<date>.json`, `latest.json`). Rules decide every fact; Claude writes only the wording (EN + KM); invalid records are never published. | `scripts/daily-data-lib.mjs`, `scripts/daily-data.mjs`, `.github/workflows/daily-fortune.yml`, `netlify.toml` |
+| 2 | Daily page cards, homepage "Today's Fortune" cards and Kru Toch use that same data. With no data, everything looks exactly as before. | `scripts/daily-fortune.mjs`, `scripts/home-page.mjs`, `index.html`, `css/fortune.css`, `css/home.css`, `netlify/functions/ai-friend.js` |
+| 3 | Compare Two Signs inside the Compatibility page (no percentages; existing rules and text). | `js/compare-signs.js`, `compatibility.html`, `css/style.css` |
+| 4 | Result-specific share links (animals/date/language only), `?lang=km`, daily day + sign sharing, link-preview edge function, 90 fixed preview images. | `js/share.js`, `js/i18n.js`, `js/compat-page.js`, `js/app.js`, `js/business-calculator.js`, `netlify/edge-functions/*`, `images/og/*`, `scripts/og-images.py`, `scripts/share-preview-data.mjs` |
+| 5 | Rich "Share image" cards (daily sign, two signs), EN/KM, drawn on the visitor's device, loaded only on demand. | `js/share-cards.js`, `js/share.js` |
+| 6 | Accurate privacy section (EN + KM), one new compatibility FAQ (visible + structured data), richer daily-page description when data exists. | `privacy.html`, `js/compat-text.js`, `compatibility.html`, `scripts/daily-fortune.mjs` |
+
+Also on this branch (approved earlier): Kru Toch AI chat (`js/ai-friend*.js`, `css/ai-friend.css`, `netlify/functions/ai-friend.js`, `js/mbs-engine.js`, one loader line per page), the animal-page section-menu fix (`scripts/animal-profile.mjs`, `blog/zodiac-year-*.html`, `css/profile.css`).
+
+## Test results (section 13 of the brief)
+
+| Requirement | Result | How it was checked |
+|---|---|---|
+| All 12 animals receive valid daily content | PASS (pipeline) / NOT VERIFIED with real Claude wording | `tests/daily-data-test.mjs` (27 checks: 12 signs, rules for 366 days, 21 broken-record cases rejected). Real wording needs the GitHub secret, then the preview job. |
+| Daily JSON records validate correctly | PASS | same test; generator refuses to publish on any error |
+| Chatbot uses the correct daily data | PASS | 7 function checks: same lucky items/text as the JSON; works packaged like Netlify |
+| Existing zodiac calculations unchanged | PASS | 720 calculator checks vs live pages; 56 daily-post checks; no-data daily page byte-identical |
+| Compare Two Signs uses accurate existing results | PASS | all 144 pairs = `getCompatibilityType`; EN + KM complete; no percentages |
+| Sharing links work as intended | PASS | 13 browser checks: pair/sign/day links, no birth dates or names, Khmer adds `lang=km`, language switch wins |
+| English and Khmer sharing content | PASS | previews, titles and cards in both languages |
+| Khmer renders properly in social images | PASS (Chromium) | cards rendered in EN/KM; Khmer wraps at word boundaries |
+| Social preview images & metadata accessible | PASS locally / NOT VERIFIED on Netlify | 32 preview checks (Node + Deno); images at stable public paths. Check with Facebook Sharing Debugger + Telegram after deploy. |
+| Temporary assets expire | N/A by design | no temporary files exist: cards are drawn on the visitor's device and never uploaded |
+| Existing pages, navigation, URLs keep working | PASS | 372 page/viewport checks (9 pages × EN/KM × 3 sizes), chat suites, menu tests |
+| No major mobile / accessibility / SEO / performance regressions | PASS | axe-core: 0 violations on new sections (EN/KM); JSON-LD valid; first-load +≈6 KB gz per page |
+
+Known, pre-existing: at 320 px wide the homepage and Zodiac Guide overflow by 4–8 px (also without these changes).
+
+## Data processing and retention (accurate summary)
+
+| What | Where it is processed | Kept? |
+|---|---|---|
+| Birth dates typed into calculators | Visitor's browser only | Not sent or stored by us (may appear in the visitor's own address bar on the compatibility page) |
+| Kru Toch chat messages | Netlify Function → Anthropic API | Conversation kept in the visitor's tab (sessionStorage) until closed; Anthropic handles data under its own policy |
+| Chat abuse limits | Netlify Function memory (per IP) | Temporary counter, not saved |
+| Language choice | Visitor's browser (localStorage) | Until the visitor clears it |
+| Daily zodiac data | GitHub Action → Anthropic API → public JSON | Public, no visitor data |
+| Share links | Visitor → chosen social app | Contain animals/date/language only |
+| Share images | Visitor's device (canvas) | Never uploaded or stored by us |
+| Link previews | Netlify Edge Function; social crawlers fetch the page and fixed images | Nothing stored |
+| Hosting | Netlify (technical request data such as IP, browser, page) | Per Netlify's policy |
+| Ads | Google AdSense cookies | Per Google's policy |
+
+## Deploy checklist (only after the owner says "deploy")
+
+1. Secrets: `ANTHROPIC_API_KEY` in **Netlify** (Kru Toch) and in **GitHub → Settings → Secrets → Actions** (daily wording). Set a monthly spending limit in the Anthropic console. Revoke the two keys pasted in chat earlier.
+2. Review real wording: run the "Daily data preview" job on `site-update`, check EN and Khmer samples (native Khmer review recommended).
+3. Remove `.github/workflows/daily-data-preview.yml` (test only).
+4. Merge fresh `main` into `site-update` (the daily bot changes `index.html`, `blog.html`, `sitemap.xml` every day), regenerate `index.html` with `node scripts/home-page.mjs`, re-run the tests, then fast-forward `main`.
+5. After Netlify publishes: open each main page, chat once, open a `?pair=` and a `?sign=` link, run Facebook Sharing Debugger and a Telegram preview on both, confirm `/data/daily/latest.json` appears after the next daily run.
+
+## Rollback
+
+- **Everything:** `git revert -m 1 <merge commit>` on `main` and push (Netlify redeploys the previous site). DNS is not involved.
+- **Daily data only:** remove the "Daily data" step from `.github/workflows/daily-fortune.yml` and delete `data/daily/` — pages, homepage and Kru Toch fall back automatically.
+- **Link previews only:** delete `netlify/edge-functions/` — normal page previews return.
+- **Share cards only:** delete `js/share-cards.js` — "Share image" falls back to the original simple card.
+- **Compare Two Signs only:** remove `<section id="compare">` and its `<script>` line from `compatibility.html`.
+- **Kru Toch only:** remove the `ai-friend-loader.js` line from each page (or unset the Netlify key; the chat then answers with its offline guide).
