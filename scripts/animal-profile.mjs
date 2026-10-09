@@ -304,6 +304,7 @@ function body(lang) {
     <p class="pf-years">${yrs}</p>
     <p class="fx-sub">${esc(c.intro)}</p>
     <div class="pf-cta-row"><a class="fx-btn" href="${CHK}">${EMOJI[A]} ${esc(u.btnCheck(n))}</a><a class="fx-btn fx-btn-rose" href="/compatibility">💗 ${esc(u.btnCompat)}</a></div>
+    <div class="pf-share share-row" data-share-title="${esc(c.h1)}" data-share-url="/blog/zodiac-year-${slug}.html" data-share-card="${esc(JSON.stringify({ cardType: "article", lang, animal: A, eyebrow: c.eyebrow, title: c.h1, sub: c.intro }))}"></div>
   </div>
 </section>
 
@@ -454,7 +455,7 @@ ${u.tools.map((x) => `        <li><a href="${x[3]}"><span class="fx-t-ico" aria-
 // ---------------------------------------------------------------- SEO
 const TITLE = `Year of the ${A}: Personality, Years & Compatibility | MyBirthSign`;
 const DESC = `Explore the Year of the ${A}, including ${A} birth years, personality traits, elements, lucky signs, love, career, and Chinese zodiac compatibility.`;
-const OG = "https://mybirthsign.com/images/fortune/hero-" + slug + ".webp";
+const OG = "https://mybirthsign.com/images/og/sign-" + slug + ".jpg";   // 1200x630 JPG (Facebook / Telegram friendly)
 const today = new Date().toISOString().slice(0, 10);
 const faqEn = faqs("en");
 const jsonld = JSON.stringify([

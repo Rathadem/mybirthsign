@@ -406,7 +406,7 @@ ${t.guides.map((g) => `          <div class="fx-guide"><div class="fx-guide-ico"
 
   <section class="fx-sec" aria-labelledby="fx-grid-${lang}">
     <div class="fx-head"><h2 id="fx-grid-${lang}">${t.gridH}</h2>${I.orn}<p>${t.gridP}</p></div>
-    ${DATA ? `<div class="fx-day-share share-row" data-share-title="${attr(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html"></div>
+    ${DATA ? `<div class="fx-day-share share-row" data-share-title="${attr(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html" data-share-card="${attr(JSON.stringify({ cardType: "lucky", lang, date: isKm ? dateKM : dateEN, top: DATA.highlights.topLucky, topNames: DATA.highlights.topLucky.map(nm), careful: DATA.highlights.careful.map(nm), text: DATA.highlights.theme[lang] }))}"></div>
     ` : ""}<ul class="fx-grid">
 ${byZodiac.map((c) => "      " + signCard(c, lang, t)).join("\n")}
     </ul>
@@ -478,7 +478,7 @@ if (exists && !FORCE) {
   const desc = DATA
     ? "Today's Chinese zodiac fortune for all 12 animals: love, career and money highlights, lucky numbers and colors, the best signs for the day and traditional daily advice."
     : "Discover today's Chinese zodiac fortune for all 12 zodiac animals, including the best signs for the day, signs needing extra care, and traditional daily guidance.";
-  const ogImage = "https://mybirthsign.com/images/fortune/hero-night.webp";
+  const ogImage = `https://mybirthsign.com/images/og/sign-${dayAnimal.toLowerCase()}.jpg`;   // the day animal, 1200x630 JPG
   const faqEN = faqs("en", dateEN);
   const jsonld = JSON.stringify({
     "@context": "https://schema.org",

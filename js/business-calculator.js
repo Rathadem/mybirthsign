@@ -418,7 +418,14 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="biz-result-card">
         ${overviewHtml(p1Name, p2Name, bziA, bziB, scores, top, bottom, elRel, bizA, bizB)}
 
-        ${shareRowHtml(p1Name + " + " + p2Name, { emoji: ZODIAC_EMOJI[bziA.animal] + " 🤝 " + ZODIAC_EMOJI[bziB.animal], heading: p1Name + " + " + p2Name, subheading: CATEGORY_LABEL[top[0][0]] + " · " + CATEGORY_LABEL[top[1][0]] }, "/compatibility?pair=" + bziA.animal.toLowerCase() + "-" + bziB.animal.toLowerCase() + "#compare")}
+        ${shareRowHtml(animalName(bziA.animal) + " + " + animalName(bziB.animal) + " — " + (S.biz_ov_match || "Business Match"),
+          // names stay off the card and out of the link: the two signs and the page's own scores only
+          { cardType: "business", lang: lang, eyebrow: S.biz_ov_title || "Your Business Compatibility Result", a: bziA.animal, b: bziB.animal,
+            nameA: animalName(bziA.animal), nameB: animalName(bziB.animal),
+            overall: Math.round(Object.values(scores).reduce(function (x, y) { return x + y; }, 0) / Object.values(scores).length),
+            level: S.biz_ov_match || "Business Match",
+            cats: top.slice(0, 3).map(function (e) { return [CATEGORY_LABEL[e[0]], e[1]]; }),
+            discuss: CATEGORY_LABEL[bottom[0][0]] + ", " + CATEGORY_LABEL[bottom[1][0]] }, "/compatibility?pair=" + bziA.animal.toLowerCase() + "-" + bziB.animal.toLowerCase() + "#compare")}
 
         <h3 class="biz-subheading">${S.biz_summary_heading || "🧧 Business Partnership Summary"}</h3>
         <div class="biz-summary-box">

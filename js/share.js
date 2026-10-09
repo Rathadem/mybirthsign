@@ -1,48 +1,29 @@
-// Reusable "Share" button + popover, used on every result card and every
-// blog post. Two entry points:
-//   - shareRowHtml(title) returns markup to drop into a template string
-//     (used by app.js, wedding.js, business-calculator.js for results).
-//   - wireShareRows(root) finds any unwired ".share-row" under `root`
-//     (default: whole document) and wires up its button + popover. Static
-//     placeholders in blog posts are wired on page load; dynamically
-//     injected result cards are wired right after their innerHTML is set.
-//     A ".share-row" with no data-share-title falls back to the nearest
-//     <article>'s <h1>, then to the page title.
+// share.js — the "Share" button + menu used on result cards, daily fortunes and blog posts.
+//   shareRowHtml(title, cardSpec, shareUrl)  markup for a result card (app.js, compat-page.js, ...)
+//   shareBlockHtml(title, cardSpec, shareUrl) the same, plus a preview of the image card
+//   wireShareRows(root)                       wires every unwired ".share-row" (runs on page load too)
+// A row may carry data-share-title, data-share-url (the result's own public address: animals / date /
+// language only, never birth dates or names) and data-share-card (what the image card shows).
+// They are read when the menu is used, so a page may fill them in after load.
 //
-// Facebook and Telegram support a real "share this link" web intent, so
-// those open a share dialog directly. Instagram and TikTok have no public
-// web intent for sharing an arbitrary link, so those copy the link to the
-// clipboard and open the app/site instead, so the person can paste it in.
+// What each action really does (no platform is promised more than it supports):
+//   Share image     phone/tablet share sheet with a 1080x1350 image (only where the browser can share files)
+//   Download image  saves a 1080x1080 image
+//   Copy link       copies the result's link
+//   More apps       the device's own share sheet with the link (only where the browser supports it)
+//   Facebook, WhatsApp, Telegram   their official "share a link" pages; the preview comes from the page tags
+//   Pinterest       Pinterest's "create a Pin" page with the link and the result's fixed public preview image
+//   Instagram, TikTok  neither accepts a website link, so a 1080x1920 image is shared or saved and the menu
+//                   shows how to post it in the app
+// Image cards are drawn on the visitor's device by js/share-cards.js (loaded on first use); nothing is uploaded.
 
-const _SHARE_NETWORKS = [
-  {
-    id: "facebook",
-    label: "Facebook",
-    color: "#1877F2",
-    icon: '<path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/>'
-  },
-  {
-    id: "telegram",
-    label: "Telegram",
-    color: "#29A9EB",
-    icon: '<path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>'
-  },
-  {
-    id: "tiktok",
-    label: "TikTok",
-    color: "#25F4EE",
-    copyOnly: true,
-    appUrl: "https://www.tiktok.com/",
-    icon: '<path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>'
-  },
-  {
-    id: "instagram",
-    label: "Instagram",
-    color: "#E1306C",
-    copyOnly: true,
-    appUrl: "https://www.instagram.com/",
-    icon: '<path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/>'
-  }
+const _SHARE_NETS = [
+  { id: "facebook", label: "Facebook", color: "#1877F2", link: true, icon: "<path d=\"M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z\"/>" },
+  { id: "whatsapp", label: "WhatsApp", color: "#25D366", link: true, icon: "<path d=\"M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z\"/>" },
+  { id: "telegram", label: "Telegram", color: "#29A9EB", link: true, icon: "<path d=\"M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z\"/>" },
+  { id: "pinterest", label: "Pinterest", color: "#E60023", link: true, icon: "<path d=\"M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z\"/>" },
+  { id: "instagram", label: "Instagram", color: "#E1306C", link: false, icon: "<path d=\"M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077\"/>" },
+  { id: "tiktok", label: "TikTok", color: "#25F4EE", link: false, icon: "<path d=\"M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z\"/>" }
 ];
 
 function _brandIconHtml(net) {
@@ -52,7 +33,6 @@ function _brandIconHtml(net) {
     '</svg>'
   );
 }
-
 function _copyIconHtml() {
   return (
     '<svg class="share-net-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
@@ -62,7 +42,6 @@ function _copyIconHtml() {
     '</svg>'
   );
 }
-
 function _imageIconHtml() {
   return (
     '<svg class="share-net-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
@@ -72,692 +51,22 @@ function _imageIconHtml() {
     '</svg>'
   );
 }
-
-// measureText().width only reports a glyph run's *advance* width. Scripts
-// with stacked/subscript consonant clusters -- Khmer chief among them --
-// routinely paint ink that extends further right (or left) than that
-// advance, because a tall conjunct cluster's visual bounding box is wider
-// than the cursor distance it advances by. A line that "fits" by .width
-// alone can still paint past the card edge once the real font (with real
-// complex-script shaping) draws it, even though the exact same measurement
-// looked safe moments earlier with the exact same font loaded. Using the
-// actual bounding box (when the browser supports it) catches that overhang;
-// .width is kept as a floor for browsers that don't report it (returns 0).
-function _textInkWidth(ctx, text) {
-  const m = ctx.measureText(text);
-  const left = m.actualBoundingBoxLeft || 0;
-  const right = m.actualBoundingBoxRight || 0;
-  return Math.max(m.width, left + right);
+function _svgIcon(paths) {
+  return '<svg class="share-net-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths + "</svg>";
 }
+const _ICON_DOWNLOAD = _svgIcon('<path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path>');
+const _ICON_MORE = _svgIcon('<circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"></line><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"></line>');
 
-// Wraps `text` onto lines no wider than `maxWidth` on the given 2D context
-// (which must already have its font set), returning an array of lines.
-//
-// Splits on whitespace first, but scripts like Khmer often have no spaces
-// within a whole clause — a single "word" there can be far wider than the
-// card itself. So any word that alone doesn't fit gets broken
-// character-by-character as a fallback, instead of being left to overflow.
-function _wrapCanvasText(ctx, text, maxWidth) {
-  const words = String(text).split(/\s+/).filter(Boolean);
-  const lines = [];
-  let line = "";
+const _ZODIAC = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
+const _CARD_TYPES = ["daily", "lucky", "sign", "pair", "love", "business", "article"];
 
-  words.forEach(function (word) {
-    if (_textInkWidth(ctx, word) > maxWidth) {
-      if (line) { lines.push(line); line = ""; }
-      let chunk = "";
-      for (const ch of word) {
-        const test = chunk + ch;
-        if (_textInkWidth(ctx, test) > maxWidth && chunk) {
-          lines.push(chunk);
-          chunk = ch;
-        } else {
-          chunk = test;
-        }
-      }
-      line = chunk;
-      return;
-    }
-
-    const test = line ? line + " " + word : word;
-    if (_textInkWidth(ctx, test) > maxWidth && line) {
-      lines.push(line);
-      line = word;
-    } else {
-      line = test;
-    }
-  });
-  if (line) lines.push(line);
-  return lines;
-}
-
-// A faint, muted strip of all 12 zodiac animals used as a decorative motif
-// near the bottom of the share card, reinforcing the zodiac theme and
-// filling what would otherwise be empty space.
-const _ZODIAC_MOTIF = ["🐀", "🐂", "🐅", "🐇", "🐉", "🐍", "🐎", "🐐", "🐒", "🐓", "🐕", "🐖"];
-
-// Same 12 animals, in the same order, as lowercase keys matching the
-// circular badge artwork filenames -- used so the share card can draw the
-// real illustrated badges instead of emoji glyphs, both for the big "hero"
-// icon and the decorative motif strip.
-const _ZODIAC_BADGE_ORDER = ["rat", "ox", "tiger", "rabbit", "dragon", "snake", "horse", "goat", "monkey", "rooster", "dog", "pig"];
-
-function _loadImage(src) {
-  return new Promise(function (resolve) {
-    const img = new Image();
-    img.onload = function () { resolve(img); };
-    img.onerror = function () { resolve(null); };
-    img.src = src;
-  });
-}
-
-// Loads (and caches) all 12 circular zodiac badge images once, keyed by
-// lowercase animal name, so repeated share-card renders don't re-fetch them.
-let _zodiacBadgeImagesPromise = null;
-function _loadZodiacBadges() {
-  if (!_zodiacBadgeImagesPromise) {
-    _zodiacBadgeImagesPromise = Promise.all(
-      _ZODIAC_BADGE_ORDER.map(function (a) { return _loadImage("images/zodiac-badges/" + a + ".webp"); })
-    ).then(function (imgs) {
-      const map = {};
-      _ZODIAC_BADGE_ORDER.forEach(function (a, i) { map[a] = imgs[i]; });
-      return map;
-    });
-  }
-  return _zodiacBadgeImagesPromise;
-}
-
-function _roundRectPath(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  if (ctx.roundRect) {
-    ctx.roundRect(x, y, w, h, r);
-  } else {
-    ctx.moveTo(x + r, y);
-    ctx.arcTo(x + w, y, x + w, y + h, r);
-    ctx.arcTo(x + w, y + h, x, y + h, r);
-    ctx.arcTo(x, y + h, x, y, r);
-    ctx.arcTo(x, y, x + w, y, r);
-    ctx.closePath();
-  }
-}
-
-// Deterministic pseudo-random generator (mulberry32) so the scattered
-// starfield looks the same every time rather than flickering between
-// re-renders of the same result.
-function _seededRandom(seed) {
-  let t = seed;
-  return function () {
-    t |= 0; t = (t + 0x6d2b79f5) | 0;
-    let r = Math.imul(t ^ (t >>> 15), 1 | t);
-    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
-    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-// Draws a branded, portrait "share card" graphic (animal/result headline,
-// subheading, optional badge, site wordmark) and resolves with a PNG Blob.
-// `spec`: { emoji, heading, subheading, badge, animal }
-// When `spec.animal` is given (a single zodiac animal name, any case), the
-// big hero icon and the decorative motif strip are drawn from the real
-// circular badge illustrations instead of emoji glyphs, with the current
-// animal highlighted in the strip. Without it (a combined emoji, like the
-// wedding ring or a two-animal "+" pairing), the original emoji rendering
-// is used unchanged.
-//
-// Also waits for webfonts (document.fonts.ready) before measuring or
-// drawing any text: if "Noto Sans Khmer" is still loading when we
-// measureText() for the heading/badge/subheading, the canvas silently
-// measures with a narrower fallback font, then draws the real (wider)
-// Khmer glyphs a moment later once the webfont finishes loading -- so
-// text that was wrapped/sized for the narrow fallback overflows past the
-// card's edges. Waiting first keeps the measurement and the draw using
-// the same, final font (same fix already used in _buildCompatCardBlob).
-function _buildShareCardBlob(spec) {
-  const animalKey = spec.animal ? String(spec.animal).toLowerCase() : null;
-  const badgesPromise = animalKey ? _loadZodiacBadges() : Promise.resolve(null);
-  const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
-  return Promise.all([badgesPromise, fontsReady]).then(function (results) {
-  const badges = results[0];
-  return new Promise(function (resolve) {
-    const W = 1080, H = 1350;
-
-    // --- Layout pass -------------------------------------------------
-    // Work out how tall the heading/badge-pill/subheading block actually
-    // needs to be *before* sizing the real canvas, using a throwaway
-    // context purely for measurement (nothing here is drawn). The card's
-    // lower elements (the zodiac motif strip, the footer) were originally
-    // pinned to fixed pixel offsets from the bottom, on the assumption that
-    // block would always be short -- true for compact English copy, but
-    // Khmer text routinely wraps to 2 lines (e.g. the "Born {date} · Zodiac
-    // year {year}" subheading), which ran straight into the motif strip
-    // below it. Measuring first lets the canvas grow to fit instead.
-    const mctx = document.createElement("canvas").getContext("2d");
-    mctx.textAlign = "center";
-
-    mctx.font = "700 72px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    const headingLines = _wrapCanvasText(mctx, spec.heading || "", W - 160).slice(0, 2);
-    let layoutY = 745;
-    layoutY += headingLines.length * 86;
-
-    let badgeFontPx = 34, badgeLines = [], pillW = 0, pillH = 0, pillY = 0;
-    if (spec.badge) {
-      const maxPillTextWidth = W - 160;
-      while (true) {
-        mctx.font = "600 " + badgeFontPx + "px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-        badgeLines = _wrapCanvasText(mctx, spec.badge, maxPillTextWidth).slice(0, 3);
-        const stillOverflowing = badgeLines.some(function (l) { return _textInkWidth(mctx, l) > maxPillTextWidth; });
-        if (!stillOverflowing || badgeFontPx <= 20) break;
-        badgeFontPx -= 2;
-      }
-      const lineH = badgeFontPx + 2 + 30;
-      const padX = 32, padY = 22;
-      const widest = badgeLines.reduce(function (m, l) { return Math.max(m, _textInkWidth(mctx, l)); }, 0);
-      pillW = Math.min(widest + padX * 2, W - 100);
-      pillH = badgeLines.length * lineH + padY * 2 - 14;
-      pillY = layoutY + 16;
-      layoutY = pillY + pillH + 46;
-    } else {
-      layoutY += 24;
-    }
-
-    let subLines = [];
-    if (spec.subheading) {
-      mctx.font = "400 38px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      subLines = _wrapCanvasText(mctx, spec.subheading, W - 200).slice(0, 3);
-      layoutY += subLines.length * 50;
-    }
-
-    // Default layout assumes the block above ends by ~1118px (H - 232),
-    // leaving room for the motif strip and footer below. Grow the canvas
-    // by whatever extra the real content needs past that, so everything
-    // below shifts down together instead of colliding.
-    const extraH = Math.max(0, (layoutY + 50) - (H - 232));
-    const H2 = H + extraH;
-    // --- End layout pass ----------------------------------------------
-
-    const canvas = document.createElement("canvas");
-    canvas.width = W;
-    canvas.height = H2;
-    const ctx = canvas.getContext("2d");
-    const gold = "#d4af37";
-    const paleGold = "#e9d28a";
-
-    // Background: a deep night-sky gradient, richer at the edges.
-    const bg = ctx.createRadialGradient(W / 2, H2 * 0.4, 80, W / 2, H2 * 0.5, H2 * 0.85);
-    bg.addColorStop(0, "#1c1440");
-    bg.addColorStop(0.55, "#140f2e");
-    bg.addColorStop(1, "#0b0820");
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H2);
-
-    // Scattered faint stars for texture (deterministic per render).
-    const rand = _seededRandom(42);
-    for (let i = 0; i < 90; i++) {
-      const sx = rand() * W;
-      const sy = rand() * H2;
-      const r = rand() * 1.8 + 0.4;
-      ctx.beginPath();
-      ctx.arc(sx, sy, r, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(233,210,138," + (0.12 + rand() * 0.25).toFixed(2) + ")";
-      ctx.fill();
-    }
-
-    // Soft decorative glow behind the emoji
-    const glow = ctx.createRadialGradient(W / 2, 460, 40, W / 2, 460, 420);
-    glow.addColorStop(0, "rgba(212,175,55,0.28)");
-    glow.addColorStop(1, "rgba(212,175,55,0)");
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, W, H2);
-
-    // Outer card border with inset hairline for a framed, layered look.
-    _roundRectPath(ctx, 28, 28, W - 56, H2 - 56, 28);
-    ctx.strokeStyle = "rgba(212,175,55,0.55)";
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    _roundRectPath(ctx, 42, 42, W - 84, H2 - 84, 20);
-    ctx.strokeStyle = "rgba(212,175,55,0.22)";
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    // Small diamond flourishes in each corner of the outer border.
-    [[28, 28], [W - 28, 28], [28, H2 - 28], [W - 28, H2 - 28]].forEach(function (pt) {
-      ctx.save();
-      ctx.translate(pt[0], pt[1]);
-      ctx.rotate(Math.PI / 4);
-      ctx.fillStyle = gold;
-      ctx.fillRect(-7, -7, 14, 14);
-      ctx.restore();
-    });
-
-    ctx.textAlign = "center";
-
-    // Eyebrow label
-    ctx.fillStyle = "rgba(180,169,214,0.85)";
-    ctx.font = "600 26px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.save();
-    ctx.letterSpacing = "4px";
-    ctx.fillText("CHINESE ZODIAC READING", W / 2, 108);
-    ctx.restore();
-
-    // Site wordmark
-    ctx.fillStyle = gold;
-    ctx.font = "600 36px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.fillText("☾ MYBIRTHSIGN", W / 2, 160);
-
-    // Thin rule under the wordmark
-    ctx.strokeStyle = "rgba(212,175,55,0.35)";
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(W / 2 - 70, 186);
-    ctx.lineTo(W / 2 + 70, 186);
-    ctx.stroke();
-
-    // Ring around the big emoji
-    ctx.beginPath();
-    ctx.arc(W / 2, 460, 215, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(212,175,55,0.45)";
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(W / 2, 460, 232, 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(212,175,55,0.2)";
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    // Big hero icon: the real illustrated badge when we have one, else the
-    // original emoji glyph.
-    if (animalKey && badges && badges[animalKey]) {
-      const heroR = 205;
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(W / 2, 460, heroR, 0, Math.PI * 2);
-      ctx.clip();
-      ctx.drawImage(badges[animalKey], W / 2 - heroR, 460 - heroR, heroR * 2, heroR * 2);
-      ctx.restore();
-    } else {
-      ctx.font = "260px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      ctx.fillText(spec.emoji || "🔮", W / 2, 565);
-    }
-
-    // Heading / badge pill / subheading all draw inside a hard horizontal
-    // clip, matched to the card's safe inner area (inside the gold border).
-    // This is a belt-and-suspenders guarantee on top of the wrapping below:
-    // even if a particular script's glyphs paint wider than measureText()
-    // reports (Khmer's stacked consonant clusters can render ink past their
-    // own advance width -- see _textInkWidth), the clip makes it physically
-    // impossible for text to spill past the card's edge, whatever the cause.
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(64, 0, W - 128, H2);
-    ctx.clip();
-
-    // Heading (lines already computed in the layout pass above)
-    ctx.fillStyle = "#f6f2ff";
-    ctx.font = "700 72px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    let y = 745;
-    headingLines.forEach(function (line) {
-      ctx.fillText(line, W / 2, y);
-      y += 86;
-    });
-
-    // Optional badge pill (e.g. a luck verdict or star rating). Lines,
-    // font size, and pill box were already worked out in the layout pass
-    // above so the canvas could be sized to fit; just draw them here.
-    if (spec.badge) {
-      ctx.font = "600 " + badgeFontPx + "px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      const lineH = badgeFontPx + 2 + 30;
-      const padY = 22;
-      const pillX = W / 2 - pillW / 2;
-      ctx.fillStyle = "rgba(212,175,55,0.16)";
-      _roundRectPath(ctx, pillX, pillY, pillW, pillH, pillH / 2 > 40 ? 24 : pillH / 2);
-      ctx.fill();
-      ctx.strokeStyle = gold;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.fillStyle = paleGold;
-      let by = pillY + padY + badgeFontPx * 0.72;
-      badgeLines.forEach(function (line) {
-        ctx.fillText(line, W / 2, by);
-        by += lineH;
-      });
-      y = pillY + pillH + 46;
-    } else {
-      y += 24;
-    }
-
-    // Subheading (lines already computed in the layout pass above)
-    if (spec.subheading) {
-      ctx.fillStyle = "#b4a9d6";
-      ctx.font = "400 38px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      subLines.forEach(function (line) {
-        ctx.fillText(line, W / 2, y);
-        y += 50;
-      });
-    }
-
-    ctx.restore();
-
-    // Decorative zodiac motif strip, filling the space above the footer --
-    // the real badge illustrations (current animal highlighted) when we
-    // have them, else the original faint emoji row. Anchored to H2 (which
-    // already grew to clear the block above) rather than the original fixed H.
-    const motifY = H2 - 232;
-    const motifGap = 72;
-    if (animalKey && badges) {
-      const motifStartX = W / 2 - (motifGap * (_ZODIAC_BADGE_ORDER.length - 1)) / 2;
-      _ZODIAC_BADGE_ORDER.forEach(function (a, i) {
-        const img = badges[a];
-        if (!img) return;
-        const isCurrent = a === animalKey;
-        const s = isCurrent ? 68 : 46;
-        ctx.save();
-        ctx.globalAlpha = isCurrent ? 1 : 0.38;
-        if (isCurrent) {
-          ctx.shadowColor = "rgba(212,175,55,0.9)";
-          ctx.shadowBlur = 14;
-        }
-        ctx.drawImage(img, motifStartX + i * motifGap - s / 2, motifY - s / 2, s, s);
-        ctx.restore();
-      });
-    } else {
-      ctx.font = "54px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      ctx.globalAlpha = 0.22;
-      const motifStartX = W / 2 - (motifGap * (_ZODIAC_MOTIF.length - 1)) / 2;
-      _ZODIAC_MOTIF.forEach(function (emoji, i) {
-        ctx.fillText(emoji, motifStartX + i * motifGap, motifY);
-      });
-      ctx.globalAlpha = 1;
-    }
-
-    // Footer
-    ctx.strokeStyle = "rgba(180,169,214,0.3)";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(W / 2 - 120, H2 - 150);
-    ctx.lineTo(W / 2 + 120, H2 - 150);
-    ctx.stroke();
-    ctx.fillStyle = gold;
-    ctx.font = "600 38px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.fillText("mybirthsign.com", W / 2, H2 - 98);
-    ctx.fillStyle = "rgba(180,169,214,0.75)";
-    ctx.font = "400 26px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.fillText("Find your own zodiac sign, free", W / 2, H2 - 62);
-
-    canvas.toBlob(function (blob) { resolve(blob); }, "image/png");
-  });
-  });
-}
-
-// Draws a heart-shaped path. (cx, topY) is the point of the notch between
-// the two lobes at the top of the heart; `w`/`h` set its bounding box.
-function _heartPath(ctx, cx, topY, w, h) {
-  const topCurveHeight = h * 0.3;
-  ctx.beginPath();
-  ctx.moveTo(cx, topY + topCurveHeight);
-  ctx.bezierCurveTo(cx, topY, cx - w / 2, topY, cx - w / 2, topY + topCurveHeight);
-  ctx.bezierCurveTo(cx - w / 2, topY + (h + topCurveHeight) / 2, cx, topY + (h + topCurveHeight) / 2, cx, topY + h);
-  ctx.bezierCurveTo(cx, topY + (h + topCurveHeight) / 2, cx + w / 2, topY + (h + topCurveHeight) / 2, cx + w / 2, topY + topCurveHeight);
-  ctx.bezierCurveTo(cx + w / 2, topY, cx, topY, cx, topY + topCurveHeight);
-  ctx.closePath();
-}
-
-// A faint field of small scattered hearts used as background texture on the
-// pink compatibility card, in place of the zodiac card's starfield.
-function _scatterHearts(ctx, W, H, seed, count) {
-  const rand = _seededRandom(seed);
-  for (let i = 0; i < count; i++) {
-    const hx = rand() * W;
-    const hy = rand() * H;
-    const s = rand() * 20 + 10;
-    ctx.save();
-    ctx.globalAlpha = 0.10 + rand() * 0.16;
-    ctx.fillStyle = "#ffffff";
-    _heartPath(ctx, hx, hy, s, s);
-    ctx.fill();
-    ctx.restore();
-  }
-}
-
-// Draws a branded, portrait "compatibility share card" (two people, a big
-// percentage heart, and a supportive tagline), modeled on the pink/hearts
-// "LoveMath"-style layout, and resolves with a PNG Blob.
-// `spec`: { p1Label, p1Sub, p1Emoji, p2Label, p2Sub, p2Emoji, overall, tagline, overallLabel, eyebrow }
-function _buildCompatCardBlob(spec) {
-  // Wait for webfonts to finish loading first: if "Noto Sans Khmer" is still
-  // loading when we measureText() for the name/date pills below, the canvas
-  // silently falls back to a narrower system font for the measurement, then
-  // (once the webfont finishes loading a moment later) draws the *actual*
-  // text with the real, wider Khmer glyphs — so the pill ends up too narrow
-  // and the text overflows its edges. Waiting for fonts.ready keeps the
-  // measurement and the draw using the same, final font.
-  const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
-  return fontsReady.then(function () {
-    return new Promise(function (resolve) {
-    const W = 1080, H = 1420;
-    const canvas = document.createElement("canvas");
-    canvas.width = W;
-    canvas.height = H;
-    const ctx = canvas.getContext("2d");
-    const deepPink = "#c2185b";
-    const hotPink = "#ff5c8d";
-    const white = "#ffffff";
-
-    // Background: warm pink gradient.
-    const bg = ctx.createRadialGradient(W / 2, H * 0.35, 60, W / 2, H * 0.5, H * 0.9);
-    bg.addColorStop(0, "#ff8fb3");
-    bg.addColorStop(0.55, "#ff6a9c");
-    bg.addColorStop(1, "#e84a85");
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
-
-    _scatterHearts(ctx, W, H, 7, 70);
-
-    // Outer card border, framed look.
-    _roundRectPath(ctx, 28, 28, W - 56, H - 56, 28);
-    ctx.strokeStyle = "rgba(255,255,255,0.55)";
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    _roundRectPath(ctx, 42, 42, W - 84, H - 84, 20);
-    ctx.strokeStyle = "rgba(255,255,255,0.28)";
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    ctx.textAlign = "center";
-
-    // Eyebrow + site wordmark
-    ctx.fillStyle = "rgba(255,255,255,0.9)";
-    ctx.font = "600 26px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.save();
-    ctx.letterSpacing = "3px";
-    ctx.fillText(spec.eyebrow || "RELATIONSHIP COMPATIBILITY", W / 2, 108);
-    ctx.restore();
-
-    ctx.fillStyle = white;
-    ctx.font = "700 44px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.fillText("💞 MYBIRTHSIGN", W / 2, 160);
-
-    ctx.strokeStyle = "rgba(255,255,255,0.4)";
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(W / 2 - 80, 186);
-    ctx.lineTo(W / 2 + 80, 186);
-    ctx.stroke();
-
-    // Two person "avatar" circles with a small heart between them.
-    const avatarY = 330;
-    const avatarR = 130;
-    const avatarGap = 260;
-    const p1X = W / 2 - avatarGap / 2;
-    const p2X = W / 2 + avatarGap / 2;
-
-    // A few short motion-streak lines trailing behind an avatar, on the side
-    // away from where it's running (`dir`: +1 = running rightward, so the
-    // streaks trail off to its left, and vice versa) — a simple cue that
-    // reads as "running" rather than just standing in place.
-    function drawMotionStreaks(cx, cy, r, dir) {
-      const trailX = cx - dir * (r + 18);
-      ctx.save();
-      ctx.lineCap = "round";
-      [-46, 0, 46].forEach(function (dy, i) {
-        const len = 54 - i * 6;
-        ctx.strokeStyle = "rgba(255,255,255," + (0.55 - i * 0.12) + ")";
-        ctx.lineWidth = 7 - i;
-        ctx.beginPath();
-        ctx.moveTo(trailX, cy + dy);
-        ctx.lineTo(trailX - dir * len, cy + dy * 0.7);
-        ctx.stroke();
-      });
-      ctx.restore();
-    }
-
-    // `mirror` horizontally flips just the emoji glyph (not the circle or its
-    // border), so the two avatars visually turn toward each other/the heart
-    // between them instead of both facing whichever way their emoji glyph
-    // happens to be drawn by default.
-    function drawAvatar(cx, cy, r, emoji, colorA, colorB, mirror) {
-      const grad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
-      grad.addColorStop(0, colorA);
-      grad.addColorStop(1, colorB);
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-      ctx.lineWidth = 8;
-      ctx.strokeStyle = white;
-      ctx.stroke();
-      ctx.fillStyle = white;
-      ctx.font = (r * 1.05) + "px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      if (mirror) {
-        ctx.save();
-        ctx.translate(cx, 0);
-        ctx.scale(-1, 1);
-        ctx.translate(-cx, 0);
-        ctx.fillText(emoji, cx, cy + r * 0.36);
-        ctx.restore();
-      } else {
-        ctx.fillText(emoji, cx, cy + r * 0.36);
-      }
-    }
-
-    // Person 1 faces right (toward the heart/Person 2); Person 2 is mirrored
-    // so it faces left (toward the heart/Person 1) — the two end up facing
-    // each other regardless of the emoji's own default orientation. Motion
-    // streaks trail behind each one so the pair reads as running toward
-    // each other rather than just standing face to face.
-    drawMotionStreaks(p1X, avatarY, avatarR, 1);
-    drawMotionStreaks(p2X, avatarY, avatarR, -1);
-    drawAvatar(p1X, avatarY, avatarR, spec.p1Emoji || "💗", "#6ec3ff", "#4a90e2", false);
-    drawAvatar(p2X, avatarY, avatarR, spec.p2Emoji || "💗", "#ff9ecf", "#e0569f", true);
-
-    // Small heart between the two avatars.
-    ctx.fillStyle = white;
-    _heartPath(ctx, W / 2, avatarY - 34, 70, 64);
-    ctx.fill();
-
-    // Name/date pills under each avatar.
-    function drawPill(cx, cy, label, sub) {
-      ctx.font = "700 32px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      const labelW = _textInkWidth(ctx, label);
-      ctx.font = "400 28px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      const subW = sub ? _textInkWidth(ctx, sub) : 0;
-      const pillW = Math.max(labelW, subW) + 56;
-      const pillH = sub ? 108 : 70;
-      _roundRectPath(ctx, cx - pillW / 2, cy, pillW, pillH, 18);
-      ctx.fillStyle = "rgba(255,255,255,0.95)";
-      ctx.fill();
-      ctx.fillStyle = "#7a1942";
-      ctx.font = "700 32px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      ctx.fillText(label, cx, cy + 44);
-      if (sub) {
-        ctx.fillStyle = "#c2185b";
-        ctx.font = "400 26px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-        ctx.fillText(sub, cx, cy + 86);
-      }
-    }
-    drawPill(p1X, avatarY + avatarR + 26, spec.p1Label || "Person 1", spec.p1Sub || "");
-    drawPill(p2X, avatarY + avatarR + 26, spec.p2Label || "Person 2", spec.p2Sub || "");
-
-    // Big percentage heart.
-    const bigHeartCenterY = 900;
-    const bigHeartW = 560, bigHeartH = 500;
-    ctx.save();
-    ctx.shadowColor = "rgba(0,0,0,0.25)";
-    ctx.shadowBlur = 30;
-    ctx.shadowOffsetY = 10;
-    const heartGrad = ctx.createLinearGradient(0, bigHeartCenterY - bigHeartH / 2, 0, bigHeartCenterY + bigHeartH / 2);
-    heartGrad.addColorStop(0, hotPink);
-    heartGrad.addColorStop(1, deepPink);
-    ctx.fillStyle = heartGrad;
-    _heartPath(ctx, W / 2, bigHeartCenterY - bigHeartH / 2, bigHeartW, bigHeartH);
-    ctx.fill();
-    ctx.restore();
-
-    ctx.fillStyle = white;
-    ctx.font = "700 36px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.fillText(spec.overallLabel || "Compatibility", W / 2, bigHeartCenterY - 60);
-    ctx.font = "800 108px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.fillText((spec.overall != null ? spec.overall : "--") + "%", W / 2, bigHeartCenterY + 40);
-
-    // Five-heart rating row, filled proportionally to the overall score.
-    const filledHearts = Math.max(0, Math.min(5, Math.round(((spec.overall || 0) / 100) * 5)));
-    const miniSize = 36, miniGap = 48;
-    const miniStartX = W / 2 - (miniGap * 4) / 2;
-    for (let i = 0; i < 5; i++) {
-      const hx = miniStartX + i * miniGap;
-      const hy = bigHeartCenterY + 110;
-      ctx.fillStyle = i < filledHearts ? white : "rgba(255,255,255,0.35)";
-      _heartPath(ctx, hx, hy, miniSize, miniSize);
-      ctx.fill();
-    }
-
-    // Supportive tagline below the heart.
-    let taglineBottom = bigHeartCenterY + 190;
-    if (spec.tagline) {
-      ctx.fillStyle = "#7a1942";
-      ctx.font = "italic 600 34px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-      const lines = _wrapCanvasText(ctx, spec.tagline, W - 220).slice(0, 3);
-      const boxPadY = 24, lineH = 42;
-      const boxH = lines.length * lineH + boxPadY * 2;
-      const boxY = bigHeartCenterY + 180;
-      _roundRectPath(ctx, 90, boxY, W - 180, boxH, 20);
-      ctx.fillStyle = "rgba(255,255,255,0.92)";
-      ctx.fill();
-      ctx.fillStyle = "#7a1942";
-      let ty = boxY + boxPadY + 30;
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(102, 0, W - 204, H);
-      ctx.clip();
-      lines.forEach(function (line) {
-        ctx.fillText(line, W / 2, ty);
-        ty += lineH;
-      });
-      ctx.restore();
-      taglineBottom = boxY + boxH;
-    }
-
-    // Footer — always clear of the tagline box, however many lines it wrapped to.
-    ctx.fillStyle = "rgba(255,255,255,0.95)";
-    ctx.font = "600 36px system-ui, -apple-system, Segoe UI, Roboto, 'Noto Sans Khmer', Arial, sans-serif";
-    ctx.fillText("mybirthsign.com", W / 2, Math.max(H - 70, taglineBottom + 54));
-
-    canvas.toBlob(function (blob) { resolve(blob); }, "image/png");
-    });
-  });
-}
-
-// Dispatches to the right card-drawing function based on `spec.cardType`
-// ("compat" for the pink relationship card, otherwise the default zodiac
-// card), so callers of shareBlockHtml()/wireShareRows() don't need to care
-// which drawing routine backs a given result's image.
-// Rich daily-sign and two-sign cards live in js/share-cards.js, loaded only when someone taps
-// "Share image" (keeps every page light); other results use the cards drawn below.
+// ---------------------------------------------------------------- image cards
 let _shareCardsLoading = null;
 function _loadShareCards() {
   if (window.MBSShareCards) return Promise.resolve(window.MBSShareCards);
   if (_shareCardsLoading) return _shareCardsLoading;
   const me = document.querySelector('script[src*="share.js"]');
-  const src = (me ? me.src.replace(/share\.js.*$/, "") : "/js/") + "share-cards.js";
+  const src = me ? me.src.replace(/share\.js.*$/, "share-cards.js") : "/js/share-cards.js";
   _shareCardsLoading = new Promise(function (resolve, reject) {
     const s = document.createElement("script");
     s.src = src; s.onload = function () { resolve(window.MBSShareCards); };
@@ -766,104 +75,21 @@ function _loadShareCards() {
   });
   return _shareCardsLoading;
 }
-
-function _buildCardBlob(spec) {
-  if (spec && (spec.cardType === "daily" || spec.cardType === "pair")) {
-    return _loadShareCards().then(function (m) { return m[spec.cardType](spec); });
+// Older result cards passed { heading, subheading, ... }; they become a simple "article" card.
+function _normalizeSpec(spec, title, lang) {
+  const s = spec && typeof spec === "object" ? Object.assign({}, spec) : {};
+  if (!s.lang) s.lang = lang;
+  if (_CARD_TYPES.indexOf(s.cardType) < 0) {
+    return { cardType: "article", lang: s.lang, title: s.heading || title || document.title, sub: s.subheading || "", animal: s.animal };
   }
-  return spec && spec.cardType === "compat" ? _buildCompatCardBlob(spec) : _buildShareCardBlob(spec);
+  return s;
+}
+function _buildCardBlob(spec, format) {
+  const s = _normalizeSpec(spec, "", (typeof getLang === "function") ? getLang() : "en");
+  return _loadShareCards().then(function (m) { return m[s.cardType](s, format || "portrait"); });
 }
 
-function _shareInnerHtml() {
-  const options = _SHARE_NETWORKS.map(function (net) {
-    // Facebook/Telegram are real <a target="_blank"> links (href is filled
-    // in by wireShareRows() right away, before the row can be interacted
-    // with) rather than a window.open() call from a click handler, because
-    // plain anchor-tag navigation is far more reliably allowed than a
-    // scripted popup inside constrained contexts like a sandboxed artifact
-    // preview or a mobile browser's popup blocker — a window.open() call
-    // there can silently do nothing even on a direct, synchronous tap.
-    if (net.copyOnly) {
-      return (
-        '<button type="button" class="share-option" data-share-net="' + net.id + '">' +
-          _brandIconHtml(net) +
-          '<span class="share-option-label">' + net.label + '</span>' +
-        '</button>'
-      );
-    }
-    return (
-      '<a class="share-option" data-share-net="' + net.id + '" href="#" target="_blank" rel="noopener">' +
-        _brandIconHtml(net) +
-        '<span class="share-option-label">' + net.label + '</span>' +
-      '</a>'
-    );
-  }).join("");
-
-  return (
-    '<button type="button" class="share-btn" aria-haspopup="true" aria-expanded="false">' +
-      '<svg class="share-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-        '<circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle>' +
-        '<line x1="8.6" y1="10.6" x2="15.4" y2="6.4"></line><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"></line>' +
-      '</svg>' +
-      '<span class="share-btn-label"></span>' +
-    '</button>' +
-    '<div class="share-popover" hidden>' +
-      '<button type="button" class="share-option share-image">' +
-        _imageIconHtml() +
-        '<span class="share-option-label share-image-label"></span>' +
-      '</button>' +
-      options +
-      '<button type="button" class="share-option share-copy">' +
-        _copyIconHtml() +
-        '<span class="share-option-label share-copy-label"></span>' +
-      '</button>' +
-    '</div>'
-  );
-}
-
-// shareUrl (optional): the address of this specific result, e.g. "/compatibility?pair=rat-dragon".
-// It never contains birth dates or names; the visitor's language is added when they share.
-function shareRowHtml(title, cardSpec, shareUrl) {
-  const safeTitle = title ? String(title).replace(/"/g, "&quot;") : "";
-  let attrs = ' data-share-title="' + safeTitle + '"';
-  if (shareUrl) attrs += ' data-share-url="' + String(shareUrl).replace(/"/g, "&quot;") + '"';
-  if (cardSpec) {
-    attrs += ' data-share-card="' + JSON.stringify(cardSpec).replace(/"/g, "&quot;") + '"';
-  }
-  return '<div class="share-row"' + attrs + '>' + _shareInnerHtml() + '</div>';
-}
-
-// Like shareRowHtml(), but also shows the branded card itself (the same
-// image the "Share image" button generates) right on the page, so people
-// can see — and admire — the card before they ever open the share menu.
-function shareBlockHtml(title, cardSpec, shareUrl) {
-  return (
-    '<div class="share-card-block">' +
-      '<div class="share-card-wrap"><img class="share-card-img" alt="' +
-        (title ? String(title).replace(/"/g, "&quot;") : "Zodiac result card") +
-      '" loading="lazy"></div>' +
-      shareRowHtml(title, cardSpec, shareUrl) +
-    '</div>'
-  );
-}
-
-let _shareOutsideClickWired = false;
-function _ensureShareOutsideClickHandler() {
-  if (_shareOutsideClickWired) return;
-  _shareOutsideClickWired = true;
-  document.addEventListener("click", function (e) {
-    document.querySelectorAll(".share-row").forEach(function (row) {
-      if (row.contains(e.target)) return;
-      const pop = row.querySelector(".share-popover");
-      const btn = row.querySelector(".share-btn");
-      if (pop && !pop.hidden) {
-        pop.hidden = true;
-        if (btn) btn.setAttribute("aria-expanded", "false");
-      }
-    });
-  });
-}
-
+// ---------------------------------------------------------------- helpers
 function _openInNewTab(url) {
   // A real, temporary <a target="_blank"> click is more reliably allowed
   // than a scripted window.open() call in constrained contexts (a
@@ -879,7 +105,6 @@ function _openInNewTab(url) {
   a.click();
   document.body.removeChild(a);
 }
-
 function _downloadBlob(blob, filename) {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -890,7 +115,6 @@ function _downloadBlob(blob, filename) {
   document.body.removeChild(a);
   setTimeout(function () { URL.revokeObjectURL(a.href); }, 30000);
 }
-
 function _copyToClipboard(text) {
   function fallbackCopy() {
     const ta = document.createElement("textarea");
@@ -908,10 +132,6 @@ function _copyToClipboard(text) {
     fallbackCopy();
   }
 }
-
-// The link that gets shared: the row's own result address if it has one (data-share-url),
-// otherwise this page without private details (birth dates in ?person1/?person2 are removed).
-// Khmer visitors share a Khmer link (?lang=km) so the preview and page open in Khmer.
 function _shareUrlFor(row, lang) {
   let u;
   try {
@@ -925,206 +145,238 @@ function _shareUrlFor(row, lang) {
     return window.location.href.split("#")[0];
   }
 }
+// Pinterest needs a public image address. Personal cards exist only on the visitor's device, so a Pin uses
+// the result's fixed public preview image (the same one Facebook shows), or the page's own og:image.
+function _pinImageFor(spec) {
+  const o = window.location.origin, low = function (a) { return String(a).toLowerCase(); };
+  const pairImg = function (a, b) {
+    const i = _ZODIAC.indexOf(a), j = _ZODIAC.indexOf(b);
+    if (i < 0 || j < 0) return null;
+    return o + "/images/og/pair-" + low(i <= j ? a : b) + "-" + low(i <= j ? b : a) + ".jpg";
+  };
+  let img = null;
+  if (spec) {
+    if (spec.a && spec.b) img = pairImg(spec.a, spec.b);
+    else if (spec.animal && _ZODIAC.indexOf(spec.animal) > -1) img = o + "/images/og/sign-" + low(spec.animal) + ".jpg";
+    else if (spec.top && spec.top[0] && _ZODIAC.indexOf(spec.top[0]) > -1) img = o + "/images/og/sign-" + low(spec.top[0]) + ".jpg";
+  }
+  if (!img) {
+    const m = document.querySelector('meta[property="og:image"]');
+    img = m && m.content ? m.content : o + "/images/og/site.jpg";
+  }
+  return img;
+}
+function _strings(lang) {
+  const S = (typeof UI_STRINGS !== "undefined" && UI_STRINGS[lang]) || {};
+  const d = function (k, en) { return S[k] || en; };
+  return {
+    share: d("share_button", "Share"), copy: d("share_copy_link", "Copy link"), copied: d("share_copied", "Link copied!"),
+    image: d("share_image_option", "Share image"), preparing: d("share_image_preparing", "Preparing image…"),
+    saved: d("share_image_saved", "Image saved!"), failed: d("share_image_failed", "Couldn't create the image"),
+    download: d("share_download", "Download image"), more: d("share_more_apps", "More apps…"),
+    menu: d("share_menu_label", "Share options"),
+    instagram: d("share_ig_steps", "Instagram doesn't accept website links. Post the image instead: pick Instagram in the share list, or open Instagram, tap +, choose Story or Post and select the saved image."),
+    tiktok: d("share_tt_steps", "TikTok doesn't accept website links. Post the image instead: pick TikTok in the share list, or open TikTok, tap +, then Upload and select the saved image.")
+  };
+}
+function _canShareFiles() {
+  try {
+    if (!navigator.canShare) return false;
+    const f = new File([new Blob(["x"], { type: "image/png" })], "t.png", { type: "image/png" });
+    return navigator.canShare({ files: [f] });
+  } catch (e) { return false; }
+}
 
+// ---------------------------------------------------------------- markup
+function _shareInnerHtml() {
+  const opt = function (cls, icon, extra) {
+    return '<button type="button" class="share-option ' + cls + '"' + (extra || "") + ">" + icon + '<span class="share-option-label"></span></button>';
+  };
+  const nets = _SHARE_NETS.map(function (net) {
+    const inner = _brandIconHtml(net) + '<span class="share-option-label">' + net.label + "</span>";
+    return net.link
+      ? '<a class="share-option" data-share-net="' + net.id + '" href="#" target="_blank" rel="noopener">' + inner + "</a>"
+      : '<button type="button" class="share-option" data-share-net="' + net.id + '">' + inner + "</button>";
+  }).join("");
+  return (
+    '<button type="button" class="share-btn" aria-haspopup="true" aria-expanded="false">' +
+      '<svg class="share-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle>' +
+        '<line x1="8.6" y1="10.6" x2="15.4" y2="6.4"></line><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"></line>' +
+      "</svg>" +
+      '<span class="share-btn-label"></span>' +
+    "</button>" +
+    '<div class="share-popover" role="group" hidden>' +
+      opt("share-image", _imageIconHtml()) +
+      opt("share-download", _ICON_DOWNLOAD) +
+      opt("share-copy", _copyIconHtml()) +
+      opt("share-more", _ICON_MORE) +
+      '<div class="share-sep" role="presentation"></div>' +
+      nets +
+      '<p class="share-note" role="status" hidden></p>' +
+    "</div>"
+  );
+}
+function shareRowHtml(title, cardSpec, shareUrl) {
+  const safeTitle = title ? String(title).replace(/"/g, "&quot;") : "";
+  let attrs = ' data-share-title="' + safeTitle + '"';
+  if (shareUrl) attrs += ' data-share-url="' + String(shareUrl).replace(/"/g, "&quot;") + '"';
+  if (cardSpec) attrs += ' data-share-card="' + JSON.stringify(cardSpec).replace(/&/g, "&amp;").replace(/"/g, "&quot;") + '"';
+  return '<div class="share-row"' + attrs + ">" + _shareInnerHtml() + "</div>";
+}
+function shareBlockHtml(title, cardSpec, shareUrl) {
+  return (
+    '<div class="share-card-block">' +
+      '<div class="share-card-wrap"><img class="share-card-img" alt="' +
+        (title ? String(title).replace(/"/g, "&quot;") : "Zodiac result card") +
+      '" loading="lazy"></div>' +
+      shareRowHtml(title, cardSpec, shareUrl) +
+    "</div>"
+  );
+}
+
+let _shareOutsideClickWired = false;
+function _ensureShareOutsideClickHandler() {
+  if (_shareOutsideClickWired) return;
+  _shareOutsideClickWired = true;
+  document.addEventListener("click", function (e) {
+    if (e.target && e.target.hasAttribute && e.target.hasAttribute("download")) return;   // our own image download, not an outside tap
+    document.querySelectorAll(".share-row").forEach(function (row) {
+      if (row.contains(e.target)) return;
+      const pop = row.querySelector(".share-popover");
+      const btn = row.querySelector(".share-btn");
+      if (pop && !pop.hidden) {
+        pop.hidden = true;
+        if (btn) btn.setAttribute("aria-expanded", "false");
+      }
+    });
+  });
+}
+document.addEventListener("keydown", function (e) {
+  if (e.key !== "Escape") return;
+  document.querySelectorAll(".share-popover:not([hidden])").forEach(function (p) {
+    p.hidden = true;
+    const b = p.parentElement && p.parentElement.querySelector(".share-btn");
+    if (b) { b.setAttribute("aria-expanded", "false"); b.focus(); }
+  });
+});
+
+// ---------------------------------------------------------------- wiring
 function wireShareRows(root) {
   const scope = root || document;
   const lang = (typeof getLang === "function") ? getLang() : "en";
-  const S = (typeof UI_STRINGS !== "undefined" && UI_STRINGS[lang]) || {};
-  const shareLabel = S.share_button || "Share";
-  const copyLabel = S.share_copy_link || "Copy link";
-  const copiedLabel = S.share_copied || "Link copied!";
-  const pasteTpl = S.share_paste_note_tpl || "Link copied — paste it in {network}";
-  const imageLabel = S.share_image_option || "Share image";
-  const imagePreparingLabel = S.share_image_preparing || "Preparing image…";
-  const imageSavedLabel = S.share_image_saved || "Image saved!";
-  const imageFailedLabel = S.share_image_failed || "Couldn't create the image";
+  const T = _strings(lang);
+  const canFiles = _canShareFiles();
+  const canLink = typeof navigator.share === "function";
 
   scope.querySelectorAll(".share-row:not([data-share-wired])").forEach(function (row) {
     row.setAttribute("data-share-wired", "true");
+    if (!row.querySelector(".share-btn")) row.innerHTML = _shareInnerHtml();
 
-    if (!row.querySelector(".share-btn")) {
-      row.innerHTML = _shareInnerHtml();
-    }
+    const btn = row.querySelector(".share-btn"), pop = row.querySelector(".share-popover"), note = row.querySelector(".share-note");
+    const q = function (sel) { return row.querySelector(sel); };
+    const label = function (el, text) { const l = el && el.querySelector(".share-option-label"); if (l) l.textContent = text; };
+    if (!btn || !pop) return;
+    btn.querySelector(".share-btn-label").textContent = T.share;
+    pop.setAttribute("aria-label", T.menu);
+    label(q(".share-image"), T.image); label(q(".share-download"), T.download); label(q(".share-copy"), T.copy); label(q(".share-more"), T.more);
+    if (!canFiles && q(".share-image")) q(".share-image").hidden = true;      // file sharing unsupported here: Download covers it
+    if (!canLink && q(".share-more")) q(".share-more").hidden = true;
 
-    let title = row.getAttribute("data-share-title");
-    if (!title) {
-      const article = row.closest("article");
-      const h1 = article && article.querySelector("h1");
-      title = (h1 && h1.textContent.trim()) || document.title;
-    }
-    const url = _shareUrlFor(row, lang);
-    const encodedUrl = encodeURIComponent(url);
-    const encodedTitle = encodeURIComponent(title);
-
-    let cardSpec = null;
-    const cardAttr = row.getAttribute("data-share-card");
-    if (cardAttr) {
-      try { cardSpec = JSON.parse(cardAttr); } catch (e) { cardSpec = null; }
-    }
-    if (!cardSpec) cardSpec = { emoji: "🔮", heading: title, subheading: "mybirthsign.com" };
-
-    // If this row is wrapped in a .share-card-block (shareBlockHtml()), it
-    // has a visible <img class="share-card-img"> placeholder — render the
-    // same branded card the "Share image" button would produce, right on
-    // the page, so people see it before they ever open the share menu.
-    const previewImg = row.parentElement &&
-      row.parentElement.classList.contains("share-card-block") &&
-      row.parentElement.querySelector(".share-card-img");
-    if (previewImg && !previewImg.src) {
-      _buildCardBlob(cardSpec).then(function (blob) {
-        if (blob) previewImg.src = URL.createObjectURL(blob);
-      });
-    }
-
-    const btn = row.querySelector(".share-btn");
-    const label = row.querySelector(".share-btn-label");
-    const pop = row.querySelector(".share-popover");
-    const copyBtn = row.querySelector(".share-copy");
-    const copyLabelEl = copyBtn && copyBtn.querySelector(".share-copy-label");
-    const imageBtn = row.querySelector(".share-image");
-    const imageLabelEl = imageBtn && imageBtn.querySelector(".share-image-label");
-    if (label) label.textContent = shareLabel;
-    if (copyLabelEl) copyLabelEl.textContent = copyLabel;
-    if (imageLabelEl) imageLabelEl.textContent = imageLabel;
-
-    function openPopover() {
-      document.querySelectorAll(".share-popover").forEach(function (p) { p.hidden = true; });
-      pop.hidden = false;
-      btn.setAttribute("aria-expanded", "true");
-    }
-
-    function togglePopover() {
-      const isOpen = !pop.hidden;
-      document.querySelectorAll(".share-popover").forEach(function (p) { p.hidden = true; });
-      pop.hidden = isOpen;
-      btn.setAttribute("aria-expanded", String(!isOpen));
-    }
-
-    if (btn && pop) {
-      btn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (navigator.share) {
-          // navigator.share() can fail two different ways when the page is
-          // embedded somewhere that blocks the Web Share API via
-          // Permissions-Policy (e.g. a sandboxed preview iframe): it can
-          // throw *synchronously*, or it can return a promise that *rejects
-          // asynchronously* with no visible share sheet ever appearing.
-          // Either way, without handling both cases the button just looks
-          // like it does nothing — so fall back to the manual popover both
-          // times, unless the rejection was the user deliberately cancelling
-          // the native share sheet (AbortError).
-          try {
-            const sharePromise = navigator.share({ title: title, url: url });
-            if (sharePromise && typeof sharePromise.catch === "function") {
-              sharePromise.catch(function (err) {
-                if (err && err.name === "AbortError") return;
-                openPopover();
-              });
-            }
-            return;
-          } catch (err) {
-            openPopover();
-            return;
-          }
-        }
-        togglePopover();
-      });
-    }
-
-    const shareUrls = {
-      facebook: "https://www.facebook.com/sharer/sharer.php?u=" + encodedUrl,
-      telegram: "https://t.me/share/url?url=" + encodedUrl + "&text=" + encodedTitle
+    // read on use, so values filled in after page load are respected
+    const title = function () {
+      let t = row.getAttribute("data-share-title");
+      if (!t) { const a = row.closest("article"), h1 = a && a.querySelector("h1"); t = (h1 && h1.textContent.trim()) || document.title; }
+      return t;
     };
+    const url = function () { return _shareUrlFor(row, lang); };
+    const spec = function () {
+      let s = null;
+      const raw = row.getAttribute("data-share-card");
+      if (raw) { try { s = JSON.parse(raw); } catch (e) { s = null; } }
+      return _normalizeSpec(s, title(), lang);
+    };
+    // images are drawn once per format and kept, so a second tap is instant
+    const blobs = {};
+    const blobFor = function (format) {
+      const key = format + "|" + (row.getAttribute("data-share-card") || "") + "|" + title();
+      if (!blobs[key]) blobs[key] = _buildCardBlob(spec(), format).then(function (b) { if (!b) delete blobs[key]; return b; }, function (e) { delete blobs[key]; throw e; });
+      return blobs[key];
+    };
+    const fileName = function (format) { return "mybirthsign-" + (spec().cardType || "card") + "-" + format + ".png"; };
 
-    row.querySelectorAll("[data-share-net]").forEach(function (optEl) {
-      const netId = optEl.getAttribute("data-share-net");
-      const net = _SHARE_NETWORKS.filter(function (n) { return n.id === netId; })[0];
-      if (!net) return;
+    const block = row.parentElement && row.parentElement.classList.contains("share-card-block") && row.parentElement.querySelector(".share-card-img");
+    if (block && !block.src) blobFor("portrait").then(function (b) { if (b) block.src = URL.createObjectURL(b); }).catch(function () {});
 
-      if (!net.copyOnly) {
-        // Set the real href right away (before the row can be tapped) so
-        // these behave as plain link navigation, not a scripted popup.
-        optEl.setAttribute("href", shareUrls[net.id]);
-        return;
+    function showNote(text) { if (!note) return; note.textContent = text || ""; note.hidden = !text; }
+    function setOpen(open) {
+      document.querySelectorAll(".share-popover").forEach(function (p) {
+        if (p !== pop) { p.hidden = true; const b = p.parentElement && p.parentElement.querySelector(".share-btn"); if (b) b.setAttribute("aria-expanded", "false"); }
+      });
+      pop.hidden = !open;
+      btn.setAttribute("aria-expanded", String(open));
+      if (open) {
+        showNote("");
+        // links are filled in now, so they always carry the current language and result
+        const u = url(), t = title(), eu = encodeURIComponent(u), et = encodeURIComponent(t);
+        const hrefs = {
+          facebook: "https://www.facebook.com/sharer/sharer.php?u=" + eu,
+          whatsapp: "https://wa.me/?text=" + encodeURIComponent(t + " " + u),
+          telegram: "https://t.me/share/url?url=" + eu + "&text=" + et,
+          pinterest: "https://www.pinterest.com/pin/create/button/?url=" + eu + "&media=" + encodeURIComponent(_pinImageFor(spec())) + "&description=" + et
+        };
+        row.querySelectorAll("a[data-share-net]").forEach(function (a) { a.setAttribute("href", hrefs[a.getAttribute("data-share-net")] || "#"); });
+        if (canFiles) blobFor("portrait").catch(function () {});              // draw ahead so the share sheet opens quickly
+        const first = pop.querySelector(".share-option:not([hidden])");
+        if (first && document.activeElement === btn) first.focus({ preventScroll: true });
       }
+    }
+    btn.addEventListener("click", function (e) { e.stopPropagation(); setOpen(pop.hidden); });
 
-      // No public web intent exists for sharing an arbitrary link straight
-      // into Instagram or TikTok, so copy the link and open the app/site
-      // so the person can paste it themselves.
-      optEl.addEventListener("click", function () {
-        _copyToClipboard(url);
-        const labelEl = optEl.querySelector(".share-option-label");
-        const original = labelEl ? labelEl.textContent : "";
-        if (labelEl) labelEl.textContent = pasteTpl.replace("{network}", net.label);
-        _openInNewTab(net.appUrl);
-        setTimeout(function () {
-          if (labelEl) labelEl.textContent = original;
-          pop.hidden = true;
-          btn.setAttribute("aria-expanded", "false");
-        }, 2200);
+    function busy(el, text) { el.disabled = true; label(el, text); }
+    function done(el, text, delay) { label(el, text); setTimeout(function () { el.disabled = false; label(el, el.__label); }, delay || 0); }
+    function makeImage(el, format, after) {
+      el.__label = el.__label || (el.querySelector(".share-option-label") || {}).textContent;
+      busy(el, T.preparing);
+      blobFor(format).then(function (blob) {
+        if (!blob) { done(el, T.failed, 2200); return; }
+        after(blob);
+      }).catch(function () { done(el, T.failed, 2200); });
+    }
+    function shareFileOrSave(el, blob, format, savedNote) {
+      const file = new File([blob], fileName(format), { type: "image/png" });
+      if (canFiles && navigator.canShare({ files: [file] })) {
+        Promise.resolve(navigator.share({ files: [file], title: title() })).then(function () { done(el, el.__label, 0); }, function (err) {
+          if (err && err.name === "AbortError") { done(el, el.__label, 0); return; }
+          _downloadBlob(blob, fileName(format)); done(el, T.saved, 2200);
+        });
+      } else {
+        _downloadBlob(blob, fileName(format)); done(el, T.saved, 2200);
+      }
+      if (savedNote) showNote(savedNote);
+    }
+
+    const imageBtn = q(".share-image");
+    if (imageBtn) imageBtn.addEventListener("click", function () { makeImage(imageBtn, "portrait", function (b) { shareFileOrSave(imageBtn, b, "portrait"); }); });
+    const dlBtn = q(".share-download");
+    if (dlBtn) dlBtn.addEventListener("click", function () { makeImage(dlBtn, "square", function (b) { _downloadBlob(b, fileName("square")); done(dlBtn, T.saved, 2200); }); });
+    const copyBtn = q(".share-copy");
+    if (copyBtn) copyBtn.addEventListener("click", function () {
+      copyBtn.__label = copyBtn.__label || T.copy;
+      _copyToClipboard(url()); label(copyBtn, T.copied); setTimeout(function () { label(copyBtn, T.copy); }, 1800);
+    });
+    const moreBtn = q(".share-more");
+    if (moreBtn) moreBtn.addEventListener("click", function () {
+      try {
+        Promise.resolve(navigator.share({ title: title(), url: url() })).catch(function () {});
+      } catch (e) { /* the menu stays open with the other options */ }
+    });
+    row.querySelectorAll("button[data-share-net]").forEach(function (el) {
+      const id = el.getAttribute("data-share-net");
+      el.addEventListener("click", function () {
+        makeImage(el, "story", function (b) { shareFileOrSave(el, b, "story", id === "tiktok" ? T.tiktok : T.instagram); });
       });
     });
-
-    if (copyBtn) {
-      copyBtn.addEventListener("click", function () {
-        _copyToClipboard(url);
-        if (copyLabelEl) copyLabelEl.textContent = copiedLabel;
-        setTimeout(function () {
-          if (copyLabelEl) copyLabelEl.textContent = copyLabel;
-        }, 1800);
-      });
-    }
-
-    if (imageBtn) {
-      imageBtn.addEventListener("click", function () {
-        if (imageLabelEl) imageLabelEl.textContent = imagePreparingLabel;
-        imageBtn.disabled = true;
-
-        function resetLabel(text, delay) {
-          setTimeout(function () {
-            if (imageLabelEl) imageLabelEl.textContent = text;
-            imageBtn.disabled = false;
-          }, delay || 0);
-        }
-
-        _buildCardBlob(cardSpec).then(function (blob) {
-          if (!blob) {
-            resetLabel(imageFailedLabel, 0);
-            setTimeout(function () { if (imageLabelEl) imageLabelEl.textContent = imageLabel; }, 2200);
-            return;
-          }
-          const file = new File([blob], "mybirthsign-result.png", { type: "image/png" });
-
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-              const sharePromise = navigator.share({ files: [file], title: title });
-              if (sharePromise && typeof sharePromise.catch === "function") {
-                sharePromise
-                  .then(function () { resetLabel(imageLabel, 0); })
-                  .catch(function (err) {
-                    if (err && err.name === "AbortError") { resetLabel(imageLabel, 0); return; }
-                    _downloadBlob(blob, "mybirthsign-result.png");
-                    if (imageLabelEl) imageLabelEl.textContent = imageSavedLabel;
-                    resetLabel(imageLabel, 2200);
-                  });
-                return;
-              }
-              resetLabel(imageLabel, 0);
-              return;
-            } catch (err) {
-              // fall through to a direct download below
-            }
-          }
-
-          _downloadBlob(blob, "mybirthsign-result.png");
-          if (imageLabelEl) imageLabelEl.textContent = imageSavedLabel;
-          resetLabel(imageLabel, 2200);
-        }).catch(function () {
-          resetLabel(imageFailedLabel, 0);
-          setTimeout(function () { if (imageLabelEl) imageLabelEl.textContent = imageLabel; }, 2200);
-        });
-      });
-    }
   });
 
   _ensureShareOutsideClickHandler();

@@ -1,6 +1,7 @@
 """Builds the fixed social-preview images (1200x630 JPG) used by link previews:
    images/og/sign-<animal>.jpg      (12)  daily fortune / single sign links
    images/og/pair-<a>-<b>.jpg       (78)  compatibility / Compare Two Signs links (a <= b in zodiac order)
+   images/og/site.jpg               (1)   general pages (home, about, blog, tools) — all 12 medals
 They contain no words except the brand and web address, so the same image works for English and Khmer
 (the preview title/description carry the language). Run once:  python3 scripts/og-images.py
 Needs Playwright + Chromium (dev machine only; nothing runs on the live site)."""
@@ -31,14 +32,21 @@ def page(animals):
     cls = "row one" if len(animals) == 1 else "row"
     return f'<html><head><meta charset="utf-8"><style>{CSS}</style></head><body><div class="shade"></div><div class="frame"></div><div class="{cls}">{meds}</div><p class="han" style="top:{450 if len(animals) == 1 else 418}px">{han}</p><p class="brand"><b>MyBirthSign</b><span>mybirthsign.com</span></p></body></html>'
 out = ROOT / "images/og"; out.mkdir(parents=True, exist_ok=True)
-jobs = [([a], f"sign-{a.lower()}.jpg") for a in ORDER]
-jobs += [([a, b], f"pair-{a.lower()}-{b.lower()}.jpg") for i, a in enumerate(ORDER) for b in ORDER[i:]]
-exe = sys.argv[1] if len(sys.argv) > 1 else None
+def site_page():
+    meds = "".join(f'<img src="{MED[a]}" style="width:150px;height:150px;border-radius:50%;box-shadow:0 0 0 4px rgba(246,220,155,.35),0 0 40px rgba(246,220,155,.35)">' for a in ORDER)
+    grid = f'<div style="position:absolute;left:0;right:0;top:70px;display:grid;grid-template-columns:repeat(6,150px);gap:26px 34px;justify-content:center">{meds}</div>'
+    return f'<html><head><meta charset="utf-8"><style>{CSS}</style></head><body><div class="shade"></div><div class="frame"></div>{grid}<div class="brand"><b>MyBirthSign</b><span>mybirthsign.com</span></div></body></html>'
+args = [a for a in sys.argv[1:] if not a.startswith("--")]
+only_site = "--site" in sys.argv
+jobs = [] if only_site else [([a], f"sign-{a.lower()}.jpg") for a in ORDER]
+if not only_site: jobs += [([a, b], f"pair-{a.lower()}-{b.lower()}.jpg") for i, a in enumerate(ORDER) for b in ORDER[i:]]
+jobs += [(None, "site.jpg")]
+exe = args[0] if args else None
 with sync_playwright() as p:
     br = p.chromium.launch(executable_path=exe) if exe else p.chromium.launch()
     pg = br.new_page(viewport={"width": 1200, "height": 630})
     for animals, name in jobs:
-        pg.set_content(page(animals)); pg.wait_for_timeout(60)
+        pg.set_content(site_page() if animals is None else page(animals)); pg.wait_for_timeout(60)
         pg.screenshot(path=str(out / name), type="jpeg", quality=70)
     br.close()
 print("wrote", len(jobs), "images to", out)

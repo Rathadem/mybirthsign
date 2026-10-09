@@ -217,7 +217,8 @@ document.addEventListener("DOMContentLoaded", function () {
       '<p class="cmp-desc-lg">' + esc(desc) + "</p>" +
       // share: the link carries the two ANIMALS only (never the birth dates); the image card is drawn on this device
       (typeof shareRowHtml === "function" ? '<div class="cmp-share">' + shareRowHtml(aName(A.animal) + " + " + aName(B.animal) + " — " + overall + "%",
-        { cardType: "compat", emoji: (typeof ZODIAC_EMOJI !== "undefined" ? ZODIAC_EMOJI[A.animal] + " 💞 " + ZODIAC_EMOJI[B.animal] : "💞"), heading: aName(A.animal) + " + " + aName(B.animal), subheading: lvl + " — " + overall + "%", badge: overall + "%" },
+        { cardType: "love", lang: lang, eyebrow: T.result_h, a: A.animal, b: B.animal, nameA: aName(A.animal), nameB: aName(B.animal), overall: overall, level: lvl,
+          desc: fill(T.intro[relType], names), cats: ranked.slice(0, 3).map(function (k) { return [T.cats[k], scores[k]]; }), strengths: strengths.slice(0, 2) },
         "/compatibility?pair=" + A.animal.toLowerCase() + "-" + B.animal.toLowerCase() + "#compare") + "</div>" : "") +
       "</section>" +
 

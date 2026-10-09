@@ -1,22 +1,31 @@
-// share-cards.js — rich "Share image" cards, drawn on the visitor's own device (nothing is uploaded or stored).
-// Loaded only when someone taps "Share image" on a daily sign or a Compare Two Signs result (see js/share.js).
-//   daily: animal, rating, short fortune, love / career / money highlights, lucky number / color / direction /
-//          time, today's advice, MyBirthSign branding and web address
-//   pair:  both animals, the traditional match type, quick star ratings, a short explanation, love /
-//          friendship / business highlights and the web address
-// 1080 x 1350 (4:5) suits Facebook, Instagram and Telegram feeds. English or Khmer follows the card spec.
+// share-cards.js — "Share image" cards, drawn on the visitor's own device (nothing is uploaded or stored).
+// Loaded only when someone asks for an image (see js/share.js). Every card uses the site's own results:
+//   daily    one sign's daily fortune: date, rating, short fortune, love / career / money, lucky number /
+//            color / direction / time, today's advice
+//   lucky    "Who is lucky today": date, the top lucky signs (rules), the sign to take it easy, short note
+//   sign     Zodiac Checker result: sign, element, traits, lucky numbers & colors, best matches, needs patience
+//   pair     Compare Two Signs: traditional match type, star ratings, short explanation, love / friendship / business
+//   love     Love compatibility: both signs, the page's own overall % and level, three category scores, strengths
+//   business Business partner: both signs, the page's own overall %, strengths, areas to discuss
+//   article  blog articles and anything else: title, short line, optional animal
+// Formats (chosen by js/share.js for each action):
+//   portrait 1080 x 1350 (up to 1620 tall when the text needs it)  feeds: Facebook, Telegram, WhatsApp, "Share image"
+//   square   1080 x 1080 (shorter text)                             "Download image"
+//   story    1080 x 1920                                            Instagram / TikTok
+// English or Khmer follows spec.lang. Khmer lines break at word boundaries (Intl.Segmenter).
 (function () {
   "use strict";
-  var W = 1080, H = 1350, PAD = 90, INNER = W - PAD * 2;
-  var GOLD = "#f6dc9b", GOLD2 = "#e7c27a", INK = "#f4efff", SOFT = "#cfc6ee";
+  var W = 1080, PAD = 90, INNER = W - PAD * 2;
+  var GOLD = "#f6dc9b", GOLD2 = "#e7c27a", INK = "#f4efff", SOFT = "#cfc6ee", PINK = "#ff8fbf", WARN = "#ff9aa8";
+  var FORMATS = { portrait: { h: 1350, grow: 1620 }, square: { h: 1080 }, story: { h: 1920 } };
+  var FOOT = 190;                                   // space kept for the brand footer
+
   function fam(lang, kind) {
     if (lang === "km") return kind === "head" ? "'Moul', 'Noto Sans Khmer', serif" : "'Noto Sans Khmer', 'Kantumruy Pro', sans-serif";
     return kind === "head" ? "Georgia, 'Times New Roman', serif" : "system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif";
   }
   function font(ctx, lang, kind, size, weight) { ctx.font = (weight || 400) + " " + size + "px " + fam(lang, kind); }
 
-  // Khmer is written without spaces between words, so break lines at real word boundaries
-  // (Intl.Segmenter) and never inside a syllable cluster.
   function tokens(text, lang) {
     text = String(text || "").replace(/\s+/g, " ").trim();
     if (typeof Intl !== "undefined" && Intl.Segmenter) {
@@ -38,8 +47,9 @@
     var lines = [], line = "";
     tokens(text, lang).forEach(function (tk) {
       var test = line + tk;
+      if (line.trim() && /^[\s។៕៖,.;:!?%)\]»”’…]+$/.test(tk)) { line = test; return; }   // punctuation never starts a line
       if (ctx.measureText(test).width <= maxW || !line.trim()) {
-        if (ctx.measureText(test).width > maxW) {           // one token wider than the line: split by clusters
+        if (ctx.measureText(test).width > maxW) {
           graphemes(tk).forEach(function (g) { if (ctx.measureText(line + g).width > maxW && line) { lines.push(line); line = g; } else line += g; });
         } else line = test;
       } else { lines.push(line.trim()); line = tk.trim() ? tk : ""; }
@@ -57,7 +67,9 @@
   function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
   function loadImg(src) { return new Promise(function (ok) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = function () { ok(null); }; i.src = src; }); }
   function base() { var s = document.querySelector('script[src*="share.js"]'); return s ? s.src.replace(/js\/share\.js.*$/, "") : "/"; }
-  function medalSrc(a) { return base() + "images/business/animals/" + String(a).toLowerCase() + ".webp"; }
+  var ANIMALS = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
+  function medalSrc(a) { return ANIMALS.indexOf(a) < 0 ? null : base() + "images/business/animals/" + String(a).toLowerCase() + ".webp"; }
+  function medals(list) { return Promise.all(list.map(function (a) { var s = medalSrc(a); return s ? loadImg(s) : Promise.resolve(null); })); }
   function fontsReady(lang) {
     var want = lang === "km" ? ["400 30px 'Noto Sans Khmer'", "700 30px 'Noto Sans Khmer'", "400 30px 'Moul'"] : [];
     if (!document.fonts || !document.fonts.load) return Promise.resolve();
@@ -67,19 +79,20 @@
   function background(ctx, H) {
     var g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#22175a"); g.addColorStop(0.55, "#140d3a"); g.addColorStop(1, "#0a0722");
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    var r = ctx.createRadialGradient(W / 2, 330, 40, W / 2, 330, 520); r.addColorStop(0, "rgba(246,220,155,.22)"); r.addColorStop(1, "rgba(246,220,155,0)");
+    var r = ctx.createRadialGradient(W / 2, H * 0.25, 40, W / 2, H * 0.25, 560); r.addColorStop(0, "rgba(246,220,155,.20)"); r.addColorStop(1, "rgba(246,220,155,0)");
     ctx.fillStyle = r; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = "rgba(255,255,255,.55)";
-    for (var i = 0; i < 70; i++) { var x = (i * 977) % W, y = (i * 631) % 560, s = (i % 3) + 1; ctx.fillRect(x, y, s, s); }
+    ctx.fillStyle = "rgba(255,255,255,.5)";
+    for (var i = 0; i < 90; i++) { var x = (i * 977) % W, y = (i * 631) % Math.round(H * 0.45), s = (i % 3) + 1; ctx.fillRect(x, y, s, s); }
     ctx.strokeStyle = "rgba(246,220,155,.75)"; ctx.lineWidth = 3; roundRect(ctx, 34, 34, W - 68, H - 68, 36); ctx.stroke();
     ctx.strokeStyle = "rgba(246,220,155,.25)"; ctx.lineWidth = 1.5; roundRect(ctx, 48, 48, W - 96, H - 96, 28); ctx.stroke();
   }
   function medal(ctx, img, cx, cy, r) {
     ctx.save(); ctx.shadowColor = "rgba(246,220,155,.6)"; ctx.shadowBlur = 50; ctx.beginPath(); ctx.arc(cx, cy, r + 6, 0, Math.PI * 2); ctx.fillStyle = "rgba(246,220,155,.35)"; ctx.fill(); ctx.restore();
     if (img) { ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip(); ctx.drawImage(img, cx - r, cy - r, r * 2, r * 2); ctx.restore(); }
+    else { ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fillStyle = "#2a1f63"; ctx.fill(); ctx.strokeStyle = GOLD; ctx.lineWidth = 3; ctx.stroke(); }
   }
   function pill(ctx, text, cx, y, lang, color) {
-    font(ctx, lang, "body", 30, 700); var w = ctx.measureText(text).width + 56;
+    font(ctx, lang, "body", 30, 700); var w = Math.min(INNER, ctx.measureText(text).width + 56);
     roundRect(ctx, cx - w / 2, y, w, 54, 27); ctx.fillStyle = "rgba(246,220,155,.12)"; ctx.fill(); ctx.strokeStyle = color || GOLD; ctx.lineWidth = 2; ctx.stroke();
     ctx.fillStyle = color || GOLD; ctx.textAlign = "center"; ctx.fillText(text, cx, y + 37);
   }
@@ -88,97 +101,209 @@
     font(ctx, "en", "body", 30, 600); ctx.fillStyle = GOLD2; ctx.fillText("mybirthsign.com", W / 2, H - 92);
     font(ctx, lang, "body", 20, 400); ctx.fillStyle = "rgba(207,198,238,.75)"; ctx.fillText(note, W / 2, H - 62);
   }
-  function sectionAt(ctx, lang, label, text, y, lines) {
-    font(ctx, lang, "body", lang === "km" ? 25 : 24, 700); ctx.fillStyle = GOLD; ctx.textAlign = "left"; ctx.fillText(label, PAD + 24, y);
-    font(ctx, lang, "body", lang === "km" ? 26 : 27, 400); ctx.fillStyle = INK;
-    var lh = lang === "km" ? 42 : 36;
-    return drawLines(ctx, wrap(ctx, text, INNER - 48, lang, lines), PAD + 24, y + (lang === "km" ? 42 : 38), lh) + 14;
+  function lh(L, en, km) { return L === "km" ? km : en; }
+  // a dark panel of labelled rows (label + 1-3 lines of text each); measured first, then drawn
+  function panel(ctx, L, rows, y, maxLines) {
+    var lab = lh(L, 38, 42), line = lh(L, 36, 42);
+    var heights = rows.map(function (rw) { font(ctx, L, "body", lh(L, 27, 26), 400); return wrap(ctx, rw[1], INNER - 48, L, maxLines).length; });
+    var boxH = 30 + rows.reduce(function (acc, rw, i) { return acc + lab + heights[i] * line + 14; }, 0);
+    roundRect(ctx, PAD, y, INNER, boxH, 22); ctx.fillStyle = "rgba(10,7,34,.55)"; ctx.fill(); ctx.strokeStyle = "rgba(246,220,155,.35)"; ctx.lineWidth = 1.5; ctx.stroke();
+    var yy = y + 48;
+    rows.forEach(function (rw) {
+      font(ctx, L, "body", lh(L, 24, 25), 700); ctx.fillStyle = rw[2] || GOLD; ctx.textAlign = "left"; ctx.fillText(rw[0], PAD + 24, yy);
+      font(ctx, L, "body", lh(L, 27, 26), 400); ctx.fillStyle = INK;
+      yy = drawLines(ctx, wrap(ctx, rw[1], INNER - 48, L, maxLines), PAD + 24, yy + lab, line) + 14;
+    });
+    return y + boxH;
   }
-  function section(ctx, lang, label, text, y, lines) {
-    font(ctx, lang, "body", lang === "km" ? 26 : 25, 700); ctx.fillStyle = GOLD; ctx.textAlign = "left"; ctx.fillText(label, PAD + 24, y);
-    font(ctx, lang, "body", lang === "km" ? 27 : 28, 400); ctx.fillStyle = INK;
-    return drawLines(ctx, wrap(ctx, text, INNER - 48, lang, lines), PAD + 24, y + (lang === "km" ? 44 : 40), lang === "km" ? 44 : 38) + 18;
+  function bars(ctx, L, items, y) {                // [label, pct] rows with a gold bar
+    items.forEach(function (it, i) {
+      var yy = y + i * 76;
+      font(ctx, L, "body", lh(L, 27, 26), 600); ctx.fillStyle = INK; ctx.textAlign = "left"; ctx.fillText(it[0], PAD + 10, yy + 26);
+      font(ctx, "en", "body", 28, 700); ctx.fillStyle = GOLD; ctx.textAlign = "right"; ctx.fillText(numL(L, it[1]) + "%", W - PAD - 10, yy + 26);
+      roundRect(ctx, PAD + 10, yy + 42, INNER - 20, 14, 7); ctx.fillStyle = "rgba(246,220,155,.15)"; ctx.fill();
+      roundRect(ctx, PAD + 10, yy + 42, Math.max(14, (INNER - 20) * Math.max(0, Math.min(100, it[1])) / 100), 14, 7); ctx.fillStyle = GOLD2; ctx.fill();
+    });
+    return y + items.length * 76;
   }
-  // Draw twice: once to measure how tall the content is, then on a card just tall enough
-  // (1080 x 1350 at least, up to 1080 x 1620) so text never runs into the footer.
-  function render(lang, note, body) {
-    var m = document.createElement("canvas"); m.width = W; m.height = 1700;
-    var end = body(m.getContext("2d"));
-    var h = Math.max(1350, Math.min(1620, Math.ceil((end + 190) / 10) * 10));
-    var c = document.createElement("canvas"); c.width = W; c.height = h; var ctx = c.getContext("2d");
-    background(ctx, h); body(ctx); footer(ctx, lang, note, h);
-    return toBlob(c);
+  function cells(ctx, L, list, y, colorHex) {      // up to 4 small boxes in one row
+    var cw = INNER / list.length;
+    list.forEach(function (cell, i) {
+      var cx = PAD + cw * i + cw / 2;
+      roundRect(ctx, PAD + cw * i + 6, y, cw - 12, 100, 16); ctx.fillStyle = "rgba(246,220,155,.08)"; ctx.fill(); ctx.strokeStyle = "rgba(246,220,155,.4)"; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.textAlign = "center"; font(ctx, L, "body", 22, 600); ctx.fillStyle = SOFT; ctx.fillText(cell[0], cx, y + 34);
+      font(ctx, L, "body", String(cell[1]).length > 9 ? 22 : 28, 700); ctx.fillStyle = "#fff3d1";
+      var v = wrap(ctx, String(cell[1]), cw - 30, L, 1)[0] || "";
+      if (cell[2] && colorHex) { var tw = ctx.measureText(v).width; ctx.beginPath(); ctx.arc(cx - tw / 2 - 6, y + 72, 9, 0, Math.PI * 2); ctx.fillStyle = colorHex; ctx.fill(); ctx.fillStyle = "#fff3d1"; ctx.fillText(v, cx + 12, y + 80); }
+      else ctx.fillText(v, cx, y + 80);
+    });
+    return y + 100;
   }
-  function toBlob(canvas) { return new Promise(function (ok) { canvas.toBlob(function (b) { ok(b); }, "image/png"); }); }
+  var KD = "០១២៣៤៥៦៧៨៩";
+  function numL(L, v) { return L === "km" ? String(v).replace(/\d/g, function (c) { return KD[c]; }) : String(v); }
+
+  // Draw the content once on a tall transparent canvas, then place it on the chosen format:
+  // portrait grows (1350 -> 1620) before anything is scaled; square / story keep their size, and the
+  // content is scaled down only if it still does not fit; shorter content is centred vertically.
+  function render(L, note, format, body) {
+    var F = FORMATS[format] || FORMATS.portrait;
+    var opts = { compact: format === "square", story: format === "story" };
+    var m = document.createElement("canvas"); m.width = W; m.height = 2300;
+    var mctx = m.getContext("2d");
+    var end = Math.ceil(body(mctx, opts)) + 30;
+    var H = F.h;
+    if (F.grow) H = Math.max(F.h, Math.min(F.grow, Math.ceil((end + FOOT) / 10) * 10));
+    var avail = H - FOOT, scale = Math.min(1, avail / end);
+    var c = document.createElement("canvas"); c.width = W; c.height = H; var ctx = c.getContext("2d");
+    background(ctx, H);
+    var dw = W * scale, dh = end * scale, dy = Math.max(0, (avail - dh) / 2 + (opts.story ? 20 : 0));   // short content sits in the middle, not at the top
+    ctx.drawImage(m, 0, 0, W, end, (W - dw) / 2, dy, dw, dh);
+    footer(ctx, L, note, H);
+    return new Promise(function (ok) { c.toBlob(function (b) { ok(b); }, "image/png"); });
+  }
 
   var LBL = {
     en: { love: "Love", career: "Career", money: "Money", advice: "Today's advice", number: "Number", color: "Color", direction: "Direction", time: "Time",
-          note: "Traditional Chinese zodiac reading for fun and self-reflection", friend: "Friendship", business: "Business", stars: "Love {L}  ·  Business {B}" },
+          note: "Traditional Chinese zodiac reading for fun and self-reflection", friend: "Friendship", business: "Business", stars: "Love {L}  ·  Business {B}",
+          luckyToday: "Who is lucky today", easy: "Take it easy today", sign: "Your Chinese zodiac sign", nums: "Lucky numbers", cols: "Lucky colors",
+          matches: "Best matches", patience: "Needs patience", strengths: "Strengths", discuss: "Talk through", element: "Element" },
     km: { love: "ស្នេហា", career: "ការងារ", money: "លុយកាក់", advice: "ដំបូន្មានថ្ងៃនេះ", number: "លេខ", color: "ពណ៌", direction: "ទិស", time: "ម៉ោង",
-          note: "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត", friend: "មិត្តភាព", business: "អាជីវកម្ម", stars: "ស្នេហា {L}  ·  អាជីវកម្ម {B}" }
+          note: "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត", friend: "មិត្តភាព", business: "អាជីវកម្ម", stars: "ស្នេហា {L}  ·  អាជីវកម្ម {B}",
+          luckyToday: "តើអ្នកណាមានសំណាងថ្ងៃនេះ", easy: "ថ្ងៃនេះគួរប្រុងប្រយ័ត្ន", sign: "រាសីចិនរបស់អ្នក", nums: "លេខសំណាង", cols: "ពណ៌សំណាង",
+          matches: "គូដែលត្រូវគ្នាបំផុត", patience: "ត្រូវការការអត់ធ្មត់", strengths: "ចំណុចខ្លាំង", discuss: "គួរពិភាក្សា", element: "ធាតុ" }
   };
-  var kmd = function (v) { return String(v).replace(/\d/g, function (c) { return "០១២៣៤៥៦៧៨៩"[c]; }); };
+  function langOf(spec) { return spec && spec.lang === "km" ? "km" : "en"; }
+  function head(ctx, L, text, y, size) { ctx.textAlign = "center"; ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", size || lh(L, 66, 52), 700); return drawLines(ctx, wrap(ctx, text, INNER, L, 2), W / 2, y, lh(L, 74, 70), "center"); }
+  function eyebrow(ctx, L, text, y) { ctx.textAlign = "center"; ctx.fillStyle = GOLD2; font(ctx, L, "body", 28, 600); ctx.fillText(text || "", W / 2, y); }
+  function para(ctx, L, text, y, lines, size) { font(ctx, L, "body", size || lh(L, 31, 29), 400); ctx.fillStyle = INK; return drawLines(ctx, wrap(ctx, text, INNER, L, lines), W / 2, y, lh(L, 42, 46), "center"); }
 
-  function daily(spec) {
-    var L = spec.lang === "km" ? "km" : "en", T = LBL[L];
-    return Promise.all([loadImg(medalSrc(spec.animal)), fontsReady(L)]).then(function (r) {
-      return render(L, T.note, function (ctx) {
-        ctx.textAlign = "center"; ctx.fillStyle = GOLD2; font(ctx, L, "body", 28, 600); ctx.fillText(spec.date || "", W / 2, 116);
-        medal(ctx, r[0], W / 2, 262, 118);
-        ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", L === "km" ? 52 : 66, 700); ctx.fillText(spec.name || spec.animal, W / 2, 456);
-        pill(ctx, spec.label || "", W / 2, 478, L, spec.tier === "caution" ? "#ff9aa8" : GOLD);
-        font(ctx, L, "body", L === "km" ? 29 : 31, 400); ctx.fillStyle = INK;
-        var y = drawLines(ctx, wrap(ctx, spec.fortune, INNER, L, 3), W / 2, 590, L === "km" ? 46 : 42, "center") + 6;
-        // love / career / money panel: measure, then draw the box behind
-        var top = y, yy = y + 48;
-        var rows = [[T.love, spec.love], [T.career, spec.career], [T.money, spec.money]];
-        var heights = rows.map(function (rw) { font(ctx, L, "body", L === "km" ? 26 : 27, 400); return wrap(ctx, rw[1], INNER - 48, L, 2).length; });
-        var boxH = 30 + rows.reduce(function (acc, rw, i) { return acc + (L === "km" ? 42 : 38) + heights[i] * (L === "km" ? 42 : 36) + 14; }, 0);
-        roundRect(ctx, PAD, top, INNER, boxH, 22); ctx.fillStyle = "rgba(10,7,34,.55)"; ctx.fill(); ctx.strokeStyle = "rgba(246,220,155,.35)"; ctx.lineWidth = 1.5; ctx.stroke();
-        rows.forEach(function (rw) { yy = sectionAt(ctx, L, rw[0], rw[1], yy, 2); });
-        y = top + boxH + 20;
-        // lucky row
-        var cells = [[T.number, L === "km" ? kmd(spec.number) : String(spec.number)], [T.color, spec.color], [T.direction, spec.direction], [T.time, L === "km" ? kmd(spec.time) : spec.time]];
-        var cw = INNER / 4;
-        cells.forEach(function (cell, i) {
-          var cx = PAD + cw * i + cw / 2;
-          roundRect(ctx, PAD + cw * i + 6, y, cw - 12, 100, 16); ctx.fillStyle = "rgba(246,220,155,.08)"; ctx.fill(); ctx.strokeStyle = "rgba(246,220,155,.4)"; ctx.stroke();
-          ctx.textAlign = "center"; font(ctx, L, "body", 22, 600); ctx.fillStyle = SOFT; ctx.fillText(cell[0], cx, y + 34);
-          font(ctx, L, "body", String(cell[1]).length > 9 ? 22 : 28, 700); ctx.fillStyle = "#fff3d1";
-          if (i === 1 && spec.colorHex) { var tw = ctx.measureText(cell[1]).width; ctx.beginPath(); ctx.arc(cx - tw / 2 - 6, y + 72, 9, 0, Math.PI * 2); ctx.fillStyle = spec.colorHex; ctx.fill(); ctx.fillStyle = "#fff3d1"; ctx.fillText(cell[1], cx + 12, y + 80); }
-          else ctx.fillText(cell[1], cx, y + 80);
+  // ---------------------------------------------------------------- card types
+  function daily(spec, format) {
+    var L = langOf(spec), T = LBL[L];
+    return Promise.all([medals([spec.animal]), fontsReady(L)]).then(function (r) {
+      return render(L, T.note, format, function (ctx, o) {
+        var R = o.compact ? 90 : 118, my = o.compact ? 214 : 262;
+        eyebrow(ctx, L, spec.date, 116); medal(ctx, r[0][0], W / 2, my, R);
+        var y = my + R + 76; ctx.textAlign = "center"; ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", lh(L, 66, 52), 700); ctx.fillText(spec.name || spec.animal, W / 2, y);
+        pill(ctx, spec.label || "", W / 2, y + 22, L, spec.tier === "caution" ? WARN : GOLD);
+        y = para(ctx, L, spec.fortune, y + 134, o.compact ? 2 : 3) + 6;
+        y = panel(ctx, L, [[T.love, spec.love], [T.career, spec.career], [T.money, spec.money]], y, o.compact ? 1 : 2) + 20;
+        y = cells(ctx, L, [[T.number, numL(L, spec.number)], [T.color, spec.color, true], [T.direction, spec.direction], [T.time, numL(L, spec.time)]], y, spec.colorHex);
+        if (o.compact || !spec.advice) return y;
+        y += 48; ctx.textAlign = "center"; font(ctx, L, "body", 26, 700); ctx.fillStyle = GOLD; ctx.fillText(T.advice, W / 2, y);
+        font(ctx, L, "body", lh(L, 29, 28), 400); ctx.fillStyle = INK;
+        return drawLines(ctx, wrap(ctx, spec.advice, INNER - 40, L, 2), W / 2, y + 46, lh(L, 40, 46), "center");
+      });
+    });
+  }
+
+  function lucky(spec, format) {
+    var L = langOf(spec), T = LBL[L], top = (spec.top || []).slice(0, 3), names = spec.topNames || top;
+    return Promise.all([medals(top), fontsReady(L)]).then(function (r) {
+      return render(L, T.note, format, function (ctx, o) {
+        eyebrow(ctx, L, spec.date, 116);
+        var y = head(ctx, L, spec.heading || T.luckyToday, 206, lh(L, 60, 46));
+        var R = o.compact ? 96 : 116, cy = y + R + 30, gap = (INNER - 40) / 3;
+        top.forEach(function (a, i) {
+          var cx = PAD + 20 + gap * i + gap / 2; medal(ctx, r[0][i], cx, cy, i === 0 ? R : R - 14);
+          ctx.textAlign = "center"; ctx.fillStyle = i === 0 ? "#fff6dc" : GOLD; font(ctx, L, "head", lh(L, i === 0 ? 46 : 40, i === 0 ? 38 : 32), 700);
+          ctx.fillText(names[i] || a, cx, cy + R + 62);
         });
-        y += 148;
-        ctx.textAlign = "center"; font(ctx, L, "body", 26, 700); ctx.fillStyle = GOLD; ctx.fillText(T.advice, W / 2, y);
-        font(ctx, L, "body", L === "km" ? 28 : 29, 400); ctx.fillStyle = INK;
-        return drawLines(ctx, wrap(ctx, spec.advice, INNER - 40, L, 2), W / 2, y + 46, L === "km" ? 46 : 40, "center");
+        y = cy + R + 110;
+        if (spec.text) y = para(ctx, L, spec.text, y + 10, o.compact ? 2 : 4) + 10;
+        if (spec.careful && spec.careful.length) { pill(ctx, T.easy + ": " + spec.careful.join(", "), W / 2, y + 10, L, WARN); y += 74; }
+        return y;
       });
     });
   }
 
-  function pair(spec) {
-    var L = spec.lang === "km" ? "km" : "en", T = LBL[L];
-    return Promise.all([loadImg(medalSrc(spec.a)), loadImg(medalSrc(spec.b)), fontsReady(L)]).then(function (r) {
-      return render(L, T.note, function (ctx) {
-        medal(ctx, r[0], W / 2 - 220, 240, 128); medal(ctx, r[1], W / 2 + 220, 240, 128);
-        ctx.textAlign = "center"; ctx.fillStyle = GOLD; font(ctx, "en", "head", 84, 700); ctx.fillText("&", W / 2, 270);
-        ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", L === "km" ? 40 : 52, 700);
-        ctx.fillText(spec.nameA, W / 2 - 220, 432); ctx.fillText(spec.nameB, W / 2 + 220, 432);
-        pill(ctx, spec.label, W / 2, 468, L, spec.type === "clash" ? "#ff9aa8" : GOLD);
+  function sign(spec, format) {
+    var L = langOf(spec), T = LBL[L];
+    return Promise.all([medals([spec.animal]), fontsReady(L)]).then(function (r) {
+      return render(L, T.note, format, function (ctx, o) {
+        eyebrow(ctx, L, T.sign, 116);
+        var R = o.compact ? 96 : 124, my = o.compact ? 222 : 272; medal(ctx, r[0][0], W / 2, my, R);
+        var y = head(ctx, L, spec.name || spec.animal, my + R + 80);
+        if (spec.element) { pill(ctx, (spec.elementLabel || T.element) + ": " + spec.element, W / 2, y - 30, L, GOLD); y += 46; }
+        y = para(ctx, L, spec.traits, y + 30, o.compact ? 2 : 3) + 10;
+        var rows = [[T.nums, (spec.numbers || []).map(function (n) { return numL(L, n); }).join(", ")], [T.cols, (spec.colors || []).join(", ")]];
+        if (spec.matches && spec.matches.length) rows.push([T.matches, spec.matches.join(", ")]);
+        if (spec.patience && !o.compact) rows.push([T.patience, spec.patience, WARN]);
+        return panel(ctx, L, rows, y, 2);
+      });
+    });
+  }
+
+  function pair(spec, format) {
+    var L = langOf(spec), T = LBL[L];
+    return Promise.all([medals([spec.a, spec.b]), fontsReady(L)]).then(function (r) {
+      return render(L, T.note, format, function (ctx, o) {
+        var R = o.compact ? 104 : 128, my = o.compact ? 200 : 240;
+        medal(ctx, r[0][0], W / 2 - 220, my, R); medal(ctx, r[0][1], W / 2 + 220, my, R);
+        ctx.textAlign = "center"; ctx.fillStyle = GOLD; font(ctx, "en", "head", 84, 700); ctx.fillText("&", W / 2, my + 30);
+        ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", lh(L, 52, 40), 700);
+        ctx.fillText(spec.nameA, W / 2 - 220, my + R + 64); ctx.fillText(spec.nameB, W / 2 + 220, my + R + 64);
+        var y = my + R + 100; pill(ctx, spec.label, W / 2, y, L, spec.type === "clash" ? WARN : GOLD);
         var star = function (n) { return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n); };
-        ctx.textAlign = "center"; font(ctx, L, "body", 28, 600); ctx.fillStyle = GOLD2; ctx.fillText(T.stars.replace("{L}", star(spec.starsLove)).replace("{B}", star(spec.starsBiz)), W / 2, 580);
-        font(ctx, L, "body", L === "km" ? 28 : 30, 400); ctx.fillStyle = INK;
-        var y = drawLines(ctx, wrap(ctx, spec.intro, INNER, L, 3), W / 2, 646, L === "km" ? 46 : 42, "center") + 8;
-        var rows = [[T.love, spec.love], [T.friend, spec.friendship], [T.business, spec.business]];
-        var heights = rows.map(function (rw) { font(ctx, L, "body", L === "km" ? 26 : 27, 400); return wrap(ctx, rw[1], INNER - 48, L, 3).length; });
-        var boxH = 30 + rows.reduce(function (acc, rw, i) { return acc + (L === "km" ? 42 : 38) + heights[i] * (L === "km" ? 42 : 36) + 14; }, 0);
-        roundRect(ctx, PAD, y, INNER, boxH, 22); ctx.fillStyle = "rgba(10,7,34,.55)"; ctx.fill(); ctx.strokeStyle = "rgba(246,220,155,.35)"; ctx.lineWidth = 1.5; ctx.stroke();
-        var yy = y + 48;
-        rows.forEach(function (rw) { yy = sectionAt(ctx, L, rw[0], rw[1], yy, 3); });
-        return y + boxH;
+        y += 112; ctx.textAlign = "center"; font(ctx, L, "body", 28, 600); ctx.fillStyle = GOLD2;
+        if (spec.starsLove != null) { ctx.fillText(T.stars.replace("{L}", star(spec.starsLove)).replace("{B}", star(spec.starsBiz)), W / 2, y); y += 66; }
+        y = para(ctx, L, spec.intro, y, o.compact ? 2 : 3) + 8;
+        var rows = [[T.love, spec.love], [T.friend, spec.friendship], [T.business, spec.business]].filter(function (rw) { return rw[1]; });
+        return rows.length ? panel(ctx, L, rows, y, o.compact ? 1 : 3) : y;
       });
     });
   }
 
-  window.MBSShareCards = { daily: daily, pair: pair, _wrap: wrap };
+  function twoSigns(spec, format, accent, rowsFn) {  // love + business share one layout
+    var L = langOf(spec), T = LBL[L];
+    return Promise.all([medals([spec.a, spec.b]), fontsReady(L)]).then(function (r) {
+      return render(L, T.note, format, function (ctx, o) {
+        if (spec.eyebrow) eyebrow(ctx, L, spec.eyebrow, 112);
+        var R = o.compact ? 96 : 118, my = o.compact ? 230 : 262;
+        medal(ctx, r[0][0], W / 2 - 280, my, R); medal(ctx, r[0][1], W / 2 + 280, my, R);
+        // the page's own overall score in a ring between the two signs
+        ctx.beginPath(); ctx.arc(W / 2, my, 98, 0, Math.PI * 2); ctx.fillStyle = "rgba(10,7,34,.7)"; ctx.fill();
+        ctx.beginPath(); ctx.arc(W / 2, my, 98, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.max(0, Math.min(100, spec.overall)) / 100); ctx.strokeStyle = accent; ctx.lineWidth = 12; ctx.stroke();
+        ctx.textAlign = "center"; ctx.fillStyle = "#fff6dc"; font(ctx, "en", "head", 58, 700); ctx.fillText(numL(L, spec.overall) + "%", W / 2, my + 20);
+        ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", lh(L, 44, 36), 700);
+        ctx.fillText(spec.nameA, W / 2 - 280, my + R + 60); ctx.fillText(spec.nameB, W / 2 + 280, my + R + 60);
+        var y = my + R + 92;
+        if (spec.level) { pill(ctx, spec.level, W / 2, y, L, accent); y += 92; } else y += 30;
+        if (spec.desc) y = para(ctx, L, spec.desc, y + 10, o.compact ? 2 : 3) + 14;
+        return rowsFn(ctx, L, T, y, o);
+      });
+    });
+  }
+  function love(spec, format) {
+    return twoSigns(spec, format, PINK, function (ctx, L, T, y, o) {
+      if (spec.cats && spec.cats.length) y = bars(ctx, L, spec.cats.slice(0, o.compact ? 2 : 3), y + 6) + 10;
+      if (!o.compact && spec.strengths && spec.strengths.length) y = panel(ctx, L, [[T.strengths, spec.strengths.slice(0, 2).join(" · ")]], y + 10, 3);
+      return y;
+    });
+  }
+  function business(spec, format) {
+    return twoSigns(spec, format, GOLD2, function (ctx, L, T, y, o) {
+      if (spec.cats && spec.cats.length) y = bars(ctx, L, spec.cats.slice(0, o.compact ? 2 : 3), y + 6) + 10;
+      if (!o.compact && spec.discuss) y = panel(ctx, L, [[T.discuss, spec.discuss, WARN]], y + 10, 2);
+      return y;
+    });
+  }
+
+  function article(spec, format) {
+    var L = langOf(spec), T = LBL[L], list = spec.animal ? [spec.animal] : ["Rat", "Dragon", "Horse", "Monkey"];
+    return Promise.all([medals(list), fontsReady(L)]).then(function (r) {
+      return render(L, T.note, format, function (ctx, o) {
+        var y;
+        if (list.length === 1) { medal(ctx, r[0][0], W / 2, 250, o.compact ? 100 : 130); y = 450; }
+        else { list.forEach(function (a, i) { medal(ctx, r[0][i], PAD + 105 + i * ((INNER - 210) / 3), 230, 78); }); y = 400; }
+        if (spec.eyebrow) { eyebrow(ctx, L, spec.eyebrow, y - 20); y += 40; }
+        ctx.textAlign = "center"; ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", lh(L, 58, 44), 700);
+        y = drawLines(ctx, wrap(ctx, spec.title || "", INNER, L, 4), W / 2, y + 40, lh(L, 70, 72), "center") + 10;
+        if (spec.sub) y = para(ctx, L, spec.sub, y + 20, o.compact ? 2 : 4);
+        return y;
+      });
+    });
+  }
+
+  window.MBSShareCards = { daily: daily, lucky: lucky, sign: sign, pair: pair, love: love, business: business, article: article, FORMATS: FORMATS, _wrap: wrap };
 })();

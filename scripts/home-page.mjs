@@ -198,6 +198,7 @@ function partA(lang) {   // fortune, animals, tools
     <ul class="hm-fgrid">
 ${ORDER.map(card).join("\n")}
     </ul>
+    <div class="hm-share share-row" data-hm-share data-share-url="/"></div>
     <p class="hm-center"><a class="fx-btn" href="${latestPost.file}" data-hm-fulllink>${esc(u.todayB)}</a></p>
     <p class="hm-note">${esc(u.todayNote)}</p>
   </section>
@@ -359,9 +360,20 @@ if(window.fetch){fetch("/data/daily/latest.json",{cache:"no-cache"}).then(functi
     var c=document.createElement("span"),dot=document.createElement("i");dot.className="hm-dot";dot.style.background=s.lucky.color.hex||"#ccc";c.appendChild(dot);c.appendChild(document.createTextNode(s.lucky.color[lang]));
     x.appendChild(n);x.appendChild(c);li.appendChild(x);});
 }).catch(function(){});}
-// point "full fortune" at today's post when it exists, otherwise keep the latest published one
+// "Who is lucky today" share: the same rules as the cards above (sign of the day + its triangle friends;
+// its opposite sign takes it easy). The image card is drawn only when someone shares.
+var KMN=${JSON.stringify(KM_NAMES)},LK={en:{h:"Who is lucky today",t:"Today is the day of the {D}. By tradition, the {D}, {P} and {Q} are the best supported signs today."},
+  km:{h:"តើអ្នកណាមានសំណាងថ្ងៃនេះ",t:"ថ្ងៃនេះជាថ្ងៃ{D}។ តាមប្រពៃណី {D} {P} និង {Q} ជាសត្វដែលទទួលបានការគាំទ្រល្អបំផុតនៅថ្ងៃនេះ។"}};
+var top=[day].concat(TRI.filter(function(t){return t.indexOf(day)>-1;})[0].filter(function(x){return x!==day;})),clash=ORDER[(ORDER.indexOf(day)+6)%12];
+document.querySelectorAll("[data-hm-share]").forEach(function(el){
+  var l=el.closest("[data-lang-content]"),lang=l?l.getAttribute("data-lang-content"):"en",km=lang==="km",n=function(a){return km?KMN[a]:a;};
+  var dt=km?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):ENM[p[1]-1]+" "+p[2]+", "+p[0];
+  el.setAttribute("data-share-title",LK[lang].h+" — "+dt);
+  el.setAttribute("data-share-card",JSON.stringify({cardType:"lucky",lang:lang,date:dt,top:top,topNames:top.map(n),careful:[n(clash)],
+    text:LK[lang].t.split("{D}").join(n(top[0])).replace("{P}",n(top[1])).replace("{Q}",n(top[2]))}));});
+// point "full fortune" (and the lucky-today share link) at today's post when it exists, otherwise keep the latest published one
 var ds=p[0]+"-"+String(p[1]).padStart(2,"0")+"-"+String(p[2]).padStart(2,"0"),u="blog/daily-fortune-"+ds+".html";
-if(window.fetch){fetch(u,{method:"HEAD"}).then(function(r){if(r.ok)document.querySelectorAll("[data-hm-fulllink]").forEach(function(a){a.setAttribute("href",u);});}).catch(function(){});}
+if(window.fetch){fetch(u,{method:"HEAD"}).then(function(r){if(r.ok){document.querySelectorAll("[data-hm-fulllink]").forEach(function(a){a.setAttribute("href",u);});document.querySelectorAll("[data-hm-share]").forEach(function(el){el.setAttribute("data-share-url","/"+u);});}}).catch(function(){});}
 // "Find my sign": the date field is replaced by the site's date picker, so check the value ourselves
 var f=document.getElementById("hm-find-form");
 if(f)f.addEventListener("submit",function(e){var i=document.getElementById("hm-dob");if(!i||!i.value){e.preventDefault();var v=f.querySelector(".dp-input,input[type=text]");if(v)v.focus();}});
@@ -371,7 +383,7 @@ if(f)f.addEventListener("submit",function(e){var i=document.getElementById("hm-d
 const TITLE = "Chinese Zodiac, Compatibility & Daily Fortune | MyBirthSign";
 const DESC = "Discover your Chinese zodiac sign, personality, compatibility, lucky signs, wedding dates and more. Explore traditional Chinese zodiac insights with MyBirthSign.";
 const URL_ = "https://mybirthsign.com/";
-const OG = "https://mybirthsign.com/images/fortune/hero-night.webp";
+const OG = "https://mybirthsign.com/images/og/site.jpg";
 const jsonld = JSON.stringify([
   { "@context": "https://schema.org", "@type": "WebSite", name: "MyBirthSign", url: URL_, description: DESC, inLanguage: ["en", "km"] },
   { "@context": "https://schema.org", "@type": "Organization", name: "MyBirthSign", url: URL_, logo: "https://mybirthsign.com/apple-touch-icon.png" },

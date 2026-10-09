@@ -261,6 +261,12 @@ document.addEventListener("DOMContentLoaded", function () {
         <article class="chk-card chk-c-career"><h3><img src="images/checker/career.webp" alt="" width="37" height="30">${S.chk_career}</h3>${careerBody}<img class="chk-art" src="images/checker/art-career.webp" alt="" width="282" height="99" loading="lazy"></article>
         <article class="chk-card chk-c-luck"><h3><img src="images/checker/luck.webp" alt="" width="32" height="32">${S.chk_luck}</h3>${luckBody}<img class="chk-art" src="images/checker/art-luck.webp" alt="" width="282" height="99" loading="lazy"></article>
       </div>
+      <div class="chk-share">${typeof shareRowHtml === "function" ? shareRowHtml(
+        (lang === "km" ? "ឆ្នាំ" + animalDisplay : elementDisplay + " " + animalDisplay) + " · MyBirthSign",
+        { cardType: "sign", lang: lang, animal: animal, name: lang === "km" ? "ឆ្នាំ" + animalDisplay : animalDisplay,
+          element: elementDisplay, elementLabel: S.chk_element, traits: traits, numbers: info.luckyNumbers, colors: luckyColors,
+          matches: trianglePartnersDisplay, patience: clashAnimalDisplay },
+        "/blog/zodiac-year-" + slug + ".html") : ""}</div>
     `;
 
     resultBox.innerHTML = topHtml + `
@@ -441,7 +447,7 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
-        ${shareRowHtml(animalADisplay + " + " + animalBDisplay, { emoji: ZODIAC_EMOJI[za.animal] + " " + ZODIAC_EMOJI[zb.animal], heading: animalADisplay + " + " + animalBDisplay, subheading: compatLabel + " — " + contextLabel, badge: starDisplay }, "/compatibility?pair=" + za.animal.toLowerCase() + "-" + zb.animal.toLowerCase() + "#compare")}
+        ${shareRowHtml(animalADisplay + " + " + animalBDisplay, { cardType: "pair", lang: lang, a: za.animal, b: zb.animal, nameA: animalADisplay, nameB: animalBDisplay, type: type, label: compatLabel + " — " + contextLabel, intro: compatText }, "/compatibility?pair=" + za.animal.toLowerCase() + "-" + zb.animal.toLowerCase() + "#compare")}
 
         <h3 class="compat-label">${compatLabel} — ${contextLabel}</h3>
         <div class="compat-stars">${starDisplay}</div>

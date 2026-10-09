@@ -16,11 +16,11 @@
 <meta property="og:url" content="https://mybirthsign.com/">
 <meta property="og:title" content="Chinese Zodiac, Compatibility &amp; Daily Fortune | MyBirthSign">
 <meta property="og:description" content="Discover your Chinese zodiac sign, personality, compatibility, lucky signs, wedding dates and more. Explore traditional Chinese zodiac insights with MyBirthSign.">
-<meta property="og:image" content="https://mybirthsign.com/images/fortune/hero-night.webp">
+<meta property="og:image" content="https://mybirthsign.com/images/og/site.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Chinese Zodiac, Compatibility &amp; Daily Fortune | MyBirthSign">
 <meta name="twitter:description" content="Discover your Chinese zodiac sign, personality, compatibility, lucky signs, wedding dates and more. Explore traditional Chinese zodiac insights with MyBirthSign.">
-<meta name="twitter:image" content="https://mybirthsign.com/images/fortune/hero-night.webp">
+<meta name="twitter:image" content="https://mybirthsign.com/images/og/site.jpg">
 <meta name="theme-color" content="#0b0820">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Kantumruy+Pro:wght@400;600;700&family=Moul&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Kantumruy+Pro:wght@400;600;700&family=Moul&display=swap"></noscript>
@@ -167,6 +167,7 @@
           <span class="hm-status" data-hm-status><span aria-hidden="true" data-hm-ico>◐</span> <span data-hm-lab>Ordinary day</span></span>
           <p data-hm-line>Routine tasks — nothing special pulling for or against you today.</p></li>
     </ul>
+    <div class="hm-share share-row" data-hm-share data-share-url="/"></div>
     <p class="hm-center"><a class="fx-btn" href="blog/daily-fortune-2026-10-08.html" data-hm-fulllink>View Today's Full Fortune →</a></p>
     <p class="hm-note">For entertainment and self-reflection only. Daily ratings are based on traditional Chinese zodiac day relationships and are not scientific predictions.</p>
   </section>
@@ -243,6 +244,7 @@
           <span class="hm-status" data-hm-status><span aria-hidden="true" data-hm-ico>◐</span> <span data-hm-lab>ថ្ងៃធម្មតា</span></span>
           <p data-hm-line>កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។</p></li>
     </ul>
+    <div class="hm-share share-row" data-hm-share data-share-url="/"></div>
     <p class="hm-center"><a class="fx-btn" href="blog/daily-fortune-2026-10-08.html" data-hm-fulllink>មើលជោគជតារាសីថ្ងៃនេះពេញលេញ →</a></p>
     <p class="hm-note">សម្រាប់ការកំសាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ។ ការវាយតម្លៃប្រចាំថ្ងៃផ្អែកលើទំនាក់ទំនងថ្ងៃ-សត្វរាសីតាមប្រពៃណី ហើយមិនមែនជាការព្យាករណ៍វិទ្យាសាស្ត្រទេ។</p>
   </section>
@@ -469,9 +471,20 @@ if(window.fetch){fetch("/data/daily/latest.json",{cache:"no-cache"}).then(functi
     var c=document.createElement("span"),dot=document.createElement("i");dot.className="hm-dot";dot.style.background=s.lucky.color.hex||"#ccc";c.appendChild(dot);c.appendChild(document.createTextNode(s.lucky.color[lang]));
     x.appendChild(n);x.appendChild(c);li.appendChild(x);});
 }).catch(function(){});}
-// point "full fortune" at today's post when it exists, otherwise keep the latest published one
+// "Who is lucky today" share: the same rules as the cards above (sign of the day + its triangle friends;
+// its opposite sign takes it easy). The image card is drawn only when someone shares.
+var KMN={"Rat":"ជូត","Ox":"ឆ្លូវ","Tiger":"ខាល","Rabbit":"ថោះ","Dragon":"រោង","Snake":"ម្សាញ់","Horse":"មមី","Goat":"មមែ","Monkey":"វក","Rooster":"រកា","Dog":"ច","Pig":"កុរ"},LK={en:{h:"Who is lucky today",t:"Today is the day of the {D}. By tradition, the {D}, {P} and {Q} are the best supported signs today."},
+  km:{h:"តើអ្នកណាមានសំណាងថ្ងៃនេះ",t:"ថ្ងៃនេះជាថ្ងៃ{D}។ តាមប្រពៃណី {D} {P} និង {Q} ជាសត្វដែលទទួលបានការគាំទ្រល្អបំផុតនៅថ្ងៃនេះ។"}};
+var top=[day].concat(TRI.filter(function(t){return t.indexOf(day)>-1;})[0].filter(function(x){return x!==day;})),clash=ORDER[(ORDER.indexOf(day)+6)%12];
+document.querySelectorAll("[data-hm-share]").forEach(function(el){
+  var l=el.closest("[data-lang-content]"),lang=l?l.getAttribute("data-lang-content"):"en",km=lang==="km",n=function(a){return km?KMN[a]:a;};
+  var dt=km?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):ENM[p[1]-1]+" "+p[2]+", "+p[0];
+  el.setAttribute("data-share-title",LK[lang].h+" — "+dt);
+  el.setAttribute("data-share-card",JSON.stringify({cardType:"lucky",lang:lang,date:dt,top:top,topNames:top.map(n),careful:[n(clash)],
+    text:LK[lang].t.split("{D}").join(n(top[0])).replace("{P}",n(top[1])).replace("{Q}",n(top[2]))}));});
+// point "full fortune" (and the lucky-today share link) at today's post when it exists, otherwise keep the latest published one
 var ds=p[0]+"-"+String(p[1]).padStart(2,"0")+"-"+String(p[2]).padStart(2,"0"),u="blog/daily-fortune-"+ds+".html";
-if(window.fetch){fetch(u,{method:"HEAD"}).then(function(r){if(r.ok)document.querySelectorAll("[data-hm-fulllink]").forEach(function(a){a.setAttribute("href",u);});}).catch(function(){});}
+if(window.fetch){fetch(u,{method:"HEAD"}).then(function(r){if(r.ok){document.querySelectorAll("[data-hm-fulllink]").forEach(function(a){a.setAttribute("href",u);});document.querySelectorAll("[data-hm-share]").forEach(function(el){el.setAttribute("data-share-url","/"+u);});}}).catch(function(){});}
 // "Find my sign": the date field is replaced by the site's date picker, so check the value ourselves
 var f=document.getElementById("hm-find-form");
 if(f)f.addEventListener("submit",function(e){var i=document.getElementById("hm-dob");if(!i||!i.value){e.preventDefault();var v=f.querySelector(".dp-input,input[type=text]");if(v)v.focus();}});

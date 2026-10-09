@@ -232,3 +232,4 @@ html[lang="km"] .hm-find h2, html[lang="km"] .hm-cross h2 { line-height: 1.8; }
 .hm-fc .hm-lucky { display: flex; gap: 12px; align-items: center; font-size: .78rem; color: #cfc6ee; }
 .hm-fc .hm-lucky span { display: inline-flex; align-items: center; gap: 5px; }
 .hm-fc .hm-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255,255,255,.5); }
+.hm-share { display: flex; justify-content: center; margin: 18px 0 0; }

@@ -266,7 +266,7 @@ ${u.tools.map((x) => `        <li><a href="${x[3]}"><span class="fx-t-ico" aria-
 const TITLE = "Chinese Zodiac Animals — All 12 Signs | MyBirthSign";
 const DESC = "Explore all 12 Chinese zodiac animals, including personality traits, birth years, elements, lucky signs, and compatibility. Discover your Chinese zodiac animal with MyBirthSign.";
 const URL_ = "https://mybirthsign.com/zodiac-guide";   // existing canonical for this page (netlify.toml rewrites /zodiac-guide to animals.html)
-const OG = "https://mybirthsign.com/images/fortune/hero-night.webp";
+const OG = "https://mybirthsign.com/images/og/site.jpg";
 const faqEn = faqs(false);
 const jsonld = JSON.stringify([
   { "@context": "https://schema.org", "@type": "CollectionPage", name: "Chinese Zodiac Animals — All 12 Signs", description: DESC, url: URL_, inLanguage: ["en", "km"],

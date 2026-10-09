@@ -14,6 +14,7 @@ Design, layout, URLs and every existing calculation are unchanged; new features 
 | 5 | Rich "Share image" cards (daily sign, two signs), EN/KM, drawn on the visitor's device, loaded only on demand. | `js/share-cards.js`, `js/share.js` |
 | 6 | Accurate privacy section (EN + KM), one new compatibility FAQ (visible + structured data), richer daily-page description when data exists. | `privacy.html`, `js/compat-text.js`, `compatibility.html`, `scripts/daily-fortune.mjs` |
 | 7 | Daily lucky-zodiac favicon: the browser-tab icon shows today's top lucky sign (`highlights.topLucky[0]` of a validated `latest.json` for today's Phnom Penh date, cross-checked with the day-animal rule). Static icons (navy + gold, traced from the site's own zodiac badges); permanent favicon whenever data is missing, stale or invalid. | `js/daily-favicon.js`, `images/favicon/` (12 × SVG + 32/16 px PNG), `scripts/favicon-icons.py`, one script line per page + 3 generators |
+| 8 | Sharing upgrade: Share always opens the menu (phones too); Share image (portrait, phone share sheet), Download image (square), Copy link, More apps, Facebook, WhatsApp, Telegram, Pinterest (link + fixed public preview image), Instagram / TikTok (story image + how-to-post steps; neither accepts website links). One card design for checker, love, Compare Two Signs, business, daily sign, lucky today, articles — real results only. New share buttons: Zodiac Checker, "Who is lucky today" (homepage), 12 animal articles. Link previews: tags added to 12 pages + og:image on 2; all previews now 1200×630 JPG (broken Ox image fixed). | `js/share.js` (rewritten, 50→26 KB), `js/share-cards.js`, `js/app.js`, `js/compat-page.js`, `js/business-calculator.js`, `scripts/daily-fortune.mjs`, `scripts/home-page.mjs`, `scripts/animal-profile.mjs`, `scripts/og-images.py` (+`images/og/site.jpg`), `js/i18n.js`, `css/style.css`, `css/home.css`, `privacy.html`, page `<head>` tags |
 
 Also on this branch (approved earlier): Kru Toch AI chat (`js/ai-friend*.js`, `css/ai-friend.css`, `netlify/functions/ai-friend.js`, `js/mbs-engine.js`, one loader line per page), the animal-page section-menu fix (`scripts/animal-profile.mjs`, `blog/zodiac-year-*.html`, `css/profile.css`).
 
@@ -34,6 +35,7 @@ Also on this branch (approved earlier): Kru Toch AI chat (`js/ai-friend*.js`, `c
 | Existing pages, navigation, URLs keep working | PASS | 372 page/viewport checks (9 pages × EN/KM × 3 sizes), chat suites, menu tests |
 | No major mobile / accessibility / SEO / performance regressions | PASS | axe-core: 0 violations on new sections (EN/KM); JSON-LD valid; first-load +≈6 KB gz per page |
 | Daily favicon matches the day's lucky sign | PASS | 65 browser checks: all 12 animals from their own day's rules record, 6 fallback cases (missing, stale, tampered, unknown animal, no signs, not JSON), cache/refresh (1 request a day), new-day cache, open tab across midnight (switches; falls back if the new file is late), Phnom Penh vs UTC date, 5 page types incl. blog subfolder; no JS errors |
+| Sharing (actions, cards, previews) | PASS locally / NOT VERIFIED on real apps | 288 browser checks over 9 share points × EN/KM × desktop + phone: menu contents, Facebook/WhatsApp/Telegram/Pinterest links, Copy link, Download 1080×1080, Instagram/TikTok 1080×1920 + steps, phone share sheet gets a 1080×1350+ image, More apps link, no birth dates or names anywhere, Escape closes menu, no JS errors; 48 layout checks (320–1280 px); preview-tag audit 0 issues on all pages. Real Facebook / WhatsApp / Telegram / Pinterest / Instagram / TikTok posting not tested. |
 
 Known, pre-existing: at 320 px wide the homepage and Zodiac Guide overflow by 4–8 px (also without these changes).
 
@@ -47,7 +49,8 @@ Known, pre-existing: at 320 px wide the homepage and Zodiac Guide overflow by 4�
 | Language choice | Visitor's browser (localStorage) | Until the visitor clears it |
 | Daily zodiac data | GitHub Action → Anthropic API → public JSON | Public, no visitor data |
 | Share links | Visitor → chosen social app | Contain animals/date/language only |
-| Share images | Visitor's device (canvas) | Never uploaded or stored by us |
+| Share images (square / portrait / story) | Visitor's device (canvas); handed to the phone's share sheet or saved as a download | Never uploaded or stored by us |
+| Pinterest | Pinterest receives the link and the result's fixed public preview image (no personal data) | Per Pinterest's policy |
 | Link previews | Netlify Edge Function; social crawlers fetch the page and fixed images | Nothing stored |
 | Hosting | Netlify (technical request data such as IP, browser, page) | Per Netlify's policy |
 | Ads | Google AdSense cookies | Per Google's policy |
