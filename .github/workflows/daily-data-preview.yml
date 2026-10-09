@@ -1,0 +1,37 @@
+name: Daily data preview (test only, never publishes)
+
+# Runs only on the site-update test branch. Generates tomorrow's daily data with the real
+# Claude wording, validates it, and attaches the result as a downloadable artifact.
+# Nothing is committed or deployed. Remove this file before going live.
+on:
+  push:
+    branches: [site-update]
+    paths: ["scripts/daily-data*.mjs", "tests/daily-data-test.mjs", ".github/workflows/daily-data-preview.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Generate + validate (real Claude wording)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then echo "::warning::Add the ANTHROPIC_API_KEY repository secret to run this preview"; exit 0; fi
+          D=$(TZ=Asia/Phnom_Penh date -d tomorrow +%F)
+          mkdir -p preview-out; node scripts/daily-data.mjs --date "$D" --out preview-out || cp /tmp/daily-data-rejected-*.json preview-out/ 2>/dev/null || true
+          ls -la preview-out || true
+          [ -f "preview-out/$D.json" ] && node tests/daily-data-test.mjs "preview-out/$D.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-data-preview
+          path: preview-out/
+          if-no-files-found: ignore

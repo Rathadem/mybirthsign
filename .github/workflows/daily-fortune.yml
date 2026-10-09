@@ -41,6 +41,24 @@ jobs:
             node scripts/daily-fortune.mjs
           fi
 
+      # Daily data (data/daily/<date>.json + latest.json) for the website and Kru Toch.
+      # Rules decide every fact; Claude writes the wording; the record is checked and only
+      # published if it passes. If anything fails, the blog post above still goes out and
+      # yesterday's data simply stays in place.
+      - name: Daily data (rules + Claude wording, validated)
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FORTUNE_DATE: ${{ github.event.inputs.date }}
+          FORTUNE_TZ: Asia/Phnom_Penh
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::warning::ANTHROPIC_API_KEY secret is not set, skipping daily data"
+            exit 0
+          fi
+          node scripts/daily-data.mjs
+          node scripts/daily-data.mjs --validate data/daily/latest.json
+
       - name: Commit and push (Netlify deploys on push)
         run: |
           if [ -z "$(git status --porcelain)" ]; then
@@ -50,6 +68,7 @@ jobs:
           git config user.name "daily-fortune-bot"
           git config user.email "daily-fortune-bot@users.noreply.github.com"
           git add blog sitemap.xml blog.html index.html
+          [ -d data/daily ] && git add data/daily
           git commit -m "Daily fortune: $(date -u +%F)"
           git pull --rebase origin main
           git push origin HEAD:main

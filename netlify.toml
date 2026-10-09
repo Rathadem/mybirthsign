@@ -38,3 +38,10 @@
   for = "/images/*"
   [headers.values]
     Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+# Daily zodiac data: small public JSON, refreshed once a day. Browsers re-check after 5 minutes;
+# the CDN may serve the previous copy for a moment while it fetches the new one.
+[[headers]]
+  for = "/data/daily/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300, stale-while-revalidate=3600"
