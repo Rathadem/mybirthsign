@@ -235,30 +235,35 @@ function shareBlockHtml(title, cardSpec, shareUrl) {
   );
 }
 
+// On phones the menu opens as a bottom sheet. It is moved to <body> while open so no section of the page
+// (decorated frames, animations, overflow) can cover or clip it; a dimmed backdrop sits behind it.
+const _SHARE_SHEET = window.matchMedia ? window.matchMedia("(max-width: 560px)") : null;
+let _shareBackdrop = null;
+function _closeSharePop(p, focusBtn) {
+  if (!p || p.hidden) return;
+  p.hidden = true;
+  p.classList.remove("share-sheet");
+  if (p.__home && p.parentNode !== p.__home) p.__home.appendChild(p);
+  if (p.__btn) { p.__btn.setAttribute("aria-expanded", "false"); if (focusBtn) p.__btn.focus(); }
+  if (_shareBackdrop && !document.querySelector(".share-popover.share-sheet:not([hidden])")) _shareBackdrop.hidden = true;
+}
+function _closeAllSharePops(except, focusBtn) {
+  document.querySelectorAll(".share-popover:not([hidden])").forEach(function (p) { if (p !== except) _closeSharePop(p, focusBtn); });
+}
 let _shareOutsideClickWired = false;
 function _ensureShareOutsideClickHandler() {
   if (_shareOutsideClickWired) return;
   _shareOutsideClickWired = true;
   document.addEventListener("click", function (e) {
     if (e.target && e.target.hasAttribute && e.target.hasAttribute("download")) return;   // our own image download, not an outside tap
-    document.querySelectorAll(".share-row").forEach(function (row) {
-      if (row.contains(e.target)) return;
-      const pop = row.querySelector(".share-popover");
-      const btn = row.querySelector(".share-btn");
-      if (pop && !pop.hidden) {
-        pop.hidden = true;
-        if (btn) btn.setAttribute("aria-expanded", "false");
-      }
+    document.querySelectorAll(".share-popover:not([hidden])").forEach(function (p) {
+      if (p.contains(e.target) || (p.__home && p.__home.contains(e.target))) return;
+      _closeSharePop(p);
     });
   });
 }
 document.addEventListener("keydown", function (e) {
-  if (e.key !== "Escape") return;
-  document.querySelectorAll(".share-popover:not([hidden])").forEach(function (p) {
-    p.hidden = true;
-    const b = p.parentElement && p.parentElement.querySelector(".share-btn");
-    if (b) { b.setAttribute("aria-expanded", "false"); b.focus(); }
-  });
+  if (e.key === "Escape") _closeAllSharePops(null, true);
 });
 
 // ---------------------------------------------------------------- wiring
@@ -309,13 +314,19 @@ function wireShareRows(root) {
     if (block && !block.src) blobFor("portrait").then(function (b) { if (b) block.src = URL.createObjectURL(b); }).catch(function () {});
 
     function showNote(text) { if (!note) return; note.textContent = text || ""; note.hidden = !text; }
+    pop.__btn = btn; pop.__home = row;
     function setOpen(open) {
-      document.querySelectorAll(".share-popover").forEach(function (p) {
-        if (p !== pop) { p.hidden = true; const b = p.parentElement && p.parentElement.querySelector(".share-btn"); if (b) b.setAttribute("aria-expanded", "false"); }
-      });
-      pop.hidden = !open;
-      btn.setAttribute("aria-expanded", String(open));
-      if (open) {
+      _closeAllSharePops(pop);
+      if (!open) { _closeSharePop(pop); return; }
+      if (_SHARE_SHEET && _SHARE_SHEET.matches) {
+        if (!_shareBackdrop) { _shareBackdrop = document.createElement("div"); _shareBackdrop.className = "share-backdrop"; document.body.appendChild(_shareBackdrop); }
+        _shareBackdrop.hidden = false;
+        pop.classList.add("share-sheet");
+        document.body.appendChild(pop);
+      }
+      pop.hidden = false;
+      btn.setAttribute("aria-expanded", "true");
+      {
         showNote("");
         // links are filled in now, so they always carry the current language and result
         const u = url(), t = title(), eu = encodeURIComponent(u), et = encodeURIComponent(t);
@@ -325,7 +336,7 @@ function wireShareRows(root) {
           telegram: "https://t.me/share/url?url=" + eu + "&text=" + et,
           pinterest: "https://www.pinterest.com/pin/create/button/?url=" + eu + "&media=" + encodeURIComponent(_pinImageFor(spec())) + "&description=" + et
         };
-        row.querySelectorAll("a[data-share-net]").forEach(function (a) { a.setAttribute("href", hrefs[a.getAttribute("data-share-net")] || "#"); });
+        pop.querySelectorAll("a[data-share-net]").forEach(function (a) { a.setAttribute("href", hrefs[a.getAttribute("data-share-net")] || "#"); });
         if (canFiles) blobFor("portrait").catch(function () {});              // draw ahead so the share sheet opens quickly
         const first = pop.querySelector(".share-option:not([hidden])");
         if (first && document.activeElement === btn) first.focus({ preventScroll: true });
@@ -371,7 +382,7 @@ function wireShareRows(root) {
         Promise.resolve(navigator.share({ title: title(), url: url() })).catch(function () {});
       } catch (e) { /* the menu stays open with the other options */ }
     });
-    row.querySelectorAll("button[data-share-net]").forEach(function (el) {
+    pop.querySelectorAll("button[data-share-net]").forEach(function (el) {
       const id = el.getAttribute("data-share-net");
       el.addEventListener("click", function () {
         makeImage(el, "story", function (b) { shareFileOrSave(el, b, "story", id === "tiktok" ? T.tiktok : T.instagram); });
