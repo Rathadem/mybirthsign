@@ -267,3 +267,23 @@ html[lang="km"] .fx-hero h1 span {
   color: #ffcf5a; line-height: 2; padding: .12em 0 .18em; filter: none;
   text-shadow: 0 1px 0 #f3a82a, 0 2px 0 #b9741a, 0 3px 0 #7a4a0e, 0 6px 14px rgba(0, 0, 0, .55), 0 0 28px rgba(255, 190, 80, .45), 0 0 46px rgba(240, 111, 178, .4);
 }
+
+/* Daily data rows inside each sign card (only present when the day's data file exists) */
+.fx-sign .fx-sign-fortune { font-size: .82rem; color: #fff; }
+.fx-sign-areas { margin: 0 0 8px; display: grid; grid-template-columns: auto 1fr; gap: 3px 8px; font-size: .78rem; line-height: 1.45; }
+.fx-sign-areas dt { color: var(--fx-gold); font-weight: 700; }
+.fx-sign-areas dd { margin: 0; color: #ece6ff; }
+.fx-sign .fx-sign-lucky { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 6px 8px; border: 1px solid var(--fx-line); border-radius: 8px; background: rgba(11, 8, 32, .45); font-size: .74rem; color: #cfc6ee; }
+.fx-sign-lucky strong { color: #fff3d1; }
+.fx-swatch { display: inline-block; width: 9px; height: 9px; margin: 0 3px 0 2px; border-radius: 50%; vertical-align: middle; box-shadow: 0 0 0 1px rgba(255, 255, 255, .5); }
+html[lang="km"] .fx-sign-areas, html[lang="km"] .fx-sign .fx-sign-lucky { font-size: .84rem; }
+.fx-article .fx-theme strong { color: var(--fx-gold); }
+.fx-sign-more { margin: 0 0 8px; }
+.fx-sign-more > summary { cursor: pointer; list-style: none; padding: 6px 8px; border-radius: 8px; border: 1px dashed var(--fx-line); color: var(--fx-gold-hi); font-size: .74rem; font-weight: 700; text-align: center; }
+.fx-sign-more > summary::-webkit-details-marker { display: none; }
+.fx-sign-more > summary::after { content: " ▾"; }
+.fx-sign-more[open] > summary::after { content: " ▴"; }
+
+.fx-sign-more > summary:hover { background: rgba(231, 194, 122, .12); }
+.fx-sign-more[open] > summary { margin-bottom: 8px; }
+html[lang="km"] .fx-sign-more > summary { font-size: .82rem; }

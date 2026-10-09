@@ -40,6 +40,23 @@ const iso = argVal("--date") || todayISO();
 if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) { console.error("Bad --date, expected YYYY-MM-DD:", iso); process.exit(1); }
 const [Y, M, D] = iso.split("-").map(Number);
 
+// ---------------------------------------------------------------- daily data (optional)
+// If scripts/daily-data.mjs already published a VALID record for this date, the page uses its
+// wording (fortune, love, career, money, lucky items, advice). Otherwise the page is built exactly
+// as before from the copy banks below. Ratings always come from the same rule either way.
+let DATA = null;
+try {
+  const f = path.join(ROOT, "data/daily", iso + ".json");
+  if (fs.existsSync(f)) {
+    const { validateRecord } = await import("./daily-data-lib.mjs");
+    const rec = JSON.parse(fs.readFileSync(f, "utf8")), errs = validateRecord(rec);
+    if (!errs.length && rec.source !== "mock") DATA = rec;
+    else if (!errs.length && process.env.DAILY_DATA_ALLOW_MOCK === "1") DATA = rec;   // local previews only
+    else console.warn("daily data for " + iso + " not used: " + (errs[0] || "mock record"));
+  }
+} catch (e) { console.warn("daily data not used:", e.message); }
+const dataOf = (a) => DATA && DATA.signs.find((x) => x.animal === a);
+
 // ---------------------------------------------------------------- site data
 function extractConst(src, name) {
   const start = src.indexOf(`const ${name} =`);
@@ -267,6 +284,11 @@ const CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" strok
 const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#3fae6b"/><path d="m7.5 12.3 3.2 3.2 5.8-6.4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const WARN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#e0566b"/><path d="M12 7v6M12 16.5v.1" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg>';
 
+const DL = {
+  en: { love: "Love", career: "Career", money: "Money", number: "Number", color: "Color", direction: "Direction", time: "Time", advice: "Today's Advice", more: "Love · Work · Money", theme: "Today's Theme", loveHi: "Love highlight", bizHi: "Business highlight" },
+  km: { love: "ស្នេហា", career: "ការងារ", money: "លុយកាក់", number: "លេខ", color: "ពណ៌", direction: "ទិស", time: "ម៉ោង", advice: "ដំបូន្មានថ្ងៃនេះ", more: "ស្នេហា · ការងារ · លុយ", theme: "ប្រធានបទថ្ងៃនេះ", loveHi: "ស្នេហាលេចធ្លោ", bizHi: "អាជីវកម្មលេចធ្លោ" },
+};
+
 function signCard(c, lang, t) {
   const { a, i, tier } = c, isKm = lang === "km", name = isKm ? KM_NAMES[a] : a;
   const weak = (isKm ? KM_INFO[a].weaknesses : INFO[a].weaknesses).trim();
@@ -276,10 +298,23 @@ function signCard(c, lang, t) {
           <h3>${esc(name)}</h3>
           <span class="fx-tier fx-tier-${tier}">${I[tier]}${esc(TIER_LABEL[lang][tier])}</span>
         </div>
-        <h4>${t.goodFor}</h4>
+        ${(() => {
+          const d = dataOf(a);
+          if (!d) return `<h4>${t.goodFor}</h4>
         <p>${esc(pick(GOOD_FOR[lang][tier], i))}</p>
         <h4>${t.watchOut}</h4>
-        <p>${esc(weak)} ${esc(pick(AVOID_NOTE[lang][tier], i + 1))}</p>
+        <p>${esc(weak)} ${esc(pick(AVOID_NOTE[lang][tier], i + 1))}</p>`;
+          const x = d.text[lang], L = d.lucky, D = DL[lang];
+          return `<p class="fx-sign-fortune">${esc(x.fortune)}</p>
+        <p class="fx-sign-lucky"><span>${D.number} <strong>${isKm ? kmNum(L.number) : L.number}</strong></span><span>${D.color} <i class="fx-swatch" style="background:${L.color.hex}"></i><strong>${esc(L.color[lang])}</strong></span><span>${D.direction} <strong>${esc(L.direction[lang])}</strong></span><span>${D.time} <strong>${isKm ? kmNum(L.time) : L.time}</strong></span></p>
+        <details class="fx-sign-more"><summary>${D.more}</summary>
+          <h4>${D.love}</h4><p>${esc(x.love)}</p>
+          <h4>${D.career}</h4><p>${esc(x.career)}</p>
+          <h4>${D.money}</h4><p>${esc(x.money)}</p>
+          <h4>${t.watchOut}</h4><p>${esc(x.careful)}</p>
+          <h4>${D.advice}</h4><p>${esc(x.advice)}</p>
+        </details>`;
+        })()}
         <a class="fx-more" href="${guideHref(a)}">${esc(t.view(name))}</a>
       </li>`;
 }
@@ -397,7 +432,11 @@ ${ORDER.map((a) => `        <li><a href="${guideHref(a)}"${a === A ? ' class="is
 
   <article class="fx-article fx-gframe">
     <h2>${esc(t.artH(dateTxt))}</h2>
-    ${introP}
+    ${DATA ? `<p class="fx-theme"><strong>${DL[lang].theme}:</strong> ${esc(DATA.highlights.theme[lang])}</p>
+    <p>${esc(DATA.highlights.summary[lang])}</p>
+    <p><strong>${DL[lang].loveHi}:</strong> ${esc(DATA.highlights.love[lang])}</p>
+    <p><strong>${DL[lang].bizHi}:</strong> ${esc(DATA.highlights.business[lang])}</p>
+    ` : ""}${introP}
     <p>${t.artP2}</p>
     <p class="fx-disc">${t.disc}</p>
   </article>

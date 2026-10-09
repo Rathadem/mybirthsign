@@ -93,6 +93,7 @@ FACTS AND CALCULATIONS (very important)
 - PARTIAL INFO (only a birth year, or just a zodiac animal such as "I'm a Rat"): never refuse and never ask for the full date first. Give a genuinely useful BASE answer right away from the matching VERIFIED RESULTS (both possible animals for a year; traits, best matches, clashes, careers and lucky items for an animal; the animal-pair relationship and wedding-month ratings for two animals). Be clear these are general, based on the animal only. Then explain in one friendly line what the whole birthday adds (their exact animal and element and Yin/Yang, the Lunar New Year boundary, real percentage scores, and more specific suggestions) and invite the full date as dd/mm/yyyy, e.g. 05/05/1990. Do not pressure; the base answer must stand on its own.
 - Pair results (love, business, wedding) become available as soon as the visitor has given a partner's date of birth. So when someone wants love compatibility, a business-partner check or wedding dates and no partner birthday appears in the context, do NOT say you cannot calculate it: warmly ask for the other person's date of birth (suggest the format dd/mm/yyyy, e.g. 05/05/1990) and say you'll then show their real MyBirthSign result. Also point to the tool page for the full detailed breakdown.
 - "Is today lucky?" questions: only answer from the "Today's Daily Fortune" line in VERIFIED RESULTS (day animal, the visitor's tier and what it is traditionally good for), framed as the traditional daily view for fun, never a promise. If that line is missing, say you need their birthday first (dd/mm/yyyy) and point to the Blog's Daily Fortune.
+- When a "Today's MyBirthSign daily reading" block is present, it is the same reading the website shows today: use its wording (fortune, love, career, money, compatibility tip, what to be careful about, advice) and state its lucky number, color, direction and time EXACTLY as given. Paraphrase lightly in the visitor's language; never add other lucky numbers or predictions. For "who is lucky today?", "which signs should be careful?" or a general "today" question, use the "Today's highlights" block. If no daily reading is present, don't invent one: point to the Daily Fortune on the Blog.
 - You may explain general, well-known traditional meanings of a given animal or element (e.g. "Dragon is traditionally associated with confidence") when the visitor asks about an animal by name, but never decide which animal belongs to a birth date.
 - Chinese zodiac readings are traditional/cultural interpretations for entertainment, not scientific fact. Make no medical, legal, financial or other high-stakes claims or predictions. E.g. "Will my zodiac tell me if I have cancer?" -> no prediction; kindly suggest a doctor. "Should I invest $100,000 because my zodiac says it's lucky?" -> don't make the decision; you may share the cultural interpretation, clearly separated from real-world professional advice (a qualified financial adviser).
 - Never pretend you calculated something you did not. Never invent data, percentages, lucky numbers or scores.
@@ -119,6 +120,33 @@ SCOPE (open to new challenges)
 
 MEMORY
 - Remember everything given in this conversation: the visitor's name, birthday, zodiac result and element, the partner's name (e.g. "my wife Srey Pich"), birthday and result, the current topic and earlier results. Use the name naturally now and then ("Sure, Dara ❤️ What's your wife's date of birth?"). Never ask again for something already in the chat or context. If you don't have something you need, ask naturally.`;
+
+// ---- today's daily data (the same JSON the website shows; written by scripts/daily-data.mjs) ----
+// Read from the bundled copy (netlify.toml included_files) and, if that is not today's, from the live
+// site. Cached for 10 minutes per warm instance. Missing or old data simply means no daily block.
+let dailyCache = { at: 0, rec: null };
+function phnomPenhToday() {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+}
+async function getDaily() {
+  const today = phnomPenhToday();
+  if (dailyCache.rec && dailyCache.rec.date === today && Date.now() - dailyCache.at < 600000) return dailyCache.rec;
+  let rec = null;
+  for (const root of [process.env.LAMBDA_TASK_ROOT || "", path.resolve(__dirname, "../.."), process.cwd()]) {
+    try { const r = JSON.parse(fs.readFileSync(path.join(root, "data/daily/latest.json"), "utf8")); if (r && r.date === today) { rec = r; break; } } catch (e) { /* try next */ }
+  }
+  if (!rec && process.env.URL) {
+    try {
+      const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 2500);
+      const r = await fetch(process.env.URL.replace(/\/$/, "") + "/data/daily/latest.json", { signal: ctl.signal });
+      clearTimeout(t);
+      if (r.ok) { const j = await r.json(); if (j && j.date === today) rec = j; }
+    } catch (e) { /* no daily block */ }
+  }
+  if (rec && !(rec.version === 1 && Array.isArray(rec.signs) && rec.signs.length === 12 && rec.highlights)) rec = null;
+  dailyCache = { at: Date.now(), rec };
+  return rec;
+}
 
 // ---- tiny best-effort rate limiter (per warm server instance) ----
 const hits = new Map();
@@ -194,6 +222,18 @@ const FACT_PROVIDERS = [
     const dl = E.dailyLuck(today, S.z1.animal);
     if (dl) out.push("Today's Daily Fortune for the visitor's animal (MyBirthSign daily fortune, date " + today + " Phnom Penh time): " + JSON.stringify(dl) + ". The full daily fortune for every animal is on the Blog page.");
   },
+  // today's daily reading (rules + wording, same as the website) for the visitor's animal, plus highlights
+  function dailyReading(S, E, out) {
+    const d = S.daily; if (!d) return;
+    const h = d.highlights;
+    out.push("Today's highlights (MyBirthSign daily data, " + d.date + "): " + JSON.stringify({ dayAnimal: d.dayAnimal, theme: h.theme, topLuckySigns: h.topLucky, takeItEasy: h.careful, lovePair: h.lovePair, love: h.love, businessPair: h.businessPair, business: h.business, summary: h.summary }));
+    const a = (S.z1 && S.z1.animal) || S.selfAnimal;
+    const s = a && d.signs.find((x) => x.animal === a);
+    if (s) out.push("Today's MyBirthSign daily reading for the visitor's animal (" + a + "): " + JSON.stringify({ rating: s.label, lucky: { number: s.lucky.number, color: s.lucky.color.en + " / " + s.lucky.color.km, direction: s.lucky.direction.en + " / " + s.lucky.direction.km, time: s.lucky.time }, text: s.text }));
+    const pa = (S.z2 && S.z2.animal) || S.partnerAnimal;
+    const ps = pa && pa !== a && d.signs.find((x) => x.animal === pa);
+    if (ps) out.push("Today's daily reading for the partner's animal (" + pa + "): " + JSON.stringify({ rating: ps.label.en, fortune: ps.text.en.fortune, fortuneKm: ps.text.km.fortune }));
+  },
   // the partner's zodiac (from a full birth date)
   function partnerZodiac(S, E, out) {
     const z2 = S.z2; if (!z2) return;
@@ -243,7 +283,7 @@ const FACT_PROVIDERS = [
   }
 ];
 
-function factsBlock(c) {
+function factsBlock(c, daily) {
   if (!c || typeof c !== "object") return "";
   const E = getEngine();
   if (!E) return "";
@@ -252,7 +292,7 @@ function factsBlock(c) {
     const dob = isoOf(c.dob), partner = isoOf(c.partner);
     const z1 = (dob && E.zodiac(dob)) || null, z2 = (partner && E.zodiac(partner)) || null;
     const selfAnimal = ANIMALS.includes(c.selfAnimal) ? c.selfAnimal : "";
-    const S = { c, dob, partner, z1, z2, selfAnimal, partnerAnimal: ANIMALS.includes(c.partnerAnimal) ? c.partnerAnimal : "",
+    const S = { c, daily: daily || null, dob, partner, z1, z2, selfAnimal, partnerAnimal: ANIMALS.includes(c.partnerAnimal) ? c.partnerAnimal : "",
       myAnimal: (z1 && z1.animal) || selfAnimal, topic: TOPICS.includes(c.topic) ? c.topic : "" };
     FACT_PROVIDERS.forEach((p) => {
       try { p(S, E, out); } catch (e) { console.error("ai-friend fact provider failed", p.name, e && e.message); }
@@ -302,7 +342,7 @@ exports.handler = async function (event) {
       body: JSON.stringify({
         model: MODEL,
         max_tokens: MAX_TOKENS,
-        system: SYSTEM + contextBlock(body.context) + factsBlock(body.context),
+        system: SYSTEM + contextBlock(body.context) + factsBlock(body.context, await getDaily().catch(() => null)),
         thinking: { type: "between_tools" },          // plain chat: no up-front thinking, faster and cheaper
         output_config: { effort: EFFORT },
         messages: merged

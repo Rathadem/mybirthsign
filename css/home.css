@@ -228,3 +228,7 @@ html[lang="km"] .hm-find h2, html[lang="km"] .hm-cross h2 { line-height: 1.8; }
 .hm-page .hm-why li.fx-gframe { padding: 16px 6px 8px; }
 @media (min-width: 821px) { .hm-page .an-elements { display: flex; flex-direction: column; justify-content: center; } }
 .hm-page .an-elements .fx-btn { align-self: flex-start; }
+/* lucky number + color line, added only when today's daily data exists */
+.hm-fc .hm-lucky { display: flex; gap: 12px; align-items: center; font-size: .78rem; color: #cfc6ee; }
+.hm-fc .hm-lucky span { display: inline-flex; align-items: center; gap: 5px; }
+.hm-fc .hm-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255,255,255,.5); }

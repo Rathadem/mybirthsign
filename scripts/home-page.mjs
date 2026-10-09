@@ -344,6 +344,21 @@ function kd(n){return String(n).replace(/\\d/g,function(c){return KD[c];});}
 function setDate(){var el=document.getElementById("hm-today");if(!el)return;var km=document.documentElement.lang==="km";
   el.textContent=km?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):ENM[p[1]-1]+" "+p[2]+", "+p[0];}
 setDate();document.addEventListener("DOMContentLoaded",setDate);window.addEventListener("load",setDate);document.querySelectorAll("[data-lang-switch]").forEach(function(a){a.addEventListener("click",function(){setTimeout(setDate,0);});});
+// daily data (rules + Claude wording): when today's record exists, each card shows that sign's
+// advice for today and its lucky number & color. If it is missing or old, the cards stay as above.
+if(window.fetch){fetch("/data/daily/latest.json",{cache:"no-cache"}).then(function(r){return r.ok?r.json():null;}).then(function(rec){
+  var dsx=p[0]+"-"+String(p[1]).padStart(2,"0")+"-"+String(p[2]).padStart(2,"0");
+  if(!rec||rec.version!==1||rec.date!==dsx||!rec.signs||rec.signs.length!==12)return;
+  var by={};rec.signs.forEach(function(s){by[s.animal]=s;});
+  document.querySelectorAll("[data-hm-card]").forEach(function(li){
+    var l=li.closest("[data-lang-content]"),lang=l?l.getAttribute("data-lang-content"):"en",s=by[li.getAttribute("data-animal")];
+    if(!s||!s.text||!s.text[lang]||s.tier!==tier(li.getAttribute("data-animal"),day))return;
+    li.querySelector("[data-hm-line]").textContent=s.text[lang].advice;
+    var km=lang==="km",x=li.querySelector(".hm-lucky")||document.createElement("p");x.className="hm-lucky";x.textContent="";
+    var n=document.createElement("span");n.textContent=(km?"លេខសំណាង ":"Lucky no. ")+(km?kd(s.lucky.number):s.lucky.number);
+    var c=document.createElement("span"),dot=document.createElement("i");dot.className="hm-dot";dot.style.background=s.lucky.color.hex||"#ccc";c.appendChild(dot);c.appendChild(document.createTextNode(s.lucky.color[lang]));
+    x.appendChild(n);x.appendChild(c);li.appendChild(x);});
+}).catch(function(){});}
 // point "full fortune" at today's post when it exists, otherwise keep the latest published one
 var ds=p[0]+"-"+String(p[1]).padStart(2,"0")+"-"+String(p[2]).padStart(2,"0"),u="blog/daily-fortune-"+ds+".html";
 if(window.fetch){fetch(u,{method:"HEAD"}).then(function(r){if(r.ok)document.querySelectorAll("[data-hm-fulllink]").forEach(function(a){a.setAttribute("href",u);});}).catch(function(){});}
