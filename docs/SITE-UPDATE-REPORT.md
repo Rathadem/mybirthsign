@@ -13,6 +13,7 @@ Design, layout, URLs and every existing calculation are unchanged; new features 
 | 4 | Result-specific share links (animals/date/language only), `?lang=km`, daily day + sign sharing, link-preview edge function, 90 fixed preview images. | `js/share.js`, `js/i18n.js`, `js/compat-page.js`, `js/app.js`, `js/business-calculator.js`, `netlify/edge-functions/*`, `images/og/*`, `scripts/og-images.py`, `scripts/share-preview-data.mjs` |
 | 5 | Rich "Share image" cards (daily sign, two signs), EN/KM, drawn on the visitor's device, loaded only on demand. | `js/share-cards.js`, `js/share.js` |
 | 6 | Accurate privacy section (EN + KM), one new compatibility FAQ (visible + structured data), richer daily-page description when data exists. | `privacy.html`, `js/compat-text.js`, `compatibility.html`, `scripts/daily-fortune.mjs` |
+| 7 | Daily lucky-zodiac favicon: the browser-tab icon shows today's top lucky sign (`highlights.topLucky[0]` of a validated `latest.json` for today's Phnom Penh date, cross-checked with the day-animal rule). Static icons (navy + gold, traced from the site's own zodiac badges); permanent favicon whenever data is missing, stale or invalid. | `js/daily-favicon.js`, `images/favicon/` (12 × SVG + 32/16 px PNG), `scripts/favicon-icons.py`, one script line per page + 3 generators |
 
 Also on this branch (approved earlier): Kru Toch AI chat (`js/ai-friend*.js`, `css/ai-friend.css`, `netlify/functions/ai-friend.js`, `js/mbs-engine.js`, one loader line per page), the animal-page section-menu fix (`scripts/animal-profile.mjs`, `blog/zodiac-year-*.html`, `css/profile.css`).
 
@@ -32,6 +33,7 @@ Also on this branch (approved earlier): Kru Toch AI chat (`js/ai-friend*.js`, `c
 | Temporary assets expire | N/A by design | no temporary files exist: cards are drawn on the visitor's device and never uploaded |
 | Existing pages, navigation, URLs keep working | PASS | 372 page/viewport checks (9 pages × EN/KM × 3 sizes), chat suites, menu tests |
 | No major mobile / accessibility / SEO / performance regressions | PASS | axe-core: 0 violations on new sections (EN/KM); JSON-LD valid; first-load +≈6 KB gz per page |
+| Daily favicon matches the day's lucky sign | PASS | 65 browser checks: all 12 animals from their own day's rules record, 6 fallback cases (missing, stale, tampered, unknown animal, no signs, not JSON), cache/refresh (1 request a day), new-day cache, open tab across midnight (switches; falls back if the new file is late), Phnom Penh vs UTC date, 5 page types incl. blog subfolder; no JS errors |
 
 Known, pre-existing: at 320 px wide the homepage and Zodiac Guide overflow by 4–8 px (also without these changes).
 

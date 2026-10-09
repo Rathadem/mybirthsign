@@ -415,6 +415,7 @@ const pageHtml = `<!DOCTYPE html>
 
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939402104083173" crossorigin="anonymous"></script>
+<script src="/js/daily-favicon.js" defer></script>
 </head>
 <body class="fx-page pf-page an-page hm-page">
 
