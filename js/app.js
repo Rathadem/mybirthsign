@@ -315,7 +315,8 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
     wireShareRows(resultBox);
     // Dream Fortune (js/dream-fortune.js) builds on this result; it gets the sign only, never the birth date
-    try { document.dispatchEvent(new CustomEvent("mbs:checker-result", { detail: { animal: animal, element: element, lang: lang } })); } catch (e) { /* optional */ }
+    window.MBS_LAST_CHECKER_RESULT = { animal: animal, element: element, lang: lang };   // for js/dream-fortune.js if it loads later
+    try { document.dispatchEvent(new CustomEvent("mbs:checker-result", { detail: window.MBS_LAST_CHECKER_RESULT })); } catch (e) { /* optional */ }
     const dreamBox = document.getElementById("dream-fortune");   // sits above the result on /checker
     (dreamBox && !dreamBox.hidden ? dreamBox : resultBox).scrollIntoView({ behavior: "smooth", block: "start" });
 

@@ -333,5 +333,9 @@
   }
 
   document.addEventListener("mbs:checker-result", function (e) { try { mount(e.detail); } catch (err) { /* the checker result stays as it is */ } });
+  // loaded after a result was already shown (checker.html loads this file on first interaction): build it now
+  if (window.MBS_LAST_CHECKER_RESULT && !state) {
+    try { mount(window.MBS_LAST_CHECKER_RESULT); var box = document.getElementById("dream-fortune"); if (box && !box.hidden) box.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (err) { /* optional */ }
+  }
   window.MBSDreamFortune = { _supportiveYears: supportiveYears, _CATS: CATS, _show: function (c) { if (state && CATS.indexOf(c) > -1) reveal(c, null); } };
 })();

@@ -82,6 +82,8 @@
   }
 
   window.MBSDailyFavicon = { pick: pick, dayAnimalOf: dayAnimalOf, update: update, _today: today };
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", update); else update();
+  // start after the page has finished loading, so the icon check never competes with the page itself
+  function later() { (window.requestIdleCallback || function (f) { setTimeout(f, 300); })(update); }
+  if (document.readyState === "complete") later(); else window.addEventListener("load", later);
   document.addEventListener("visibilitychange", function () { if (!document.hidden && shownFor !== today()) update(); });
 })();
