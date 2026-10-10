@@ -178,7 +178,8 @@ document.addEventListener("DOMContentLoaded", function () {
       let label;
       try { label = new Date(year, p.r.monthIndex, p.day).toLocaleDateString(dateLocale, { year: "numeric", month: "long", day: "numeric" }); }
       catch (err) { label = p.r.monthName + " " + p.day + ", " + year; }
-      return '<li class="wed-d wed-d-' + p.r.rating + '"><div class="wed-d-date"><b>' + esc(label) + "</b>" +
+      const iso = year + "-" + String(p.r.monthIndex + 1).padStart(2, "0") + "-" + String(p.day).padStart(2, "0");
+      return '<li class="wed-d wed-d-' + p.r.rating + '"><div class="wed-d-date" data-kl-iso="' + iso + '" data-kl-style="day"><b>' + esc(label) + "</b>" +
         starsHtml(STARS[p.r.rating]) + '<span class="wed-d-rate">' + esc(T.rate[p.r.rating]) + "</span></div>" +
         '<p>' + esc(T.rateFull[p.r.rating]) + " " + esc(seasonLabel(p.r)) + ".</p></li>";
     }).join("");
@@ -202,6 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<p class="disclaimer">' + esc(S.wedding_disclaimer || "") + "</p></details>";
 
     resultBox.innerHTML = guide + months + dates + table;
+    if (window.MBSKhmerLunar) window.MBSKhmerLunar.fill(resultBox);   // Khmer lunar date under each recommended day
     resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 });

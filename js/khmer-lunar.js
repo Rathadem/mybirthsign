@@ -10,6 +10,7 @@
  */
 (function () {
   "use strict";
+  if (window.MBSKhmerLunar) return;   // loaded once (pages include it, js/daily-favicon.js adds it elsewhere)
   var LIB = "/js/vendor/momentkh.min.js", MIN = 1900, MAX = 2100;
   var libPromise = null;
   function loadLib() {
@@ -149,7 +150,63 @@
       box.innerHTML = '<div class="kl-card"><p class="kl-fallback">' + esc(S.loadFail) + "</p></div>"; box.hidden = false;
     });
   }
+  // ---- small inline dates: any element with data-kl-iso="YYYY-MM-DD" gets the Khmer lunar date added
+  //      (Compatibility and Business Partner birth dates, Wedding Date recommended days). data-kl-style="day" = no year.
+  var pageLang = function () { return document.documentElement.lang === "km" ? "km" : "en"; };
+  function shortLunar(M, iso, style) {
+    var p = iso.split("-").map(Number);
+    if (!(p[0] >= MIN && p[0] <= MAX)) return null;
+    var k; try { k = M.fromGregorian(p[0], p[1], p[2]).khmer; } catch (e) { return null; }
+    if (!k || !k.monthName) return null;
+    var t = kmNum(k.day) + k.moonPhaseName + " ខែ" + k.monthName;
+    if (style !== "day") t += " ឆ្នាំ" + k.animalYearName + " " + k.sakName + " ព.ស. " + kmNum(k.beYear);
+    return t;
+  }
+  function fill(root) {
+    var els = (root || document).querySelectorAll("[data-kl-iso]:not([data-kl-done])");
+    if (!els.length) return;
+    loadLib().then(function (M) {
+      Array.prototype.forEach.call(els, function (el) {
+        var iso = el.getAttribute("data-kl-iso"); el.setAttribute("data-kl-done", "1");
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+        var txt = shortLunar(M, iso, el.getAttribute("data-kl-style"));
+        var span = document.createElement("span"); span.className = "kl-inline";
+        if (txt) { span.setAttribute("lang", "km"); span.textContent = "🌙 " + txt; }
+        else { span.textContent = pageLang() === "km" ? "មិនអាចបង្ហាញថ្ងៃខែចន្ទគតិបានទេ" : "Khmer lunar date not available for this year"; }
+        el.appendChild(span);
+      });
+    }, function () { /* the page works without the lunar dates */ });
+  }
+  function pair(target, items, lang) {   // block with one lunar line per person
+    if (!target) return;
+    var S = lang === "km" ? { h: "ថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ" } : { h: "Khmer lunar birth dates" };
+    var old = target.querySelector(".kl-pair"); if (old) old.remove();
+    var box = document.createElement("div"); box.className = "kl-pair";
+    box.innerHTML = '<h3><span class="kl-moon kl-moon-sm" aria-hidden="true"></span>' + esc(S.h) + "</h3><ul>" +
+      items.map(function (it) { return '<li data-kl-iso="' + esc(it.iso) + '"><b>' + esc(it.label) + "</b></li>"; }).join("") + "</ul>";
+    target.appendChild(box); fill(box);
+  }
+
+  // ---- today's Khmer lunar date on every page (top of the footer; nothing above the fold moves)
+  function todayStrip() {
+    var foot = document.querySelector("footer.site-footer");
+    if (!foot || foot.querySelector(".kl-today-strip")) return;
+    loadLib().then(function (M) {
+      var t = ppToday(), line; try { line = M.format(M.fromGregorian(t[0], t[1], t[2])); } catch (e) { return; }
+      var km = pageLang() === "km", p = document.createElement("p"); p.className = "kl-today-strip";
+      p.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><span>' + esc(km ? "ថ្ងៃនេះតាមចន្ទគតិខ្មែរ៖" : "Today on the Khmer lunar calendar:") + '</span> <span lang="km">' + esc(line) + "</span>";
+      foot.insertBefore(p, foot.firstChild);
+    }, function () { /* optional */ });
+  }
+
   document.addEventListener("mbs:checker-date", function (e) { show(e.detail); });
   if (window.MBS_LAST_CHECKER_DATE) show(window.MBS_LAST_CHECKER_DATE);
-  window.MBSKhmerLunar = { _show: show };
+  window.MBSKhmerLunar = { _show: show, fill: fill, pair: pair };
+  function boot() {
+    fill(document);
+    // the footer line waits until the page has loaded, so it never slows the page down
+    var later = function () { (window.requestIdleCallback || function (f) { setTimeout(f, 400); })(todayStrip); };
+    if (document.readyState === "complete") later(); else window.addEventListener("load", later);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();

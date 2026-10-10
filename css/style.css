@@ -3439,3 +3439,18 @@ html[lang="km"] .kl-row dt { text-transform: none; letter-spacing: 0; font-size:
 .kl-fallback { margin: 0; color: #ffd9a8; line-height: 1.7; }
 @media (max-width: 600px) { .kl-card { padding: 18px 14px 14px; } .kl-head h2 { font-size: 1.15rem; } .kl-row { padding: 10px 12px; } .kl-row strong { font-size: 1rem; } }
 @media (max-width: 380px) { .kl-grid { grid-template-columns: 1fr; } }
+/* Khmer lunar dates elsewhere: pair block (Compatibility / Business Partner), inline (Wedding Date), footer line (every page) */
+.kl-moon-sm { display: inline-block; vertical-align: -3px; width: 18px; height: 18px; margin-right: 8px; border-radius: 50%; background: radial-gradient(circle at 36% 34%, #fff6d8, #f1cf7c 55%, #b8862f); box-shadow: inset -4px -2px 0 0 rgba(18, 13, 48, .78), 0 0 8px rgba(246, 210, 130, .4); }
+.kl-pair { margin: 16px auto 4px; max-width: 760px; padding: 14px 16px; border-radius: 16px; border: 1px solid #e7c27a66; background: rgba(11, 8, 31, .55); text-align: left; }
+.kl-pair h3 { margin: 0 0 8px; font: 700 1.02rem/1.4 Georgia, serif; color: #f6e3b2; }
+html[lang="km"] .kl-pair h3 { font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; }
+.kl-pair ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.kl-pair li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; color: #f1ecff; }
+.kl-pair li b { color: #e7c27a; font-size: .9rem; min-width: 84px; }
+.kl-inline { display: block; color: #fff3d1; font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; font-size: .95rem; line-height: 1.7; }
+.kl-pair .kl-inline { display: inline; }
+.wed-d-date .kl-inline { flex-basis: 100%; margin-top: 2px; font-size: .9rem; color: #f6dc9b; }
+.kl-today-strip { margin: 0 auto 10px; padding: 8px 14px; max-width: 900px; border-radius: 999px; border: 1px solid rgba(231, 194, 122, .35); background: rgba(11, 8, 31, .5);
+  color: #cfc6ee; font-size: .86rem !important; line-height: 1.7; text-align: center; }
+.kl-today-strip [lang="km"] { color: #fff3d1; font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; }
+@media (max-width: 600px) { .kl-today-strip { border-radius: 14px; margin: 0 16px 10px; } }

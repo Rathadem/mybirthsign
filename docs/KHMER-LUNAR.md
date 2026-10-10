@@ -40,3 +40,9 @@ The "Your Khmer Lunar Birth Date" card on `/checker` shows the visitor's birthda
 - **Moha Songkran:** the new animal year begins at a set hour on the first day of Khmer New Year. We don't know the birth time, so a birthday on that day gets a note saying it depends on the time of birth.
 - **Before Khmer New Year:** the Khmer animal year changes at Khmer New Year (mid-April). For birthdays from January to April it can differ from the Chinese zodiac sign, and the card says so.
 - **Before 2015:** only the 2010 Water Festival was checked against a published date. Earlier years rely on the traditional rules and the two-library cross-check.
+
+## Other pages (added Oct 2026)
+- **Every page:** the footer shows today's Khmer lunar date (Cambodia time). `js/daily-favicon.js`, which every page already loads, adds `js/khmer-lunar.js` after the page has loaded, so it doesn't affect page speed.
+- **Compatibility and Business Partner:** a "Khmer lunar birth dates" box in the result, one line per person (`klPairHtml` in `js/compat-page.js` and `js/business-calculator.js`).
+- **Wedding Date:** each recommended Saturday also shows its Khmer lunar day (`data-kl-iso` in `js/wedding.js`).
+- **Same method and range:** these use the same library and the same 1900–2100 range. Outside it, they say the date isn't available.

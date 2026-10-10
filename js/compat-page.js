@@ -1,3 +1,10 @@
+// Khmer lunar birth dates (filled in by js/khmer-lunar.js; the dates stay on this page)
+function klPairHtml(items, lang) {
+  var h = lang === "km" ? "ថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ" : "Khmer lunar birth dates";
+  var e = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  return '<div class="kl-pair"><h3><span class="kl-moon kl-moon-sm" aria-hidden="true"></span>' + e(h) + "</h3><ul>" +
+    items.filter(function (it) { return /^\d{4}-\d{2}-\d{2}$/.test(it.iso || ""); }).map(function (it) { return '<li data-kl-iso="' + e(it.iso) + '"><b>' + e(it.label) + "</b></li>"; }).join("") + "</ul></div>";
+}
 // compat-page.js — redesigned Chinese Zodiac Compatibility Calculator.
 // Zodiac year / animal / element come from getBaZi() -> getZodiac(), which
 // compares each birth date with the real Lunar New Year date (CNY_DATES);
@@ -215,6 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="cmp-pct" id="cmp-pct" aria-label="' + overall + '%">0%</div></div>' +
       '<p class="cmp-level">' + esc(lvl) + "</p></div>" + personCard(T.p2, B, g2) + "</div>" +
       '<p class="cmp-desc-lg">' + esc(desc) + "</p>" +
+      klPairHtml([{ iso: raw1, label: T.p1 }, { iso: raw2, label: T.p2 }], lang) +
       // share: the link carries the two ANIMALS only (never the birth dates); the image card is drawn on this device
       (typeof shareRowHtml === "function" ? '<div class="cmp-share">' + shareRowHtml(aName(A.animal) + " + " + aName(B.animal) + " — " + overall + "%",
         { cardType: "love", lang: lang, eyebrow: T.result_h, a: A.animal, b: B.animal, nameA: aName(A.animal), nameB: aName(B.animal), overall: overall, level: lvl,
@@ -245,6 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<p class="cmp-reset-row"><button type="button" id="cmp-reset" class="cmp-reset">' + esc(T.reset) + "</button></p>";
 
     animateCount(document.getElementById("cmp-pct"), overall);
+    if (window.MBSKhmerLunar) window.MBSKhmerLunar.fill(out);
     if (typeof wireShareRows === "function") wireShareRows(out);
 
     try {

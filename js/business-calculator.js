@@ -1,3 +1,10 @@
+// Khmer lunar birth dates (filled in by js/khmer-lunar.js; the dates stay on this page)
+function klPairHtml(items, lang) {
+  var h = lang === "km" ? "ថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ" : "Khmer lunar birth dates";
+  var e = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  return '<div class="kl-pair"><h3><span class="kl-moon kl-moon-sm" aria-hidden="true"></span>' + e(h) + "</h3><ul>" +
+    items.filter(function (it) { return /^\d{4}-\d{2}-\d{2}$/.test(it.iso || ""); }).map(function (it) { return '<li data-kl-iso="' + e(it.iso) + '"><b>' + e(it.label) + "</b></li>"; }).join("") + "</ul></div>";
+}
 // business-calculator.js — Two-Person Business Partnership Compatibility
 // Calculator (Chinese Zodiac + Five Elements). Lives on
 // business-partner.html only.
@@ -417,6 +424,7 @@ document.addEventListener("DOMContentLoaded", function () {
     resultBox.innerHTML = `
       <div class="biz-result-card">
         ${overviewHtml(p1Name, p2Name, bziA, bziB, scores, top, bottom, elRel, bizA, bizB)}
+        ${klPairHtml([{ iso: dob1Raw, label: p1Name }, { iso: dob2Raw, label: p2Name }], lang)}
 
         ${shareRowHtml(animalName(bziA.animal) + " + " + animalName(bziB.animal) + " — " + (S.biz_ov_match || "Business Match"),
           // names stay off the card and out of the link: the two signs and the page's own scores only
@@ -521,6 +529,7 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     `;
     wireShareRows(resultBox);
+    if (window.MBSKhmerLunar) window.MBSKhmerLunar.fill(resultBox);
 
     const resetBtn = document.getElementById("biz-reset-btn");
     if (resetBtn) {

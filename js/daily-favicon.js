@@ -84,7 +84,13 @@
 
   window.MBSDailyFavicon = { pick: pick, dayAnimalOf: dayAnimalOf, update: update, _today: today };
   // start after the page has finished loading, so the icon check never competes with the page itself
-  function later() { (window.requestIdleCallback || function (f) { setTimeout(f, 300); })(update); }
+  function later() {
+    (window.requestIdleCallback || function (f) { setTimeout(f, 300); })(update);
+    // today's Khmer lunar date in the footer of every page (js/khmer-lunar.js; pages that use it for results load it themselves)
+    if (!window.MBSKhmerLunar && !document.querySelector('script[src*="khmer-lunar.js"]')) {
+      var s = document.createElement("script"); s.src = "/js/khmer-lunar.js"; s.async = true; document.body.appendChild(s);
+    }
+  }
   if (document.readyState === "complete") later(); else window.addEventListener("load", later);
   document.addEventListener("visibilitychange", function () { if (!document.hidden && shownFor !== today()) update(); });
 })();
