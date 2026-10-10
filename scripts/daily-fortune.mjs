@@ -140,8 +140,8 @@ const TRADE = {
   },
 };
 const TRADE_T = {
-  en: { h: "Trade today", hours: "Best selling hours", partner: "Good trade partner", partnerName: (n) => n, best: (l) => `Best signs for trade today: ${l}.` },
-  km: { h: "ការលក់ដូរថ្ងៃនេះ", hours: "ម៉ោងលក់ដាច់", partner: "ដៃគូជួញដូរល្អ", partnerName: (n) => "ឆ្នាំ" + n, best: (l) => `រាសីល្អសម្រាប់ការលក់ដូរថ្ងៃនេះ៖ ${l}។` },
+  en: { h: "Trade today", hours: "Best selling hours", partner: "Good trade partner", partnerName: (n) => n, best: (l) => `Best signs for trade today: ${l}.`, shareDay: "Share today's fortune", shareSign: (n) => `Share ${n}'s fortune` },
+  km: { h: "ការលក់ដូរថ្ងៃនេះ", hours: "ម៉ោងលក់ដាច់", partner: "ដៃគូជួញដូរល្អ", partnerName: (n) => "ឆ្នាំ" + n, best: (l) => `រាសីល្អសម្រាប់ការលក់ដូរថ្ងៃនេះ៖ ${l}។`, shareDay: "ចែករំលែកជោគជតាថ្ងៃនេះ", shareSign: (n) => `ចែករំលែកជោគជតាឆ្នាំ${n}` },
 };
 const AVOID_NOTE = {
   en: {
@@ -330,7 +330,7 @@ function signCard(c, lang, t) {
   const tradeBox = `<div class="fx-trade"><h4>${esc(TT.h)}</h4><p>${esc(trade)}</p>
           <p class="fx-trade-meta"><span>${TT.hours} <strong>${time}</strong></span><span>${TT.partner} <strong>${esc(partner)}</strong></span></p></div>`;
   const lucky = `<p class="fx-sign-lucky"><span>${D.number} <strong>${isKm ? kmNum(L.number) : L.number}</strong></span><span>${D.color} <i class="fx-swatch" style="background:${L.color.hex}"></i><strong>${esc(L.color[lang])}</strong></span><span>${D.direction} <strong>${esc(L.direction[lang])}</strong></span><span>${D.time} <strong>${time}</strong></span></p>`;
-  const share = `<div class="fx-sign-share share-row" data-share-title="${attr(`${name} · ${TIER_LABEL[lang][tier]} — ${date}`)}" data-share-url="/blog/daily-fortune-${iso}.html?sign=${a.toLowerCase()}" data-share-card="${attr(JSON.stringify(spec))}"></div>`;
+  const share = `<div class="fx-sign-share share-row" data-share-icon-only data-share-label="${attr(TT.shareSign(name))}" data-share-title="${attr(`${name} · ${TIER_LABEL[lang][tier]} — ${date}`)}" data-share-url="/blog/daily-fortune-${iso}.html?sign=${a.toLowerCase()}" data-share-card="${attr(JSON.stringify(spec))}"></div>`;
   const inner = x
     ? `<p class="fx-sign-fortune" data-sign="${a.toLowerCase()}">${esc(x.fortune)}</p>
         ${tradeBox}
@@ -353,9 +353,9 @@ function signCard(c, lang, t) {
           ${med(a, 76)}
           <h3>${esc(name)}</h3>
           <span class="fx-tier fx-tier-${tier}">${I[tier]}${esc(TIER_LABEL[lang][tier])}</span>
+          ${share}
         </div>
         ${inner}
-        ${share}
         <a class="fx-more" href="${guideHref(a)}">${esc(t.view(name))}</a>
       </li>`;
 }
@@ -445,7 +445,7 @@ ${t.guides.map((g) => `          <div class="fx-guide"><div class="fx-guide-ico"
 
   <section class="fx-sec" aria-labelledby="fx-grid-${lang}">
     <div class="fx-head"><h2 id="fx-grid-${lang}">${t.gridH}</h2>${I.orn}<p>${t.gridP}</p></div>
-    <div class="fx-day-share share-row" data-share-title="${attr(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html" data-share-card="${attr(JSON.stringify({ cardType: "lucky", lang, date: isKm ? dateKM : dateEN, top: FACTS.highlights.topLucky, topNames: FACTS.highlights.topLucky.map(nm), careful: FACTS.highlights.careful.map(nm), text: TRADE_T[lang].best(andJoin(FACTS.highlights.topLucky.map(nm), lang)) }))}"></div>
+    <div class="fx-day-share share-row" data-share-label="${attr(TRADE_T[lang].shareDay)}" data-share-title="${attr(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html" data-share-card="${attr(JSON.stringify({ cardType: "lucky", lang, date: isKm ? dateKM : dateEN, top: FACTS.highlights.topLucky, topNames: FACTS.highlights.topLucky.map(nm), careful: FACTS.highlights.careful.map(nm), text: TRADE_T[lang].best(andJoin(FACTS.highlights.topLucky.map(nm), lang)) }))}"></div>
     <ul class="fx-grid">
 ${byZodiac.map((c) => "      " + signCard(c, lang, t)).join("\n")}
     </ul>

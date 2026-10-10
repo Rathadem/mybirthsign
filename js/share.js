@@ -289,7 +289,9 @@ function wireShareRows(root) {
     const q = function (sel) { return row.querySelector(sel); };
     const label = function (el, text) { const l = el && el.querySelector(".share-option-label"); if (l) l.textContent = text; };
     if (!btn || !pop) return;
-    btn.querySelector(".share-btn-label").textContent = T.share;
+    const own = row.getAttribute("data-share-label-" + lang) || row.getAttribute("data-share-label");   // optional per-row label
+    btn.querySelector(".share-btn-label").textContent = own || T.share;
+    if (row.hasAttribute("data-share-icon-only")) btn.setAttribute("aria-label", own || T.share);
     pop.setAttribute("aria-label", T.menu);
     label(q(".share-image"), T.image); label(q(".share-download"), T.download); label(q(".share-copy"), T.copy); label(q(".share-more"), T.more);
     if (!canFiles && q(".share-image")) q(".share-image").hidden = true;      // file sharing unsupported here: Download covers it
