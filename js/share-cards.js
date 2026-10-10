@@ -96,6 +96,16 @@
     roundRect(ctx, cx - w / 2, y, w, 54, 27); ctx.fillStyle = "rgba(246,220,155,.12)"; ctx.fill(); ctx.strokeStyle = color || GOLD; ctx.lineWidth = 2; ctx.stroke();
     ctx.fillStyle = color || GOLD; ctx.textAlign = "center"; ctx.fillText(text, cx, y + 37);
   }
+  // QR code for https://mybirthsign.com (generated once, dark modules on a light tile so phone cameras read it)
+  var QR_SRC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAAD6CAIAAAAHjs1qAAADu0lEQVR42u3dPW7cMBCAUStgu1U2l9lD+LC+VpwLuLHbVBJAcjBD8b3W2D/5AyFgQOp4Pl5v9/L330f3a//8ft/qc+O+VU2/3mAbckfuIHeQO8gd5A5yB7nDPO38z3ETuxEj076sSWHNzx35/67YhtUdNzMgd5A7yB3kDnIHuYPcoUMbeXHcpLDmxC7uapz/3vN3jpub3q8NqztuZkDuIHeQO8gd5A5yB7lDh+YSzJI1GV1x5mp1B7mD3EHuIHeQO3IHuYPcYSHbTVXjnn6adcbvyMzV6g5yB7mD3EHuIHeQO8gd5A6Xhqaqu+10HJlf7rbftOa3srrjZgbkDnIHuYPcQe4gd5A7dLiYqt5vp2Pc7DPrtTWvpNUd5A5yB7mD3EHuIHfkDnKH22i77TcdkXWt4ua1NX+v1R3kDnIHuSN3kDvIHeQOcodSjufjdfLnmnO1rH2fWTtKa+5kjXtCbdy3srrjZgbkDnIHuYPcQe4gd5A7dGgrfum4WW/WO488VzXuc1c8l9jqDnJH7iB3kDvIHeQOcge5w3TH99dn94tXfEZpTVl7N+O+c81prtUdNzMgd5A7yB3kDnIHuYPcocPFVHXF2WfNE3FrToJr7jeNO1vY6o6bGZA7yB3kDnIHuYPcQe7Qoa14BmzNZ6PWnFDWfAat1R3kDnIHuYPcQe7IHeQOcoeFHM/Hq/vFWTPXuL2Mu+03zbqScb/3/HOt7riZAbmD3EHuIHeQO8gd5A4d2vmfa85NdztNd+QXxc1N417rBGBwMwNyB7kjd5A7yB3kDnKHUi72qtZ8+mnczLXmZLSmmmcLm6qC3JE7yB3kDnIHuYPcQe4wXRt5cc29qnF2eyZrXBtZM1erO25mQO4gd5A7yB3kDnIHuUOH4/vrc6sfXPNpoOeyZpArXmerO8gduYPcQe4gd5A7yB3kDtO1++2SPJ/YZT1nNG6OmLWDtuaZxk4ABrkjd5A7yB3kDnIHuYPcYbqLE4BXnJzFiZvIrnjicc3/vhOAQe7IHeQOcge5g9xB7iB3mG7J56reT9bctOZO5bj9tVZ33MyA3EHuIHeQO8gd5A5yhw7NJfhf3Jm3NZ+NutuZxlZ33MyA3EHuIHeQO8gd5A5yhw6mqtPETSjP33lkEpy1JzjrWlndcTMDcge5g9xB7iB3kDvIHToMTVXvd05v1v7LOHG7b2vuc7W6g9yRO8gd5A5yB7mD3EHuMN3FVLXmczdHrHjGb9bnZk1k42auVnfczIDcQe4gd5A7yB3kDnKHDj9nL1x2Gaq1pQAAAABJRU5ErkJggg==";
+  var qrReady = loadImg(QR_SRC);
+  function qr(ctx, img, H) {
+    if (!img) return;
+    var s = 116, pad = 10, x = W - 62 - s - pad, y = H - 56 - s - pad;     // inside the frame, in the footer band
+    roundRect(ctx, x - pad, y - pad, s + pad * 2, s + pad * 2, 16); ctx.fillStyle = "#fffaec"; ctx.fill();
+    ctx.strokeStyle = "rgba(246,220,155,.9)"; ctx.lineWidth = 2; ctx.stroke();
+    ctx.imageSmoothingEnabled = false; ctx.drawImage(img, x, y, s, s); ctx.imageSmoothingEnabled = true;
+  }
   function footer(ctx, lang, note, H) {
     ctx.textAlign = "center"; ctx.fillStyle = GOLD; font(ctx, "en", "head", 40, 700); ctx.fillText("MyBirthSign", W / 2, H - 132);
     font(ctx, "en", "body", 30, 600); ctx.fillStyle = GOLD2; ctx.fillText("mybirthsign.com", W / 2, H - 92);
@@ -174,7 +184,10 @@
     var dw = W * scale, dh = end * scale, dy = Math.max(0, (avail - dh) / 2 + (opts.story ? 20 : 0));   // short content sits in the middle, not at the top
     ctx.drawImage(m, 0, 0, W, end, (W - dw) / 2, dy, dw, dh);
     footer(ctx, L, note, H);
-    return new Promise(function (ok) { c.toBlob(function (b) { ok(b); }, "image/png"); });
+    return qrReady.then(function (img) {
+      qr(ctx, img, H);
+      return new Promise(function (ok) { c.toBlob(function (b) { ok(b); }, "image/png"); });
+    });
   }
 
   var LBL = {
