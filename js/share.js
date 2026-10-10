@@ -175,9 +175,14 @@ function _strings(lang) {
     saved: d("share_image_saved", "Image saved!"), failed: d("share_image_failed", "Couldn't create the image"),
     download: d("share_download", "Download image"), more: d("share_more_apps", "More apps…"),
     menu: d("share_menu_label", "Share options"),
+    facebook: d("share_fb_steps", "Choose Facebook in the list — your result image and link go into a new post."),
     instagram: d("share_ig_steps", "Instagram doesn't accept website links. Post the image instead: pick Instagram in the share list, or open Instagram, tap +, choose Story or Post and select the saved image."),
     tiktok: d("share_tt_steps", "TikTok doesn't accept website links. Post the image instead: pick TikTok in the share list, or open TikTok, tap +, then Upload and select the saved image.")
   };
+}
+function _isPhone() {
+  try { if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return true; } catch (e) { /* ignore */ }
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
 }
 function _canShareFiles() {
   try {
@@ -302,12 +307,14 @@ function wireShareRows(root) {
       return _normalizeSpec(s, title(), lang);
     };
     // images are drawn once per format and kept, so a second tap is instant
-    const blobs = {};
+    const blobs = {}, ready = {};
+    const blobKey = function (format) { return format + "|" + (row.getAttribute("data-share-card") || "") + "|" + title(); };
     const blobFor = function (format) {
-      const key = format + "|" + (row.getAttribute("data-share-card") || "") + "|" + title();
-      if (!blobs[key]) blobs[key] = _buildCardBlob(spec(), format).then(function (b) { if (!b) delete blobs[key]; return b; }, function (e) { delete blobs[key]; throw e; });
+      const key = blobKey(format);
+      if (!blobs[key]) blobs[key] = _buildCardBlob(spec(), format).then(function (b) { if (!b) delete blobs[key]; else ready[key] = b; return b; }, function (e) { delete blobs[key]; throw e; });
       return blobs[key];
     };
+    const readyBlob = function (format) { return ready[blobKey(format)] || null; };
     const fileName = function (format) { return "mybirthsign-" + (spec().cardType || "card") + "-" + format + ".png"; };
 
     const block = row.parentElement && row.parentElement.classList.contains("share-card-block") && row.parentElement.querySelector(".share-card-img");
@@ -381,6 +388,23 @@ function wireShareRows(root) {
       try {
         Promise.resolve(navigator.share({ title: title(), url: url() })).catch(function () {});
       } catch (e) { /* the menu stays open with the other options */ }
+    });
+    // Facebook on phones: the facebook.com share link opens the Facebook app, which ignores it and just shows the
+    // feed. So phones use the device share sheet instead: the visitor picks Facebook and gets a real post with the
+    // result image (already drawn when the menu opened) and the link. Computers keep the Facebook share window.
+    const fbLink = pop.querySelector('a[data-share-net="facebook"]');
+    if (fbLink && canLink && _isPhone()) fbLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      const u = url(), t = title(), b = canFiles ? readyBlob("portrait") : null;
+      let data = { title: t, text: t, url: u };
+      if (b) { const f = new File([b], fileName("portrait"), { type: "image/png" }); if (navigator.canShare && navigator.canShare({ files: [f] })) data = { files: [f], title: t, text: t + " " + u }; }
+      showNote(T.facebook);
+      try {
+        Promise.resolve(navigator.share(data)).catch(function (err) {
+          if (err && err.name === "AbortError") return;
+          _openInNewTab(fbLink.href);                                   // share sheet unavailable: fall back to the web share page
+        });
+      } catch (err) { _openInNewTab(fbLink.href); }
     });
     pop.querySelectorAll("button[data-share-net]").forEach(function (el) {
       const id = el.getAttribute("data-share-net");
