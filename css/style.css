@@ -3532,3 +3532,5 @@ html[lang="km"] .klc-l { text-transform: none; letter-spacing: 0; font-size: .82
   .klc-art { grid-row: 1; height: auto; aspect-ratio: 1200 / 630; min-height: 0; object-position: center; }
   .klc-panel { grid-row: 2; margin: -28px 10px 10px; }
 }
+.klc-share { display: flex; justify-content: center; margin-top: 10px; }
+.klc-share .share-btn { border-color: #e7c27a99; color: #fff3d1; background: rgba(231, 194, 122, .1); }

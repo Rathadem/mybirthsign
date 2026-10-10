@@ -400,5 +400,78 @@
     });
   }
 
-  window.MBSShareCards = { dream: dream, daily: daily, lucky: lucky, sign: sign, pair: pair, love: love, business: business, article: article, FORMATS: FORMATS, _wrap: wrap };
+
+  // lunar: "Khmer Lunar Calendar: Today" (blog card) — the owner's Angkor Wat picture on top, the day's lunar date in a gold-framed
+  // panel below. Every value comes from the spec (worked out by js/khmer-lunar.js for Cambodia's date); nothing is baked into art.
+  function lunar(spec, format) {
+    var L = langOf(spec), F = FORMATS[format] || FORMATS.portrait, H = F.h;
+    var KMF = "'Kantumruy Pro', 'Noto Sans Khmer', sans-serif";
+    var want = ["400 30px 'Noto Sans Khmer'", "700 30px 'Noto Sans Khmer'", "400 30px 'Moul'", "700 30px 'Kantumruy Pro'"];
+    var fl = document.fonts && document.fonts.load ? Promise.all(want.map(function (f) { return document.fonts.load(f).catch(function () {}); })) : Promise.resolve();
+    return Promise.all([loadImg(base() + "images/guides/khmer-lunar-wide.webp"), fl]).then(function (r) {
+      var art = r[0], c = document.createElement("canvas"); c.width = W; c.height = H;
+      var ctx = alignByHand(c.getContext("2d"));
+      ctx.fillStyle = "#0b0826"; ctx.fillRect(0, 0, W, H);
+      // picture band (taller on the story format), fading into navy
+      var bandH = format === "story" ? 820 : format === "square" ? 400 : 450;
+      if (art) {
+        var sc = Math.max(W / art.width, bandH / art.height), dw = art.width * sc, dh = art.height * sc;
+        ctx.drawImage(art, (W - dw) * 0.62, (bandH - dh) / 2, dw, dh);
+      }
+      var fade = ctx.createLinearGradient(0, bandH * 0.45, 0, bandH); fade.addColorStop(0, "rgba(11,8,38,0)"); fade.addColorStop(1, "rgba(11,8,38,1)");
+      ctx.fillStyle = fade; ctx.fillRect(0, 0, W, bandH + 2);
+      // content measured on a spare canvas first, then placed in the panel (scaled down only if needed)
+      var m = document.createElement("canvas"); m.width = W; m.height = 1600; var mx = alignByHand(m.getContext("2d"));
+      var compact = format === "square", PX = 120, IW = W - PX * 2, y = 70;
+      mx.textAlign = "center"; mx.fillStyle = "#f6dc9b"; mx.font = "400 " + (compact ? 38 : 44) + "px 'Moul', 'Noto Sans Khmer', serif"; mx.fillText("ប្រតិទិនចន្ទគតិខ្មែរ", W / 2, y + 10);
+      y += compact ? 54 : 62; mx.fillStyle = "#fff3d1"; mx.font = "700 " + (compact ? 30 : 34) + "px " + (L === "km" ? KMF : "Georgia, serif"); mx.fillText(spec.heading || "Khmer Lunar Calendar · Today", W / 2, y);
+      y += 30; mx.strokeStyle = "rgba(246,220,155,.45)"; mx.lineWidth = 2; mx.beginPath(); mx.moveTo(PX + 40, y); mx.lineTo(W - PX - 40, y); mx.stroke();
+      y += compact ? 82 : 100; mx.fillStyle = "#fff3d1"; mx.font = "700 " + (compact ? 66 : 78) + "px " + KMF;
+      mx.shadowColor = "rgba(246,210,130,.45)"; mx.shadowBlur = 24; mx.fillText(spec.big || "", W / 2, y); mx.shadowBlur = 0;
+      y += compact ? 36 : 46;
+      (spec.rows || []).forEach(function (rw, i) {
+        if (compact && i === 0) return;                       // square: the date line below already carries the day
+        var rowH = rw[2] ? (compact ? 104 : 126) : (compact ? 80 : 94);
+        mx.textAlign = "left"; mx.fillStyle = "#c9b98a"; mx.font = "400 " + (compact ? 22 : 25) + "px " + KMF + ", system-ui, sans-serif";
+        mx.fillText(rw[0], PX + 92, y + 30);
+        mx.fillStyle = "#ffffff"; mx.font = "700 " + (compact ? 32 : 36) + "px " + KMF; mx.fillText(wrap(mx, rw[1], IW - 100, "km", 1)[0] || "", PX + 92, y + (compact ? 66 : 76));
+        if (rw[2]) { mx.fillStyle = "#cfc6ee"; mx.font = "400 " + (compact ? 22 : 25) + "px " + KMF + ", system-ui, sans-serif"; mx.fillText(wrap(mx, rw[2], IW - 100, L, 1)[0] || "", PX + 92, y + (compact ? 94 : 112)); }
+        // icon: the moon for the lunar-day row, a gold dot otherwise
+        var cx = PX + 40, cy = y + rowH / 2 + 2;
+        if (i === 1 && typeof Path2D !== "undefined") {
+          mx.save(); mx.translate(cx - 26, cy - 26); mx.scale(52 / 44, 52 / 44);
+          mx.beginPath(); mx.arc(22, 22, 20, 0, Math.PI * 2); mx.fillStyle = "#1a1040"; mx.fill(); mx.strokeStyle = "rgba(231,194,122,.8)"; mx.lineWidth = 1.5; mx.stroke();
+          if (spec.moonD) { mx.fillStyle = "#f6d282"; mx.fill(new Path2D(spec.moonD)); } mx.restore();
+        } else { mx.beginPath(); mx.arc(cx, cy, 9, 0, Math.PI * 2); mx.fillStyle = "#e7c27a"; mx.fill(); }
+        y += rowH;
+        if (i < spec.rows.length - 1) { mx.strokeStyle = "rgba(231,194,122,.22)"; mx.lineWidth = 1.5; mx.beginPath(); mx.moveTo(PX, y); mx.lineTo(W - PX, y); mx.stroke(); }
+      });
+      if (spec.full && format === "story") {
+        y += 22; mx.font = "400 30px " + KMF; var fl2 = wrap(mx, spec.full, IW - 60, "km", 2);
+        roundRect(mx, PX, y, IW, 40 + fl2.length * 46, 18); mx.fillStyle = "rgba(231,194,122,.12)"; mx.fill();
+        mx.fillStyle = "#fff3d1"; mx.textAlign = "center"; fl2.forEach(function (ln, k) { mx.fillText(ln, W / 2, y + 54 + k * 46); });
+        y += 40 + fl2.length * 46;
+      }
+      var end = y + 40;
+      // panel (gold double frame + corner marks), overlapping the bottom of the picture
+      var top = Math.max(bandH - (compact ? 130 : 150), 40), avail = H - FOOT - top - 10, scl = Math.min(1.15, avail / end);
+      var pw = (W - 120) , ph = end * scl, px = 60;
+      ctx.save(); ctx.shadowColor = "rgba(0,0,0,.55)"; ctx.shadowBlur = 40;
+      roundRect(ctx, px, top, pw, ph, 30); ctx.fillStyle = "rgba(14,10,46,.93)"; ctx.fill(); ctx.restore();
+      ctx.strokeStyle = "rgba(231,194,122,.85)"; ctx.lineWidth = 2.5; roundRect(ctx, px, top, pw, ph, 30); ctx.stroke();
+      ctx.strokeStyle = "rgba(231,194,122,.3)"; ctx.lineWidth = 1.5; roundRect(ctx, px + 10, top + 10, pw - 20, ph - 20, 22); ctx.stroke();
+      ctx.strokeStyle = "#e7c27a"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(px + 22, top + 64); ctx.lineTo(px + 22, top + 30); ctx.quadraticCurveTo(px + 22, top + 22, px + 30, top + 22); ctx.lineTo(px + 64, top + 22); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(px + pw - 22, top + ph - 64); ctx.lineTo(px + pw - 22, top + ph - 30); ctx.quadraticCurveTo(px + pw - 22, top + ph - 22, px + pw - 30, top + ph - 22); ctx.lineTo(px + pw - 64, top + ph - 22); ctx.stroke();
+      ctx.drawImage(m, 0, 0, W, end, (W - W * scl) / 2, top, W * scl, end * scl);
+      // outer frame + brand footer + QR, same as every other card
+      ctx.strokeStyle = "rgba(246,220,155,.75)"; ctx.lineWidth = 3; roundRect(ctx, 34, 34, W - 68, H - 68, 36); ctx.stroke();
+      footer(ctx, L, spec.note || LBL[L].note, H);
+      return qrReady.then(function (img) {
+        qr(ctx, img, H);
+        return new Promise(function (ok) { c.toBlob(function (b) { ok(b); }, "image/png"); });
+      });
+    });
+  }
+  window.MBSShareCards = { lunar: lunar, dream: dream, daily: daily, lucky: lucky, sign: sign, pair: pair, love: love, business: business, article: article, FORMATS: FORMATS, _wrap: wrap };
 })();

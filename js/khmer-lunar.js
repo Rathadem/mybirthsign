@@ -202,6 +202,7 @@
     if (frac >= 0.999 || frac <= 0.001) d = "";
     else if (wax) d = "M" + c + " " + (c - r) + " A" + r + " " + r + " 0 0 1 " + c + " " + (c + r) + " A" + rx + " " + r + " 0 0 " + (kk > 0 ? 0 : 1) + " " + c + " " + (c - r) + "Z";
     else d = "M" + c + " " + (c - r) + " A" + r + " " + r + " 0 0 0 " + c + " " + (c + r) + " A" + rx + " " + r + " 0 0 " + (kk > 0 ? 1 : 0) + " " + c + " " + (c - r) + "Z";
+    moonSvg.lastD = d;   // the share picture draws the same moon
     return '<svg class="klc-moon" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="#1a1040" stroke="#e7c27a" stroke-opacity=".7"/>' +
       (d ? '<path d="' + d + '" fill="#f6d282"/>' : "") + "</svg>";
   }
@@ -232,13 +233,25 @@
       r(ILOT, km ? "ខែចន្ទគតិ" : "Lunar month", '<span lang="km">ខែ' + esc(k.monthName) + "</span>", km ? "" : esc(MONTH_EN[k.monthIndex])) +
       r(ITEM, km ? "ឆ្នាំ និងស័ក" : "Khmer year", '<span lang="km">ឆ្នាំ' + esc(k.animalYearName) + " " + esc(k.sakName) + "</span>", km ? "" : esc("Year of the " + ANIMAL_EN[k.animalYear] + " · " + SAK_EN[k.sak])) +
       r(IWHL, km ? "ពុទ្ធសករាជ" : "Buddhist Era", '<span lang="km">ព.ស. ' + kmNum(k.beYear) + "</span>", km ? "" : esc("B.E. " + k.beYear));
+    // share picture of this card (js/share-cards.js "lunar"): plain-text copy of the same values, the link goes to this article
+    var strip = function (h) { var t = document.createElement("div"); t.innerHTML = h; return t.textContent.trim(); };
+    var shareRows = [], tmp = document.createElement("ul"); tmp.innerHTML = rows;
+    Array.prototype.forEach.call(tmp.children, function (li) {
+      var l = li.querySelector(".klc-l"), st = li.querySelector("strong"), sb = li.querySelector(".klc-s");
+      shareRows.push([l ? l.textContent : "", st ? st.textContent : "", sb ? sb.textContent : ""]);
+    });
+    var bigTxt = strip(lunar), full = M.format(M.fromGregorian(y, m, d));
+    var share = typeof shareRowHtml === "function" ? '<div class="klc-share">' + shareRowHtml(
+      (km ? "ថ្ងៃនេះ " : "Today: ") + bigTxt + " — " + (km ? "ប្រតិទិនចន្ទគតិខ្មែរ" : "Khmer Lunar Calendar"),
+      { cardType: "lunar", lang: lang, heading: km ? "ថ្ងៃនេះ" : "Khmer Lunar Calendar · Today", big: bigTxt, rows: shareRows, full: full, moonD: moonSvg.lastD || "", note: km ? "ប្រតិទិនចន្ទគតិខ្មែរ តាមវិធានប្រពៃណី · ម៉ោងកម្ពុជា" : "Khmer lunar calendar · traditional rules · Cambodia time" },
+      "/blog/khmer-lunar-calendar-birth-date.html") + "</div>" : "";
     return '<p class="klc-big">' + lunar + "</p>" +
       '<ul class="klc-rows">' + rows + "</ul>" +
       '<p class="klc-full" lang="km">' + esc(M.format(M.fromGregorian(y, m, d))) + "</p>" +
       '<p class="klc-note">' + esc(km
         ? "គណនាសម្រាប់ថ្ងៃនេះតាមម៉ោងកម្ពុជា ហើយប្តូរដោយស្វ័យប្រវត្តិនៅម៉ោង ១២ យប់ (ម៉ោងកម្ពុជា)។ ព្រះចន្ទ គឺតាមថ្ងៃខែក្នុងប្រតិទិន។"
         : "Worked out for today in Cambodia (Asia/Phnom_Penh) and updated automatically at midnight Cambodia time. The moon shown follows the calendar's lunar day.") +
-      ' <a href="../checker.html">' + esc(km ? "រកថ្ងៃខែកំណើតចន្ទគតិរបស់អ្នក →" : "Find your lunar birth date →") + "</a></p>";
+      ' <a href="../checker.html">' + esc(km ? "រកថ្ងៃខែកំណើតចន្ទគតិរបស់អ្នក →" : "Find your lunar birth date →") + "</a></p>" + share;
   }
   var cardDay = null, cardTimer = null;
   function todayCards(force) {
@@ -249,7 +262,10 @@
     loadLib().then(function (M) {
       Array.prototype.forEach.call(cards, function (c) {
         var body = c.querySelector(".klc-body"); if (!body) return;
-        try { body.innerHTML = todayCardHtml(M, c.getAttribute("data-lang") === "km" ? "km" : "en"); c.classList.remove("klc-failed"); }
+        try {
+          body.innerHTML = todayCardHtml(M, c.getAttribute("data-lang") === "km" ? "km" : "en"); c.classList.remove("klc-failed");
+          if (typeof wireShareRows === "function") wireShareRows(body);
+        }
         catch (e) { body.innerHTML = '<p class="klc-wait">' + esc(c.getAttribute("data-lang") === "km" ? "មិនអាចបង្ហាញថ្ងៃខែចន្ទគតិថ្ងៃនេះបានទេ។ សូមពិនិត្យប្រតិទិនខ្មែរបោះពុម្ព។" : "Today’s Khmer lunar date couldn’t be shown. Please check a printed Khmer calendar.") + "</p>"; c.classList.add("klc-failed"); }
       });
       cardDay = key;
