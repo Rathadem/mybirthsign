@@ -198,7 +198,7 @@
     km: { love: "ស្នេហា", career: "ការងារ", money: "លុយកាក់", advice: "ដំបូន្មានថ្ងៃនេះ", number: "លេខ", color: "ពណ៌", direction: "ទិស", time: "ម៉ោង",
           note: "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត", friend: "មិត្តភាព", business: "អាជីវកម្ម", stars: "ស្នេហា {L}  ·  អាជីវកម្ម {B}",
           luckyToday: "តើអ្នកណាមានសំណាងថ្ងៃនេះ", easy: "ថ្ងៃនេះគួរប្រុងប្រយ័ត្ន", sign: "រាសីចិនរបស់អ្នក", nums: "លេខសំណាង", cols: "ពណ៌សំណាង",
-          matches: "គូដែលត្រូវគ្នាបំផុត", patience: "ត្រូវការការអត់ធ្មត់", strengths: "ចំណុចខ្លាំង", discuss: "គួរពិភាក្សា", element: "ធាតុ" }
+          matches: "គូដែលត្រូវគ្នាបំផុត", patience: "ឆ្នាំខុង", strengths: "ចំណុចខ្លាំង", discuss: "គួរពិភាក្សា", element: "ធាតុ" }
   };
   function langOf(spec) { return spec && spec.lang === "km" ? "km" : "en"; }
   function head(ctx, L, text, y, size) { ctx.textAlign = "center"; ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", size || lh(L, 66, 52), 700); return drawLines(ctx, wrap(ctx, text, INNER, L, 2), W / 2, y, lh(L, 74, 70), "center"); }
