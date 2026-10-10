@@ -64,8 +64,9 @@
     if (cached) { apply(cached, iso); schedule(); return; }
     if (!window.fetch || triedFor === iso) { schedule(); return; }   // one request per day at most
     triedFor = iso;
-    fetch("/data/daily/latest.json", { cache: "no-cache" })
-      .then(function (r) { return r.ok ? r.json() : null; })
+    var getj = function (u) { return fetch(u, { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }); };
+    // today's own file exists from Cambodia midnight (made a day ahead); latest.json is the fallback
+    getj("/data/daily/" + iso + ".json").then(function (rec) { return rec && rec.date === iso ? rec : getj("/data/daily/latest.json"); }, function () { return getj("/data/daily/latest.json"); })
       .then(function (rec) {
         var a = pick(rec, iso);
         if (a) { writeCache(iso, a); apply(a, iso); }

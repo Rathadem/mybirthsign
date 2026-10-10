@@ -30,6 +30,7 @@ const write = (p, s) => fs.writeFileSync(path.join(ROOT, p), s);
 const args = process.argv.slice(2);
 const argVal = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
 const FORCE = args.includes("--force");
+const NO_FEATURE = args.includes("--no-feature");   // day-ahead post: leave blog.html and the homepage on today
 const TZ = process.env.FORTUNE_TZ || "Asia/Phnom_Penh";
 
 function todayISO() {
@@ -561,6 +562,7 @@ if (!sm.includes(`<loc>${loc}</loc>`)) {
 }
 
 // ---------------------------------------------------------------- blog.html feature
+if (NO_FEATURE) { console.log("day-ahead post: blog.html and homepage left on today"); process.exit(0); }
 let blog = read("blog.html");
 const before = blog;
 blog = blog.replace(/href="blog\/daily-fortune-\d{4}-\d{2}-\d{2}\.html"/g, `href="blog/${slug}.html"`);

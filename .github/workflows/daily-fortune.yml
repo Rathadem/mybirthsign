@@ -1,9 +1,15 @@
 name: Daily zodiac fortune
 
-# Publishes "Today's Fortune for Each Zodiac Animal" every day.
-# 17:10 UTC is 00:10 the next morning in Cambodia (UTC+7), so the new day's post is ready at midnight there.
+# Publishes "Today's Fortune for Each Zodiac Animal" every day, on Cambodia time (UTC+7, no daylight saving).
+# GitHub often starts scheduled runs hours late, so the day's post and data are made A DAY AHEAD:
+#   10:10 UTC = 17:10 in Cambodia -> "ahead" run: makes TOMORROW's post + data file (not linked yet;
+#                                   the homepage switches to it by itself at Cambodia midnight)
+#   17:10 UTC = 00:10 in Cambodia -> "today" run: points the blog page / homepage lists at today's post and
+#                                   moves latest.json forward (reuses the file made ahead, no second AI call).
+#                                   If the ahead run was missed, this run makes everything as before.
 on:
   schedule:
+    - cron: "10 10 * * *"
     - cron: "10 17 * * *"
   workflow_dispatch:
     inputs:
@@ -30,6 +36,20 @@ jobs:
         with:
           node-version: 20
 
+      - name: Which day (Cambodia time)
+        id: day
+        env:
+          INPUT_DATE: ${{ github.event.inputs.date }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          HOUR=$(TZ=Asia/Phnom_Penh date +%H)
+          if [ -n "$INPUT_DATE" ]; then MODE=today; DAY="$INPUT_DATE"
+          # the ahead run only counts as "ahead" while it is still afternoon/evening in Cambodia
+          elif [ "$SCHEDULE" = "10 10 * * *" ] && [ "$HOUR" -ge 12 ]; then MODE=ahead; DAY=$(TZ=Asia/Phnom_Penh date -d tomorrow +%F)
+          else MODE=today; DAY=$(TZ=Asia/Phnom_Penh date +%F); fi
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"; echo "date=$DAY" >> "$GITHUB_OUTPUT"
+          echo "::notice::Daily fortune run: $MODE for $DAY (Cambodia time now $(TZ=Asia/Phnom_Penh date '+%F %H:%M'))"
+
       # Daily data (data/daily/<date>.json + latest.json) for the website and Kru Toch.
       # Rules decide every fact; Claude writes the wording; the record is checked and only
       # published if it passes. If anything fails, the blog post below still goes out (with its
@@ -39,25 +59,32 @@ jobs:
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          FORTUNE_DATE: ${{ github.event.inputs.date }}
           FORTUNE_TZ: Asia/Phnom_Penh
+          DAY: ${{ steps.day.outputs.date }}
+          MODE: ${{ steps.day.outputs.mode }}
         run: |
           if [ -z "$ANTHROPIC_API_KEY" ]; then
             echo "::warning::ANTHROPIC_API_KEY secret is not set, skipping daily data"
             exit 0
           fi
-          if [ -n "$FORTUNE_DATE" ]; then node scripts/daily-data.mjs --date "$FORTUNE_DATE"; else node scripts/daily-data.mjs; fi
-          node scripts/daily-data.mjs --validate data/daily/latest.json
-
-      - name: Generate today's fortune post
-        env:
-          FORTUNE_DATE: ${{ github.event.inputs.date }}
-          FORTUNE_TZ: Asia/Phnom_Penh
-        run: |
-          if [ -n "$FORTUNE_DATE" ]; then
-            node scripts/daily-fortune.mjs --date "$FORTUNE_DATE"
+          if [ "$MODE" = "ahead" ]; then
+            node scripts/daily-data.mjs --date "$DAY" --no-latest --reuse
+            node scripts/daily-data.mjs --validate "data/daily/$DAY.json"
           else
-            node scripts/daily-fortune.mjs
+            node scripts/daily-data.mjs --date "$DAY" --reuse
+            node scripts/daily-data.mjs --validate data/daily/latest.json
+          fi
+
+      - name: Generate the fortune post
+        env:
+          FORTUNE_TZ: Asia/Phnom_Penh
+          DAY: ${{ steps.day.outputs.date }}
+          MODE: ${{ steps.day.outputs.mode }}
+        run: |
+          if [ "$MODE" = "ahead" ]; then
+            node scripts/daily-fortune.mjs --date "$DAY" --no-feature
+          else
+            node scripts/daily-fortune.mjs --date "$DAY"
           fi
 
       - name: Commit and push (Netlify deploys on push)
@@ -70,6 +97,6 @@ jobs:
           git config user.email "daily-fortune-bot@users.noreply.github.com"
           git add blog sitemap.xml blog.html index.html
           [ -d data/daily ] && git add data/daily
-          git commit -m "Daily fortune: $(date -u +%F)"
+          git commit -m "Daily fortune: ${{ steps.day.outputs.date }} (${{ steps.day.outputs.mode }})"
           git pull --rebase origin main
           git push origin HEAD:main

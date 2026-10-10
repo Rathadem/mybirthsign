@@ -460,8 +460,9 @@ function setDate(){var el=document.getElementById("hm-today");if(!el)return;var 
 setDate();document.addEventListener("DOMContentLoaded",setDate);window.addEventListener("load",setDate);document.querySelectorAll("[data-lang-switch]").forEach(function(a){a.addEventListener("click",function(){setTimeout(setDate,0);});});
 // daily data (rules + Claude wording): when today's record exists, each card shows that sign's
 // advice for today and its lucky number & color. If it is missing or old, the cards stay as above.
-if(window.fetch){fetch("/data/daily/latest.json",{cache:"no-cache"}).then(function(r){return r.ok?r.json():null;}).then(function(rec){
-  var dsx=p[0]+"-"+String(p[1]).padStart(2,"0")+"-"+String(p[2]).padStart(2,"0");
+var dsx=p[0]+"-"+String(p[1]).padStart(2,"0")+"-"+String(p[2]).padStart(2,"0");
+function getj(u){return fetch(u,{cache:"no-cache"}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});}
+if(window.fetch){getj("/data/daily/"+dsx+".json").then(function(rec){return rec&&rec.date===dsx?rec:getj("/data/daily/latest.json");}).then(function(rec){
   if(!rec||rec.version!==1||rec.date!==dsx||!rec.signs||rec.signs.length!==12)return;
   var by={};rec.signs.forEach(function(s){by[s.animal]=s;});
   document.querySelectorAll("[data-hm-card]").forEach(function(li){

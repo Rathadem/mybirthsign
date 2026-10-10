@@ -29,6 +29,8 @@ if (args.includes("--validate")) {
 
 const iso = argVal("--date") || process.env.FORTUNE_DATE || today();
 const MOCK = args.includes("--mock");
+const NO_LATEST = args.includes("--no-latest");   // day-ahead run: write <date>.json only
+const REUSE = args.includes("--reuse");           // if <date>.json is already published and valid, just promote it
 const OUT = argVal("--out") || (MOCK ? null : path.join(ROOT, "data/daily"));
 if (MOCK && !argVal("--out")) { console.error("--mock needs --out <dir> (mock wording is never published)"); process.exit(1); }
 const facts = computeFacts(iso);
@@ -164,7 +166,27 @@ function build(t) {
   });
 }
 
+function promoteLatest(body, day) {
+  // latest.json only moves forward (re-running an old date never replaces a newer day)
+  const latestFile = path.join(OUT, "latest.json");
+  let latestDate = "";
+  try { latestDate = JSON.parse(fs.readFileSync(latestFile, "utf8")).date || ""; } catch (e) { /* first run */ }
+  if (day >= latestDate) fs.writeFileSync(latestFile, body);
+}
+
 (async () => {
+  if (REUSE && !MOCK && OUT) {
+    const f = path.join(OUT, `${iso}.json`);
+    if (fs.existsSync(f)) {
+      const body = fs.readFileSync(f, "utf8");
+      let rec = null; try { rec = JSON.parse(body); } catch (e) { /* rebuild below */ }
+      if (rec && rec.source !== "mock" && !validateRecord(rec).length) {
+        if (!NO_LATEST) promoteLatest(body, iso);
+        console.log(`reused ${iso} (already made ahead, no AI call)`);
+        return;
+      }
+    }
+  }
   const t = MOCK ? mockText() : await aiText();
   const rec = build(t);
   // lucky numbers etc. are numbers and stay numbers after trimAll
@@ -179,10 +201,6 @@ function build(t) {
   fs.mkdirSync(OUT, { recursive: true });
   const body = JSON.stringify(rec);
   fs.writeFileSync(path.join(OUT, `${iso}.json`), body);
-  // latest.json only moves forward (re-running an old date never replaces a newer day)
-  const latestFile = path.join(OUT, "latest.json");
-  let latestDate = "";
-  try { latestDate = JSON.parse(fs.readFileSync(latestFile, "utf8")).date || ""; } catch (e) { /* first run */ }
-  if (iso >= latestDate) fs.writeFileSync(latestFile, body);
+  if (!NO_LATEST) promoteLatest(body, iso);
   console.log(`published ${iso} (${(Buffer.byteLength(body) / 1024).toFixed(1)} KB)` + (MOCK ? " [mock]" : ` tokens in ${usage.in} out ${usage.out}`));
 })().catch((e) => { console.error("NOT PUBLISHED:", e.message); process.exit(2); });

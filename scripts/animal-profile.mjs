@@ -65,7 +65,8 @@ const typeOf = (b) => (b === A ? "same" : info.clash.includes(b) ? "clash" : sam
 const best = ORDER.filter((b) => b !== A && sameTri(A, b));
 const support = info.compatible.filter((b) => !sameTri(A, b));
 const clash = info.clash;
-const latestDaily = fs.readdirSync(path.join(ROOT, "blog")).filter((f) => /^daily-fortune-\d{4}-\d{2}-\d{2}\.html$/.test(f)).sort().pop();
+const PP_TODAY = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());   // a post made a day ahead is not linked before its day
+const latestDaily = fs.readdirSync(path.join(ROOT, "blog")).filter((f) => /^daily-fortune-\d{4}-\d{2}-\d{2}\.html$/.test(f) && f.slice(14, 24) <= PP_TODAY).sort().pop();
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const URL_ = `https://mybirthsign.com/blog/zodiac-year-${slug}`;
