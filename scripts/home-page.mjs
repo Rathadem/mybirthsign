@@ -180,7 +180,8 @@ function main2(lang) {
     const t = tierOf(a, TODAY_ANIMAL), [ico, lab, line] = tr[t];
     return `        <li class="hm-fc fx-tier-${t}" data-hm-card data-animal="${a}"><a class="hm-fc-name" href="${href(a)}">${medal(a, 76)}<span>${esc(nm(a, km))}</span></a>
           <span class="hm-status" data-hm-status><span aria-hidden="true" data-hm-ico>${ico}</span> <span data-hm-lab>${esc(lab)}</span></span>
-          <p data-hm-line>${esc(line)}</p></li>`;
+          <p data-hm-line>${esc(line)}</p>
+          <div class="hm-digits ld ld-mini" data-lucky-digits data-animal="${a}" data-lang="${km ? "km" : "en"}" data-no-head data-no-note></div></li>`;
   };
   const animalCard = (a) => `        <li><a class="hm-ac" href="${href(a)}">${medal(a, 96)}<strong>${esc(nm(a, km))}</strong><span class="hm-han" lang="zh" aria-hidden="true">${HAN[a]}</span>${km ? "" : `<small lang="km">ឆ្នាំ${esc(KM_NAMES[a])}</small>`}</a></li>`;
   const postCard = (p) => {
@@ -201,7 +202,7 @@ ${ORDER.map(card).join("\n")}
     </ul>
     <div class="hm-share share-row" data-hm-share data-share-url="/"></div>
     <p class="hm-center"><a class="fx-btn" href="${latestPost.file}" data-hm-fulllink>${esc(u.todayB)}</a></p>
-    <p class="hm-note">${esc(u.todayNote)}</p>
+    <p class="hm-note">${esc(u.todayNote)} ${esc(km ? "លេខសំណាង (១ ដល់ ៥ ខ្ទង់) ប្តូររៀងរាល់ថ្ងៃ តាមម៉ោងកម្ពុជា ហើយសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការណែនាំឱ្យភ្នាល់ទេ។" : "Lucky numbers (1 to 5 digits) change every day, Cambodia time, and are for fun only, not betting advice.")}</p>
   </section>
 
   <section class="fx-sec hm-lunar-sec" aria-label="${esc(km ? "ប្រតិទិនចន្ទគតិខ្មែរ" : "Khmer Lunar Calendar")}">
@@ -489,6 +490,7 @@ ${partB("km")}
 <script src="js/datepicker.js"></script>
 <script src="js/share.js"></script>
 <script src="js/app.js"></script>
+<script src="js/lucky-digits.js" defer></script>
 <script>${clientJs}</script>
 </body>
 </html>

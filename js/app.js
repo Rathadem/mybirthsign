@@ -265,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <article class="chk-card chk-c-pers"><h3><img src="images/checker/personality.webp" alt="" width="36" height="36" class="chk-ico-new">${S.chk_personality}</h3>${persBody}<img class="chk-art" src="images/checker/art-pers.webp" alt="" width="282" height="99" loading="lazy"></article>
         <article class="chk-card chk-c-love"><h3><img src="images/checker/love.webp" alt="" width="36" height="36" class="chk-ico-new">${loveTitle}</h3>${loveBody}<img class="chk-art" src="images/checker/art-love.webp" alt="" width="282" height="99" loading="lazy"></article>
         <article class="chk-card chk-c-career"><h3><img src="images/checker/career.webp" alt="" width="37" height="30">${S.chk_career}</h3>${careerBody}<img class="chk-art" src="images/checker/art-career.webp" alt="" width="282" height="99" loading="lazy"></article>
-        <article class="chk-card chk-c-luck"><h3><img src="images/checker/luck.webp" alt="" width="32" height="32">${S.chk_luck}</h3>${luckBody}<img class="chk-art" src="images/checker/art-luck.webp" alt="" width="282" height="99" loading="lazy"></article>
+        <article class="chk-card chk-c-luck"><h3><img src="images/checker/luck.webp" alt="" width="32" height="32">${S.chk_luck}</h3>${luckBody}<div class="ld chk-ld" data-lucky-digits data-animal="${animal}" data-lang="${lang}"></div><img class="chk-art" src="images/checker/art-luck.webp" alt="" width="282" height="99" loading="lazy"></article>
       </div>
     `;
 
@@ -314,6 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     `;
     wireShareRows(resultBox);
+    if (window.MBSLuckyDigits) window.MBSLuckyDigits.fill(resultBox);   // lucky numbers of 1–5 digits for today (js/lucky-digits.js)
     // Dream Fortune (js/dream-fortune.js) builds on this result; it gets the sign only, never the birth date
     window.MBS_LAST_CHECKER_RESULT = { animal: animal, element: element, lang: lang };   // for js/dream-fortune.js if it loads later
     try { document.dispatchEvent(new CustomEvent("mbs:checker-result", { detail: window.MBS_LAST_CHECKER_RESULT })); } catch (e) { /* optional */ }

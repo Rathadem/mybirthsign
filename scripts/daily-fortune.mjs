@@ -61,6 +61,16 @@ const dataOf = (a) => DATA && DATA.signs.find((x) => x.animal === a);
 const { computeFacts } = await import("./daily-data-lib.mjs");
 const FACTS = computeFacts(iso);
 const factOf = (a) => FACTS.signs.find((x) => x.animal === a);
+// lucky numbers of 1–5 digits for this post's date (same js/lucky-digits.js the homepage and Checker use)
+const { createRequire } = await import("node:module");
+const LUCKY_DIGITS = createRequire(import.meta.url)("../js/lucky-digits.js");
+const KD_ = "០១២៣៤៥៦៧៨៩", kmD = (x) => String(x).replace(/\d/g, (d) => KD_[d]);
+function digitsHtml(a, lang) {
+  const v = LUCKY_DIGITS.forSign(a, iso); if (!v) return "";
+  const km = lang === "km";
+  const lab = (n) => km ? kmD(n) + "ខ្ទង់" : n + (n === 1 ? " digit" : " digits");
+  return `<div class="ld ld-mini fx-digits"><p class="ld-h">${km ? "លេខសំណាង" : "Lucky numbers"}</p><ul class="ld-list">${[1, 2, 3, 4, 5].map((n) => `<li><span class="ld-l">${lab(n)}</span><b class="ld-n">${km ? kmD(v["d" + n]) : v["d" + n]}</b></li>`).join("")}</ul></div>`;
+}
 
 // ---------------------------------------------------------------- site data
 function extractConst(src, name) {
@@ -336,6 +346,7 @@ function signCard(c, lang, t) {
     ? `<p class="fx-sign-fortune" data-sign="${a.toLowerCase()}">${esc(x.fortune)}</p>
         ${tradeBox}
         ${lucky}
+        ${digitsHtml(a, lang)}
         <details class="fx-sign-more"><summary>${D.more}</summary>
           <h4>${D.love}</h4><p>${esc(x.love)}</p>
           <h4>${D.career}</h4><p>${esc(x.career)}</p>
@@ -348,7 +359,8 @@ function signCard(c, lang, t) {
         ${tradeBox}
         <h4>${t.watchOut}</h4>
         <p>${esc(watch)}</p>
-        ${lucky}`;
+        ${lucky}
+        ${digitsHtml(a, lang)}`;
   return `<li class="fx-sign fx-sign-${tier}">
         <div class="fx-sign-head">
           ${med(a, 76)}
@@ -447,6 +459,7 @@ ${t.guides.map((g) => `          <div class="fx-guide"><div class="fx-guide-ico"
   <section class="fx-sec" aria-labelledby="fx-grid-${lang}">
     <div class="fx-head"><h2 id="fx-grid-${lang}">${t.gridH}</h2>${I.orn}<p>${t.gridP}</p></div>
     <div class="fx-day-share share-row" data-share-label="${attr(TRADE_T[lang].shareDay)}" data-share-title="${attr(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html" data-share-card="${attr(JSON.stringify({ cardType: "lucky", lang, date: isKm ? dateKM : dateEN, top: FACTS.highlights.topLucky, topNames: FACTS.highlights.topLucky.map(nm), careful: FACTS.highlights.careful.map(nm), text: TRADE_T[lang].best(andJoin(FACTS.highlights.topLucky.map(nm), lang)) }))}"></div>
+    <p class="fx-digits-note">${isKm ? "លេខសំណាង (១ ដល់ ៥ ខ្ទង់) សម្រាប់ថ្ងៃនេះ គឺសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។" : "Lucky numbers (1 to 5 digits) are for this day only and for fun, not a prediction or betting advice."}</p>
     <ul class="fx-grid">
 ${byZodiac.map((c) => "      " + signCard(c, lang, t)).join("\n")}
     </ul>
