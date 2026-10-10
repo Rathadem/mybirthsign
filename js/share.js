@@ -175,7 +175,9 @@ function _strings(lang) {
     saved: d("share_image_saved", "Image saved!"), failed: d("share_image_failed", "Couldn't create the image"),
     download: d("share_download", "Download image"), more: d("share_more_apps", "More apps…"),
     menu: d("share_menu_label", "Share options"),
-    facebook: d("share_fb_steps", "Choose Facebook in the list — your result image and link go into a new post."),
+    facebook: d("share_fb_steps", "Choose Facebook in the list — your result picture goes into a new post (its QR code leads to MyBirthSign)."),
+    facebookLink: d("share_fb_link_steps", "Choose Facebook in the list to post the link."),
+    fbReady: d("share_fb_ready", "Facebook — tap again to share"),
     instagram: d("share_ig_steps", "Instagram doesn't accept website links. Post the image instead: pick Instagram in the share list, or open Instagram, tap +, choose Story or Post and select the saved image."),
     tiktok: d("share_tt_steps", "TikTok doesn't accept website links. Post the image instead: pick TikTok in the share list, or open TikTok, tap +, then Upload and select the saved image.")
   };
@@ -395,15 +397,32 @@ function wireShareRows(root) {
     const fbLink = pop.querySelector('a[data-share-net="facebook"]');
     if (fbLink && canLink && _isPhone()) fbLink.addEventListener("click", function (e) {
       e.preventDefault();
-      const u = url(), t = title(), b = canFiles ? readyBlob("portrait") : null;
-      let data = { title: t, text: t, url: u };
-      if (b) { const f = new File([b], fileName("portrait"), { type: "image/png" }); if (navigator.canShare && navigator.canShare({ files: [f] })) data = { files: [f], title: t, text: t + " " + u }; }
-      showNote(T.facebook);
+      const u = url(), t = title();
+      const labelEl = fbLink.querySelector(".share-option-label");
+      // Facebook's app keeps the picture only when the share has NO text/link attached (the card's QR code leads to
+      // the site), so phones share the image alone. The image is drawn when the menu opens; if it is not ready yet,
+      // the first tap prepares it and the next tap shares (phones only allow sharing straight from a tap).
+      if (canFiles) {
+        const b = readyBlob("portrait");
+        if (!b) {
+          if (labelEl) labelEl.textContent = T.preparing;
+          blobFor("portrait").then(function () { if (labelEl) labelEl.textContent = T.fbReady; }, function () { if (labelEl) labelEl.textContent = "Facebook"; });
+          return;
+        }
+        const f = new File([b], fileName("portrait"), { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [f] })) {
+          if (labelEl) labelEl.textContent = "Facebook";
+          showNote(T.facebook);
+          try {
+            Promise.resolve(navigator.share({ files: [f] })).catch(function (err) { if (!err || err.name !== "AbortError") _openInNewTab(fbLink.href); });
+          } catch (err) { _openInNewTab(fbLink.href); }
+          return;
+        }
+      }
+      // no image sharing on this phone: share the link through the share sheet
+      showNote(T.facebookLink);
       try {
-        Promise.resolve(navigator.share(data)).catch(function (err) {
-          if (err && err.name === "AbortError") return;
-          _openInNewTab(fbLink.href);                                   // share sheet unavailable: fall back to the web share page
-        });
+        Promise.resolve(navigator.share({ title: t, url: u })).catch(function (err) { if (!err || err.name !== "AbortError") _openInNewTab(fbLink.href); });
       } catch (err) { _openInNewTab(fbLink.href); }
     });
     pop.querySelectorAll("button[data-share-net]").forEach(function (el) {

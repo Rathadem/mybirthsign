@@ -249,15 +249,17 @@
     var L = langOf(spec), T = LBL[L];
     return Promise.all([medals([spec.animal]), fontsReady(L)]).then(function (r) {
       return render(L, T.note, format, function (ctx, o) {
-        eyebrow(ctx, L, T.sign, 116);
-        var R = o.compact ? 96 : 124, my = o.compact ? 222 : 272; medal(ctx, r[0][0], W / 2, my, R);
-        var y = head(ctx, L, spec.name || spec.animal, my + R + 80);
-        if (spec.element) { pill(ctx, (spec.elementLabel || T.element) + ": " + spec.element, W / 2, y - 30, L, GOLD); y += 46; }
-        y = para(ctx, L, spec.traits, y + 30, o.compact ? 2 : 3) + 10;
-        var rows = [[T.nums, (spec.numbers || []).map(function (n) { return numL(L, n); }).join(", ")], [T.cols, (spec.colors || []).join(", ")]];
-        if (spec.matches && spec.matches.length) rows.push([T.matches, spec.matches.join(", ")]);
-        if (spec.patience && !o.compact) rows.push([T.patience, spec.patience, WARN]);
-        return panel(ctx, L, rows, y, 2);
+        eyebrow(ctx, L, T.sign, 112);
+        var R = o.compact ? 88 : 112, my = o.compact ? 214 : 256; medal(ctx, r[0][0], W / 2, my, R);
+        var y = head(ctx, L, spec.name || spec.animal, my + R + 84, lh(L, 70, 58));
+        if (spec.element) { pill(ctx, (spec.elementLabel || T.element) + ": " + spec.element, W / 2, y - 26, L, GOLD); y += 52; }
+        y = para(ctx, L, spec.traits, y + 26, o.compact ? 2 : 3, lh(L, 34, 32)) + 22;
+        // big badges instead of a small list (same data as the Checker result)
+        if (spec.numbers && spec.numbers.length) y = badges(ctx, L, T.nums, spec.numbers.map(function (n) { return numL(L, n); }), y, GOLD);
+        if (spec.colors && spec.colors.length) y = badges(ctx, L, T.cols, spec.colors, y, GOLD2);
+        if (!o.compact && spec.matches && spec.matches.length) y = badges(ctx, L, T.matches, spec.matches, y, GOLD);
+        if (!o.compact && spec.patience) y = badges(ctx, L, T.patience, [spec.patience], y, WARN);
+        return y;
       });
     });
   }
