@@ -204,6 +204,19 @@ ${ORDER.map(card).join("\n")}
     <p class="hm-note">${esc(u.todayNote)}</p>
   </section>
 
+  <section class="fx-sec hm-lunar-sec" aria-label="${esc(km ? "ប្រតិទិនចន្ទគតិខ្មែរ" : "Khmer Lunar Calendar")}">
+    <a class="hm-klc" href="blog/khmer-lunar-calendar-birth-date.html">
+      <img src="images/guides/khmer-lunar-card.webp" width="640" height="336" alt="${esc(km ? "ព្រះចន្ទពេញបូណ៌មីរះនៅពីក្រោយប្រាសាទអង្គរវត្តពេលយប់ ឆ្លុះលើស្រះផ្កាឈូក" : "A full moon rising behind Angkor Wat at night, reflected in a lotus pond")}" loading="lazy" decoding="async">
+      <div>
+        <span class="hm-cat">${esc(km ? "វប្បធម៌ និងប្រតិទិនខ្មែរ" : "Khmer Culture & Calendar")}</span>
+        <h2>${esc(km ? "ប្រតិទិនចន្ទគតិខ្មែរ" : "Khmer Lunar Calendar")}</h2>
+        <p>${esc(km ? "ស្វែងយល់ពីថ្ងៃកើត និងរោច ហើយរកថ្ងៃខែកំណើតតាមចន្ទគតិរបស់អ្នក។" : "How waxing and waning moon days are counted, and how to find your Khmer lunar birth date.")}</p>
+        <p class="hm-klc-today" data-kl-today-line data-lang="${km ? "km" : "en"}"></p>
+        <span class="hm-more">${esc(km ? "អានមគ្គុទ្ទេសក៍ →" : "Read the guide →")}</span>
+      </div>
+    </a>
+  </section>
+
   <section class="fx-sec" id="animals" aria-labelledby="${ID("an")}">
     <div class="fx-head"><h2 id="${ID("an")}">${esc(u.animalsH)}</h2>${ICON.orn}<p>${esc(u.animalsP)}</p></div>
     <ul class="hm-agrid">

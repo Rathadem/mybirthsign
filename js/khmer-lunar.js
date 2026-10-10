@@ -283,7 +283,7 @@
     });
   }
   // coming back to the tab (or from the back/forward cache) re-checks the date
-  document.addEventListener("visibilitychange", function () { if (!document.hidden) todayCards(false); });
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) { todayCards(false); todayLines(); } });
   window.addEventListener("pageshow", function () { todayCards(false); });
   window.addEventListener("focus", function () { todayCards(false); });
 
@@ -302,9 +302,22 @@
   document.addEventListener("mbs:checker-date", function (e) { show(e.detail); });
   if (window.MBS_LAST_CHECKER_DATE) show(window.MBS_LAST_CHECKER_DATE);
   window.MBSKhmerLunar = { _show: show, fill: fill, pair: pair, _todayCards: todayCards };
+  // short "Today: ១៥រោច ខែភទ្របទ …" lines ([data-kl-today-line], homepage lunar card)
+  function todayLines() {
+    var els = document.querySelectorAll("[data-kl-today-line]");
+    if (!els.length) return;
+    loadLib().then(function (M) {
+      var t = ppToday(), line; try { line = M.format(M.fromGregorian(t[0], t[1], t[2])); } catch (e) { return; }
+      Array.prototype.forEach.call(els, function (el) {
+        var km = (el.getAttribute("data-lang") || pageLang()) === "km";
+        el.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><b>' + esc(km ? "ថ្ងៃនេះ៖" : "Today:") + '</b> <span lang="km">' + esc(line) + "</span>";
+      });
+    }, function () { /* the card still links to the guide */ });
+  }
   function boot() {
     fill(document);
     todayCards(true);
+    todayLines();
     // the footer line waits until the page has loaded, so it never slows the page down
     var later = function () { (window.requestIdleCallback || function (f) { setTimeout(f, 400); })(todayStrip); };
     if (document.readyState === "complete") later(); else window.addEventListener("load", later);

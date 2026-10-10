@@ -233,3 +233,15 @@ html[lang="km"] .hm-find h2, html[lang="km"] .hm-cross h2 { line-height: 1.8; }
 .hm-fc .hm-lucky span { display: inline-flex; align-items: center; gap: 5px; }
 .hm-fc .hm-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255,255,255,.5); }
 .hm-share { display: flex; justify-content: center; margin: 18px 0 0; }
+/* Khmer Lunar Calendar feature card (links to the Khmer lunar guide; today's line filled by js/khmer-lunar.js) */
+.hm-klc { display: grid; grid-template-columns: 1.25fr 1fr; align-items: center; text-decoration: none; border-radius: 18px; overflow: hidden;
+  background: linear-gradient(180deg, rgba(34, 22, 78, .85), rgba(15, 10, 42, .92)); border: 1px solid var(--hm-line); transition: transform .2s ease, border-color .2s ease; }
+.hm-klc:hover, .hm-klc:focus-visible { transform: translateY(-3px); border-color: #f6dc9b; }
+.hm-klc img { width: 100%; height: 100%; min-height: 220px; max-height: 300px; object-fit: cover; object-position: center 40%; }
+.hm-klc > div { padding: 20px 24px; display: flex; flex-direction: column; gap: 8px; }
+.hm-klc h2 { margin: 0; color: #fff; font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.4; }
+.hm-klc p { margin: 0; color: #cfc6ee; }
+.hm-klc .hm-klc-today { min-height: 3.2em; padding: 8px 12px; border-radius: 12px; background: rgba(231, 194, 122, .1); border: 1px solid rgba(231, 194, 122, .3); color: #fff3d1; font-size: .92rem; line-height: 1.6; }
+.hm-klc .hm-klc-today b { color: #e7c27a; margin-right: 4px; }
+.hm-klc .hm-klc-today [lang="km"] { font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; }
+@media (max-width: 760px) { .hm-klc { grid-template-columns: 1fr; } .hm-klc img { min-height: 0; height: 180px; } .hm-klc > div { padding: 16px; } }
