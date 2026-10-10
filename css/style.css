@@ -3402,3 +3402,40 @@ html[lang="km"] .bv2-hero h1 { font-family: "Noto Sans Khmer", "Kantumruy Pro", 
   .chk-hero.cmp-hero { background: linear-gradient(180deg, rgba(11,8,31,.45) 0%, rgba(11,8,31,.25) 45%, #0b081f 100%), url("../images/compat/hero-bg-m.webp") center top / cover no-repeat; }
   .cmp-result { background: linear-gradient(180deg, rgba(11,8,31,.62), rgba(11,8,31,.88)), url("../images/compat/hero-bg-m.webp") center 30% / cover no-repeat; }
 }
+
+/* ===== Checker: Your Khmer Lunar Birth Date (js/khmer-lunar.js) ===== */
+.kl { margin-top: 4px; margin-bottom: 22px; }
+.kl-card { position: relative; padding: 22px 22px 18px; border-radius: 22px; border: 1.5px solid #e7c27a66; color: #f1ecff;
+  background: radial-gradient(120% 90% at 100% 0%, rgba(140, 92, 230, .22), transparent 60%), linear-gradient(180deg, #1a1340, #120d30);
+  box-shadow: 0 0 0 4px rgba(231, 194, 122, .06), 0 12px 40px rgba(0, 0, 0, .4); }
+.kl-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.kl-head h2 { margin: 0; font: 700 1.35rem/1.25 Georgia, serif; color: #f6e3b2; }
+.kl-head p { margin: 2px 0 0; color: #cfc6ee; font-size: .92rem; }
+.kl-moon { flex: 0 0 46px; height: 46px; border-radius: 50%; background: radial-gradient(circle at 36% 34%, #fff6d8, #f1cf7c 55%, #b8862f);
+  box-shadow: inset -10px -4px 0 0 rgba(18, 13, 48, .78), 0 0 18px rgba(246, 210, 130, .45); }
+.kl-main { margin: 0 0 12px; padding: 14px 16px; border-radius: 16px; text-align: center; border: 1px solid #e7c27a88;
+  background: radial-gradient(80% 120% at 50% 0%, rgba(246, 210, 130, .18), transparent 70%), rgba(11, 8, 31, .6); }
+.kl-main p { margin: 0; }
+.kl-main-label { color: #e7c27a; font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+html[lang="km"] .kl-main-label { text-transform: none; letter-spacing: 0; font-size: .9rem; }
+.kl-main-date { margin-top: 2px !important; font-size: clamp(1.6rem, 4.6vw, 2.2rem); font-weight: 700; color: #fff3d1; line-height: 1.6; text-shadow: 0 0 18px rgba(246, 210, 130, .35); }
+.kl-main-extra { color: #cfc6ee; font-size: .92rem; }
+.kl-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0; }
+@media (max-width: 899px) { .kl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.kl-row { margin: 0; padding: 12px 14px; border-radius: 14px; border: 1px solid #3b2d6e; background: rgba(11, 8, 31, .55); min-width: 0; }
+.kl-row dt { color: #e7c27a; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+.kl-row dd { margin: 0; }
+.kl-row strong { display: block; color: #fff; font-size: 1.12rem; font-weight: 700; line-height: 1.5; overflow-wrap: anywhere; }
+.kl-extra { display: block; margin-top: 2px; color: #cfc6ee; font-size: .86rem; line-height: 1.5; }
+.kl [lang="km"], html[lang="km"] .kl { font-family: "Kantumruy Pro", "Noto Sans Khmer", "Khmer OS", sans-serif; }
+html[lang="km"] .kl-head h2 { font-family: "Moul", "Kantumruy Pro", serif; font-weight: 400; font-size: 1.15rem; line-height: 1.9; }
+html[lang="km"] .kl-row dt { text-transform: none; letter-spacing: 0; font-size: .86rem; }
+.kl-full { margin: 14px 0 0; padding: 10px 14px; border-radius: 12px; background: rgba(231, 194, 122, .1); border: 1px dashed #e7c27a66; color: #fff3d1; line-height: 1.8; }
+.kl-full > span:first-child { color: #e7c27a; font-weight: 700; margin-right: 4px; }
+.kl-notes { margin: 12px 0 0; padding: 0 0 0 18px; color: #e6defc; font-size: .9rem; line-height: 1.6; }
+.kl-notes li + li { margin-top: 4px; }
+.kl-today { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid #3b2d6e; color: #b9b0dc; font-size: .86rem; line-height: 1.7; }
+.kl-method { margin: 8px 0 0; color: #9f96c6; font-size: .78rem; line-height: 1.55; }
+.kl-fallback { margin: 0; color: #ffd9a8; line-height: 1.7; }
+@media (max-width: 600px) { .kl-card { padding: 18px 14px 14px; } .kl-head h2 { font-size: 1.15rem; } .kl-row { padding: 10px 12px; } .kl-row strong { font-size: 1rem; } }
+@media (max-width: 380px) { .kl-grid { grid-template-columns: 1fr; } }

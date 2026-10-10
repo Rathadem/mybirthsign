@@ -90,6 +90,7 @@
 
 <section id="dream-fortune" class="container chk-wrap df" hidden></section>
 <div id="result" class="container chk-wrap" aria-live="polite"></div>
+<section id="khmer-lunar" class="container chk-wrap kl" hidden aria-live="polite"></section>
 
 <section class="container chk-wrap">
   <div class="chk-cta">
@@ -220,6 +221,7 @@
 <script src="js/checker-extra.js"></script>
 <script src="js/app.js"></script>
 <script src="js/checker-page.js"></script>
+<script src="js/khmer-lunar.js" defer></script>
 <script>/* Dream Fortune: loaded with the page for a shared ?dob= link, otherwise on first touch/typing or when the browser is idle (faster first paint) */
 (function(){var src="js/dream-fortune.js";if(/[?&]dob=/.test(location.search)){document.write('<script src="'+src+'" defer><\/script>');return;}
 var done=false;function load(){if(done)return;done=true;var s=document.createElement("script");s.src=src;document.body.appendChild(s);}

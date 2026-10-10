@@ -317,6 +317,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Dream Fortune (js/dream-fortune.js) builds on this result; it gets the sign only, never the birth date
     window.MBS_LAST_CHECKER_RESULT = { animal: animal, element: element, lang: lang };   // for js/dream-fortune.js if it loads later
     try { document.dispatchEvent(new CustomEvent("mbs:checker-result", { detail: window.MBS_LAST_CHECKER_RESULT })); } catch (e) { /* optional */ }
+    // Khmer Lunar Birth Date (js/khmer-lunar.js) needs the date itself; it stays on this page (never in a link)
+    window.MBS_LAST_CHECKER_DATE = { iso: value, lang: lang, animal: animal };
+    try { document.dispatchEvent(new CustomEvent("mbs:checker-date", { detail: window.MBS_LAST_CHECKER_DATE })); } catch (e) { /* optional */ }
     const dreamBox = document.getElementById("dream-fortune");   // sits above the result on /checker
     (dreamBox && !dreamBox.hidden ? dreamBox : resultBox).scrollIntoView({ behavior: "smooth", block: "start" });
 
