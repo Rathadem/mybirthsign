@@ -147,7 +147,6 @@ html[lang="km"] .pf-pairs h4 { letter-spacing: 0; text-transform: none; font-siz
 }
 @media (max-width: 720px) { .pf-grid12 { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 640px) {
-  .pf-hero .pf-hero-in { padding: 190px 16px 34px; }
   .pf-cards { grid-template-columns: 1fr; }
   .pf-ov-body { flex-direction: column; text-align: center; }
   .pf-medal-lg { width: 104px; height: 104px; }
@@ -179,9 +178,6 @@ html[lang="km"] .pf-years { letter-spacing: .02em; }
 .pf-lucky .pf-lg { flex: 1; }
 .pf-lucky .pf-lg + .pf-lg { border-top: 1px solid rgba(231, 194, 122, .2); }
 @media (max-width: 640px) {
-  .pf-hero.fx-hero { background-size: auto 330px; background-position: 30px top; }
-  .pf-hero.fx-hero::before { background: linear-gradient(180deg, rgba(11, 8, 32, 0) 0%, rgba(11, 8, 32, .35) 220px, rgba(11, 8, 32, .95) 330px); }
-  .pf-hero .pf-hero-in { padding: 250px 16px 32px; }
 }
 
 /* Section menu: glide to the section and briefly glow it, so the jump is obvious
