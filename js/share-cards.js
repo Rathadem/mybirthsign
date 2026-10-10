@@ -322,22 +322,61 @@
 
   // Dream Fortune (Checker page): sign, chosen dream, headline, short text, supportive years / lucky colors
   // only when the page had them, one tip. All text comes from the site's own templates.
+  // a row of large "badges" (years, colors) under a small label
+  function badges(ctx, L, label, items, y, color) {
+    ctx.textAlign = "center"; font(ctx, L, "body", lh(L, 27, 27), 700); ctx.fillStyle = color;
+    ctx.fillText("✦  " + label + "  ✦", W / 2, y + 30);
+    font(ctx, "en", "head", 46, 700);
+    var big = L === "km" ? function () { font(ctx, L, "body", 42, 700); } : function () { font(ctx, "en", "head", 46, 700); };
+    big();
+    var ws = items.map(function (t) { return Math.min(INNER, ctx.measureText(t).width + 64); }), gap = 22;
+    var rows = [[]], rw = [0];
+    ws.forEach(function (w, k) { var r = rows.length - 1; if (rw[r] && rw[r] + gap + w > INNER) { rows.push([]); rw.push(0); r++; } rows[r].push(k); rw[r] += (rw[r] ? gap : 0) + w; });
+    var yy = y + 58;
+    rows.forEach(function (row, r) {
+      var x = W / 2 - rw[r] / 2;
+      row.forEach(function (k) {
+        var w = ws[k], g = ctx.createLinearGradient(0, yy, 0, yy + 78);
+        g.addColorStop(0, "rgba(246,220,155,.20)"); g.addColorStop(1, "rgba(246,220,155,.06)");
+        roundRect(ctx, x, yy, w, 78, 39); ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.stroke();
+        big(); ctx.fillStyle = "#fff6dc"; ctx.textAlign = "center"; ctx.fillText(items[k], x + w / 2, yy + 54);
+        x += w + gap;
+      });
+      yy += 96;
+    });
+    return yy + 6;
+  }
+  // a framed note with a coloured label and larger text
+  function note(ctx, L, mark, label, text, y, color) {
+    font(ctx, L, "body", lh(L, 31, 30), 400);
+    var lines = wrap(ctx, text, INNER - 76, L, 3), lineH = lh(L, 44, 50);
+    var h = 76 + lines.length * lineH;
+    roundRect(ctx, PAD, y, INNER, h, 26); ctx.fillStyle = "rgba(10,7,34,.62)"; ctx.fill();
+    ctx.strokeStyle = color; ctx.globalAlpha = .55; ctx.lineWidth = 2; ctx.stroke(); ctx.globalAlpha = 1;
+    roundRect(ctx, PAD, y + 18, 8, h - 36, 4); ctx.fillStyle = color; ctx.fill();          // accent bar
+    ctx.textAlign = "left"; font(ctx, L, "body", lh(L, 28, 28), 700); ctx.fillStyle = color;
+    ctx.fillText(mark + "  " + label, PAD + 38, y + 50);
+    font(ctx, L, "body", lh(L, 31, 30), 400); ctx.fillStyle = INK;
+    drawLines(ctx, lines, PAD + 38, y + 50 + lineH, lineH);
+    return y + h + 18;
+  }
+  // Dream Fortune (Checker page): sign, chosen dream, headline, short text, supportive / careful years and lucky
+  // colors only when the page had them, a watch-out and one tip. All text comes from the site's own templates.
   function dream(spec, format) {
     var L = langOf(spec), T = LBL[L];
     return Promise.all([medals([spec.animal]), fontsReady(L)]).then(function (r) {
       return render(L, T.note, format, function (ctx, o) {
         eyebrow(ctx, L, (spec.category || ""), 112);
-        var R = o.compact ? 92 : 116, my = o.compact ? 222 : 262; medal(ctx, r[0][0], W / 2, my, R);
-        ctx.textAlign = "center"; ctx.fillStyle = GOLD; font(ctx, L, "body", 26, 600); ctx.fillText("✦  " + (spec.name || spec.animal) + "  ✦", W / 2, my + R + 52);
-        var y = head(ctx, L, spec.title || "", my + R + 128, lh(L, 56, 44));
-        y = para(ctx, L, spec.desc, y + 14, o.compact ? 3 : 4) + 10;
-        var rows = [];
-        if (spec.years && spec.years.length) rows.push([spec.yearsLabel, spec.years.join("  ·  ")]);
-        if (spec.careYear) rows.push([spec.careLabel, spec.careYear, WARN]);
-        if (spec.colors && spec.colors.length) rows.push([spec.colorsLabel, spec.colors.join(", ")]);
-        if (spec.watch && !o.compact) rows.push([spec.watchLabel, spec.watch, WARN]);
-        if (spec.tip && !o.compact) rows.push([spec.tipLabel || "", spec.tip]);
-        return rows.length ? panel(ctx, L, rows, y + 6, 2) : y;
+        var R = o.compact ? 88 : 108, my = o.compact ? 214 : 250; medal(ctx, r[0][0], W / 2, my, R);
+        ctx.textAlign = "center"; ctx.fillStyle = GOLD; font(ctx, L, "body", 28, 700); ctx.fillText("✦  " + (spec.name || spec.animal) + "  ✦", W / 2, my + R + 52);
+        var y = head(ctx, L, spec.title || "", my + R + 126, lh(L, 58, 46));
+        y = para(ctx, L, spec.desc, y + 12, o.compact ? 2 : 3, lh(L, 33, 31)) + 18;
+        if (spec.years && spec.years.length) y = badges(ctx, L, spec.yearsLabel, spec.years, y, GOLD);
+        if (spec.careYear) y = badges(ctx, L, spec.careLabel, [spec.careYear], y, WARN);
+        if (spec.colors && spec.colors.length && !(spec.years && spec.years.length)) y = badges(ctx, L, spec.colorsLabel, spec.colors, y, GOLD2);   // years first: keeps the text large
+        if (!o.compact && spec.watch) y = note(ctx, L, "⚠", spec.watchLabel, spec.watch, y + 6, WARN);
+        if (!o.compact && spec.tip) y = note(ctx, L, "✦", spec.tipLabel || "", spec.tip, y, GOLD);
+        return y;
       });
     });
   }

@@ -130,3 +130,15 @@ html[lang="km"] .df-cat { text-transform: none; letter-spacing: 0; }
   .df-bulb, .df-spinning::after, .df-spinning .df-hub-t, .df-tick, .df-sparks i, .df-spin[aria-busy="true"] { animation: none; }
   .df-bulb { opacity: .7; }
 }
+
+/* bigger, more stylish info chips on the page (years, careful year, colors) */
+.df-chips { gap: 12px; }
+.df-chip { padding: 12px 18px; border-radius: 16px; background: linear-gradient(180deg, rgba(246, 220, 155, .16), rgba(246, 220, 155, .05)); border-width: 1.5px; text-align: center; }
+.df-chip b { font-size: .86rem; letter-spacing: .02em; }
+.df-chip span { font-size: 1.3rem; letter-spacing: .03em; font-family: Georgia, "Times New Roman", serif; }
+html[lang="km"] .df-chip span { font-family: "Noto Sans Khmer", "Kantumruy Pro", sans-serif; font-size: 1.25rem; }
+.df-chip small { font-size: .78rem; }
+.df-chip-care { background: linear-gradient(180deg, rgba(255, 154, 168, .16), rgba(255, 154, 168, .05)); }
+.df-balance li { font-size: 1rem; padding: 11px 14px; border-left: 3px solid rgba(246, 220, 155, .6); }
+.df-balance li:nth-child(2) { border-left-color: rgba(255, 154, 168, .75); }
+.df-tip { font-size: 1rem; }
