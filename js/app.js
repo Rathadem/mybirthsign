@@ -261,6 +261,8 @@ document.addEventListener("DOMContentLoaded", function () {
           element: elementDisplay, elementLabel: S.chk_element, traits: traits, numbers: info.luckyNumbers, colors: luckyColors,
           matches: trianglePartnersDisplay, patience: clashAnimalDisplay },
         "/blog/zodiac-year-" + slug + ".html") : ""}</div>
+    `;
+    const fourHtml = `
       <div class="chk-four">
         <article class="chk-card chk-c-pers"><h3><img src="images/checker/personality.webp" alt="" width="36" height="36" class="chk-ico-new">${S.chk_personality}</h3>${persBody}<img class="chk-art" src="images/checker/art-pers.webp" alt="" width="282" height="99" loading="lazy"></article>
         <article class="chk-card chk-c-love"><h3><img src="images/checker/love.webp" alt="" width="36" height="36" class="chk-ico-new">${loveTitle}</h3>${loveBody}<img class="chk-art" src="images/checker/art-love.webp" alt="" width="282" height="99" loading="lazy"></article>
@@ -269,7 +271,10 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     `;
 
-    resultBox.innerHTML = topHtml + `
+    // the sign hero sits right under the Khmer lunar card on /checker (#chk-hero); other pages keep it in #result
+    const heroBox = document.getElementById("chk-hero");
+    if (heroBox) { heroBox.innerHTML = topHtml; wireShareRows(heroBox); }
+    resultBox.innerHTML = (heroBox ? "" : topHtml) + fourHtml + `
       <div class="result-card chk-details">
 
         <p class="lunar-note">${lunarNote}</p>
