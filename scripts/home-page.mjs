@@ -473,7 +473,6 @@ ${partB("km")}
 <script src="js/share.js"></script>
 <script src="js/app.js"></script>
 <script>${clientJs}</script>
-<script src="js/ai-friend-loader.js" defer></script>
 </body>
 </html>
 `;
