@@ -203,12 +203,6 @@ function _shareInnerHtml() {
   const opt = function (cls, icon, extra) {
     return '<button type="button" class="share-option ' + cls + '"' + (extra || "") + ">" + icon + '<span class="share-option-label"></span></button>';
   };
-  const nets = _SHARE_NETS.map(function (net) {
-    const inner = _brandIconHtml(net) + '<span class="share-option-label">' + net.label + "</span>";
-    return net.link
-      ? '<a class="share-option" data-share-net="' + net.id + '" href="#" target="_blank" rel="noopener">' + inner + "</a>"
-      : '<button type="button" class="share-option" data-share-net="' + net.id + '">' + inner + "</button>";
-  }).join("");
   return (
     '<button type="button" class="share-btn" aria-haspopup="true" aria-expanded="false">' +
       '<svg class="share-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
@@ -219,11 +213,9 @@ function _shareInnerHtml() {
     "</button>" +
     '<div class="share-popover" role="group" hidden>' +
       opt("share-image", _imageIconHtml()) +
-      opt("share-download", _ICON_DOWNLOAD) +
-      opt("share-copy", _copyIconHtml()) +
       opt("share-more", _ICON_MORE) +
-      '<div class="share-sep" role="presentation"></div>' +
-      nets +
+      opt("share-copy", _copyIconHtml()) +
+      opt("share-download", _ICON_DOWNLOAD) +
       '<p class="share-note" role="status" hidden></p>' +
     "</div>"
   );
@@ -299,6 +291,7 @@ function wireShareRows(root) {
     pop.setAttribute("aria-label", T.menu);
     label(q(".share-image"), T.image); label(q(".share-download"), T.download); label(q(".share-copy"), T.copy); label(q(".share-more"), T.more);
     if (!canFiles && q(".share-image")) q(".share-image").hidden = true;      // file sharing unsupported here: Download covers it
+    if (canFiles && q(".share-download")) q(".share-download").hidden = true; // menu = Share image, Copy link, More apps (Download only where Share image can't work)
     if (!canLink && q(".share-more")) q(".share-more").hidden = true;
 
     // read on use, so values filled in after page load are respected
@@ -352,10 +345,9 @@ function wireShareRows(root) {
           pinterest: "https://www.pinterest.com/pin/create/button/?url=" + eu + "&media=" + encodeURIComponent(_pinImageFor(spec())) + "&description=" + et
         };
         pop.querySelectorAll("a[data-share-net]").forEach(function (a) { a.setAttribute("href", hrefs[a.getAttribute("data-share-net")] || "#"); });
-        if (canFiles || _isPhone()) {   // draw ahead, one after another, so each option works on the first tap
-          const next = function (f) { return function () { return blobFor(f).catch(function () {}); }; };
-          blobFor("portrait").catch(function () {}).then(next("story")).then(next("square"));
-        }
+        // draw ahead so the option works on the first tap (Share image = portrait, Download = square)
+        if (canFiles) blobFor("portrait").catch(function () {});
+        else if (_isPhone()) blobFor("square").catch(function () {});
         const first = pop.querySelector(".share-option:not([hidden])");
         if (first && document.activeElement === btn) first.focus({ preventScroll: true });
       }
