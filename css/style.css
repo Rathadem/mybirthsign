@@ -3495,3 +3495,40 @@ html[lang="km"] .klb h1 { line-height: 1.8; }
 .bv2-guide-wide .bv2-guide-art { height: 100%; min-height: 200px; max-height: 260px; object-position: center 40%; }
 .bv2-guide-wide .bv2-guide-body h3 { font-size: 1.3rem; }
 @media (max-width: 700px) { .bv2-guide-card.bv2-guide-wide { grid-template-columns: 1fr; } .bv2-guide-wide .bv2-guide-art { height: 170px; min-height: 0; } }
+
+/* ===== "Khmer Lunar Calendar: Today" card in the Khmer lunar article — artwork is decoration, all dates are live text ===== */
+.klc { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); margin: 18px 0 16px; border-radius: 20px; overflow: hidden;
+  border: 1.5px solid #e7c27a88; background: #0c0928; box-shadow: 0 0 0 4px rgba(231, 194, 122, .07), 0 16px 44px rgba(0, 0, 0, .5); }
+.klc-art { grid-column: 1 / -1; grid-row: 1; width: 100%; height: 100%; min-height: 100%; object-fit: cover; object-position: 72% 50%; }
+.klc-panel { grid-column: 1; grid-row: 1; position: relative; margin: 14px; padding: 16px 16px 14px; border-radius: 16px; color: #f1ecff;
+  background: linear-gradient(180deg, rgba(14, 10, 46, .9), rgba(10, 7, 34, .94)); border: 1px solid #e7c27a99;
+  box-shadow: inset 0 0 0 4px rgba(10, 7, 34, .9), inset 0 0 0 5px rgba(231, 194, 122, .35); }
+.klc-panel::before, .klc-panel::after { content: ""; position: absolute; width: 26px; height: 26px; border: 2px solid #e7c27a; pointer-events: none; }
+.klc-panel::before { top: 6px; left: 6px; border-right: 0; border-bottom: 0; border-top-left-radius: 10px; }
+.klc-panel::after { bottom: 6px; right: 6px; border-left: 0; border-top: 0; border-bottom-right-radius: 10px; }
+.klc-top { text-align: center; padding-bottom: 8px; border-bottom: 1px solid rgba(231, 194, 122, .35); }
+.klc-km { margin: 0; font-family: "Moul", "Kantumruy Pro", serif; font-size: 1.15rem; line-height: 1.9; color: #f6dc9b; text-shadow: 0 0 14px rgba(246, 210, 130, .35); }
+.klc .klc-h { margin: 0; color: #fff3d1; font: 700 1.05rem/1.4 Georgia, serif; letter-spacing: .02em; }
+html[lang="km"] .klc .klc-h { font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; }
+.klc-big { margin: 10px 0 4px; text-align: center; font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 700; line-height: 1.7; color: #fff3d1; text-shadow: 0 0 16px rgba(246, 210, 130, .35); }
+.klc-rows { list-style: none; margin: 4px 0 0; padding: 0 !important; }
+.klc-rows li { display: flex; align-items: center; gap: 12px; margin: 0 !important; padding: 8px 2px; border-bottom: 1px solid rgba(231, 194, 122, .2); }
+.klc-rows li:last-child { border-bottom: 0; }
+.klc-ico { flex: 0 0 38px; height: 38px; display: grid; place-items: center; color: #e7c27a; }
+.klc-ico svg { width: 30px; height: 30px; }
+.klc-ico .klc-moon { width: 36px; height: 36px; }
+.klc-rows div { min-width: 0; }
+.klc-l { display: block; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: #c9b98a; }
+html[lang="km"] .klc-l { text-transform: none; letter-spacing: 0; font-size: .82rem; }
+.klc-rows strong { display: block; color: #fff; font-size: 1.05rem; line-height: 1.5; overflow-wrap: anywhere; }
+.klc-s { display: block; color: #cfc6ee; font-size: .84rem; line-height: 1.5; }
+.klc [lang="km"], html[lang="km"] .klc-panel { font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; }
+.klc-full { margin: 8px 0 0 !important; padding: 8px 10px; border-radius: 10px; background: rgba(231, 194, 122, .1); color: #fff3d1 !important; font-size: .92rem; line-height: 1.8; text-align: center; }
+.klc-note { margin: 8px 0 0 !important; color: #a99fd0 !important; font-size: .76rem; line-height: 1.55; }
+.klc-wait { margin: 18px 0; color: #cfc6ee !important; text-align: center; }
+.klc-failed .klc-wait { color: #ffd9a8 !important; }
+@media (max-width: 680px) {
+  .klc { grid-template-columns: 1fr; }
+  .klc-art { grid-row: 1; height: auto; aspect-ratio: 1200 / 630; min-height: 0; object-position: center; }
+  .klc-panel { grid-row: 2; margin: -28px 10px 10px; }
+}

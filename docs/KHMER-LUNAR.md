@@ -46,3 +46,16 @@ The "Your Khmer Lunar Birth Date" card on `/checker` shows the visitor's birthda
 - **Compatibility and Business Partner:** a "Khmer lunar birth dates" box in the result, one line per person (`klPairHtml` in `js/compat-page.js` and `js/business-calculator.js`).
 - **Wedding Date:** each recommended Saturday also shows its Khmer lunar day (`data-kl-iso` in `js/wedding.js`).
 - **Same method and range:** these use the same library and the same 1900–2100 range. Outside it, they say the date isn't available.
+
+## "Khmer Lunar Calendar: Today" card (blog article)
+- **Where:** at the top of `blog/khmer-lunar-calendar-birth-date.html` (English and Khmer), drawn by `todayCards()` in `js/khmer-lunar.js`. The Angkor Wat picture is decoration only. Every date on the card is live text worked out on the visitor's device. Nothing is baked into the HTML or the image, so caching can never show an old date.
+- **Which day:** the date in Cambodia (`Asia/Phnom_Penh`), whatever the visitor's own timezone.
+- **When it updates:** the card redraws at the next Cambodia midnight (a timer), and again when the tab becomes visible, gets focus, or comes back from the back/forward cache.
+- **Moon row:** comes from the calendar's lunar day (15 កើត full-moon day, 8 កើត/រោច half moon, last day dark moon). The small moon picture is an illustration of that lunar day, not an astronomy model.
+- **If loading fails:** if the library can't load, the card says so and suggests a printed Khmer calendar.
+- **Tested** with a set clock:
+  - 23:59 and 00:00 Cambodia time with the viewer in Los Angeles;
+  - Water Festival 2026 day 1, Visak Bochea 2026, before and after Khmer New Year 2026, the leap month (2nd Asadh 2023), and the 30-day Jesth (15 រោច) in the 2025 leap-day year;
+  - a page left open across midnight;
+  - the library failing to load;
+  - phone and desktop, English and Khmer.
