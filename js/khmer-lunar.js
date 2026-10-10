@@ -139,6 +139,11 @@
   function show(info) {
     var box = document.getElementById("khmer-lunar");
     if (!box || !info || !/^\d{4}-\d{2}-\d{2}$/.test(info.iso || "")) return;
+    if (!window.momentkh) {   // show the card frame at once (it is the first card under the form, and the page scrolls to it)
+      var S0 = T[info.lang === "km" ? "km" : "en"];
+      box.innerHTML = '<div class="kl-card"><div class="kl-head"><span class="kl-moon" aria-hidden="true"></span><div><h2>' + esc(S0.title) + "</h2><p>" + esc(S0.sub) + "</p></div></div></div>";
+      box.hidden = false;
+    }
     loadLib().then(function (M) { render(box, info, M); }, function () {
       var S = T[info.lang === "km" ? "km" : "en"];
       box.innerHTML = '<div class="kl-card"><p class="kl-fallback">' + esc(S.loadFail) + "</p></div>"; box.hidden = false;

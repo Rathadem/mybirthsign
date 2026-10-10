@@ -6,7 +6,7 @@ The "Your Khmer Lunar Birth Date" card on `/checker` shows the visitor's birthda
 - `js/khmer-lunar.js`: the card (English and Khmer). It runs when `js/app.js` fires `mbs:checker-date` after a result. The birth date stays on the page and is never put in a link.
 - `js/vendor/momentkh.min.js`: the calendar library, loaded only after a result is shown (16 KB).
 - `js/vendor/momentkh.LICENSE.txt`: the library's MIT license.
-- `checker.html`: the `#khmer-lunar` section, placed directly after `#result`, plus the script tag.
+- `checker.html`: the `#khmer-lunar` section, the first card under the birthday form (above Dream Fortune and the zodiac results), plus the script tag. After a check, the page scrolls to it.
 - `css/style.css`: the `.kl-*` styles at the end of the file.
 - `js/app.js`: two added lines that send the date to the card. The zodiac result HTML is unchanged, byte for byte.
 - `tests/khmer-lunar-test.mjs`: the reference-date tests. Run with `node tests/khmer-lunar-test.mjs`; add `--cross` for the 1900–2100 cross-check.

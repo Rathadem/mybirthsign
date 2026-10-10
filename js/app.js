@@ -321,7 +321,8 @@ document.addEventListener("DOMContentLoaded", function () {
     window.MBS_LAST_CHECKER_DATE = { iso: value, lang: lang, animal: animal };
     try { document.dispatchEvent(new CustomEvent("mbs:checker-date", { detail: window.MBS_LAST_CHECKER_DATE })); } catch (e) { /* optional */ }
     const dreamBox = document.getElementById("dream-fortune");   // sits above the result on /checker
-    (dreamBox && !dreamBox.hidden ? dreamBox : resultBox).scrollIntoView({ behavior: "smooth", block: "start" });
+    const lunarBox = document.getElementById("khmer-lunar");   // Khmer lunar card is the first card under the form
+    (lunarBox && !lunarBox.hidden ? lunarBox : dreamBox && !dreamBox.hidden ? dreamBox : resultBox).scrollIntoView({ behavior: "smooth", block: "start" });
 
     // Fetch a personalized AI-written reading. Falls back to the static
     // element blurb if the function isn't deployed yet or the call fails.
