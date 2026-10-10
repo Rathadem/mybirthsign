@@ -317,3 +317,28 @@ html[lang="km"] .fx-page .fx-day-share .share-btn { font-size: 1rem; }
 html[lang="km"] .fx-sign .fx-trade p { font-size: .86rem; }
 html[lang="km"] .fx-sign .fx-trade .fx-trade-meta { font-size: .82rem; }
 .fx-trade-meta strong, .fx-sign-lucky strong { white-space: nowrap; }
+
+/* Gold zodiac figure in the page header (daily fortune: the day animal; animal pages: that animal).
+   Drawn with ::after so the night-scene shading never dims it. Figures: images/gold/*.webp (supplied by the owner). */
+.fx-hero--rat { --fx-gold-fig: url("../images/gold/rat.webp"); }
+.fx-hero--ox { --fx-gold-fig: url("../images/gold/ox.webp"); }
+.fx-hero--tiger { --fx-gold-fig: url("../images/gold/tiger.webp"); }
+.fx-hero--rabbit { --fx-gold-fig: url("../images/gold/rabbit.webp"); }
+.fx-hero--dragon { --fx-gold-fig: url("../images/gold/dragon.webp"); }
+.fx-hero--snake { --fx-gold-fig: url("../images/gold/snake.webp"); }
+.fx-hero--horse { --fx-gold-fig: url("../images/gold/horse.webp"); }
+.fx-hero--goat { --fx-gold-fig: url("../images/gold/goat.webp"); }
+.fx-hero--monkey { --fx-gold-fig: url("../images/gold/monkey.webp"); }
+.fx-hero--rooster { --fx-gold-fig: url("../images/gold/rooster.webp"); }
+.fx-hero--dog { --fx-gold-fig: url("../images/gold/dog.webp"); }
+.fx-hero--pig { --fx-gold-fig: url("../images/gold/pig.webp"); }
+.fx-hero[class*="fx-hero--"]::after {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: max(1.5%, calc(50% - 640px)); bottom: 16px; width: min(290px, 20vw); height: 80%;
+  background: var(--fx-gold-fig) left bottom / contain no-repeat;
+  filter: drop-shadow(0 0 22px rgba(246, 200, 110, .45)) drop-shadow(0 8px 18px rgba(0, 0, 0, .55));
+}
+@media (max-width: 1279px) {
+  .fx-hero[class*="fx-hero--"]::after { left: 50%; transform: translateX(-50%); top: 16px; bottom: auto; width: 190px; height: 160px; background-position: center bottom; }
+  .fx-hero[class*="fx-hero--"] .fx-hero-in, .fx-hero[class*="fx-hero--"] .pf-hero-in { padding-top: 186px; }
+}
