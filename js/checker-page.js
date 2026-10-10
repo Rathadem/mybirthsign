@@ -4,7 +4,7 @@ function zodiacAnimalHtml(animal) {
   const S = UI_STRINGS[getLang()];
   const name = getLang() === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[animal] : animal;
   return '<li><a class="chk-animal-link" data-animal="' + animal + '" aria-expanded="false" href="animals.html#animal-' + slug + '">' +
-    '<img src="images/business/animals/' + slug + '.webp" alt="" width="72" height="72" loading="lazy">' +
+    '<img src="images/business/animals/s144/' + slug + '.webp" alt="" width="72" height="72" loading="lazy">' +
     "<span>" + name + "</span></a></li>";
 }
 (function () {
@@ -23,7 +23,7 @@ function zodiacAnimalHtml(animal) {
   const inRange = (y) => y >= 1950 && y <= 2031;
   const yearsOf = (a) => nearbyYearsForAnimal(a, 1990, 12).filter(inRange);
   const nm = (a) => (getLang() === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[a] : a);
-  const med = (a, n) => '<img src="images/business/animals/' + a.toLowerCase() + '.webp" alt="" width="' + n + '" height="' + n + '" loading="lazy">';
+  const med = (a, n) => '<img src="images/business/animals/' + (n <= 72 ? "s144/" : "") + a.toLowerCase() + '.webp" alt="" width="' + n + '" height="' + n + '" loading="lazy">';
   let current = null;
 
   function row(a) {

@@ -3396,3 +3396,9 @@ html[lang="km"] .bv2-hero h1 { font-family: "Noto Sans Khmer", "Kantumruy Pro", 
 .pf-share { margin-top: 14px; }
 .biz-result-card > .share-row { justify-content: center; margin: 18px 0; }
 .chk-share { margin: 14px 0 18px; }
+/* Phones: smaller crops of the hero pictures (same visible area, about half the download) */
+@media (max-width: 600px) {
+  .chk-hero:not(.cmp-hero):not(.wed-hero) { background: linear-gradient(180deg, rgba(11,8,31,.55) 0%, rgba(11,8,31,.35) 45%, #0b081f 100%), url("../images/checker/hero-bg-m.webp") center top / cover no-repeat; }
+  .chk-hero.cmp-hero { background: linear-gradient(180deg, rgba(11,8,31,.45) 0%, rgba(11,8,31,.25) 45%, #0b081f 100%), url("../images/compat/hero-bg-m.webp") center top / cover no-repeat; }
+  .cmp-result { background: linear-gradient(180deg, rgba(11,8,31,.62), rgba(11,8,31,.88)), url("../images/compat/hero-bg-m.webp") center 30% / cover no-repeat; }
+}

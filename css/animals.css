@@ -133,3 +133,5 @@ html[lang="km"] .an-intro h2, html[lang="km"] .an-duo h2 { font-size: clamp(1.1r
   radial-gradient(circle at 38% 34%, #fff6c8 0, #f7d77f 38%, #e0a83e 100%); }
 
 .an-wheel{display:block;width:100%;height:auto;border-radius:50%}
+/* Phones: smaller crop of the night-sky hero (same visible area, about half the download) */
+@media (max-width: 600px) { .an-hero.fx-hero { background-image: url("../images/fortune/hero-night-m.webp"); } }

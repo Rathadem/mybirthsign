@@ -47,7 +47,7 @@ const slug = (a) => a.toLowerCase();
 const href = (a) => `blog/zodiac-year-${slug(a)}.html`;
 const nm = (a, km) => (km ? KM_NAMES[a] : a);
 const T = (en, km) => `<span data-lang-content="en">${en}</span><span data-lang-content="km">${km}</span>`;   // for the two shared (form) sections only
-const medal = (a, s, lazy = true) => `<img class="an-medal" src="images/profile/medal-${slug(a)}.webp" width="${s}" height="${s}" alt="" ${lazy ? 'loading="lazy" decoding="async"' : 'fetchpriority="high"'}>`;
+const medal = (a, s, lazy = true) => `<img class="an-medal" src="images/profile/${s <= 80 ? "s152/" : ""}medal-${slug(a)}.webp" width="${s}" height="${s}" alt="" ${lazy ? 'loading="lazy" decoding="async"' : 'fetchpriority="high"'}>`;
 
 // ---------------------------------------------------------------- the day rule (same as the daily-fortune pages)
 const jdn = (y, m, d) => Math.floor(Date.UTC(y, m - 1, d) / 86400000) + 2440588;
@@ -418,6 +418,8 @@ const pageHtml = `<!DOCTYPE html>
 <meta name="theme-color" content="#0b0820">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Kantumruy+Pro:wght@400;600;700&family=Moul&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Kantumruy+Pro:wght@400;600;700&family=Moul&display=swap"></noscript>
+<link rel="preload" as="image" href="images/fortune/hero-night.webp" media="(min-width: 601px)">
+<link rel="preload" as="image" href="images/fortune/hero-night-m.webp" media="(max-width: 600px)" fetchpriority="high">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/fortune.css">
 <link rel="stylesheet" href="css/profile.css">
