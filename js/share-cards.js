@@ -328,12 +328,14 @@
       return render(L, T.note, format, function (ctx, o) {
         eyebrow(ctx, L, (spec.category || ""), 112);
         var R = o.compact ? 92 : 116, my = o.compact ? 222 : 262; medal(ctx, r[0][0], W / 2, my, R);
-        ctx.textAlign = "center"; ctx.fillStyle = GOLD; font(ctx, "en", "body", 26, 600); ctx.fillText("✦  " + (spec.name || spec.animal) + "  ✦", W / 2, my + R + 52);
+        ctx.textAlign = "center"; ctx.fillStyle = GOLD; font(ctx, L, "body", 26, 600); ctx.fillText("✦  " + (spec.name || spec.animal) + "  ✦", W / 2, my + R + 52);
         var y = head(ctx, L, spec.title || "", my + R + 128, lh(L, 56, 44));
-        y = para(ctx, L, spec.desc, y + 14, o.compact ? 3 : 5) + 10;
+        y = para(ctx, L, spec.desc, y + 14, o.compact ? 3 : 4) + 10;
         var rows = [];
         if (spec.years && spec.years.length) rows.push([spec.yearsLabel, spec.years.join("  ·  ")]);
+        if (spec.careYear) rows.push([spec.careLabel, spec.careYear, WARN]);
         if (spec.colors && spec.colors.length) rows.push([spec.colorsLabel, spec.colors.join(", ")]);
+        if (spec.watch && !o.compact) rows.push([spec.watchLabel, spec.watch, WARN]);
         if (spec.tip && !o.compact) rows.push([spec.tipLabel || "", spec.tip]);
         return rows.length ? panel(ctx, L, rows, y + 6, 2) : y;
       });

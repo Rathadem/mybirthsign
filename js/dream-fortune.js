@@ -52,6 +52,7 @@
       card: "✨ Create My Fortune Card", making: "Creating your card…", ready: "Your card is ready — share it or download it with the Share button.", fail: "Couldn't create the card. Please try again.",
       tip: "Try this", years: "Traditionally supportive years", symYear: "Symbolic green-light year", symNote: "A traditionally supportive year for your sign — a fun symbol, not a promise.",
       colors: "Lucky colors", fun: "For entertainment and inspiration only.", shareTitle: "My Dream Fortune: {C} · {A}",
+      edge: "Your edge", watch: "Watch out", careYear: "Year to go carefully", careNote: "Traditionally a clash year for your sign — take big decisions slowly.",
       names: { wealth: "Wealth & Money", car: "Dream Sports Car", home: "Dream Home", love: "Love & Relationships", career: "Career Success", years: "Lucky Years", opportunity: "Unexpected Opportunity", growth: "Personal Growth" },
       buttons: { car: "When Will I Get My Dream Sports Car?", wealth: "My Wealth Journey", home: "My Dream Home", love: "My Love Story", career: "My Career Success", years: "My Lucky Years" },
       titles: { car: "The {A}'s Dream Ride", wealth: "The {A}'s Wealth Journey", home: "The {A}'s Dream Home", love: "The {A}'s Love Story", career: "The {A}'s Road to Success", years: "The {A}'s Lucky Years", opportunity: "A Surprise Door Opens", growth: "The {A} Grows Stronger" },
@@ -90,6 +91,7 @@
       card: "✨ បង្កើត​រូបភាព", making: "កំពុងបង្កើតរូបភាព…", ready: "រូបភាពរបស់អ្នករួចរាល់ — ចុចប៊ូតុងចែករំលែក ដើម្បីចែករំលែក ឬទាញយក។", fail: "មិនអាចបង្កើតរូបភាពបានទេ។ សូមព្យាយាមម្តងទៀត។",
       tip: "សាកល្បងធ្វើ", years: "ឆ្នាំដែលគាំទ្រតាមប្រពៃណី", symYear: "ឆ្នាំភ្លើងបៃតង (និមិត្តរូប)", symNote: "ជាឆ្នាំដែលតាមប្រពៃណីគាំទ្ររាសីរបស់អ្នក — គ្រាន់តែជានិមិត្តរូបសម្រាប់ការកម្សាន្ត មិនមែនជាការសន្យាទេ។",
       colors: "ពណ៌សំណាង", fun: "សម្រាប់ការកម្សាន្ត និងការលើកទឹកចិត្តប៉ុណ្ណោះ។", shareTitle: "ជោគជតាក្តីស្រមៃរបស់ខ្ញុំ៖ {C} · {A}",
+      edge: "ចំណុចខ្លាំងរបស់អ្នក", watch: "គួរប្រយ័ត្ន", careYear: "ឆ្នាំគួរប្រុងប្រយ័ត្ន", careNote: "តាមប្រពៃណី ជាឆ្នាំឆុងនឹងរាសីរបស់អ្នក — សម្រេចចិត្តរឿងធំៗដោយយឺតៗ។",
       names: { wealth: "ទ្រព្យសម្បត្តិ និងលុយកាក់", car: "រថយន្តស្ព័រក្នុងក្តីស្រមៃ", home: "ផ្ទះក្នុងក្តីស្រមៃ", love: "ស្នេហា និងទំនាក់ទំនង", career: "ភាពជោគជ័យក្នុងអាជីព", years: "ឆ្នាំសំណាង", opportunity: "ឱកាសដែលមិននឹកស្មានដល់", growth: "ការរីកចម្រើនផ្ទាល់ខ្លួន" },
       buttons: { car: "ពេលណាខ្ញុំនឹងមានរថយន្តស្ព័រក្នុងក្តីស្រមៃ?", wealth: "ដំណើរទ្រព្យសម្បត្តិរបស់ខ្ញុំ", home: "ផ្ទះក្នុងក្តីស្រមៃរបស់ខ្ញុំ", love: "រឿងស្នេហារបស់ខ្ញុំ", career: "ភាពជោគជ័យក្នុងអាជីពរបស់ខ្ញុំ", years: "ឆ្នាំសំណាងរបស់ខ្ញុំ" },
       titles: { car: "រថយន្តក្នុងក្តីស្រមៃរបស់{A}", wealth: "ដំណើរទ្រព្យសម្បត្តិរបស់{A}", home: "ផ្ទះក្នុងក្តីស្រមៃរបស់{A}", love: "រឿងស្នេហារបស់{A}", career: "ផ្លូវឆ្ពោះទៅភាពជោគជ័យរបស់{A}", years: "ឆ្នាំសំណាងរបស់{A}", opportunity: "ទ្វារឱកាសដ៏គួរឱ្យភ្ញាក់ផ្អើល", growth: "{A}កាន់តែរឹងមាំ" },
@@ -147,13 +149,21 @@
     return out;
   }
 
+  // the next year whose animal is the sign's direct opposite (getCompatibilityType "clash")
+  function carefulYear(animal) {
+    if (typeof animalForYear !== "function" || typeof getCompatibilityType !== "function" || typeof getZodiac !== "function") return null;
+    var now = getZodiac(new Date()).zodiacYear;
+    for (var y = now; y < now + 13; y++) if (getCompatibilityType(animal, animalForYear(y)) === "clash") return y;
+    return null;
+  }
+
   var state = null;          // { animal, element, lang, root, spins, picks, spinning, rot }
 
   function mount(detail) {
     var host = document.getElementById("dream-fortune");
     if (!host || !detail || !detail.animal || !SIGN.en[detail.animal]) { if (host) host.hidden = true; return; }
     var lang = detail.lang === "km" ? "km" : "en", S = T[lang];
-    var name = lang === "km" ? (typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[detail.animal] : detail.animal) : detail.animal;
+    var name = lang === "km" ? "ឆ្នាំ" + (typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[detail.animal] : detail.animal) : detail.animal;
     state = { animal: detail.animal, name: name, lang: lang, spins: 0, picks: {}, spinning: false, rot: 0, host: host };
     var seg = 360 / CATS.length;
     var slices = CATS.map(function (c, i) {
@@ -163,6 +173,8 @@
       return '<path d="M100 100L' + x0.toFixed(2) + " " + y0.toFixed(2) + "A96 96 0 0 1 " + x1.toFixed(2) + " " + y1.toFixed(2) + 'Z" class="df-slice df-s' + (i % 2) + '"/>' +
         '<text x="' + ex.toFixed(1) + '" y="' + ey.toFixed(1) + '" class="df-ico" transform="rotate(' + (i * seg) + " " + ex.toFixed(1) + " " + ey.toFixed(1) + ')">' + EMOJI[c] + "</text>";
     }).join("");
+    var bulbs = "";
+    for (var k = 0; k < 16; k++) { var ba = (k * 22.5 - 90) * Math.PI / 180; bulbs += '<circle class="df-bulb' + (k % 2 ? " df-b2" : "") + '" cx="' + (100 + 92.5 * Math.cos(ba)).toFixed(1) + '" cy="' + (100 + 92.5 * Math.sin(ba)).toFixed(1) + '" r="2.4"/>'; }
     host.innerHTML =
       '<div class="df-card">' +
         '<h2 class="df-h" id="df-h">' + esc(S.h) + "</h2>" +
@@ -171,7 +183,7 @@
           '<div class="df-wheel" role="img" aria-label="' + esc(S.wheel) + '">' +
             '<span class="df-pointer" aria-hidden="true"></span>' +
             '<svg viewBox="0 0 200 200" aria-hidden="true"><g class="df-rot">' +
-              '<circle cx="100" cy="100" r="99" class="df-rim"/>' + slices +
+              '<circle cx="100" cy="100" r="99" class="df-rim"/>' + slices + bulbs +
               '<circle cx="100" cy="100" r="22" class="df-hub"/><text x="100" y="101" class="df-hub-t">✦</text>' +
             "</g></svg>" +
           "</div>" +
@@ -192,26 +204,54 @@
 
   function spin() {
     if (!state || state.spinning) return;
-    var S = T[state.lang], host = state.host, btn = host.querySelector(".df-spin"), g = host.querySelector(".df-rot");
+    var S = T[state.lang], host = state.host, btn = host.querySelector(".df-spin"), g = host.querySelector(".df-rot"), wheel = host.querySelector(".df-wheel");
     var i = rnd(CATS.length), seg = 360 / CATS.length, jitter = rnd(Math.floor(seg * 0.5)) - Math.floor(seg * 0.25);
+    var still = reducedMotion();
     var base = Math.ceil(state.rot / 360) * 360;
-    var target = base + (reducedMotion() ? 0 : 360 * 5) + (360 - i * seg) + jitter;
+    var target = base + (still ? 0 : 360 * 5) + (360 - i * seg) + jitter;
     state.spinning = true; state.spins++;
     btn.disabled = true; btn.textContent = S.spinning; btn.setAttribute("aria-busy", "true");
+    host.querySelector(".df-live").textContent = "";
     host.querySelectorAll(".df-dream").forEach(function (b) { b.disabled = true; });
-    var ms = reducedMotion() ? 0 : 3200;
-    g.style.transition = ms ? "transform " + ms + "ms cubic-bezier(.12,.72,.18,1)" : "none";
-    g.style.transform = "rotate(" + target + "deg)";
+    host.querySelectorAll(".df-win").forEach(function (x) { x.classList.remove("df-win"); });
+    var ms = still ? 0 : 3600, settle = still ? 0 : 420, over = still ? 0 : 3;
+    if (!still) wheel.classList.add("df-spinning");
+    g.style.transition = ms ? "transform " + ms + "ms cubic-bezier(.12,.72,.16,1)" : "none";
+    g.style.transform = "rotate(" + (target + over) + "deg)";
     state.rot = target;
+    if (!still) ticker(g, wheel.querySelector(".df-pointer"), seg, ms + settle);
     setTimeout(function () {
-      state.spinning = false;
-      btn.disabled = false; btn.textContent = S.again; btn.removeAttribute("aria-busy");
-      host.querySelectorAll(".df-dream").forEach(function (b) { b.disabled = false; });
-      host.querySelector(".df-live").textContent = fill(S.stopped, { C: S.names[CATS[i]] });
-      host.querySelector(".df-wheel").classList.add("df-glow");
-      setTimeout(function () { var w = host.querySelector(".df-wheel"); if (w) w.classList.remove("df-glow"); }, 1200);
-      reveal(CATS[i], null);
-    }, ms + 60);
+      if (settle) { g.style.transition = "transform " + settle + "ms cubic-bezier(.3,0,.3,1)"; g.style.transform = "rotate(" + target + "deg)"; }
+      setTimeout(function () {
+        state.spinning = false;
+        wheel.classList.remove("df-spinning");
+        btn.disabled = false; btn.textContent = S.again; btn.removeAttribute("aria-busy");
+        host.querySelectorAll(".df-dream").forEach(function (b) { b.disabled = false; });
+        host.querySelector(".df-live").textContent = fill(S.stopped, { C: S.names[CATS[i]] });
+        var slice = host.querySelectorAll(".df-slice")[i]; if (slice) slice.classList.add("df-win");
+        if (!still) { wheel.classList.add("df-glow"); sparkle(wheel); setTimeout(function () { wheel.classList.remove("df-glow"); }, 1300); }
+        reveal(CATS[i], null);
+      }, settle + 40);
+    }, ms);
+  }
+  // the pointer flicks each time a slice edge passes under it (reads the wheel's live angle)
+  function ticker(g, ptr, seg, total) {
+    if (!ptr || !window.requestAnimationFrame) return;
+    var t0 = performance.now(), last = null;
+    (function frame(now) {
+      var m = getComputedStyle(g).transform, ang = 0;
+      if (m && m !== "none") { var v = m.match(/matrix\(([^)]+)\)/); if (v) { var p = v[1].split(",").map(parseFloat); ang = Math.atan2(p[1], p[0]) * 180 / Math.PI; } }
+      var slot = Math.floor(((ang + seg / 2) % 360 + 360) % 360 / seg);
+      if (last !== null && slot !== last) { ptr.classList.remove("df-tick"); void ptr.offsetWidth; ptr.classList.add("df-tick"); }
+      last = slot;
+      if (now - t0 < total) requestAnimationFrame(frame); else ptr.classList.remove("df-tick");
+    })(t0);
+  }
+  function sparkle(wheel) {
+    var box = document.createElement("span"); box.className = "df-sparks"; box.setAttribute("aria-hidden", "true");
+    for (var k = 0; k < 12; k++) { var sp = document.createElement("i"); sp.style.setProperty("--a", (k * 30) + "deg"); sp.style.setProperty("--d", (54 + (k % 3) * 14) + "%"); box.appendChild(sp); }
+    wheel.appendChild(box);
+    setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); }, 1200);
   }
 
   function content(cat) {
@@ -225,7 +265,10 @@
     var info = (typeof ANIMAL_INFO !== "undefined" && ANIMAL_INFO[state.animal]) || null;
     var kmInfo = (typeof KM_ANIMAL_INFO !== "undefined" && KM_ANIMAL_INFO[state.animal]) || null;
     var colors = L === "km" ? (kmInfo && kmInfo.luckyColors) : (info && info.luckyColors);
+    var weak = L === "km" ? (kmInfo && kmInfo.weaknesses) : (info && info.weaknesses);
+    var cy = (cat === "years" || cat === "wealth" || cat === "career" || cat === "car") ? carefulYear(state.animal) : null;
     return {
+      edge: L === "en" ? cap(P[0]) : P[0], watch: weak || "", careYear: cy,
       cat: cat, emoji: EMOJI[cat], catName: S.names[cat], title: fill(S.titles[cat], v), desc: desc,
       tip: S.tips[cat][(idx + n) % S.tips[cat].length],
       years: cat === "car" ? years.slice(0, 1) : (cat === "years" || cat === "wealth" || cat === "career" || cat === "opportunity") ? years : [],
@@ -243,12 +286,16 @@
         : '<div class="df-chip"><b>' + esc(S.years) + "</b><span>" + esc(ys.join(" · ")) + "</span></div>";
     }
     var colorHtml = R.colors.length ? '<div class="df-chip"><b>' + esc(S.colors) + "</b><span>" + esc(R.colors.join(", ")) + "</span></div>" : "";
+    var careHtml = R.careYear ? '<div class="df-chip df-chip-care"><b>' + esc(S.careYear) + "</b><span>" + esc(L === "km" ? kmd(R.careYear) : R.careYear) + "</span><small>" + esc(S.careNote) + "</small></div>" : "";
+    var balance = '<ul class="df-balance">' +
+      '<li><span aria-hidden="true">💪</span><b>' + esc(S.edge) + ":</b> " + esc(R.edge) + "</li>" +
+      (R.watch ? '<li><span aria-hidden="true">⚠️</span><b>' + esc(S.watch) + ":</b> " + esc(R.watch) + "</li>" : "") + "</ul>";
     out.innerHTML =
       '<article class="df-result" aria-labelledby="df-rt">' +
         '<p class="df-cat"><span aria-hidden="true">' + R.emoji + "</span> " + esc(R.catName) + "</p>" +
         '<h3 class="df-title" id="df-rt" tabindex="-1">' + esc(R.title) + "</h3>" +
-        '<p class="df-desc">' + esc(R.desc) + "</p>" +
-        (yearsHtml || colorHtml ? '<div class="df-chips">' + yearsHtml + colorHtml + "</div>" : "") +
+        '<p class="df-desc">' + esc(R.desc) + "</p>" + balance +
+        (yearsHtml || colorHtml || careHtml ? '<div class="df-chips">' + yearsHtml + careHtml + colorHtml + "</div>" : "") +
         '<p class="df-tip"><b>' + esc(S.tip) + ":</b> " + esc(R.tip) + "</p>" +
         '<p class="df-fun">' + esc(S.fun) + "</p>" +
         '<button type="button" class="df-make">' + esc(S.card) + "</button>" +
@@ -270,7 +317,8 @@
     var spec = {
       cardType: "dream", lang: L, animal: state.animal, name: state.name, emoji: R.emoji, category: R.catName, title: R.title, desc: R.desc, tip: R.tip,
       yearsLabel: R.years.length ? (R.cat === "car" ? S.symYear : S.years) : "", years: R.years.map(function (y) { return L === "km" ? kmd(y) : String(y); }),
-      colorsLabel: R.colors.length ? S.colors : "", colors: R.colors, tipLabel: S.tip
+      colorsLabel: R.colors.length ? S.colors : "", colors: R.colors, tipLabel: S.tip,
+      watchLabel: R.watch ? S.watch : "", watch: R.watch, careLabel: R.careYear ? S.careYear : "", careYear: R.careYear ? (L === "km" ? kmd(R.careYear) : String(R.careYear)) : ""
     };
     btn.disabled = true; msg.textContent = S.making;
     _buildCardBlob(spec, "portrait").then(function (blob) {
