@@ -336,9 +336,20 @@ html[lang="km"] .fx-sign .fx-trade .fx-trade-meta { font-size: .82rem; }
   content: ""; position: absolute; z-index: -1; pointer-events: none;
   left: max(1.5%, calc(50% - 640px)); bottom: 16px; width: min(290px, 20vw); height: 80%;
   background: var(--fx-gold-fig) left bottom / contain no-repeat;
-  filter: drop-shadow(0 0 22px rgba(246, 200, 110, .45)) drop-shadow(0 8px 18px rgba(0, 0, 0, .55));
+  /* blend into the night scene: soft warm glow (no hard dark shadow), a touch less saturated, a faint reflection on the lake */
+  filter: drop-shadow(0 0 26px rgba(255, 196, 96, .32)) saturate(.92) brightness(.97);
+  -webkit-box-reflect: below 2px linear-gradient(transparent 72%, rgba(255, 255, 255, .16));
+  opacity: .96;
 }
+/* warm moon-like light pooling behind the figure, so it feels lit by the scene */
+.fx-hero[class*="fx-hero--"] { background-image:
+  radial-gradient(ellipse 22% 46% at max(13%, calc(50% - 500px)) 70%, rgba(255, 190, 90, .22), rgba(255, 190, 90, 0) 70%),
+  url("../images/fortune/hero-night.webp"); }
 @media (max-width: 1279px) {
-  .fx-hero[class*="fx-hero--"]::after { left: 50%; transform: translateX(-50%); top: 16px; bottom: auto; width: 190px; height: 160px; background-position: center bottom; }
+  .fx-hero[class*="fx-hero--"]::after { left: 50%; transform: translateX(-50%); top: 16px; bottom: auto; width: 190px; height: 160px; background-position: center bottom; -webkit-box-reflect: none; }
+  .fx-hero[class*="fx-hero--"] { background-image: radial-gradient(ellipse 180px 120px at 50% 105px, rgba(255, 190, 90, .24), rgba(255, 190, 90, 0) 75%), url("../images/fortune/hero-night.webp"); }
   .fx-hero[class*="fx-hero--"] .fx-hero-in, .fx-hero[class*="fx-hero--"] .pf-hero-in { padding-top: 186px; }
+}
+@media (max-width: 600px) {
+  .fx-hero[class*="fx-hero--"] { background-image: radial-gradient(ellipse 170px 115px at 50% 105px, rgba(255, 190, 90, .24), rgba(255, 190, 90, 0) 75%), url("../images/fortune/hero-night-m.webp"); }
 }
