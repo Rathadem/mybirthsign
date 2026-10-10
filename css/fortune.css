@@ -292,3 +292,13 @@ html[lang="km"] .fx-sign-more > summary { font-size: .82rem; }
 @media (prefers-reduced-motion: reduce) { .fx-sign-hit { animation: none; outline: 2px solid #f6dc9b; } }
 .fx-day-share { display: flex; justify-content: center; margin: -6px 0 14px; }
 .fx-sign-share { display: flex; justify-content: center; margin-top: 8px; }
+/* Daily trade box in each sign card (rules only, shown on every daily post) */
+.fx-sign .fx-trade { margin: 0 0 8px; padding: 7px 9px; border-radius: 8px; border: 1px solid rgba(231, 194, 122, .45); background: linear-gradient(135deg, rgba(231, 194, 122, .14), rgba(11, 8, 32, .4)); }
+.fx-sign .fx-trade h4 { margin: 0 0 3px; color: var(--fx-gold-hi); }
+.fx-sign .fx-trade h4::before { content: "🛒 "; }
+.fx-sign .fx-trade p { margin: 0; font-size: .8rem; color: #fff; }
+.fx-sign .fx-trade .fx-trade-meta { display: flex; flex-wrap: wrap; gap: 2px 12px; margin-top: 5px; font-size: .74rem; color: #cfc6ee; }
+.fx-trade-meta strong { color: #fff3d1; }
+html[lang="km"] .fx-sign .fx-trade p { font-size: .86rem; }
+html[lang="km"] .fx-sign .fx-trade .fx-trade-meta { font-size: .82rem; }
+.fx-trade-meta strong, .fx-sign-lucky strong { white-space: nowrap; }

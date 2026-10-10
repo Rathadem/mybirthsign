@@ -64,7 +64,7 @@ Write today's reading for these signs:
 ${part.map(signBrief).join("\n")}
 
 For EACH sign give:
-fortune (overall day), love (relationships), career (work/business), money (everyday money habits), compat (which animal to team up with today and why, using the sign's harmony animal above), careful (one thing to watch, kind tone), advice (one practical action for today).
+fortune (overall day), love (relationships), career (work and business, with a focus on daily trade: selling, buying, customers, stock, deals), money (today's trading money: sales, prices, spending, saving), compat (which animal to team up with today and why, using the sign's harmony animal above), careful (one thing to watch, kind tone), advice (one practical action for today).
 ${LEN(lang)}
 Return JSON: {"signs":{"<Animal in English>":{"fortune":"","love":"","career":"","money":"","compat":"","careful":"","advice":""}, ...}} with exactly these animals: ${part.map((s) => s.animal).join(", ")}.`;
 }

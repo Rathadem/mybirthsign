@@ -56,6 +56,10 @@ try {
   }
 } catch (e) { console.warn("daily data not used:", e.message); }
 const dataOf = (a) => DATA && DATA.signs.find((x) => x.animal === a);
+// rule-only facts (lucky number / color / direction / time, harmony animal) — same rules as the daily data, no AI
+const { computeFacts } = await import("./daily-data-lib.mjs");
+const FACTS = computeFacts(iso);
+const factOf = (a) => FACTS.signs.find((x) => x.animal === a);
 
 // ---------------------------------------------------------------- site data
 function extractConst(src, name) {
@@ -119,6 +123,25 @@ const GOOD_FOR = {
     ordinary: ["កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។", "ការបញ្ចប់កិច្ចការផ្ទះ ឯកសារ និងកិច្ចការប្រចាំថ្ងៃ។", "ការរក្សាចង្វាក់ធម្មតារបស់អ្នក មិនចាំបាច់បង្ខំអ្វីទេ។", "ការរៀបចំផែនការទុកជាមុន ជាជាងធ្វើការសម្រេចចិត្តធំៗ។"],
     caution: ["កិច្ចការស្រាលៗប៉ុណ្ណោះ។ ប្រសិនបើអាច គួរជៀសវាងការសម្រេចចិត្តសំខាន់ៗ។", "ការងារស្ងប់ស្ងាត់ ការសម្រាក និងការបញ្ចប់កិច្ចការតូចតាច។", "ការស្តាប់ច្រើនជាងនិយាយ និងពិនិត្យលម្អិតម្តងទៀត។", "ការពន្យារការទិញធំៗ ឬការចុះហត្ថលេខាទៅថ្ងៃផ្សេង។"],
   },
+};
+// Daily trade (buying, selling, stock, customers) — one line per rating, picked by date like GOOD_FOR.
+const TRADE = {
+  en: {
+    great: ["Strong day for sales: open early, put your best goods up front and ask a fair price with confidence.", "Good day to close deals, take new orders and restock what sells fast.", "Customers are easier to win today — try a new product, a promotion or a special price.", "A good day to collect what you are owed and agree terms with suppliers."],
+    good: ["Steady sales — keep regular customers happy and follow up on orders.", "Good for small restocks and fair deals with people you already trust.", "Selling goes smoothly; team up with a friend or a neighbouring shop to reach more buyers.", "A fine day to settle accounts and plan next week's stock."],
+    ordinary: ["A normal trading day — keep your usual prices and routine; no need to gamble on big stock.", "Sales are average; focus on good service, a clean display and correct change.", "Better for counting stock and checking costs than for starting something big.", "Buy only what you need today and save big orders for a stronger day."],
+    caution: ["Trade carefully: sell what you have and avoid big stock purchases, lending or new contracts.", "Double-check prices, money and change — slow and careful beats fast today.", "Not a day for risky deals or selling on credit; keep cash safe and put off big decisions.", "Keep it simple: serve your regular customers and leave negotiations for another day."],
+  },
+  km: {
+    great: ["ថ្ងៃលក់ដាច់៖ បើកហាងឱ្យបានព្រឹក ដាក់ទំនិញល្អៗនៅខាងមុខ ហើយដាក់តម្លៃសមរម្យដោយទំនុកចិត្ត។", "ថ្ងៃល្អសម្រាប់បិទការព្រមព្រៀង ទទួលការកុម្ម៉ង់ថ្មី និងបន្ថែមស្តុកទំនិញដែលលក់ដាច់។", "ថ្ងៃនេះងាយទាក់ទាញអតិថិជន — សាកល្បងទំនិញថ្មី ប្រូម៉ូសិន ឬតម្លៃពិសេស។", "ថ្ងៃល្អសម្រាប់ប្រមូលលុយដែលគេជំពាក់ និងព្រមព្រៀងលក្ខខណ្ឌជាមួយអ្នកផ្គត់ផ្គង់។"],
+    good: ["ការលក់មានស្ថិរភាព — ថែរក្សាអតិថិជនប្រចាំ និងតាមដានការកុម្ម៉ង់។", "ល្អសម្រាប់បន្ថែមស្តុកតិចៗ និងការជួញដូរដោយយុត្តិធម៌ជាមួយអ្នកដែលអ្នកទុកចិត្ត។", "ការលក់ដូររលូន — សហការជាមួយមិត្ត ឬហាងជិតខាង ដើម្បីបានអតិថិជនច្រើនជាងមុន។", "ថ្ងៃល្អសម្រាប់ទូទាត់គណនី និងរៀបចំស្តុកសម្រាប់សប្តាហ៍ក្រោយ។"],
+    ordinary: ["ថ្ងៃលក់ដូរធម្មតា — រក្សាតម្លៃ និងទម្លាប់ដដែល មិនចាំបាច់ប្រថុយទិញស្តុកច្រើនទេ។", "ការលក់មធ្យម — ផ្តោតលើសេវាកម្មល្អ ការតាំងទំនិញឱ្យស្អាត និងការអាប់លុយឱ្យត្រឹមត្រូវ។", "ល្អសម្រាប់រាប់ស្តុក និងពិនិត្យថ្លៃដើម ជាជាងចាប់ផ្តើមអ្វីធំៗ។", "ទិញតែអ្វីដែលត្រូវការថ្ងៃនេះ ហើយទុកការកុម្ម៉ង់ធំៗសម្រាប់ថ្ងៃល្អជាងនេះ។"],
+    caution: ["ជួញដូរដោយប្រុងប្រយ័ត្ន៖ លក់ទំនិញដែលមានស្រាប់ ជៀសវាងទិញស្តុកច្រើន ឱ្យគេខ្ចី ឬចុះកិច្ចសន្យាថ្មី។", "ពិនិត្យតម្លៃ លុយ និងលុយអាប់ឱ្យបានច្បាស់ — យឺតតែប្រាកដ ប្រសើរជាងលឿននៅថ្ងៃនេះ។", "មិនមែនជាថ្ងៃសម្រាប់ការព្រមព្រៀងប្រថុយ ឬលក់ជំពាក់ទេ — រក្សាលុយឱ្យមានសុវត្ថិភាព ហើយពន្យារការសម្រេចចិត្តធំៗ។", "ធ្វើឱ្យសាមញ្ញ៖ បម្រើអតិថិជនប្រចាំ ហើយទុកការចរចាសម្រាប់ថ្ងៃផ្សេង។"],
+  },
+};
+const TRADE_T = {
+  en: { h: "Trade today", hours: "Best selling hours", partner: "Good trade partner", partnerName: (n) => n, best: (l) => `Best signs for trade today: ${l}.` },
+  km: { h: "ការលក់ដូរថ្ងៃនេះ", hours: "ម៉ោងលក់ដាច់", partner: "ដៃគូជួញដូរល្អ", partnerName: (n) => "ឆ្នាំ" + n, best: (l) => `រាសីល្អសម្រាប់ការលក់ដូរថ្ងៃនេះ៖ ${l}។` },
 };
 const AVOID_NOTE = {
   en: {
@@ -293,30 +316,46 @@ const DL = {
 function signCard(c, lang, t) {
   const { a, i, tier } = c, isKm = lang === "km", name = isKm ? KM_NAMES[a] : a;
   const weak = (isKm ? KM_INFO[a].weaknesses : INFO[a].weaknesses).trim();
-  return `<li class="fx-sign fx-sign-${tier}">
-        <div class="fx-sign-head">
-          ${med(a, 76)}
-          <h3>${esc(name)}</h3>
-          <span class="fx-tier fx-tier-${tier}">${I[tier]}${esc(TIER_LABEL[lang][tier])}</span>
-        </div>
-        ${(() => {
-          const d = dataOf(a);
-          if (!d) return `<h4>${t.goodFor}</h4>
-        <p>${esc(pick(GOOD_FOR[lang][tier], i))}</p>
-        <h4>${t.watchOut}</h4>
-        <p>${esc(weak)} ${esc(pick(AVOID_NOTE[lang][tier], i + 1))}</p>`;
-          const x = d.text[lang], L = d.lucky, D = DL[lang];
-          return `<p class="fx-sign-fortune" data-sign="${a.toLowerCase()}">${esc(x.fortune)}</p>
-        <p class="fx-sign-lucky"><span>${D.number} <strong>${isKm ? kmNum(L.number) : L.number}</strong></span><span>${D.color} <i class="fx-swatch" style="background:${L.color.hex}"></i><strong>${esc(L.color[lang])}</strong></span><span>${D.direction} <strong>${esc(L.direction[lang])}</strong></span><span>${D.time} <strong>${isKm ? kmNum(L.time) : L.time}</strong></span></p>
+  const d = dataOf(a), F = factOf(a), L = d ? d.lucky : F.lucky, D = DL[lang], TT = TRADE_T[lang], date = isKm ? dateKM : dateEN;
+  const trade = pick(TRADE[lang][tier], i + 2);
+  const partner = TT.partnerName(isKm ? KM_NAMES[L.helperAnimal || F.lucky.helperAnimal] : (L.helperAnimal || F.lucky.helperAnimal));
+  const time = isKm ? kmNum(L.time) : L.time;
+  const goodFor = pick(GOOD_FOR[lang][tier], i), watch = `${weak} ${pick(AVOID_NOTE[lang][tier], i + 1)}`;
+  const x = d ? d.text[lang] : null;
+  const card = x
+    ? { fortune: x.fortune, love: x.love, career: x.career, money: x.money, advice: x.advice }
+    : { fortune: goodFor };
+  const spec = Object.assign({ cardType: "daily", lang, animal: a, name, tier, label: TIER_LABEL[lang][tier], date }, card,
+    { trade, tradeLabel: TT.h, number: L.number, color: L.color[lang], colorHex: L.color.hex, direction: L.direction[lang], time: L.time });
+  const tradeBox = `<div class="fx-trade"><h4>${esc(TT.h)}</h4><p>${esc(trade)}</p>
+          <p class="fx-trade-meta"><span>${TT.hours} <strong>${time}</strong></span><span>${TT.partner} <strong>${esc(partner)}</strong></span></p></div>`;
+  const lucky = `<p class="fx-sign-lucky"><span>${D.number} <strong>${isKm ? kmNum(L.number) : L.number}</strong></span><span>${D.color} <i class="fx-swatch" style="background:${L.color.hex}"></i><strong>${esc(L.color[lang])}</strong></span><span>${D.direction} <strong>${esc(L.direction[lang])}</strong></span><span>${D.time} <strong>${time}</strong></span></p>`;
+  const share = `<div class="fx-sign-share share-row" data-share-title="${attr(`${name} · ${TIER_LABEL[lang][tier]} — ${date}`)}" data-share-url="/blog/daily-fortune-${iso}.html?sign=${a.toLowerCase()}" data-share-card="${attr(JSON.stringify(spec))}"></div>`;
+  const inner = x
+    ? `<p class="fx-sign-fortune" data-sign="${a.toLowerCase()}">${esc(x.fortune)}</p>
+        ${tradeBox}
+        ${lucky}
         <details class="fx-sign-more"><summary>${D.more}</summary>
           <h4>${D.love}</h4><p>${esc(x.love)}</p>
           <h4>${D.career}</h4><p>${esc(x.career)}</p>
           <h4>${D.money}</h4><p>${esc(x.money)}</p>
           <h4>${t.watchOut}</h4><p>${esc(x.careful)}</p>
           <h4>${D.advice}</h4><p>${esc(x.advice)}</p>
-          <div class="fx-sign-share share-row" data-share-title="${attr(`${name} · ${TIER_LABEL[lang][tier]} — ${isKm ? dateKM : dateEN}`)}" data-share-url="/blog/daily-fortune-${iso}.html?sign=${a.toLowerCase()}" data-share-card="${attr(JSON.stringify({ cardType: "daily", lang, animal: a, name, tier, label: TIER_LABEL[lang][tier], date: isKm ? dateKM : dateEN, fortune: x.fortune, love: x.love, career: x.career, money: x.money, advice: x.advice, number: L.number, color: L.color[lang], colorHex: L.color.hex, direction: L.direction[lang], time: L.time }))}"></div>
-        </details>`;
-        })()}
+        </details>`
+    : `<h4 data-sign="${a.toLowerCase()}">${t.goodFor}</h4>
+        <p>${esc(goodFor)}</p>
+        ${tradeBox}
+        <h4>${t.watchOut}</h4>
+        <p>${esc(watch)}</p>
+        ${lucky}`;
+  return `<li class="fx-sign fx-sign-${tier}">
+        <div class="fx-sign-head">
+          ${med(a, 76)}
+          <h3>${esc(name)}</h3>
+          <span class="fx-tier fx-tier-${tier}">${I[tier]}${esc(TIER_LABEL[lang][tier])}</span>
+        </div>
+        ${inner}
+        ${share}
         <a class="fx-more" href="${guideHref(a)}">${esc(t.view(name))}</a>
       </li>`;
 }
@@ -406,8 +445,8 @@ ${t.guides.map((g) => `          <div class="fx-guide"><div class="fx-guide-ico"
 
   <section class="fx-sec" aria-labelledby="fx-grid-${lang}">
     <div class="fx-head"><h2 id="fx-grid-${lang}">${t.gridH}</h2>${I.orn}<p>${t.gridP}</p></div>
-    ${DATA ? `<div class="fx-day-share share-row" data-share-title="${attr(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html" data-share-card="${attr(JSON.stringify({ cardType: "lucky", lang, date: isKm ? dateKM : dateEN, top: DATA.highlights.topLucky, topNames: DATA.highlights.topLucky.map(nm), careful: DATA.highlights.careful.map(nm), text: DATA.highlights.theme[lang] }))}"></div>
-    ` : ""}<ul class="fx-grid">
+    <div class="fx-day-share share-row" data-share-title="${attr(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html" data-share-card="${attr(JSON.stringify({ cardType: "lucky", lang, date: isKm ? dateKM : dateEN, top: FACTS.highlights.topLucky, topNames: FACTS.highlights.topLucky.map(nm), careful: FACTS.highlights.careful.map(nm), text: TRADE_T[lang].best(andJoin(FACTS.highlights.topLucky.map(nm), lang)) }))}"></div>
+    <ul class="fx-grid">
 ${byZodiac.map((c) => "      " + signCard(c, lang, t)).join("\n")}
     </ul>
   </section>
@@ -501,8 +540,8 @@ if (exists && !FORCE) {
     .replace("{{JSONLD}}", () => jsonld)
     .replace("{{BODY_EN}}", () => body("en"))
     .replace("{{BODY_KM}}", () => body("km"))
-    // shared sign link (?sign=rat): open that sign's card, scroll to it and glow briefly (only on pages with daily data)
-    .replace("</body>", () => DATA ? `<script>(function(){var m=/[?&]sign=([a-z]+)/.exec(location.search);if(!m)return;function go(){var l=document.documentElement.lang==="km"?"km":"en",c=document.querySelector('[data-lang-content="'+l+'"] [data-sign="'+m[1]+'"]')||document.querySelector('[data-sign="'+m[1]+'"]');if(!c)return;var li=c.closest(".fx-sign"),d=li&&li.querySelector("details");if(!li)return;if(!li.offsetParent){if(++n<40)setTimeout(go,100);return;}if(d)d.open=true;li.classList.add("fx-sign-hit");li.style.scrollMarginTop="16px";li.scrollIntoView({block:"start"});setTimeout(function(){li.scrollIntoView({block:"start"});},700);}var n=0;if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50);});else setTimeout(go,50);})();</script>\n</body>` : "</body>");
+    // shared sign link (?sign=rat): open that sign's card, scroll to it and glow briefly 
+    .replace("</body>", () => `<script>(function(){var m=/[?&]sign=([a-z]+)/.exec(location.search);if(!m)return;function go(){var l=document.documentElement.lang==="km"?"km":"en",c=document.querySelector('[data-lang-content="'+l+'"] [data-sign="'+m[1]+'"]')||document.querySelector('[data-sign="'+m[1]+'"]');if(!c)return;var li=c.closest(".fx-sign"),d=li&&li.querySelector("details");if(!li)return;if(!li.offsetParent){if(++n<40)setTimeout(go,100);return;}if(d)d.open=true;li.classList.add("fx-sign-hit");li.style.scrollMarginTop="16px";li.scrollIntoView({block:"start"});setTimeout(function(){li.scrollIntoView({block:"start"});},700);}var n=0;if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50);});else setTimeout(go,50);})();</script>\n</body>`);
   if (/\{\{\w+\}\}/.test(html)) throw new Error("Unfilled placeholder in template output");
   write(postPath, html);
   console.log(`Wrote ${postPath} — ${dayAnimal} day (great: ${sorted.filter((c) => c.tier === "great").map((c) => c.a)}, caution: ${cautionList}).`);

@@ -1,6 +1,6 @@
 // share-cards.js — "Share image" cards, drawn on the visitor's own device (nothing is uploaded or stored).
 // Loaded only when someone asks for an image (see js/share.js). Every card uses the site's own results:
-//   daily    one sign's daily fortune: date, rating, short fortune, love / career / money, lucky number /
+//   daily    one sign's daily fortune: date, rating, short fortune, trade today, love / career / money, lucky number /
 //            color / direction / time, today's advice
 //   lucky    "Who is lucky today": date, the top lucky signs (rules), the sign to take it easy, short note
 //   sign     Zodiac Checker result: sign, element, traits, lucky numbers & colors, best matches, needs patience
@@ -191,11 +191,11 @@
   }
 
   var LBL = {
-    en: { love: "Love", career: "Career", money: "Money", advice: "Today's advice", number: "Number", color: "Color", direction: "Direction", time: "Time",
+    en: { trade: "Trade today", love: "Love", career: "Career", money: "Money", advice: "Today's advice", number: "Number", color: "Color", direction: "Direction", time: "Time",
           note: "Traditional Chinese zodiac reading for fun and self-reflection", friend: "Friendship", business: "Business", stars: "Love {L}  ·  Business {B}",
           luckyToday: "Who is lucky today", easy: "Take it easy today", sign: "Your Chinese zodiac sign", nums: "Lucky numbers", cols: "Lucky colors",
           matches: "Best matches", patience: "Needs patience", strengths: "Strengths", discuss: "Talk through", element: "Element" },
-    km: { love: "ស្នេហា", career: "ការងារ", money: "លុយកាក់", advice: "ដំបូន្មានថ្ងៃនេះ", number: "លេខ", color: "ពណ៌", direction: "ទិស", time: "ម៉ោង",
+    km: { trade: "ការលក់ដូរថ្ងៃនេះ", love: "ស្នេហា", career: "ការងារ", money: "លុយកាក់", advice: "ដំបូន្មានថ្ងៃនេះ", number: "លេខ", color: "ពណ៌", direction: "ទិស", time: "ម៉ោង",
           note: "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត", friend: "មិត្តភាព", business: "អាជីវកម្ម", stars: "ស្នេហា {L}  ·  អាជីវកម្ម {B}",
           luckyToday: "តើអ្នកណាមានសំណាងថ្ងៃនេះ", easy: "ថ្ងៃនេះគួរប្រុងប្រយ័ត្ន", sign: "រាសីចិនរបស់អ្នក", nums: "លេខសំណាង", cols: "ពណ៌សំណាង",
           matches: "គូដែលត្រូវគ្នាបំផុត", patience: "ឆ្នាំខុង", strengths: "ចំណុចខ្លាំង", discuss: "គួរពិភាក្សា", element: "ធាតុ" }
@@ -215,7 +215,11 @@
         var y = my + R + 76; ctx.textAlign = "center"; ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", lh(L, 66, 52), 700); ctx.fillText(spec.name || spec.animal, W / 2, y);
         pill(ctx, spec.label || "", W / 2, y + 22, L, spec.tier === "caution" ? WARN : GOLD);
         y = para(ctx, L, spec.fortune, y + 134, o.compact ? 2 : 3) + 6;
-        y = panel(ctx, L, [[T.love, spec.love], [T.career, spec.career], [T.money, spec.money]], y, o.compact ? 1 : 2) + 20;
+        // daily trade first (every daily card has it), then love / career / money when the day's text exists
+        var rows = [[spec.tradeLabel || T.trade, spec.trade], [T.love, spec.love], [T.career, spec.career], [T.money, spec.money]].filter(function (rw) { return rw[1]; });
+        if (o.compact) rows = rows.slice(0, 2);
+        if (rows.length === 1) y = note(ctx, L, "✦", rows[0][0], rows[0][1], y + 4, GOLD) + 4;   // trade only: bigger box
+        else if (rows.length) y = panel(ctx, L, rows, y, rows.length > 2 ? (o.compact ? 1 : 2) : 3) + 20;
         y = cells(ctx, L, [[T.number, numL(L, spec.number)], [T.color, spec.color, true], [T.direction, spec.direction], [T.time, numL(L, spec.time)]], y, spec.colorHex);
         if (o.compact || !spec.advice) return y;
         y += 48; ctx.textAlign = "center"; font(ctx, L, "body", 26, 700); ctx.fillStyle = GOLD; ctx.fillText(T.advice, W / 2, y);
