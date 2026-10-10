@@ -178,6 +178,8 @@ function _strings(lang) {
     facebook: d("share_fb_steps", "Choose Facebook in the list — your result picture goes into a new post (its QR code leads to MyBirthSign)."),
     facebookLink: d("share_fb_link_steps", "Choose Facebook in the list to post the link."),
     fbReady: d("share_fb_ready", "Facebook — tap again to share"),
+    tapAgain: d("share_tap_again", "Ready — tap again"),
+    inApp: d("share_in_app", "This app's built-in browser can't save or share pictures. Tap ⋯ and choose “Open in browser” (Safari or Chrome), then try again."),
     instagram: d("share_ig_steps", "Instagram doesn't accept website links. Post the image instead: pick Instagram in the share list, or open Instagram, tap +, choose Story or Post and select the saved image."),
     tiktok: d("share_tt_steps", "TikTok doesn't accept website links. Post the image instead: pick TikTok in the share list, or open TikTok, tap +, then Upload and select the saved image.")
   };
@@ -186,6 +188,8 @@ function _isPhone() {
   try { if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return true; } catch (e) { /* ignore */ }
   return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
 }
+// in-app browsers (Facebook, Messenger, Instagram, LINE, TikTok…) block downloads and often the share sheet
+function _isInAppBrowser() { return /FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\/|musical_ly|BytedanceWebview|TikTok/i.test(navigator.userAgent || ""); }
 function _canShareFiles() {
   try {
     if (!navigator.canShare) return false;
@@ -348,7 +352,10 @@ function wireShareRows(root) {
           pinterest: "https://www.pinterest.com/pin/create/button/?url=" + eu + "&media=" + encodeURIComponent(_pinImageFor(spec())) + "&description=" + et
         };
         pop.querySelectorAll("a[data-share-net]").forEach(function (a) { a.setAttribute("href", hrefs[a.getAttribute("data-share-net")] || "#"); });
-        if (canFiles) blobFor("portrait").catch(function () {});              // draw ahead so the share sheet opens quickly
+        if (canFiles || _isPhone()) {   // draw ahead, one after another, so each option works on the first tap
+          const next = function (f) { return function () { return blobFor(f).catch(function () {}); }; };
+          blobFor("portrait").catch(function () {}).then(next("story")).then(next("square"));
+        }
         const first = pop.querySelector(".share-option:not([hidden])");
         if (first && document.activeElement === btn) first.focus({ preventScroll: true });
       }
@@ -357,8 +364,18 @@ function wireShareRows(root) {
 
     function busy(el, text) { el.disabled = true; label(el, text); }
     function done(el, text, delay) { label(el, text); setTimeout(function () { el.disabled = false; label(el, el.__label); }, delay || 0); }
+    const phone = _isPhone(), inApp = _isInAppBrowser();
     function makeImage(el, format, after) {
       el.__label = el.__label || (el.querySelector(".share-option-label") || {}).textContent;
+      const ready0 = readyBlob(format);
+      if (ready0) { label(el, el.__label); after(ready0); return; }   // still inside the tap, so the phone allows sharing / saving
+      if (phone) {
+        // phones only allow sharing or saving straight from a tap, so the first tap draws the picture and the next one shares it
+        busy(el, T.preparing);
+        blobFor(format).then(function (b) { el.disabled = false; label(el, b ? T.tapAgain : T.failed); if (!b) setTimeout(function () { label(el, el.__label); }, 2200); },
+          function () { el.disabled = false; label(el, T.failed); setTimeout(function () { label(el, el.__label); }, 2200); });
+        return;
+      }
       busy(el, T.preparing);
       blobFor(format).then(function (blob) {
         if (!blob) { done(el, T.failed, 2200); return; }
@@ -372,6 +389,8 @@ function wireShareRows(root) {
           if (err && err.name === "AbortError") { done(el, el.__label, 0); return; }
           _downloadBlob(blob, fileName(format)); done(el, T.saved, 2200);
         });
+      } else if (inApp) {
+        done(el, el.__label, 0); showNote(T.inApp); return;
       } else {
         _downloadBlob(blob, fileName(format)); done(el, T.saved, 2200);
       }
@@ -381,7 +400,10 @@ function wireShareRows(root) {
     const imageBtn = q(".share-image");
     if (imageBtn) imageBtn.addEventListener("click", function () { makeImage(imageBtn, "portrait", function (b) { shareFileOrSave(imageBtn, b, "portrait"); }); });
     const dlBtn = q(".share-download");
-    if (dlBtn) dlBtn.addEventListener("click", function () { makeImage(dlBtn, "square", function (b) { _downloadBlob(b, fileName("square")); done(dlBtn, T.saved, 2200); }); });
+    if (dlBtn) dlBtn.addEventListener("click", function () {
+      if (inApp) { showNote(T.inApp); return; }
+      makeImage(dlBtn, "square", function (b) { _downloadBlob(b, fileName("square")); done(dlBtn, T.saved, 2200); });
+    });
     const copyBtn = q(".share-copy");
     if (copyBtn) copyBtn.addEventListener("click", function () {
       copyBtn.__label = copyBtn.__label || T.copy;
@@ -426,6 +448,15 @@ function wireShareRows(root) {
       try {
         Promise.resolve(navigator.share({ title: t, url: u })).catch(function (err) { if (!err || err.name !== "AbortError") _openInNewTab(fbLink.href); });
       } catch (err) { _openInNewTab(fbLink.href); }
+    });
+    if (_isPhone()) pop.querySelectorAll('a[data-share-net]:not([data-share-net="facebook"])').forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        const href = a.getAttribute("href");
+        if (!href || href === "#") return;
+        e.preventDefault();
+        _closeSharePop(pop);
+        window.location.href = href;   // a direct tap-navigation is what lets the phone hand the link to the app
+      });
     });
     pop.querySelectorAll("button[data-share-net]").forEach(function (el) {
       const id = el.getAttribute("data-share-net");
