@@ -3558,6 +3558,9 @@ html[lang="km"] .kl-pair h3 { font-family: "Kantumruy Pro", "Noto Sans Khmer", s
   color: #cfc6ee; font-size: .86rem !important; line-height: 1.7; text-align: center; }
 .kl-today-strip [lang="km"] { color: #fff3d1; font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; }
 @media (max-width: 600px) { .kl-today-strip { border-radius: 14px; margin: 0 16px 10px; } }
+/* homepage-style footers reset paragraph margins: keep the strip centered with space under it */
+footer.site-footer.hm-footer p.kl-today-strip { max-width: 1180px; margin: 0 auto 26px; }
+@media (max-width: 600px) { footer.site-footer.hm-footer p.kl-today-strip { margin: 0 0 22px; } }
 
 /* ===== Blog article: Khmer Lunar Calendar (blog/khmer-lunar-calendar-birth-date.html) — extends article.post ===== */
 /* wider page: the Today card uses the full width; reading text stays a comfortable centered column */
