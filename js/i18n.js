@@ -250,7 +250,6 @@ const UI_STRINGS = {
   en: {
     nav_checker: "Home",
     nav_checker_page: "MyBirthSign",
-    nav_daily: "Today's Daily Fortune",
     nav_tools: "Horoscope",
     nav_animals: "Zodiac Guide",
     nav_compatibility: "Compatibility",
@@ -583,7 +582,6 @@ const UI_STRINGS = {
   km: {
     nav_checker: "ទំព័រដើម",
     nav_checker_page: "ជោគជតារាសីខ្ញុំ",
-    nav_daily: "ជោគជតាប្រចាំថ្ងៃ",
     nav_tools: "ជោគជតារាសី",
     nav_animals: "មគ្គុទ្ទេសក៍និមិត្តសញ្ញា",
     nav_compatibility: "គួរស្រករ",
