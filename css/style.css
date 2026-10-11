@@ -4021,3 +4021,7 @@ header.site-header nav.nav-open { max-height: calc(100vh - 80px); max-height: ca
 html { scroll-padding-top: 76px; }
 /* Checker: when the lunar card fills in, the browser must not "anchor" on the cards below and jump past it */
 #khmer-lunar, #chk-hero, #dream-fortune, #result { overflow-anchor: none; }
+/* bars that stick under the header (animal page section tabs) sit right below it, not behind it */
+.pf-nav { top: var(--hdr-h, 60px); }
+
+html { scroll-padding-top: calc(var(--hdr-h, 60px) + 16px); }

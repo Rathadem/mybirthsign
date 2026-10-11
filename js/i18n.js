@@ -1116,6 +1116,10 @@ function fitNav() {
   // a soft shadow under the header once the page is scrolled
   const shade = function () { header.classList.toggle("is-scrolled", (window.scrollY || 0) > 8); };
   shade(); window.addEventListener("scroll", shade, { passive: true });
+  // header height for bars that stick just below it (css: var(--hdr-h))
+  const hh = function () { root.style.setProperty("--hdr-h", Math.round(header.getBoundingClientRect().height) + "px"); };
+  hh(); window.addEventListener("resize", hh); window.addEventListener("load", hh);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(hh).catch(function () {});
   window.addEventListener("resize", later);
   window.addEventListener("load", later);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(later).catch(function () {});

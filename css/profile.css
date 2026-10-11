@@ -1,5 +1,5 @@
 /* MyBirthSign — animal profile pages ("Year of the Tiger" etc.). Builds on css/fortune.css; scoped to body.pf-page. */
-.pf-page [id] { scroll-margin-top: 76px; }
+.pf-page [id] { scroll-margin-top: 80px; }
 .pf-page svg { flex: none; }
 .pf-page .fx-wrap { max-width: 1240px; }
 .pf-page .fx-gframe { border-width: 28px 30px; border-image-width: 28px 30px; }
@@ -20,7 +20,7 @@
 .fx-btn-sm { min-height: 42px; padding: 8px 18px; font-size: .9rem; }
 
 /* ---------- section navigation (sticky; scrolls sideways on phones) ---------- */
-.pf-nav { position: sticky; top: 0; z-index: 30; background: rgba(11, 8, 32, .94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--fx-line); border-top: 1px solid var(--fx-line); }
+.pf-nav { position: sticky; top: var(--hdr-h, 60px); z-index: 30; background: rgba(11, 8, 32, .94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--fx-line); border-top: 1px solid var(--fx-line); }
 .pf-nav ul { max-width: 1180px; margin: 0 auto; padding: 4px 12px; display: flex; gap: 2px; list-style: none; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; justify-content: center; }
 .pf-nav ul::-webkit-scrollbar { display: none; }
 .pf-nav a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 78px; min-height: 52px; padding: 6px 10px; border-radius: 10px; color: #e6def8; text-decoration: none; font-size: .78rem; white-space: nowrap; }
