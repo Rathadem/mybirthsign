@@ -4011,3 +4011,13 @@ html[lang="km"] .fe-h2 { line-height: 1.6; }
 .fe-find .fe-text p:first-child { margin-top: 0; }
 .fe-cta + .fe-text p { text-align: center; }
 .fe .disclaimer { color: #a99fd0; font-size: .82rem; }
+
+/* ===== Header stays at the top while the page scrolls (all pages) ===== */
+header.site-header { position: sticky; top: 0; z-index: 1000; background: rgba(16, 11, 42, .9); -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); }
+header.site-header.is-scrolled { box-shadow: 0 8px 24px rgba(4, 2, 16, .45); border-bottom-color: rgba(231, 194, 122, .22); }
+/* the phone / compact menu panel scrolls inside itself if it is taller than the screen */
+header.site-header nav.nav-open { max-height: calc(100vh - 80px); max-height: calc(100dvh - 80px); overflow-y: auto; }
+/* jumps to a section (links, the Checker's scroll to the result) stop below the header */
+html { scroll-padding-top: 76px; }
+/* Checker: when the lunar card fills in, the browser must not "anchor" on the cards below and jump past it */
+#khmer-lunar, #chk-hero, #dream-fortune, #result { overflow-anchor: none; }

@@ -1113,6 +1113,9 @@ function fitNav() {
   }
   function later() { if (!raf) raf = requestAnimationFrame(measure); }
   measure();
+  // a soft shadow under the header once the page is scrolled
+  const shade = function () { header.classList.toggle("is-scrolled", (window.scrollY || 0) > 8); };
+  shade(); window.addEventListener("scroll", shade, { passive: true });
   window.addEventListener("resize", later);
   window.addEventListener("load", later);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(later).catch(function () {});
