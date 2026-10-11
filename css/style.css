@@ -3920,3 +3920,32 @@ html[lang="km"] .hc-step, html[lang="km"] .hc-sign, html[lang="km"] .hc-ex, html
   .hc-signs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hc-exs { grid-template-columns: 1fr; }
 }
+
+/* ===== Blog: What Your Chinese Zodiac Sign Says — reuses .fe hero, .zc medals/icons/boxes ===== */
+.wz-car .zc-ico { --zm: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M9%203.5h6a1.5%201.5%200%200%201%201.5%201.5v1.5H20a1.5%201.5%200%200%201%201.5%201.5v4.2H2.5V8A1.5%201.5%200%200%201%204%206.5h3.5V5A1.5%201.5%200%200%201%209%203.5Zm0%201.5v1.5h6V5H9Zm-6.5%208.7h7.5v1.8h4v-1.8h7.5V19a1.5%201.5%200%200%201-1.5%201.5H4A1.5%201.5%200%200%201%202.5%2019v-5.3Z%22%20fill%3D%22%23000%22/%3E%3C/svg%3E"); --zc: #9aa6ff; }
+.wz-note { display: block !important; max-width: 820px; margin: -4px auto 10px !important; }
+.wz-cards { list-style: none; margin: 8px 0 18px !important; padding: 0 !important; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.wz-card { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 14px; margin: 0 !important; padding: 16px; border-radius: 18px; border: 1px solid rgba(231, 194, 122, .42); background: linear-gradient(135deg, #1c1444, #0d0a24 70%); box-shadow: 0 14px 34px rgba(0, 0, 0, .35); }
+.wz-left { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.wz-left .zc-medal { width: 120px; }
+.wz-left h3 { margin: 10px 0 6px !important; color: #f6dc9b !important; font-size: 1.2rem; }
+.wz-yrs { padding: 6px 8px; border-radius: 10px; background: rgba(231, 194, 122, .14); border: 1px solid rgba(231, 194, 122, .35); color: #fff3d1; font-size: .74rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.wz-desc { margin: 0 0 10px !important; font-size: .95rem; line-height: 1.6; color: #f1ecff !important; }
+.wz-rows { list-style: none; margin: 0 !important; padding: 0 !important; display: grid; gap: 7px; }
+.wz-rows li { display: flex; align-items: flex-start; gap: 8px; margin: 0 !important; font-size: .88rem; line-height: 1.45; color: #e6e0f7; }
+.wz-rows .zc-ico { margin-top: 1px; }
+.wz-rows b { color: var(--zc); font-weight: 700; white-space: nowrap; }
+.wz-more { display: inline-block; margin-top: 10px; color: #f6dc9b; font-size: .88rem; font-weight: 600; }
+.wz-groups { list-style: none; margin: 0 !important; padding: 0 !important; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.wz-group { margin: 0 !important; }
+.wz-group .zc-tri-m { justify-content: flex-start; margin-left: 4px; }
+.wz-group h3 { margin: 10px 0 6px !important; color: #f6dc9b !important; font-size: 1.1rem; }
+.wz-group h3 small { color: #cfc6ee; font-weight: 400; font-size: .82em; }
+.wz-group p { margin: 0 !important; font-size: .92rem; line-height: 1.6; color: #d9d1f2 !important; }
+html[lang="km"] .wz-card, html[lang="km"] .wz-group { font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; }
+@media (max-width: 900px) { .wz-cards, .wz-groups { grid-template-columns: 1fr; } }
+@media (max-width: 520px) {
+  .wz-card { grid-template-columns: 1fr; padding: 14px 12px; }
+  .wz-left .zc-medal { width: 110px; }
+  .wz-rows b { white-space: normal; }
+}
