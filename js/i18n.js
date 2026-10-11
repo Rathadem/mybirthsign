@@ -858,7 +858,7 @@ const UI_STRINGS = {
     footer_about: "អំពីយើង",
     footer_privacy: "គោលការណ៍ឯកជនភាព",
     footer_contact: "ទាក់ទង",
-    footer_copyright: "© ២០២៦ MyBirthSign។ សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។",
+    footer_copyright: "© 2026 MyBirthSign។ សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។",
 
     result_born: "កើតនៅថ្ងៃ",
     result_zodiac_year: "ឆ្នាំនិមិត្តសញ្ញា",

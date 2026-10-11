@@ -78,7 +78,7 @@ const TIER = {
 };
 const KM_MONTHS = UI_STRINGS.km && ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"];
 const EN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const kmDigits = (n) => String(n).replace(/\d/g, (d) => "០១២៣៤៥៦៧៨៩"[d]);
+const kmDigits = (n) => String(n).replace(/\d/g, (d) => "0123456789"[d]);
 const fmtDate = (y, m, d, km) => km ? `ថ្ងៃទី${kmDigits(d)} ខែ${KM_MONTHS[m - 1]} ឆ្នាំ${kmDigits(y)}` : `${EN_MONTHS[m - 1]} ${d}, ${y}`;
 
 const UI = {
@@ -355,7 +355,7 @@ var p=pp(),day=ORDER[(jdn(p[0],p[1],p[2])+1)%12];
 document.querySelectorAll("[data-hm-card]").forEach(function(li){
   var l=li.closest("[data-lang-content]"),lang=l?l.getAttribute("data-lang-content"):"en",t=tier(li.getAttribute("data-animal"),day),r=TR[lang][t];
   li.className="hm-fc fx-tier-"+t;li.querySelector("[data-hm-ico]").textContent=r[0];li.querySelector("[data-hm-lab]").textContent=r[1];li.querySelector("[data-hm-line]").textContent=r[2];});
-var KMM=${JSON.stringify(KM_MONTHS)},ENM=${JSON.stringify(EN_MONTHS)},KD="០១២៣៤៥៦៧៨៩";
+var KMM=${JSON.stringify(KM_MONTHS)},ENM=${JSON.stringify(EN_MONTHS)},KD="0123456789";
 function kd(n){return String(n).replace(/\\d/g,function(c){return KD[c];});}
 function setDate(){document.querySelectorAll("[data-hm-today]").forEach(function(el){var km=el.getAttribute("data-lang")==="km";
   el.textContent=km?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):ENM[p[1]-1]+" "+p[2]+", "+p[0];});}

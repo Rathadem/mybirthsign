@@ -13,7 +13,7 @@ const SITE = "https://mybirthsign.com";
 const BRAND = { en: "MyBirthSign", km: "ផ្កាយកំណើត" };
 const EN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const KM_MONTHS = ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"];
-const kmDigits = (v) => String(v).replace(/\d/g, (c) => "០១២៣៤៥៦៧៨៩"[c]);
+const kmDigits = (v) => String(v).replace(/\d/g, (c) => "0123456789"[c]);
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 

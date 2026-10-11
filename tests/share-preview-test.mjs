@@ -47,7 +47,7 @@ p = previewFor(new URL("https://mybirthsign.com/blog/daily-fortune-2026-10-10.ht
 ok("daily EN title", p.title === "Rat · Good Day — Daily Fortune, October 10, 2026 | MyBirthSign", p.title);
 ok("daily EN uses the day's text", p.description === "A calm, steady day for the Rat.");
 p = previewFor(new URL("https://mybirthsign.com/blog/daily-fortune-2026-10-10.html?sign=rat&lang=km"), rec);
-ok("daily KM", p.description === "ថ្ងៃស្ងប់សម្រាប់ជូត។" && /ថ្ងៃទី១០ ខែតុលា ឆ្នាំ២០២៦/.test(p.title), p.title);
+ok("daily KM", p.description === "ថ្ងៃស្ងប់សម្រាប់ជូត។" && /ថ្ងៃទី10 ខែតុលា ឆ្នាំ2026/.test(p.title), p.title);
 p = previewFor(new URL("https://mybirthsign.com/blog/daily-fortune-2026-10-10.html?sign=rat"), null);
 ok("daily without data: generic text", /traditional daily fortune/.test(p.description));
 ok("daily page in Khmer", previewFor(new URL("https://mybirthsign.com/blog/daily-fortune-2026-10-10.html?lang=km")).title.includes("ផ្កាយកំណើត"));

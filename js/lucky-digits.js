@@ -37,7 +37,7 @@
 
   if (typeof module === "object" && module.exports) { module.exports = { forSign: forSign, LUCKY: LUCKY }; return; }
 
-  var KD = "០១២៣៤៥៦៧៨៩";
+  var KD = "0123456789";
   function kmNum(s) { return String(s).replace(/\d/g, function (d) { return KD[d]; }); }
   function ppToday() {
     try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); }
@@ -45,7 +45,7 @@
   }
   var T = {
     en: { h: "Lucky numbers today", d: function (n) { return n + (n === 1 ? " digit" : " digits"); }, note: "For fun only, not a prediction or betting advice." },
-    km: { h: "លេខសំណាងថ្ងៃនេះ", d: function (n) { return kmNum(n) + "ខ្ទង់"; }, note: "សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។" }
+    km: { h: "លេខសំណាងថ្ងៃនេះ", d: function (n) { return kmNum(n) + " ខ្ទង់"; }, note: "សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។" }
   };
   function html(v, lang, opts) {
     var S = T[lang], km = lang === "km";

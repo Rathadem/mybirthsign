@@ -64,11 +64,11 @@ const factOf = (a) => FACTS.signs.find((x) => x.animal === a);
 // lucky numbers of 1–5 digits for this post's date (same js/lucky-digits.js the homepage and Checker use)
 const { createRequire } = await import("node:module");
 const LUCKY_DIGITS = createRequire(import.meta.url)("../js/lucky-digits.js");
-const KD_ = "០១២៣៤៥៦៧៨៩", kmD = (x) => String(x).replace(/\d/g, (d) => KD_[d]);
+const KD_ = "0123456789", kmD = (x) => String(x).replace(/\d/g, (d) => KD_[d]);
 function digitsHtml(a, lang) {
   const v = LUCKY_DIGITS.forSign(a, iso); if (!v) return "";
   const km = lang === "km";
-  const lab = (n) => km ? kmD(n) + "ខ្ទង់" : n + (n === 1 ? " digit" : " digits");
+  const lab = (n) => km ? kmD(n) + " ខ្ទង់" : n + (n === 1 ? " digit" : " digits");
   return `<div class="ld ld-mini fx-digits"><p class="ld-h">${km ? "លេខសំណាង" : "Lucky numbers"}</p><ul class="ld-list">${[1, 2, 3, 4, 5].map((n) => `<li><span class="ld-l">${lab(n)}</span><b class="ld-n">${km ? kmD(v["d" + n]) : v["d" + n]}</b></li>`).join("")}</ul></div>`;
 }
 
@@ -171,7 +171,7 @@ const AVOID_NOTE = {
 const EN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const EN_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const KM_MONTHS = ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"];
-const kmNum = (n) => String(n).replace(/\d/g, (d) => "០១២៣៤៥៦៧៨៩"[d]);
+const kmNum = (n) => String(n).replace(/\d/g, (d) => "0123456789"[d]);
 const weekday = EN_DAYS[new Date(Date.UTC(Y, M - 1, D)).getUTCDay()];
 
 const dateEN = `${EN_MONTHS[M - 1]} ${D}, ${Y}`;

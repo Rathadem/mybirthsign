@@ -149,7 +149,7 @@
     });
     return y + 100;
   }
-  var KD = "០១២៣៤៥៦៧៨៩";
+  var KD = "0123456789";
   function numL(L, v) { return L === "km" ? String(v).replace(/\d/g, function (c) { return KD[c]; }) : String(v); }
 
   // Draw the content once on a tall transparent canvas, then place it on the chosen format:

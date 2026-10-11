@@ -126,7 +126,7 @@
     }
   };
 
-  var KD = "០១២៣៤៥៦៧៨៩";
+  var KD = "0123456789";
   function kmd(v) { return String(v).replace(/\d/g, function (c) { return KD[c]; }); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function an(s) { return s.replace(/\b([Aa]) (?=[AEIOU])/g, "$1n "); }      // "a Ox" -> "an Ox"

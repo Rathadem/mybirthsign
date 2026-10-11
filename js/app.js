@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (nowD.getDate() < date.getDate()) ageM -= 1;
     if (ageM < 0) { ageY -= 1; ageM += 12; }
     if (ageY < 0) { ageY = 0; ageM = 0; }
-    const kmDigits = (n) => String(n).replace(/\d/g, (d) => "០១២៣៤៥៦៧៨៩"[d]);
+    const kmDigits = (n) => String(n).replace(/\d/g, (d) => "0123456789"[d]);
     const ageText = lang === "km"
       ? "អាយុ " + kmDigits(ageY) + " ឆ្នាំ " + kmDigits(ageM) + " ខែ"
       : "Age: " + ageY + (ageY === 1 ? " year " : " years ") + ageM + (ageM === 1 ? " month" : " months");

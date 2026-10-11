@@ -24,7 +24,10 @@
     return libPromise;
   }
 
-  var KD = "០១២៣៤៥៦៧៨៩";
+  var KD = "0123456789";
+  // numbers stay as 1, 2, 3 on Khmer pages too: the library writes Khmer digits, turn them back
+  function westDigits(t) { return String(t).replace(/[\u17E0-\u17E9]/g, function (c) { return String(c.charCodeAt(0) - 0x17E0); }); }
+  function fmtKh(M, r) { return westDigits(M.format(r)); }
   function kmNum(n) { return String(n).replace(/\d/g, function (d) { return KD[d]; }); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
@@ -120,7 +123,7 @@
     if (info.animal && ANIMAL_EN[k.animalYear] !== info.animal) notes.push(S.differs(lang === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? (KM_ANIMAL_NAMES[info.animal] || info.animal) : info.animal));
 
     var t = ppToday(), todayLine = "";
-    try { todayLine = M.format(M.fromGregorian(t[0], t[1], t[2])); } catch (e) { todayLine = ""; }
+    try { todayLine = fmtKh(M, M.fromGregorian(t[0], t[1], t[2])); } catch (e) { todayLine = ""; }
 
     box.innerHTML = head +
       '<div class="kl-main"><p class="kl-main-label">' + esc(S.lunar) + '</p><p class="kl-main-date">' + lunar + "</p>" + (lunarExtra ? '<p class="kl-main-extra">' + lunarExtra + "</p>" : "") + "</div>" +
@@ -130,7 +133,7 @@
         row(S.be, esc(beTxt), beExtra) +
         row(S.year, yearTxt, yearExtra) +
       "</dl>" +
-      '<p class="kl-full"><span>' + esc(S.full) + '</span> <span lang="km">' + esc(M.format(r)) + "</span></p>" +
+      '<p class="kl-full"><span>' + esc(S.full) + '</span> <span lang="km">' + esc(fmtKh(M, r)) + "</span></p>" +
       (notes.length ? '<ul class="kl-notes">' + notes.map(function (n) { return "<li>" + esc(n) + "</li>"; }).join("") + "</ul>" : "") +
       (todayLine ? '<p class="kl-today">' + esc(S.today) + ' <span lang="km">' + esc(todayLine) + "</span></p>" : "") +
       '<p class="kl-method">' + esc(S.method) + "</p></div>";
@@ -240,14 +243,14 @@
       var l = li.querySelector(".klc-l"), st = li.querySelector("strong"), sb = li.querySelector(".klc-s");
       shareRows.push([l ? l.textContent : "", st ? st.textContent : "", sb ? sb.textContent : ""]);
     });
-    var bigTxt = strip(lunar), full = M.format(M.fromGregorian(y, m, d));
+    var bigTxt = strip(lunar), full = fmtKh(M, M.fromGregorian(y, m, d));
     var share = typeof shareRowHtml === "function" ? '<div class="klc-share">' + shareRowHtml(
       (km ? "ថ្ងៃនេះ " : "Today: ") + bigTxt + " — " + (km ? "ប្រតិទិនចន្ទគតិខ្មែរ" : "Khmer Lunar Calendar"),
       { cardType: "lunar", lang: lang, heading: km ? "ថ្ងៃនេះ" : "Khmer Lunar Calendar · Today", big: bigTxt, rows: shareRows, full: full, moonD: moonSvg.lastD || "", note: km ? "ប្រតិទិនចន្ទគតិខ្មែរ តាមវិធានប្រពៃណី · ម៉ោងកម្ពុជា" : "Khmer lunar calendar · traditional rules · Cambodia time" },
       "/blog/khmer-lunar-calendar-birth-date.html") + "</div>" : "";
     return '<p class="klc-big">' + lunar + "</p>" +
       '<ul class="klc-rows">' + rows + "</ul>" +
-      '<p class="klc-full" lang="km">' + esc(M.format(M.fromGregorian(y, m, d))) + "</p>" +
+      '<p class="klc-full" lang="km">' + esc(fmtKh(M, M.fromGregorian(y, m, d))) + "</p>" +
       '<p class="klc-note">' + esc(km
         ? "គណនាសម្រាប់ថ្ងៃនេះតាមម៉ោងកម្ពុជា ហើយប្តូរដោយស្វ័យប្រវត្តិនៅម៉ោង ១២ យប់ (ម៉ោងកម្ពុជា)។ ព្រះចន្ទ គឺតាមថ្ងៃខែក្នុងប្រតិទិន។"
         : "Worked out for today in Cambodia (Asia/Phnom_Penh) and updated automatically at midnight Cambodia time. The moon shown follows the calendar's lunar day.") +
@@ -292,7 +295,7 @@
     var foot = document.querySelector("footer.site-footer");
     if (!foot || foot.querySelector(".kl-today-strip")) return;
     loadLib().then(function (M) {
-      var t = ppToday(), line; try { line = M.format(M.fromGregorian(t[0], t[1], t[2])); } catch (e) { return; }
+      var t = ppToday(), line; try { line = fmtKh(M, M.fromGregorian(t[0], t[1], t[2])); } catch (e) { return; }
       var km = pageLang() === "km", p = document.createElement("p"); p.className = "kl-today-strip";
       p.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><span>' + esc(km ? "ថ្ងៃនេះតាមចន្ទគតិខ្មែរ៖" : "Today on the Khmer lunar calendar:") + '</span> <span lang="km">' + esc(line) + "</span>";
       foot.insertBefore(p, foot.firstChild);
@@ -307,7 +310,7 @@
     var els = document.querySelectorAll("[data-kl-today-line]");
     if (!els.length) return;
     loadLib().then(function (M) {
-      var t = ppToday(), line; try { line = M.format(M.fromGregorian(t[0], t[1], t[2])); } catch (e) { return; }
+      var t = ppToday(), line; try { line = fmtKh(M, M.fromGregorian(t[0], t[1], t[2])); } catch (e) { return; }
       Array.prototype.forEach.call(els, function (el) {
         var km = (el.getAttribute("data-lang") || pageLang()) === "km";
         el.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><b>' + esc(km ? "ថ្ងៃនេះ៖" : "Today:") + '</b> <span lang="km">' + esc(line) + "</span>";
