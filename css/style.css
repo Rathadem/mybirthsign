@@ -3457,8 +3457,8 @@ html[lang="km"] .kl-pair h3 { font-family: "Kantumruy Pro", "Noto Sans Khmer", s
 
 /* ===== Blog article: Khmer Lunar Calendar (blog/khmer-lunar-calendar-birth-date.html) — extends article.post ===== */
 /* wider page: the Today card uses the full width; reading text stays a comfortable centered column */
-article.post.klb { max-width: 1040px; }
-.klb > :not(.klc) { max-width: 780px; margin-left: auto; margin-right: auto; }
+article.post.klb { max-width: 1160px; }
+.klb > :not(.klc) { max-width: 860px; margin-left: auto; margin-right: auto; }
 .klb h2 { color: #f6e3b2; margin-top: 1.9em; }
 .klb h3 { color: #e7c27a; }
 .klb-eyebrow { margin: 26px 0 4px; color: var(--accent-soft); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; }
