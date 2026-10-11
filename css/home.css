@@ -36,7 +36,9 @@
 
 .hm-strip { display: flex; gap: 8px 28px; flex-wrap: wrap; justify-content: center; margin: 22px 0 0; font-size: 1.12rem; line-height: 1.6; color: #cfc6ee; }
 .hm-strip strong { color: var(--fx-gold-hi); font-weight: 700; }
-#today-number { font-size: 1.3em; }
+#today-number, [data-today-number] { font-size: 1.3em; }
+.hm-strip-top { justify-content: flex-start; align-items: baseline; margin: 10px 0 4px; }
+@media (max-width: 760px) { .hm-strip-top { justify-content: center; } }
 
 /* ---------- today's fortune ---------- */
 .hm-fgrid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }

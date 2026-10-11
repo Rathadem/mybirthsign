@@ -165,6 +165,7 @@ function body(lang) {
     <div class="an-hero-text">
       <p class="fx-eyebrow">${esc(u.eyebrow)}</p>
       <h1 id="${ID("h1")}"><strong>${esc(u.h1)}</strong></h1>
+      <p class="hm-strip hm-strip-top"><span>${km ? "ថ្ងៃនេះ" : "Today"}: <strong data-hm-today data-lang="${lang}">${fmtDate(TY, TM, TD, km)}</strong></span><span>${km ? "លេខថ្ងៃនេះ" : "Today's Number"}: <strong data-today-number>—</strong></span></p>
       <p class="fx-sub">${esc(u.sub)}</p>
       <div class="pf-cta-row"><a class="fx-btn" href="/checker">${esc(u.btnFind)}</a><a class="fx-btn fx-btn-rose" href="/compatibility">${esc(u.btnCompat)}</a></div>
       <ul class="hm-benefits">${u.benefits.map(([i, t]) => `<li><span class="hm-bi">${ICON[i]}</span><span>${esc(t)}</span></li>`).join("")}</ul>
@@ -322,7 +323,6 @@ const FIND = `<div class="fx-wrap">
     </form>
   </section>
 </div>`;
-const STRIP = `<div class="fx-wrap"><p class="hm-strip"><span>${T("Today", "ថ្ងៃនេះ")}: <strong id="hm-today">${fmtDate(TY, TM, TD, false)}</strong></span><span>${T("Today's Number", "លេខថ្ងៃនេះ")}: <strong id="today-number">—</strong></span></p></div>`;
 const COMPAT = `<div class="fx-wrap">
   <section class="fx-sec hm-compat" id="compatibility" aria-labelledby="hm-compat-h">
     <div class="fx-gframe">
@@ -357,8 +357,8 @@ document.querySelectorAll("[data-hm-card]").forEach(function(li){
   li.className="hm-fc fx-tier-"+t;li.querySelector("[data-hm-ico]").textContent=r[0];li.querySelector("[data-hm-lab]").textContent=r[1];li.querySelector("[data-hm-line]").textContent=r[2];});
 var KMM=${JSON.stringify(KM_MONTHS)},ENM=${JSON.stringify(EN_MONTHS)},KD="០១២៣៤៥៦៧៨៩";
 function kd(n){return String(n).replace(/\\d/g,function(c){return KD[c];});}
-function setDate(){var el=document.getElementById("hm-today");if(!el)return;var km=document.documentElement.lang==="km";
-  el.textContent=km?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):ENM[p[1]-1]+" "+p[2]+", "+p[0];}
+function setDate(){document.querySelectorAll("[data-hm-today]").forEach(function(el){var km=el.getAttribute("data-lang")==="km";
+  el.textContent=km?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):ENM[p[1]-1]+" "+p[2]+", "+p[0];});}
 setDate();document.addEventListener("DOMContentLoaded",setDate);window.addEventListener("load",setDate);document.querySelectorAll("[data-lang-switch]").forEach(function(a){a.addEventListener("click",function(){setTimeout(setDate,0);});});
 // daily data (rules + Claude wording): when today's record exists, each card shows that sign's
 // advice for today and its lucky number & color. If it is missing or old, the cards stay as above.
@@ -461,7 +461,6 @@ ${body("km")}
 
 ${FIND}
 
-${STRIP}
 
 <div data-lang-content="en">
 ${partA("en")}

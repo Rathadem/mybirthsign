@@ -39,15 +39,15 @@ document.addEventListener("DOMContentLoaded", function () {
       weekday: "long", year: "numeric", month: "long", day: "numeric"
     });
   }
-  const todayNumberEl = document.getElementById("today-number");
-  if (todayNumberEl) {
+  const todayNumberEls = document.querySelectorAll("#today-number, [data-today-number]");
+  if (todayNumberEls.length) {
     const today = new Date();
     const digits = (today.getMonth() + 1).toString() + today.getDate().toString() + today.getFullYear().toString();
     let sum = digits.split("").reduce((a, b) => a + parseInt(b, 10), 0);
     while (sum > 9) {
       sum = sum.toString().split("").reduce((a, b) => a + parseInt(b, 10), 0);
     }
-    todayNumberEl.textContent = sum;
+    todayNumberEls.forEach((el) => { el.textContent = sum; });
   }
 
   const heroBtn = document.getElementById("hero-reveal-btn");
