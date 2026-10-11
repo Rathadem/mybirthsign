@@ -57,7 +57,7 @@ export function previewFor(url, dailyRecord) {
     if (!a) return {
       lang: L, url: shareUrl,
       title: `ជោគជតារាសីចិនប្រចាំថ្ងៃ — ${when} | ${BRAND.km}`,
-      description: "ស្វែងយល់ថាថ្ងៃនេះប្រព្រឹត្តចំពោះសត្វរាសីទាំង ១២ យ៉ាងណា៖ សំណាង ស្នេហា ការងារ លុយកាក់ និងដំបូន្មានប្រចាំថ្ងៃ តាមប្រពៃណី។",
+      description: "ស្វែងយល់ថាថ្ងៃនេះប្រព្រឹត្តចំពោះសត្វរាសីទាំង 12 យ៉ាងណា៖ សំណាង ស្នេហា ការងារ លុយកាក់ និងដំបូន្មានប្រចាំថ្ងៃ តាមប្រពៃណី។",
       image: null,
     };
     const s = dailyRecord && dailyRecord.date === iso && Array.isArray(dailyRecord.signs) ? dailyRecord.signs.find((x) => x.animal === a) : null;

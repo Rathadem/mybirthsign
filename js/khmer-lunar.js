@@ -68,7 +68,7 @@
       differs: function (z) { return "ឆ្នាំសត្វខ្មែរប្តូរនៅពេលចូលឆ្នាំខ្មែរ មិនមែននៅចូលឆ្នាំចិនទេ ដូច្នេះអាចខុសពីរាសីចិនរបស់អ្នក (" + z + ") ខាងលើ។"; },
       today: "ថ្ងៃនេះតាមចន្ទគតិ (កម្ពុជា) — សម្រាប់ប្រៀបធៀប មិនមែនថ្ងៃកំណើតរបស់អ្នកទេ៖",
       method: "គណនាតាមវិធានប្រតិទិនចន្ទគតិខ្មែរ (បណ្ណាល័យកូដចំហ momentkh) ហើយបានផ្ទៀងផ្ទាត់ជាមួយថ្ងៃបុណ្យផ្លូវការរបស់កម្ពុជា។ សម្រាប់ការកម្សាន្ត និងវប្បធម៌ — សូមពិនិត្យប្រតិទិនខ្មែរបោះពុម្ពសម្រាប់ពិធីផ្សេងៗ។",
-      fallback: "មិនអាចបង្ហាញថ្ងៃខែចន្ទគតិដែលគួរឱ្យទុកចិត្តសម្រាប់ថ្ងៃកំណើតនេះបានទេ។ ការគណនាបង្ហាញតែថ្ងៃកំណើតពីឆ្នាំ ១៩០០ ដល់ ២១០០ ប៉ុណ្ណោះ។",
+      fallback: "មិនអាចបង្ហាញថ្ងៃខែចន្ទគតិដែលគួរឱ្យទុកចិត្តសម្រាប់ថ្ងៃកំណើតនេះបានទេ។ ការគណនាបង្ហាញតែថ្ងៃកំណើតពីឆ្នាំ 1900 ដល់ 2100 ប៉ុណ្ណោះ។",
       loadFail: "មិនអាចបង្ហាញថ្ងៃខែចន្ទគតិបានទេ។ សូមព្យាយាមម្តងទៀត។"
     }
   };
@@ -78,7 +78,7 @@
       return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()).split("-").map(Number);
     } catch (e) { var d = new Date(); return [d.getFullYear(), d.getMonth() + 1, d.getDate()]; }
   }
-  function lunarText(k, lang) {                     // "៨រោច ខែភទ្របទ"
+  function lunarText(k, lang) {                     // "8រោច ខែភទ្របទ"
     return kmNum(k.day) + k.moonPhaseName + " ខែ" + k.monthName;
   }
 
@@ -252,7 +252,7 @@
       '<ul class="klc-rows">' + rows + "</ul>" +
       '<p class="klc-full" lang="km">' + esc(fmtKh(M, M.fromGregorian(y, m, d))) + "</p>" +
       '<p class="klc-note">' + esc(km
-        ? "គណនាសម្រាប់ថ្ងៃនេះតាមម៉ោងកម្ពុជា ហើយប្តូរដោយស្វ័យប្រវត្តិនៅម៉ោង ១២ យប់ (ម៉ោងកម្ពុជា)។ ព្រះចន្ទ គឺតាមថ្ងៃខែក្នុងប្រតិទិន។"
+        ? "គណនាសម្រាប់ថ្ងៃនេះតាមម៉ោងកម្ពុជា ហើយប្តូរដោយស្វ័យប្រវត្តិនៅម៉ោង 12 យប់ (ម៉ោងកម្ពុជា)។ ព្រះចន្ទ គឺតាមថ្ងៃខែក្នុងប្រតិទិន។"
         : "Worked out for today in Cambodia (Asia/Phnom_Penh) and updated automatically at midnight Cambodia time. The moon shown follows the calendar's lunar day.") +
       ' <a href="../checker.html">' + esc(km ? "រកថ្ងៃខែកំណើតចន្ទគតិរបស់អ្នក →" : "Find your lunar birth date →") + "</a></p>" + share;
   }
@@ -305,7 +305,7 @@
   document.addEventListener("mbs:checker-date", function (e) { show(e.detail); });
   if (window.MBS_LAST_CHECKER_DATE) show(window.MBS_LAST_CHECKER_DATE);
   window.MBSKhmerLunar = { _show: show, fill: fill, pair: pair, _todayCards: todayCards };
-  // short "Today: ១៥រោច ខែភទ្របទ …" lines ([data-kl-today-line], homepage lunar card)
+  // short "Today: 15រោច ខែភទ្របទ …" lines ([data-kl-today-line], homepage lunar card)
   function todayLines() {
     var els = document.querySelectorAll("[data-kl-today-line]");
     if (!els.length) return;

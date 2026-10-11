@@ -29,25 +29,25 @@ const CLASH_ANIMAL = {
 const FOLLOWUP_PROMPTS = {
   year_ahead: {
     en: (a, e) => `Write one short, warm paragraph (3-4 sentences) about what the coming year is likely to hold for a ${e} ${a} in the Chinese zodiac — focus on general themes (energy, opportunities, things to watch for), not specific dates or predictions presented as fact.`,
-    km: (a, e) => `សូមសរសេរអត្ថបទខ្លីមួយកថាខណ្ឌ (៣-៤ល្បះ) ជាភាសាខ្មែរ អំពីអ្វីដែលឆ្នាំខាងមុខអាចនាំមកសម្រាប់ជនជាតិរាសី${e} ${a} តាមប្រតិទិនចិន — ផ្តោតលើប្រធានបទទូទៅ (ថាមពល ឱកាស អ្វីដែលត្រូវប្រុងប្រយ័ត្ន) មិនមែនកាលបរិច្ឆេទជាក់លាក់ ឬការទស្សន៍ទាយដែលបង្ហាញជាការពិត។`
+    km: (a, e) => `សូមសរសេរអត្ថបទខ្លីមួយកថាខណ្ឌ (3-4ល្បះ) ជាភាសាខ្មែរ អំពីអ្វីដែលឆ្នាំខាងមុខអាចនាំមកសម្រាប់ជនជាតិរាសី${e} ${a} តាមប្រតិទិនចិន — ផ្តោតលើប្រធានបទទូទៅ (ថាមពល ឱកាស អ្វីដែលត្រូវប្រុងប្រយ័ត្ន) មិនមែនកាលបរិច្ឆេទជាក់លាក់ ឬការទស្សន៍ទាយដែលបង្ហាញជាការពិត។`
   },
   luck_boost: {
     en: (a, e) => `Write one short, practical paragraph (3-4 sentences) with friendly suggestions for how a ${e} ${a} in the Chinese zodiac might boost their luck or energy right now, in a fun, encouraging tone — not superstition presented as fact.`,
-    km: (a, e) => `សូមសរសេរអត្ថបទខ្លីមួយកថាខណ្ឌ (៣-៤ល្បះ) ជាភាសាខ្មែរ ដែលផ្តល់យោបល់ជាក់ស្តែង និងរីករាយ អំពីរបៀបដែលជនជាតិរាសី${e} ${a} អាចបង្កើនសំណាង ឬថាមពលរបស់ខ្លួននាពេលនេះ ជាសម្លេងលើកទឹកចិត្ត។`
+    km: (a, e) => `សូមសរសេរអត្ថបទខ្លីមួយកថាខណ្ឌ (3-4ល្បះ) ជាភាសាខ្មែរ ដែលផ្តល់យោបល់ជាក់ស្តែង និងរីករាយ អំពីរបៀបដែលជនជាតិរាសី${e} ${a} អាចបង្កើនសំណាង ឬថាមពលរបស់ខ្លួននាពេលនេះ ជាសម្លេងលើកទឹកចិត្ត។`
   },
   career_fit: {
     en: (a, e) => `Write one short paragraph (3-4 sentences) about career paths and working styles that tend to suit a ${e} ${a} in the Chinese zodiac, framed as general personality-based tendencies, not guarantees.`,
-    km: (a, e) => `សូមសរសេរអត្ថបទខ្លីមួយកថាខណ្ឌ (៣-៤ល្បះ) ជាភាសាខ្មែរ អំពីមុខរបរ និងរបៀបធ្វើការដែលសមស្របនឹងជនជាតិរាសី${e} ${a} ដោយផ្អែកលើទំនោរបុគ្គលិកលក្ខណៈទូទៅ មិនមែនការធានា។`
+    km: (a, e) => `សូមសរសេរអត្ថបទខ្លីមួយកថាខណ្ឌ (3-4ល្បះ) ជាភាសាខ្មែរ អំពីមុខរបរ និងរបៀបធ្វើការដែលសមស្របនឹងជនជាតិរាសី${e} ${a} ដោយផ្អែកលើទំនោរបុគ្គលិកលក្ខណៈទូទៅ មិនមែនការធានា។`
   },
   clash_relationship: {
     en: (a, e, clash) => `Write one short, balanced paragraph (3-4 sentences) about how a ${e} ${a} in the Chinese zodiac can get along well with a ${clash}, since these two signs are traditionally considered a "clash" pairing — keep it constructive and practical, not fatalistic.`,
-    km: (a, e, clash) => `សូមសរសេរអត្ថបទខ្លីមួយកថាខណ្ឌ (៣-៤ល្បះ) ជាភាសាខ្មែរ អំពីរបៀបដែលជនជាតិរាសី${e} ${a} អាចរស់នៅដោយសុខដុមជាមួយជនជាតិរាសី${clash} ដោយសារសញ្ញាទាំងពីរនេះត្រូវបានចាត់ទុកថាជា "ប្រឆាំង" គ្នាតាមទំនៀមទម្លាប់ — សូមរក្សាសម្លេងស្ថាបនា និងជាក់ស្តែង មិនមែនអវិជ្ជមានទាំងស្រុង។`
+    km: (a, e, clash) => `សូមសរសេរអត្ថបទខ្លីមួយកថាខណ្ឌ (3-4ល្បះ) ជាភាសាខ្មែរ អំពីរបៀបដែលជនជាតិរាសី${e} ${a} អាចរស់នៅដោយសុខដុមជាមួយជនជាតិរាសី${clash} ដោយសារសញ្ញាទាំងពីរនេះត្រូវបានចាត់ទុកថាជា "ប្រឆាំង" គ្នាតាមទំនៀមទម្លាប់ — សូមរក្សាសម្លេងស្ថាបនា និងជាក់ស្តែង មិនមែនអវិជ្ជមានទាំងស្រុង។`
   }
 };
 
 function initialReadingPrompt(animal, element, month, day, lang) {
   if (lang === "km") {
-    return `សូមសរសេរការទស្សន៍ទាយផ្ទាល់ខ្លួនខ្លីមួយ (២ កថាខណ្ឌខ្លីៗ ប្រហែល ៣-៤ល្បះក្នុងមួយកថាខណ្ឌ) ជាភាសាខ្មែរ សម្រាប់អ្នកដែលកើតនៅខែ${month} ថ្ងៃទី${day} ហើយមានរាសីចិនជា${element} ${animal}។ សូមឱ្យវាមានលក្ខណៈផ្ទាល់ខ្លួន កក់ក្តៅ និងលើកទឹកចិត្ត ជៀសវាងពាក្យទូទៅហួសហេតុ។ កុំនិយាយថានេះជាការទស្សន៍ទាយវិទ្យាសាស្ត្រ។`;
+    return `សូមសរសេរការទស្សន៍ទាយផ្ទាល់ខ្លួនខ្លីមួយ (2 កថាខណ្ឌខ្លីៗ ប្រហែល 3-4ល្បះក្នុងមួយកថាខណ្ឌ) ជាភាសាខ្មែរ សម្រាប់អ្នកដែលកើតនៅខែ${month} ថ្ងៃទី${day} ហើយមានរាសីចិនជា${element} ${animal}។ សូមឱ្យវាមានលក្ខណៈផ្ទាល់ខ្លួន កក់ក្តៅ និងលើកទឹកចិត្ត ជៀសវាងពាក្យទូទៅហួសហេតុ។ កុំនិយាយថានេះជាការទស្សន៍ទាយវិទ្យាសាស្ត្រ។`;
   }
   return `Write a short, personalized reading (2 short paragraphs, about 3-4 sentences each) for someone born on month ${month}, day ${day}, whose Chinese zodiac sign is the ${element} ${animal}. Make it feel personal, warm, and encouraging — not generic. Don't claim this is scientific prediction.`;
 }

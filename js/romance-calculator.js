@@ -324,8 +324,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setUrlParams(dob1Raw, dob2Raw);
 
-    const p1Label = S.romance_person1_label || (isKm ? "អ្នកទី ១" : "Person 1");
-    const p2Label = S.romance_person2_label || (isKm ? "អ្នកទី ២" : "Person 2");
+    const p1Label = S.romance_person1_label || (isKm ? "អ្នកទី 1" : "Person 1");
+    const p2Label = S.romance_person2_label || (isKm ? "អ្នកទី 2" : "Person 2");
 
     const summaryText = isKm
       ? `${animalName(bziA.animal)} និង ${animalName(bziB.animal)} បង្កើតបានជាគូដែល${levelLabel} (${overall}%)។ ចំណុចខ្លាំងបំផុតគឺ${CATEGORY_LABEL[topCat.key]} ខណៈដែល${CATEGORY_LABEL[bottomCat.key]}ទាមទារការយកចិត្តទុកដាក់បន្ថែម។ ${elRel.note}`
