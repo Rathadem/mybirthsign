@@ -326,6 +326,7 @@ function wireShareRows(root) {
     function setOpen(open) {
       _closeAllSharePops(pop);
       if (!open) { _closeSharePop(pop); return; }
+      pop.style.left = ""; pop.style.right = "";
       if (_SHARE_SHEET && _SHARE_SHEET.matches) {
         if (!_shareBackdrop) { _shareBackdrop = document.createElement("div"); _shareBackdrop.className = "share-backdrop"; document.body.appendChild(_shareBackdrop); }
         _shareBackdrop.hidden = false;
@@ -333,6 +334,15 @@ function wireShareRows(root) {
         document.body.appendChild(pop);
       }
       pop.hidden = false;
+      if (!pop.classList.contains("share-sheet")) {
+        // open the menu right under its Share button (the row can be much wider than the button), kept on screen
+        try {
+          const rr = row.getBoundingClientRect(), br = btn.getBoundingClientRect(), pw = pop.offsetWidth;
+          const vw = document.documentElement.clientWidth;
+          const left = Math.max(8, Math.min(br.left + br.width / 2 - pw / 2, vw - pw - 8));
+          pop.style.left = Math.round(left - rr.left) + "px"; pop.style.right = "auto";
+        } catch (e) { /* keep the default position */ }
+      }
       btn.setAttribute("aria-expanded", "true");
       {
         showNote("");
