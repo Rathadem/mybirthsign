@@ -3949,3 +3949,65 @@ html[lang="km"] .wz-card, html[lang="km"] .wz-group { font-family: "Kantumruy Pr
   .wz-left .zc-medal { width: 110px; }
   .wz-rows b { white-space: normal; }
 }
+
+/* ===== Polish pass for the four redesigned guides (five elements, compatibility, calculate, personality) ===== */
+/* section headings: a little more air, and a gold ornament under each */
+.fe-h2 { margin-top: 2.2em; margin-bottom: .9em; font-size: clamp(1.45rem, 2.6vw, 1.9rem); line-height: 1.3; }
+.fe-h2::after { content: ""; display: block; width: 120px; height: 10px; margin: 10px auto 0;
+  background: radial-gradient(circle, #e7c27a 0 3px, transparent 3.5px) center / 10px 10px no-repeat,
+              linear-gradient(90deg, transparent, rgba(231, 194, 122, .7) 30%, transparent 46%, transparent 54%, rgba(231, 194, 122, .7) 70%, transparent) center / 100% 1px no-repeat; }
+.fe-h2 + .fe-text p:first-child { margin-top: 0; }
+/* the opening paragraph reads as a lead */
+.fe > .fe-text:first-of-type p:first-child { font-size: 1.08rem; line-height: 1.75; color: #f1ecff; }
+.fe .share-row { margin-bottom: 4px; }
+/* boxes that sit side by side get equal height and no empty gaps */
+.zc-top { grid-template-columns: 1fr; }
+.zc-types { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.zc-t { flex-direction: column; align-items: flex-start; gap: 6px; height: 100%; box-sizing: border-box; }
+.zc-types li { margin: 0 !important; }
+.zc-groups { grid-template-columns: 1fr; }
+.zc-tris { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.zc-stack { grid-template-columns: 1fr 1fr; align-items: stretch; }
+.zc-stack .zc-box { height: 100%; box-sizing: border-box; }
+.hc-bottom { grid-template-columns: 1fr; }
+.hc-exs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hc-ex { flex-direction: column; align-items: stretch; }
+.hc-ex > img { order: -1; align-self: center; width: 72px; height: 72px; margin-bottom: 6px; }
+.hc-ex > div { display: flex; flex-direction: column; }
+.hc-your { margin-top: auto; }
+.hc-side { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: stretch; }
+.hc-side .zc-box { height: 100%; box-sizing: border-box; }
+.zc-bh { text-align: center; }
+.hc-calc .zc-bh, .hc-tips .zc-bh { text-align: left; }
+/* cards in a row share edges: equal heights, actions pinned to the bottom */
+.wz-right { display: flex; flex-direction: column; }
+.wz-more { margin-top: auto; padding-top: 10px; align-self: flex-start; }
+.wz-cards > li { height: 100%; box-sizing: border-box; }
+.fe-panel { display: flex; flex-direction: column; }
+/* Khmer: small text a bit larger with room for stacked letters */
+html[lang="km"] .fe-traits, html[lang="km"] .zc-t span span, html[lang="km"] .hc-yrs, html[lang="km"] .wz-yrs,
+html[lang="km"] .fe-attrs li, html[lang="km"] .fe-node, html[lang="km"] .hc-tag, html[lang="km"] .zc-tri span { font-size: .86rem; line-height: 1.75; }
+html[lang="km"] .fe-desc, html[lang="km"] .wz-desc, html[lang="km"] .zc-g p, html[lang="km"] .zc-box > p, html[lang="km"] .hc-ex p { line-height: 1.8; }
+html[lang="km"] .fe-h2 { line-height: 1.6; }
+@media (max-width: 1100px) {
+  .zc-types { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .zc-tris, .hc-exs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .zc-stack, .hc-side { grid-template-columns: 1fr; }
+  .zc-types { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .zc-types, .zc-tris, .hc-exs { grid-template-columns: 1fr; }
+  .zc-t { flex-direction: row; align-items: center; }
+  .hc-ex { flex-direction: row; align-items: flex-end; }
+  .hc-ex > img { order: 0; width: 60px; height: 60px; margin: 0; }
+}
+.hc-full[hidden], .hc-out[hidden] { display: none !important; }
+.hc-tag { align-self: flex-start; }
+.zc-chart { table-layout: fixed; }
+.zc-chart thead th:first-child { width: 128px; }
+@media (max-width: 520px) { .zc-chart thead th:first-child { width: 104px; } }
+.fe-find .fe-text p:first-child { margin-top: 0; }
+.fe-cta + .fe-text p { text-align: center; }
+.fe .disclaimer { color: #a99fd0; font-size: .82rem; }
