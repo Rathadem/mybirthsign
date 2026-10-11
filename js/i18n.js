@@ -1088,8 +1088,36 @@ function initNavToggle() {
   // Collapsing back to desktop width (e.g. rotating a tablet) shouldn't
   // leave the mobile panel stuck open underneath the now-inline nav.
   window.addEventListener("resize", function () {
-    if (window.innerWidth > 640) closeMenu();
+    if (window.innerWidth > 640 && !document.documentElement.classList.contains("nav-compact")) closeMenu();
   });
+  fitNav();
+}
+
+// Desktop: every page sits on one line in the top menu. If that line does not fit (narrow window,
+// longer Khmer labels) the page gets html.nav-compact and the menu turns into the ☰ panel (css/style.css).
+function fitNav() {
+  const root = document.documentElement;
+  const header = document.querySelector("header.site-header");
+  const box = header && header.querySelector(".container");
+  const nav = header && header.querySelector("nav");
+  if (!box || !nav) return;
+  let raf = 0;
+  function measure() {
+    raf = 0;
+    if (window.innerWidth <= 640) { root.classList.remove("nav-compact"); return; }   // phones use the media query
+    const wasOpen = nav.classList.contains("nav-open");
+    root.classList.remove("nav-compact");
+    const tooWide = box.scrollWidth > box.clientWidth + 1 || nav.getBoundingClientRect().right > box.getBoundingClientRect().right + 1;
+    root.classList.toggle("nav-compact", tooWide);
+    if (!tooWide && wasOpen) { nav.classList.remove("nav-open"); const t = header.querySelector(".nav-toggle"); if (t) t.setAttribute("aria-expanded", "false"); }
+  }
+  function later() { if (!raf) raf = requestAnimationFrame(measure); }
+  measure();
+  window.addEventListener("resize", later);
+  window.addEventListener("load", later);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(later).catch(function () {});
+  // the EN / ខ្មែរ switch changes the labels (and their width)
+  document.querySelectorAll("[data-lang-switch]").forEach(function (a) { a.addEventListener("click", function () { setTimeout(later, 0); }); });
 }
 
 // Phones: show the EN / ខ្មែរ switch in the top bar next to the menu button, so it is always
