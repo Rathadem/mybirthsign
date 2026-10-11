@@ -3536,6 +3536,11 @@ html[lang="km"] .klc-l { text-transform: none; letter-spacing: 0; font-size: .82
   .klc-panel { grid-row: 2; margin: -28px 10px 10px; }
 }
 .klc-share { display: flex; justify-content: center; margin-top: 10px; }
+/* let the share menu open outside the card (the card used to clip it); the picture keeps the rounded corners */
+.klc { overflow: visible; }
+.klc-art { border-radius: 19px; }
+.klc-share .share-row { position: relative; }
+.klc-share .share-popover:not(.share-sheet) { right: auto; left: 50%; transform: translateX(-50%); z-index: 60; }
 .klc-share .share-btn { border-color: #e7c27a99; color: #fff3d1; background: rgba(231, 194, 122, .1); }
 
 /* Lucky numbers, 1 to 5 digits (js/lucky-digits.js; daily posts are rendered with the same numbers) */
