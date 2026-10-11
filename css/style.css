@@ -3862,3 +3862,61 @@ html[lang="km"] .zc-an, html[lang="km"] .zc-box, html[lang="km"] .zc-chart, html
 .zc-top, .zc-groups { align-items: start; }
 .zc-chart th, .zc-chart td { vertical-align: middle; }
 @media (max-width: 520px) { .zc-chart { min-width: 620px; font-size: .78rem; } }
+
+/* ===== Blog: How to Calculate Your Chinese Zodiac Sign — reuses .fe hero and .zc boxes/medals ===== */
+.hc-steps { list-style: none; margin: 8px 0 0 !important; padding: 0 !important; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; counter-reset: none; }
+.hc-step { position: relative; display: flex; align-items: flex-start; gap: 14px; margin: 0 !important; padding: 18px 16px 16px; border-radius: 18px; border: 1px solid rgba(231, 194, 122, .42); background: linear-gradient(180deg, #1c1444, #0d0a24); }
+.hc-num { position: absolute; top: -12px; left: 14px; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; font-weight: 700; color: #2a1d05; background: linear-gradient(180deg, #f6d98d, #d4a43c); box-shadow: 0 4px 12px rgba(212, 164, 60, .4); }
+.hc-si { flex: 0 0 56px; height: 56px; display: grid; place-items: center; border-radius: 14px; background: rgba(231, 194, 122, .1); }
+.hc-si svg { width: 40px; height: 40px; fill: none; stroke: #e7c27a; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hc-si .hc-fill { fill: #e7c27a; }
+.hc-step:nth-child(2) .hc-si svg { stroke: #ff7a5c; }
+.hc-step h3 { margin: 2px 0 4px !important; color: #f6dc9b !important; font-size: 1.08rem; }
+.hc-step p { margin: 0 !important; font-size: .9rem; line-height: 1.55; color: #d9d1f2 !important; }
+.hc-signs { list-style: none; margin: 8px 0 18px !important; padding: 0 !important; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.hc-sign { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 0 !important; padding: 12px 8px 12px; border-radius: 16px; text-align: center; border: 1px solid rgba(231, 194, 122, .25); background: linear-gradient(180deg, #17113a, #0d0a24); }
+.hc-sign .zc-medal { width: min(96px, 90%); }
+.hc-sn { margin-top: 6px; color: #fff3d1; font-weight: 700; }
+.hc-yrs { padding-top: 6px; border-top: 1px solid rgba(231, 194, 122, .2); color: #cfc6ee; font-size: .8rem; line-height: 1.55; font-variant-numeric: tabular-nums; }
+.hc-bottom { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start; margin-top: 8px; }
+.hc-side { display: grid; gap: 16px; }
+.hc-exs { list-style: none; margin: 0 !important; padding: 0 !important; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hc-ex { display: flex; align-items: flex-end; gap: 6px; margin: 0 !important; padding: 12px; border-radius: 14px; border: 1px solid rgba(231, 194, 122, .25); background: rgba(8, 6, 24, .5); }
+.hc-ex > div { min-width: 0; flex: 1; }
+.hc-ex > img { flex: 0 0 auto; width: 64px; height: 64px; border-radius: 50%; }
+.hc-ex h3 { margin: 0 0 4px !important; color: #fff3d1 !important; font-size: .98rem; }
+.hc-ex p { margin: 0 0 8px !important; font-size: .84rem; line-height: 1.5; color: #cfc6ee !important; }
+.hc-tag { display: inline-block; margin-bottom: 6px; padding: 2px 10px; border-radius: 999px; font-size: .76rem; color: #2a1d05; background: #f1dfae; }
+.hc-your { display: block; padding: 6px 10px; border-radius: 10px; font-size: .9rem; color: #fff; }
+.hc-before .hc-your { background: linear-gradient(90deg, #d9468c, #b8327a); }
+.hc-after .hc-your { background: linear-gradient(90deg, #c98a1e, #a8700f); }
+.hc-calc > p, .hc-tips p { margin: 0 0 10px !important; font-size: .9rem; color: #d9d1f2 !important; }
+.hc-form { display: grid; gap: 8px; }
+.hc-form label { font-size: .82rem; color: #e7c27a; }
+.hc-form input { width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(231, 194, 122, .5); background: #fff; color: #1a1430; font: inherit; font-size: 1rem; }
+.hc-form .fe-btn { width: 100%; border: 0; cursor: pointer; font: inherit; font-weight: 700; font-size: 1rem; }
+.hc-out { margin-top: 12px; padding: 12px; border-radius: 12px; border: 1px solid rgba(231, 194, 122, .35); background: rgba(231, 194, 122, .08); }
+.hc-out p { margin: 8px 0 0 !important; font-size: .86rem; line-height: 1.5; color: #d9d1f2 !important; }
+.hc-res { display: flex; align-items: center; gap: 12px; }
+.hc-res img { width: 64px; height: 64px; border-radius: 50%; }
+.hc-res b { display: block; color: #f6dc9b; font-size: 1.25rem; }
+.hc-res span { color: #cfc6ee; font-size: .86rem; }
+.hc-err { color: #ffc9a8 !important; margin: 0 !important; }
+.hc-full { display: inline-block; margin-top: 10px; color: #f6dc9b; font-weight: 600; }
+.hc-tips ul { list-style: none; margin: 0 !important; padding: 0 !important; display: grid; gap: 8px; }
+.hc-tips li { position: relative; margin: 0 !important; padding-left: 28px; font-size: .88rem; line-height: 1.5; color: #e6e0f7; }
+.hc-tips li::before { content: "✓"; position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font-size: .72rem; font-weight: 700; color: #2a1d05; background: linear-gradient(180deg, #f6d98d, #d4a43c); }
+.hc-tips a { color: #f6dc9b; }
+html[lang="km"] .hc-step, html[lang="km"] .hc-sign, html[lang="km"] .hc-ex, html[lang="km"] .hc-calc, html[lang="km"] .hc-tips { font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; }
+@media (max-width: 1100px) {
+  .hc-signs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .hc-bottom { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .hc-steps { grid-template-columns: 1fr; gap: 18px; }
+  .hc-signs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .hc-signs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hc-exs { grid-template-columns: 1fr; }
+}
