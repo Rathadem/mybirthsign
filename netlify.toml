@@ -35,6 +35,17 @@
   to = "/animals.html"
   status = 200
 
+# Short link for the Khmer Lunar Calendar guide (the page lives in /blog/). Only these exact paths.
+[[redirects]]
+  from = "/khmer-lunar-calendar-birth-date"
+  to = "/blog/khmer-lunar-calendar-birth-date.html"
+  status = 301
+
+[[redirects]]
+  from = "/khmer-lunar-calendar-birth-date.html"
+  to = "/blog/khmer-lunar-calendar-birth-date.html"
+  status = 301
+
 # Speed: let browsers reuse images for a day (they are not fingerprinted, so keep it short).
 [[headers]]
   for = "/images/*"
