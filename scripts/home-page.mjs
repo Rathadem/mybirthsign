@@ -317,7 +317,7 @@ const FIND = `<div class="fx-wrap">
       <label for="hm-dob">${T("Select Birth Date", "ជ្រើសរើសថ្ងៃកំណើត")}</label>
       <div class="hm-find-row">
         <input type="date" lang="en-GB" id="hm-dob" name="dob" required min="${MIN}" max="${MAX}">
-        <button type="submit" class="fx-btn">${T("Find My Sign →", "ស្វែងរករាសីរបស់ខ្ញុំ →")}</button>
+        <button type="submit" class="fx-btn">${T("Find My Sign →", "ជោគជតារាសីរបស់ខ្ញុំ →")}</button>
       </div>
       <a class="hm-find-learn" href="blog/how-to-calculate-zodiac-sign.html">${T("Not sure how Chinese zodiac years work? Learn more →", "មិនច្បាស់ពីរបៀបដែលឆ្នាំរាសីដំណើរការ? ស្វែងយល់បន្ថែម →")}</a>
     </form>
