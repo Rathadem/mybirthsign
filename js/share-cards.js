@@ -8,6 +8,7 @@
 //   love     Love compatibility: both signs, the page's own overall % and level, three category scores, strengths
 //   business Business partner: both signs, the page's own overall %, strengths, areas to discuss
 //   article  blog articles and anything else: title, short line, optional animal
+//   guide    the four guide articles: picture band, title, line, the page's artwork row, three key points
 // Formats (chosen by js/share.js for each action):
 //   portrait 1080 x 1350 (up to 1620 tall when the text needs it)  feeds: Facebook, Telegram, WhatsApp, "Share image"
 //   square   1080 x 1080 (shorter text)                             "Download image"
@@ -473,5 +474,73 @@
       });
     });
   }
-  window.MBSShareCards = { lunar: lunar, dream: dream, daily: daily, lucky: lucky, sign: sign, pair: pair, love: love, business: business, article: article, FORMATS: FORMATS, _wrap: wrap };
+
+  // Guide articles (five elements, compatibility, calculate, personality): Angkor picture band, title, short line,
+  // a row of the page's own artwork (element circles or zodiac medallions) and three key points.
+  // spec: { lang, eyebrow, title, sub, icons: [[imagePath, label, color?], ...], points: [..] }
+  function guide(spec, format) {
+    var L = langOf(spec), F = FORMATS[format] || FORMATS.portrait, H = F.h, compact = format === "square", story = format === "story";
+    var icons = (spec.icons || []).slice(0, 12), pts = (spec.points || []).slice(0, compact ? 2 : 3);
+    return Promise.all([loadImg(base() + "images/guides/khmer-lunar-wide.webp"), Promise.all(icons.map(function (ic) { return loadImg(base() + ic[0]); })), fontsReady(L)]).then(function (r) {
+      var art = r[0], imgs = r[1];
+      // content first, on a spare canvas, so it can be fitted into the panel
+      var m = document.createElement("canvas"); m.width = W; m.height = 1800; var mx = alignByHand(m.getContext("2d"));
+      var PX = 120, IW = W - PX * 2, y = 74;
+      if (spec.eyebrow) { mx.textAlign = "center"; mx.fillStyle = GOLD2; font(mx, L, "body", L === "km" ? 28 : 26, 700); mx.fillText(L === "km" ? spec.eyebrow : String(spec.eyebrow).toUpperCase().split("").join(String.fromCharCode(8202)), W / 2, y); y += 30; }
+      var tg = mx.createLinearGradient(0, y, 0, y + 160); tg.addColorStop(0, "#fff1c8"); tg.addColorStop(1, "#e7c27a");
+      mx.fillStyle = tg; mx.textAlign = "center"; font(mx, L, "head", L === "km" ? (compact ? 44 : 50) : (compact ? 56 : 64), L === "km" ? 400 : 700);
+      y = drawLines(mx, wrap(mx, spec.title || "", IW, L, 3), W / 2, y + (L === "km" ? 62 : 64), L === "km" ? 78 : 72, "center");
+      if (spec.sub) { font(mx, L, "body", L === "km" ? 28 : 30, 400); mx.fillStyle = INK; y = drawLines(mx, wrap(mx, spec.sub, IW, L, 2), W / 2, y + 18, L === "km" ? 46 : 42, "center"); }
+      // ornament
+      y += 26; mx.strokeStyle = "rgba(231,194,122,.6)"; mx.lineWidth = 2; mx.beginPath(); mx.moveTo(W / 2 - 150, y); mx.lineTo(W / 2 - 18, y); mx.moveTo(W / 2 + 18, y); mx.lineTo(W / 2 + 150, y); mx.stroke();
+      mx.beginPath(); mx.arc(W / 2, y, 6, 0, Math.PI * 2); mx.fillStyle = GOLD2; mx.fill(); y += 30;
+      // artwork row(s): up to 6 per row
+      if (icons.length) {
+        var per = icons.length <= 6 ? icons.length : 6, rows = Math.ceil(icons.length / per), big = icons.length <= 6;
+        var R = big ? (compact ? 62 : 72) : (compact ? 46 : 54), gap = (IW - per * R * 2) / Math.max(1, per - 1);
+        for (var k = 0; k < icons.length; k++) {
+          var row = Math.floor(k / per), col = k % per, inRow = Math.min(per, icons.length - row * per);
+          var rowW = inRow * R * 2 + (inRow - 1) * gap, cx = (W - rowW) / 2 + R + col * (R * 2 + gap), cy = y + R + row * (R * 2 + (big ? 70 : 54));
+          var col0 = icons[k][2] || GOLD2;
+          mx.save(); mx.shadowColor = col0; mx.shadowBlur = 28; mx.beginPath(); mx.arc(cx, cy, R + 4, 0, Math.PI * 2); mx.fillStyle = col0; mx.globalAlpha = .55; mx.fill(); mx.restore();
+          if (imgs[k]) { mx.save(); mx.beginPath(); mx.arc(cx, cy, R, 0, Math.PI * 2); mx.clip(); mx.drawImage(imgs[k], cx - R, cy - R, R * 2, R * 2); mx.restore(); }
+          if (icons[k][1]) { mx.textAlign = "center"; mx.fillStyle = icons[k][2] || "#fff3d1"; font(mx, L, "body", big ? (L === "km" ? 26 : 27) : (L === "km" ? 21 : 22), 700); mx.fillText(icons[k][1], cx, cy + R + (big ? 40 : 30)); }
+        }
+        y += rows * R * 2 + (rows - 1) * (big ? 70 : 54) + (big ? 96 : 80);
+      }
+      // key points with gold check marks
+      pts.forEach(function (t) {
+        font(mx, L, "body", L === "km" ? 27 : 29, 500); var ls = wrap(mx, t, IW - 70, L, 2), x0 = PX + 10;
+        mx.beginPath(); mx.arc(x0 + 18, y + 6, 18, 0, Math.PI * 2); var cg = mx.createLinearGradient(0, y - 12, 0, y + 24); cg.addColorStop(0, "#f6d98d"); cg.addColorStop(1, "#d4a43c"); mx.fillStyle = cg; mx.fill();
+        mx.strokeStyle = "#2a1d05"; mx.lineWidth = 4; mx.lineCap = "round"; mx.beginPath(); mx.moveTo(x0 + 9, y + 6); mx.lineTo(x0 + 16, y + 13); mx.lineTo(x0 + 28, y - 1); mx.stroke(); mx.lineCap = "butt";
+        mx.textAlign = "left"; mx.fillStyle = INK; y = drawLines(mx, ls, x0 + 54, y + 16, L === "km" ? 44 : 40, "left") + 18;
+      });
+      var end = y + 30;
+      // card: picture band, then the content in a gold-framed panel overlapping it
+      var c = document.createElement("canvas"); c.width = W; c.height = H; var ctx = alignByHand(c.getContext("2d"));
+      ctx.fillStyle = "#0b0826"; ctx.fillRect(0, 0, W, H);
+      // the panel sits just above the footer; whatever room is left above it shows more of the picture
+      var minTop = compact ? 120 : 170, room = H - FOOT - 26, scl = Math.min(1, (room - minTop) / end);
+      var top = Math.max(minTop, room - end * scl), bandH = Math.min(top + 230, Math.round(H * 0.62));
+      if (art) {
+        var sc = Math.max(W / art.width, bandH / art.height), dw = art.width * sc, dh = art.height * sc;
+        ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, bandH); ctx.clip(); ctx.drawImage(art, (W - dw) * 0.62, (bandH - dh) * 0.7, dw, dh); ctx.restore();
+      }
+      var fade = ctx.createLinearGradient(0, bandH * 0.45, 0, bandH); fade.addColorStop(0, "rgba(11,8,38,0)"); fade.addColorStop(1, "rgba(11,8,38,1)");
+      ctx.fillStyle = fade; ctx.fillRect(0, 0, W, bandH + 2);
+      var px = 60, pw = W - 120, ph = end * scl;
+      ctx.save(); ctx.shadowColor = "rgba(0,0,0,.55)"; ctx.shadowBlur = 40; roundRect(ctx, px, top, pw, ph, 30); ctx.fillStyle = "rgba(14,10,46,.94)"; ctx.fill(); ctx.restore();
+      ctx.strokeStyle = "rgba(231,194,122,.85)"; ctx.lineWidth = 2.5; roundRect(ctx, px, top, pw, ph, 30); ctx.stroke();
+      ctx.strokeStyle = "rgba(231,194,122,.3)"; ctx.lineWidth = 1.5; roundRect(ctx, px + 10, top + 10, pw - 20, ph - 20, 22); ctx.stroke();
+      ctx.strokeStyle = "#e7c27a"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(px + 22, top + 64); ctx.lineTo(px + 22, top + 30); ctx.quadraticCurveTo(px + 22, top + 22, px + 30, top + 22); ctx.lineTo(px + 64, top + 22); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(px + pw - 22, top + ph - 64); ctx.lineTo(px + pw - 22, top + ph - 30); ctx.quadraticCurveTo(px + pw - 22, top + ph - 22, px + pw - 30, top + ph - 22); ctx.lineTo(px + pw - 64, top + ph - 22); ctx.stroke();
+      var dw2 = W * scl; ctx.drawImage(m, 0, 0, W, end, (W - dw2) / 2, top, dw2, ph);
+      // outer frame like the other cards, then the footer
+      ctx.strokeStyle = "rgba(246,220,155,.55)"; ctx.lineWidth = 2; roundRect(ctx, 24, 24, W - 48, H - 48, 34); ctx.stroke();
+      footer(ctx, L, spec.note || LBL[L].note, H);
+      return qrReady.then(function (img) { qr(ctx, img, H); return new Promise(function (ok) { c.toBlob(function (b) { ok(b); }, "image/png"); }); });
+    });
+  }
+  window.MBSShareCards = { guide: guide, lunar: lunar, dream: dream, daily: daily, lucky: lucky, sign: sign, pair: pair, love: love, business: business, article: article, FORMATS: FORMATS, _wrap: wrap };
 })();
