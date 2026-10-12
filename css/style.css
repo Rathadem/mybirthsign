@@ -3405,13 +3405,15 @@ footer.site-footer:not(.hm-footer) a { padding: 7px 6px; line-height: 1.3; }
 .ad-slot { display: none !important; }
 
 /* Language blocks: show only the active language from the very first paint (JS used to hide the other one after load, which made the page jump) */
-html:not([lang="km"]) [data-lang-content="km"] { display: none; }
-html[lang="km"] [data-lang-content="en"] { display: none; }
-html:not([lang^="zh"]) [data-lang-content="zh"] { display: none; }
+/* Keyed on data-site-lang (set by js/i18n.js), not on lang: a browser translator (e.g. Chrome "Translate to English")
+   rewrites <html lang>, which used to hide every block and leave empty boxes. */
+html:not([data-site-lang="km"]) [data-lang-content="km"] { display: none; }
+html[data-site-lang="km"] [data-lang-content="en"] { display: none; }
+html:not([data-site-lang="zh"]) [data-lang-content="zh"] { display: none; }
 /* Chinese: show the Chinese block; where a place has no Chinese block yet, its English block shows instead */
-html[lang^="zh"] [data-lang-content="km"] { display: none; }
-html[lang^="zh"] [data-lang-content="en"]:has(~ [data-lang-content="zh"]),
-html[lang^="zh"] [data-lang-content="zh"] ~ [data-lang-content="en"] { display: none; }
+html[data-site-lang="zh"] [data-lang-content="km"] { display: none; }
+html[data-site-lang="zh"] [data-lang-content="en"]:has(~ [data-lang-content="zh"]),
+html[data-site-lang="zh"] [data-lang-content="zh"] ~ [data-lang-content="en"] { display: none; }
 /* Simplified Chinese text: Noto Sans SC (loaded only in Chinese), then the phone / computer's own Chinese font */
 html[lang^="zh"] body { font-family: Georgia, "Times New Roman", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
 html[lang^="zh"] :is(h1, h2, h3, p, li, span, a, b, strong, button, label, td, th, summary, small, em) { word-break: normal; line-break: strict; }

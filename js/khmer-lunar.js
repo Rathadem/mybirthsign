@@ -176,7 +176,7 @@
   }
   // ---- small inline dates: any element with data-kl-iso="YYYY-MM-DD" gets the Khmer lunar date added
   //      (Compatibility and Business Partner birth dates, Wedding Date recommended days). data-kl-style="day" = no year.
-  var pageLang = function () { var l = document.documentElement.lang || ""; return l === "km" ? "km" : l.indexOf("zh") === 0 ? "zh" : "en"; };
+  var pageLang = function () { var l = document.documentElement.getAttribute("data-site-lang") || document.documentElement.lang || ""; return l === "km" ? "km" : l.indexOf("zh") === 0 ? "zh" : "en"; };
   function shortLunar(M, iso, style) {
     var p = iso.split("-").map(Number);
     if (!(p[0] >= MIN && p[0] <= MAX)) return null;

@@ -1510,6 +1510,7 @@ function applyStaticTranslations() {
   const lang = getLang();
   try {
     document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.documentElement.setAttribute("data-site-lang", lang);   // the CSS language blocks key on this (a page translator can change lang)
   } catch (e) { /* ignore */ }
   if (lang === "zh") loadChineseFont();
 

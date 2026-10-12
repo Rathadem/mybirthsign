@@ -60,7 +60,7 @@
     var els = (scope || document).querySelectorAll("[data-lucky-digits][data-animal]");
     Array.prototype.forEach.call(els, function (el) {
       var iso = el.getAttribute("data-date") || ppToday();
-      var hl = document.documentElement.lang || "";
+      var hl = document.documentElement.getAttribute("data-site-lang") || document.documentElement.lang || "";
       var lang = el.getAttribute("data-lang") || (hl === "km" ? "km" : hl.indexOf("zh") === 0 ? "zh" : "en");
       var v = forSign(el.getAttribute("data-animal"), iso);
       if (!v) { el.hidden = true; return; }
