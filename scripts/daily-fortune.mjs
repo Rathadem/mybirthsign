@@ -667,9 +667,10 @@ blog = blog.replace(/href="blog\/daily-fortune-\d{4}-\d{2}-\d{2}\.html"/g, `href
 const dayLower = dayAnimal.toLowerCase();
 blog = blog.replace(/(<a class="bv2-featured" href="blog\/daily-fortune-[^"]+">\s*<div class="bv2-featured-art">\s*<img src=")images\/zodiac\/\w+\.webp(" alt=")Illustration of the \w+(, today's luckiest Chinese zodiac sign")/g,
   `$1images/zodiac/${dayLower}.webp$2Illustration of the ${dayAnimal}$3`);
-// featured date lines: the English one is "<weekday>, <Month> <d>, <yyyy>", the Khmer one starts with a Khmer weekday
 let dateIdx = 0;
-blog = blog.replace(/(<div class="bv2-featured-meta">\s*<span>)([^<]*)(<\/span>)/g, (m, a, _old, c) => a + (dateIdx++ === 0 ? dateFullEN : dateFullKM) + c);
+blog = blog.replace(/(<a class="bv2-featured" href="blog\/daily-fortune-[^"]+">\s*<div class="bv2-featured-art">\s*<img src=")images\/zodiac\/\w+\.webp(" alt="今日最幸运生肖插图")/g, `$1images/zodiac/${dayLower}.webp$2`);
+// featured date lines in block order: English, Khmer, Chinese
+blog = blog.replace(/(<div class="bv2-featured-meta">\s*<span>)([^<]*)(<\/span>)/g, (m, a, _old, c) => a + ([dateFullEN, dateFullKM, dateFullZH][dateIdx++] || dateFullEN) + c);
 if (blog !== before) { write("blog.html", blog); console.log("blog.html feature updated"); }
 
 // ---------------------------------------------------------------- homepage "From the MyBirthSign Blog" list
