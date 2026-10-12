@@ -294,6 +294,26 @@
       renderGrid();
       popup.hidden = false;
       wrap.classList.add("kdp-open");
+      keepInView();
+    }
+    // The calendar opens above the field. If the sticky header (or the top of the screen) would cover it,
+    // scroll the page down a little; if the page can't scroll that far, open it below the field instead.
+    function headerBottom() {
+      const h = document.querySelector("header.site-header");
+      if (!h) return 0;
+      const r = h.getBoundingClientRect();
+      return getComputedStyle(h).position === "sticky" || getComputedStyle(h).position === "fixed" ? Math.max(0, r.bottom) : 0;
+    }
+    function keepInView() {
+      popup.style.top = ""; popup.style.bottom = "";
+      const gap = 8, topLimit = headerBottom() + gap;
+      let r = popup.getBoundingClientRect();
+      if (r.top >= topLimit) return;
+      const need = topLimit - r.top;
+      if (window.scrollY >= need) { window.scrollBy(0, -need); return; }
+      popup.style.top = "calc(100% + 8px)"; popup.style.bottom = "auto";      // not enough room above: open below
+      r = popup.getBoundingClientRect();
+      if (r.bottom > window.innerHeight - gap) window.scrollBy(0, Math.min(r.bottom - window.innerHeight + gap, r.top - topLimit));
     }
     function closePopup() {
       popup.hidden = true;
