@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
   if (!form || !resultBox) return;
 
   const lang = typeof getLang === "function" ? getLang() : "en";
-  const isKm = lang === "km";
+  const isKm = lang === "km", isZh = lang === "zh";
   const T = (typeof WED_TEXT !== "undefined" && (WED_TEXT[lang] || WED_TEXT.en)) || {};
   const S = (typeof UI_STRINGS !== "undefined" && UI_STRINGS[lang]) || {};
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const fill = (s, map) => String(s).replace(/\{(\w+)\}/g, (m, k) => (map[k] !== undefined ? map[k] : m));
-  const aName = (a) => (isKm && typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[a] : a);
-  const eName = (e) => (isKm && typeof KM_ELEMENT_NAMES !== "undefined" ? KM_ELEMENT_NAMES[e] : e);
+  const aName = (a) => (typeof LOC !== "undefined" ? LOC.animal(a, lang) : a);
+  const eName = (e) => (typeof LOC !== "undefined" ? LOC.element(e, lang) : e);
   const errBox = document.getElementById("wed-error");
   const showErr = (m) => { if (errBox) { errBox.textContent = m; errBox.hidden = false; } };
   const clearErr = () => { if (errBox) { errBox.hidden = true; errBox.textContent = ""; } };
@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const k = el.getAttribute("data-wed");
     if (T[k] !== undefined) el.textContent = T[k];
   });
-  if (isKm && T.title) document.title = T.title + " | MyBirthSign";
-  function fillList(id, html) { const el = document.getElementById(id); if (el && isKm) el.innerHTML = html; }
+  if ((isKm || isZh) && T.title) document.title = T.title + " | MyBirthSign";
+  function fillList(id, html) { const el = document.getElementById(id); if (el && (isKm || isZh)) el.innerHTML = html; }
   fillList("wed-why", (T.why || []).map(function (w) { return '<article class="wed-why-card"><h3>' + esc(w[0]) + "</h3><p>" + esc(w[1]) + "</p></article>"; }).join(""));
   fillList("wed-plan", (T.plan || []).map(function (w, i) { return '<article class="wed-plan-card"><span class="wed-plan-n" aria-hidden="true">' + (i + 1) + "</span><h3>" + esc(w[0]) + "</h3><p>" + esc(w[1]) + "</p></article>"; }).join(""));
   fillList("wed-tools", (T.tools || []).map(function (w) { return '<a class="wed-tool" href="' + w[2] + '"><strong>' + esc(w[0]) + "</strong><span>" + esc(w[1]) + "</span></a>"; }).join(""));
@@ -55,14 +55,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function holidaysInMonth(year, monthIndex) {
     const names = [];
-    if (monthIndex === 0) names.push(isKm ? "ទិវាចូលឆ្នាំសាកល" : "New Year's Day");
-    if (monthIndex === 1) names.push(isKm ? "ទិវាស្នេហា" : "Valentine's Day");
-    if (monthIndex === 3) names.push(isKm ? "បុណ្យចូលឆ្នាំខ្មែរ" : "Khmer New Year");
-    if (monthIndex === 11) names.push(isKm ? "បុណ្យណូអែល" : "Christmas");
+    if (monthIndex === 0) names.push(isKm ? "ទិវាចូលឆ្នាំសាកល" : isZh ? "元旦" : "New Year's Day");
+    if (monthIndex === 1) names.push(isKm ? "ទិវាស្នេហា" : isZh ? "情人节" : "Valentine's Day");
+    if (monthIndex === 3) names.push(isKm ? "បុណ្យចូលឆ្នាំខ្មែរ" : isZh ? "高棉新年" : "Khmer New Year");
+    if (monthIndex === 11) names.push(isKm ? "បុណ្យណូអែល" : isZh ? "圣诞节" : "Christmas");
     const cny = typeof CNY_DATES !== "undefined" ? CNY_DATES[year] : null;
     if (cny) {
       const cnyMonth = parseInt(cny.split("-")[0], 10);
-      if (cnyMonth - 1 === monthIndex) names.push(isKm ? "បុណ្យចូលឆ្នាំចិន" : "Lunar New Year");
+      if (cnyMonth - 1 === monthIndex) names.push(isKm ? "បុណ្យចូលឆ្នាំចិន" : isZh ? "农历新年" : "Lunar New Year");
     }
     return names;
   }
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function partnerCard(label, bz) {
     const slug = bz.animal.toLowerCase();
-    const info = isKm && typeof KM_ANIMAL_INFO !== "undefined" ? KM_ANIMAL_INFO[bz.animal] : (typeof ANIMAL_INFO !== "undefined" ? ANIMAL_INFO[bz.animal] : null);
+    const info = (isKm || isZh) && typeof LOC !== "undefined" ? LOC.table("ANIMAL_INFO", lang)[bz.animal] : (typeof ANIMAL_INFO !== "undefined" ? ANIMAL_INFO[bz.animal] : null);
     const traits = info && info.traits ? info.traits : "";
     const yy = bz.yinYang === "Yang" ? T.yang : T.yin;
     return '<div class="wed-partner">' +
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const rows = MONTH_ANIMALS.map(function (monthAnimal, i) {
       const rating = rateWeddingMonth(monthAnimal, A.animal, B.animal);
       let monthName;
-      try { monthName = new Date(year, i, 1).toLocaleDateString(dateLocale, { month: "long" }); }
+      try { monthName = isZh ? (i + 1) + "月" : new Date(year, i, 1).toLocaleDateString(dateLocale, { month: "long" }); }
       catch (err) { monthName = new Date(year, i, 1).toLocaleDateString("en-US", { month: "long" }); }
       return { monthIndex: i, monthName: monthName, monthAnimal: monthAnimal, rating: rating, season: seasons[i], holidays: holidaysInMonth(year, i) };
     });
@@ -176,12 +176,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const shown = picks.slice(0, 6);
     const dateItems = shown.map(function (p) {
       let label;
-      try { label = new Date(year, p.r.monthIndex, p.day).toLocaleDateString(dateLocale, { year: "numeric", month: "long", day: "numeric" }); }
+      try { label = isZh ? year + "年" + (p.r.monthIndex + 1) + "月" + p.day + "日" : new Date(year, p.r.monthIndex, p.day).toLocaleDateString(dateLocale, { year: "numeric", month: "long", day: "numeric" }); }
       catch (err) { label = p.r.monthName + " " + p.day + ", " + year; }
       const iso = year + "-" + String(p.r.monthIndex + 1).padStart(2, "0") + "-" + String(p.day).padStart(2, "0");
       return '<li class="wed-d wed-d-' + p.r.rating + '"><div class="wed-d-date" data-kl-iso="' + iso + '" data-kl-style="day"><b>' + esc(label) + "</b>" +
         starsHtml(STARS[p.r.rating]) + '<span class="wed-d-rate">' + esc(T.rate[p.r.rating]) + "</span></div>" +
-        '<p>' + esc(T.rateFull[p.r.rating]) + " " + esc(seasonLabel(p.r)) + ".</p></li>";
+        '<p>' + esc(T.rateFull[p.r.rating]) + (isZh ? "季节：" : " ") + esc(seasonLabel(p.r)) + (isZh ? "。" : ".") + "</p></li>";
     }).join("");
     const dates =
       '<section class="wed-dates" aria-labelledby="wed-dates-h"><h2 id="wed-dates-h" class="cmp-h2">' + esc(T.datesH) + "</h2>" +
