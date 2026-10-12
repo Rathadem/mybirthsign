@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Generates the premium "Chinese Zodiac Animals — All 12 Signs" page (animals.html, English + Khmer).
+ * Generates the premium "Chinese Zodiac Animals — All 12 Signs" page (animals.html, English + Khmer + Simplified Chinese).
  *
  *   node scripts/animals-page.mjs
  *
@@ -39,6 +39,9 @@ const KM_NAMES = extractConst(i18n, "KM_ANIMAL_NAMES");
 const KM_INFO = extractConst(i18n, "KM_ANIMAL_INFO");
 const KM_ELEM = extractConst(i18n, "KM_ELEMENT_NAMES");
 const ELEMENTS = extractConst(zdata, "ELEMENTS");
+const ZH_NAMES = extractConst(i18n, "ZH_ANIMAL_NAMES");
+const ZH_INFO = extractConst(i18n, "ZH_ANIMAL_INFO");
+const ZH_ELEM = extractConst(i18n, "ZH_ELEMENT_NAMES");
 const HAN = { Rat: "鼠", Ox: "牛", Tiger: "虎", Rabbit: "兔", Dragon: "龍", Snake: "蛇", Horse: "馬", Goat: "羊", Monkey: "猴", Rooster: "雞", Dog: "狗", Pig: "豬" };
 // Traditional element of each earthly branch (Rat/Pig water, Tiger/Rabbit wood, Snake/Horse fire, Monkey/Rooster metal, Ox/Dragon/Goat/Dog earth).
 // NOT in the project's data before this page — shown as "Element" on the cards as the brief asked; easy to remove if unwanted.
@@ -51,10 +54,11 @@ const href = (a) => `blog/zodiac-year-${slug(a)}.html`;
 const yearsOf = (a, n = 6) => { const idx = ORDER.indexOf(a); const out = []; for (let y = 1960; out.length < n; y++) if (((y - 4) % 12 + 12) % 12 === idx) out.push(y); return out; };
 const partners = (a) => TRIANGLES.find((t) => t.includes(a)).filter((x) => x !== a);
 const medal = (a, s, cls = "", lazy = true) => `<img class="an-medal ${cls}" src="images/profile/medal-${slug(a)}.webp" width="${s}" height="${s}" alt="" ${lazy ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async">`;
-const nm = (a, km) => (km ? KM_NAMES[a] : a);
+const nm = (a, km) => (km === "zh" ? ZH_NAMES[a] : km ? KM_NAMES[a] : a);   // km: true (Khmer), "zh" (Chinese) or false (English)
 const kmYear = (a) => `ឆ្នាំ${KM_NAMES[a]}`;
 const firstSentence = (s) => String(s).split(/[.។]/)[0].trim();
 const keywords = (a, km) => {
+  if (km === "zh") return ZH_INFO[a].traits.split("。")[0].split("、").slice(0, 3).join(" • ");
   if (km) return firstSentence(KM_INFO[a].traits);
   return firstSentence(INFO[a].traits).replace(/,?\s+and\s+/, ", ").split(",").map((w) => w.trim()).filter(Boolean).slice(0, 3).join(" • ");
 };
@@ -115,11 +119,43 @@ const UI = {
     blogH: "ពីប្លក់", blogP: "អានបន្ថែមអំពីភាពសមស្រប ការព្យាករណ៍ប្រចាំឆ្នាំ និងធាតុទាំងប្រាំ →",
     disc: "សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។ ការបកស្រាយរាសីជាប្រពៃណី និងវប្បធម៌ មិនត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រទេ។",
   },
+  zh: {
+    eyebrow: "十二生肖", h1: "中国十二生肖",
+    sub: "探索十二生肖的性格特点、五行、幸运元素和配对。",
+    btnFind: "✨ 查找我的生肖", btnCompat: "💞 查看配对",
+    introH: "认识十二生肖",
+    introP: "中国生肖是一种以十二个生肖循环为基础的传统体系。传统上，你的生肖由出生年份决定，而农历新年的分界会影响1月或2月出生的人。",
+    noteP: "不确定自己属什么？使用我们的生肖查询。", noteB: "查询我的生肖 →",
+    gridH: "十二生肖", gridP: "选择你的生肖，了解它的性格、幸运元素和配对。在传统的60年循环中，每个生肖都会与不同的五行搭配。你确切的五行取决于你的出生年份。",
+    lPers: "性格", lElem: "五行", elVar: "五行因年份而异", lComp: "配对", lYears: "出生年份", yearOf: (n) => `${n}年`, explore: (n) => `了解属${n} →`,
+    el: ZH_ELEM,
+    ctaH: "你属什么生肖？", ctaP: "输入你的生日，找到你的生肖。", ctaB: "🔮 查找我的生肖",
+    cycH: "十二年生肖循环如何运作", cycP1: "生肖每12年循环一次。", cycP2: "你的出生年份决定传统上的生肖，但1月或2月前后出生的人应核对农历新年的分界。", cycB: "查询你的生肖 →",
+    elH: "生肖五行", elP: "五行为传统生肖体系增添了另一层含义。", elB: "了解生肖五行 →",
+    persH: "每个生肖都有自己的性格", persP: "每个生肖都有自己的传统寓意。这些是供反思和娱乐的文化解读——不是科学结论。",
+    pers: [["heart", "爱情", "每个生肖在传统上如何对待爱情和承诺。"], ["brief", "事业", "传统上与每个生肖相关的工作风格和优势。"], ["coins", "金钱", "关于储蓄、消费和机会的传统看法。"], ["people", "人际关系", "每个生肖如何与家人和朋友相处。"], ["star", "优势", "每个生肖在传统上受人称赞的品质。"], ["warn", "挑战", "传统上认为每个生肖需要平衡的方面。"]],
+    compH: "生肖配对", compP: "看看两个生肖在爱情、友情和生意上传统上如何相配。", group: "天然相合的一组", compB: "查看配对 →", bizB: "商业伙伴配对 →",
+    yrH: "生肖出生年份", yrNote: "重要提示：生肖年依照农历新年计算。如果你出生在1月或2月，请使用生肖查询确认你的生肖。", yrB: "查询我的出生年份 →",
+    faqH: "常见问题", toolsH: "探索 MyBirthSign",
+    tools: [["🔮", "生肖查询", "查找你的生肖和五行", "/checker"], ["💞", "配对计算器", "查看爱情、友情等配对", "/compatibility"], ["💍", "婚期选择", "查找吉日", "/wedding-date"], ["💼", "商业伙伴配对", "看看你们是否合作愉快", "/business-partner"], ["📚", "生肖指南", "了解十二生肖", "/zodiac-guide"]],
+    blogH: "来自博客", blogP: "阅读更多关于生肖配对、年度运势和五行的文章 →",
+    disc: "仅供娱乐。生肖解读属于传统和文化，并无科学依据。",
+  },
 };
 
 function faqs(km) {
   const all = ORDER.map((a) => nm(a, km)).join(", ");
   const grp = TRIANGLES.map((t) => t.map((a) => nm(a, km)).join(" · ")).join(" | ");
+  if (km === "zh") return [
+    ["十二生肖有哪些？", `十二生肖按顺序是：${ORDER.map((a) => ZH_NAMES[a]).join("、")}。`],
+    ["我怎样才能找到自己的生肖？", "在上面的出生年份表中查找你的出生年份，或在我们的生肖查询中输入生日，获得准确结果——包括1月或2月出生的人。"],
+    ["我属什么生肖？", "这取决于你的出生年份以及那一年农历新年的日期。使用生肖查询可以马上知道。"],
+    ["生肖年是从1月1日开始的吗？", "不是。生肖年从农历新年开始，农历新年在1月下旬到2月中旬之间。"],
+    ["生肖五行是什么？", `五行是${ELEMENTS.map((e) => ZH_ELEM[e]).join("、")}。它们为传统生肖体系增添了另一层含义。`],
+    ["哪些生肖相配？", `传统上，十二生肖分成四组天然相合的组合：${grp}。`],
+    ["两个人的生肖能相配吗？", "能。两个人的生肖如果在同一组里，传统上被认为是天生的一对。使用我们的配对计算器看看你们的组合。"],
+    ["生肖有科学依据吗？", "没有。生肖解读属于传统和文化，并无科学依据。请把它当作娱乐和自我反思。"],
+  ];
   if (km) return [
     ["តើសត្វរាសីទាំង12មានអ្វីខ្លះ?", `សត្វរាសីទាំង12គឺ ${ORDER.map((a) => kmYear(a)).join(", ")}។`],
     ["តើខ្ញុំរកសត្វរាសីរបស់ខ្ញុំយ៉ាងដូចម្តេច?", "រកឆ្នាំកំណើតរបស់អ្នកក្នុងតារាងឆ្នាំកំណើតខាងលើ ឬបញ្ចូលថ្ងៃកំណើតក្នុងម៉ាស៊ីនពិនិត្យរាសីរបស់យើង ដើម្បីទទួលបានលទ្ធផលត្រឹមត្រូវ រួមទាំងអ្នកដែលកើតក្នុងខែមករា ឬកុម្ភៈ។"],
@@ -143,15 +179,15 @@ function faqs(km) {
 }
 
 function body(lang) {
-  const km = lang === "km", u = UI[lang];
+  const km = lang === "km" ? true : lang === "zh" ? "zh" : false, zh = lang === "zh", u = UI[lang];
   const card = (a) => {
     const yrs = yearsOf(a), n = nm(a, km);
     return `        <li class="an-card" style="--ac:${ACCENT[a]}">
           <a class="an-card-link" href="${href(a)}" aria-label="${esc(u.explore(n).replace(" →", ""))}">
-            <span class="an-han" lang="zh-Hant" aria-hidden="true">${HAN[a]}</span>
-            ${medal(a, 150, "an-medal-card")}
-            <h3>${esc(km ? kmYear(a) : n)}</h3>
-            <p class="an-yearof">${esc(km ? `${a}` : u.yearOf(n))}</p>
+            ${zh ? "" : `<span class="an-han" lang="zh-Hant" aria-hidden="true">${HAN[a]}</span>
+            `}${medal(a, 150, "an-medal-card")}
+            <h3>${esc(zh ? n : km ? kmYear(a) : n)}</h3>
+            <p class="an-yearof">${esc(zh ? u.yearOf(n) : km ? `${a}` : u.yearOf(n))}</p>
           </a>
           <dl>
             <dt>${esc(u.lPers)}</dt><dd>${esc(keywords(a, km))}</dd>
@@ -269,7 +305,7 @@ const URL_ = "https://mybirthsign.com/zodiac-guide";   // existing canonical for
 const OG = "https://mybirthsign.com/images/og/site.jpg";
 const faqEn = faqs(false);
 const jsonld = JSON.stringify([
-  { "@context": "https://schema.org", "@type": "CollectionPage", name: "Chinese Zodiac Animals — All 12 Signs", description: DESC, url: URL_, inLanguage: ["en", "km"],
+  { "@context": "https://schema.org", "@type": "CollectionPage", name: "Chinese Zodiac Animals — All 12 Signs", description: DESC, url: URL_, inLanguage: ["en", "km", "zh-Hans"],
     mainEntity: { "@type": "ItemList", itemListElement: ORDER.map((a, i) => ({ "@type": "ListItem", position: i + 1, name: `Year of the ${a}`, url: `https://mybirthsign.com/blog/zodiac-year-${slug(a)}` })) } },
   { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: "https://mybirthsign.com/" },
@@ -282,6 +318,7 @@ let tpl = read("scripts/animal-profile-template.html");
 tpl = tpl.replace(/(href|src)="\.\.\//g, '$1="').replace('<link rel="stylesheet" href="css/profile.css">', '<link rel="stylesheet" href="css/profile.css">\n<link rel="stylesheet" href="css/animals.css">').replace('<body class="fx-page pf-page">', '<body class="fx-page pf-page an-page">').replace("\n{{TODAY_JS}}", "")
   .replace('<link rel="icon" type="image/svg+xml" href="favicon.svg">', '<link rel="icon" type="image/svg+xml" href="favicon.svg">\n<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">\n<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">\n<link rel="shortcut icon" href="favicon.ico">\n<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">');
 const out = tpl.replace(/\{\{TITLE\}\}/g, esc(TITLE)).replace(/\{\{URL\}\}/g, URL_).replace(/\{\{DESC\}\}/g, esc(DESC)).replace(/\{\{OG_IMAGE\}\}/g, OG)
-  .replace("{{JSONLD}}", jsonld.replace(/</g, "\\u003c")).replace("{{BODY_EN}}", () => body("en")).replace("{{BODY_KM}}", () => body("km"));
+  .replace("{{JSONLD}}", jsonld.replace(/</g, "\\u003c")).replace("{{BODY_EN}}", () => body("en")).replace("{{BODY_KM}}", () => body("km")).replace("{{BODY_ZH}}", () => body("zh").replace('id="all-animals"', 'id="all-animals-zh"'));
+if (/\{\{\w+\}\}/.test(out)) throw new Error("Unfilled placeholder in animals.html");
 fs.writeFileSync(path.join(ROOT, "animals.html"), out);
 console.log("Wrote animals.html");
