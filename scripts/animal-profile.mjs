@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Generates a premium "Year of the <Animal>" profile page (English + Khmer) at blog/zodiac-year-<animal>.html.
+ * Generates a premium "Year of the <Animal>" profile page (English + Khmer + Simplified Chinese) at blog/zodiac-year-<animal>.html.
  *
  *   node scripts/animal-profile.mjs Tiger
  *
@@ -47,6 +47,12 @@ const KM_ELEM = extractConst(i18n, "KM_ELEMENT_NAMES");
 const ELEMENTS = extractConst(zdata, "ELEMENTS");
 const EMOJI = extractConst(zdata, "ZODIAC_EMOJI");
 const COLOR_HEX = extractConst(zdata, "LUCKY_COLOR_HEX");
+const ZH_NAMES = extractConst(i18n, "ZH_ANIMAL_NAMES");
+const ZH_INFO = extractConst(i18n, "ZH_ANIMAL_INFO");
+const ZH_ELEM = extractConst(i18n, "ZH_ELEMENT_NAMES");
+const ZH_COLORS = extractConst(i18n, "ZH_COLOR_NAMES");
+const ZH_DAYS = extractConst(i18n, "ZH_DAY_NAMES");
+const nameIn = (a, lang) => (lang === "km" ? KM_NAMES[a] : lang === "zh" ? ZH_NAMES[a] : a);
 
 if (!ORDER.includes(A)) { console.error("Usage: node scripts/animal-profile.mjs <Animal>  (one of " + ORDER.join(", ") + ")"); process.exit(1); }
 const slug = A.toLowerCase();
@@ -176,7 +182,14 @@ const COPY = {
   },
 };
 import { EXTRA } from "./profile-copy.mjs";
+import { PROFILE_ZH } from "./profile-zh.mjs";
 Object.assign(COPY, EXTRA);
+// Chinese copy + article text (scripts/profile-zh.mjs); the article keeps the English section order (index 4, lucky items, is not shown)
+if (COPY[A] && PROFILE_ZH[A]) {
+  COPY[A].zh = { ...PROFILE_ZH[A].copy, traits: COPY[A].en.traits.map(([icon], i) => [icon, PROFILE_ZH[A].copy.traits[i]]) };
+  const zs = PROFILE_ZH[A].sections;
+  content.zh = { lead: ["", PROFILE_ZH[A].lead1], sections: [zs[0], zs[1], zs[2], zs[3], ["", []], zs[4], zs[5]] };
+}
 if (!COPY[A]) { console.error(`No page copy for ${A} yet (add it to COPY in scripts/animal-profile.mjs).`); process.exit(1); }
 
 // ---------------------------------------------------------------- shared UI strings
@@ -235,6 +248,33 @@ const UI = {
     disc: "សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។ ការបកស្រាយរាសីជាប្រពៃណី និងវប្បធម៌ មិនត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រទេ។",
     crumbs: ["ទំព័រដើម", "ប្លក់"], share: "ចែករំលែក",
   },
+  zh: {
+    nav: [["overview", "home", "概览"], ["personality", "user", "性格"], ["elements", "leaf", "五行"], ["lucky", "clover", "幸运"], ["compat", "heart", "配对"], ["career", "brief", "事业"], ["love", "heart", "爱情"], ["health", "health", "健康"]],
+    navLabel: (n) => `属${n}页面目录`,
+    btnCheck: (n) => `看看你是否属${n} →`, btnCompat: "查看配对 →",
+    ovH: (n) => `属${n}概览`, traitsH: "主要特点", yearsH: (n) => `属${n}的年份`,
+    yearsNote: "如果你出生在1月或2月，请核对农历新年的日期来确认你的生肖。", yearsBtn: "查询我的出生年份 →",
+    luckyH: (n) => `属${n}的幸运元素`, colors: "幸运颜色", numbers: "幸运数字", days: "幸运日",
+    elH: (n) => `属${n}的五行`, elNote: "五行为传统生肖体系增添了另一层含义。你的五行取决于你的出生年份。", elBtn: "了解五行 →", elName: (e, n) => `${e}${n}`,
+    elN: ZH_ELEM,
+    compH: "最佳配对", bestL: "最佳配对", supL: "互相扶持", chalL: "有挑战的配对", compBtn: "查看完整配对指南 →",
+    persH: (n) => `属${n}的性格详解`,
+    cardT: { strengths: "优势", challenges: "挑战", love: "爱情与感情", career: "事业与工作", money: "金钱与财富", health: "健康" },
+    spiritH: (n) => `${n}的精神`,
+    deepH: (n) => `深入了解属${n}`, deepSub: "MyBirthSign 指南中关于这个生肖的全部内容。",
+    careersLead: "往往适合的职业", loveCta: "查看爱情配对 →",
+    gridH: "生肖配对", gridP: (n) => `看看属${n}在传统上与十二生肖各自如何相配。`,
+    cat: { same: "你的生肖", triangle: "相配", support: "互相扶持", neutral: "普通", clash: "有挑战" },
+    moreH: (n) => `更多关于属${n}`,
+    todayH: (n) => `属${n}今日运势`, todayLink: "查看十二生肖完整的每日运势 →",
+    todayTier: { great: "大吉", good: "吉", ordinary: "平", caution: "宜小心" },
+    todayLine: (d, t) => `今天是${d}日——对你来说是「${t}」。`,
+    ctaH: (n) => `你属${n}吗？`, ctaP: "输入你的生日，了解你的生肖、五行、幸运元素等。", ctaB: "🔮 查询我的生肖 →",
+    faqH: "常见问题", toolsH: "探索 MyBirthSign",
+    tools: [["🔮", "生肖查询", "查找你的生肖和五行", "/checker"], ["💗", "配对计算器", "查看爱情、友情等配对", "/compatibility"], ["💍", "婚期选择", "查找吉日", "/wedding-date"], ["💼", "商业伙伴配对", "看看你们是否合作愉快", "/business-partner"], ["📚", "生肖指南", "了解十二生肖", "../animals.html"]],
+    disc: "仅供娱乐。生肖解读属于传统和文化，并无科学依据。",
+    crumbs: ["首页", "博客"], share: "分享",
+  },
 };
 
 // ---------------------------------------------------------------- FAQ (answers use the data above)
@@ -243,6 +283,21 @@ function faqs(lang) {
   const nmL = (l) => l.map((x) => (lang === "km" ? KM_NAMES[x] : x));
   const colors = lang === "km" ? km.luckyColors : info.luckyColors.map((c) => c[0].toUpperCase() + c.slice(1));
   const elList = ELEMENTS.filter((e) => elementYears[e].length).map((e) => (lang === "km" ? `${KM_ELEM[e]}៖ ` : `${e}: `) + elementYears[e].join(", ")).join(lang === "km" ? " · " : " · ");
+  if (lang === "zh") {
+    const zn = ZH_NAMES[A], zl = (l) => l.map((x) => ZH_NAMES[x]).join("、");
+    const zc = info.luckyColors.map((c) => ZH_COLORS[c.toLowerCase()] || c).join("、");
+    const zel = ELEMENTS.filter((e) => elementYears[e].length).map((e) => `${ZH_ELEM[e]}：${elementYears[e].join("、")}`).join(" · ");
+    return [
+      [`哪些年份是${zn}年？`, `${zn}年包括 ${years.join("、")}。生肖每12年循环一次，生肖年从农历新年开始，而不是1月1日。`],
+      [`属${zn}的人有哪些性格特点？`, ZH_INFO[A].traits],
+      [`属${zn}的幸运颜色是什么？`, `在我们的指南中，属${zn}的幸运颜色是${zc}。`],
+      [`属${zn}的幸运数字是什么？`, `属${zn}的幸运数字是 ${info.luckyNumbers.join("、")}。`],
+      [`哪些生肖与属${zn}相配？`, `最佳配对是${zl(best)}，它们与${zn}同属三合。${support.length ? `${zl(support)}在我们的指南中也被列为互相扶持的配对，` : ""}而${zl(clash)}可能是最有挑战的组合。`],
+      [`我的${zn}年属于哪个五行？`, `这取决于你的出生年份——${zel}。可以用生肖查询来确认。`],
+      [`生肖年是从1月1日开始的吗？`, `不是。生肖年从农历新年开始，农历新年在1月下旬到2月中旬之间。如果你出生在1月或2月，请核对农历新年的日期，或使用我们的生肖查询。`],
+      [`生肖性格有科学依据吗？`, `没有。生肖解读属于传统和文化，并无科学依据。请把它当作娱乐和自我反思。`],
+    ];
+  }
   if (lang === "km") return [
     [`តើឆ្នាំ¤T¤គឺឆ្នាំអ្វីខ្លះ?`, `ឆ្នាំ¤T¤រួមមាន ${years.join(", ")}។ រង្វង់រាសីដដែលៗរៀងរាល់ 12ឆ្នាំម្តង ហើយឆ្នាំរាសីចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចន្ទគតិ មិនមែនថ្ងៃទី1 មករាទេ។`],
     [`តើបុគ្គលិកលក្ខណៈអ្វីខ្លះដែលផ្សារភ្ជាប់នឹង¤T¤?`, `តាមប្រពៃណី ¤T¤ត្រូវបានផ្សារភ្ជាប់ជាមួយភាពក្លាហាន ទំនុកចិត្ត ឯករាជ្យភាព និងការតាំងចិត្ត។ ${km.traits}`],
@@ -270,18 +325,18 @@ const CHK = "/checker";
 // The English and Khmer bodies sit on one page (one is hidden), so the Khmer section
 // IDs get a "-km" suffix. Otherwise the Khmer menu buttons jump to the hidden English copy.
 const SECTION_IDS = ["overview", "personality", "elements", "lucky", "compat", "career", "love", "health", "money"];
-function kmIds(html) {
+function kmIds(html, suffix = "km") {
   const ids = SECTION_IDS.join("|");
-  return html.replace(new RegExp(`id="(${ids})"`, "g"), 'id="$1-km"').replace(new RegExp(`href="#(${ids})"`, "g"), 'href="#$1-km"');
+  return html.replace(new RegExp(`id="(${ids})"`, "g"), `id="$1-${suffix}"`).replace(new RegExp(`href="#(${ids})"`, "g"), `href="#$1-${suffix}"`);
 }
 
 function body(lang) {
-  const u = UI[lang], c = COPY[A][lang], isKm = lang === "km";
-  const n = isKm ? KM_NAMES[A] : A;
+  const u = UI[lang], c = COPY[A][lang], isKm = lang === "km", isZh = lang === "zh";
+  const n = nameIn(A, lang);
   const ct = content[lang];
-  const colors = isKm ? km.luckyColors : info.luckyColors.map((x) => x[0].toUpperCase() + x.slice(1));
-  const days = isKm ? km.luckyDays : info.luckyDays;
-  const nmL = (l) => l.map((x) => (isKm ? KM_NAMES[x] : x));
+  const colors = isKm ? km.luckyColors : isZh ? info.luckyColors.map((x) => ZH_COLORS[x.toLowerCase()] || x) : info.luckyColors.map((x) => x[0].toUpperCase() + x.slice(1));
+  const days = isKm ? km.luckyDays : isZh ? info.luckyDays.map((d) => ZH_DAYS[d] || d) : info.luckyDays;
+  const nmL = (l) => l.map((x) => nameIn(x, lang));
   const yrs = years.join(" • ");
   const bullets = (arr) => `<ul class="pf-bullets">${arr.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`;
   const card = (key, icon, id) => `<article class="pf-card fx-gframe" ${id ? `id="${id}"` : ""}>
@@ -289,7 +344,7 @@ function body(lang) {
         ${bullets(c.cards[key])}
         ${key === "money" ? `<p class="pf-note">${esc(c.moneyNote)}</p>` : ""}${key === "health" ? `<p class="pf-note">${esc(c.healthNote)}</p>` : ""}
       </article>`;
-  const compRow = (label, list, cls) => `<div class="pf-pairs ${cls}"><h4>${esc(label)}</h4><ul>${list.map((b) => `<li><a href="${link(b)}">${medal(b, 54)}<span>${esc(isKm ? KM_NAMES[b] : b)}</span></a></li>`).join("")}</ul></div>`;
+  const compRow = (label, list, cls) => `<div class="pf-pairs ${cls}"><h4>${esc(label)}</h4><ul>${list.map((b) => `<li><a href="${link(b)}">${medal(b, 54)}<span>${esc(nameIn(b, lang))}</span></a></li>`).join("")}</ul></div>`;
   const sec = (h2, ps) => ps.map((p) => `<p>${p}</p>`).join("");
   const secBy = (i) => ct.sections[i][1];
 
@@ -301,7 +356,7 @@ function body(lang) {
 <section class="fx-hero fx-hero--${slug} pf-hero" aria-labelledby="pf-h1-${lang}">
   <div class="pf-hero-in">
     <p class="fx-eyebrow">${esc(c.eyebrow)}</p>
-    <h1 id="pf-h1-${lang}"><strong>${esc(c.h1)}</strong> <span class="pf-han" lang="zh-Hant" aria-hidden="true">${HAN[A]}</span></h1>
+    <h1 id="pf-h1-${lang}"><strong>${esc(c.h1)}</strong>${isZh ? "" : ` <span class="pf-han" lang="zh-Hant" aria-hidden="true">${HAN[A]}</span>`}</h1>
     <p class="pf-years">${yrs}</p>
     <p class="fx-sub">${esc(c.intro)}</p>
     <div class="pf-cta-row"><a class="fx-btn" href="${CHK}">${EMOJI[A]} ${esc(u.btnCheck(n))}</a><a class="fx-btn fx-btn-rose" href="/compatibility">💗 ${esc(u.btnCompat)}</a></div>
@@ -317,7 +372,7 @@ ${u.nav.map(([id, ico, label]) => `  <li><a href="#${id}">${ICON[ico]}<span>${es
   <div class="pf-trio pf-trio-first" id="overview">
     <section class="fx-gframe pf-ov" aria-labelledby="pf-ov-${lang}">
       <h2 id="pf-ov-${lang}">${ICON.crown}<span>${esc(u.ovH(n))}</span></h2>
-      <div class="pf-ov-body">${medal(A, 120, "pf-medal-lg")}<div><p>${esc(c.ovText)}</p><p>${esc(isKm ? km.traits : info.traits)}</p></div></div>
+      <div class="pf-ov-body">${medal(A, 120, "pf-medal-lg")}<div><p>${esc(c.ovText)}</p><p>${esc(isKm ? km.traits : isZh ? ZH_INFO[A].traits : info.traits)}</p></div></div>
     </section>
     <section class="fx-gframe pf-traits" aria-labelledby="pf-tr-${lang}">
       <h2 id="pf-tr-${lang}">${ICON.spark}<span>${esc(u.traitsH)}</span></h2>
@@ -339,12 +394,12 @@ ${u.nav.map(([id, ico, label]) => `  <li><a href="#${id}">${ICON[ico]}<span>${es
       <div class="pf-lg"><h3>${esc(u.numbers)}</h3>
       <ul class="pf-nums">${info.luckyNumbers.map((x) => `<li>${x}</li>`).join("")}</ul></div>
       <div class="pf-lg"><h3>${esc(u.days)}</h3>
-      <p class="pf-daysline">${esc(days.join(", "))}</p></div>
+      <p class="pf-daysline">${esc(days.join(isZh ? "、" : ", "))}</p></div>
     </section>
     <section class="fx-gframe pf-elements" id="elements" aria-labelledby="pf-el-${lang}">
       <h2 id="pf-el-${lang}">${ICON.leaf}<span>${esc(u.elH(n))}</span></h2>
       <ul class="pf-el-grid">
-${ELEMENTS.map((e) => `        <li class="pf-el pf-el-${e.toLowerCase()}"><img src="../images/profile/el-${e.toLowerCase()}.webp" width="64" height="64" alt="" loading="lazy" decoding="async"><strong>${esc(u.elName(u.elN[e], n))}</strong><span>${elementYears[e].join(", ")}</span></li>`).join("\n")}
+${ELEMENTS.map((e) => `        <li class="pf-el pf-el-${e.toLowerCase()}"><img src="../images/profile/el-${e.toLowerCase()}.webp" width="64" height="64" alt="" loading="lazy" decoding="async"><strong>${esc(u.elName(u.elN[e], n))}</strong><span>${elementYears[e].join(isZh ? "、" : ", ")}</span></li>`).join("\n")}
       </ul>
       <p class="pf-small pf-el-note">${esc(u.elNote)}</p>
       <a class="fx-btn fx-btn-sm" href="../blog/five-elements-explained.html">${esc(u.elBtn)}</a>
@@ -370,7 +425,7 @@ ${ELEMENTS.map((e) => `        <li class="pf-el pf-el-${e.toLowerCase()}"><img s
       <aside class="pf-spirit" aria-labelledby="pf-sp-${lang}">
         <div class="fx-gframe pf-spirit-in">
           <h2 id="pf-sp-${lang}">${esc(u.spiritH(n))}</h2>
-          <div class="pf-moon"><img src="../images/profile/spirit-${slug}.webp" width="520" height="462" alt="${isKm ? `រូបសត្វ${KM_NAMES[A]}ក្នុងសំពត់មាសជាមួយផ្កាឈូក` : `An ornate golden ${A} with lotus flowers`}" loading="lazy" decoding="async"></div>
+          <div class="pf-moon"><img src="../images/profile/spirit-${slug}.webp" width="520" height="462" alt="${isKm ? `រូបសត្វ${KM_NAMES[A]}ក្នុងសំពត់មាសជាមួយផ្កាឈូក` : isZh ? `饰有莲花的华丽金${ZH_NAMES[A]}` : `An ornate golden ${A} with lotus flowers`}" loading="lazy" decoding="async"></div>
           <p>${esc(c.spiritText)}</p>
         </div>
       </aside>
@@ -393,7 +448,7 @@ ${ELEMENTS.map((e) => `        <li class="pf-el pf-el-${e.toLowerCase()}"><img s
     <section aria-labelledby="pf-gr-${lang}">
       <div class="fx-head pf-head-left"><h2 id="pf-gr-${lang}">${ICON.heart}<span>${esc(u.gridH)}</span></h2><p>${esc(u.gridP(n))}</p></div>
       <div class="fx-gframe pf-gridbox"><ul class="pf-grid12">
-${ORDER.map((b) => { const t = typeOf(b); return `        <li class="pf-g pf-g-${t}${b === A ? " is-self" : ""}"><a href="${link(b)}">${medal(b, 56)}<strong>${esc(isKm ? KM_NAMES[b] : b)}</strong><span class="pf-cat">${esc(u.cat[t])}</span></a></li>`; }).join("\n")}
+${ORDER.map((b) => { const t = typeOf(b); return `        <li class="pf-g pf-g-${t}${b === A ? " is-self" : ""}"><a href="${link(b)}">${medal(b, 56)}<strong>${esc(nameIn(b, lang))}</strong><span class="pf-cat">${esc(u.cat[t])}</span></a></li>`; }).join("\n")}
       </ul>
       <p class="pf-btnrow"><a class="fx-btn fx-btn-sm" href="/compatibility">${esc(u.compBtn)}</a></p></div>
     </section>
@@ -401,13 +456,13 @@ ${ORDER.map((b) => { const t = typeOf(b); return `        <li class="pf-g pf-g-$
       <div class="fx-gframe pf-more">
         <h2 id="pf-mr-${lang}">${esc(u.moreH(n))}</h2>
         <ul>
-          <li><a href="#love">${ICON.heart}<span>${isKm ? "¤T¤ក្នុងស្នេហា និងទំនាក់ទំនង" : `${n} in Love &amp; Relationships`}</span></a></li>
-          <li><a href="#career">${ICON.brief}<span>${isKm ? "¤T¤ក្នុងអាជីព និងការងារ" : `${n} in Career &amp; Work`}</span></a></li>
-          <li><a href="#money">${ICON.coins}<span>${isKm ? "¤T¤ក្នុងលុយកាក់ និងទ្រព្យសម្បត្តិ" : `${n} in Money &amp; Wealth`}</span></a></li>
-          <li><a href="#elements">${ICON.leaf}<span>${isKm ? "¤T¤ និងធាតុផ្សេងៗ" : `${n} &amp; Different Elements`}</span></a></li>
-          <li><a href="/compatibility">${ICON.heart}<span>${isKm ? "ភាពសមស្របរបស់¤T¤" : `${n} Compatibility`}</span></a></li>
-          <li><a href="../animals.html">${ICON.star}<span>${isKm ? "មគ្គុទ្ទេសក៍សត្វទាំង12" : "All 12 Zodiac Animals"}</span></a></li>
-          <li><a href="../blog.html">${ICON.spark}<span>${isKm ? "អត្ថបទផ្សេងទៀត" : "More from the Blog"}</span></a></li>
+          <li><a href="#love">${ICON.heart}<span>${isKm ? "¤T¤ក្នុងស្នេហា និងទំនាក់ទំនង" : isZh ? `属${n}的爱情与感情` : `${n} in Love &amp; Relationships`}</span></a></li>
+          <li><a href="#career">${ICON.brief}<span>${isKm ? "¤T¤ក្នុងអាជីព និងការងារ" : isZh ? `属${n}的事业与工作` : `${n} in Career &amp; Work`}</span></a></li>
+          <li><a href="#money">${ICON.coins}<span>${isKm ? "¤T¤ក្នុងលុយកាក់ និងទ្រព្យសម្បត្តិ" : isZh ? `属${n}的金钱与财富` : `${n} in Money &amp; Wealth`}</span></a></li>
+          <li><a href="#elements">${ICON.leaf}<span>${isKm ? "¤T¤ និងធាតុផ្សេងៗ" : isZh ? `属${n}与五行` : `${n} &amp; Different Elements`}</span></a></li>
+          <li><a href="/compatibility">${ICON.heart}<span>${isKm ? "ភាពសមស្របរបស់¤T¤" : isZh ? `属${n}的配对` : `${n} Compatibility`}</span></a></li>
+          <li><a href="../animals.html">${ICON.star}<span>${isKm ? "មគ្គុទ្ទេសក៍សត្វទាំង12" : isZh ? "十二生肖指南" : "All 12 Zodiac Animals"}</span></a></li>
+          <li><a href="../blog.html">${ICON.spark}<span>${isKm ? "អត្ថបទផ្សេងទៀត" : isZh ? "更多博客文章" : "More from the Blog"}</span></a></li>
         </ul>
       </div>
     </aside>
@@ -461,7 +516,7 @@ const today = new Date().toISOString().slice(0, 10);
 const faqEn = faqs("en");
 const jsonld = JSON.stringify([
   { "@context": "https://schema.org", "@type": "Article", headline: `Year of the ${A}: Personality, Years & Compatibility`, description: DESC, image: OG, mainEntityOfPage: URL_, url: URL_,
-    author: { "@type": "Organization", name: "MyBirthSign" }, publisher: { "@type": "Organization", name: "MyBirthSign", url: "https://mybirthsign.com/" }, dateModified: today, inLanguage: ["en", "km"] },
+    author: { "@type": "Organization", name: "MyBirthSign" }, publisher: { "@type": "Organization", name: "MyBirthSign", url: "https://mybirthsign.com/" }, dateModified: today, inLanguage: ["en", "km", "zh-Hans"] },
   { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: "https://mybirthsign.com/" },
     { "@type": "ListItem", position: 2, name: "Blog", item: "https://mybirthsign.com/blog" },
@@ -471,7 +526,7 @@ const jsonld = JSON.stringify([
 
 const tpl = read("scripts/animal-profile-template.html");
 const out = tpl.replace(/\{\{TITLE\}\}/g, esc(TITLE)).replace(/\{\{URL\}\}/g, URL_).replace(/\{\{DESC\}\}/g, esc(DESC)).replace(/\{\{OG_IMAGE\}\}/g, OG)
-  .replace("{{JSONLD}}", jsonld.replace(/</g, "\\u003c")).replace("{{BODY_EN}}", () => body("en")).replace("{{BODY_KM}}", () => kmIds(body("km")))
+  .replace("{{JSONLD}}", jsonld.replace(/</g, "\\u003c")).replace("{{BODY_EN}}", () => body("en")).replace("{{BODY_KM}}", () => kmIds(body("km"))).replace("{{BODY_ZH}}", () => kmIds(body("zh"), "zh"))
   .replace("{{TODAY_JS}}", () => `<script>${todayScript()}</script>`);
 fs.writeFileSync(path.join(ROOT, `blog/zodiac-year-${slug}.html`), out.replace(/¤T¤/g, KM_NAMES[A]));
 console.log(`Wrote blog/zodiac-year-${slug}.html  (years ${years.join(", ")}; best ${best.join("/")}; supportive ${support.join("/") || "-"}; clash ${clash.join("/")})`);
@@ -480,14 +535,14 @@ console.log(`Wrote blog/zodiac-year-${slug}.html  (years ${years.join(", ")}; be
 function todayScript() {
   const km = { tiers: UI.km.todayTier, line: null };
   return `(function(){
-var ORDER=${JSON.stringify(ORDER)},TRI=${JSON.stringify(TRIANGLES)},KM=${JSON.stringify(KM_NAMES)};
-var T={en:${JSON.stringify(UI.en.todayTier)},km:${JSON.stringify(UI.km.todayTier)}};
+var ORDER=${JSON.stringify(ORDER)},TRI=${JSON.stringify(TRIANGLES)},KM=${JSON.stringify(KM_NAMES)},ZH=${JSON.stringify(ZH_NAMES)};
+var T={en:${JSON.stringify(UI.en.todayTier)},km:${JSON.stringify(UI.km.todayTier)},zh:${JSON.stringify(UI.zh.todayTier)}};
 function day(){var p=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Phnom_Penh",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date()).split("-").map(Number);
 var n=Math.floor(Date.UTC(p[0],p[1]-1,p[2])/86400000)+2440588;return ORDER[(n+1)%12];}
 function tier(a,d){if(a===d)return"great";if(TRI.some(function(t){return t.indexOf(a)>-1&&t.indexOf(d)>-1;}))return"good";if(Math.abs(ORDER.indexOf(a)-ORDER.indexOf(d))===6)return"caution";return"ordinary";}
 var d=day();
 document.querySelectorAll("[data-today]").forEach(function(el){var a=el.getAttribute("data-animal"),l=el.getAttribute("data-lang"),t=T[l][tier(a,d)];
 var line=el.querySelector("[data-today-line]");if(!line)return;
-line.textContent=l==="km"?"ថ្ងៃនេះជាថ្ងៃរបស់ឆ្នាំ"+KM[d]+" — សម្រាប់"+KM[a]+" វាជា"+t+"។":"Today is "+(/^[AEIOU]/.test(d)?"an ":"a ")+d+" day — for the "+a+" it is "+(/^[AEIOU]/.test(t)?"an ":"a ")+t+".";});
+line.textContent=l==="zh"?"今天是"+ZH[d]+"日——对属"+ZH[a]+"的人来说是「"+t+"」。":l==="km"?"ថ្ងៃនេះជាថ្ងៃរបស់ឆ្នាំ"+KM[d]+" — សម្រាប់"+KM[a]+" វាជា"+t+"។":"Today is "+(/^[AEIOU]/.test(d)?"an ":"a ")+d+" day — for the "+a+" it is "+(/^[AEIOU]/.test(t)?"an ":"a ")+t+".";});
 })();`;
 }
