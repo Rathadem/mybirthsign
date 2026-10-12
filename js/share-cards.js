@@ -13,7 +13,7 @@
 //   portrait 1080 x 1350 (up to 1620 tall when the text needs it)  feeds: Facebook, Telegram, WhatsApp, "Share image"
 //   square   1080 x 1080 (shorter text)                             "Download image"
 //   story    1080 x 1920                                            Instagram / TikTok
-// English or Khmer follows spec.lang. Khmer lines break at word boundaries (Intl.Segmenter).
+// English, Khmer or Simplified Chinese follows spec.lang. Khmer lines break at word boundaries (Intl.Segmenter).
 (function () {
   "use strict";
   var W = 1080, PAD = 90, INNER = W - PAD * 2;
@@ -23,6 +23,7 @@
 
   function fam(lang, kind) {
     if (lang === "km") return kind === "head" ? "'Moul', 'Noto Sans Khmer', serif" : "'Noto Sans Khmer', 'Kantumruy Pro', sans-serif";
+    if (lang === "zh") return "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif";
     return kind === "head" ? "Georgia, 'Times New Roman', serif" : "system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif";
   }
   function font(ctx, lang, kind, size, weight) { ctx.font = (weight || 400) + " " + size + "px " + fam(lang, kind); }
@@ -31,7 +32,7 @@
     text = String(text || "").replace(/\s+/g, " ").trim();
     if (typeof Intl !== "undefined" && Intl.Segmenter) {
       try {
-        var seg = new Intl.Segmenter(lang === "km" ? "km" : "en", { granularity: "word" });
+        var seg = new Intl.Segmenter(lang === "km" ? "km" : lang === "zh" ? "zh" : "en", { granularity: "word" });
         var out = []; for (var it = seg.segment(text)[Symbol.iterator](), s = it.next(); !s.done; s = it.next()) out.push(s.value.segment);
         return out;
       } catch (e) { /* fall through */ }
@@ -48,7 +49,7 @@
     var lines = [], line = "";
     tokens(text, lang).forEach(function (tk) {
       var test = line + tk;
-      if (line.trim() && /^[\s។៕៖,.;:!?%)\]»”’…]+$/.test(tk)) { line = test; return; }   // punctuation never starts a line
+      if (line.trim() && /^[\s។៕៖,.;:!?%)\]»”’…，。、；：！？）」』》]+$/.test(tk)) { line = test; return; }   // punctuation never starts a line
       if (ctx.measureText(test).width <= maxW || !line.trim()) {
         if (ctx.measureText(test).width > maxW) {
           graphemes(tk).forEach(function (g) { if (ctx.measureText(line + g).width > maxW && line) { lines.push(line); line = g; } else line += g; });
@@ -60,7 +61,7 @@
       lines = lines.slice(0, maxLines);
       var last = lines[maxLines - 1];
       while (last && ctx.measureText(last + "…").width > maxW) last = graphemes(last).slice(0, -1).join("");
-      lines[maxLines - 1] = last.replace(/[\s,.;:،។]+$/, "") + "…";
+      lines[maxLines - 1] = last.replace(/[\s,.;:،។，。、；：]+$/, "") + "…";
     }
     return lines;
   }
@@ -71,10 +72,12 @@
   var ANIMALS = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
   function medalSrc(a) { return ANIMALS.indexOf(a) < 0 ? null : base() + "images/business/animals/" + String(a).toLowerCase() + ".webp"; }
   function medals(list) { return Promise.all(list.map(function (a) { var s = medalSrc(a); return s ? loadImg(s) : Promise.resolve(null); })); }
-  function fontsReady(lang) {
-    var want = lang === "km" ? ["400 30px 'Noto Sans Khmer'", "700 30px 'Noto Sans Khmer'", "400 30px 'Moul'"] : [];
+  function fontsReady(lang, spec) {
+    var want = lang === "km" ? ["400 30px 'Noto Sans Khmer'", "700 30px 'Noto Sans Khmer'", "400 30px 'Moul'"] : lang === "zh" ? ["400 30px 'Noto Sans SC'", "700 30px 'Noto Sans SC'"] : [];
     if (!document.fonts || !document.fonts.load) return Promise.resolve();
-    return Promise.all(want.map(function (f) { return document.fonts.load(f).catch(function () {}); })).then(function () { return document.fonts.ready; });
+    // Chinese web fonts come in unicode-range slices, so ask for the slices this card's text needs
+    var sample = lang === "zh" ? (JSON.stringify(spec || {}) + "今日运势配对生肖幸运数字颜色方位时间爱情事业财运建议") : undefined;
+    return Promise.all(want.map(function (f) { return document.fonts.load(f, sample).catch(function () {}); })).then(function () { return document.fonts.ready; });
   }
 
   function background(ctx, H) {
@@ -199,9 +202,13 @@
     km: { trade: "ការលក់ដូរថ្ងៃនេះ", love: "ស្នេហា", career: "ការងារ", money: "លុយកាក់", advice: "ដំបូន្មានថ្ងៃនេះ", number: "លេខ", color: "ពណ៌", direction: "ទិស", time: "ម៉ោង",
           note: "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត", friend: "មិត្តភាព", business: "អាជីវកម្ម", stars: "ស្នេហា {L}  ·  អាជីវកម្ម {B}",
           luckyToday: "តើអ្នកណាមានសំណាងថ្ងៃនេះ", easy: "ថ្ងៃនេះគួរប្រុងប្រយ័ត្ន", sign: "រាសីចិនរបស់អ្នក", nums: "លេខសំណាង", cols: "ពណ៌សំណាង",
-          matches: "គូដែលត្រូវគ្នាបំផុត", patience: "ឆ្នាំខុង", strengths: "ចំណុចខ្លាំង", discuss: "គួរពិភាក្សា", element: "ធាតុ" }
+          matches: "គូដែលត្រូវគ្នាបំផុត", patience: "ឆ្នាំខុង", strengths: "ចំណុចខ្លាំង", discuss: "គួរពិភាក្សា", element: "ធាតុ" },
+    zh: { trade: "今日买卖", love: "爱情", career: "事业", money: "财运", advice: "今日建议", number: "数字", color: "颜色", direction: "方位", time: "时间",
+          note: "传统生肖解读，仅供娱乐与自我反思", friend: "友情", business: "生意", stars: "爱情 {L}  ·  生意 {B}",
+          luckyToday: "今天谁最幸运", easy: "今天宜小心", sign: "你的生肖", nums: "幸运数字", cols: "幸运颜色",
+          matches: "最佳配对", patience: "需要耐心", strengths: "优势", discuss: "需要沟通", element: "五行" }
   };
-  function langOf(spec) { return spec && spec.lang === "km" ? "km" : "en"; }
+  function langOf(spec) { return spec && (spec.lang === "km" || spec.lang === "zh") ? spec.lang : "en"; }
   function head(ctx, L, text, y, size) { ctx.textAlign = "center"; ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", size || lh(L, 66, 52), 700); return drawLines(ctx, wrap(ctx, text, INNER, L, 2), W / 2, y, lh(L, 74, 70), "center"); }
   function eyebrow(ctx, L, text, y) { ctx.textAlign = "center"; ctx.fillStyle = GOLD2; font(ctx, L, "body", 28, 600); ctx.fillText(text || "", W / 2, y); }
   function para(ctx, L, text, y, lines, size) { font(ctx, L, "body", size || lh(L, 31, 29), 400); ctx.fillStyle = INK; return drawLines(ctx, wrap(ctx, text, INNER, L, lines), W / 2, y, lh(L, 42, 46), "center"); }
@@ -209,7 +216,7 @@
   // ---------------------------------------------------------------- card types
   function daily(spec, format) {
     var L = langOf(spec), T = LBL[L];
-    return Promise.all([medals([spec.animal]), fontsReady(L)]).then(function (r) {
+    return Promise.all([medals([spec.animal]), fontsReady(L, spec)]).then(function (r) {
       return render(L, T.note, format, function (ctx, o) {
         var R = o.compact ? 90 : 118, my = o.compact ? 214 : 262;
         eyebrow(ctx, L, spec.date, 116); medal(ctx, r[0][0], W / 2, my, R);
@@ -232,7 +239,7 @@
 
   function lucky(spec, format) {
     var L = langOf(spec), T = LBL[L], top = (spec.top || []).slice(0, 3), names = spec.topNames || top;
-    return Promise.all([medals(top), fontsReady(L)]).then(function (r) {
+    return Promise.all([medals(top), fontsReady(L, spec)]).then(function (r) {
       return render(L, T.note, format, function (ctx, o) {
         eyebrow(ctx, L, spec.date, 116);
         var y = head(ctx, L, spec.heading || T.luckyToday, 206, lh(L, 60, 46));
@@ -244,7 +251,7 @@
         });
         y = cy + R + 110;
         if (spec.text) y = para(ctx, L, spec.text, y + 10, o.compact ? 2 : 4) + 10;
-        if (spec.careful && spec.careful.length) { pill(ctx, T.easy + ": " + spec.careful.join(", "), W / 2, y + 10, L, WARN); y += 74; }
+        if (spec.careful && spec.careful.length) { pill(ctx, T.easy + (L === "zh" ? "：" : ": ") + spec.careful.join(L === "zh" ? "、" : ", "), W / 2, y + 10, L, WARN); y += 74; }
         return y;
       });
     });
@@ -252,12 +259,12 @@
 
   function sign(spec, format) {
     var L = langOf(spec), T = LBL[L];
-    return Promise.all([medals([spec.animal]), fontsReady(L)]).then(function (r) {
+    return Promise.all([medals([spec.animal]), fontsReady(L, spec)]).then(function (r) {
       return render(L, T.note, format, function (ctx, o) {
         eyebrow(ctx, L, T.sign, 112);
         var R = o.compact ? 88 : 112, my = o.compact ? 214 : 256; medal(ctx, r[0][0], W / 2, my, R);
         var y = head(ctx, L, spec.name || spec.animal, my + R + 84, lh(L, 70, 58));
-        if (spec.element) { pill(ctx, (spec.elementLabel || T.element) + ": " + spec.element, W / 2, y - 26, L, GOLD); y += 52; }
+        if (spec.element) { pill(ctx, (spec.elementLabel || T.element) + (L === "zh" ? "：" : ": ") + spec.element, W / 2, y - 26, L, GOLD); y += 52; }
         y = para(ctx, L, spec.traits, y + 26, o.compact ? 2 : 3, lh(L, 34, 32)) + 22;
         // big badges instead of a small list (same data as the Checker result)
         if (spec.numbers && spec.numbers.length) y = badges(ctx, L, T.nums, spec.numbers.map(function (n) { return numL(L, n); }), y, GOLD);
@@ -271,7 +278,7 @@
 
   function pair(spec, format) {
     var L = langOf(spec), T = LBL[L];
-    return Promise.all([medals([spec.a, spec.b]), fontsReady(L)]).then(function (r) {
+    return Promise.all([medals([spec.a, spec.b]), fontsReady(L, spec)]).then(function (r) {
       return render(L, T.note, format, function (ctx, o) {
         var R = o.compact ? 104 : 128, my = o.compact ? 200 : 240;
         medal(ctx, r[0][0], W / 2 - 220, my, R); medal(ctx, r[0][1], W / 2 + 220, my, R);
@@ -291,7 +298,7 @@
 
   function twoSigns(spec, format, accent, rowsFn) {  // love + business share one layout
     var L = langOf(spec), T = LBL[L];
-    return Promise.all([medals([spec.a, spec.b]), fontsReady(L)]).then(function (r) {
+    return Promise.all([medals([spec.a, spec.b]), fontsReady(L, spec)]).then(function (r) {
       return render(L, T.note, format, function (ctx, o) {
         if (spec.eyebrow) eyebrow(ctx, L, spec.eyebrow, 112);
         var R = o.compact ? 96 : 118, my = o.compact ? 230 : 262;
@@ -326,7 +333,7 @@
 
   function article(spec, format) {
     var L = langOf(spec), T = LBL[L], list = spec.animal ? [spec.animal] : ["Rat", "Dragon", "Horse", "Monkey"];
-    return Promise.all([medals(list), fontsReady(L)]).then(function (r) {
+    return Promise.all([medals(list), fontsReady(L, spec)]).then(function (r) {
       return render(L, T.note, format, function (ctx, o) {
         var y;
         if (list.length === 1) { medal(ctx, r[0][0], W / 2, 250, o.compact ? 100 : 130); y = 450; }
@@ -384,7 +391,7 @@
   // colors only when the page had them, a watch-out and one tip. All text comes from the site's own templates.
   function dream(spec, format) {
     var L = langOf(spec), T = LBL[L];
-    return Promise.all([medals([spec.animal]), fontsReady(L)]).then(function (r) {
+    return Promise.all([medals([spec.animal]), fontsReady(L, spec)]).then(function (r) {
       return render(L, T.note, format, function (ctx, o) {
         eyebrow(ctx, L, (spec.category || ""), 112);
         var R = o.compact ? 88 : 108, my = o.compact ? 214 : 250; medal(ctx, r[0][0], W / 2, my, R);
@@ -425,7 +432,7 @@
       var m = document.createElement("canvas"); m.width = W; m.height = 1600; var mx = alignByHand(m.getContext("2d"));
       var compact = format === "square", PX = 120, IW = W - PX * 2, y = 70;
       mx.textAlign = "center"; mx.fillStyle = "#f6dc9b"; mx.font = "400 " + (compact ? 38 : 44) + "px 'Moul', 'Noto Sans Khmer', serif"; mx.fillText("ប្រតិទិនចន្ទគតិខ្មែរ", W / 2, y + 10);
-      y += compact ? 54 : 62; mx.fillStyle = "#fff3d1"; mx.font = "700 " + (compact ? 30 : 34) + "px " + (L === "km" ? KMF : "Georgia, serif"); mx.fillText(spec.heading || "Khmer Lunar Calendar · Today", W / 2, y);
+      y += compact ? 54 : 62; mx.fillStyle = "#fff3d1"; mx.font = "700 " + (compact ? 30 : 34) + "px " + (L === "km" ? KMF : L === "zh" ? fam("zh") : "Georgia, serif"); mx.fillText(spec.heading || "Khmer Lunar Calendar · Today", W / 2, y);
       y += 30; mx.strokeStyle = "rgba(246,220,155,.45)"; mx.lineWidth = 2; mx.beginPath(); mx.moveTo(PX + 40, y); mx.lineTo(W - PX - 40, y); mx.stroke();
       y += compact ? 82 : 100; mx.fillStyle = "#fff3d1"; mx.font = "700 " + (compact ? 66 : 78) + "px " + KMF;
       mx.shadowColor = "rgba(246,210,130,.45)"; mx.shadowBlur = 24; mx.fillText(spec.big || "", W / 2, y); mx.shadowBlur = 0;
@@ -481,12 +488,12 @@
   function guide(spec, format) {
     var L = langOf(spec), F = FORMATS[format] || FORMATS.portrait, H = F.h, compact = format === "square", story = format === "story";
     var icons = (spec.icons || []).slice(0, 12), pts = (spec.points || []).slice(0, compact ? 2 : 3);
-    return Promise.all([loadImg(base() + "images/guides/khmer-lunar-wide.webp"), Promise.all(icons.map(function (ic) { return loadImg(base() + ic[0]); })), fontsReady(L)]).then(function (r) {
+    return Promise.all([loadImg(base() + "images/guides/khmer-lunar-wide.webp"), Promise.all(icons.map(function (ic) { return loadImg(base() + ic[0]); })), fontsReady(L, spec)]).then(function (r) {
       var art = r[0], imgs = r[1];
       // content first, on a spare canvas, so it can be fitted into the panel
       var m = document.createElement("canvas"); m.width = W; m.height = 1800; var mx = alignByHand(m.getContext("2d"));
       var PX = 120, IW = W - PX * 2, y = 74;
-      if (spec.eyebrow) { mx.textAlign = "center"; mx.fillStyle = GOLD2; font(mx, L, "body", L === "km" ? 28 : 26, 700); mx.fillText(L === "km" ? spec.eyebrow : String(spec.eyebrow).toUpperCase().split("").join(String.fromCharCode(8202)), W / 2, y); y += 30; }
+      if (spec.eyebrow) { mx.textAlign = "center"; mx.fillStyle = GOLD2; font(mx, L, "body", L === "km" ? 28 : 26, 700); mx.fillText(L !== "en" ? spec.eyebrow : String(spec.eyebrow).toUpperCase().split("").join(String.fromCharCode(8202)), W / 2, y); y += 30; }
       var tg = mx.createLinearGradient(0, y, 0, y + 160); tg.addColorStop(0, "#fff1c8"); tg.addColorStop(1, "#e7c27a");
       mx.fillStyle = tg; mx.textAlign = "center"; font(mx, L, "head", L === "km" ? (compact ? 44 : 50) : (compact ? 56 : 64), L === "km" ? 400 : 700);
       y = drawLines(mx, wrap(mx, spec.title || "", IW, L, 3), W / 2, y + (L === "km" ? 62 : 64), L === "km" ? 78 : 72, "center");
