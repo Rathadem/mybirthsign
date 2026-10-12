@@ -4,13 +4,13 @@
 // Acts ONLY on shared result links; every other request passes straight through untouched:
 //   /compatibility?pair=rat-dragon[&lang=km]                 two signs (Compare Two Signs / results)
 //   /blog/daily-fortune-YYYY-MM-DD.html?sign=rat[&lang=km]    one sign's daily fortune
-//   /blog/daily-fortune-YYYY-MM-DD.html?lang=km               the day's page in Khmer
+//   /blog/daily-fortune-YYYY-MM-DD.html?lang=km|zh            the day's page in Khmer or Chinese
 // Images are fixed public files (images/og/*.jpg), never generated per visitor.
 // If anything goes wrong the original page is served unchanged (config.onError = "bypass").
 import D from "../edge-lib/share-preview-data.js";
 
 const SITE = "https://mybirthsign.com";
-const BRAND = { en: "MyBirthSign", km: "ផ្កាយកំណើត" };
+const BRAND = { en: "MyBirthSign", km: "ផ្កាយកំណើត", zh: "MyBirthSign" };
 const EN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const KM_MONTHS = ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"];
 const kmDigits = (v) => String(v).replace(/\d/g, (c) => "0123456789"[c]);
@@ -24,15 +24,16 @@ export function typeOf(a, b) {
   if (D.triangles.some((t) => t.includes(a) && t.includes(b))) return "triangle";
   return "neutral";
 }
-function name(a, L) { return L === "km" ? D.kmNames[a] : a; }
+function name(a, L) { return L === "km" ? D.kmNames[a] : L === "zh" ? D.zhNames[a] : a; }
 function dateText(iso, L) {
   const [y, m, d] = iso.split("-").map(Number);
+  if (L === "zh") return `${y}年${m}月${d}日`;
   return L === "km" ? `ថ្ងៃទី${kmDigits(d)} ខែ${KM_MONTHS[m - 1]} ឆ្នាំ${kmDigits(y)}` : `${EN_MONTHS[m - 1]} ${d}, ${y}`;
 }
 
 /** Works out the preview for a URL, or null when the page should be left alone. dailyRecord is optional. */
 export function previewFor(url, dailyRecord) {
-  const q = url.searchParams, L = q.get("lang") === "km" ? "km" : "en";
+  const q = url.searchParams, L = q.get("lang") === "km" || q.get("lang") === "zh" ? q.get("lang") : "en";
   const shareUrl = SITE + url.pathname + url.search;
   const path = url.pathname.replace(/\.html$/, "");
   if (path === "/compatibility" && q.get("pair")) {
@@ -44,16 +45,22 @@ export function previewFor(url, dailyRecord) {
     const intro = D.intro[L][type].replace(/\{(\w+)\}/g, (s, k) => names[k] || s);
     return {
       lang: L, url: shareUrl,
-      title: L === "km" ? `${names.A} និង ${names.B} — ${D.label.km[type]} | ${BRAND.km}` : `${names.A} & ${names.B} — ${D.label.en[type]} | ${BRAND.en}`,
-      description: intro + (L === "km" ? " ប្រៀបធៀបសត្វរាសីណាមួយដោយឥតគិតថ្លៃ នៅលើ ផ្កាយកំណើត។" : " Compare any two Chinese zodiac signs free on MyBirthSign."),
+      title: L === "km" ? `${names.A} និង ${names.B} — ${D.label.km[type]} | ${BRAND.km}` : L === "zh" ? `${names.A}和${names.B} — ${D.label.zh[type]} | ${BRAND.zh}` : `${names.A} & ${names.B} — ${D.label.en[type]} | ${BRAND.en}`,
+      description: intro + (L === "km" ? " ប្រៀបធៀបសត្វរាសីណាមួយដោយឥតគិតថ្លៃ នៅលើ ផ្កាយកំណើត។" : L === "zh" ? "在 MyBirthSign 免费比较任意两个生肖。" : " Compare any two Chinese zodiac signs free on MyBirthSign."),
       image: `${SITE}/images/og/pair-${x.toLowerCase()}-${y.toLowerCase()}.jpg`,
     };
   }
   const dm = /^\/blog\/daily-fortune-(\d{4}-\d{2}-\d{2})$/.exec(path);
   if (dm) {
     const iso = dm[1], a = animalOf(q.get("sign"));
-    if (!a && L !== "km") return null;
+    if (!a && L === "en") return null;
     const when = dateText(iso, L);
+    if (!a && L === "zh") return {
+      lang: L, url: shareUrl,
+      title: `生肖每日运势 — ${when} | ${BRAND.zh}`,
+      description: "看看今天十二生肖的运势：传统的吉日、幸运数字、颜色、方位和每日建议。",
+      image: null,
+    };
     if (!a) return {
       lang: L, url: shareUrl,
       title: `ជោគជតារាសីចិនប្រចាំថ្ងៃ — ${when} | ${BRAND.km}`,
@@ -61,12 +68,12 @@ export function previewFor(url, dailyRecord) {
       image: null,
     };
     const s = dailyRecord && dailyRecord.date === iso && Array.isArray(dailyRecord.signs) ? dailyRecord.signs.find((x) => x.animal === a) : null;
-    const label = s && s.label ? " · " + s.label[L] : "";
+    const label = s && s.label && s.label[L] ? " · " + s.label[L] : "";
     const text = s && s.text && s.text[L] && s.text[L].fortune;
     return {
       lang: L, url: shareUrl,
-      title: L === "km" ? `${name(a, L)}${label} — ជោគជតាប្រចាំថ្ងៃ ${when} | ${BRAND.km}` : `${a}${label} — Daily Fortune, ${when} | ${BRAND.en}`,
-      description: text || (L === "km"
+      title: L === "km" ? `${name(a, L)}${label} — ជោគជតាប្រចាំថ្ងៃ ${when} | ${BRAND.km}` : L === "zh" ? `属${name(a, L)}${label} — ${when}每日运势 | ${BRAND.zh}` : `${a}${label} — Daily Fortune, ${when} | ${BRAND.en}`,
+      description: text || (L === "zh" ? `属${name(a, L)}的传统每日运势：爱情、事业、财运、幸运数字和颜色。` : L === "km"
         ? `ជោគជតាប្រចាំថ្ងៃរបស់${name(a, L)}តាមប្រពៃណី៖ ស្នេហា ការងារ លុយកាក់ លេខ និងពណ៌សំណាង។`
         : `The ${a}'s traditional daily fortune: love, career, money, lucky number and color.`),
       image: `${SITE}/images/og/sign-${a.toLowerCase()}.jpg`,
@@ -79,7 +86,7 @@ export function previewFor(url, dailyRecord) {
 export function applyPreview(html, p) {
   const tags = {
     "og:title": p.title, "og:description": p.description, "og:url": p.url,
-    "og:locale": p.lang === "km" ? "km_KH" : "en_US",
+    "og:locale": p.lang === "km" ? "km_KH" : p.lang === "zh" ? "zh_CN" : "en_US",
     "twitter:title": p.title, "twitter:description": p.description, "twitter:card": "summary_large_image",
   };
   if (p.image) Object.assign(tags, { "og:image": p.image, "og:image:width": "1200", "og:image:height": "630", "twitter:image": p.image });
@@ -98,7 +105,7 @@ export function applyPreview(html, p) {
 export default async function handler(request, context) {
   const url = new URL(request.url);
   const q = url.searchParams;
-  if (!q.has("pair") && !q.has("sign") && q.get("lang") !== "km") return;   // not a shared result: untouched
+  if (!q.has("pair") && !q.has("sign") && q.get("lang") !== "km" && q.get("lang") !== "zh") return;   // not a shared result: untouched
   let daily = null;
   const dm = /daily-fortune-(\d{4}-\d{2}-\d{2})/.exec(url.pathname);
   if (dm && q.has("sign")) {

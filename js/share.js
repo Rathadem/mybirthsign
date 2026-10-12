@@ -138,7 +138,7 @@ function _shareUrlFor(row, lang) {
     const own = row.getAttribute("data-share-url");
     u = new URL(own || window.location.href, window.location.origin);
     ["person1", "person2", "g1", "g2", "dob", "date", "name"].forEach(function (k) { u.searchParams.delete(k); });
-    if (lang === "km") u.searchParams.set("lang", "km"); else u.searchParams.delete("lang");
+    if (lang === "km" || lang === "zh") u.searchParams.set("lang", lang); else u.searchParams.delete("lang");
     if (!own) u.hash = "";
     return u.toString();
   } catch (e) {
