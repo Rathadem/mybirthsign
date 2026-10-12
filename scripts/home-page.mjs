@@ -40,13 +40,20 @@ const ELEMENTS = extractConst(zdata, "ELEMENTS");
 const KM_NAMES = extractConst(i18n, "KM_ANIMAL_NAMES");
 const UI_STRINGS = extractConst(i18n, "UI_STRINGS");
 const AU = extractConst(read("scripts/animals-page.mjs"), "UI", { KM_ELEM: extractConst(i18n, "KM_ELEMENT_NAMES"), ORDER, INFO: {}, KM_INFO: {}, KM_NAMES });   // reuse the /animals copy (cycle, elements) so both pages say the same thing
+AU.zh = AU.zh || {
+  el: extractConst(i18n, "ZH_ELEMENT_NAMES"),
+  cycH: "十二年生肖周期如何运作", cycP1: "生肖每 12 年循环一次。", cycP2: "你的出生年份决定传统生肖，但在 1 月或 2 月出生的人应该查看农历新年的分界。", cycB: "查询你的生肖 →",
+  elH: "中国生肖的五行", elP: "五行为传统生肖体系增添了另一层含义。", elB: "了解生肖五行 →",
+};
 const HAN = { Rat: "鼠", Ox: "牛", Tiger: "虎", Rabbit: "兔", Dragon: "龍", Snake: "蛇", Horse: "馬", Goat: "羊", Monkey: "猴", Rooster: "雞", Dog: "狗", Pig: "豬" };
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const slug = (a) => a.toLowerCase();
 const href = (a) => `blog/zodiac-year-${slug(a)}.html`;
-const nm = (a, km) => (km ? KM_NAMES[a] : a);
-const T = (en, km) => `<span data-lang-content="en">${en}</span><span data-lang-content="km">${km}</span>`;   // for the two shared (form) sections only
+const ZH_NAMES = extractConst(i18n, "ZH_ANIMAL_NAMES"), ZH_ELEM = extractConst(i18n, "ZH_ELEMENT_NAMES");
+// nm(a, lang): animal name in that language (true / false still work for Khmer / English)
+const nm = (a, lang) => (lang === true || lang === "km" ? KM_NAMES[a] : lang === "zh" ? ZH_NAMES[a] : a);
+const T = (en, km, zh) => `<span data-lang-content="en">${en}</span><span data-lang-content="km">${km}</span>` + (zh ? `<span data-lang-content="zh">${zh}</span>` : "");   // for the two shared (form) sections only
 const medal = (a, s, lazy = true) => `<img class="an-medal" src="images/profile/${s <= 80 ? "s152/" : ""}medal-${slug(a)}.webp" width="${s}" height="${s}" alt="" ${lazy ? 'loading="lazy" decoding="async"' : 'fetchpriority="high"'}>`;
 
 // ---------------------------------------------------------------- the day rule (same as the daily-fortune pages)
@@ -74,12 +81,13 @@ const ring = (cls, size, km) => `<ul class="an-ring ${cls}" aria-hidden="true">$
 // ---------------------------------------------------------------- copy
 const TIER = {
   en: { great: ["★", "Great day", "Big decisions, bold moves, saying what's on your mind."], good: ["✦", "Good day", "Steady follow-through on something already in motion."], ordinary: ["◐", "Ordinary day", "Routine tasks — nothing special pulling for or against you today."], caution: ["▲", "Take it easy", "Low-key tasks only. Worth skipping anything high-stakes if you can."] },
+  zh: { great: ["★", "大吉", "适合做大决定、大胆行动、说出心里话。"], good: ["✦", "吉", "稳步推进已经在进行中的事情。"], ordinary: ["◐", "平", "处理日常事务——今天没有特别的助力或阻力。"], caution: ["▲", "宜小心", "只做轻松的事。可以的话，避开任何重大决定。"] },
   km: { great: ["★", "ថ្ងៃល្អខ្លាំង", "ការសម្រេចចិត្តធំៗ ការផ្លាស់ប្តូរយ៉ាងក្លាហាន និងការនិយាយអ្វីដែលគិតក្នុងចិត្ត។"], good: ["✦", "ថ្ងៃល្អ", "ការបន្តធ្វើកិច្ចការដែលកំពុងដំណើរការស្រាប់ដោយស្ថិរភាព។"], ordinary: ["◐", "ថ្ងៃធម្មតា", "កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។"], caution: ["▲", "ថ្ងៃគួរប្រុងប្រយ័ត្ន", "កិច្ចការស្រាលៗប៉ុណ្ណោះ។ ប្រសិនបើអាច គួរជៀសវាងការសម្រេចចិត្តសំខាន់ៗ។"] },
 };
 const KM_MONTHS = UI_STRINGS.km && ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"];
 const EN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const kmDigits = (n) => String(n).replace(/\d/g, (d) => "0123456789"[d]);
-const fmtDate = (y, m, d, km) => km ? `ថ្ងៃទី${kmDigits(d)} ខែ${KM_MONTHS[m - 1]} ឆ្នាំ${kmDigits(y)}` : `${EN_MONTHS[m - 1]} ${d}, ${y}`;
+const fmtDate = (y, m, d, km) => km === "zh" ? `${y}年${m}月${d}日` : km && km !== "en" ? `ថ្ងៃទី${kmDigits(d)} ខែ${KM_MONTHS[m - 1]} ឆ្នាំ${kmDigits(y)}` : `${EN_MONTHS[m - 1]} ${d}, ${y}`;
 
 const UI = {
   en: {
@@ -112,6 +120,37 @@ const UI = {
     blogH: "From the MyBirthSign Blog", blogB: "Read More →", blogAll: "View All Articles →",
     blogDesc: "Today's Chinese zodiac fortune for all 12 animals, with the best signs of the day and signs needing extra care.", blogTitle: (d) => `Chinese Zodiac Daily Fortune — ${d}`,
     finalH: "Your Journey with the Stars", finalP: "Explore the wisdom of the Chinese zodiac and discover more about love, career, compatibility, and harmony.", finalB: "Start Your Zodiac Journey →",
+  },
+  zh: {
+    eyebrow: "十二生肖周期", h1: "了解你的中国生肖",
+    sub: "根据你的出生日期，了解你的性格、配对、幸运象征等。",
+    btnFind: "✨ 查询我的生肖 →", btnCompat: "💗 生肖配对 →",
+    benefits: [["star", "性格解读"], ["heart", "爱情配对"], ["brief", "事业指引"], ["lotus", "幸运象征与五行"]],
+    todayH: "今日生肖运势", todayP: "快速看看今天对十二生肖各有什么影响。", todayB: "查看今日完整运势 →", todayNote: "仅供娱乐与自我反思。每日评分基于传统中国生肖的日辰关系，并非科学预测。",
+    animalsH: "探索十二生肖", animalsP: "选择一个生肖，了解它的性格、年份、五行、幸运象征和配对。", animalsB: "查看全部生肖 →",
+    toolsH: "MyBirthSign 工具",
+    tools: [
+      ["images/checker/art-love.webp", "生肖配对", "看看两个出生日期在爱情、友情和事业上的传统配对。", "查看配对 →", "/compatibility"],
+      ["images/compat/hero-bg-card.webp", "结婚吉月挑选", "根据双方生肖，查看传统上适合结婚的月份。", "寻找好日子 →", "/wedding-date"],
+      ["images/checker/art-career.webp", "合作伙伴配对", "比较两个出生日期在传统生肖中的商业配对。", "查看商业配对 →", "/business-partner"],
+      ["images/checker/art-pers.webp", "生肖指南", "了解十二生肖、五行、幸运象征等。", "浏览指南 →", "/zodiac-guide"],
+    ],
+    whyH: "为什么选择 MyBirthSign？", whyP: "简单易懂的传统中国生肖解读。",
+    why: [["spark", "准确的生肖计算", "以农历新年为分界，遵循中国生肖传统。"], ["star", "详细的性格解读", "了解优点、挑战和传统特点。"], ["heart", "爱情与关系指引", "探索传统生肖配对。"], ["brief", "事业与商业配对", "比较传统生肖优势。"], ["lotus", "简单易用", "简单的工具，快速得到答案。"]],
+    guidesH: "精选生肖指南", guidesB: "阅读更多 →",
+    guides: [
+      ["images/guides/compatibility-guide.webp", "配对", "生肖配对指南：谁和谁最相配", "找到你在爱情、友情和事业上最相配的生肖。", "blog/zodiac-compatibility-guide.html"],
+      ["images/guides/five-elements.webp", "五行", "五行详解", "木、火、土、金、水，以及它们如何影响每个生肖。", "blog/five-elements-explained.html"],
+      ["images/guides/calculate-zodiac.webp", "基础", "如何计算你的生肖", "如果你在 1 月或 2 月出生，为什么农历新年很重要。", "blog/how-to-calculate-zodiac-sign.html"],
+      ["images/guides/zodiac-personality.webp", "性格", "你的生肖透露了你的哪些性格", "探索每个生肖的传统特点。", "blog/what-your-zodiac-says.html"],
+    ],
+    howH: "MyBirthSign 如何运作", howSteps: [["cal", "输入你的出生日期"], ["dragon", "找到你的生肖"], ["leaf", "了解你的五行"], ["spark", "查看配对与指引"]],
+    howP: "中国生肖遵循传统的 12 年周期。由于生肖年以农历新年为准，1 月或 2 月出生的人应该查看自己的确切出生日期。", howB: "查询我的生肖 →",
+    crossH1: "正在筹备婚礼？", crossP1: "根据双方生肖，查看传统上适合结婚的月份。", crossB1: "结婚吉月挑选 →",
+    crossH2: "正在选择合作伙伴？", crossP2: "用传统中国生肖配对比较两个出生日期。", crossB2: "合作伙伴配对 →",
+    blogH: "MyBirthSign 博客", blogB: "阅读更多 →", blogAll: "查看全部文章 →",
+    blogDesc: "十二生肖今日运势，包括今天最旺的生肖和需要多加小心的生肖。", blogTitle: (d) => `生肖每日运势 — ${d}`,
+    finalH: "与星辰同行", finalP: "探索中国生肖的智慧，进一步了解爱情、事业、配对与和谐。", finalB: "开始你的生肖之旅 →",
   },
   km: {
     eyebrow: "វដ្តរាសី 12 ឆ្នាំ", h1: "ស្វែងយល់ពីរាសីឆ្នាំចិនរបស់អ្នក",
@@ -156,7 +195,7 @@ const latestPost = posts[0];
 
 // ---------------------------------------------------------------- sections (one language each)
 function body(lang) {
-  const km = lang === "km", u = UI[lang];
+  const km = lang === "km", zh = lang === "zh", u = UI[lang];
   const ID = (s) => `hm-${s}-${lang}`;
   return `<div class="hm-body">
 <section class="fx-hero an-hero hm-hero" aria-labelledby="${ID("h1")}">
@@ -165,7 +204,7 @@ function body(lang) {
     <div class="an-hero-text">
       <p class="fx-eyebrow">${esc(u.eyebrow)}</p>
       <h1 id="${ID("h1")}"><strong>${esc(u.h1)}</strong></h1>
-      <p class="hm-strip hm-strip-top"><span>${km ? "ថ្ងៃនេះ" : "Today"}: <strong data-hm-today data-lang="${lang}">${fmtDate(TY, TM, TD, km)}</strong></span><span>${km ? "លេខថ្ងៃនេះ" : "Today's Number"}: <strong data-today-number>—</strong></span></p>
+      <p class="hm-strip hm-strip-top"><span>${km ? "ថ្ងៃនេះ" : zh ? "今天" : "Today"}${zh ? "：" : ": "}<strong data-hm-today data-lang="${lang}">${fmtDate(TY, TM, TD, lang)}</strong></span><span>${km ? "លេខថ្ងៃនេះ" : zh ? "今日数字" : "Today's Number"}${zh ? "：" : ": "}<strong data-today-number>—</strong></span></p>
       <p class="fx-sub">${esc(u.sub)}</p>
       <div class="pf-cta-row"><a class="fx-btn" href="/checker">${esc(u.btnFind)}</a><a class="fx-btn fx-btn-rose" href="/compatibility">${esc(u.btnCompat)}</a></div>
       <ul class="hm-benefits">${u.benefits.map(([i, t]) => `<li><span class="hm-bi">${ICON[i]}</span><span>${esc(t)}</span></li>`).join("")}</ul>
@@ -175,26 +214,27 @@ function body(lang) {
 </div>`;
 }
 function main2(lang) {
-  const km = lang === "km", u = UI[lang], au = AU[lang], tr = TIER[lang];
+  const km = lang === "km", zh = lang === "zh", u = UI[lang], au = AU[lang], tr = TIER[lang];
   const ID = (s) => `hm-${s}-${lang}`;
   const card = (a) => {
     const t = tierOf(a, TODAY_ANIMAL), [ico, lab, line] = tr[t];
-    return `        <li class="hm-fc fx-tier-${t}" data-hm-card data-animal="${a}"><a class="hm-fc-name" href="${href(a)}">${medal(a, 76)}<span>${esc(nm(a, km))}</span></a>
+    return `        <li class="hm-fc fx-tier-${t}" data-hm-card data-animal="${a}"><a class="hm-fc-name" href="${href(a)}">${medal(a, 76)}<span>${esc(nm(a, lang))}</span></a>
           <span class="hm-status" data-hm-status><span aria-hidden="true" data-hm-ico>${ico}</span> <span data-hm-lab>${esc(lab)}</span></span>
           <p data-hm-line>${esc(line)}</p>
-          <div class="hm-digits ld ld-mini" data-lucky-digits data-animal="${a}" data-lang="${km ? "km" : "en"}" data-no-head data-no-note></div></li>`;
+          <div class="hm-digits ld ld-mini" data-lucky-digits data-animal="${a}" data-lang="${lang}" data-no-head data-no-note></div></li>`;
   };
-  const animalCard = (a) => `        <li><a class="hm-ac" href="${href(a)}">${medal(a, 96)}<strong>${esc(nm(a, km))}</strong><span class="hm-han" lang="zh" aria-hidden="true">${HAN[a]}</span>${km ? "" : `<small lang="km">ឆ្នាំ${esc(KM_NAMES[a])}</small>`}</a></li>`;
+  const animalCard = (a) => `        <li><a class="hm-ac" href="${href(a)}">${medal(a, 96)}<strong>${esc(nm(a, lang))}</strong>${zh ? "" : `<span class="hm-han" lang="zh" aria-hidden="true">${HAN[a]}</span>`}${km ? "" : `<small lang="km">ឆ្នាំ${esc(KM_NAMES[a])}</small>`}</a></li>`;
   const postCard = (p) => {
-    const dt = fmtDate(p.y, p.m, p.d, km);
+    const dt = fmtDate(p.y, p.m, p.d, lang);
     return `        <li><a class="hm-pc" href="${p.file}"><img src="images/zodiac/${slug(p.animal)}.webp" width="360" height="542" alt="" loading="lazy" decoding="async"><div><time datetime="${p.y}-${String(p.m).padStart(2, "0")}-${String(p.d).padStart(2, "0")}">${esc(dt)}</time><h3>${esc(u.blogTitle(dt))}</h3><p>${esc(u.blogDesc)}</p><span class="hm-more">${esc(u.blogB)}</span></div></a></li>`;
   };
-  return { card, animalCard, postCard, ID, km, u, au, tr };
+  return { card, animalCard, postCard, ID, km, zh, u, au, tr };
 }
 
 // Section builders that sit between the two shared (form) sections.
 function partA(lang) {   // fortune, animals, tools
-  const { card, animalCard, ID, km, u } = main2(lang);
+  const { card, animalCard, ID, km, zh, u } = main2(lang);
+  const L3 = (en, k, z) => (km ? k : zh ? z : en);
   return `<div class="fx-wrap">
   <section class="fx-sec fx-sec-first" id="fortune" aria-labelledby="${ID("fo")}">
     <div class="fx-head"><h2 id="${ID("fo")}">${esc(u.todayH)}</h2>${ICON.orn}<p>${esc(u.todayP)}</p></div>
@@ -203,18 +243,18 @@ ${ORDER.map(card).join("\n")}
     </ul>
     <div class="hm-share share-row" data-hm-share data-share-url="/"></div>
     <p class="hm-center"><a class="fx-btn" href="${latestPost.file}" data-hm-fulllink>${esc(u.todayB)}</a></p>
-    <p class="hm-note">${esc(u.todayNote)} ${esc(km ? "លេខសំណាង (1 ដល់ 5 ខ្ទង់) ប្តូររៀងរាល់ថ្ងៃ តាមម៉ោងកម្ពុជា ហើយសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការណែនាំឱ្យភ្នាល់ទេ។" : "Lucky numbers (1 to 5 digits) change every day, Cambodia time, and are for fun only, not betting advice.")}</p>
+    <p class="hm-note">${esc(u.todayNote)} ${esc(L3("Lucky numbers (1 to 5 digits) change every day, Cambodia time, and are for fun only, not betting advice.", "លេខសំណាង (1 ដល់ 5 ខ្ទង់) ប្តូររៀងរាល់ថ្ងៃ តាមម៉ោងកម្ពុជា ហើយសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការណែនាំឱ្យភ្នាល់ទេ។", "幸运数字（1 至 5 位数）每天按柬埔寨时间更新，仅供娱乐，不是投注建议。"))}</p>
   </section>
 
-  <section class="fx-sec hm-lunar-sec" aria-label="${esc(km ? "ប្រតិទិនចន្ទគតិខ្មែរ" : "Khmer Lunar Calendar")}">
+  <section class="fx-sec hm-lunar-sec" aria-label="${esc(L3("Khmer Lunar Calendar", "ប្រតិទិនចន្ទគតិខ្មែរ", "高棉农历"))}">
     <a class="hm-klc" href="blog/khmer-lunar-calendar-birth-date.html">
-      <img src="images/guides/khmer-lunar-card.webp" width="640" height="336" alt="${esc(km ? "ព្រះចន្ទពេញបូណ៌មីរះនៅពីក្រោយប្រាសាទអង្គរវត្តពេលយប់ ឆ្លុះលើស្រះផ្កាឈូក" : "A full moon rising behind Angkor Wat at night, reflected in a lotus pond")}" loading="lazy" decoding="async">
+      <img src="images/guides/khmer-lunar-card.webp" width="640" height="336" alt="${esc(L3("A full moon rising behind Angkor Wat at night, reflected in a lotus pond", "ព្រះចន្ទពេញបូណ៌មីរះនៅពីក្រោយប្រាសាទអង្គរវត្តពេលយប់ ឆ្លុះលើស្រះផ្កាឈូក", "夜晚，一轮满月从吴哥窟后升起，倒映在莲花池中"))}" loading="lazy" decoding="async">
       <div>
-        <span class="hm-cat">${esc(km ? "វប្បធម៌ និងប្រតិទិនខ្មែរ" : "Khmer Culture & Calendar")}</span>
-        <h2>${esc(km ? "ប្រតិទិនចន្ទគតិខ្មែរ" : "Khmer Lunar Calendar")}</h2>
-        <p>${esc(km ? "ស្វែងយល់ពីថ្ងៃកើត និងរោច ហើយរកថ្ងៃខែកំណើតតាមចន្ទគតិរបស់អ្នក។" : "How waxing and waning moon days are counted, and how to find your Khmer lunar birth date.")}</p>
-        <p class="hm-klc-today" data-kl-today-line data-lang="${km ? "km" : "en"}"></p>
-        <span class="hm-more">${esc(km ? "អានមគ្គុទ្ទេសក៍ →" : "Read the guide →")}</span>
+        <span class="hm-cat">${esc(L3("Khmer Culture & Calendar", "វប្បធម៌ និងប្រតិទិនខ្មែរ", "高棉文化与历法"))}</span>
+        <h2>${esc(L3("Khmer Lunar Calendar", "ប្រតិទិនចន្ទគតិខ្មែរ", "高棉农历"))}</h2>
+        <p>${esc(L3("How waxing and waning moon days are counted, and how to find your Khmer lunar birth date.", "ស្វែងយល់ពីថ្ងៃកើត និងរោច ហើយរកថ្ងៃខែកំណើតតាមចន្ទគតិរបស់អ្នក។", "了解上弦和下弦的日子怎么计算，以及如何找到你的高棉农历生日。"))}</p>
+        <p class="hm-klc-today" data-kl-today-line data-lang="${lang}"></p>
+        <span class="hm-more">${esc(L3("Read the guide →", "អានមគ្គុទ្ទេសក៍ →", "阅读指南 →"))}</span>
       </div>
     </a>
   </section>
@@ -236,7 +276,7 @@ ${u.tools.map(([img, t, p, b, h]) => `      <li class="hm-tool fx-gframe"><img s
 </div>`;
 }
 function partB(lang) {   // why, guides, how, cycle, elements, cross, blog, final
-  const { postCard, ID, km, u, au } = main2(lang);
+  const { postCard, ID, km, zh, u, au } = main2(lang);
   const ring2 = ring("an-ring-cycle", 60, km);
   return `<div class="fx-wrap">
   <section class="fx-sec" id="why" aria-labelledby="${ID("wh")}">
@@ -256,7 +296,7 @@ ${u.guides.map(([img, cat, t, d, h]) => `      <li><a class="hm-gc" href="${h}">
       <h2 id="${ID("hw")}">${esc(u.howH)}</h2>
       <ol class="hm-steps">${u.howSteps.map(([i, t], n) => `<li><span class="hm-n" aria-hidden="true">${km ? kmDigits(n + 1) : n + 1}</span><span class="hm-bi">${ICON[i]}</span><span>${esc(t)}</span></li>`).join("")}</ol>
       <p>${esc(u.howP)}</p>
-      <p class="hm-how-extra">${esc(UI_STRINGS[lang].how_p1.replace(/\s+/g, " ").trim())}</p>
+      <p class="hm-how-extra">${esc((UI_STRINGS[lang] || UI_STRINGS.en).how_p1.replace(/\s+/g, " ").trim())}</p>
       <a class="fx-btn fx-btn-sm" href="/checker">${esc(u.howB)}</a>
     </div>
   </section>
@@ -267,7 +307,7 @@ ${u.guides.map(([img, cat, t, d, h]) => `      <li><a class="hm-gc" href="${h}">
       <div class="an-cycle-body">
         <div class="an-cycle-art">${ring2}<span class="an-cycle-label">12</span></div>
         <div><p>${esc(au.cycP1)}</p><p>${esc(au.cycP2)}</p>
-          <p class="an-order">${ORDER.map((a) => esc(nm(a, km))).join(" → ")} → ${esc(nm(ORDER[0], km))}</p>
+          <p class="an-order">${ORDER.map((a) => esc(nm(a, lang))).join(" → ")} → ${esc(nm(ORDER[0], lang))}</p>
           <a class="fx-btn fx-btn-sm" href="/checker">${esc(au.cycB)}</a></div>
       </div>
     </section>
@@ -298,7 +338,9 @@ ${posts.map(postCard).join("\n")}
 }
 function footer(lang) {
   const km = lang === "km";
-  const L = km
+  const L = lang === "zh"
+    ? { blurb: "了解你的中国生肖，探索关于性格、配对、幸运象征等的传统解读。", explore: "探索", res: "资源", legal: "法律", links: [["/checker", "生肖查询"], ["/animals", "十二生肖"], ["/compatibility", "生肖配对"], ["/wedding-date", "结婚吉日"], ["/business-partner", "合作伙伴"], ["/zodiac-guide", "生肖指南"]], res2: [["/blog", "博客"], ["/about", "关于我们"], ["/contact", "联系我们"]], legal2: [["/privacy", "隐私政策"]], note: "仅供娱乐与自我反思。中国生肖解读属于传统与文化，并未经过科学证实。" }
+    : km
     ? { blurb: "ស្វែងយល់រាសីរបស់អ្នក និងអានការបកស្រាយតាមប្រពៃណីអំពីបុគ្គលិកលក្ខណៈ ភាពត្រូវគ្នា សំណាង និងច្រើនទៀត។", explore: "ស្វែងយល់", res: "ធនធាន", legal: "ច្បាប់", links: [["/checker", "ពិនិត្យរាសី"], ["/animals", "សត្វរាសី"], ["/compatibility", "ភាពត្រូវគ្នា"], ["/wedding-date", "ថ្ងៃរៀបការ"], ["/business-partner", "ដៃគូអាជីវកម្ម"], ["/zodiac-guide", "មគ្គុទ្ទេសក៍រាសី"]], res2: [["/blog", "ប្លុក"], ["/about", "អំពីយើង"], ["/contact", "ទំនាក់ទំនង"]], legal2: [["/privacy", "គោលការណ៍ឯកជនភាព"]], note: "សម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ។ ការបកស្រាយរាសីគឺជាប្រពៃណី និងវប្បធម៌ មិនត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រទេ។" }
     : { blurb: "Discover your Chinese zodiac and explore traditional insights into personality, compatibility, lucky signs and more.", explore: "Explore", res: "Resources", legal: "Legal", links: [["/checker", "Checker"], ["/animals", "Animals"], ["/compatibility", "Compatibility"], ["/wedding-date", "Wedding Date"], ["/business-partner", "Business Partner"], ["/zodiac-guide", "Zodiac Guide"]], res2: [["/blog", "Blog"], ["/about", "About"], ["/contact", "Contact"]], legal2: [["/privacy", "Privacy Policy"]], note: "For entertainment and self-reflection only. Chinese zodiac interpretations are traditional/cultural and are not scientifically proven." };
   const col = (h, ls) => `<nav aria-label="${esc(h)}"><h2>${esc(h)}</h2><ul>${ls.map(([h2, t]) => `<li><a href="${h2}">${esc(t)}</a></li>`).join("")}</ul></nav>`;
@@ -310,28 +352,28 @@ const MIN = "1920-01-01", MAX = "2026-12-31";
 const FIND = `<div class="fx-wrap">
   <section class="hm-find fx-gframe" id="find" aria-labelledby="hm-find-h">
     <div class="hm-find-text">
-      <h2 id="hm-find-h">${T("Find Your Chinese Zodiac Sign", "ស្វែងរករាសីរបស់អ្នក")}</h2>
-      <p>${T("Enter your birth date to discover your zodiac animal, element, lucky signs and more.", "បញ្ចូលថ្ងៃកំណើតរបស់អ្នក ដើម្បីស្វែងរកសត្វរាសី ធាតុ សំណាង និងច្រើនទៀត។")}</p>
+      <h2 id="hm-find-h">${T("Find Your Chinese Zodiac Sign", "ស្វែងរករាសីរបស់អ្នក", "查询你的中国生肖")}</h2>
+      <p>${T("Enter your birth date to discover your zodiac animal, element, lucky signs and more.", "បញ្ចូលថ្ងៃកំណើតរបស់អ្នក ដើម្បីស្វែងរកសត្វរាសី ធាតុ សំណាង និងច្រើនទៀត។", "输入你的出生日期，了解你的生肖、五行、幸运象征等。")}</p>
     </div>
     <form class="hm-find-form" id="hm-find-form" action="/checker" method="get" novalidate>
-      <label for="hm-dob">${T("Select Birth Date", "ជ្រើសរើសថ្ងៃកំណើត")}</label>
+      <label for="hm-dob">${T("Select Birth Date", "ជ្រើសរើសថ្ងៃកំណើត", "选择出生日期")}</label>
       <div class="hm-find-row">
         <input type="date" lang="en-GB" id="hm-dob" name="dob" required min="${MIN}" max="${MAX}">
-        <button type="submit" class="fx-btn">${T("Find My Sign →", "ជោគជតារាសីរបស់ខ្ញុំ →")}</button>
+        <button type="submit" class="fx-btn">${T("Find My Sign →", "ជោគជតារាសីរបស់ខ្ញុំ →", "我的生肖运势 →")}</button>
       </div>
-      <a class="hm-find-learn" href="blog/how-to-calculate-zodiac-sign.html">${T("Not sure how Chinese zodiac years work? Learn more →", "មិនច្បាស់ពីរបៀបដែលឆ្នាំរាសីដំណើរការ? ស្វែងយល់បន្ថែម →")}</a>
+      <a class="hm-find-learn" href="blog/how-to-calculate-zodiac-sign.html">${T("Not sure how Chinese zodiac years work? Learn more →", "មិនច្បាស់ពីរបៀបដែលឆ្នាំរាសីដំណើរការ? ស្វែងយល់បន្ថែម →", "不清楚生肖年怎么算？了解更多 →")}</a>
     </form>
   </section>
 </div>`;
 const COMPAT = `<div class="fx-wrap">
   <section class="fx-sec hm-compat" id="compatibility" aria-labelledby="hm-compat-h">
     <div class="fx-gframe">
-      <div class="fx-head"><h2 id="hm-compat-h">${T("Chinese Zodiac Compatibility", "ភាពត្រូវគ្នានៃរាសី")}</h2>${ICON.orn}
-        <p>${T("Compare two birthdays to discover traditional zodiac compatibility in love, friendship, business and more.", "ប្រៀបធៀបថ្ងៃកំណើតពីរ ដើម្បីស្វែងយល់ភាពត្រូវគ្នាតាមប្រពៃណីក្នុងស្នេហា មិត្តភាព អាជីវកម្ម និងច្រើនទៀត។")}</p></div>
+      <div class="fx-head"><h2 id="hm-compat-h">${T("Chinese Zodiac Compatibility", "ភាពត្រូវគ្នានៃរាសី", "中国生肖配对")}</h2>${ICON.orn}
+        <p>${T("Compare two birthdays to discover traditional zodiac compatibility in love, friendship, business and more.", "ប្រៀបធៀបថ្ងៃកំណើតពីរ ដើម្បីស្វែងយល់ភាពត្រូវគ្នាតាមប្រពៃណីក្នុងស្នេហា មិត្តភាព អាជីវកម្ម និងច្រើនទៀត។", "比较两个生日，了解在爱情、友情、事业等方面的传统生肖配对。")}</p></div>
       <form id="compat-form" class="hm-compat-form" novalidate>
         <div class="hm-compat-row">
-          <div><span class="hm-pl">${T("Person A", "មនុស្ស A")}</span><label class="hm-lbl" for="dob-a" data-i18n="doba_label">Person A's date of birth</label><input type="date" lang="en-GB" id="dob-a" name="dob-a" required min="${MIN}" max="${MAX}"></div>
-          <div><span class="hm-pl">${T("Person B", "មនុស្ស B")}</span><label class="hm-lbl" for="dob-b" data-i18n="dobb_label">Person B's date of birth</label><input type="date" lang="en-GB" id="dob-b" name="dob-b" required min="${MIN}" max="${MAX}"></div>
+          <div><span class="hm-pl">${T("Person A", "មនុស្ស A", "A")}</span><label class="hm-lbl" for="dob-a" data-i18n="doba_label">Person A's date of birth</label><input type="date" lang="en-GB" id="dob-a" name="dob-a" required min="${MIN}" max="${MAX}"></div>
+          <div><span class="hm-pl">${T("Person B", "មនុស្ស B", "B")}</span><label class="hm-lbl" for="dob-b" data-i18n="dobb_label">Person B's date of birth</label><input type="date" lang="en-GB" id="dob-b" name="dob-b" required min="${MIN}" max="${MAX}"></div>
         </div>
         <fieldset class="hm-rel"><legend data-i18n="relationship_legend">Relationship type</legend>
           <label class="radio-option"><input type="radio" name="context" value="romantic" checked> <span aria-hidden="true">❤️</span> <span data-i18n="romantic_option">Romantic Partner</span></label>
@@ -339,7 +381,7 @@ const COMPAT = `<div class="fx-wrap">
         </fieldset>
         <button type="submit" class="fx-btn" data-i18n="compat_submit">Check Compatibility</button>
       </form>
-      <p class="hm-note">${T("Traditional compatibility is for entertainment and cultural interest, not a prediction of how a relationship will go.", "ភាពត្រូវគ្នាតាមប្រពៃណីសម្រាប់ការកំសាន្ត និងវប្បធម៌ប៉ុណ្ណោះ មិនមែនជាការព្យាករណ៍ពីទំនាក់ទំនងទេ។")}</p>
+      <p class="hm-note">${T("Traditional compatibility is for entertainment and cultural interest, not a prediction of how a relationship will go.", "ភាពត្រូវគ្នាតាមប្រពៃណីសម្រាប់ការកំសាន្ត និងវប្បធម៌ប៉ុណ្ណោះ មិនមែនជាការព្យាករណ៍ពីទំនាក់ទំនងទេ។", "传统配对仅供娱乐和文化兴趣，不能预测一段关系会如何发展。")}</p>
       <div id="compat-result" class="hm-result" aria-live="polite"></div>
     </div>
   </section>
@@ -357,8 +399,8 @@ document.querySelectorAll("[data-hm-card]").forEach(function(li){
   li.className="hm-fc fx-tier-"+t;li.querySelector("[data-hm-ico]").textContent=r[0];li.querySelector("[data-hm-lab]").textContent=r[1];li.querySelector("[data-hm-line]").textContent=r[2];});
 var KMM=${JSON.stringify(KM_MONTHS)},ENM=${JSON.stringify(EN_MONTHS)},KD="0123456789";
 function kd(n){return String(n).replace(/\\d/g,function(c){return KD[c];});}
-function setDate(){document.querySelectorAll("[data-hm-today]").forEach(function(el){var km=el.getAttribute("data-lang")==="km";
-  el.textContent=km?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):ENM[p[1]-1]+" "+p[2]+", "+p[0];});}
+function fdt(lang){return lang==="km"?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):lang==="zh"?p[0]+"年"+p[1]+"月"+p[2]+"日":ENM[p[1]-1]+" "+p[2]+", "+p[0];}
+function setDate(){document.querySelectorAll("[data-hm-today]").forEach(function(el){el.textContent=fdt(el.getAttribute("data-lang"));});}
 setDate();document.addEventListener("DOMContentLoaded",setDate);window.addEventListener("load",setDate);document.querySelectorAll("[data-lang-switch]").forEach(function(a){a.addEventListener("click",function(){setTimeout(setDate,0);});});
 // daily data (rules + Claude wording): when today's record exists, each card shows that sign's
 // advice for today and its lucky number & color. If it is missing or old, the cards stay as above.
@@ -372,18 +414,18 @@ if(window.fetch){getj("/data/daily/"+dsx+".json").then(function(rec){return rec&
     if(!s||!s.text||!s.text[lang]||s.tier!==tier(li.getAttribute("data-animal"),day))return;
     li.querySelector("[data-hm-line]").textContent=s.text[lang].advice;
     var km=lang==="km",x=li.querySelector(".hm-lucky")||document.createElement("p");x.className="hm-lucky";x.textContent="";
-    var n=document.createElement("span");n.textContent=(km?"លេខសំណាង ":"Lucky no. ")+(km?kd(s.lucky.number):s.lucky.number);
+    var n=document.createElement("span");n.textContent=(km?"លេខសំណាង ":lang==="zh"?"幸运数字 ":"Lucky no. ")+(km?kd(s.lucky.number):s.lucky.number);
     var c=document.createElement("span"),dot=document.createElement("i");dot.className="hm-dot";dot.style.background=s.lucky.color.hex||"#ccc";c.appendChild(dot);c.appendChild(document.createTextNode(s.lucky.color[lang]));
     x.appendChild(n);x.appendChild(c);li.appendChild(x);});
 }).catch(function(){});}
 // "Who is lucky today" share: the same rules as the cards above (sign of the day + its triangle friends;
 // its opposite sign takes it easy). The image card is drawn only when someone shares.
-var KMN=${JSON.stringify(KM_NAMES)},LK={en:{h:"Who is lucky today",t:"Today is the day of the {D}. By tradition, the {D}, {P} and {Q} are the best supported signs today."},
+var KMN=${JSON.stringify(KM_NAMES)},ZHN=${JSON.stringify(ZH_NAMES)},LK={zh:{h:"今天谁最幸运",t:"今天是{D}日。按照传统，属{D}、{P}和{Q}的人今天最得助力。"},en:{h:"Who is lucky today",t:"Today is the day of the {D}. By tradition, the {D}, {P} and {Q} are the best supported signs today."},
   km:{h:"តើអ្នកណាមានសំណាងថ្ងៃនេះ",t:"ថ្ងៃនេះជាថ្ងៃ{D}។ តាមប្រពៃណី {D} {P} និង {Q} ជាសត្វដែលទទួលបានការគាំទ្រល្អបំផុតនៅថ្ងៃនេះ។"}};
 var top=[day].concat(TRI.filter(function(t){return t.indexOf(day)>-1;})[0].filter(function(x){return x!==day;})),clash=ORDER[(ORDER.indexOf(day)+6)%12];
 document.querySelectorAll("[data-hm-share]").forEach(function(el){
-  var l=el.closest("[data-lang-content]"),lang=l?l.getAttribute("data-lang-content"):"en",km=lang==="km",n=function(a){return km?KMN[a]:a;};
-  var dt=km?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):ENM[p[1]-1]+" "+p[2]+", "+p[0];
+  var l=el.closest("[data-lang-content]"),lang=l?l.getAttribute("data-lang-content"):"en",km=lang==="km",n=function(a){return km?KMN[a]:lang==="zh"?ZHN[a]:a;};
+  var dt=fdt(lang);
   el.setAttribute("data-share-title",LK[lang].h+" — "+dt);
   el.setAttribute("data-share-card",JSON.stringify({cardType:"lucky",lang:lang,date:dt,top:top,topNames:top.map(n),careful:[n(clash)],
     text:LK[lang].t.split("{D}").join(n(top[0])).replace("{P}",n(top[1])).replace("{Q}",n(top[2]))}));});
@@ -458,6 +500,9 @@ ${body("en")}
 <div data-lang-content="km">
 ${body("km")}
 </div>
+<div data-lang-content="zh">
+${body("zh")}
+</div>
 
 ${FIND}
 
@@ -468,6 +513,9 @@ ${partA("en")}
 <div data-lang-content="km">
 ${partA("km")}
 </div>
+<div data-lang-content="zh">
+${partA("zh")}
+</div>
 
 ${COMPAT}
 
@@ -477,11 +525,15 @@ ${partB("en")}
 <div data-lang-content="km">
 ${partB("km")}
 </div>
+<div data-lang-content="zh">
+${partB("zh")}
+</div>
 </main>
 
 <footer class="site-footer hm-footer">
 <div data-lang-content="en">${footer("en")}</div>
 <div data-lang-content="km">${footer("km")}</div>
+<div data-lang-content="zh">${footer("zh")}</div>
 </footer>
 
 <script src="js/i18n.js"></script>
