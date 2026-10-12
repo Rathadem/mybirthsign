@@ -136,3 +136,44 @@ const ANIMAL_BUSINESS = {
     Pig: { strength: "ភាពសប្បុរស និងសភាវគតិបង្កើតទំនាក់ទំនងដែលទទួលបានសុឆន្ទៈល្អរយៈពេលវែង។", roles: ["ទំនាក់ទំនងអតិថិជន", "ភាពជាដៃគូ", "វប្បធម៌ក្រុម"] }
   }
 };
+
+// Simplified Chinese (zh)
+ANIMAL_BUSINESS.zh = {
+  Rat: { strength: "敏锐发现机会，在情况变化时足智多谋、快速解决问题。", roles: ["业务拓展", "商务谈判", "市场调研"] },
+  Ox: { strength: "自律、有条理地执行到底，稳稳掌控日常运营。", roles: ["运营", "财务", "流程与制度"] },
+  Tiger: { strength: "敢于开拓，愿意承担别人犹豫不决的经过计算的风险。", roles: ["战略", "新业务", "对外领导"] },
+  Rabbit: { strength: "善于协调，擅长化解与客户、员工或伙伴之间的摩擦。", roles: ["合作关系", "客户关系", "谈判"] },
+  Dragon: { strength: "有大局观，天生能号召大家朝远大目标前进。", roles: ["战略", "愿景与品牌", "领导"] },
+  Snake: { strength: "敏锐的战略分析，面对重大决定时耐心而有计算。", roles: ["战略", "财务", "风险分析"] },
+  Horse: { strength: "精力充沛、执行迅速，擅长面向公众的工作。", roles: ["销售", "市场营销", "业务拓展"] },
+  Goat: { strength: "有创意，对品牌、美感和客户喜好有直觉。", roles: ["创意与品牌", "产品开发", "设计"] },
+  Monkey: { strength: "善于创新解决问题，计划需要改变时能迅速适应。", roles: ["创新", "产品开发", "技术"] },
+  Rooster: { strength: "非常注重细节，擅长组织、排程和质量管理。", roles: ["运营", "行政", "质量管理"] },
+  Dog: { strength: "忠诚可靠——是会信守承诺、保护团队利益的伙伴。", roles: ["运营", "人事与团队文化", "信任与合规"] },
+  Pig: { strength: "慷慨，善于建立关系，往往能赢得长久的好感。", roles: ["客户关系", "合作关系", "团队文化"] }
+};
+// Chinese element notes (the English / Khmer ones are in elementRelation above)
+const ELEMENT_NOTE_ZH = {
+  same: (a) => `你们五行相同（${a}）。这意味着本能相似、工作节奏一致——相处舒服，但当一方有盲点时，自然的互补会少一些。`,
+  genAB: (a, b) => `在五行循环中，${a}生${b}——你的能量往往能滋养和支持伙伴，传统上是对合作很有利的相生关系。`,
+  genBA: (a, b) => `在五行循环中，${b}生${a}——伙伴的能量往往能滋养和支持你，传统上是很有利的相生关系。`,
+  ctlAB: (a, b) => `在五行循环中，${a}克${b}——这个组合如果不刻意平衡，可能带来真正的紧张，因为一方天然倾向于牵制另一方。`,
+  ctlBA: (a, b) => `在五行循环中，${b}克${a}——这个组合如果不刻意平衡，可能带来真正的紧张。`,
+  neutral: (a, b) => `${a}和${b}在传统上没有明显的相生或相克——既不互相加强，也不互相牵制。`
+};
+(function () {
+  const ZE = { Wood: "木", Fire: "火", Earth: "土", Metal: "金", Water: "水" };
+  const base = elementRelation;
+  elementRelation = function (elA, elB, lang) {
+    const r = base(elA, elB, lang === "zh" ? "en" : lang);
+    if (lang !== "zh") return r;
+    const a = ZE[elA], b = ZE[elB];
+    if (elA === elB) r.note = ELEMENT_NOTE_ZH.same(a);
+    else if (ELEMENT_GENERATES[elA] === elB) r.note = ELEMENT_NOTE_ZH.genAB(a, b);
+    else if (ELEMENT_GENERATES[elB] === elA) r.note = ELEMENT_NOTE_ZH.genBA(a, b);
+    else if (ELEMENT_CONTROLS[elA] === elB) r.note = ELEMENT_NOTE_ZH.ctlAB(a, b);
+    else if (ELEMENT_CONTROLS[elB] === elA) r.note = ELEMENT_NOTE_ZH.ctlBA(a, b);
+    else r.note = ELEMENT_NOTE_ZH.neutral(a, b);
+    return r;
+  };
+})();

@@ -1,6 +1,6 @@
 // Khmer lunar birth dates (filled in by js/khmer-lunar.js; the dates stay on this page)
 function klPairHtml(items, lang) {
-  var h = lang === "km" ? "ថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ" : "Khmer lunar birth dates";
+  var h = lang === "km" ? "ថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ" : lang === "zh" ? "高棉农历生日" : "Khmer lunar birth dates";
   var e = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
   return '<div class="kl-pair"><h3><span class="kl-moon kl-moon-sm" aria-hidden="true"></span>' + e(h) + "</h3><ul>" +
     items.filter(function (it) { return /^\d{4}-\d{2}-\d{2}$/.test(it.iso || ""); }).map(function (it) { return '<li data-kl-iso="' + e(it.iso) + '"><b>' + e(it.label) + "</b></li>"; }).join("") + "</ul></div>";
@@ -17,11 +17,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const lang = typeof getLang === "function" ? getLang() : "en";
   const S = (typeof UI_STRINGS !== "undefined" && UI_STRINGS[lang]) || {};
-  const isKm = lang === "km";
-  const animalBusinessSource = (isKm && typeof ANIMAL_BUSINESS !== "undefined" && ANIMAL_BUSINESS.km) ? ANIMAL_BUSINESS.km : ANIMAL_BUSINESS.en;
-  const elementName = (el) => (isKm && typeof KM_ELEMENT_NAMES !== "undefined") ? KM_ELEMENT_NAMES[el] : el;
-  const animalName = (an) => (isKm && typeof KM_ANIMAL_NAMES !== "undefined") ? KM_ANIMAL_NAMES[an] : an;
-  const yinYangLabel = (yy) => isKm ? (yy === "Yang" ? "☯️ យ៉ាង" : "☯️ យិន") : (yy === "Yang" ? "☯️ Yang" : "☯️ Yin");
+  const isKm = lang === "km", isZh = lang === "zh";
+  const ZP = isZh ? { c: "：", cm: "、", d: "。", sc: "；" } : { c: ":", cm: ", ", d: ".", sc: "; " };
+  const animalBusinessSource = (typeof ANIMAL_BUSINESS !== "undefined" && ANIMAL_BUSINESS[lang]) ? ANIMAL_BUSINESS[lang] : ANIMAL_BUSINESS.en;
+  const elementName = (el) => (typeof LOC !== "undefined" ? LOC.element(el, lang) : el);
+  const animalName = (an) => (typeof LOC !== "undefined" ? LOC.animal(an, lang) : an);
+  const yyWord = (yy) => isKm ? (yy === "Yang" ? "យ៉ាង" : "យិន") : isZh ? (yy === "Yang" ? "阳" : "阴") : yy;
+  const yinYangLabel = (yy) => "☯️ " + yyWord(yy);
 
   const todayIso = new Date().toISOString().slice(0, 10);
   ["biz-p1-dob", "biz-p2-dob"].forEach(function (id) {
@@ -78,7 +80,12 @@ document.addEventListener("DOMContentLoaded", function () {
     ["innovation", "💡", "ភាពច្នៃប្រឌិតថ្មី"],
     ["risk", "🛡️", "ការគ្រប់គ្រងហានិភ័យ"]
   ];
-  const CATEGORY_META = isKm ? CATEGORY_META_KM : CATEGORY_META_EN;
+  const CATEGORY_META_ZH = [
+    ["entrepreneurship", "🚀", "创业"], ["leadership", "👑", "领导力"], ["finance", "💰", "金钱与财务"], ["growth", "📈", "成长策略"],
+    ["decision", "🧠", "决策"], ["communication", "🗣️", "沟通"], ["trust", "🤝", "信任与可靠"], ["conflict", "⚡", "冲突处理"],
+    ["operations", "🏢", "运营"], ["sales", "📣", "销售与营销"], ["innovation", "💡", "创新"], ["risk", "🛡️", "风险管理"]
+  ];
+  const CATEGORY_META = isKm ? CATEGORY_META_KM : isZh ? CATEGORY_META_ZH : CATEGORY_META_EN;
 
   const WEIGHTS = {
     entrepreneurship: { a: 0.6, e: 0.4 },
@@ -146,6 +153,11 @@ document.addEventListener("DOMContentLoaded", function () {
       ]
     }
   };
+  WORKS_BANK.zh = {
+    high: ["在你们之间往往自然而然地顺利，没有太多摩擦。", "是这段合作真正的结构性优势。", "配合得很好——是建立商业习惯的坚实基础。"],
+    medium: ["有一些明确的规则就能运作得很好，而不是假设你们会自然用同样的方法。", "很有潜力，但最好及早公开讨论。", "大致平衡，你们各自能弥补对方的不足。"],
+    low: ["实际上，这是你们需要写成书面流程、而不能只靠直觉的地方。", "是这个组合传统上的摩擦点——最好在变成争议之前用书面方式解决。", "需要刻意建立制度；如果只是口头约定，这里最可能出现分歧。"]
+  };
   const CHALLENGE_BANK = {
     en: {
       high: [
@@ -176,6 +188,11 @@ document.addEventListener("DOMContentLoaded", function () {
       ]
     }
   };
+  CHALLENGE_BANK.zh = {
+    high: ["主要风险是以为会一直这么顺利，从来不写成书面约定。", "这里很少引起冲突，但只靠口头约定以后仍可能出问题——还是写下来吧。"],
+    medium: ["如果没有事先约定流程，这方面不同的本能在压力下可能带来摩擦。", "期望不一致是主要风险——一份简短的书面协议就能避免大部分问题。"],
+    low: ["实际上，这个组合的大多数合作纠纷可能都源于这里。", "如果没有清楚的书面协议，这里很可能成为反复出现的症结。"]
+  };
   function pick(seedStr, key, arr) { return arr[hashSeed(seedStr + "|" + key + "|pick") % arr.length]; }
   function worksSentence(seedStr, key, tier) {
     const bank = WORKS_BANK[lang] || WORKS_BANK.en;
@@ -184,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function challengeSentence(seedStr, key, tier) {
     const bank = CHALLENGE_BANK[lang] || CHALLENGE_BANK.en;
     const s = pick(seedStr, key, bank[tier] || bank.medium);
-    return isKm ? s : (s.charAt(0).toUpperCase() + s.slice(1));
+    return isKm || isZh ? s : (s.charAt(0).toUpperCase() + s.slice(1));
   }
 
   function buildAnalysis(bziA, bziB, animalTier, elementTier, seedStr) {
@@ -192,12 +209,14 @@ document.addEventListener("DOMContentLoaded", function () {
       const key = c[0], emoji = c[1], title = c[2];
       const lead = isKm
         ? `រវាង${animalName(bziA.animal)} (${elementName(bziA.element)}) និង${animalName(bziB.animal)} (${elementName(bziB.element)})`
+        : isZh ? `属${animalName(bziA.animal)}（${elementName(bziA.element)}）和属${animalName(bziB.animal)}（${elementName(bziB.element)}）之间`
         : `Between ${bziA.animal} (${bziA.element}) and ${bziB.animal} (${bziB.element})`;
       const titleLower = isKm ? title : title.toLowerCase();
       return {
         title: `${emoji} ${title}`,
         works: isKm
           ? `${lead} ទាក់ទងនឹង${titleLower} ${worksSentence(seedStr, key, animalTier)}`
+          : isZh ? `${lead}，“${title}”${worksSentence(seedStr, key, animalTier)}`
           : `${lead}, ${titleLower} ${worksSentence(seedStr, key, animalTier)}`,
         challenge: challengeSentence(seedStr, key, key === "finance" || key === "operations" || key === "risk" ? elementTier : animalTier)
       };
@@ -237,6 +256,9 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
   }
 
+  const CHECKLIST_ITEMS_ZH = ["股权比例", "初始投资", "利润分配", "薪资 / 股东提款", "谁管理银行账户", "支出审批额度", "招聘权限", "重大决策规则",
+    "债务 / 贷款", "知识产权", "客户归属", "一方退出时怎么办", "股权回购公式", "争议解决", "出售公司规则"];
+  const CHALLENGE_TOPICS_ZH = ["股权", "金钱", "工作量", "决策权", "经营策略", "招聘", "扩张", "个人提款", "债务", "退出策略"];
   const CHECKLIST_ITEMS_EN = [
     "Ownership percentage", "Initial investment", "Profit distribution", "Salary / owner draws",
     "Who controls the bank account", "Spending approval limits", "Hiring authority", "Major decision rules",
@@ -285,7 +307,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="biz-ov-animal">${animalName(bzi.animal)}</div>
         <div class="biz-ov-chips">
           <span class="biz-ov-chip"><img src="images/business/el-${bzi.element.toLowerCase()}.webp" alt="" width="30" height="30" loading="lazy"><span><b>${elementName(bzi.element)}</b><small>${S.biz_ov_el_label || "Element"}</small></span></span>
-          <span class="biz-ov-chip"><span class="biz-ov-yy">\u262F</span><span><b>${isKm ? (bzi.yinYang === "Yang" ? "\u1799\u17C9\u17B6\u1784" : "\u1799\u17B7\u1793") : bzi.yinYang}</b><small>${name}</small></span></span>
+          <span class="biz-ov-chip"><span class="biz-ov-yy">\u262F</span><span><b>${yyWord(bzi.yinYang)}</b><small>${name}</small></span></span>
           <span class="biz-ov-chip"><img class="biz-ov-yearico" src="images/business/animals/${slug}.webp" alt="" width="30" height="30" loading="lazy"><span><b>${bzi.zodiacYear}</b><small>${S.biz_ov_year_label || "Zodiac Year"}</small></span></span>
         </div>
       </div>`;
@@ -384,6 +406,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const dateLocale = lang === "km" ? "km-KH" : "en-US";
     function fmtDate(d) {
+      if (isZh) return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日";
       try { return d.toLocaleDateString(dateLocale, { year: "numeric", month: "long", day: "numeric" }); }
       catch (err) { return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }); }
     }
@@ -392,28 +415,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const bizB = animalBusinessSource[bziB.animal];
 
     const strengths = top.map(function (e) {
+      if (isZh) return `根据传统解读，“${CATEGORY_LABEL[e[0]]}”是你们最强的方面之一（${e[1]}/100）——当合作的其他方面比较困难时，可以多依靠它。`;
       return isKm
         ? `${CATEGORY_LABEL[e[0]]}គឺជាផ្នែកខ្លាំងបំផុតមួយរបស់អ្នក (${e[1]}/100) ដោយផ្អែកលើការបកស្រាយតាមប្រពៃណី — ពឹងផ្អែកលើវានៅពេលផ្នែកផ្សេងទៀតនៃដៃគូភាពមានអារម្មណ៍ពិបាក។`
         : `${CATEGORY_LABEL[e[0]]} is one of your strongest areas (${e[1]}/100) based on the traditional interpretation — lean on it when other parts of the partnership feel harder.`;
     });
     const challenges = bottom.map(function (e) {
+      if (isZh) return `“${CATEGORY_LABEL[e[0]]}”得分较低（${e[1]}/100）——实际上，这里最需要书面流程或协议。`;
       return isKm
         ? `${CATEGORY_LABEL[e[0]]}ទទួលបានពិន្ទុទាបជាង (${e[1]}/100) — នេះជាក់ស្តែងជាកន្លែងដែលដំណើរការ ឬកិច្ចព្រមព្រៀងជាលាយលក្ខណ៍អក្សរនឹងសំខាន់បំផុត។`
         : `${CATEGORY_LABEL[e[0]]} scores lower (${e[1]}/100) — this is realistically where a written process or agreement will matter most.`;
     });
 
-    const checklistItems = isKm ? CHECKLIST_ITEMS_KM : CHECKLIST_ITEMS_EN;
-    const challengeTopics = isKm ? CHALLENGE_TOPICS_KM : CHALLENGE_TOPICS_EN;
+    const checklistItems = isKm ? CHECKLIST_ITEMS_KM : isZh ? CHECKLIST_ITEMS_ZH : CHECKLIST_ITEMS_EN;
+    const challengeTopics = isKm ? CHALLENGE_TOPICS_KM : isZh ? CHALLENGE_TOPICS_ZH : CHALLENGE_TOPICS_EN;
 
     const hasTimeLoc = !!time1 || !!time2 || !!loc1 || !!loc2;
     const beforeAfterA = isKm ? (bziA.beforeCNY ? "មុន" : "នៅ/ក្រោយ") : (bziA.beforeCNY ? "before" : "on/after");
     const beforeAfterB = isKm ? (bziB.beforeCNY ? "មុន" : "នៅ/ក្រោយ") : (bziB.beforeCNY ? "before" : "on/after");
-    const cnyNoteA = bziA.cny
+    const cnyNoteA = bziA.cny && isZh ? `${fmtDate(dob1)}——在当年农历新年（${bziA.birthYear}年${+bziA.cny.split("-")[0]}月${+bziA.cny.split("-")[1]}日）${bziA.beforeCNY ? "之前" : "当天或之后"}，所以使用的生肖年是 ${bziA.zodiacYear}。`
+      : bziA.cny
       ? (isKm
           ? `${fmtDate(dob1)} — ${beforeAfterA}ពិធីបុណ្យចូលឆ្នាំចិននៃឆ្នាំនោះ (${bziA.cny.replace("-", "/")}/${bziA.birthYear}) ដូច្នេះឆ្នាំនិមិត្តសញ្ញាដែលប្រើគឺ ${bziA.zodiacYear}។`
           : `${fmtDate(dob1)} — ${beforeAfterA} that year's Chinese New Year (${bziA.cny.replace("-", "/")}/${bziA.birthYear}), so the zodiac year used is ${bziA.zodiacYear}.`)
       : `${fmtDate(dob1)}.`;
-    const cnyNoteB = bziB.cny
+    const cnyNoteB = bziB.cny && isZh ? `${fmtDate(dob2)}——在当年农历新年（${bziB.birthYear}年${+bziB.cny.split("-")[0]}月${+bziB.cny.split("-")[1]}日）${bziB.beforeCNY ? "之前" : "当天或之后"}，所以使用的生肖年是 ${bziB.zodiacYear}。`
+      : bziB.cny
       ? (isKm
           ? `${fmtDate(dob2)} — ${beforeAfterB}ពិធីបុណ្យចូលឆ្នាំចិននៃឆ្នាំនោះ (${bziB.cny.replace("-", "/")}/${bziB.birthYear}) ដូច្នេះឆ្នាំនិមិត្តសញ្ញាដែលប្រើគឺ ${bziB.zodiacYear}។`
           : `${fmtDate(dob2)} — ${beforeAfterB} that year's Chinese New Year (${bziB.cny.replace("-", "/")}/${bziB.birthYear}), so the zodiac year used is ${bziB.zodiacYear}.`)
@@ -433,31 +460,31 @@ document.addEventListener("DOMContentLoaded", function () {
             overall: Math.round(Object.values(scores).reduce(function (x, y) { return x + y; }, 0) / Object.values(scores).length),
             level: S.biz_ov_match || "Business Match",
             cats: top.slice(0, 3).map(function (e) { return [CATEGORY_LABEL[e[0]], e[1]]; }),
-            discuss: CATEGORY_LABEL[bottom[0][0]] + ", " + CATEGORY_LABEL[bottom[1][0]] }, "/compatibility?pair=" + bziA.animal.toLowerCase() + "-" + bziB.animal.toLowerCase() + "#compare")}
+            discuss: CATEGORY_LABEL[bottom[0][0]] + ZP.cm + CATEGORY_LABEL[bottom[1][0]] }, "/compatibility?pair=" + bziA.animal.toLowerCase() + "-" + bziB.animal.toLowerCase() + "#compare")}
 
         <h3 class="biz-subheading">${S.biz_summary_heading || "🧧 Business Partnership Summary"}</h3>
         <div class="biz-summary-box">
-          <p><strong>${p1Name}:</strong> ${animalName(bziA.animal)} · ${elementName(bziA.element)} · ${isKm ? (bziA.yinYang === "Yang" ? "យ៉ាង" : "យិន") : bziA.yinYang}</p>
-          <p><strong>${p2Name}:</strong> ${animalName(bziB.animal)} · ${elementName(bziB.element)} · ${isKm ? (bziB.yinYang === "Yang" ? "យ៉ាង" : "យិន") : bziB.yinYang}</p>
-          <p>${S.biz_summary_complementary || "Main complementary qualities:"} ${CATEGORY_LABEL[top[0][0]]}, ${CATEGORY_LABEL[top[1][0]]}.</p>
-          <p>${S.biz_summary_discuss || "Main areas requiring discussion:"} ${CATEGORY_LABEL[bottom[0][0]]}, ${CATEGORY_LABEL[bottom[1][0]]}.</p>
-          <p>${S.biz_summary_roles || "Potential role division:"} ${p1Name} → ${bizA.roles[0]}; ${p2Name} → ${bizB.roles[0]}.</p>
+          <p><strong>${p1Name}${ZP.c}</strong> ${animalName(bziA.animal)} · ${elementName(bziA.element)} · ${yyWord(bziA.yinYang)}</p>
+          <p><strong>${p2Name}${ZP.c}</strong> ${animalName(bziB.animal)} · ${elementName(bziB.element)} · ${yyWord(bziB.yinYang)}</p>
+          <p>${S.biz_summary_complementary || "Main complementary qualities:"} ${CATEGORY_LABEL[top[0][0]]}${ZP.cm}${CATEGORY_LABEL[top[1][0]]}${ZP.d}</p>
+          <p>${S.biz_summary_discuss || "Main areas requiring discussion:"} ${CATEGORY_LABEL[bottom[0][0]]}${ZP.cm}${CATEGORY_LABEL[bottom[1][0]]}${ZP.d}</p>
+          <p>${S.biz_summary_roles || "Potential role division:"} ${p1Name} → ${bizA.roles[0]}${ZP.sc}${p2Name} → ${bizB.roles[0]}${ZP.d}</p>
         </div>
 
         <div class="biz-two-col">
           <div class="biz-profile-card">
             <h3>${p1Name}</h3>
             <p class="biz-sign-line"><img class="sign-line-badge" src="images/zodiac-badges/${bziA.animal.toLowerCase()}.webp" alt="" loading="lazy" width="28" height="28"> <strong>${elementName(bziA.element)} ${animalName(bziA.animal)}</strong></p>
-            <p class="biz-bazi-line">${bziA.stem.name} ${bziA.stem.hanzi} (${S.biz_heavenly_stem_label || "Heavenly Stem"}) · ${bziA.branch.name} ${bziA.branch.hanzi} (${S.biz_earthly_branch_label || "Earthly Branch"}) · ${isKm ? (bziA.yinYang === "Yang" ? "យ៉ាង" : "យិន") : bziA.yinYang}</p>
+            <p class="biz-bazi-line">${bziA.stem.name} ${bziA.stem.hanzi} (${S.biz_heavenly_stem_label || "Heavenly Stem"}) · ${bziA.branch.name} ${bziA.branch.hanzi} (${S.biz_earthly_branch_label || "Earthly Branch"}) · ${yyWord(bziA.yinYang)}</p>
             <p class="biz-born-sub">${cnyNoteA}</p>
-            <p>${(isKm && typeof KM_ELEMENT_INFO !== "undefined" ? KM_ELEMENT_INFO : ELEMENT_INFO)[bziA.element].blurb}</p>
+            <p>${(typeof LOC !== "undefined" ? LOC.table("ELEMENT_INFO", lang) : ELEMENT_INFO)[bziA.element].blurb}</p>
           </div>
           <div class="biz-profile-card">
             <h3>${p2Name}</h3>
             <p class="biz-sign-line"><img class="sign-line-badge" src="images/zodiac-badges/${bziB.animal.toLowerCase()}.webp" alt="" loading="lazy" width="28" height="28"> <strong>${elementName(bziB.element)} ${animalName(bziB.animal)}</strong></p>
-            <p class="biz-bazi-line">${bziB.stem.name} ${bziB.stem.hanzi} (${S.biz_heavenly_stem_label || "Heavenly Stem"}) · ${bziB.branch.name} ${bziB.branch.hanzi} (${S.biz_earthly_branch_label || "Earthly Branch"}) · ${isKm ? (bziB.yinYang === "Yang" ? "យ៉ាង" : "យិន") : bziB.yinYang}</p>
+            <p class="biz-bazi-line">${bziB.stem.name} ${bziB.stem.hanzi} (${S.biz_heavenly_stem_label || "Heavenly Stem"}) · ${bziB.branch.name} ${bziB.branch.hanzi} (${S.biz_earthly_branch_label || "Earthly Branch"}) · ${yyWord(bziB.yinYang)}</p>
             <p class="biz-born-sub">${cnyNoteB}</p>
-            <p>${(isKm && typeof KM_ELEMENT_INFO !== "undefined" ? KM_ELEMENT_INFO : ELEMENT_INFO)[bziB.element].blurb}</p>
+            <p>${(typeof LOC !== "undefined" ? LOC.table("ELEMENT_INFO", lang) : ELEMENT_INFO)[bziB.element].blurb}</p>
           </div>
         </div>
 
