@@ -3407,6 +3407,14 @@ footer.site-footer:not(.hm-footer) a { padding: 7px 6px; line-height: 1.3; }
 /* Language blocks: show only the active language from the very first paint (JS used to hide the other one after load, which made the page jump) */
 html:not([lang="km"]) [data-lang-content="km"] { display: none; }
 html[lang="km"] [data-lang-content="en"] { display: none; }
+html:not([lang^="zh"]) [data-lang-content="zh"] { display: none; }
+/* Chinese: show the Chinese block; where a place has no Chinese block yet, its English block shows instead */
+html[lang^="zh"] [data-lang-content="km"] { display: none; }
+html[lang^="zh"] [data-lang-content="en"]:has(~ [data-lang-content="zh"]),
+html[lang^="zh"] [data-lang-content="zh"] ~ [data-lang-content="en"] { display: none; }
+/* Simplified Chinese text: Noto Sans SC (loaded only in Chinese), then the phone / computer's own Chinese font */
+html[lang^="zh"] body { font-family: Georgia, "Times New Roman", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+html[lang^="zh"] :is(h1, h2, h3, p, li, span, a, b, strong, button, label, td, th, summary, small, em) { word-break: normal; line-break: strict; }
 
 /* Footer backgrounds: skyline pictures removed (lighter pages). Plain dark footer instead. */
 footer.site-footer, body.chk-page footer.chk-footer, .fx-page footer.site-footer, .hm-final { background-image: none !important; background-color: #0b0820 !important; }
@@ -4025,3 +4033,17 @@ html { scroll-padding-top: 76px; }
 .pf-nav { top: var(--hdr-h, 60px); }
 
 html { scroll-padding-top: calc(var(--hdr-h, 60px) + 16px); }
+/* phones: three language buttons (EN · ខ្មែរ · 中文) + the menu button fit on one line next to the logo */
+@media (max-width: 640px) {
+  header.site-header .lang-toggle-bar { margin: 0 4px 0 auto; padding: 2px; }
+  header.site-header .lang-toggle-bar a { padding: 4px 8px; font-size: .78rem; }
+  header.site-header .container { gap: 8px; padding-left: 16px; padding-right: 16px; }
+}
+@media (max-width: 400px) {
+  header.site-header .logo { font-size: 1rem; gap: 6px; letter-spacing: 0; }
+  header.site-header .logo-mark { width: 22px; height: 22px; }
+  header.site-header .lang-toggle-bar a { padding: 4px 6px; font-size: .74rem; }
+  header.site-header .container { gap: 6px; padding-left: 12px; padding-right: 12px; }
+  .nav-toggle { width: 36px; }
+}
+@media (max-width: 340px) { header.site-header .logo-text { display: none; } }

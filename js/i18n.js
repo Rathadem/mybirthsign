@@ -246,6 +246,195 @@ const KM_LIFE_PATH_INFO = {
 // ---------------------------------------------------------------------------
 // Static UI copy
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Simplified Chinese (zh) display names and content — same keys as the KM_ tables above
+// ---------------------------------------------------------------------------
+const ZH_ANIMAL_NAMES = {
+  Rat: "鼠", Ox: "牛", Tiger: "虎", Rabbit: "兔", Dragon: "龙", Snake: "蛇",
+  Horse: "马", Goat: "羊", Monkey: "猴", Rooster: "鸡", Dog: "狗", Pig: "猪"
+};
+const ZH_ELEMENT_NAMES = { Wood: "木", Fire: "火", Earth: "土", Metal: "金", Water: "水" };
+const ZH_COLOR_NAMES = {
+  blue: "蓝色", gold: "金色", green: "绿色", white: "白色", yellow: "黄色", gray: "灰色", orange: "橙色",
+  pink: "粉色", red: "红色", purple: "紫色", black: "黑色", silver: "银色", brown: "棕色"
+};
+const ZH_DAY_NAMES = {
+  Monday: "星期一", Tuesday: "星期二", Wednesday: "星期三", Thursday: "星期四",
+  Friday: "星期五", Saturday: "星期六", Sunday: "星期日"
+};
+const ZH_ANIMAL_INFO = {
+  Rat: {
+    traits: "机智、足智多谋、善于交际。属鼠的人天生擅长解决问题，常能发现别人错过的机会。",
+    weaknesses: "可能比较焦躁，或在金钱和信任上过于谨慎。",
+    overview: "鼠是十二生肖之首。传说它靠的是聪明而不是力气——骑在牛背上抢先冲过终点。这个故事很能说明鼠的特点：足智多谋、善于观察，总是快人一步。属鼠的人往往最先察觉市场、谈话或感情中的变化，很少措手不及。在人际交往中，他们迷人又灵活，既能在人群中游刃有余，也能在一旁安静地收集信息。",
+    careers: "商业、写作、研究、贸易"
+  },
+  Ox: {
+    traits: "可靠、诚实、勤劳。属牛的人靠坚持不懈，一步一步稳稳地取得成功。",
+    weaknesses: "可能比较固执，面对突然的变化时适应得慢。",
+    overview: "牛是十二生肖中安静的实力派——不张扬，却几乎没人能比它更持久。别的生肖追求速胜，牛则着眼长远，年复一年默默付出，直到成果无可否认。所以属牛的人擅长一切需要耐心的事：创业、钻研手艺、经营家庭。他们的直率让重视诚实的人感到清新，但在期待委婉的人看来，可能显得有些生硬。",
+    careers: "农业、工程、金融、医学"
+  },
+  Tiger: {
+    traits: "勇敢、自信、好胜。属虎的人是天生的领导者，做事果断。",
+    weaknesses: "可能比较冲动，对节奏慢的人缺乏耐心。",
+    overview: "虎是十二生肖中天生敢于冒险的一个——大胆、有魅力，敢为人先。当大家都在犹豫时，往往是虎第一个开口或采取行动。这种勇气让他们成为有号召力的领导者，和他们在一起总是充满活力；但也可能让他们对流程、规则或需要更多时间的人失去耐心。属虎的人如果在行动力之外再多一点克制，带着大家一起前进，会做得最好。",
+    careers: "创业、体育、法律、管理"
+  },
+  Rabbit: {
+    traits: "温和、体贴、善于协调。属兔的人重视和谐，擅长避免冲突。",
+    weaknesses: "可能过于谨慎，回避必要的正面沟通。",
+    overview: "兔做事细腻优雅，往往在别人开口之前就能感觉到气氛的紧张。所以属兔的人是天生的调解者，与他们相处非常愉快——他们很少挑起争端，还常常平息已经开始的争执。代价是他们有时会完全回避必要的冲突，因为当下开口太难，小问题就这样慢慢变大。",
+    careers: "外交、心理咨询、设计、酒店服务"
+  },
+  Dragon: {
+    traits: "自信、有魅力、有抱负。属龙的人引人注目，常常自然而然地成为领导者。",
+    weaknesses: "可能显得骄傲，或对限制缺乏耐心。",
+    overview: "龙是十二生肖中唯一的神兽，也带着那种非凡的气场。属龙的人一走进房间，往往不费力气就成了焦点——人们注意他们、信任他们，常常在他们开口之前就把领导的位置交给他们。这种天生的威信伴随着很高的标准，对自己和身边的人都是如此；当现实的进度跟不上他们的远见时，就可能显得不耐烦。",
+    careers: "领导管理、创业、娱乐、房地产"
+  },
+  Snake: {
+    traits: "睿智、直觉敏锐、优雅。属蛇的人思考深入，行动之前会周密计划。",
+    weaknesses: "可能比较神秘，或容易想得太多。",
+    overview: "蛇是十二生肖中的谋略家——安静、警觉，从不急于亮出底牌。别的生肖当场反应，蛇则会把问题放在心里反复思考，直到想出清晰的计划。因此属蛇的人以智慧和判断力著称，尤其在需要耐心而不是速度的时候。同样的保密本能也可能变成隐瞒，让身边的人看不清平静外表下真正发生了什么。",
+    careers: "金融、研究、心理学、战略规划"
+  },
+  Horse: {
+    traits: "精力充沛、独立、爱冒险。属马的人热爱自由和新鲜体验。",
+    weaknesses: "可能缺乏耐心，或难以长期投入。",
+    overview: "马靠一股冲劲前进——好动、独立，前方有广阔天地时最快乐。一成不变的生活很难长久适合属马的人；他们喜欢旅行、新项目和新朋友，走到哪里都带来感染人的活力。同样对自由的热爱，也可能让长期承诺显得束缚，所以属马的人在有活动空间的环境里，往往比在被束缚得太紧的环境里做得更好。",
+    careers: "旅游、销售、体育、媒体"
+  },
+  Goat: {
+    traits: "温柔、有创意、富有同情心。属羊的人艺术感强，非常关心他人。",
+    weaknesses: "可能优柔寡断，或过于依赖别人。",
+    overview: "羊是十二生肖中温柔的艺术家，向往美、和谐与情感的深度。属羊的人常能察觉别人忽略的感受，所以是温暖的朋友，在创意领域也很有才华。他们在安全、支持的环境中表现最好，在残酷或竞争激烈的环境中则比较吃力。如果缺少这种支持，属羊的人可能变得犹豫不决，或过于依赖别人替他们做艰难的决定。",
+    careers: "艺术、设计、心理咨询、公益事业"
+  },
+  Monkey: {
+    traits: "聪明、好奇、风趣。属猴的人学东西快，喜欢用创意解决问题。",
+    weaknesses: "可能比较调皮，或难以专注于一件事。",
+    overview: "猴是十二生肖中头脑最灵活的——好奇、爱玩，遇到难题反而很开心。属猴的人学新技能很快，喜欢找到别人没想到的巧妙捷径，所以是出色的随机应变者和天生的开心果。灵活头脑的另一面是注意力不够持久：属猴的人在想法之间跳得太快，最有希望的点子有时反而没能完成。",
+    careers: "科技、市场营销、喜剧表演、咨询"
+  },
+  Rooster: {
+    traits: "观察力强、勤劳、自信。属鸡的人注重细节，做事追求做好。",
+    weaknesses: "可能对别人过于挑剔或说话太直。",
+    overview: "鸡对把事情做好非常自豪，连大多数人想不到要检查的细节都不放过。所以属鸡的人擅长一切要求精确和高标准的工作——是团队中能发现别人都没看到的错误的那个人。同样挑毛病的眼光也可能变成对自己或别人的批评，所以属鸡的人要记住，不是每个不完美都需要指出来。",
+    careers: "会计、新闻、质量管理、公开演讲"
+  },
+  Dog: {
+    traits: "忠诚、诚实、有保护欲。属狗的人非常值得信赖，会为自己相信的事挺身而出。",
+    weaknesses: "可能容易焦虑，或对新环境过于警惕。",
+    overview: "狗是十二生肖中最忠诚的守护者——是不用开口就会出现的朋友，也是即使要付出代价也会为别人说话的人。属狗的人有强烈的是非观，很少为了息事宁人而妥协。同样的警觉也可能变成担忧或怀疑，尤其是对还没赢得他们信任的新人或新环境。",
+    careers: "法律、安保、社会工作、教育"
+  },
+  Pig: {
+    traits: "热心、慷慨、随和。属猪的人重视舒适、善良和真诚的关系。",
+    weaknesses: "可能过于轻信，或容易放纵。",
+    overview: "猪以温暖和幽默为十二生肖画上句号——慷慨、随和，乐于分享自己拥有的一切。属猪的人往往相信别人说的话，总往好处想，所以是非常好相处、少有是非的伙伴。同样的信任也是他们最大的弱点：属猪的人可能很晚才发现有人在利用他们的慷慨，有时也会对自己（或别人）放纵过头。",
+    careers: "酒店服务、餐饮业、教育、医疗保健"
+  }
+};
+const ZH_ELEMENT_INFO = {
+  Wood: {
+    blurb: "木年带来成长、创意和开创新事物的动力。这个五行的人通常善于合作、慷慨、富有理想。",
+    overview: "木是春天的五行——扩展、新枝、新计划。木年出生的人通常是推动团队前进的人，上一个点子还没完成，下一个就已经提出来。他们是热情的合作者，真心希望身边的人和自己一起成长。慷慨的另一面是容易答应太多：接下太多项目，或难以对占便宜的人设立界限。"
+  },
+  Fire: {
+    blurb: "火年带来热情、活力和勇气。这个五行的人通常充满干劲、爱冒险、乐于带头。",
+    overview: "火带来热度、动力和存在感。火年出生的人很少默默无闻——他们说话有信念，行动迅速，能激励身边的人行动起来。所以他们在危机或大胆的新事业中是天生的领导者。挑战在于保持这份热度：火型性格如果不把热情和耐心结合起来，可能很快耗尽人际关系或机会。"
+  },
+  Earth: {
+    blurb: "土年带来稳定、务实和耐心。这个五行的人通常可靠、踏实，擅长长远规划。",
+    overview: "土是收获的五行——稳定、耐心、经久耐用。土年出生的人通常是最可靠的人：准时出现、说到做到，考虑的是几年后而不是几天后。同样的踏实也可能变成过度谨慎，让土型性格在真正需要冒险的时候难以迈出一步。"
+  },
+  Metal: {
+    blurb: "金年带来纪律、抱负和坚强的意志。这个五行的人通常坚定、独立、重视原则。",
+    overview: "金是刀剑与钟的五行——锋利、响亮、不肯弯曲。金年出生的人清楚自己坚持什么，一旦做出决定就很少妥协。这让他们在谈判和领导中拥有一种安静而强大的力量。在比较灵活的人看来，这可能显得死板，所以金型性格有意识地练习变通时，往往做得最好。"
+  },
+  Water: {
+    blurb: "水年带来直觉、适应力和冷静的智慧。这个五行的人通常善于思考、圆融、观察敏锐。",
+    overview: "水是河流的五行——永远流动，总能找到阻力最小的路。水年出生的人开口之前会先观察气氛，根据对象调整自己的方式。所以他们是出色的协调者，也是不动声色就能说服别人的沟通者。风险在于被动：水型性格可能随波逐流，没有及时对本该反对的事情表态。"
+  }
+};
+const ZH_COMPAT_INFO = {
+  same: {
+    label: "同一生肖",
+    text: {
+      romantic: "你们属同一个生肖，彼此有一种深刻而直接的理解——不用解释就能读懂对方的本能。风险是两个强势又相似的性格争同一个角色，而不是互相平衡。有意识地分工“谁负责什么”会很有帮助。",
+      business: "同一生肖意味着价值观和节奏相同，早期合作会感觉毫不费力。想要长久合作，最好及早明确分工——否则两个本能相同的人可能都抢着做同样的事，而忽略了其他工作。"
+    }
+  },
+  triangle: {
+    label: "三合天然相配",
+    text: {
+      romantic: "你们的生肖属于同一个“三合”——十二生肖中四个天然相合的组合之一。传统上这是最容易、最和谐的配对之一，彼此能直觉地理解对方的节奏和价值观。",
+      business: "传统上这是最强的合作配对之一——对节奏和优先事项的共同直觉让日常合作顺畅，而三合之中互补的优势往往能弥补彼此的盲点。"
+    }
+  },
+  clash: {
+    label: "六冲",
+    text: {
+      romantic: "你们的生肖在生肖轮上正好相对——是典型的“相冲”配对。这并不代表不合适，而是说明你们看待生活的角度很可能真的不同；一旦学会跨越这种差异去沟通，它既可能带来摩擦，也可能成为感情最大的优势。",
+      business: "相冲的配对其实可能成为很强的商业伙伴，因为你们常从相反的角度看问题，能补上对方漏掉的部分。最好的方式是明确分工，并且刻意、经常地沟通，而不是想当然地以为彼此想法一致。"
+    }
+  },
+  neutral: {
+    label: "普通配对",
+    text: {
+      romantic: "你们的生肖不属于同一个三合，但也不是直接相冲。传统的生肖配对对这一组既不特别看好，也不特别担心——实际上，你们相处得好不好，更多取决于个人性格，而不只是生肖。",
+      business: "这里没有来自生肖的强烈吸引或摩擦——是真正可行的组合，成功更多取决于清楚的沟通和明确的分工，而不是生肖是否相合。"
+    }
+  }
+};
+const ZH_LIFE_PATH_INFO = {
+  1: { label: "领导者", blurb: "独立、有干劲，按照自己的方向前进时最快乐，而不是跟随别人。" },
+  2: { label: "和平使者", blurb: "圆融、敏感，在亲密而合作的关系中最有满足感。" },
+  3: { label: "沟通者", blurb: "善于表达、富有创意，喜欢表现自己——需要玩乐和创作的空间。" },
+  4: { label: "建设者", blurb: "务实、自律，重视结构、安全感和把事情做好。" },
+  5: { label: "自由灵魂", blurb: "爱冒险、适应力强、讨厌一成不变——需要变化和自由才觉得有活力。" },
+  6: { label: "照顾者", blurb: "有责任心、充满爱，天生愿意照顾家庭、亲人和社区。" },
+  7: { label: "探索者", blurb: "内省、善于分析，喜欢深度、独处，以及弄明白“为什么”。" },
+  8: { label: "成就者", blurb: "有抱负、有商业头脑，追求成就、地位和物质上的成功。" },
+  9: { label: "人道主义者", blurb: "富有同情心、理想主义，关注大局多于个人得失。" },
+  11: { label: "直觉者（主数）", blurb: "非常敏感、直觉强，拥有 1 的独立，又有更高的精神与情感感知力。" },
+  22: { label: "大建设者（主数）", blurb: "务实的理想主义——把 4 的自律与实现大规模、有意义成就的远见结合在一起。" },
+  33: { label: "大导师（主数）", blurb: "把 6 的关怀放大成一种使命：在更大的范围内教导、疗愈或鼓舞他人。" }
+};
+// lucky colors / days in Chinese, built from the English lists (js/zodiac-data.js loads after this file)
+function fillZhLucky() {
+  if (fillZhLucky.done || typeof ANIMAL_INFO === "undefined") return;
+  Object.keys(ZH_ANIMAL_INFO).forEach(function (a) {
+    const src = ANIMAL_INFO[a] || {};
+    ZH_ANIMAL_INFO[a].luckyColors = (src.luckyColors || []).map(function (c) { return ZH_COLOR_NAMES[c] || c; });
+    ZH_ANIMAL_INFO[a].luckyDays = (src.luckyDays || []).map(function (d) { return ZH_DAY_NAMES[d] || d; });
+  });
+  fillZhLucky.done = true;
+}
+// One place to look up a name or table in the page language (en / km / zh).
+const LOC = {
+  animal: function (a, lang) { lang = lang || getLang(); return lang === "km" ? KM_ANIMAL_NAMES[a] : lang === "zh" ? ZH_ANIMAL_NAMES[a] : a; },
+  element: function (e, lang) { lang = lang || getLang(); return lang === "km" ? KM_ELEMENT_NAMES[e] : lang === "zh" ? ZH_ELEMENT_NAMES[e] : e; },
+  color: function (c, lang) { lang = lang || getLang(); return lang === "km" ? (KM_COLOR_NAMES[c] || c) : lang === "zh" ? (ZH_COLOR_NAMES[c] || c) : c; },
+  day: function (d, lang) { lang = lang || getLang(); return lang === "km" ? (KM_DAY_NAMES[d] || d) : lang === "zh" ? (ZH_DAY_NAMES[d] || d) : d; },
+  /** the table for this language: "ANIMAL_INFO", "ELEMENT_INFO", "COMPAT_INFO" or "LIFE_PATH_INFO" */
+  table: function (name, lang) {
+    lang = lang || getLang();
+    const T = {
+      km: { ANIMAL_INFO: KM_ANIMAL_INFO, ELEMENT_INFO: KM_ELEMENT_INFO, COMPAT_INFO: KM_COMPAT_INFO, LIFE_PATH_INFO: KM_LIFE_PATH_INFO },
+      zh: { ANIMAL_INFO: ZH_ANIMAL_INFO, ELEMENT_INFO: ZH_ELEMENT_INFO, COMPAT_INFO: ZH_COMPAT_INFO, LIFE_PATH_INFO: ZH_LIFE_PATH_INFO }
+    };
+    if (lang === "zh" && name === "ANIMAL_INFO") fillZhLucky();
+    if (T[lang] && T[lang][name]) return T[lang][name];
+    if (name === "ANIMAL_INFO" && typeof ANIMAL_INFO !== "undefined") return ANIMAL_INFO;
+    if (name === "ELEMENT_INFO" && typeof ELEMENT_INFO !== "undefined") return ELEMENT_INFO;
+    if (name === "COMPAT_INFO" && typeof COMPAT_INFO !== "undefined") return COMPAT_INFO;
+    if (name === "LIFE_PATH_INFO" && typeof LIFE_PATH_INFO !== "undefined") return LIFE_PATH_INFO;
+    return undefined;
+  }
+};
+
 const UI_STRINGS = {
   en: {
     nav_checker: "Home",
@@ -260,6 +449,7 @@ const UI_STRINGS = {
     nav_more: "More",
     lang_toggle_en: "EN",
     lang_toggle_km: "ខ្មែរ",
+    lang_toggle_zh: "中文",
 
     animals_hero_title: "The Complete Chinese Zodiac Animal Guide",
     animals_hero_subtitle: "All 12 zodiac animals — personality, luck, and compatibility at a glance. Tap any animal to read the full profile.",
@@ -592,6 +782,7 @@ const UI_STRINGS = {
     nav_more: "ផ្សេងៗ",
     lang_toggle_en: "EN",
     lang_toggle_km: "ខ្មែរ",
+    lang_toggle_zh: "中文",
 
     animals_hero_title: "មគ្គុទ្ទេសក៍ពេញលេញនៃសត្វនិមិត្តសញ្ញាចិនទាំង12",
     animals_hero_subtitle: "សត្វនិមិត្តសញ្ញាទាំង12 — បុគ្គលិកលក្ខណៈ សំណាង និងភាពសមស្របជាមួយអ្នកដទៃ។ ចុចលើសត្វនីមួយៗដើម្បីអានព័ត៌មានពេញលេញ។",
@@ -910,6 +1101,328 @@ const UI_STRINGS = {
     followup_loading: "✨ កំពុងគិត…",
     followup_luck_fallback_tpl: "ពឹងផ្អែកលើលេខសំណាង ({numbers}) ពណ៌សំណាង ({colors}) និងប្រើ{days}នៅពេលចាំបាច់ត្រូវការពេលវេលាត្រឹមត្រូវ។",
     followup_career_fallback_tpl: "មុខរបរដែលសមស្រប៖ {careers}។"
+  },
+  zh: {
+    nav_checker: "首页",
+    nav_checker_page: "我的生肖运势",
+    nav_tools: "运势",
+    nav_animals: "生肖指南",
+    nav_compatibility: "生肖配对",
+    nav_wedding: "结婚吉日",
+    nav_blog: "博客",
+    nav_about: "关于我们",
+    nav_contact: "联系我们",
+    nav_more: "更多",
+    lang_toggle_en: "EN",
+    lang_toggle_km: "ខ្មែរ",
+    lang_toggle_zh: "中文",
+    animals_hero_title: "十二生肖完整指南",
+    animals_hero_subtitle: "十二生肖一览——性格、运气与配对。点击任意生肖查看完整介绍。",
+    animals_read_more: "查看完整性格",
+    animals_cta: "查询你的生肖 →",
+    animals_blog_cta: "查看完整年份指南 →",
+    compat_page_hero_title: "生肖配对查询",
+    compat_page_hero_subtitle: "输入两个生日，看看你们的生肖是否相配——适用于恋爱或合作。",
+    compat_page_cta: "查询你的生肖 →",
+    romance_hero_title: "💞 生肖配对计算器",
+    romance_hero_subtitle: "输入两个人的出生日期，获取完整的生肖配对解读——爱情、友情、事业、财务、沟通、吸引力与长期潜力。",
+    romance_p1_dob_label: "第一个人——出生日期",
+    romance_p2_dob_label: "第二个人——出生日期",
+    romance_submit_btn: "❤️ 查看我们的配对",
+    romance_err_required: "请输入两个人的出生日期。",
+    romance_err_invalid: "其中一个日期无效，请重新检查。",
+    romance_err_future: "出生日期不能是未来的日期，请检查输入。",
+    romance_compat_label: "配对度",
+    romance_strengths_label: "优势",
+    romance_challenges_label: "可能的挑战",
+    romance_advice_label: "建议",
+    romance_weaknesses_label: "弱点",
+    romance_person1_label: "第一个人",
+    romance_person2_label: "第二个人",
+    romance_categories_heading: "详细配对分析",
+    romance_profiles_heading: "生肖资料",
+    romance_overall_heading: "整体配对",
+    romance_disclaimer: "本结果基于传统中国生肖命理，仅供娱乐，并非科学预测。",
+    romance_reset: "🔄 查询另一对",
+    rc_hero_title: "💞 恋爱配对计算器",
+    rc_hero_subtitle: "输入双方生日，获取完整配对报告——西方太阳星座、数字命理生命灵数，以及 11 个方面的关系分析。",
+    rc_person1_legend: "第一个人",
+    rc_person2_legend: "第二个人",
+    rc_name_label: "姓名或昵称（可选）",
+    rc_dob_label_req: "出生日期（必填）",
+    rc_time_label: "出生时间（可选）",
+    rc_location_label: "出生地点（可选）",
+    rc_location_placeholder: "城市，国家",
+    rc_gender_label: "性别（可选）",
+    rc_gender_prefer_not: "不愿透露",
+    rc_gender_woman: "女",
+    rc_gender_man: "男",
+    rc_gender_nonbinary: "非二元",
+    rc_submit: "❤️ 计算配对",
+    rc_privacy_note: "你的信息仅用于计算本次配对结果。出生资料无需保存，你输入的内容也不会发送到任何外部服务——全部在你自己的浏览器中计算。",
+    rc_quick_check_heading: "想快速查看生肖配对？",
+    rc_quick_check_intro: "想要更简单的星级配对？请使用下面的快速查询。",
+    rc_err_required: "请输入两个人的出生日期。",
+    rc_err_future: "出生日期不能是未来的日期，请检查输入。",
+    rc_err_invalid: "其中一个日期无效，请重新检查。",
+    rc_western_zodiac_heading: "西方星座",
+    rc_chinese_zodiac_heading: "中国生肖",
+    rc_numerology_heading: "数字命理",
+    rc_life_path_label: "生命灵数",
+    rc_birthday_number_label: "生日数",
+    rc_attitude_number_label: "态度数",
+    rc_numerology_method_note: "计算方法：月、日、年分别化简，每一步都保留主数 11、22 和 33，然后把三个结果相加，再用同样的方法化简。",
+    rc_summary_heading: "配对总结",
+    rc_summary_disclaimer: "这些配对分数基于传统星座与数字命理，仅供娱乐与自我反思，并未经过科学验证。",
+    rc_card_eyebrow: "恋爱配对",
+    rc_card_overall_label: "配对度",
+    rc_card_tagline_high: "你们之间有真正的优势——这份缘分可以成为感情的坚实依靠。",
+    rc_card_tagline_medium: "你们很有潜力——只需要多一点用心，就能更加默契。",
+    rc_card_tagline_low: "这需要双方认真付出——但愿意经营的情侣，往往会觉得值得。",
+    rc_analysis_heading: "关系分析",
+    rc_works_well_label: "可能顺利的地方",
+    rc_challenge_label: "可能出现挑战的地方",
+    rc_insights_heading: "个性化解读",
+    rc_strengths_heading: "💚 最大优势",
+    rc_challenges_heading: "⚠️ 可能的挑战",
+    rc_tips_heading: "💡 相处建议",
+    rc_needs_heading: "❤️ 双方各自的需要",
+    rc_comm_tip_heading: "💬 沟通建议",
+    rc_love_tip_heading: "💕 爱情建议",
+    rc_extra_astro_heading: "月亮、上升、金星与火星",
+    rc_extra_astro_missing: "没有提供出生时间和地点，因此本部分主要基于太阳星座配对。",
+    rc_extra_astro_unavailable: "月亮、上升、金星和火星星座需要精确的天文（星历）计算，本工具暂不提供，因此即使输入了出生时间和地点，我们也不会猜测。以上内容仅基于太阳星座与数字命理配对。",
+    rc_disclaimer: "星座与数字命理是传统信仰体系，仅供娱乐与自我反思。它们并不是经过科学验证的性格、感情或未来预测方法。",
+    rc_narrative_lang_note: "下面的详细说明目前仅提供英文版。",
+    rc_pair_header_tpl: "{p1} {symbol1} {p1sign}  ❤️  {p2} {symbol2} {p2sign}",
+    nav_business: "合作伙伴",
+    nav_business_guide: "商业指南",
+    biz_hero_title: "💼 商业合作配对",
+    biz_hero_subtitle: "中国生肖 • 五行 • 商业性格",
+    biz_person1_legend: "第一个人",
+    biz_person2_legend: "第二个人",
+    biz_name_label: "姓名 / 公司名称（可选）",
+    biz_dob_label_req: "出生日期（必填）",
+    biz_time_label: "出生时间（可选）",
+    biz_location_label: "出生地点（可选）",
+    biz_location_placeholder: "城市，国家",
+    biz_submit: "查看商业配对 →",
+    biz_privacy_note: "出生信息仅用于生成本次解读，无需保存。所有计算都在你自己的浏览器中完成。",
+    biz_err_required: "请输入两个人的出生日期。",
+    biz_err_future: "出生日期不能是未来的日期，请检查输入。",
+    biz_err_invalid: "其中一个日期无效，请重新检查。",
+    biz_heavenly_stem_label: "天干",
+    biz_earthly_branch_label: "地支",
+    biz_five_elements_heading: "五行",
+    biz_elements_disclaimer: "五行相互关系是一种传统框架，并非科学预测商业结果的方法。",
+    biz_dashboard_heading: "配对概览",
+    biz_dashboard_disclaimer: "基于传统中国命理的娱乐性分数，并非科学测量，不能代替对真实合作伙伴的评估。",
+    biz_analysis_heading: "商业配对分析",
+    biz_narrative_lang_note: "下面的详细说明目前仅提供英文版。",
+    biz_works_well_label: "可能顺利的地方",
+    biz_challenge_label: "可能出现挑战的地方",
+    biz_roles_heading: "👥 角色配对",
+    biz_role_intro: "根据传统生肖解读，以下角色可能与双方各自的特点互补——但不保证一定合适。",
+    biz_could_focus_on_tpl: "{name} 可以考虑负责：",
+    biz_strengths_heading: "💎 互补优势",
+    biz_what_may_bring_tpl: "{name} 可能带来的",
+    biz_what_together: "双方可能共同打造的",
+    biz_top_strengths_heading: "💚 最大优势",
+    biz_challenges_heading: "⚠️ 可能的商业挑战",
+    biz_challenges_intro: "这些是合作之前值得讨论的实际商业问题——不是生肖预测。",
+    biz_checklist_heading: "📋 合作清单",
+    biz_checklist_intro: "在正式合作之前，请把这些事项写成书面约定——最好请专业法律人士协助。",
+    biz_summary_heading: "🧧 商业合作总结",
+    biz_summary_complementary: "主要互补特点：",
+    biz_summary_discuss: "需要讨论的主要方面：",
+    biz_summary_roles: "可能的分工：",
+    biz_extra_heading: "出生时间与地点",
+    biz_extra_unavailable: "已输入出生时间和地点，但这里不会用于额外计算——只计算上面显示的、以农历新年为准的生肖、五行和天干地支。",
+    biz_extra_missing: "没有提供出生时间和地点，因此本解读只基于出生日期。",
+    biz_privacy_inline: "出生信息仅用于生成本次解读，无需保存。",
+    biz_disclaimer: "中国命理与五行是传统信仰体系，用于文化探索、娱乐与自我反思。它们不是经过科学验证的商业表现、性格、财务结果或合作成功的预测方法。真正的商业决定应基于资历、经验、财务分析、合同以及专业意见。",
+    biz_reset: "🔄 分析另一组合作",
+    biz_page_cta: "试试我们的恋爱与综合配对计算器 →",
+    biz_guide_cta: "阅读完整指南：中国生肖商业配对 →",
+    biz_h1_a: "运势",
+    biz_h1_b: "合作伙伴",
+    biz_h1_c: "配对",
+    biz_hero_sub2: "比较两个出生日期的商业配对",
+    biz_hero_desc: "了解两个生肖在商业上如何合作，包括团队协作、沟通、领导力、理财方式和成长潜力。",
+    biz_time_toggle: "添加出生时间（可选）",
+    biz_ov_title: "你们的商业配对结果",
+    biz_ov_match: "商业配对",
+    biz_ov_el_label: "五行",
+    biz_ov_year_label: "生肖年",
+    biz_ov_c_partnership: "合作关系",
+    biz_ov_c_communication: "沟通",
+    biz_ov_c_leadership: "领导力",
+    biz_ov_c_finance: "财务潜力",
+    biz_ov_c_decision: "决策",
+    biz_ov_c_growth: "成长潜力",
+    biz_ov_d_high: "这方面非常相配。",
+    biz_ov_d_mid: "有清楚的约定就能顺利合作。",
+    biz_ov_d_low: "需要刻意建立规则。",
+    biz_ov_strengths: "商业优势",
+    biz_ov_challenges: "可能的挑战",
+    biz_ov_roles: "最适合的商业角色",
+    biz_ov_elem_title: "五行配对",
+    biz_ov_harm_high: "商业非常和谐",
+    biz_ov_harm_mid: "商业平衡和谐",
+    biz_ov_harm_low: "需要刻意平衡",
+    biz_ov_disclaimer: "这些解读基于传统中国生肖与五行概念，仅供娱乐与个人反思。",
+    wedding_hero_title: "结婚吉月挑选",
+    wedding_hero_subtitle: "输入双方生日和年份，我们会根据每个月与你们两人生肖的相合程度来评分——作为挑选日子的有趣传统参考。",
+    wedding_year_label: "计划结婚的年份",
+    wedding_submit: "查找好月份",
+    wedding_results_heading: "{year} 年各月",
+    wedding_month_col: "月份",
+    wedding_animal_col: "当月生肖",
+    wedding_rating_col: "评分",
+    wedding_note_col: "原因",
+    rating_excellent: "极佳",
+    rating_good: "良好",
+    rating_workable: "可以",
+    rating_avoid: "避免",
+    wedding_note_excellent: "本月生肖与你们两人的生肖都属于“三合”——传统上是最和谐的组合之一。",
+    wedding_note_good: "本月生肖与其中一人三合，与另一人无冲——总体上是不错的月份。",
+    wedding_note_workable: "与你们两人既不相冲也不三合——是可行、少摩擦的月份。",
+    wedding_note_avoid: "本月生肖与你们至少一人直接相冲——传统上需要谨慎，或最好避开。",
+    wedding_disclaimer: "这是一个简化的趣味指南，基于传统的生肖月份规律和一般季节规律——并非精确的农历择日，也不是真实的天气预报。如需精确日期，可以参考专业通书或请教命理师，并查看你所在城市的历史天气。仅供娱乐。",
+    wedding_region_label: "你所在的大致气候区",
+    region_northern: "北半球（如美国、欧洲、中国）",
+    region_southern: "南半球（如澳大利亚、南非、南美）",
+    region_tropical: "热带 / 近赤道地区（如柬埔寨、东南亚）",
+    wedding_season_col: "一般季节",
+    wedding_holiday_col: "附近节日",
+    season_spring: "春季",
+    season_summer: "夏季",
+    season_fall: "秋季",
+    season_winter: "冬季",
+    season_tropical: "热带",
+    season_note_mild: "通常气候温和——热门婚礼季节",
+    season_note_hot: "可能较热",
+    season_note_cold: "可能较冷或多雨",
+    season_note_tropical: "请查看当地的旱季 / 雨季",
+    no_holidays: "—",
+    wedding_top_picks_heading: "综合最佳月份",
+    wedding_top_picks_note: "结合了生肖相合与通常较温和的天气。列出的节日前后，场地和价格可能更紧张、更贵——如果正好在你的月份，请提早预订。",
+    wedding_top_picks_none: "今年没有在生肖和季节两方面都特别突出的月份——下面的完整表格仍有不错的选择。",
+    wedding_suggested_dates_label: "建议的星期六",
+    hero_title: "你的生日透露了什么？",
+    hero_subtitle: "输入你的出生日期，查看你的生肖、五行、幸运数字等。",
+    checker_hero_title: "我属什么生肖？",
+    checker_hero_subtitle: "输入你的出生日期，了解你的生肖、五行、性格等。",
+    chk_form_hint: "你的出生日期决定你的生肖、五行以及传统生肖特点。",
+    chk_sample_note: "下面显示的是示例结果——在上方输入你的出生日期，查看你自己的生肖。",
+    chk_foot_tag: "生肖 • 配对 • 合作伙伴 • 生肖指南",
+    chk_foot_checker: "生肖查询",
+    chk_your_sign: "你的生肖",
+    chk_animal_years: "出生年份",
+    chk_same_sign: "同一生肖（彼此深刻理解，但要注意竞争）",
+    chk_full_guide: "阅读完整指南 →",
+    chk_close: "关闭",
+    chk_birth_year: "出生年份",
+    chk_element: "五行",
+    chk_yinyang: "阴 / 阳",
+    chk_zodiac_year: "生肖年",
+    chk_yang: "阳",
+    chk_yin: "阴",
+    chk_personality: "性格",
+    chk_love: "爱情与关系",
+    chk_career: "事业与工作",
+    chk_luck: "运气与传统",
+    chk_directions: "幸运方位",
+    chk_months: "最佳月份",
+    chk_cta_title: "查看你的配对",
+    chk_cta_sub: "看看你和伴侣、朋友或合作伙伴有多相配。",
+    chk_cta_btn: "查看配对 →",
+    chk_explore_title: "探索全部十二生肖",
+    chk_disclaimer: "生肖解读基于传统文化信仰，仅供娱乐、文化探索与个人反思，不应视为科学预测或专业建议。",
+    today_label: "今天",
+    today_number_label: "今日数字",
+    today_luck_heading: "你今天的运气",
+    today_luck_date_tpl: "用你的{animal}运势来看 {date}：",
+    today_luck_weekday_match_tpl: "✅ 今天（{weekday}）是你的幸运日之一。",
+    today_luck_weekday_nomatch_tpl: "➖ 今天（{weekday}）不是你常见的幸运日——是平静的一天，并不是坏日子。",
+    today_luck_number_match_tpl: "✅ 今天的通用数字（{number}）是你的幸运数字之一。",
+    today_luck_number_nomatch_tpl: "➖ 今天的通用数字是 {number}——不是你常见的幸运数字。",
+    today_luck_month_same_tpl: "✅ 本月带有{animal}的能量——正是你自己的生肖——对你来说是特别旺的一个月。",
+    today_luck_month_triangle_tpl: "✅ 本月带有{animal}的能量，与你属于同一三合组——是顺利、有助力的一个月。",
+    today_luck_month_clash_tpl: "⚠️ 本月带有{animal}的能量，与你的生肖相冲——这个月要谨慎行事，避免大的风险。",
+    today_luck_month_neutral_tpl: "➖ 本月带有{animal}的能量——对你的生肖来说属于中性，既无加分也无需特别小心。",
+    today_luck_verdict_great: "总体：今天对你来说是大吉的一天——适合行动。✨",
+    today_luck_verdict_good: "总体：今天是好日子——好好把握。",
+    today_luck_verdict_ordinary: "总体：今天是平常的一天——稳稳地过。",
+    today_luck_verdict_caution: "总体：今天放轻松一些，尽量避免做重大决定。",
+    dob_label: "你的出生日期",
+    reveal_button: "我的运势",
+    hero_cta_button: "我的生肖运势",
+    compat_heading: "查看配对",
+    compat_intro: "看看两个生日有多相配——适用于恋爱或商业合作。",
+    doba_label: "A 的出生日期",
+    dobb_label: "B 的出生日期",
+    relationship_legend: "关系类型",
+    romantic_option: "恋人",
+    business_option: "合作伙伴",
+    compat_submit: "查看配对",
+    how_heading: "计算方法",
+    how_p1: "按照传统的东亚生肖周期，你的出生年份对应十二生肖之一和五行之一。生肖代表据说每 12 年重复一次的性格特点，五行则每 10 年重复一次，为性格增添另一层色彩——两者组合成独特的 60 年周期（例如“土龙”或“水虎”）。",
+    how_p2: "本工具供娱乐与自我反思。1 月下旬或 2 月出生的人可能正好在农历新年前后，在某些传统体系中结果可能会相差一年——遇到这种情况我们会特别说明。",
+    blog_heading: "博客文章",
+    blog_link: "阅读更多关于生肖配对、年度运势和五行的文章 →",
+    footer_about: "关于我们",
+    footer_privacy: "隐私政策",
+    footer_contact: "联系我们",
+    footer_copyright: "© 2026 MyBirthSign。仅供娱乐。",
+    result_born: "出生",
+    result_zodiac_year: "生肖年",
+    ai_loading: "✨ 正在为你撰写个人解读…",
+    strengths: "优点",
+    watch_out: "需要注意",
+    lucky_numbers: "幸运数字",
+    lucky_colors: "幸运颜色",
+    lucky_days: "幸运日",
+    best_matches: "最相配的生肖",
+    share_button: "分享",
+    share_copy_link: "复制链接",
+    share_copied: "链接已复制！",
+    share_paste_note_tpl: "已复制——请在 {network} 中粘贴",
+    share_image_option: "分享图片",
+    share_image_preparing: "正在生成图片…",
+    share_image_saved: "图片已保存！",
+    share_image_failed: "无法生成图片",
+    share_download: "下载图片",
+    share_more_apps: "更多应用…",
+    share_menu_label: "分享选项",
+    share_fb_steps: "在列表中选择 Facebook——你的结果图片会放进新帖子（图片上的二维码会打开 MyBirthSign）。",
+    share_fb_link_steps: "在列表中选择 Facebook 来发布链接。",
+    share_fb_ready: "Facebook——再点一次即可分享",
+    share_tap_again: "准备好了——再点一次",
+    share_in_app: "这个应用的内置浏览器无法保存或分享图片。请点击 ⋯ 并选择“在浏览器中打开”（Safari 或 Chrome），然后再试一次。",
+    share_ig_steps: "Instagram 不支持网站链接。请改为发布图片：在分享列表中选择 Instagram，或打开 Instagram，点击 +，选择快拍或帖子，再选择已保存的图片。",
+    share_tt_steps: "TikTok 不支持网站链接。请改为发布图片：在分享列表中选择 TikTok，或打开 TikTok，点击 +，选择上传，再选择已保存的图片。",
+    needs_patience: "需要多一些耐心的生肖",
+    careers_heading: "通常适合的职业",
+    best_match_years_heading: "最相配的出生年份",
+    disclaimer: "仅供娱乐。",
+    compat_disclaimer: "仅供娱乐——不能代替真正的沟通。",
+    romantic_label: "恋人",
+    business_label: "合作伙伴",
+    born_sub_tpl: "出生于 {date} · 生肖年 {year}",
+    lunar_note_with_cny_tpl: "根据 {year} 年真实的农历新年日期（{cny}）计算——而不只是公历年份。",
+    lunar_note_no_cny_tpl: "根据 {year} 年真实的农历新年日期计算——而不只是公历年份。",
+    same_sign_note_tpl: "同一生肖（{animal}，彼此深刻理解，但要注意竞争）：{years}",
+    needs_patience_note_tpl: "需要多一些耐心——{animal}：{years}",
+    ad_space: "广告位",
+    followup_heading: "继续探索",
+    followup_year_ahead: "今年对我来说会怎样？",
+    followup_luck_boost: "我现在怎样提升运气？",
+    followup_career_fit: "什么职业最适合我？",
+    followup_clash_relationship_tpl: "我和属{animal}的人怎么相处？",
+    followup_loading: "✨ 思考中…",
+    followup_luck_fallback_tpl: "多借助你的幸运数字（{numbers}）、幸运颜色（{colors}），需要挑时间时优先选择{days}。",
+    followup_career_fallback_tpl: "通常适合的职业：{careers}。"
   }
 };
 
@@ -917,25 +1430,30 @@ const UI_STRINGS = {
 // Language-state helpers
 // ---------------------------------------------------------------------------
 const LANG_STORAGE_KEY = "siteLang";
+// English, Khmer and Simplified Chinese. A page or tool without Chinese text yet shows its English text.
+const SITE_LANGS = ["en", "km", "zh"];
+/** the language a piece of content has: `lang` when the table has it, otherwise English */
+function pickLang(table, lang) { lang = lang || getLang(); return table && table[lang] !== undefined ? table[lang] : (table ? table.en : undefined); }
 
 function getLang() {
   // a shared Khmer/English link (?lang=km / ?lang=en) opens in that language and remembers it
   try {
     const q = new URLSearchParams(window.location.search).get("lang");
-    if (q === "en" || q === "km") {
+    if (SITE_LANGS.indexOf(q) > -1) {
       try { window.localStorage.setItem(LANG_STORAGE_KEY, q); } catch (e) { /* storage blocked */ }
       return q;
     }
   } catch (e) { /* old browser */ }
   try {
     const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
-    if (stored === "en" || stored === "km") return stored;
+    if (SITE_LANGS.indexOf(stored) > -1) return stored;
   } catch (e) {
     // localStorage unavailable (private mode, etc.) — fall through to auto-detect.
   }
   try {
     const nav = (navigator.language || navigator.userLanguage || "").toLowerCase();
     if (nav.indexOf("km") === 0) return "km";
+    if (nav.indexOf("zh") === 0) return "zh";
   } catch (e) {
     // navigator unavailable
   }
@@ -943,7 +1461,7 @@ function getLang() {
 }
 
 function setLang(lang) {
-  if (lang !== "en" && lang !== "km") return;
+  if (SITE_LANGS.indexOf(lang) < 0) return;
   try {
     window.localStorage.setItem(LANG_STORAGE_KEY, lang);
   } catch (e) {
@@ -974,31 +1492,47 @@ function fmt(str, vars) {
 // ---------------------------------------------------------------------------
 // DOM wiring: static [data-i18n] text, [data-lang-content] blocks, toggle
 // ---------------------------------------------------------------------------
+// Chinese text uses Noto Sans SC, loaded only when a visitor reads the site in Chinese
+function loadChineseFont() {
+  try {
+    if (document.getElementById("font-zh")) return;
+    const l = document.createElement("link");
+    l.id = "font-zh"; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap";
+    document.head.appendChild(l);
+  } catch (e) { /* the system Chinese font is used */ }
+}
+
 function applyStaticTranslations() {
   const lang = getLang();
   try {
-    document.documentElement.lang = lang;
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
   } catch (e) { /* ignore */ }
+  if (lang === "zh") loadChineseFont();
 
   const strings = UI_STRINGS[lang] || UI_STRINGS.en;
+  const str = function (key) { return strings[key] !== undefined ? strings[key] : UI_STRINGS.en[key]; };
 
   document.querySelectorAll("[data-i18n]").forEach(function (el) {
-    const key = el.getAttribute("data-i18n");
-    if (strings[key] !== undefined) {
-      el.textContent = strings[key];
-    }
+    const v = str(el.getAttribute("data-i18n"));
+    if (v !== undefined) el.textContent = v;
   });
 
   document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
-    const key = el.getAttribute("data-i18n-placeholder");
-    if (strings[key] !== undefined) {
-      el.setAttribute("placeholder", strings[key]);
-    }
+    const v = str(el.getAttribute("data-i18n-placeholder"));
+    if (v !== undefined) el.setAttribute("placeholder", v);
   });
 
+  // a block shows when it is in the page language; in Chinese, an English block also shows
+  // when the same place has no Chinese block yet
   document.querySelectorAll("[data-lang-content]").forEach(function (el) {
     const elLang = el.getAttribute("data-lang-content");
-    el.style.display = elLang === lang ? "" : "none";
+    let show = elLang === lang;
+    if (!show && lang === "zh" && elLang === "en") {
+      const sibs = el.parentNode ? el.parentNode.children : [];
+      show = !Array.prototype.some.call(sibs, function (s) { return s.getAttribute && s.getAttribute("data-lang-content") === "zh"; });
+    }
+    el.style.display = show ? "" : "none";
   });
 
   document.querySelectorAll("[data-lang-switch]").forEach(function (btn) {
@@ -1168,6 +1702,9 @@ const ZodiacI18N = {
   KM_ELEMENT_INFO: KM_ELEMENT_INFO,
   KM_COMPAT_INFO: KM_COMPAT_INFO,
   KM_LIFE_PATH_INFO: KM_LIFE_PATH_INFO,
+  ZH_ANIMAL_NAMES: ZH_ANIMAL_NAMES,
+  ZH_ANIMAL_INFO: ZH_ANIMAL_INFO,
+  LOC: LOC,
   UI_STRINGS: UI_STRINGS
 };
 
@@ -1177,6 +1714,8 @@ const ZodiacI18N = {
 if (typeof window !== "undefined") {
   window.ZodiacI18N = ZodiacI18N;
   window.getLang = getLang;
+  window.pickLang = pickLang;
+  window.SITE_LANGS = SITE_LANGS;
   window.setLang = setLang;
   window.t = t;
   window.fmt = fmt;
@@ -1188,4 +1727,13 @@ if (typeof window !== "undefined") {
   window.KM_ELEMENT_INFO = KM_ELEMENT_INFO;
   window.KM_COMPAT_INFO = KM_COMPAT_INFO;
   window.KM_LIFE_PATH_INFO = KM_LIFE_PATH_INFO;
+  window.ZH_ANIMAL_NAMES = ZH_ANIMAL_NAMES;
+  window.ZH_ELEMENT_NAMES = ZH_ELEMENT_NAMES;
+  window.ZH_ANIMAL_INFO = ZH_ANIMAL_INFO;
+  window.ZH_ELEMENT_INFO = ZH_ELEMENT_INFO;
+  window.ZH_COMPAT_INFO = ZH_COMPAT_INFO;
+  window.ZH_LIFE_PATH_INFO = ZH_LIFE_PATH_INFO;
+  window.ZH_COLOR_NAMES = ZH_COLOR_NAMES;
+  window.ZH_DAY_NAMES = ZH_DAY_NAMES;
+  window.LOC = LOC;
 }
