@@ -36,6 +36,9 @@
   var SAK_EN = ["Samrithisak", "Ekasak", "Tosak", "Treisak", "Chattvasak", "Panchasak", "Chhasak", "Saptasak", "Atthasak", "Noppasak"];
   var KM_SOLAR = ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"];
   var KM_WEEK = ["អាទិត្យ", "ចន្ទ", "អង្គារ", "ពុធ", "ព្រហស្បតិ៍", "សុក្រ", "សៅរ៍"];
+  var ZHA = { Rat: "鼠", Ox: "牛", Tiger: "虎", Rabbit: "兔", Dragon: "龙", Snake: "蛇", Horse: "马", Goat: "羊", Monkey: "猴", Rooster: "鸡", Dog: "狗", Pig: "猪" };
+  var ZH_WEEK = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+  function langOf(l) { return l === "km" || l === "zh" ? l : "en"; }
   function ord(n) { var s = ["th", "st", "nd", "rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
 
   var T = {
@@ -55,6 +58,23 @@
       method: "Calculated with the traditional Khmer lunisolar calendar rules (open-source momentkh library) and checked against official Cambodian holiday dates. For fun and culture; check a printed Khmer calendar for ceremonies.",
       fallback: "We can't show a reliable Khmer lunar date for this birthday. The calculation is only shown for birthdays from 1900 to 2100.",
       loadFail: "The Khmer lunar date couldn't load. Please try again."
+    },
+    zh: {
+      title: "你的高棉农历生日", sub: "你的生日在传统高棉农历（ចន្ទគតិ）上的日期。",
+      greg: "公历生日", lunar: "高棉农历日期", phase: "月相", be: "佛历年份", year: "高棉历年",
+      waxing: "上弦（月亮渐圆）", waning: "下弦（月亮渐缺）",
+      dayOf: function (d, ph, m) { return (ph ? "下弦" : "上弦") + "第 " + d + " 天，" + m + " 月"; },
+      yearTxt: function (a, s, js) { return ZHA[a] + "年 · " + s + " · 小历 " + js; },
+      full: "高棉文",
+      leap: "那一年有闰月（អធិកមាស）：按照高棉历每隔几年的规则，阿萨月重复了一次。",
+      ny: "出生在高棉新年（4 月中旬）之前，所以高棉生肖年是从前一年 4 月开始的那一年。",
+      visak: function (a, b) { return "出生在卫塞节（佛诞日）：佛历年份大约在这一天交替，所以日历上可能显示佛历 " + a + " 或 " + b + " 年。"; },
+      nyDays: "出生在高棉新年第一天（Moha Songkran）：新的生肖年在当天某个时刻开始，所以取决于出生时间。",
+      differs: function (z) { return "高棉历在高棉新年更换生肖年，而不是在农历新年，所以可能与上面显示的中国生肖（" + z + "）不同。"; },
+      today: "今天的高棉农历日期（柬埔寨时间）——仅供比较，不是你的生日：",
+      method: "按照传统高棉阴阳历规则计算（开源 momentkh 程序库），并与柬埔寨官方节日日期核对。仅供娱乐与文化参考；举行仪式请查看印刷版高棉日历。",
+      fallback: "无法为这个生日显示可靠的高棉农历日期。只计算 1900 年至 2100 年之间的生日。",
+      loadFail: "高棉农历日期无法加载，请再试一次。"
     },
     km: {
       title: "ថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ", sub: "ថ្ងៃកំណើតរបស់អ្នក តាមប្រតិទិនចន្ទគតិខ្មែរ។",
@@ -87,7 +107,7 @@
   }
 
   function render(box, info, M) {
-    var lang = info.lang === "km" ? "km" : "en", S = T[lang], p = info.iso.split("-").map(Number), y = p[0], m = p[1], d = p[2];
+    var lang = langOf(info.lang), S = T[lang], p = info.iso.split("-").map(Number), y = p[0], m = p[1], d = p[2];
     var head = '<div class="kl-card"><div class="kl-head"><span class="kl-moon" aria-hidden="true"></span><div><h2>' + esc(S.title) + "</h2><p>" + esc(S.sub) + "</p></div></div>";
     if (!(y >= MIN && y <= MAX)) { box.innerHTML = head + '<p class="kl-fallback">' + esc(S.fallback) + "</p></div>"; box.hidden = false; return; }
     var r;
@@ -96,12 +116,13 @@
     var k = r.khmer, wd = new Date(y, m - 1, d).getDay();
     var gregTxt = lang === "km"
       ? "ថ្ងៃ" + KM_WEEK[wd] + " ទី" + kmNum(d) + " ខែ" + KM_SOLAR[m - 1] + " ឆ្នាំ" + kmNum(y)
+      : lang === "zh" ? y + "年" + m + "月" + d + "日 " + ZH_WEEK[wd]
       : new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(y, m - 1, d));
     var phaseTxt = k.moonPhase ? S.waning : S.waxing;
     var lunar = '<span lang="km">' + esc(lunarText(k)) + "</span>";
-    var lunarExtra = lang === "en" ? esc(S.dayOf(k.day, k.moonPhase, MONTH_EN[k.monthIndex])) : "";
-    var beTxt = lang === "km" ? "ព.ស. " + kmNum(k.beYear) : k.beYear + " BE";
-    var beExtra = lang === "en" ? '<span lang="km">ព.ស. ' + kmNum(k.beYear) + "</span>" : "";
+    var lunarExtra = lang !== "km" ? esc(S.dayOf(k.day, k.moonPhase, MONTH_EN[k.monthIndex])) : "";
+    var beTxt = lang === "km" ? "ព.ស. " + kmNum(k.beYear) : lang === "zh" ? "佛历 " + k.beYear + " 年" : k.beYear + " BE";
+    var beExtra = lang !== "km" ? '<span lang="km">ព.ស. ' + kmNum(k.beYear) + "</span>" : "";
     var yearTxt = lang === "km"
       ? "ឆ្នាំ" + k.animalYearName + " " + k.sakName
       : esc(S.yearTxt(ANIMAL_EN[k.animalYear], SAK_EN[k.sak], k.jsYear));
@@ -120,7 +141,7 @@
       // during the New Year days the animal year / ស័ក change at a set hour; without a birth time we say so instead of guessing
       else if (bd === nyd) notes.push(S.nyDays);
     }
-    if (info.animal && ANIMAL_EN[k.animalYear] !== info.animal) notes.push(S.differs(lang === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? (KM_ANIMAL_NAMES[info.animal] || info.animal) : info.animal));
+    if (info.animal && ANIMAL_EN[k.animalYear] !== info.animal) notes.push(S.differs(lang === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? (KM_ANIMAL_NAMES[info.animal] || info.animal) : lang === "zh" ? ZHA[info.animal] || info.animal : info.animal));
 
     var t = ppToday(), todayLine = "";
     try { todayLine = fmtKh(M, M.fromGregorian(t[0], t[1], t[2])); } catch (e) { todayLine = ""; }
@@ -129,7 +150,7 @@
       '<div class="kl-main"><p class="kl-main-label">' + esc(S.lunar) + '</p><p class="kl-main-date">' + lunar + "</p>" + (lunarExtra ? '<p class="kl-main-extra">' + lunarExtra + "</p>" : "") + "</div>" +
       '<dl class="kl-grid">' +
         row(S.greg, esc(gregTxt)) +
-        row(S.phase, esc(phaseTxt), lang === "en" ? '<span lang="km">' + esc(k.moonPhaseName) + "</span>" : "") +
+        row(S.phase, esc(phaseTxt), lang !== "km" ? '<span lang="km">' + esc(k.moonPhaseName) + "</span>" : "") +
         row(S.be, esc(beTxt), beExtra) +
         row(S.year, yearTxt, yearExtra) +
       "</dl>" +
@@ -144,18 +165,18 @@
     var box = document.getElementById("khmer-lunar");
     if (!box || !info || !/^\d{4}-\d{2}-\d{2}$/.test(info.iso || "")) return;
     if (!window.momentkh) {   // show the card frame at once (it is the first card under the form, and the page scrolls to it)
-      var S0 = T[info.lang === "km" ? "km" : "en"];
+      var S0 = T[langOf(info.lang)];
       box.innerHTML = '<div class="kl-card"><div class="kl-head"><span class="kl-moon" aria-hidden="true"></span><div><h2>' + esc(S0.title) + "</h2><p>" + esc(S0.sub) + "</p></div></div></div>";
       box.hidden = false;
     }
     loadLib().then(function (M) { render(box, info, M); }, function () {
-      var S = T[info.lang === "km" ? "km" : "en"];
+      var S = T[langOf(info.lang)];
       box.innerHTML = '<div class="kl-card"><p class="kl-fallback">' + esc(S.loadFail) + "</p></div>"; box.hidden = false;
     });
   }
   // ---- small inline dates: any element with data-kl-iso="YYYY-MM-DD" gets the Khmer lunar date added
   //      (Compatibility and Business Partner birth dates, Wedding Date recommended days). data-kl-style="day" = no year.
-  var pageLang = function () { return document.documentElement.lang === "km" ? "km" : "en"; };
+  var pageLang = function () { var l = document.documentElement.lang || ""; return l === "km" ? "km" : l.indexOf("zh") === 0 ? "zh" : "en"; };
   function shortLunar(M, iso, style) {
     var p = iso.split("-").map(Number);
     if (!(p[0] >= MIN && p[0] <= MAX)) return null;
@@ -175,14 +196,14 @@
         var txt = shortLunar(M, iso, el.getAttribute("data-kl-style"));
         var span = document.createElement("span"); span.className = "kl-inline";
         if (txt) { span.setAttribute("lang", "km"); span.textContent = "🌙 " + txt; }
-        else { span.textContent = pageLang() === "km" ? "មិនអាចបង្ហាញថ្ងៃខែចន្ទគតិបានទេ" : "Khmer lunar date not available for this year"; }
+        else { span.textContent = pageLang() === "km" ? "មិនអាចបង្ហាញថ្ងៃខែចន្ទគតិបានទេ" : pageLang() === "zh" ? "这一年无法显示高棉农历日期" : "Khmer lunar date not available for this year"; }
         el.appendChild(span);
       });
     }, function () { /* the page works without the lunar dates */ });
   }
   function pair(target, items, lang) {   // block with one lunar line per person
     if (!target) return;
-    var S = lang === "km" ? { h: "ថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ" } : { h: "Khmer lunar birth dates" };
+    var S = lang === "km" ? { h: "ថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ" } : lang === "zh" ? { h: "高棉农历生日" } : { h: "Khmer lunar birth dates" };
     var old = target.querySelector(".kl-pair"); if (old) old.remove();
     var box = document.createElement("div"); box.className = "kl-pair";
     box.innerHTML = '<h3><span class="kl-moon kl-moon-sm" aria-hidden="true"></span>' + esc(S.h) + "</h3><ul>" +
@@ -297,7 +318,7 @@
     loadLib().then(function (M) {
       var t = ppToday(), line; try { line = fmtKh(M, M.fromGregorian(t[0], t[1], t[2])); } catch (e) { return; }
       var km = pageLang() === "km", p = document.createElement("p"); p.className = "kl-today-strip";
-      p.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><span>' + esc(km ? "ថ្ងៃនេះតាមចន្ទគតិខ្មែរ៖" : "Today on the Khmer lunar calendar:") + '</span> <span lang="km">' + esc(line) + "</span>";
+      p.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><span>' + esc(km ? "ថ្ងៃនេះតាមចន្ទគតិខ្មែរ៖" : pageLang() === "zh" ? "今天的高棉农历：" : "Today on the Khmer lunar calendar:") + '</span> <span lang="km">' + esc(line) + "</span>";
       foot.insertBefore(p, foot.firstChild);
     }, function () { /* optional */ });
   }
@@ -312,8 +333,8 @@
     loadLib().then(function (M) {
       var t = ppToday(), line; try { line = fmtKh(M, M.fromGregorian(t[0], t[1], t[2])); } catch (e) { return; }
       Array.prototype.forEach.call(els, function (el) {
-        var km = (el.getAttribute("data-lang") || pageLang()) === "km";
-        el.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><b>' + esc(km ? "ថ្ងៃនេះ៖" : "Today:") + '</b> <span lang="km">' + esc(line) + "</span>";
+        var L = el.getAttribute("data-lang") || pageLang(), km = L === "km";
+        el.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><b>' + esc(km ? "ថ្ងៃនេះ៖" : L === "zh" ? "今天：" : "Today:") + '</b> <span lang="km">' + esc(line) + "</span>";
       });
     }, function () { /* the card still links to the guide */ });
   }

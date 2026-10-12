@@ -1,8 +1,7 @@
 // Reusable zodiac animal component for the checker page.
 function zodiacAnimalHtml(animal) {
   const slug = animal.toLowerCase();
-  const S = UI_STRINGS[getLang()];
-  const name = getLang() === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[animal] : animal;
+  const name = LOC.animal(animal);
   return '<li><a class="chk-animal-link" data-animal="' + animal + '" aria-expanded="false" href="animals.html#animal-' + slug + '">' +
     '<img src="images/business/animals/s144/' + slug + '.webp" alt="" width="72" height="72" loading="lazy">' +
     "<span>" + name + "</span></a></li>";
@@ -22,7 +21,7 @@ function zodiacAnimalHtml(animal) {
   if (!ul || !panel) return;
   const inRange = (y) => y >= 1950 && y <= 2031;
   const yearsOf = (a) => nearbyYearsForAnimal(a, 1990, 12).filter(inRange);
-  const nm = (a) => (getLang() === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[a] : a);
+  const nm = (a) => LOC.animal(a);
   const med = (a, n) => '<img src="images/business/animals/' + (n <= 72 ? "s144/" : "") + a.toLowerCase() + '.webp" alt="" width="' + n + '" height="' + n + '" loading="lazy">';
   let current = null;
 
@@ -30,17 +29,17 @@ function zodiacAnimalHtml(animal) {
     return '<li class="chk-d-row">' + med(a, 44) + "<div><strong>" + nm(a) + "</strong><span>" + yearsOf(a).join(", ") + "</span></div></li>";
   }
   function show(animal) {
-    const S = UI_STRINGS[getLang()];
-    const km = getLang() === "km";
+    const lang = getLang();
+    const S = Object.assign({}, UI_STRINGS.en, UI_STRINGS[lang]);
     const info = ANIMAL_INFO[animal];
     const X = typeof CHECKER_EXTRA !== "undefined" ? CHECKER_EXTRA[animal] : null;
     const partners = getTrianglePartners(animal);
     const clash = info.clash[0];
-    const blurb = km && typeof KM_ANIMAL_INFO !== "undefined" ? KM_ANIMAL_INFO[animal].traits : info.traits;
+    const blurb = LOC.table("ANIMAL_INFO", lang)[animal].traits;
     current = animal;
     panel.innerHTML =
       '<div class="chk-d-head">' + med(animal, 84) +
-        '<div><h3>' + nm(animal) + (X ? ' <span class="chk-d-kanji" lang="zh">' + X.kanji + "</span>" : "") + "</h3>" +
+        '<div><h3>' + nm(animal) + (X ? ' <span class="chk-d-kanji" lang="zh">' + (lang === "zh" ? ZH_ANIMAL_NAMES[animal] : X.kanji) + "</span>" : "") + "</h3>" +
         '<p class="chk-d-years"><strong>' + S.chk_animal_years + ":</strong> " + yearsOf(animal).join(", ") + "</p>" +
         "<p>" + blurb + "</p></div>" +
         '<button type="button" class="chk-d-close" aria-label="' + S.chk_close + '">×</button></div>' +

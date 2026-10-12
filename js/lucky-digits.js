@@ -45,9 +45,11 @@
   }
   var T = {
     en: { h: "Lucky numbers today", d: function (n) { return n + (n === 1 ? " digit" : " digits"); }, note: "For fun only, not a prediction or betting advice." },
-    km: { h: "លេខសំណាងថ្ងៃនេះ", d: function (n) { return kmNum(n) + " ខ្ទង់"; }, note: "សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។" }
+    km: { h: "លេខសំណាងថ្ងៃនេះ", d: function (n) { return kmNum(n) + " ខ្ទង់"; }, note: "សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។" },
+    zh: { h: "今日幸运数字", d: function (n) { return n + " 位数"; }, note: "仅供娱乐，不是预测，也不是投注建议。" }
   };
   function html(v, lang, opts) {
+    if (!T[lang]) lang = "en";
     var S = T[lang], km = lang === "km";
     var chips = [1, 2, 3, 4, 5].map(function (n) {
       return '<li><span class="ld-l">' + S.d(n) + '</span><b class="ld-n">' + (km ? kmNum(v["d" + n]) : v["d" + n]) + "</b></li>";
@@ -58,7 +60,8 @@
     var els = (scope || document).querySelectorAll("[data-lucky-digits][data-animal]");
     Array.prototype.forEach.call(els, function (el) {
       var iso = el.getAttribute("data-date") || ppToday();
-      var lang = el.getAttribute("data-lang") || (document.documentElement.lang === "km" ? "km" : "en");
+      var hl = document.documentElement.lang || "";
+      var lang = el.getAttribute("data-lang") || (hl === "km" ? "km" : hl.indexOf("zh") === 0 ? "zh" : "en");
       var v = forSign(el.getAttribute("data-animal"), iso);
       if (!v) { el.hidden = true; return; }
       el.innerHTML = html(v, lang, { noHead: el.hasAttribute("data-no-head"), noNote: el.hasAttribute("data-no-note") });

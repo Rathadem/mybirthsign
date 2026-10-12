@@ -126,6 +126,61 @@
     }
   };
 
+  // Simplified Chinese
+  SIGN.zh = {
+    Rat: ["反应敏捷", "一辆小巧精致、充满智能科技的跑车", "一个靠近市区、温馨整洁的家", "忠诚、体贴，总有小惊喜", "比别人更早发现机会"],
+    Ox: ["耐心和稳定的努力", "一辆坚固可靠、经久耐用的豪华旅行车", "一座带花园的坚实家宅", "稳重、有保护欲、非常忠诚", "一步一步打下扎实的基础"],
+    Tiger: ["勇气", "一辆马力强劲、回头率极高的跑车", "一个宽敞大气、可以自由活动的家", "热情、有保护欲、爱冒险", "在别人犹豫时勇敢带头"],
+    Rabbit: ["善良和好品味", "一辆优雅舒适、颜色柔和的敞篷车", "一个安静美丽、充满绿植和阳光的家", "温柔、体贴、浪漫", "营造和谐，创造美好的成果"],
+    Dragon: ["自信和远大的眼光", "一辆镶着金边的大胆超级跑车", "一座能俯瞰城市的豪宅", "慷慨、热情、气场强大", "激励别人，带领大计划"],
+    Snake: ["智慧和冷静的专注", "一辆线条流畅、安静低调的深色豪华车", "一个私密、有格调、带安静书房的家", "深情、细腻、默默付出", "周密的计划和明智的决定"],
+    Horse: ["活力和对自由的热爱", "一辆适合长途驾驶的高速敞篷跑车", "一个靠近大路和自然、明亮的家", "活泼、真诚、充满冒险精神", "行动迅速，迎接新挑战"],
+    Goat: ["创意和温柔的心", "一辆时尚舒适、内饰漂亮的车", "一个有花园、色调柔和的艺术之家", "温柔、体贴、顾家", "创意点子和团队合作"],
+    Monkey: ["聪明和灵活的点子", "一辆满是高科技配置的电动跑车", "一个到处都是智能设备的智慧之家", "有趣、爱玩、笑声不断", "用有创意的方法解决问题"],
+    Rooster: ["勤奋和注重细节", "一辆保养得完美无瑕的经典老爷车", "一个整洁优雅、样样井井有条的家", "诚实、可靠，以伴侣为荣", "把每件工作都认真做好"],
+    Dog: ["忠诚和公正的心", "一辆安全可靠、适合全家出游的 SUV", "一个温暖好客、常有朋友来访的家", "忠实、有保护欲、真诚", "赢得信任，帮助团队"],
+    Pig: ["慷慨和快乐", "一辆舒适宽敞、坐得下所有人的豪华车", "一个宽敞快乐、有大厨房的家", "善良、大方、讨人喜欢", "稳定的努力和良好的人际关系"]
+  };
+  T.zh = {
+    h: "✨ 梦想运势", sub: "用你的生肖{A}轻松看看你的梦想——仅供娱乐和启发，不是预测，也不是理财建议。",
+    spin: "🎡 转一转我的未来", spinning: "转动中…", again: "🎡 再转一次", pick: "或选择一个梦想：", wheel: "幸运转盘", stopped: "转盘停在：{C}",
+    card: "✨ 生成我的运势卡", making: "正在生成你的卡片…", ready: "你的卡片已准备好——用“分享”按钮分享或下载。", fail: "无法生成卡片，请再试一次。",
+    tip: "试试这样做", years: "传统上的助运年份", symYear: "象征性的绿灯年", symNote: "传统上对你的生肖有助力的一年——只是有趣的象征，不是保证。",
+    colors: "幸运颜色", fun: "仅供娱乐和启发。", shareTitle: "我的梦想运势：{C} · {A}",
+    edge: "你的优势", watch: "需要注意", careYear: "需要谨慎的一年", careNote: "传统上与你的生肖相冲的一年——重大决定要慢慢来。",
+    names: { wealth: "财富与金钱", car: "梦想跑车", home: "梦想之家", love: "爱情与关系", career: "事业成功", years: "幸运年份", opportunity: "意外机会", growth: "个人成长" },
+    buttons: { car: "我什么时候能拥有梦想跑车？", wealth: "我的财富之路", home: "我的梦想之家", love: "我的爱情故事", career: "我的事业成功", years: "我的幸运年份" },
+    titles: { car: "属{A}的梦想座驾", wealth: "属{A}的财富之路", home: "属{A}的梦想之家", love: "属{A}的爱情故事", career: "属{A}的成功之路", years: "属{A}的幸运年份", opportunity: "一扇惊喜之门打开了", growth: "属{A}的人越来越强" },
+    desc: {
+      car: ["你属{A}的心向往着{C}。传统认为，你的{S}能把目标变成现实——所以把这个梦想当作地图上的目的地，而不是一张彩票。",
+            "{C}——这正是为属{A}的人打造的座驾！用你的{S}一步一步去计划，梦想就会越来越近。"],
+      wealth: ["属{A}的你，致富之路靠的是{S}。小而稳定的行动比大的赌注更适合你——让你的钱像花园一样慢慢生长。",
+               "属{A}的人发挥{S}时最耀眼。钱往往跟着专注走：一个清楚的目标，一个简单的计划，稳步前进。"],
+      home: ["你属{A}的心梦想着{H}。想象那里的颜色、光线和围坐在餐桌旁的人——有细节的梦想更容易一步步实现。",
+             "对属{A}的人来说，家是为你的{S}充电的地方。你的梦想：{H}。"],
+      love: ["在爱情里，属{A}的人{L}。你的生肖最美好的篇章，是用耐心、善良和真诚的话语写成的。",
+             "属{A}的你，爱情故事因你的{S}而闪光。对的人会正因为这一点而爱你。"],
+      career: ["属{A}的人靠{W}一步步成长。你的{S}是你事业上最大的财富——注意到它的人会为你打开下一扇门。",
+               "属{A}的人的成功是{W}。继续发挥你的{S}，让成果替你说话。"],
+      years: ["根据中国生肖传统，属{A}的人在三合生肖的年份最得助力。下面是你接下来的这些年份——把它们当作重新出发的友好里程碑。",
+              "幸运年份不会替你做事——它们奖励已经准备好的属{A}的人。用你的{S}为下面这些年份做好准备。"],
+      opportunity: ["睁大眼睛吧，属{A}的你！你的{S}能帮你发现别人错过的机会——一个新的人脉、一个点子、一次邀请。",
+                    "惊喜喜欢会说“好”的属{A}的人。你的{S}能把一个小机会变成更大的收获。"],
+      growth: ["属{A}的你，成长之路就是让你的{S}更进一步。每天的小习惯会塑造你正在成为的那个人。",
+               "最好的属{A}的人，冷静、好奇、善良。你的{S}就是种子——继续给它浇水吧。"]
+    },
+    tips: {
+      car: ["给你的梦想之车准备一个专属存钱罐，每周存一点。", "把具体的车型写在卡片上，放在每天都能看到的地方。", "查一查它的真实价格，再拆成每月的小目标。"],
+      wealth: ["先储蓄，再消费：发薪当天就先存下一小笔。", "这个月学一项新的理财技能，比如做预算或储蓄。", "远离“快速致富”的诱惑——你的生肖真正的好运是耐心。"],
+      home: ["把你喜欢的房子照片收集起来——你的风格会越来越清楚。", "开始一个小小的买房基金，即使增长得很慢。", "让今天的住处更接近梦想一点：一盆植物、一盏灯、一个整洁的角落。"],
+      love: ["今天对一个你在乎的人说一句真诚又温暖的话。", "安排一次小而简单的约会——用心比花钱更重要。", "回应之前先认真听完；这是最浪漫的能力。"],
+      career: ["选一项技能，每天练习 15 分钟。", "把你的目标告诉一位导师或上司。", "这周完成一件拖着没做完的事——动力本身就是好运。"],
+      years: ["在日历上把这些年份标记为重大目标的检查点。", "利用每个幸运年份的前一年来计划和储蓄。", "现在就养成一个小习惯，等这些年份到来时你已准备好。"],
+      opportunity: ["这个月接受一次新的邀请。", "把脑海里冒出来的点子记下来。", "联系一位老朋友——很多机会是通过人带来的。"],
+      growth: ["每天读 10 页书。", "尝试一件稍微走出舒适圈的新事情。", "每天结束时写下一件你做得好的事。"]
+    }
+  };
+
   var KD = "0123456789";
   function kmd(v) { return String(v).replace(/\d/g, function (c) { return KD[c]; }); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -162,8 +217,9 @@
   function mount(detail) {
     var host = document.getElementById("dream-fortune");
     if (!host || !detail || !detail.animal || !SIGN.en[detail.animal]) { if (host) host.hidden = true; return; }
-    var lang = detail.lang === "km" ? "km" : "en", S = T[lang];
-    var name = lang === "km" ? "ឆ្នាំ" + (typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[detail.animal] : detail.animal) : detail.animal;
+    var lang = detail.lang === "km" || detail.lang === "zh" ? detail.lang : "en", S = T[lang];
+    var name = lang === "km" ? "ឆ្នាំ" + (typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[detail.animal] : detail.animal)
+      : lang === "zh" ? (typeof ZH_ANIMAL_NAMES !== "undefined" ? ZH_ANIMAL_NAMES[detail.animal] : detail.animal) : detail.animal;
     state = { animal: detail.animal, name: name, lang: lang, spins: 0, picks: {}, spinning: false, rot: 0, host: host };
     var seg = 360 / CATS.length;
     var slices = CATS.map(function (c, i) {
@@ -263,9 +319,9 @@
     if (L === "en") desc = cap(an(desc));
     var years = supportiveYears(state.animal, 3);
     var info = (typeof ANIMAL_INFO !== "undefined" && ANIMAL_INFO[state.animal]) || null;
-    var kmInfo = (typeof KM_ANIMAL_INFO !== "undefined" && KM_ANIMAL_INFO[state.animal]) || null;
-    var colors = L === "km" ? (kmInfo && kmInfo.luckyColors) : (info && info.luckyColors);
-    var weak = L === "km" ? (kmInfo && kmInfo.weaknesses) : (info && info.weaknesses);
+    var kmInfo = L !== "en" && typeof LOC !== "undefined" ? (LOC.table("ANIMAL_INFO", L) || {})[state.animal] || null : null;
+    var colors = L !== "en" ? (kmInfo && kmInfo.luckyColors) : (info && info.luckyColors);
+    var weak = L !== "en" ? (kmInfo && kmInfo.weaknesses) : (info && info.weaknesses);
     var cy = (cat === "years" || cat === "wealth" || cat === "career" || cat === "car") ? carefulYear(state.animal) : null;
     return {
       edge: L === "en" ? cap(P[0]) : P[0], watch: weak || "", careYear: cy,

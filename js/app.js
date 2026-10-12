@@ -15,6 +15,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const KM_MONTHS = ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"];
 
   function localeDate(date, lang, opts) {
+    if (lang === "zh") {                       // 2026年10月12日 星期一
+      const ZW = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+      let out = "";
+      if (opts.year) out += date.getFullYear() + "年";
+      if (opts.month) out += (date.getMonth() + 1) + "月";
+      if (opts.day) out += date.getDate() + "日";
+      if (opts.weekday) out += (out ? " " : "") + ZW[date.getDay()];
+      return out;
+    }
     if (lang === "km") {
       const segments = [];
       if (opts.weekday) segments.push("ថ្ងៃ" + KM_WEEKDAYS[date.getDay()]);
@@ -74,12 +83,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const { animal, element, zodiacYear } = getZodiac(date);
     const info = ANIMAL_INFO[animal];
     const elInfo = ELEMENT_INFO[element];
-    const kmInfo = KM_ANIMAL_INFO[animal];
-    const kmElInfo = KM_ELEMENT_INFO[element];
+    const kmInfo = lang === "en" ? info : LOC.table("ANIMAL_INFO", lang)[animal];       // Khmer or Chinese text
+    const kmElInfo = lang === "en" ? elInfo : LOC.table("ELEMENT_INFO", lang)[element];
     const cny = CNY_DATES[date.getFullYear()];
 
-    const animalDisplay = lang === "km" ? KM_ANIMAL_NAMES[animal] : animal;
-    const elementDisplay = lang === "km" ? KM_ELEMENT_NAMES[element] : element;
+    const animalDisplay = LOC.animal(animal, lang);
+    const elementDisplay = LOC.element(element, lang);
     // In Khmer, spell the result out as "ឆ្នាំ{zodiac year name} ធាតុ
     // {element} សត្វ{everyday animal name}" (e.g. "ឆ្នាំមមី ធាតុ ភ្លើង
     // សត្វសេះ") rather than the terser "{element} {animal}" used in English.
@@ -93,30 +102,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const kmDigits = (n) => String(n).replace(/\d/g, (d) => "0123456789"[d]);
     const ageText = lang === "km"
       ? "អាយុ " + kmDigits(ageY) + " ឆ្នាំ " + kmDigits(ageM) + " ខែ"
+      : lang === "zh" ? "年龄：" + ageY + "岁" + ageM + "个月"
       : "Age: " + ageY + (ageY === 1 ? " year " : " years ") + ageM + (ageM === 1 ? " month" : " months");
     const resultHeading = lang === "km"
       ? "ឆ្នាំ" + animalDisplay + " ធាតុ " + elementDisplay + " សត្វ" + KM_ANIMAL_COMMON_NAMES[animal]
+      : lang === "zh" ? elementDisplay + animalDisplay
       : elementDisplay + " " + animalDisplay;
 
     const trianglePartners = getTrianglePartners(animal);
-    const trianglePartnersDisplay = trianglePartners.map((a) => (lang === "km" ? KM_ANIMAL_NAMES[a] : a));
+    const trianglePartnersDisplay = trianglePartners.map((a) => LOC.animal(a, lang));
 
     const matchYearsHtml = trianglePartners
       .map((a, i) => `<li><strong>${trianglePartnersDisplay[i]}</strong>: ${nearbyYearsForAnimal(a, zodiacYear).join(", ")}</li>`)
       .join("");
     const sameSignYears = nearbyYearsForAnimal(animal, zodiacYear).filter((y) => y !== zodiacYear);
     const clashAnimal = info.clash[0];
-    const clashAnimalDisplay = lang === "km" ? KM_ANIMAL_NAMES[clashAnimal] : clashAnimal;
+    const clashAnimalDisplay = LOC.animal(clashAnimal, lang);
     const clashYears = nearbyYearsForAnimal(clashAnimal, zodiacYear);
 
-    const traits = lang === "km" ? kmInfo.traits : info.traits;
-    const weaknesses = lang === "km" ? kmInfo.weaknesses : info.weaknesses;
-    const overview = lang === "km" ? kmInfo.overview : info.overview;
-    const careers = lang === "km" ? kmInfo.careers : info.careers;
-    const luckyColors = lang === "km" ? kmInfo.luckyColors : info.luckyColors;
-    const luckyDays = lang === "km" ? kmInfo.luckyDays : info.luckyDays;
-    const elOverview = lang === "km" ? kmElInfo.overview : elInfo.overview;
-    const elBlurb = lang === "km" ? kmElInfo.blurb : elInfo.blurb;
+    const traits = lang !== "en" ? kmInfo.traits : info.traits;
+    const weaknesses = lang !== "en" ? kmInfo.weaknesses : info.weaknesses;
+    const overview = lang !== "en" ? kmInfo.overview : info.overview;
+    const careers = lang !== "en" ? kmInfo.careers : info.careers;
+    const luckyColors = lang !== "en" ? kmInfo.luckyColors : info.luckyColors;
+    const luckyDays = lang !== "en" ? kmInfo.luckyDays : info.luckyDays;
+    const elOverview = lang !== "en" ? kmElInfo.overview : elInfo.overview;
+    const elBlurb = lang !== "en" ? kmElInfo.blurb : elInfo.blurb;
 
     const bornSub = fmt(S.born_sub_tpl, {
       date: localeDate(date, lang, { year: "numeric", month: "long", day: "numeric" }),
@@ -147,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const todayMonthAnimal = MONTH_ANIMALS[today.getMonth()];
-    const todayMonthAnimalDisplay = lang === "km" ? KM_ANIMAL_NAMES[todayMonthAnimal] : todayMonthAnimal;
+    const todayMonthAnimalDisplay = LOC.animal(todayMonthAnimal, lang);
     const monthRelation = getCompatibilityType(animal, todayMonthAnimal);
 
     const isLuckyWeekday = luckyDays.includes(todayWeekdayEn);
@@ -193,14 +204,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const yinyang = X ? (X.yin === "Yang" ? S.chk_yang : S.chk_yin) : "";
     const yearsList = nearbyYearsForAnimal(animal, 1990, 12).filter((y) => y >= 1950 && y <= 2031).join(", ");
     const XK = typeof CHECKER_EXTRA_KM !== "undefined" ? CHECKER_EXTRA_KM[animal] : null;
-    const XL = lang === "km" ? XK : X;
+    const XL = lang === "km" ? XK : lang === "zh" ? (typeof CHECKER_EXTRA_ZH !== "undefined" ? CHECKER_EXTRA_ZH[animal] : null) : X;
     const useEn = !!XL;
     const persBody = useEn ? li(XL.personality) : "<p>" + traits + "</p>";
     const loveTitle = S.chk_love;
     const loveBody = useEn ? li(XL.love) : "<p>" + weaknesses + "</p>";
     const careerBody = useEn ? li(XL.career) : "<p>" + careers + "</p>";
-    const dirText = lang === "km" ? checkerKmWords(X.directions) : X.directions;
-    const monthText = lang === "km" ? checkerKmWords(X.months) : X.months;
+    const dirText = lang === "km" ? checkerKmWords(X.directions) : lang === "zh" ? checkerZhWords(X.directions) : X.directions;
+    const monthText = lang === "km" ? checkerKmWords(X.months) : lang === "zh" ? checkerZhWords(X.months) : X.months;
     const luckRows = [
       [S.lucky_numbers, info.luckyNumbers.join(", ")],
       [S.lucky_colors, renderLuckyColorChips(luckyColors, info.luckyColors)]
@@ -231,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const rel2 = getCompatibilityType(animal, nowZ.animal);
       const tier2 = rel2 === "same" ? "same" : (rel2 === "triangle" ? "triangle" : (rel2 === "clash" ? "clash" : "neutral"));
       const T2 = YL.tiers[tier2];
-      const nm = (a) => (lang === "km" ? KM_ANIMAL_NAMES[a] : a);
+      const nm = (a) => LOC.animal(a, lang);
       const introTxt = YL.intro.replace("{year}", nowZ.zodiacYear).replace("{ya}", nm(nowZ.animal)).replace("{a}", nm(animal));
       yearLuckHtml = '<div class="today-luck-card"><h3>' + YL.heading + '</h3><p class="today-luck-intro">' + introTxt + '</p><ul class="today-luck-list">' +
         T2.items.map((t) => "<li>" + t + "</li>").join("") + '</ul><p class="today-luck-verdict today-luck-verdict-' + YL.verdict[tier2] + '">' + T2.summary + "</p></div>";
@@ -240,11 +251,11 @@ document.addEventListener("DOMContentLoaded", function () {
       <section class="chk-hero-card" aria-labelledby="chk-res-h">
         <div class="chk-medal-lg">
           <img src="images/business/animals/${slug}.webp" alt="Golden ${animal} zodiac medallion" width="320" height="320">
-          ${X ? `<span class="chk-kanji" lang="zh" aria-hidden="true">${X.kanji}</span>` : ""}
+          ${X ? `<span class="chk-kanji" lang="zh" aria-hidden="true">${lang === "zh" ? ZH_ANIMAL_NAMES[animal] : X.kanji}</span>` : ""}
         </div>
         <div class="chk-hero-copy">
           ${lang === "km" ? "" : `<p class="chk-eyebrow">${S.chk_your_sign}</p>`}
-          <h2 id="chk-res-h" class="chk-animal">${lang === "km" ? "ឆ្នាំ" + animalDisplay + " សត្វ" + KM_ANIMAL_COMMON_NAMES[animal] : animalDisplay}</h2>
+          <h2 id="chk-res-h" class="chk-animal">${lang === "km" ? "ឆ្នាំ" + animalDisplay + " សត្វ" + KM_ANIMAL_COMMON_NAMES[animal] : lang === "zh" ? "属" + animalDisplay : animalDisplay}</h2>
           <p class="chk-years">${yearsList}</p>
           <p class="chk-desc">${traits}${(typeof CHECKER_TRAITS_MORE !== "undefined" && CHECKER_TRAITS_MORE[lang] && CHECKER_TRAITS_MORE[lang][animal]) ? " " + CHECKER_TRAITS_MORE[lang][animal] : ""}${outlookHtml}</p>
         </div>
@@ -256,8 +267,8 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       </section>
       <div class="chk-share">${typeof shareRowHtml === "function" ? shareRowHtml(
-        (lang === "km" ? "ឆ្នាំ" + animalDisplay : elementDisplay + " " + animalDisplay) + " · MyBirthSign",
-        { cardType: "sign", lang: lang, animal: animal, name: lang === "km" ? "ឆ្នាំ" + animalDisplay : animalDisplay,
+        (lang === "km" ? "ឆ្នាំ" + animalDisplay : lang === "zh" ? elementDisplay + animalDisplay : elementDisplay + " " + animalDisplay) + " · MyBirthSign",
+        { cardType: "sign", lang: lang, animal: animal, name: lang === "km" ? "ឆ្នាំ" + animalDisplay : lang === "zh" ? "属" + animalDisplay : animalDisplay,
           element: elementDisplay, elementLabel: S.chk_element, traits: traits, numbers: info.luckyNumbers, colors: luckyColors,
           matches: trianglePartnersDisplay, patience: clashAnimalDisplay },
         "/blog/zodiac-year-" + slug + ".html") : ""}</div>
@@ -362,7 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // this exact sign, with a static fallback built from the data we
     // already have if the AI function isn't deployed or the call fails.
     const followupAnswer = document.getElementById("followup-answer");
-    const compatForClash = lang === "km" ? KM_COMPAT_INFO.clash : COMPAT_INFO.clash;
+    const compatForClash = LOC.table("COMPAT_INFO", lang).clash;
     const fallbackFor = {
       year_ahead: elBlurb,
       luck_boost: fmt(S.followup_luck_fallback_tpl, {
@@ -436,16 +447,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const type = getCompatibilityType(za.animal, zb.animal);
     const compat = COMPAT_INFO[type];
-    const kmCompat = KM_COMPAT_INFO[type];
-    const compatLabel = lang === "km" ? kmCompat.label : compat.label;
-    const compatText = lang === "km" ? kmCompat.text[context] : compat.text[context];
+    const kmCompat = LOC.table("COMPAT_INFO", lang)[type];
+    const compatLabel = kmCompat.label;
+    const compatText = kmCompat.text[context];
     const stars = compat.stars[context];
     const starDisplay = "★".repeat(stars) + "☆".repeat(5 - stars);
 
-    const animalADisplay = lang === "km" ? KM_ANIMAL_NAMES[za.animal] : za.animal;
-    const animalBDisplay = lang === "km" ? KM_ANIMAL_NAMES[zb.animal] : zb.animal;
-    const elementADisplay = lang === "km" ? KM_ELEMENT_NAMES[za.element] : za.element;
-    const elementBDisplay = lang === "km" ? KM_ELEMENT_NAMES[zb.element] : zb.element;
+    const animalADisplay = LOC.animal(za.animal, lang);
+    const animalBDisplay = LOC.animal(zb.animal, lang);
+    const elementADisplay = LOC.element(za.element, lang);
+    const elementBDisplay = LOC.element(zb.element, lang);
 
     compatResult.innerHTML = `
       <div class="card compat-card">
