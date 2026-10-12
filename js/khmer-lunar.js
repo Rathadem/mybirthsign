@@ -236,7 +236,8 @@
     var nx = new Date(Date.UTC(y, m - 1, d + 1)), kn = M.fromGregorian(nx.getUTCFullYear(), nx.getUTCMonth() + 1, nx.getUTCDate()).khmer;
     var isLast = kn.day === 1 && kn.moonPhase === 0;
     var monthLen = isLast && k.moonPhase === 1 ? k.day : 15;   // days in the waning half (14 or 15)
-    var km = lang === "km", wd = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+    var km = lang === "km", zh = lang === "zh", wd = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+    var MOON_ZH = { waxQ: "上弦半月", full: "满月日", waneQ: "下弦半月", dark: "无月日（月末）" };
     var weekEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][wd];
     var monEn = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][m - 1];
     var mo = moonOf(k, isLast);
@@ -247,9 +248,16 @@
     var ILOT = '<svg viewBox="0 0 24 24"><path d="M12 4c2 2.4 2.6 5.6 0 9-2.6-3.4-2-6.6 0-9Zm-7 5c3 .3 5.4 2.2 6.4 5.6C8 14.8 5.6 12.8 5 9Zm14 0c-.6 3.8-3 5.8-6.4 5.6 1-3.4 3.4-5.3 6.4-5.6ZM4 16.5c2.6 1.9 5.3 2.6 8 2.6s5.4-.7 8-2.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
     var ITEM = '<svg viewBox="0 0 24 24"><path d="M12 3l2 4h-4l2-4Zm-4 5h8l1.5 4h-11L8 8Zm-3 5h14l1 4H4l1-4Zm-1 5h16v2.5H4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>';
     var IWHL = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 4v16M4 12h16M6.3 6.3l11.4 11.4M17.7 6.3 6.3 17.7" stroke="currentColor" stroke-width="1.1"/></svg>';
-    var dateMain = km ? "ថ្ងៃ" + KM_WEEK[wd] + " ទី" + kmNum(d) + " ខែ" + KM_SOLAR[m - 1] + " ឆ្នាំ" + kmNum(y) : esc(weekEn + ", " + d + " " + monEn + " " + y);
+    var dateMain = km ? "ថ្ងៃ" + KM_WEEK[wd] + " ទី" + kmNum(d) + " ខែ" + KM_SOLAR[m - 1] + " ឆ្នាំ" + kmNum(y) : zh ? esc(y + "年" + m + "月" + d + "日 " + ZH_WEEK[wd]) : esc(weekEn + ", " + d + " " + monEn + " " + y);
     var lunar = '<span lang="km">' + esc(kmNum(k.day) + k.moonPhaseName + " ខែ" + k.monthName) + "</span>";
-    var rows =
+    var rows = zh ?
+      r(ICAL, "今天（柬埔寨时间）", dateMain, '<span lang="km">ថ្ងៃ' + esc(KM_WEEK[wd]) + "</span>") +
+      r(moonSvg(k, monthLen), "农历日", '<span lang="km">' + esc(kmNum(k.day) + k.moonPhaseName) + "</span>",
+        esc((k.moonPhase ? "下弦第" : "上弦第") + k.day + "天" + (MOON_ZH[mo] ? " · " + MOON_ZH[mo] : ""))) +
+      r(ILOT, "农历月", '<span lang="km">ខែ' + esc(k.monthName) + "</span>", esc(MONTH_EN[k.monthIndex])) +
+      r(ITEM, "高棉年份与ស័ក", '<span lang="km">ឆ្នាំ' + esc(k.animalYearName) + " " + esc(k.sakName) + "</span>", esc(ZHA[ANIMAL_EN[k.animalYear]] + "年 · " + SAK_EN[k.sak])) +
+      r(IWHL, "佛历", '<span lang="km">ព.ស. ' + kmNum(k.beYear) + "</span>", esc("佛历 " + k.beYear + " 年"))
+      :
       r(ICAL, km ? "ថ្ងៃនេះ (ម៉ោងកម្ពុជា)" : "Today (Cambodia time)", dateMain, km ? "" : '<span lang="km">ថ្ងៃ' + esc(KM_WEEK[wd]) + "</span>") +
       r(moonSvg(k, monthLen), km ? "ថ្ងៃតាមចន្ទគតិ" : "Lunar day", '<span lang="km">' + esc(kmNum(k.day) + k.moonPhaseName) + "</span>",
         esc(km ? (k.moonPhase ? "រោច (រនោច)" : "កើត (ខ្នើត)") + (mo.length > 4 || mo === "full" || mo === "dark" ? " · " + MOON_KM[mo] : "")
@@ -266,16 +274,17 @@
     });
     var bigTxt = strip(lunar), full = fmtKh(M, M.fromGregorian(y, m, d));
     var share = typeof shareRowHtml === "function" ? '<div class="klc-share">' + shareRowHtml(
-      (km ? "ថ្ងៃនេះ " : "Today: ") + bigTxt + " — " + (km ? "ប្រតិទិនចន្ទគតិខ្មែរ" : "Khmer Lunar Calendar"),
-      { cardType: "lunar", lang: lang, heading: km ? "ថ្ងៃនេះ" : "Khmer Lunar Calendar · Today", big: bigTxt, rows: shareRows, full: full, moonD: moonSvg.lastD || "", note: km ? "ប្រតិទិនចន្ទគតិខ្មែរ តាមវិធានប្រពៃណី · ម៉ោងកម្ពុជា" : "Khmer lunar calendar · traditional rules · Cambodia time" },
+      (km ? "ថ្ងៃនេះ " : zh ? "今天：" : "Today: ") + bigTxt + " — " + (km ? "ប្រតិទិនចន្ទគតិខ្មែរ" : zh ? "高棉农历" : "Khmer Lunar Calendar"),
+      { cardType: "lunar", lang: lang, heading: km ? "ថ្ងៃនេះ" : zh ? "高棉农历 · 今天" : "Khmer Lunar Calendar · Today", big: bigTxt, rows: shareRows, full: full, moonD: moonSvg.lastD || "", note: km ? "ប្រតិទិនចន្ទគតិខ្មែរ តាមវិធានប្រពៃណី · ម៉ោងកម្ពុជា" : zh ? "高棉农历 · 传统规则 · 柬埔寨时间" : "Khmer lunar calendar · traditional rules · Cambodia time" },
       "/blog/khmer-lunar-calendar-birth-date.html") + "</div>" : "";
     return '<p class="klc-big">' + lunar + "</p>" +
       '<ul class="klc-rows">' + rows + "</ul>" +
       '<p class="klc-full" lang="km">' + esc(fmtKh(M, M.fromGregorian(y, m, d))) + "</p>" +
       '<p class="klc-note">' + esc(km
         ? "គណនាសម្រាប់ថ្ងៃនេះតាមម៉ោងកម្ពុជា ហើយប្តូរដោយស្វ័យប្រវត្តិនៅម៉ោង 12 យប់ (ម៉ោងកម្ពុជា)។ ព្រះចន្ទ គឺតាមថ្ងៃខែក្នុងប្រតិទិន។"
+        : zh ? "按柬埔寨（Asia/Phnom_Penh）的今天计算，并在柬埔寨时间午夜自动更新。显示的月相依照历法上的农历日。"
         : "Worked out for today in Cambodia (Asia/Phnom_Penh) and updated automatically at midnight Cambodia time. The moon shown follows the calendar's lunar day.") +
-      ' <a href="../checker.html">' + esc(km ? "រកថ្ងៃខែកំណើតចន្ទគតិរបស់អ្នក →" : "Find your lunar birth date →") + "</a></p>" + share;
+      ' <a href="../checker.html">' + esc(km ? "រកថ្ងៃខែកំណើតចន្ទគតិរបស់អ្នក →" : zh ? "查找你的农历生日 →" : "Find your lunar birth date →") + "</a></p>" + share;
   }
   var cardDay = null, cardTimer = null;
   function todayCards(force) {
@@ -287,10 +296,10 @@
       Array.prototype.forEach.call(cards, function (c) {
         var body = c.querySelector(".klc-body"); if (!body) return;
         try {
-          body.innerHTML = todayCardHtml(M, c.getAttribute("data-lang") === "km" ? "km" : "en"); c.classList.remove("klc-failed");
+          var cl = c.getAttribute("data-lang"); body.innerHTML = todayCardHtml(M, cl === "km" || cl === "zh" ? cl : "en"); c.classList.remove("klc-failed");
           if (typeof wireShareRows === "function") wireShareRows(body);
         }
-        catch (e) { body.innerHTML = '<p class="klc-wait">' + esc(c.getAttribute("data-lang") === "km" ? "មិនអាចបង្ហាញថ្ងៃខែចន្ទគតិថ្ងៃនេះបានទេ។ សូមពិនិត្យប្រតិទិនខ្មែរបោះពុម្ព។" : "Today’s Khmer lunar date couldn’t be shown. Please check a printed Khmer calendar.") + "</p>"; c.classList.add("klc-failed"); }
+        catch (e) { body.innerHTML = '<p class="klc-wait">' + esc(c.getAttribute("data-lang") === "km" ? "មិនអាចបង្ហាញថ្ងៃខែចន្ទគតិថ្ងៃនេះបានទេ។ សូមពិនិត្យប្រតិទិនខ្មែរបោះពុម្ព។" : c.getAttribute("data-lang") === "zh" ? "无法显示今天的高棉农历日期。请查看印刷的高棉日历。" : "Today’s Khmer lunar date couldn’t be shown. Please check a printed Khmer calendar.") + "</p>"; c.classList.add("klc-failed"); }
       });
       cardDay = key;
       // next redraw just after midnight in Cambodia (UTC+7 all year, no daylight saving)
