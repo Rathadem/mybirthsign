@@ -8,7 +8,7 @@
 // while keeping the original input (hidden) as the single source of truth
 // for its value, so all existing form-handling code keeps working unchanged.
 //
-// The displayed/typed date format is always dd/mm/yyyy (both languages, per
+// The displayed/typed date format is always dd/mm/yyyy (all languages, per
 // an earlier site decision); only the calendar's month/weekday names and
 // button labels switch with the page language.
 
@@ -25,10 +25,13 @@
   ];
   const EN_WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
   const KM_WEEKDAYS = ["អា", "ច", "អ", "ពុ", "ព្រ", "សុ", "ស"];
+  const ZH_MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+  const ZH_WEEKDAYS = ["日", "一", "二", "三", "四", "五", "六"];
 
   const STR = {
     en: { clear: "Clear", today: "Today", placeholder: "dd/mm/yyyy" },
-    km: { clear: "សម្អាត", today: "ថ្ងៃនេះ", placeholder: "ថថ/ខខ/ឆឆឆឆ" }
+    km: { clear: "សម្អាត", today: "ថ្ងៃនេះ", placeholder: "ថថ/ខខ/ឆឆឆឆ" },
+    zh: { clear: "清除", today: "今天", placeholder: "日/月/年", prev: "上个月", next: "下个月" }
   };
 
   function lang() {
@@ -183,9 +186,11 @@
 
     function renderLabels() {
       const L = lang();
-      const months = L === "km" ? KM_MONTHS : EN_MONTHS;
-      const weekdays = L === "km" ? KM_WEEKDAYS : EN_WEEKDAYS;
+      const months = L === "km" ? KM_MONTHS : L === "zh" ? ZH_MONTHS : EN_MONTHS;
+      const weekdays = L === "km" ? KM_WEEKDAYS : L === "zh" ? ZH_WEEKDAYS : EN_WEEKDAYS;
       const s = STR[L] || STR.en;
+      prevBtn.setAttribute("aria-label", s.prev || "Previous month");
+      nextBtn.setAttribute("aria-label", s.next || "Next month");
 
       monthSel.innerHTML = "";
       months.forEach(function (name, idx) {
