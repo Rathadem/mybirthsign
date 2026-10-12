@@ -25,6 +25,18 @@
       note: "Traditional Chinese zodiac reading for entertainment and self-reflection, not a prediction.",
       stars: function (n) { return n + " of 5 stars"; }
     },
+    zh: {
+      h: "比较两个生肖", p: "不知道生日？选择两个生肖，看看它们的传统配对。",
+      a: "第一个生肖", b: "第二个生肖", pick: "选择生肖", go: "比较生肖", err: "请选择两个生肖。",
+      quick: "传统快速评分", love: "爱情", business: "事业",
+      loveH: "爱情与关系", friendH: "友情", bizH: "商业合作", teamH: "团队合作与金钱",
+      strengthsH: "优势", challengesH: "需要注意", adviceH: "实用建议",
+      support: "在我们的生肖指南中，{A}和{B}也被列为互相助力的配对。",
+      exact: "这里只比较生肖。如需精确的百分比分数，请在上方输入两个出生日期。",
+      exactBtn: "输入生日获取精确分数 ↑",
+      note: "传统中国生肖解读，仅供娱乐与自我反思，并非预测。",
+      stars: function (n) { return n + " / 5 星"; }
+    },
     km: {
       h: "ប្រៀបធៀបរាសីពីរ", p: "មិនដឹងថ្ងៃកំណើត? ជ្រើសរើសសត្វរាសីពីរ ដើម្បីមើលភាពត្រូវគ្នាតាមប្រពៃណី។",
       a: "រាសីទីមួយ", b: "រាសីទីពីរ", pick: "ជ្រើសរើសសត្វ", go: "ប្រៀបធៀប", err: "សូមជ្រើសរើសសត្វរាសីពីរ។",
@@ -41,17 +53,17 @@
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function fill(s, map) { return String(s).replace(/\{(\w+)\}/g, function (m, k) { return map[k] !== undefined ? map[k] : m; }); }
-  function lang() { try { return typeof getLang === "function" && getLang() === "km" ? "km" : "en"; } catch (e) { return "en"; } }
+  function lang() { try { var l = typeof getLang === "function" ? getLang() : "en"; return l === "km" || l === "zh" ? l : "en"; } catch (e) { return "en"; } }
 
   /** Pure: the full traditional comparison for two animals (also used by tests and sharing). */
   function compareSigns(a, b, L) {
     if (ANIMALS.indexOf(a) < 0 || ANIMALS.indexOf(b) < 0) return null;
-    L = L === "km" ? "km" : "en";
+    L = L === "km" || L === "zh" ? L : "en";
     var T = (typeof CMP_TEXT !== "undefined" && (CMP_TEXT[L] || CMP_TEXT.en)) || null;
     if (!T || typeof getCompatibilityType !== "function" || typeof COMPAT_INFO === "undefined") return null;
     var type = getCompatibilityType(a, b), tier = ANIMAL_TIER[type];
-    var CI = (L === "km" && typeof KM_COMPAT_INFO !== "undefined" ? KM_COMPAT_INFO : COMPAT_INFO)[type];
-    var nm = function (x) { return L === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[x] : x; };
+    var CI = Object.assign({}, COMPAT_INFO[type], (typeof LOC !== "undefined" ? LOC.table("COMPAT_INFO", L) : COMPAT_INFO)[type]);
+    var nm = function (x) { return typeof LOC !== "undefined" ? LOC.animal(x, L) : x; };
     var names = { A: nm(a), B: nm(b) };
     var info = typeof ANIMAL_INFO !== "undefined" ? ANIMAL_INFO : {};
     var supportive = type !== "triangle" && type !== "same" && type !== "clash" &&
@@ -76,7 +88,7 @@
   window.MBSCompareSigns = compareSigns;
 
   function medal(a, L) {
-    var n = L === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[a] : a;
+    var n = typeof LOC !== "undefined" ? LOC.animal(a, L) : a;
     return '<figure class="cs-sign"><img src="images/business/animals/' + a.toLowerCase() + '.webp" alt="" width="110" height="110" loading="lazy"><figcaption>' + esc(n) + "</figcaption></figure>";
   }
   function starRow(label, n, u) {
@@ -115,7 +127,7 @@
     var root = document.getElementById("compare");
     if (!root) return;
     var L = lang(), u = UI[L];
-    var nm = function (x) { return L === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[x] : x; };
+    var nm = function (x) { return typeof LOC !== "undefined" ? LOC.animal(x, L) : x; };
     root.querySelectorAll("[data-cs]").forEach(function (el) { var k = el.getAttribute("data-cs"); if (u[k]) el.textContent = u[k]; });
     ["cs-a", "cs-b"].forEach(function (id) {
       var sel = document.getElementById(id); if (!sel) return;

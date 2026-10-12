@@ -1,6 +1,6 @@
 // Khmer lunar birth dates (filled in by js/khmer-lunar.js; the dates stay on this page)
 function klPairHtml(items, lang) {
-  var h = lang === "km" ? "ថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ" : "Khmer lunar birth dates";
+  var h = lang === "km" ? "ថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ" : lang === "zh" ? "高棉农历生日" : "Khmer lunar birth dates";
   var e = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
   return '<div class="kl-pair"><h3><span class="kl-moon kl-moon-sm" aria-hidden="true"></span>' + e(h) + "</h3><ul>" +
     items.filter(function (it) { return /^\d{4}-\d{2}-\d{2}$/.test(it.iso || ""); }).map(function (it) { return '<li data-kl-iso="' + e(it.iso) + '"><b>' + e(it.label) + "</b></li>"; }).join("") + "</ul></div>";
@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const G = (typeof CMP_GENDER !== "undefined" && (CMP_GENDER[lang] || CMP_GENDER.en)) || null;
   const ANIMALS = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
   const ELEMS = ["Wood", "Fire", "Earth", "Metal", "Water"];
-  const aName = (a) => (isKm && typeof KM_ANIMAL_NAMES !== "undefined" ? KM_ANIMAL_NAMES[a] : a);
-  const eName = (e) => (isKm && typeof KM_ELEMENT_NAMES !== "undefined" ? KM_ELEMENT_NAMES[e] : e);
+  const aName = (a) => LOC.animal(a, lang);
+  const eName = (e) => LOC.element(e, lang);
   const fill = (s, map) => String(s).replace(/\{(\w+)\}/g, (m, k) => (map[k] !== undefined ? map[k] : m));
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const k = el.getAttribute("data-cmp");
     if (T[k] !== undefined) el.innerHTML = T[k];
   });
-  if (isKm && T.title) document.title = T.title + " | MyBirthSign";
+  if (lang !== "en" && T.title) document.title = T.title + " | MyBirthSign";
   const lab1 = document.getElementById("cmp-l1"), lab2 = document.getElementById("cmp-l2");
   if (lab1) lab1.textContent = T.p1 + " — " + T.dob;
   if (lab2) lab2.textContent = T.p2 + " — " + T.dob;

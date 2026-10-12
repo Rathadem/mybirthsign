@@ -437,6 +437,7 @@ const LOC = {
 
 const UI_STRINGS = {
   en: {
+    cmp_guide_link: "Read our full guide to zodiac compatibility →",
     nav_checker: "Home",
     nav_checker_page: "MyBirthSign",
     nav_tools: "Horoscope",
@@ -770,6 +771,7 @@ const UI_STRINGS = {
     followup_career_fallback_tpl: "Careers that often fit well: {careers}."
   },
   km: {
+    cmp_guide_link: "អានមគ្គុទ្ទេសក៍ពេញលេញអំពីភាពត្រូវគ្នានៃរាសី →",
     nav_checker: "ទំព័រដើម",
     nav_checker_page: "ជោគជតារាសីខ្ញុំ",
     nav_tools: "ជោគជតារាសី",
@@ -1103,6 +1105,7 @@ const UI_STRINGS = {
     followup_career_fallback_tpl: "មុខរបរដែលសមស្រប៖ {careers}។"
   },
   zh: {
+    cmp_guide_link: "阅读完整的生肖配对指南 →",
     nav_checker: "首页",
     nav_checker_page: "我的生肖运势",
     nav_tools: "运势",
