@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Generates the daily "Today's Fortune for Each Zodiac Animal" post (English + Khmer).
+ * Generates the daily "Today's Fortune for Each Zodiac Animal" post (English + Khmer + Simplified Chinese).
  *
  *   node scripts/daily-fortune.mjs                 # today's date (Asia/Phnom_Penh)
  *   node scripts/daily-fortune.mjs --date 2026-10-07
@@ -67,9 +67,9 @@ const LUCKY_DIGITS = createRequire(import.meta.url)("../js/lucky-digits.js");
 const KD_ = "0123456789", kmD = (x) => String(x).replace(/\d/g, (d) => KD_[d]);
 function digitsHtml(a, lang) {
   const v = LUCKY_DIGITS.forSign(a, iso); if (!v) return "";
-  const km = lang === "km";
-  const lab = (n) => km ? kmD(n) + " ខ្ទង់" : n + (n === 1 ? " digit" : " digits");
-  return `<div class="ld ld-mini fx-digits"><p class="ld-h">${km ? "លេខសំណាង" : "Lucky numbers"}</p><ul class="ld-list">${[1, 2, 3, 4, 5].map((n) => `<li><span class="ld-l">${lab(n)}</span><b class="ld-n">${km ? kmD(v["d" + n]) : v["d" + n]}</b></li>`).join("")}</ul></div>`;
+  const km = lang === "km", zh = lang === "zh";
+  const lab = (n) => km ? kmD(n) + " ខ្ទង់" : zh ? n + " 位数" : n + (n === 1 ? " digit" : " digits");
+  return `<div class="ld ld-mini fx-digits"><p class="ld-h">${km ? "លេខសំណាង" : zh ? "幸运数字" : "Lucky numbers"}</p><ul class="ld-list">${[1, 2, 3, 4, 5].map((n) => `<li><span class="ld-l">${lab(n)}</span><b class="ld-n">${km ? kmD(v["d" + n]) : v["d" + n]}</b></li>`).join("")}</ul></div>`;
 }
 
 // ---------------------------------------------------------------- site data
@@ -97,6 +97,16 @@ const TRIANGLES = extractConst(zdata, "ZODIAC_TRIANGLES");
 const KM_NAMES = extractConst(i18n, "KM_ANIMAL_NAMES");
 const KM_INFO = extractConst(i18n, "KM_ANIMAL_INFO");
 const KM_DAYS = extractConst(i18n, "KM_DAY_NAMES");
+const ZH_NAMES = extractConst(i18n, "ZH_ANIMAL_NAMES");
+const ZH_INFO = extractConst(i18n, "ZH_ANIMAL_INFO");
+const ZH_DAYS = extractConst(i18n, "ZH_DAY_NAMES");
+const ZH_COLORS = extractConst(i18n, "ZH_COLOR_NAMES");
+const ZH_DIR = { North: "北", Northeast: "东北", East: "东", Southeast: "东南", South: "南", Southwest: "西南", West: "西", Northwest: "西北" };
+// per-language helpers (zh has no AI daily text, so zh always uses the copy banks below)
+const nameIn = (a, lang) => lang === "km" ? KM_NAMES[a] : lang === "zh" ? ZH_NAMES[a] : a;
+const infoIn = (a, lang) => lang === "km" ? KM_INFO[a] : lang === "zh" ? ZH_INFO[a] : INFO[a];
+const colorIn = (c, lang) => lang === "zh" ? (ZH_COLORS[String(c.en).toLowerCase()] || c.en) : c[lang];
+const dirIn = (d, lang) => lang === "zh" ? (ZH_DIR[d.en] || d.en) : d[lang];
 
 // Branch order of the traditional cycle (Rat first).
 const ORDER = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
@@ -120,6 +130,7 @@ const RANK = { great: 0, good: 1, ordinary: 2, caution: 3 };
 const TIER_LABEL = {
   en: { great: "Great Day", good: "Good Day", ordinary: "Ordinary Day", caution: "Take It Easy" },
   km: { great: "ថ្ងៃល្អខ្លាំង", good: "ថ្ងៃល្អ", ordinary: "ថ្ងៃធម្មតា", caution: "ថ្ងៃគួរប្រុងប្រយ័ត្ន" },
+  zh: { great: "大吉", good: "吉", ordinary: "平", caution: "宜小心" },
 };
 const GOOD_FOR = {
   en: {
@@ -133,6 +144,12 @@ const GOOD_FOR = {
     good: ["ការបន្តធ្វើកិច្ចការដែលកំពុងដំណើរការស្រាប់ដោយស្ថិរភាព។", "ការធ្វើការជាក្រុម ផែនការរួម និងការបញ្ចប់អ្វីដែលធ្វើមិនទាន់ចប់។", "ការរីកចម្រើនជាក់ស្តែង — ជ័យជម្នះតូចៗកើនឡើងនៅថ្ងៃនេះ។", "ការសន្ទនាដែលត្រូវការការអត់ធ្មត់ និងចិត្តស្ងប់។"],
     ordinary: ["កិច្ចការប្រចាំថ្ងៃ — គ្មានអ្វីពិសេសគាំទ្រ ឬប្រឆាំងនឹងអ្នកថ្ងៃនេះទេ។", "ការបញ្ចប់កិច្ចការផ្ទះ ឯកសារ និងកិច្ចការប្រចាំថ្ងៃ។", "ការរក្សាចង្វាក់ធម្មតារបស់អ្នក មិនចាំបាច់បង្ខំអ្វីទេ។", "ការរៀបចំផែនការទុកជាមុន ជាជាងធ្វើការសម្រេចចិត្តធំៗ។"],
     caution: ["កិច្ចការស្រាលៗប៉ុណ្ណោះ។ ប្រសិនបើអាច គួរជៀសវាងការសម្រេចចិត្តសំខាន់ៗ។", "ការងារស្ងប់ស្ងាត់ ការសម្រាក និងការបញ្ចប់កិច្ចការតូចតាច។", "ការស្តាប់ច្រើនជាងនិយាយ និងពិនិត្យលម្អិតម្តងទៀត។", "ការពន្យារការទិញធំៗ ឬការចុះហត្ថលេខាទៅថ្ងៃផ្សេង។"],
+  },
+  zh: {
+    great: ["适合做大决定、大胆行动、说出心里话。", "适合开始新事物、争取想要的东西、拜访重要的人。", "适合签约、启动或宣布——势头在你这边。", "适合联系一直想联系的人。"],
+    good: ["稳步推进已经在进行中的事情。", "适合团队合作、共同计划，把做了一半的事做完。", "务实前进——今天的小成果会慢慢累积。", "适合需要耐心和冷静头脑的谈话。"],
+    ordinary: ["处理日常事务——今天没有特别的助力或阻力。", "适合补做家务、文书和日常琐事。", "保持平常的节奏，不必勉强任何事。", "适合提前计划，而不是做大动作。"],
+    caution: ["只做轻松的事。可以的话，避开任何重大决定。", "适合安静工作、休息和收尾小事。", "多听少说，仔细核对细节。", "把大笔消费或签字推迟到别的日子。"],
   },
 };
 // Daily trade (buying, selling, stock, customers) — one line per rating, picked by date like GOOD_FOR.
@@ -149,10 +166,17 @@ const TRADE = {
     ordinary: ["ថ្ងៃលក់ដូរធម្មតា — រក្សាតម្លៃ និងទម្លាប់ដដែល មិនចាំបាច់ប្រថុយទិញស្តុកច្រើនទេ។", "ការលក់មធ្យម — ផ្តោតលើសេវាកម្មល្អ ការតាំងទំនិញឱ្យស្អាត និងការអាប់លុយឱ្យត្រឹមត្រូវ។", "ល្អសម្រាប់រាប់ស្តុក និងពិនិត្យថ្លៃដើម ជាជាងចាប់ផ្តើមអ្វីធំៗ។", "ទិញតែអ្វីដែលត្រូវការថ្ងៃនេះ ហើយទុកការកុម្ម៉ង់ធំៗសម្រាប់ថ្ងៃល្អជាងនេះ។"],
     caution: ["ជួញដូរដោយប្រុងប្រយ័ត្ន៖ លក់ទំនិញដែលមានស្រាប់ ជៀសវាងទិញស្តុកច្រើន ឱ្យគេខ្ចី ឬចុះកិច្ចសន្យាថ្មី។", "ពិនិត្យតម្លៃ លុយ និងលុយអាប់ឱ្យបានច្បាស់ — យឺតតែប្រាកដ ប្រសើរជាងលឿននៅថ្ងៃនេះ។", "មិនមែនជាថ្ងៃសម្រាប់ការព្រមព្រៀងប្រថុយ ឬលក់ជំពាក់ទេ — រក្សាលុយឱ្យមានសុវត្ថិភាព ហើយពន្យារការសម្រេចចិត្តធំៗ។", "ធ្វើឱ្យសាមញ្ញ៖ បម្រើអតិថិជនប្រចាំ ហើយទុកការចរចាសម្រាប់ថ្ងៃផ្សេង។"],
   },
+  zh: {
+    great: ["销售旺日：早点开门，把最好的货摆在前面，自信地开出公道价。", "适合成交、接新订单，补充卖得快的货。", "今天更容易赢得顾客——试试新产品、促销或特价。", "适合收回欠款，并与供应商谈好条件。"],
+    good: ["销售平稳——照顾好老顾客，跟进订单。", "适合少量补货，与信任的人做公平交易。", "买卖顺利；可与朋友或邻近店铺合作，接触更多买家。", "适合结清账目，安排下周的货。"],
+    ordinary: ["普通的交易日——保持平常的价格和节奏，不必冒险大量进货。", "销售一般；专注于好服务、整洁的陈列和准确找零。", "更适合盘点库存、核对成本，而不是开始大事。", "今天只买需要的，大订单留到更好的日子。"],
+    caution: ["谨慎交易：卖现有的货，避免大量进货、借钱给人或签新合同。", "仔细核对价格、钱款和找零——今天慢而稳胜过快。", "不适合冒险交易或赊账；保管好现金，推迟重大决定。", "保持简单：服务好老顾客，谈判留到别的日子。"],
+  },
 };
 const TRADE_T = {
   en: { h: "Trade today", hours: "Best selling hours", partner: "Good trade partner", partnerName: (n) => n, best: (l) => `Best signs for trade today: ${l}.`, shareDay: "Share today's fortune", shareSign: (n) => `Share ${n}'s fortune` },
   km: { h: "ការលក់ដូរថ្ងៃនេះ", hours: "ម៉ោងលក់ដាច់", partner: "ដៃគូជួញដូរល្អ", partnerName: (n) => "ឆ្នាំ" + n, best: (l) => `រាសីល្អសម្រាប់ការលក់ដូរថ្ងៃនេះ៖ ${l}។`, shareDay: "ចែករំលែកជោគជតាថ្ងៃនេះ", shareSign: (n) => `ចែករំលែកជោគជតាឆ្នាំ${n}` },
+  zh: { h: "今日买卖", hours: "旺销时段", partner: "好的生意伙伴", partnerName: (n) => "属" + n, best: (l) => `今天最适合做买卖的生肖：${l}。`, shareDay: "分享今日运势", shareSign: (n) => `分享属${n}的运势` },
 };
 const AVOID_NOTE = {
   en: {
@@ -167,6 +191,12 @@ const AVOID_NOTE = {
     ordinary: ["មិនមានអ្វីជំរុញវាខ្លាំងនៅថ្ងៃនេះទេ ប៉ុន្តែគួរកត់សម្គាល់។", "ថ្ងៃស្ងប់ស្ងាត់ជាពេលល្អក្នុងការកត់សម្គាល់ និងបន្ធូរបន្ថយវា។"],
     caution: ["ថ្ងៃនេះទំនោរនេះអាចប៉ះពាល់អ្នកបាន — សូមគិតឱ្យបានល្អិតល្អន់មុននឹងសម្រេចចិត្តធំៗ។", "ថ្ងៃនេះទំនោរនេះងាយកើតឡើង — សូមយឺតបន្តិច ហើយគេងគិតមុនការសម្រេចចិត្តធំៗ។"],
   },
+  zh: {
+    great: ["即使是好日子，这一点也值得留意，以免用力过猛。", "幸运的日子容易让人做过头——注意分寸。"],
+    good: ["这么顺的日子里容易放松警惕——别完全放下戒备。", "顺利的日子容易让人懈怠；保持一点警觉。"],
+    ordinary: ["今天没有什么把它推向极端，但值得留意。", "平静的日子正好可以觉察并缓和它。"],
+    caution: ["今天这种倾向容易出问题——做重大决定前先停一停。", "今天这种倾向更容易被触发——放慢脚步，重大选择先睡一觉再定。"],
+  },
 };
 const EN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const EN_DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -177,6 +207,8 @@ const weekday = EN_DAYS[new Date(Date.UTC(Y, M - 1, D)).getUTCDay()];
 const dateEN = `${EN_MONTHS[M - 1]} ${D}, ${Y}`;
 const dateKM = `ថ្ងៃទី${kmNum(D)} ខែ${KM_MONTHS[M - 1]} ឆ្នាំ${kmNum(Y)}`;
 const dateFullEN = `${weekday}, ${dateEN}`;
+const dateZH = `${Y}年${M}月${D}日`;
+const dateFullZH = `${dateZH} ${ZH_DAYS[weekday]}`;
 const dateFullKM = `${KM_DAYS[weekday]} ទី${kmNum(D)} ខែ${KM_MONTHS[M - 1]} ឆ្នាំ${kmNum(Y)}`;
 
 // ---------------------------------------------------------------- helpers
@@ -184,7 +216,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 const pick = (arr, animalIdx) => arr[(dayNumber + animalIdx) % arr.length];
 const sorted = ORDER.map((a, i) => ({ a, i, tier: tierOf(a) })).sort((x, y) => RANK[x.tier] - RANK[y.tier] || x.i - y.i);
 
-const names = (list, lang) => list.map((a) => (lang === "km" ? KM_NAMES[a] : a)).join(lang === "km" ? " " : ", ");
+const names = (list, lang) => list.map((a) => nameIn(a, lang)).join(lang === "km" ? " " : lang === "zh" ? "、" : ", ");
 const bestList = sorted.filter((c) => c.tier === "great" || c.tier === "good").map((c) => c.a);
 const cautionList = sorted.filter((c) => c.tier === "caution").map((c) => c.a);
 
@@ -201,13 +233,20 @@ const introKM = `<p>
     ដោយផ្អែកលើចំណុចខ្សោយធម្មតារបស់សត្វនោះ។
   </p>`;
 
+const introZH = `<p>
+    在传统的日周期中，每一天都带有十二生肖中某一个生肖的能量。今天是${ZH_NAMES[dayAnimal]}日：
+    与${names(bestList, "zh")}最为相合，而${names(cautionList, "zh")}今天需要多加小心。
+    以下是今天与十二生肖的关系——适合做什么，以及根据各生肖常见的弱点，需要留意的一件事。
+  </p>`;
+
 // ---------------------------------------------------------------- page copy
 const UI = extractConst(i18n, "UI_STRINGS");
 const ENERGY = {   // three-word "overall energy" of each day animal (presentation copy only)
   en: { Rat: ["Quick", "Resourceful", "Social"], Ox: ["Steady", "Practical", "Focused"], Tiger: ["Bold", "Energetic", "Decisive"], Rabbit: ["Gentle", "Calm", "Diplomatic"], Dragon: ["Confident", "Ambitious", "Radiant"], Snake: ["Wise", "Intuitive", "Composed"], Horse: ["Free", "Lively", "Adventurous"], Goat: ["Gentle", "Creative", "Caring"], Monkey: ["Playful", "Clever", "Adaptable"], Rooster: ["Precise", "Organized", "Proud"], Dog: ["Loyal", "Honest", "Protective"], Pig: ["Generous", "Warm", "Easygoing"] },
   km: { Rat: ["រហ័សរហួន", "ប៉ិនប្រសប់", "រួសរាយ"], Ox: ["ស្ថិរភាព", "ជាក់ស្តែង", "ផ្តោតអារម្មណ៍"], Tiger: ["ក្លាហាន", "សកម្ម", "ឆាប់សម្រេច"], Rabbit: ["ទន់ភ្លន់", "ស្ងប់ស្ងាត់", "ចេះសម្របសម្រួល"], Dragon: ["ទំនុកចិត្ត", "មហិច្ឆតា", "ភ្លឺស្វាង"], Snake: ["ឈ្លាសវៃ", "យល់ដឹងដោយវិចារណញាណ", "ស្ងប់ស្ងាត់"], Horse: ["សេរី", "រស់រវើក", "ចូលចិត្តផ្សងព្រេង"], Goat: ["ទន់ភ្លន់", "ច្នៃប្រឌិត", "យកចិត្តទុកដាក់"], Monkey: ["រីករាយ", "ឆ្លាត", "សម្របខ្លួនបាន"], Rooster: ["ច្បាស់លាស់", "មានរបៀប", "មានមោទនភាព"], Dog: ["ស្មោះស្ម័គ្រ", "ស្មោះត្រង់", "ការពារ"], Pig: ["ចិត្តទូលាយ", "កក់ក្តៅ", "ងាយស្រួល"] },
+  zh: { Rat: ["机敏", "足智多谋", "善交际"], Ox: ["稳重", "务实", "专注"], Tiger: ["勇敢", "活力", "果断"], Rabbit: ["温和", "平静", "圆融"], Dragon: ["自信", "进取", "光彩"], Snake: ["睿智", "直觉", "沉着"], Horse: ["自由", "活泼", "爱冒险"], Goat: ["温柔", "有创意", "体贴"], Monkey: ["风趣", "聪明", "善变通"], Rooster: ["精准", "有条理", "自豪"], Dog: ["忠诚", "正直", "守护"], Pig: ["慷慨", "温暖", "随和"] },
 };
-const andJoin = (arr, lang) => arr.length < 2 ? arr.join("") : lang === "km" ? arr.slice(0, -1).join(" ") + " និង " + arr[arr.length - 1] : arr.slice(0, -1).join(", ") + " & " + arr[arr.length - 1];
+const andJoin = (arr, lang) => arr.length < 2 ? arr.join("") : lang === "zh" ? arr.slice(0, -1).join("、") + "和" + arr[arr.length - 1] : lang === "km" ? arr.slice(0, -1).join(" ") + " និង " + arr[arr.length - 1] : arr.slice(0, -1).join(", ") + " & " + arr[arr.length - 1];
 const T = {
   en: {
     eyebrow: "Daily Fortune · MyBirthSign", h1a: "Today's Chinese", h1b: "Zodiac Fortune",
@@ -277,10 +316,52 @@ const T = {
       ["📚", "មគ្គុទ្ទេសក៍សត្វនិមិត្តសញ្ញា", "អានអំពីសត្វទាំង12។", "../animals.html"],
     ],
   },
+  zh: {
+    eyebrow: "每日运势 · MyBirthSign", h1a: "", h1b: "今日生肖运势",
+    sub: "看看今天为十二生肖带来什么。",
+    dayWord: (n) => `${n}日`, favors: (l) => `今天的能量有利于<strong>${l}</strong>`,
+    care: (n) => `<strong>${n}</strong>——今天多加小心`,
+    langAria: "语言",
+    energyTitle: "今日生肖能量", best: "最受助力", extra: "需多加小心", overall: "整体能量",
+    fine: "基于传统生肖解读，仅供娱乐与自我反思。",
+    sotd: "🌟 今日生肖", sotdLead: (n) => `今天对属${n}的人格外有利。`,
+    goodFor: "适合", watchOut: "需要留意", goodForUp: "适合", watchUp: "需要留意",
+    learn: (n) => `了解更多关于属${n} →`, view: (n) => `查看属${n}指南 →`,
+    gridH: "十二生肖今日运势", gridP: "找到你的生肖，看看今天会带来什么。",
+    guideH: "今日指引", guideP: "今天的生肖能量可以从生活的不同方面来看。这些只是供思考的提示，并非预测。",
+    guides: [
+      ["❤️", "爱情", "留意今天的能量如何影响你倾听和亲近身边人的方式。", "/compatibility", "查看配对 →"],
+      ["💼", "事业", "适合检视优先事项，看看稳定的努力最适合用在哪里。", "/business-partner", "查看商业伙伴 →"],
+      ["💰", "财运", "冷静地思考开支和储蓄。这只是反思，不是理财建议。", "../animals.html", "阅读生肖指南 →"],
+      ["🤝", "人际关系", "家人、朋友和同事——留意谁可以依靠，谁需要你的耐心。", "/checker", "查找你的生肖 →"],
+    ],
+    ctaH: "不知道自己的生肖？", ctaP: "输入生日，了解你的生肖、五行、幸运数字等。", ctaB: "✨ 查找我的生肖",
+    allH: "探索十二生肖", allP: "点击一个生肖，阅读完整指南。",
+    artH: (d) => `${d}生肖每日运势`,
+    artP2: "把这个页面当作每天轻松的自我检查。在列表中找到你的生肖，看看今天适合做什么，并留意一个需要注意的弱点。如果还不知道自己的生肖，生肖查询工具几秒钟就能告诉你。",
+    disc: "本每日运势基于传统生肖解读，仅供娱乐与自我反思，并非科学或理财建议。",
+    faqH: "常见问题",
+    toolsH: "探索 MyBirthSign", toolsP: "更多免费的生肖工具。",
+    tools: [
+      ["🔮", "生肖查询", "根据生日查找你的生肖和五行。", "/checker"],
+      ["💞", "配对计算器", "看看两个生肖合不合。", "/compatibility"],
+      ["💍", "婚期选择", "查找适合办婚礼的月份。", "/wedding-date"],
+      ["💼", "商业伙伴配对", "比较两位伙伴的生肖。", "/business-partner"],
+      ["📚", "生肖指南", "阅读十二生肖介绍。", "../animals.html"],
+    ],
+  },
 };
 function faqs(lang, dateTxt) {
-  const A = dayAnimal, nm = (a) => (lang === "km" ? KM_NAMES[a] : a);
+  const A = dayAnimal, nm = (a) => nameIn(a, lang);
   const others = bestList.filter((a) => a !== A);
+  if (lang === "zh") return [
+    ["今天的生肖是什么？", `今天（${dateTxt}）在传统的十二日周期中是${nm(A)}日。`],
+    ["哪些生肖与今天的能量最相合？", `${nm(A)}是今日生肖，${andJoin(others.map(nm), "zh")}与它同属三合，因此传统上今天最受助力。`],
+    ["今天哪个生肖需要多加小心？", `${andJoin(cautionList.map(nm), "zh")}在周期中与${nm(A)}正好相对（相冲），因此传统上今天需要多加小心。`],
+    ["生肖每日运势是怎么计算的？", "每个日历日按循环周期对应十二生肖之一，从一个固定的参考日期开始计算。然后把每个生肖与当天的生肖比较：相同生肖为大吉，同属三合的生肖为吉，正好相冲的生肖宜小心，其余生肖为平。"],
+    ["我的出生日期会影响我的生肖吗？", "会。生肖按农历年计算，从农历新年（大约在1月21日至2月20日之间）开始，而不是1月1日。如果你出生在1月或2月初，请用生肖查询工具确认。"],
+    ["生肖运势有科学依据吗？", "没有。生肖是一种传统文化体系，没有科学证据表明它能预测性格或未来。我们提供它仅供娱乐与自我反思。"],
+  ];
   if (lang === "km") return [
     ["តើសត្វនិមិត្តសញ្ញាប្រចាំថ្ងៃនេះជាអ្វី?", `ថ្ងៃនេះ ${dateTxt} ជាថ្ងៃ${nm(A)} ក្នុងវដ្តថ្ងៃ12 តាមប្រពៃណី។`],
     ["តើសញ្ញាណាខ្លះសមស្របបំផុតជាមួយថាមពលថ្ងៃនេះ?", `${nm(A)} ជាសញ្ញាប្រចាំថ្ងៃ ហើយ ${andJoin(others.map(nm), "km")} ស្ថិតក្នុងក្រុមមិត្តភក្តិតែមួយ ដូច្នេះតាមប្រពៃណីទទួលបានការគាំទ្រល្អបំផុតថ្ងៃនេះ។`],
@@ -313,7 +394,7 @@ const I = {
 const slugOf = (a) => a.toLowerCase();
 const guideHref = (a) => `../blog/zodiac-year-${slugOf(a)}.html`;
 const med = (a, size, cls = "") => `<img class="fx-med ${cls}" src="../images/fortune/med-${slugOf(a)}.webp" width="${size}" height="${size}" alt="" loading="lazy" decoding="async">`;
-const firstSentence = (s, lang) => { const m = s.trim().match(lang === "km" ? /^[^។]+។?/ : /^[^.]+\.?/); return m ? m[0].trim() : s.trim(); };
+const firstSentence = (s, lang) => { const m = s.trim().match(lang === "km" ? /^[^។]+។?/ : lang === "zh" ? /^[^。]+。?/ : /^[^.]+\.?/); return m ? m[0].trim() : s.trim(); };
 const CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v11.5A1.5 1.5 0 0 1 19 20H5a1.5 1.5 0 0 1-1.5-1.5V7A1.5 1.5 0 0 1 5 5.5ZM3.5 10h17M8 3.5v4M16 3.5v4"/></svg>';
 const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#3fae6b"/><path d="m7.5 12.3 3.2 3.2 5.8-6.4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const WARN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#e0566b"/><path d="M12 7v6M12 16.5v.1" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg>';
@@ -322,25 +403,27 @@ const attr = (v) => esc(v).replace(/"/g, "&quot;").replace(/'/g, "&#39;");   // 
 const DL = {
   en: { love: "Love", career: "Career", money: "Money", number: "Number", color: "Color", direction: "Direction", time: "Time", advice: "Today's Advice", more: "Love · Work · Money", theme: "Today's Theme", loveHi: "Love highlight", bizHi: "Business highlight" },
   km: { love: "ស្នេហា", career: "ការងារ", money: "លុយកាក់", number: "លេខ", color: "ពណ៌", direction: "ទិស", time: "ម៉ោង", advice: "ដំបូន្មានថ្ងៃនេះ", more: "ស្នេហា · ការងារ · លុយ", theme: "ប្រធានបទថ្ងៃនេះ", loveHi: "ស្នេហាលេចធ្លោ", bizHi: "អាជីវកម្មលេចធ្លោ" },
+  zh: { love: "爱情", career: "事业", money: "财运", number: "数字", color: "颜色", direction: "方位", time: "时间", advice: "今日建议", more: "爱情 · 事业 · 财运", theme: "今日主题", loveHi: "爱情亮点", bizHi: "生意亮点" },
 };
 
 function signCard(c, lang, t) {
-  const { a, i, tier } = c, isKm = lang === "km", name = isKm ? KM_NAMES[a] : a;
-  const weak = (isKm ? KM_INFO[a].weaknesses : INFO[a].weaknesses).trim();
-  const d = dataOf(a), F = factOf(a), L = d ? d.lucky : F.lucky, D = DL[lang], TT = TRADE_T[lang], date = isKm ? dateKM : dateEN;
+  const { a, i, tier } = c, isKm = lang === "km", name = nameIn(a, lang);
+  const weak = infoIn(a, lang).weaknesses.trim();
+  const d = dataOf(a), F = factOf(a), L = d ? d.lucky : F.lucky, D = DL[lang], TT = TRADE_T[lang], date = isKm ? dateKM : lang === "zh" ? dateZH : dateEN;
   const trade = pick(TRADE[lang][tier], i + 2);
-  const partner = TT.partnerName(isKm ? KM_NAMES[L.helperAnimal || F.lucky.helperAnimal] : (L.helperAnimal || F.lucky.helperAnimal));
+  const partner = TT.partnerName(nameIn(L.helperAnimal || F.lucky.helperAnimal, lang));
   const time = isKm ? kmNum(L.time) : L.time;
-  const goodFor = pick(GOOD_FOR[lang][tier], i), watch = `${weak} ${pick(AVOID_NOTE[lang][tier], i + 1)}`;
-  const x = d ? d.text[lang] : null;
+  const goodFor = pick(GOOD_FOR[lang][tier], i), watch = `${weak}${lang === "zh" ? "" : " "}${pick(AVOID_NOTE[lang][tier], i + 1)}`;
+  const x = d && d.text[lang] ? d.text[lang] : null;
+  const colorTxt = colorIn(L.color, lang), dirTxt = dirIn(L.direction, lang);
   const card = x
     ? { fortune: x.fortune, love: x.love, career: x.career, money: x.money, advice: x.advice }
     : { fortune: goodFor };
   const spec = Object.assign({ cardType: "daily", lang, animal: a, name, tier, label: TIER_LABEL[lang][tier], date }, card,
-    { trade, tradeLabel: TT.h, number: L.number, color: L.color[lang], colorHex: L.color.hex, direction: L.direction[lang], time: L.time });
+    { trade, tradeLabel: TT.h, number: L.number, color: colorTxt, colorHex: L.color.hex, direction: dirTxt, time: L.time });
   const tradeBox = `<div class="fx-trade"><h4>${esc(TT.h)}</h4><p>${esc(trade)}</p>
           <p class="fx-trade-meta"><span>${TT.hours} <strong>${time}</strong></span><span>${TT.partner} <strong>${esc(partner)}</strong></span></p></div>`;
-  const lucky = `<p class="fx-sign-lucky"><span>${D.number} <strong>${isKm ? kmNum(L.number) : L.number}</strong></span><span>${D.color} <i class="fx-swatch" style="background:${L.color.hex}"></i><strong>${esc(L.color[lang])}</strong></span><span>${D.direction} <strong>${esc(L.direction[lang])}</strong></span><span>${D.time} <strong>${time}</strong></span></p>`;
+  const lucky = `<p class="fx-sign-lucky"><span>${D.number} <strong>${isKm ? kmNum(L.number) : L.number}</strong></span><span>${D.color} <i class="fx-swatch" style="background:${L.color.hex}"></i><strong>${esc(colorTxt)}</strong></span><span>${D.direction} <strong>${esc(dirTxt)}</strong></span><span>${D.time} <strong>${time}</strong></span></p>`;
   const share = `<div class="fx-sign-share share-row" data-share-icon-only data-share-label="${attr(TT.shareSign(name))}" data-share-title="${attr(`${name} · ${TIER_LABEL[lang][tier]} — ${date}`)}" data-share-url="/blog/daily-fortune-${iso}.html?sign=${a.toLowerCase()}" data-share-card="${attr(JSON.stringify(spec))}"></div>`;
   const inner = x
     ? `<p class="fx-sign-fortune" data-sign="${a.toLowerCase()}">${esc(x.fortune)}</p>
@@ -374,20 +457,20 @@ function signCard(c, lang, t) {
 }
 
 function body(lang) {
-  const isKm = lang === "km", t = T[lang], nm = (a) => (isKm ? KM_NAMES[a] : a);
-  const A = dayAnimal, dateTxt = isKm ? dateKM : dateEN;
+  const isKm = lang === "km", isZh = lang === "zh", t = T[lang], nm = (a) => nameIn(a, lang);
+  const A = dayAnimal, dateTxt = isKm ? dateKM : isZh ? dateZH : dateEN;
   const favorsList = andJoin(bestList.map(nm), lang), careList = andJoin(cautionList.map(nm), lang);
   const energy = ENERGY[lang][A].join(" • ");
   const KM_TRAIT_LINE = { Ox: "ទុកចិត្តបាន ស្មោះត្រង់ និងឧស្សាហ៍ព្យាយាម។" };   // wording supplied by the site owner
-  const traitLine = isKm && KM_TRAIT_LINE[A] ? KM_TRAIT_LINE[A] : firstSentence(isKm ? KM_INFO[A].traits : INFO[A].traits, lang);
+  const traitLine = isKm && KM_TRAIT_LINE[A] ? KM_TRAIT_LINE[A] : firstSentence(infoIn(A, lang).traits, lang);
   // Sign of the day (always the day animal = "great"): three good-for lines from the existing bank, starting at the one its card shows.
   const gbank = GOOD_FOR[lang].great, aIdx = ORDER.indexOf(A);
   const goodBullets = [0, 1, 2].map((k) => gbank[((dayNumber + aIdx) % gbank.length + k) % gbank.length]);
-  const weakA = (isKm ? KM_INFO[A].weaknesses : INFO[A].weaknesses).trim();
+  const weakA = infoIn(A, lang).weaknesses.trim();
   const watchBullets = [weakA, pick(AVOID_NOTE[lang].great, aIdx + 1)];
   const faqItems = faqs(lang, dateTxt);
-  const introP = isKm ? introKM : introEN;
-  const wd = isKm ? KM_DAYS[weekday] : weekday;
+  const introP = isKm ? introKM : isZh ? introZH : introEN;
+  const wd = isKm ? KM_DAYS[weekday] : isZh ? ZH_DAYS[weekday] : weekday;
   const byZodiac = ORDER.map((a, i) => ({ a, i, tier: tierOf(a) }));
 
   return `<div class="fx-body">
@@ -430,7 +513,7 @@ function body(lang) {
   <div class="fx-duo">
     <section aria-labelledby="fx-sotd-${lang}">
       <div class="fx-gframe fx-feature">
-        <div class="fx-feature-art"><img src="../images/zodiac/${slugOf(A)}.webp" width="360" height="542" alt="${esc(isKm ? nm(A) : A + " zodiac animal")}" loading="lazy" decoding="async"></div>
+        <div class="fx-feature-art"><img src="../images/zodiac/${slugOf(A)}.webp" width="360" height="542" alt="${esc(isKm ? nm(A) : isZh ? "生肖" + nm(A) : A + " zodiac animal")}" loading="lazy" decoding="async"></div>
         <div class="fx-feature-body">
           <p class="fx-kicker">${t.sotd}</p>
           <h2 id="fx-sotd-${lang}">${esc(nm(A))}</h2>
@@ -458,14 +541,14 @@ ${t.guides.map((g) => `          <div class="fx-guide"><div class="fx-guide-ico"
 
   <section class="fx-sec" aria-labelledby="fx-grid-${lang}">
     <div class="fx-head"><h2 id="fx-grid-${lang}">${t.gridH}</h2>${I.orn}<p>${t.gridP}</p></div>
-    <div class="fx-day-share share-row" data-share-label="${attr(TRADE_T[lang].shareDay)}" data-share-title="${attr(t.gridH.replace(/<[^>]+>/g, "") + " — " + (isKm ? dateKM : dateEN))}" data-share-url="/blog/daily-fortune-${iso}.html" data-share-card="${attr(JSON.stringify({ cardType: "lucky", lang, date: isKm ? dateKM : dateEN, top: FACTS.highlights.topLucky, topNames: FACTS.highlights.topLucky.map(nm), careful: FACTS.highlights.careful.map(nm), text: TRADE_T[lang].best(andJoin(FACTS.highlights.topLucky.map(nm), lang)) }))}"></div>
-    <p class="fx-digits-note">${isKm ? "លេខសំណាង (1 ដល់ 5 ខ្ទង់) សម្រាប់ថ្ងៃនេះ គឺសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។" : "Lucky numbers (1 to 5 digits) are for this day only and for fun, not a prediction or betting advice."}</p>
+    <div class="fx-day-share share-row" data-share-label="${attr(TRADE_T[lang].shareDay)}" data-share-title="${attr(t.gridH.replace(/<[^>]+>/g, "") + " — " + dateTxt)}" data-share-url="/blog/daily-fortune-${iso}.html" data-share-card="${attr(JSON.stringify({ cardType: "lucky", lang, date: dateTxt, top: FACTS.highlights.topLucky, topNames: FACTS.highlights.topLucky.map(nm), careful: FACTS.highlights.careful.map(nm), text: TRADE_T[lang].best(andJoin(FACTS.highlights.topLucky.map(nm), lang)) }))}"></div>
+    <p class="fx-digits-note">${isKm ? "លេខសំណាង (1 ដល់ 5 ខ្ទង់) សម្រាប់ថ្ងៃនេះ គឺសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។" : isZh ? "幸运数字（1至5位数）仅适用于今天，仅供娱乐，并非预测或投注建议。" : "Lucky numbers (1 to 5 digits) are for this day only and for fun, not a prediction or betting advice."}</p>
     <ul class="fx-grid">
 ${byZodiac.map((c) => "      " + signCard(c, lang, t)).join("\n")}
     </ul>
   </section>
 
-  <div class="ad-slot">${isKm ? "ទំនេរសម្រាប់ផ្សាយពាណិជ្ជកម្ម" : "Ad space"}</div>
+  <div class="ad-slot">${isKm ? "ទំនេរសម្រាប់ផ្សាយពាណិជ្ជកម្ម" : isZh ? "广告位" : "Ad space"}</div>
 
   <section class="fx-sec" aria-labelledby="fx-cta-${lang}">
     <div class="fx-cta">
@@ -488,10 +571,10 @@ ${ORDER.map((a) => `        <li><a href="${guideHref(a)}"${a === A ? ' class="is
 
   <article class="fx-article fx-gframe">
     <h2>${esc(t.artH(dateTxt))}</h2>
-    ${DATA ? `<p class="fx-theme"><strong>${DL[lang].theme}:</strong> ${esc(DATA.highlights.theme[lang])}</p>
+    ${DATA && DATA.highlights.theme[lang] ? `<p class="fx-theme"><strong>${DL[lang].theme}${isZh ? "：" : ":"}</strong> ${esc(DATA.highlights.theme[lang])}</p>
     <p>${esc(DATA.highlights.summary[lang])}</p>
-    <p><strong>${DL[lang].loveHi}:</strong> ${esc(DATA.highlights.love[lang])}</p>
-    <p><strong>${DL[lang].bizHi}:</strong> ${esc(DATA.highlights.business[lang])}</p>
+    <p><strong>${DL[lang].loveHi}${isZh ? "：" : ":"}</strong> ${esc(DATA.highlights.love[lang])}</p>
+    <p><strong>${DL[lang].bizHi}${isZh ? "：" : ":"}</strong> ${esc(DATA.highlights.business[lang])}</p>
     ` : ""}${introP}
     <p>${t.artP2}</p>
     <p class="fx-disc">${t.disc}</p>
@@ -554,8 +637,9 @@ if (exists && !FORCE) {
     .replace("{{JSONLD}}", () => jsonld)
     .replace("{{BODY_EN}}", () => body("en"))
     .replace("{{BODY_KM}}", () => body("km"))
+    .replace("{{BODY_ZH}}", () => body("zh"))
     // shared sign link (?sign=rat): open that sign's card, scroll to it and glow briefly 
-    .replace("</body>", () => `<script>(function(){var m=/[?&]sign=([a-z]+)/.exec(location.search);if(!m)return;function go(){var l=document.documentElement.lang==="km"?"km":"en",c=document.querySelector('[data-lang-content="'+l+'"] [data-sign="'+m[1]+'"]')||document.querySelector('[data-sign="'+m[1]+'"]');if(!c)return;var li=c.closest(".fx-sign"),d=li&&li.querySelector("details");if(!li)return;if(!li.offsetParent){if(++n<40)setTimeout(go,100);return;}if(d)d.open=true;li.classList.add("fx-sign-hit");li.style.scrollMarginTop="16px";li.scrollIntoView({block:"start"});setTimeout(function(){li.scrollIntoView({block:"start"});},700);}var n=0;if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50);});else setTimeout(go,50);})();</script>\n</body>`);
+    .replace("</body>", () => `<script>(function(){var m=/[?&]sign=([a-z]+)/.exec(location.search);if(!m)return;function go(){var hl=document.documentElement.lang,l=hl==="km"?"km":/^zh/.test(hl)?"zh":"en",c=document.querySelector('[data-lang-content="'+l+'"] [data-sign="'+m[1]+'"]')||document.querySelector('[data-sign="'+m[1]+'"]');if(!c)return;var li=c.closest(".fx-sign"),d=li&&li.querySelector("details");if(!li)return;if(!li.offsetParent){if(++n<40)setTimeout(go,100);return;}if(d)d.open=true;li.classList.add("fx-sign-hit");li.style.scrollMarginTop="16px";li.scrollIntoView({block:"start"});setTimeout(function(){li.scrollIntoView({block:"start"});},700);}var n=0;if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){setTimeout(go,50);});else setTimeout(go,50);})();</script>\n</body>`);
   if (/\{\{\w+\}\}/.test(html)) throw new Error("Unfilled placeholder in template output");
   write(postPath, html);
   console.log(`Wrote ${postPath} — ${dayAnimal} day (great: ${sorted.filter((c) => c.tier === "great").map((c) => c.a)}, caution: ${cautionList}).`);
