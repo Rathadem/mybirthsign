@@ -495,7 +495,10 @@
       var PX = 120, IW = W - PX * 2, y = 74;
       if (spec.eyebrow) { mx.textAlign = "center"; mx.fillStyle = GOLD2; font(mx, L, "body", L === "km" ? 28 : 26, 700); mx.fillText(L !== "en" ? spec.eyebrow : String(spec.eyebrow).toUpperCase().split("").join(String.fromCharCode(8202)), W / 2, y); y += 30; }
       var tg = mx.createLinearGradient(0, y, 0, y + 160); tg.addColorStop(0, "#fff1c8"); tg.addColorStop(1, "#e7c27a");
-      mx.fillStyle = tg; mx.textAlign = "center"; font(mx, L, "head", L === "km" ? (compact ? 44 : 50) : (compact ? 56 : 64), L === "km" ? 400 : 700);
+      // Khmer titles: the regular Khmer face in a solid colour. The display face with a gradient fill dropped all but the
+      // first letter of each line on some phones (same choice as the "big" Khmer lines further up).
+      mx.fillStyle = L === "km" ? "#fff1c8" : tg; mx.textAlign = "center";
+      if (L === "km") font(mx, L, "body", compact ? 46 : 52, 700); else font(mx, L, "head", compact ? 56 : 64, 700);
       y = drawLines(mx, wrap(mx, spec.title || "", IW, L, 3), W / 2, y + (L === "km" ? 62 : 64), L === "km" ? 78 : 72, "center");
       if (spec.sub) { font(mx, L, "body", L === "km" ? 28 : 30, 400); mx.fillStyle = INK; y = drawLines(mx, wrap(mx, spec.sub, IW, L, 2), W / 2, y + 18, L === "km" ? 46 : 42, "center"); }
       // ornament
