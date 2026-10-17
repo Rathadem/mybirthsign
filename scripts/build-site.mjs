@@ -60,8 +60,21 @@ function pagePath(rel, html) {
 const urlFor = (p, lang) => SITE + prefix(lang) + (p === "/" && lang !== "en" ? "/" : p);
 const hrefFor = (p, lang) => prefix(lang) + (p === "/" && lang !== "en" ? "/" : p);
 
-function nextNonSpace(html, i) { while (i < html.length && /\s/.test(html[i])) i++; return i; }
-function prevNonSpace(html, i) { while (i > 0 && /\s/.test(html[i - 1])) i--; return i; }
+// whitespace and HTML comments between language blocks do not break their neighbourhood
+function nextNonSpace(html, i) {
+  for (;;) {
+    while (i < html.length && /\s/.test(html[i])) i++;
+    if (html.startsWith("<!--", i)) { const e = html.indexOf("-->", i); if (e < 0) return i; i = e + 3; continue; }
+    return i;
+  }
+}
+function prevNonSpace(html, i) {
+  for (;;) {
+    while (i > 0 && /\s/.test(html[i - 1])) i--;
+    if (html.startsWith("-->", i - 3)) { const s = html.lastIndexOf("<!--", i - 3); if (s < 0) return i; i = s; continue; }
+    return i;
+  }
+}
 
 function variant(html, lang, p) {
   // 1. drop the other languages' blocks (in Chinese an English block stays where there is no Chinese block next to it)
