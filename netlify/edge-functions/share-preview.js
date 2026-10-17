@@ -33,9 +33,10 @@ function dateText(iso, L) {
 
 /** Works out the preview for a URL, or null when the page should be left alone. dailyRecord is optional. */
 export function previewFor(url, dailyRecord) {
-  const q = url.searchParams, L = q.get("lang") === "km" || q.get("lang") === "zh" ? q.get("lang") : "en";
+  const q = url.searchParams, pm = /^\/(km|zh)(\/.*)$/.exec(url.pathname);   // /km/... and /zh/... language addresses
+  const L = pm ? pm[1] : q.get("lang") === "km" || q.get("lang") === "zh" ? q.get("lang") : "en";
   const shareUrl = SITE + url.pathname + url.search;
-  const path = url.pathname.replace(/\.html$/, "");
+  const path = (pm ? pm[2] : url.pathname).replace(/\.html$/, "");
   if (path === "/compatibility" && q.get("pair")) {
     const m = /^([a-z]+)-([a-z]+)$/.exec(q.get("pair"));
     const a = m && animalOf(m[1]), b = m && animalOf(m[2]);
@@ -105,7 +106,7 @@ export function applyPreview(html, p) {
 export default async function handler(request, context) {
   const url = new URL(request.url);
   const q = url.searchParams;
-  if (!q.has("pair") && !q.has("sign") && q.get("lang") !== "km" && q.get("lang") !== "zh") return;   // not a shared result: untouched
+  if (!q.has("pair") && !q.has("sign") && q.get("lang") !== "km" && q.get("lang") !== "zh" && !/^\/(km|zh)\//.test(url.pathname)) return;   // not a shared result: untouched
   let daily = null;
   const dm = /daily-fortune-(\d{4}-\d{2}-\d{2})/.exec(url.pathname);
   if (dm && q.has("sign")) {
@@ -122,6 +123,7 @@ export default async function handler(request, context) {
 }
 
 export const config = {
-  path: ["/compatibility", "/compatibility.html", "/blog/daily-fortune-*"],
+  path: ["/compatibility", "/compatibility.html", "/blog/daily-fortune-*",
+    "/km/compatibility", "/km/compatibility.html", "/km/blog/daily-fortune-*", "/zh/compatibility", "/zh/compatibility.html", "/zh/blog/daily-fortune-*"],
   onError: "bypass",
 };

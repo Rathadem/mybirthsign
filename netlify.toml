@@ -2,7 +2,10 @@
   functions = "netlify/functions"
   # link previews for shared results (netlify/edge-functions/share-preview.js)
   edge_functions = "netlify/edge-functions"
-  publish = "."
+  # One language per address: scripts/build-site.mjs writes dist/ with English at /page, Khmer at /km/page (no ads,
+  # Khmer is not an AdSense language) and Chinese at /zh/page. The repo files themselves stay multi-language.
+  command = "node scripts/build-site.mjs"
+  publish = "dist"
 
 [functions]
   node_bundler = "esbuild"

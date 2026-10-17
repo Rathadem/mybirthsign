@@ -1438,7 +1438,41 @@ const SITE_LANGS = ["en", "km", "zh"];
 /** the language a piece of content has: `lang` when the table has it, otherwise English */
 function pickLang(table, lang) { lang = lang || getLang(); return table && table[lang] !== undefined ? table[lang] : (table ? table.en : undefined); }
 
+// Published site (scripts/build-site.mjs): every page address has ONE language — /page (English), /km/page, /zh/page —
+// and the build marks it on <html data-site-lang>. The repo's own files (no mark) keep the old one-address behaviour.
+const PAGE_LANG = (function () {
+  try { const l = document.documentElement.getAttribute("data-site-lang"); return SITE_LANGS.indexOf(l) > -1 ? l : null; } catch (e) { return null; }
+})();
+/** this page's address in another language, e.g. /km/blog/x for /blog/x (query and #hash kept, ?lang dropped) */
+function langUrl(lang) {
+  const u = new URL(window.location.href);
+  const bare = u.pathname.replace(/^\/(km|zh)(?=\/|$)/, "") || "/";
+  u.pathname = (lang === "en" ? "" : "/" + lang) + bare;
+  u.searchParams.delete("lang");
+  return u.toString();
+}
+function storeLang(lang) { try { window.localStorage.setItem(LANG_STORAGE_KEY, lang); } catch (e) { /* storage blocked */ } }
+// old links (?lang=km) and a visitor's saved choice open the matching language address
+(function () {
+  if (!PAGE_LANG) return;
+  try {
+    const q = new URLSearchParams(window.location.search).get("lang");
+    if (SITE_LANGS.indexOf(q) > -1) {
+      storeLang(q);
+      window.location.replace(langUrl(q));
+      return;
+    }
+    if (PAGE_LANG === "en") {
+      const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
+      if (stored === "km" || stored === "zh") { window.location.replace(langUrl(stored)); return; }
+    } else {
+      storeLang(PAGE_LANG);
+    }
+  } catch (e) { /* stay on this page */ }
+})();
+
 function getLang() {
+  if (PAGE_LANG) return PAGE_LANG;
   // a shared Khmer/English link (?lang=km / ?lang=en) opens in that language and remembers it
   try {
     const q = new URLSearchParams(window.location.search).get("lang");
@@ -1465,11 +1499,8 @@ function getLang() {
 
 function setLang(lang) {
   if (SITE_LANGS.indexOf(lang) < 0) return;
-  try {
-    window.localStorage.setItem(LANG_STORAGE_KEY, lang);
-  } catch (e) {
-    // best effort only
-  }
+  storeLang(lang);
+  if (PAGE_LANG) { if (lang !== PAGE_LANG) window.location.href = langUrl(lang); return; }
   if (typeof window !== "undefined" && window.location && typeof window.location.reload === "function") {
     // drop a shared ?lang=… so the visitor's own choice wins after the reload
     try {
@@ -1576,7 +1607,7 @@ function markCurrentNav() {
   const nav = document.querySelector("header.site-header nav");
   if (!nav) return;
   const norm = function (p) {
-    p = String(p || "/").toLowerCase().replace(/\/index(\.html)?$/, "/").replace(/\.html$/, "").replace(/\/+$/, "");
+    p = String(p || "/").toLowerCase().replace(/^\/(km|zh)(?=\/|$)/, "").replace(/\/index(\.html)?$/, "/").replace(/\.html$/, "").replace(/\/+$/, "");
     if (p === "/zodiac-guide") p = "/animals";
     return p || "/";
   };

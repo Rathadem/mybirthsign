@@ -138,6 +138,8 @@ function _shareUrlFor(row, lang) {
     const own = row.getAttribute("data-share-url");
     u = new URL(own || window.location.href, window.location.origin);
     ["person1", "person2", "g1", "g2", "dob", "date", "name"].forEach(function (k) { u.searchParams.delete(k); });
+    // shared links use the main address + ?lang= (link previews read it; the page then opens the /km/ or /zh/ address)
+    u.pathname = u.pathname.replace(/^\/(km|zh)(?=\/|$)/, "") || "/";
     if (lang === "km" || lang === "zh") u.searchParams.set("lang", lang); else u.searchParams.delete("lang");
     if (!own) u.hash = "";
     return u.toString();
