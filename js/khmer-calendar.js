@@ -183,8 +183,7 @@
     var kt = document.querySelector(".khmer-title"); if (kt) { kt.textContent = lang === "km" ? "ប្រតិទិនចន្ទគតិខ្មែរ" : ""; kt.hidden = lang !== "km"; }
     if ($("title")) $("title").hidden = lang === "km";
     $("todayBtn").textContent = w.today; $("jumpLabel").textContent = w.jump;
-    var opts = $("language").options; for (var o = 0; o < opts.length; o++) opts[o].textContent = w.langs[o];
-    $("language").value = lang;
+    var sel = $("language"); if (sel) { for (var o = 0; o < sel.options.length; o++) sel.options[o].textContent = w.langs[o]; sel.value = lang; }
     var key = document.querySelector(".calendar-key"); if (key) key.innerHTML = w.key.map(function (x) { return "<span>" + esc(x) + "</span>"; }).join("");
     if ($("footerData")) $("footerData").textContent = w.footer;
     $("week").innerHTML = w.week.map(function (d) { return "<div>" + d + "</div>"; }).join("");
@@ -234,7 +233,7 @@
     $("next").onclick = function () { shown = new Date(shown.getFullYear(), shown.getMonth() + 1, 1); render(); };
     $("todayBtn").onclick = function () { selected = new Date(); selected.setHours(0, 0, 0, 0); shown = new Date(selected.getFullYear(), selected.getMonth(), 1); render(); };
     $("dateJump").onchange = function (e) { if (!e.target.value) return; var p = e.target.value.split("-").map(Number); if (p[0] < 1900 || p[0] > 2099) return; selected = new Date(p[0], p[1] - 1, p[2]); shown = new Date(p[0], p[1] - 1, 1); render(); };
-    $("language").onchange = function (e) {
+    if ($("language")) $("language").onchange = function (e) {
       if (SITE) { location.href = langUrl(e.target.value); return; }   // published site: one address per language
       lang = e.target.value; render();
     };
