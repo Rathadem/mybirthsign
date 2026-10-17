@@ -23,6 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Playfair+Display:wght@600;700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Playfair+Display:wght@600;700&display=swap"></noscript>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/blog-polish.css">
 
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9939402104083173" crossorigin="anonymous"></script>
@@ -128,12 +129,16 @@
   </a>
 </div>
 
-<section class="bv2-section" id="guides">
+<section class="bv2-section bv2-guides-slider" id="guides">
   <div class="bv2-section-head">
     <h2>Popular Guides</h2>
     <a class="bv2-view-all" href="#zodiac-animals">All 12 Animal Guides ↓</a>
+    <div class="bv2-guide-carousel-controls" role="group" aria-label="Popular Guides carousel controls">
+      <button type="button" class="bv2-guide-arrow" data-guide-slide="prev" aria-label="Previous popular guides" aria-controls="guides-track-en" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button type="button" class="bv2-guide-arrow" data-guide-slide="next" aria-label="Next popular guides" aria-controls="guides-track-en"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
   </div>
-  <div class="bv2-guides-grid">
+  <div class="bv2-guides-grid bv2-guides-slider-track" id="guides-track-en" data-guide-track role="region" aria-roledescription="carousel" aria-label="Popular Guides carousel" tabindex="0">
     <a class="bv2-guide-card bv2-guide-wide" href="blog/khmer-lunar-calendar-birth-date.html">
       <img class="bv2-guide-art" src="images/guides/khmer-lunar-card.webp" alt="A full moon rising behind Angkor Wat at night, its towers lit in gold and reflected in a lotus pond" loading="lazy" width="640" height="336">
       <div class="bv2-guide-body">
@@ -298,7 +303,17 @@
   </div>
 </section>
 
-<section class="bv2-info-section">
+<section class="bv2-section bv2-latest-section" id="latest-articles-en">
+  <div class="bv2-section-head"><h2>Latest Articles</h2><a class="bv2-view-all" href="blog.html">View All Articles →</a></div>
+  <div class="bv2-latest-grid">
+    <a class="bv2-latest-card" href="blog/five-elements-explained.html"><img src="images/guides/five-elements.webp" alt="The five elements in Chinese zodiac tradition" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">Zodiac Basics</p><h3>The Five Elements in Chinese Zodiac</h3><p>Learn how Wood, Fire, Earth, Metal, and Water add another layer to zodiac tradition.</p><span class="bv2-latest-read">Read article →</span></div></a>
+    <a class="bv2-latest-card" href="blog/zodiac-compatibility-guide.html"><img src="images/guides/compatibility-guide.webp" alt="Zodiac compatibility and relationships" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">Love &amp; Compatibility</p><h3>Most Compatible Zodiac Signs</h3><p>Explore traditional zodiac pairings for love, friendship, and long-term relationships.</p><span class="bv2-latest-read">Read article →</span></div></a>
+    <a class="bv2-latest-card" href="blog/lucky-days-opening-business.html"><img src="images/guides/opening-day-card.webp" alt="Choosing an auspicious day to open a business" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">Traditional Guidance</p><h3>How to Choose a Lucky Business Opening Day</h3><p>Discover Cambodian traditions for choosing a meaningful date for a new beginning.</p><span class="bv2-latest-read">Read article →</span></div></a>
+    <a class="bv2-latest-card" href="blog/khmer-lunar-calendar-birth-date.html"><img src="images/guides/khmer-lunar-card.webp" alt="Angkor Wat beneath the moon, representing the Khmer lunar calendar" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">Khmer Culture</p><h3>Understanding the Khmer Lunar Calendar</h3><p>Learn about waxing and waning moon days and finding your Khmer lunar birth date.</p><span class="bv2-latest-read">Read article →</span></div></a>
+  </div>
+</section>
+
+  <section class="bv2-info-section">
   <div class="bv2-info-grid">
     <div>
       <h2>Explore the Chinese Zodiac</h2>
@@ -402,12 +417,16 @@
   </a>
 </div>
 
-<section class="bv2-section" id="guides-km">
+<section class="bv2-section bv2-guides-slider" id="guides-km">
   <div class="bv2-section-head">
     <h2>មគ្គុទ្ទេសក៍ពេញនិយម</h2>
     <a class="bv2-view-all" href="#zodiac-animals-km">មគ្គុទ្ទេសក៍សត្វទាំង 12 ↓</a>
+    <div class="bv2-guide-carousel-controls" role="group" aria-label="ប៊ូតុងបញ្ជាផ្ទាំងរំកិល">
+      <button type="button" class="bv2-guide-arrow" data-guide-slide="prev" aria-label="មើលមគ្គុទ្ទេសក៍មុន" aria-controls="guides-track-km" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button type="button" class="bv2-guide-arrow" data-guide-slide="next" aria-label="មើលមគ្គុទ្ទេសក៍បន្ទាប់" aria-controls="guides-track-km"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
   </div>
-  <div class="bv2-guides-grid">
+  <div class="bv2-guides-grid bv2-guides-slider-track" id="guides-track-km" data-guide-track role="region" aria-roledescription="carousel" aria-label="ផ្ទាំងរំកិលមគ្គុទ្ទេសក៍ពេញនិយម" tabindex="0">
     <a class="bv2-guide-card bv2-guide-wide" href="blog/khmer-lunar-calendar-birth-date.html">
       <img class="bv2-guide-art" src="images/guides/khmer-lunar-card.webp" alt="ព្រះចន្ទពេញបូណ៌មីរះនៅពីក្រោយប្រាសាទអង្គរវត្តពេលយប់ ប៉មភ្លឺពណ៌មាស ឆ្លុះលើស្រះផ្កាឈូក" loading="lazy" width="640" height="336">
       <div class="bv2-guide-body">
@@ -584,7 +603,17 @@
   </div>
 </section>
 
-<section class="bv2-info-section">
+<section class="bv2-section bv2-latest-section" id="latest-articles-km">
+  <div class="bv2-section-head"><h2>អត្ថបទថ្មីៗ</h2><a class="bv2-view-all" href="blog.html">មើលអត្ថបទទាំងអស់ →</a></div>
+  <div class="bv2-latest-grid">
+    <a class="bv2-latest-card" href="blog/five-elements-explained.html"><img src="images/guides/five-elements.webp" alt="ធាតុទាំងប្រាំក្នុងប្រពៃណីរាសីចិន" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">មូលដ្ឋានរាសី</p><h3>ធាតុទាំងប្រាំក្នុងរាសីចិន</h3><p>ស្វែងយល់អំពីធាតុឈើ ភ្លើង ដី លោហៈ និងទឹកក្នុងប្រពៃណីរាសី។</p><span class="bv2-latest-read">អានអត្ថបទ →</span></div></a>
+    <a class="bv2-latest-card" href="blog/zodiac-compatibility-guide.html"><img src="images/guides/compatibility-guide.webp" alt="ភាពសមស្របនៃរាសី និងទំនាក់ទំនង" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">ស្នេហា និងភាពសមស្រប</p><h3>រាសីដែលសមស្របគ្នាបំផុត</h3><p>ស្វែងយល់ពីគូរាសីតាមប្រពៃណីសម្រាប់ស្នេហា មិត្តភាព និងទំនាក់ទំនងយូរអង្វែង។</p><span class="bv2-latest-read">អានអត្ថបទ →</span></div></a>
+    <a class="bv2-latest-card" href="blog/lucky-days-opening-business.html"><img src="images/guides/opening-day-card.webp" alt="ការជ្រើសរើសថ្ងៃសមរម្យសម្រាប់បើកអាជីវកម្ម" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">ការណែនាំតាមប្រពៃណី</p><h3>របៀបជ្រើសរើសថ្ងៃបើកអាជីវកម្ម</h3><p>ស្វែងយល់ពីប្រពៃណីខ្មែរក្នុងការជ្រើសរើសថ្ងៃសម្រាប់ការចាប់ផ្តើមថ្មី។</p><span class="bv2-latest-read">អានអត្ថបទ →</span></div></a>
+    <a class="bv2-latest-card" href="blog/khmer-lunar-calendar-birth-date.html"><img src="images/guides/khmer-lunar-card.webp" alt="អង្គរវត្តក្រោមពន្លឺព្រះចន្ទ តំណាងឱ្យប្រតិទិនចន្ទគតិខ្មែរ" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">វប្បធម៌ខ្មែរ</p><h3>ស្វែងយល់អំពីប្រតិទិនចន្ទគតិខ្មែរ</h3><p>ស្វែងយល់ពីថ្ងៃកើត ថ្ងៃរោច និងរបៀបរកថ្ងៃខែកំណើតតាមចន្ទគតិខ្មែរ។</p><span class="bv2-latest-read">អានអត្ថបទ →</span></div></a>
+  </div>
+</section>
+
+  <section class="bv2-info-section">
   <div class="bv2-info-grid">
     <div>
       <h2>ស្វែងយល់អំពីនិមិត្តសញ្ញាចិន</h2>
@@ -686,12 +715,16 @@
   </a>
 </div>
 
-<section class="bv2-section" id="guides-zh">
+<section class="bv2-section bv2-guides-slider" id="guides-zh">
   <div class="bv2-section-head">
     <h2>热门指南</h2>
     <a class="bv2-view-all" href="#zodiac-animals-zh">十二生肖指南 ↓</a>
+    <div class="bv2-guide-carousel-controls" role="group" aria-label="热门指南轮播控制">
+      <button type="button" class="bv2-guide-arrow" data-guide-slide="prev" aria-label="上一组热门指南" aria-controls="guides-track-zh" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button type="button" class="bv2-guide-arrow" data-guide-slide="next" aria-label="下一组热门指南" aria-controls="guides-track-zh"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
   </div>
-  <div class="bv2-guides-grid">
+  <div class="bv2-guides-grid bv2-guides-slider-track" id="guides-track-zh" data-guide-track role="region" aria-roledescription="carousel" aria-label="热门指南轮播" tabindex="0">
     <a class="bv2-guide-card bv2-guide-wide" href="blog/khmer-lunar-calendar-birth-date.html">
       <img class="bv2-guide-art" src="images/guides/khmer-lunar-card.webp" alt="夜晚满月从吴哥窟后方升起，金色的塔影倒映在莲花池中" loading="lazy" width="640" height="336">
       <div class="bv2-guide-body">
@@ -856,7 +889,17 @@
   </div>
 </section>
 
-<section class="bv2-info-section">
+<section class="bv2-section bv2-latest-section" id="latest-articles-zh">
+  <div class="bv2-section-head"><h2>最新文章</h2><a class="bv2-view-all" href="blog.html">查看全部文章 →</a></div>
+  <div class="bv2-latest-grid">
+    <a class="bv2-latest-card" href="blog/five-elements-explained.html"><img src="images/guides/five-elements.webp" alt="中国生肖传统中的五行" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">生肖基础</p><h3>中国生肖中的五行</h3><p>了解木、火、土、金、水如何为生肖传统增添另一层含义。</p><span class="bv2-latest-read">阅读文章 →</span></div></a>
+    <a class="bv2-latest-card" href="blog/zodiac-compatibility-guide.html"><img src="images/guides/compatibility-guide.webp" alt="生肖配对与人际关系" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">爱情与配对</p><h3>最合拍的生肖组合</h3><p>探索传统生肖配对在爱情、友谊和长期关系中的意义。</p><span class="bv2-latest-read">阅读文章 →</span></div></a>
+    <a class="bv2-latest-card" href="blog/lucky-days-opening-business.html"><img src="images/guides/opening-day-card.webp" alt="选择适合开业的吉日" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">传统指南</p><h3>如何选择开业吉日</h3><p>了解柬埔寨传统中为事业新起点选择有意义日期的方式。</p><span class="bv2-latest-read">阅读文章 →</span></div></a>
+    <a class="bv2-latest-card" href="blog/khmer-lunar-calendar-birth-date.html"><img src="images/guides/khmer-lunar-card.webp" alt="月光下的吴哥窟，代表高棉阴历" loading="lazy" width="440" height="260"><div class="bv2-latest-body"><p class="bv2-latest-kicker">高棉文化</p><h3>了解高棉阴历</h3><p>认识月亮盈亏日期，并了解如何查找自己的高棉阴历生日。</p><span class="bv2-latest-read">阅读文章 →</span></div></a>
+  </div>
+</section>
+
+  <section class="bv2-info-section">
   <div class="bv2-info-grid">
     <div>
       <h2>探索中国生肖</h2>
@@ -903,5 +946,6 @@
 </footer>
 
 <script src="js/i18n.js"></script>
+<script src="js/blog-carousel.js" defer></script>
 </body>
 </html>
