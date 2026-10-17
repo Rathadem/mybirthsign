@@ -4080,3 +4080,25 @@ html { scroll-padding-top: calc(var(--hdr-h, 60px) + 16px); }
 .kny-res span { font-size: .8rem; color: #b9b0de; }
 .kny-res b { font-size: 1.15rem; color: #fff3d1; }
 @media (max-width: 760px) { .kny-two, .kny-days, .kny-exs { grid-template-columns: 1fr; } }
+
+/* ===== Opening-day guide (blog/lucky-days-opening-business.html) ===== */
+.lod-ways { list-style: none; margin: 0 !important; padding: 0 !important; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.lod-ways li { margin: 0 !important; position: relative; padding-left: 58px !important; }
+.lod-num { position: absolute; left: 16px; top: 16px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; color: #2a1d05; background: linear-gradient(180deg, #f6d98d, #d4a43c); }
+.lod-ways h3 { margin: 0 0 6px !important; color: #fff3d1 !important; font-size: 1.02rem; }
+.lod-ways p { margin: 0 !important; font-size: .92rem; line-height: 1.6; color: #d9d2ee; }
+.lod-sign { display: inline-flex; align-items: center; gap: 8px; color: #fff3d1; font-weight: 700; }
+.lod-sign img { width: 32px; height: 32px; border-radius: 50%; }
+.lod-calc select { width: 100%; min-height: 46px; padding: 8px 12px; border-radius: 12px; border: 1px solid #5a4796; background: #120c33; color: #fff; font: inherit; }
+.lod-list { list-style: none; margin: 12px 0 0 !important; padding: 0 !important; display: grid; gap: 6px; max-height: 520px; overflow-y: auto; }
+.lod-d { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.4fr) auto; align-items: center; gap: 8px; margin: 0 !important; padding: 8px 10px; border-radius: 10px; border: 1px solid #332a52; background: rgba(8, 6, 24, .45); font-size: .88rem; }
+.lod-date { color: #fff3d1; font-weight: 700; }
+.lod-an { display: inline-flex; align-items: center; gap: 6px; color: #e4ddf7; }
+.lod-an img { border-radius: 50%; }
+.lod-lunar { color: #b9b0de; font-size: .82rem; }
+.lod-tag { padding: 3px 10px; border-radius: 999px; font-size: .78rem; text-align: center; color: #fff; background: #3b2f6e; white-space: nowrap; }
+.lod-fav .lod-tag, .lod-own .lod-tag { background: linear-gradient(90deg, #2f9e62, #23804e); }
+.lod-avoid .lod-tag { background: linear-gradient(90deg, #d9468c, #b8327a); }
+.lod-fav, .lod-own { border-color: rgba(63, 174, 107, .5); }
+.lod-avoid { border-color: rgba(217, 70, 140, .5); }
+@media (max-width: 760px) { .lod-ways { grid-template-columns: 1fr; } .lod-d { grid-template-columns: minmax(0, 1fr) auto; } .lod-lunar { grid-column: 1 / -1; } }
