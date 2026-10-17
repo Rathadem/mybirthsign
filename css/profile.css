@@ -190,3 +190,25 @@ html { scroll-behavior: smooth; }
   100% { box-shadow: 0 0 0 0 rgba(246, 220, 155, 0), 0 0 0 0 rgba(246, 220, 155, 0); }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .pf-body [id]:target { animation: none; outline: 2px solid rgba(246, 220, 155, .7); } }
+
+/* exact year dates (start / end of each zodiac year, from the Lunar New Year table) */
+.pf-dates { margin-top: 26px; }
+.pf-dates h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
+.pf-dates h2 svg { width: 26px; height: 26px; color: var(--fx-gold-hi); flex: none; }
+.pf-dates > p { color: #e6def8; line-height: 1.6; margin: 0 0 14px; max-width: 70ch; }
+.pf-tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.pf-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.pf-table td { white-space: nowrap; }
+@media (max-width: 520px) { .pf-table th, .pf-table td { padding: 8px 5px; font-size: .84rem; white-space: normal; } .pf-table thead th { font-size: .7rem; letter-spacing: .02em; } }
+.pf-table th, .pf-table td { padding: 9px 12px; text-align: left; border-bottom: 1px solid rgba(231, 194, 122, .25); color: #eee8ff; }
+.pf-table thead th { color: var(--fx-gold-hi); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; border-bottom-color: rgba(231, 194, 122, .6); }
+.pf-table tbody th { color: var(--fx-gold-hi); font-weight: 700; }
+.pf-table tr.is-ex { background: rgba(231, 194, 122, .1); }
+.pf-example { margin: 14px 0 0; padding: 12px 14px; border-left: 3px solid var(--fx-gold-hi); background: rgba(11, 8, 32, .5); border-radius: 0 8px 8px 0; color: #e6def8; line-height: 1.6; }
+.pf-example strong { color: var(--fx-gold-hi); }
+/* why these matches (under the 12-sign grid) */
+.pf-why { margin: 18px 0 4px; }
+.pf-why h3 { margin: 0 0 8px; color: var(--fx-gold-hi); font-size: 1.05rem; }
+.pf-why ul { margin: 0 0 10px; padding-left: 1.1em; display: grid; gap: 8px; }
+.pf-why li { color: #e6def8; line-height: 1.55; }
+.pf-why li strong { color: #fff; }

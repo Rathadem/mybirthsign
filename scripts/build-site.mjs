@@ -110,6 +110,15 @@ function variant(html, lang, p) {
   if (!/hreflang="x-default"/.test(out)) out = out.replace(/<\/head>/i, `${alts}\n</head>`);
   if (lang !== "en") out = out.replace(/<meta property="og:locale" content="[^"]*">/, `<meta property="og:locale" content="${lang === "km" ? "km_KH" : "zh_CN"}">`);
 
+  // 3b. empty "Ad space" placeholder boxes (hidden by CSS, but still text in the HTML) are left out of the published pages
+  out = out.replace(/\s*<div class="ad-slot[^"]*"[^>]*>[^<]*<\/div>/g, "");
+
+  // 3c. daily fortune posts: the day animal repeats every 12 days, so posts 12 days apart are nearly the same page.
+  //     Visitors can still open every post; search engines are asked not to index them (they still follow the links).
+  if (/^\/blog\/daily-fortune-\d{4}-\d{2}-\d{2}/.test(p) && !/<meta name="robots"/.test(out)) {
+    out = out.replace(/(<meta name="viewport"[^>]*>)/, `$1\n<meta name="robots" content="noindex, follow">`);
+  }
+
   // 4. Khmer pages carry no ad code at all
   if (lang === "km") {
     out = out.replace(/\s*<script[^>]*pagead2\.googlesyndication\.com[^>]*><\/script>/gi, "");
@@ -168,8 +177,9 @@ const pageList = [];
 const smPath = path.join(DIST, "sitemap.xml");
 if (fs.existsSync(smPath)) {
   const sm = fs.readFileSync(smPath, "utf8");
-  const out = sm.replace(/  <url><loc>https:\/\/mybirthsign\.com([^<]*)<\/loc>(.*?)<\/url>/g, (m, p, rest) =>
-    LANGS.map((l) => `  <url><loc>${urlFor(p || "/", l)}</loc>${rest}</url>`).join("\n"));
+  const out = sm.replace(/  <url><loc>https:\/\/mybirthsign\.com([^<]*)<\/loc>(.*?)<\/url>\n?/g, (m, p, rest) =>
+    /^\/blog\/daily-fortune-/.test(p) ? "" :   // noindex pages stay out of the sitemap (see step 3c)
+    LANGS.map((l) => `  <url><loc>${urlFor(p || "/", l)}</loc>${rest}</url>`).join("\n") + "\n");
   fs.writeFileSync(smPath, out);
 }
 

@@ -45,6 +45,7 @@ const KM_DAYS = extractConst(i18n, "KM_DAY_NAMES");
 const KM_COLORS = extractConst(i18n, "KM_COLOR_NAMES");
 const KM_ELEM = extractConst(i18n, "KM_ELEMENT_NAMES");
 const ELEMENTS = extractConst(zdata, "ELEMENTS");
+const CNY = extractConst(zdata, "CNY_DATES");   // the same Lunar New Year table getZodiac() uses (1900–2060)
 const EMOJI = extractConst(zdata, "ZODIAC_EMOJI");
 const COLOR_HEX = extractConst(zdata, "LUCKY_COLOR_HEX");
 const ZH_NAMES = extractConst(i18n, "ZH_ANIMAL_NAMES");
@@ -71,7 +72,20 @@ const typeOf = (b) => (b === A ? "same" : info.clash.includes(b) ? "clash" : sam
 const best = ORDER.filter((b) => b !== A && sameTri(A, b));
 const support = info.compatible.filter((b) => !sameTri(A, b));
 const clash = info.clash;
-const PP_TODAY = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());   // a post made a day ahead is not linked before its day
+// exact start / end of each zodiac year of this animal, straight from CNY_DATES (a year ends the day before the next Lunar New Year)
+const MON = {
+  en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+  km: ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"],
+};
+const ymd = (y, md) => { const [m, d] = md.split("-").map(Number); return [y, m, d]; };
+const dayBefore = ([y, m, d]) => { const t = new Date(Date.UTC(y, m - 1, d) - 86400000); return [t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate()]; };
+const fmtD = ([y, m, d], lang, short) => (lang === "zh" ? `${y}年${m}月${d}日` : `${d} ${lang === "km" ? MON.km[m - 1] : short ? MON.en[m - 1].slice(0, 3) : MON.en[m - 1]} ${y}`);
+const dateYears = []; for (let y = 1924; y <= 2043; y++) if (((y - 4) % 12 + 12) % 12 === idx) dateYears.push(y);
+const span = (y) => ({ start: ymd(y, CNY[y]), end: dayBefore(ymd(y + 1, CNY[y + 1])), el: elementOf(y) });
+const EX_Y = years[2];                                   // worked example: the day before that year's Lunar New Year
+const EX = { ...span(EX_Y), before: dayBefore(ymd(EX_Y, CNY[EX_Y])), prev: ORDER[(idx + 11) % 12], prevEl: elementOf(EX_Y - 1) };
+const TRI = TRIANGLES.find((t) => t.includes(A));
+const PP_TODAY =new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());   // a post made a day ahead is not linked before its day
 const latestDaily = fs.readdirSync(path.join(ROOT, "blog")).filter((f) => /^daily-fortune-\d{4}-\d{2}-\d{2}\.html$/.test(f) && f.slice(14, 24) <= PP_TODAY).sort().pop();
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -195,7 +209,7 @@ if (!COPY[A]) { console.error(`No page copy for ${A} yet (add it to COPY in scri
 // ---------------------------------------------------------------- shared UI strings
 const UI = {
   en: {
-    nav: [["overview", "home", "Overview"], ["personality", "user", "Personality"], ["elements", "leaf", "Elements"], ["lucky", "clover", "Lucky Signs"], ["compat", "heart", "Compatibility"], ["career", "brief", "Career"], ["love", "heart", "Love"], ["health", "health", "Health"]],
+    nav: [["overview", "home", "Overview"], ["dates", "cal", "Exact Dates"], ["personality", "user", "Personality"], ["elements", "leaf", "Elements"], ["lucky", "clover", "Lucky Signs"], ["compat", "heart", "Compatibility"], ["career", "brief", "Career"], ["love", "heart", "Love"], ["health", "health", "Health"]],
     navLabel: (n) => `${n} sections`,
     btnCheck: (n) => `Check if You're a ${n} →`, btnCompat: "Check Compatibility →",
     ovH: (n) => `${n} Overview`, traitsH: "Key Traits", yearsH: (n) => `Zodiac Years for ${n}`,
@@ -220,9 +234,20 @@ const UI = {
     tools: [["🔮", "Chinese Zodiac Checker", "Find your animal and element", "/checker"], ["💗", "Compatibility Calculator", "Check love, friendship and more", "/compatibility"], ["💍", "Wedding Date Picker", "Find auspicious dates", "/wedding-date"], ["💼", "Business Partner Compatibility", "See if you work well together", "/business-partner"], ["📚", "Chinese Zodiac Guide", "Learn about all 12 animals", "../animals.html"]],
     disc: "For entertainment purposes only. Chinese zodiac interpretations are traditional and cultural, not scientifically proven.",
     crumbs: ["Home", "Blog"], share: "Share",
+    datesH: (n) => `Exact ${n} Year Dates`,
+    datesP: "A zodiac year starts on Lunar New Year and ends the day before the next one. These dates come from the same Lunar New Year table the Zodiac Checker uses.",
+    th: ["Year", "Starts", "Ends", "Element"], exL: "Example:",
+    example: (n, e, d) => `someone born on ${d(e.before)} is not a ${n}. The ${EX_Y} ${n} year began on ${d(e.start)}, so that birthday still belongs to the ${e.prevElN} ${e.prevN} year that started in ${EX_Y - 1}. Anyone born from ${d(e.start)} to ${d(e.end)} is a ${e.elN} ${n}.`,
+    whyH: "Why these matches?",
+    why: (n, x) => [
+      `<strong>Good — ${x.best.join(" and ")}.</strong> They share the ${n}'s triangle (${x.tri.join(" · ")}). The three animals of a triangle sit four places apart on the 12-animal wheel, and tradition treats them as natural allies with a similar pace.`,
+      `<strong>Supportive — ${x.support.join(", ")}.</strong> This is the ${n}'s “six harmony” partner. Each animal has exactly one, a one-to-one pairing traditionally seen as quietly helpful.`,
+      `<strong>Challenging — ${x.clash.join(", ")}.</strong> It sits six places away, directly opposite the ${n} on the wheel (a “clash”). Tradition reads this as opposite priorities that need more patience, not as a forbidden match.`,
+      `<strong>Neutral — the other ${x.neutral} signs.</strong> No special bond or clash in this system.`],
+    whyFoot: "The birth-date Compatibility Calculator uses the triangle and clash rules for the animal part of its score, then adds each person's element and Yin or Yang. How two people treat each other matters far more than either animal.",
   },
   km: {
-    nav: [["overview", "home", "ទិដ្ឋភាពទូទៅ"], ["personality", "user", "បុគ្គលិកលក្ខណៈ"], ["elements", "leaf", "ធាតុ"], ["lucky", "clover", "សំណាង"], ["compat", "heart", "ភាពសមស្រប"], ["career", "brief", "អាជីព"], ["love", "heart", "ស្នេហា"], ["health", "health", "សុខភាព"]],
+    nav: [["overview", "home", "ទិដ្ឋភាពទូទៅ"], ["dates", "cal", "កាលបរិច្ឆេទ"], ["personality", "user", "បុគ្គលិកលក្ខណៈ"], ["elements", "leaf", "ធាតុ"], ["lucky", "clover", "សំណាង"], ["compat", "heart", "ភាពសមស្រប"], ["career", "brief", "អាជីព"], ["love", "heart", "ស្នេហា"], ["health", "health", "សុខភាព"]],
     navLabel: (n) => `ផ្នែកនៃ${n}`,
     btnCheck: () => `ពិនិត្យថាតើអ្នកជាឆ្នាំ¤T¤ឬទេ →`, btnCompat: "ពិនិត្យភាពសមស្រប →",
     ovH: () => "ទិដ្ឋភាពទូទៅនៃឆ្នាំ¤T¤", traitsH: "លក្ខណៈសំខាន់ៗ", yearsH: () => "ឆ្នាំរាសីរបស់¤T¤",
@@ -247,9 +272,20 @@ const UI = {
     tools: [["🔮", "ម៉ាស៊ីនពិនិត្យរាសី", "ស្វែងរកសត្វ និងធាតុរបស់អ្នក", "/checker"], ["💗", "គណនាភាពសមស្រប", "ពិនិត្យស្នេហា មិត្តភាព និងផ្សេងទៀត", "/compatibility"], ["💍", "ជ្រើសរើសថ្ងៃរៀបការ", "ស្វែងរកថ្ងៃមង្គល", "/wedding-date"], ["💼", "ភាពសមស្របដៃគូអាជីវកម្ម", "មើលថាតើអ្នកធ្វើការជាមួយគ្នាបានល្អទេ", "/business-partner"], ["📚", "មគ្គុទ្ទេសក៍រាសី", "ស្វែងយល់អំពីសត្វទាំង12", "../animals.html"]],
     disc: "សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។ ការបកស្រាយរាសីជាប្រពៃណី និងវប្បធម៌ មិនត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រទេ។",
     crumbs: ["ទំព័រដើម", "ប្លក់"], share: "ចែករំលែក",
+    datesH: () => "កាលបរិច្ឆេទពិតប្រាកដនៃឆ្នាំ¤T¤",
+    datesP: "ឆ្នាំរាសីចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចន្ទគតិ (ចូលឆ្នាំចិន) ហើយបញ្ចប់នៅថ្ងៃមុនចូលឆ្នាំបន្ទាប់។ កាលបរិច្ឆេទទាំងនេះយកចេញពីតារាងថ្ងៃចូលឆ្នាំចន្ទគតិដូចគ្នា ដែលម៉ាស៊ីនពិនិត្យរាសីប្រើ។",
+    th: ["ឆ្នាំរាសី", "ចាប់ផ្តើម", "បញ្ចប់", "ធាតុ"], exL: "ឧទាហរណ៍៖",
+    example: (n, e, d) => `អ្នកដែលកើតនៅ ${d(e.before)} មិនមែនជា¤T¤ទេ។ ឆ្នាំ¤T¤ ${EX_Y} ចាប់ផ្តើមនៅ ${d(e.start)} ដូច្នេះថ្ងៃកំណើតនោះនៅតែស្ថិតក្នុងឆ្នាំ${e.prevN}${e.prevElN} ដែលចាប់ផ្តើមក្នុងឆ្នាំ ${EX_Y - 1}។ អ្នកដែលកើតពី ${d(e.start)} ដល់ ${d(e.end)} គឺជា¤T¤${e.elN}។`,
+    whyH: "ហេតុអ្វីបានជាត្រូវគ្នាបែបនេះ?",
+    why: (n, x) => [
+      `<strong>ល្អ — ${x.best.join(" និង ")}។</strong> ពួកវាស្ថិតក្នុងក្រុមបីតែមួយជាមួយ¤T¤ (${x.tri.join(" · ")})។ សត្វទាំងបីក្នុងក្រុមមួយនៅឃ្លាតពីគ្នា 4 កន្លែងលើរង្វង់សត្វទាំង 12 ហើយតាមប្រពៃណីត្រូវបានចាត់ទុកថាជាសម្ព័ន្ធមិត្តធម្មជាតិ ដែលមានចង្វាក់ស្រដៀងគ្នា។`,
+      `<strong>ជួយគាំទ្រ — ${x.support.join(", ")}។</strong> នេះជាដៃគូ «ចុះសម្រុងទាំងប្រាំមួយ» របស់¤T¤។ សត្វនីមួយៗមានដៃគូបែបនេះតែមួយគត់ ដែលតាមប្រពៃណីត្រូវបានចាត់ទុកថាជួយគ្នាដោយស្ងាត់ៗ។`,
+      `<strong>ប្រឈម — ${x.clash.join(", ")}។</strong> វានៅឃ្លាត 6 កន្លែង គឺនៅទល់មុខ¤T¤ផ្ទាល់លើរង្វង់ (ការប៉ះទង្គិច)។ តាមប្រពៃណី នេះមានន័យថាអាទិភាពផ្ទុយគ្នា ដែលត្រូវការការអត់ធ្មត់បន្ថែម មិនមែនជាគូហាមឃាត់ទេ។`,
+      `<strong>ធម្មតា — សត្វ ${x.neutral} ផ្សេងទៀត។</strong> គ្មានចំណងពិសេស ឬការប៉ះទង្គិចក្នុងប្រព័ន្ធនេះទេ។`],
+    whyFoot: "ម៉ាស៊ីនគណនាភាពសមស្របតាមថ្ងៃកំណើត ប្រើច្បាប់ក្រុមបី និងការប៉ះទង្គិច សម្រាប់ផ្នែកសត្វនៃពិន្ទុ បន្ទាប់មកបន្ថែមធាតុ និងយិន-យ៉ាងរបស់មនុស្សម្នាក់ៗ។ របៀបដែលមនុស្សពីរនាក់ប្រព្រឹត្តចំពោះគ្នា សំខាន់ជាងសត្វរាសីឆ្ងាយណាស់។",
   },
   zh: {
-    nav: [["overview", "home", "概览"], ["personality", "user", "性格"], ["elements", "leaf", "五行"], ["lucky", "clover", "幸运"], ["compat", "heart", "配对"], ["career", "brief", "事业"], ["love", "heart", "爱情"], ["health", "health", "健康"]],
+    nav: [["overview", "home", "概览"], ["dates", "cal", "起止日期"], ["personality", "user", "性格"], ["elements", "leaf", "五行"], ["lucky", "clover", "幸运"], ["compat", "heart", "配对"], ["career", "brief", "事业"], ["love", "heart", "爱情"], ["health", "health", "健康"]],
     navLabel: (n) => `属${n}页面目录`,
     btnCheck: (n) => `看看你是否属${n} →`, btnCompat: "查看配对 →",
     ovH: (n) => `属${n}概览`, traitsH: "主要特点", yearsH: (n) => `属${n}的年份`,
@@ -274,10 +310,22 @@ const UI = {
     tools: [["🔮", "生肖查询", "查找你的生肖和五行", "/checker"], ["💗", "配对计算器", "查看爱情、友情等配对", "/compatibility"], ["💍", "婚期选择", "查找吉日", "/wedding-date"], ["💼", "商业伙伴配对", "看看你们是否合作愉快", "/business-partner"], ["📚", "生肖指南", "了解十二生肖", "../animals.html"]],
     disc: "仅供娱乐。生肖解读属于传统和文化，并无科学依据。",
     crumbs: ["首页", "博客"], share: "分享",
+    datesH: (n) => `属${n}年份的确切起止日期`,
+    datesP: "生肖年从农历新年（春节）开始，到下一个农历新年的前一天结束。这些日期来自生肖查询所用的同一份农历新年日期表。",
+    th: ["生肖年", "开始", "结束", "五行"], exL: "例子：",
+    example: (n, e, d) => `${d(e.before)}出生的人并不属${n}。${EX_Y}年的${n}年从${d(e.start)}开始，所以这个生日仍属于${EX_Y - 1}年开始的${e.prevElN}${e.prevN}年。在${d(e.start)}至${d(e.end)}之间出生的人属${e.elN}${n}。`,
+    whyH: "为什么这样配对？",
+    why: (n, x) => [
+      `<strong>相配——${x.best.join("、")}。</strong>它们与${n}同属三合（${x.tri.join("、")}）。同一组三合的三个生肖在十二生肖轮上相隔四位，传统上被视为步调相近的天然盟友。`,
+      `<strong>互相扶持——${x.support.join("、")}。</strong>这是${n}的六合对象：每个生肖都只有一个六合生肖，传统上被视为默默相助的一对一组合。`,
+      `<strong>有挑战——${x.clash.join("、")}。</strong>它与${n}相隔六位，在生肖轮上正好相对（六冲）。传统上这代表彼此的优先事项相反、需要更多耐心，并不是不能在一起。`,
+      `<strong>普通——其余${x.neutral}个生肖。</strong>在这个体系中没有特别的相合或相冲。`],
+    whyFoot: "按生日计算的配对计算器在生肖部分使用三合与六冲的规则，再加上双方的五行和阴阳。两个人如何对待彼此，远比生肖更重要。",
   },
 };
 
 // ---------------------------------------------------------------- FAQ (answers use the data above)
+const lc = (s) => s.charAt(0).toLowerCase() + s.slice(1);
 function faqs(lang) {
   const n = lang === "km" ? KM_NAMES[A] : A;
   const nmL = (l) => l.map((x) => (lang === "km" ? KM_NAMES[x] : x));
@@ -288,34 +336,34 @@ function faqs(lang) {
     const zc = info.luckyColors.map((c) => ZH_COLORS[c.toLowerCase()] || c).join("、");
     const zel = ELEMENTS.filter((e) => elementYears[e].length).map((e) => `${ZH_ELEM[e]}：${elementYears[e].join("、")}`).join(" · ");
     return [
-      [`哪些年份是${zn}年？`, `${zn}年包括 ${years.join("、")}。生肖每12年循环一次，生肖年从农历新年开始，而不是1月1日。`],
+      [`哪些年份是${zn}年？`, `${zn}年包括 ${years.join("、")}。生肖每12年循环一次，生肖年从农历新年开始，而不是1月1日。例如，${EX_Y}年的${zn}年从${fmtD(EX.start, "zh")}到${fmtD(EX.end, "zh")}。`],
       [`属${zn}的人有哪些性格特点？`, ZH_INFO[A].traits],
       [`属${zn}的幸运颜色是什么？`, `在我们的指南中，属${zn}的幸运颜色是${zc}。`],
       [`属${zn}的幸运数字是什么？`, `属${zn}的幸运数字是 ${info.luckyNumbers.join("、")}。`],
       [`哪些生肖与属${zn}相配？`, `最佳配对是${zl(best)}，它们与${zn}同属三合。${support.length ? `${zl(support)}在我们的指南中也被列为互相扶持的配对，` : ""}而${zl(clash)}可能是最有挑战的组合。`],
       [`我的${zn}年属于哪个五行？`, `这取决于你的出生年份——${zel}。可以用生肖查询来确认。`],
-      [`生肖年是从1月1日开始的吗？`, `不是。生肖年从农历新年开始，农历新年在1月下旬到2月中旬之间。如果你出生在1月或2月，请核对农历新年的日期，或使用我们的生肖查询。`],
+      [`生肖年是从1月1日开始的吗？`, `不是。生肖年从农历新年开始，农历新年在1月21日至2月20日之间。如果你出生在1月或2月，请核对农历新年的日期，或使用我们的生肖查询。`],
       [`生肖性格有科学依据吗？`, `没有。生肖解读属于传统和文化，并无科学依据。请把它当作娱乐和自我反思。`],
     ];
   }
   if (lang === "km") return [
-    [`តើឆ្នាំ¤T¤គឺឆ្នាំអ្វីខ្លះ?`, `ឆ្នាំ¤T¤រួមមាន ${years.join(", ")}។ រង្វង់រាសីដដែលៗរៀងរាល់ 12ឆ្នាំម្តង ហើយឆ្នាំរាសីចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចន្ទគតិ មិនមែនថ្ងៃទី1 មករាទេ។`],
-    [`តើបុគ្គលិកលក្ខណៈអ្វីខ្លះដែលផ្សារភ្ជាប់នឹង¤T¤?`, `តាមប្រពៃណី ¤T¤ត្រូវបានផ្សារភ្ជាប់ជាមួយភាពក្លាហាន ទំនុកចិត្ត ឯករាជ្យភាព និងការតាំងចិត្ត។ ${km.traits}`],
+    [`តើឆ្នាំ¤T¤គឺឆ្នាំអ្វីខ្លះ?`, `ឆ្នាំ¤T¤រួមមាន ${years.join(", ")}។ រង្វង់រាសីដដែលៗរៀងរាល់ 12ឆ្នាំម្តង ហើយឆ្នាំរាសីចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចន្ទគតិ មិនមែនថ្ងៃទី1 មករាទេ។ ឧទាហរណ៍ ឆ្នាំ¤T¤ ${EX_Y} ចាប់ពី ${fmtD(EX.start, "km")} ដល់ ${fmtD(EX.end, "km")}។`],
+    [`តើបុគ្គលិកលក្ខណៈអ្វីខ្លះដែលផ្សារភ្ជាប់នឹង¤T¤?`, `${COPY[A].km.intro} ចំណុចខ្លាំងដែលគេលើកឡើងញឹកញាប់គឺ ${COPY[A].km.cards.strengths.join(", ")}។ ចំណុចដែលគួរប្រុងប្រយ័ត្នគឺ ${COPY[A].km.cards.challenges.join(", ")}។`],
     [`តើពណ៌សំណាងរបស់¤T¤ជាអ្វី?`, `ពណ៌សំណាងរបស់¤T¤ក្នុងមគ្គុទ្ទេសក៍របស់យើងគឺ ${colors.join(", ")}។`],
     [`តើលេខសំណាងរបស់¤T¤ជាអ្វី?`, `លេខសំណាងរបស់¤T¤គឺ ${info.luckyNumbers.join(", ")}។`],
     [`តើសត្វណាខ្លះត្រូវគ្នាជាមួយ¤T¤?`, `ត្រូវគ្នាបំផុតជាមួយ ${nmL(best).join(", ")} (ក្រុមតែមួយ)។ ${nmL(support).join(", ")} ក៏ត្រូវបានរាប់ជាដៃគូជួយគាំទ្រក្នុងមគ្គុទ្ទេសក៍របស់យើង។ ${nmL(clash).join(", ")} អាចមានភាពប្រឈមជាងគេ។`],
     [`តើ¤T¤របស់ខ្ញុំជាធាតុអ្វី?`, `ធាតុអាស្រ័យលើឆ្នាំកំណើតរបស់អ្នក — ${elList}។ ប្រើម៉ាស៊ីនពិនិត្យរាសីដើម្បីបញ្ជាក់ឆ្នាំរបស់អ្នក។`],
-    [`តើឆ្នាំរាសីចាប់ផ្តើមថ្ងៃទី1 មករាឬទេ?`, `ទេ។ ឆ្នាំរាសីចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចន្ទគតិ ដែលធ្លាក់នៅចន្លោះចុងខែមករា និងពាក់កណ្តាលខែកុម្ភៈ។ ប្រសិនបើអ្នកកើតក្នុងខែទាំងពីរនេះ សូមពិនិត្យជាមួយម៉ាស៊ីនពិនិត្យរបស់យើង។`],
+    [`តើឆ្នាំរាសីចាប់ផ្តើមថ្ងៃទី1 មករាឬទេ?`, `ទេ។ ឆ្នាំរាសីចាប់ផ្តើមនៅថ្ងៃចូលឆ្នាំចន្ទគតិ ដែលធ្លាក់នៅចន្លោះថ្ងៃទី21 មករា ដល់ថ្ងៃទី20 កុម្ភៈ។ ប្រសិនបើអ្នកកើតក្នុងខែទាំងពីរនេះ សូមពិនិត្យជាមួយម៉ាស៊ីនពិនិត្យរបស់យើង។`],
     [`តើបុគ្គលិកលក្ខណៈតាមរាសីត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រឬទេ?`, `មិនបានទេ។ ការបកស្រាយរាសីជាប្រពៃណី និងវប្បធម៌ ហើយមិនត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រទេ។ សូមប្រើវាសម្រាប់ការកម្សាន្ត និងការស្វែងយល់ប៉ុណ្ណោះ។`],
   ];
   return [
-    [`What years are the Year of the ${n}?`, `${n} years include ${years.join(", ")}. The zodiac repeats every 12 years, and the zodiac year begins at Lunar New Year, not on January 1.`],
-    [`What personality traits are associated with the ${n}?`, `Traditionally, the ${n} is associated with courage, confidence, independence, and determination. ${info.traits}`],
+    [`What years are the Year of the ${n}?`, `${n} years include ${years.join(", ")}. The zodiac repeats every 12 years, and the zodiac year begins at Lunar New Year, not on January 1. For example, the ${EX_Y} ${n} year ran from ${fmtD(EX.start, "en")} to ${fmtD(EX.end, "en")}.`],
+    [`What personality traits are associated with the ${n}?`, `${COPY[A].en.intro} The strengths most often listed are ${COPY[A].en.cards.strengths.map(lc).join(", ")}. The usual watch-outs are ${COPY[A].en.cards.challenges.map(lc).join(", ")}.`],
     [`What are the lucky colors for the ${n}?`, `The ${n}'s lucky colors in our guide are ${colors.join(", ")}.`],
     [`What are the lucky numbers for the ${n}?`, `The ${n}'s lucky numbers are ${info.luckyNumbers.join(", ")}.`],
     [`Which zodiac animals are compatible with the ${n}?`, `Best matches are ${nmL(best).join(" and ")}, which share the ${n}'s compatibility triangle. ${nmL(support).join(", ")} ${support.length > 1 ? "are" : "is"} also listed as a supportive match in our guide, while ${nmL(clash).join(", ")} can be the most challenging pairing.`],
     [`What element is my ${n} year?`, `It depends on your birth year — ${elList}. Use the Zodiac Checker to confirm yours.`],
-    [`Does the Chinese zodiac year start on January 1?`, `No. The zodiac year begins at Lunar New Year, which falls between late January and mid-February. If you were born in January or February, check the Lunar New Year date or use our Zodiac Checker.`],
+    [`Does the Chinese zodiac year start on January 1?`, `No. The zodiac year begins at Lunar New Year, which falls between 21 January and 20 February. If you were born in January or February, check the Lunar New Year date or use our Zodiac Checker.`],
     [`Is Chinese zodiac personality scientifically proven?`, `No. Chinese zodiac interpretations are traditional and cultural, and they are not scientifically proven. Enjoy them for fun and self-reflection.`],
   ];
 }
@@ -324,7 +372,7 @@ function faqs(lang) {
 const CHK = "/checker";
 // The English and Khmer bodies sit on one page (one is hidden), so the Khmer section
 // IDs get a "-km" suffix. Otherwise the Khmer menu buttons jump to the hidden English copy.
-const SECTION_IDS = ["overview", "personality", "elements", "lucky", "compat", "career", "love", "health", "money"];
+const SECTION_IDS = ["dates", "overview", "personality", "elements", "lucky", "compat", "career", "love", "health", "money"];
 function kmIds(html, suffix = "km") {
   const ids = SECTION_IDS.join("|");
   return html.replace(new RegExp(`id="(${ids})"`, "g"), `id="$1-${suffix}"`).replace(new RegExp(`href="#(${ids})"`, "g"), `href="#$1-${suffix}"`);
@@ -385,6 +433,18 @@ ${u.nav.map(([id, ico, label]) => `  <li><a href="#${id}">${ICON[ico]}<span>${es
       <a class="fx-btn fx-btn-sm" href="${CHK}">${esc(u.yearsBtn)}</a>
     </section>
   </div>
+
+  <section class="fx-gframe pf-dates" id="dates" aria-labelledby="pf-dt-${lang}">
+    <h2 id="pf-dt-${lang}">${ICON.cal}<span>${esc(u.datesH(n))}</span></h2>
+    <p>${esc(u.datesP)}</p>
+    <div class="pf-tablewrap"><table class="pf-table">
+      <thead><tr>${u.th.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead>
+      <tbody>
+${dateYears.map((y) => { const s = span(y); return `        <tr${y === EX_Y ? ' class="is-ex"' : ""}><th scope="row">${y}</th><td>${fmtD(s.start, lang, true)}</td><td>${fmtD(s.end, lang, true)}</td><td>${esc(u.elName(u.elN[s.el], n))}</td></tr>`; }).join("\n")}
+      </tbody>
+    </table></div>
+    <p class="pf-example"><strong>${esc(u.exL)}</strong> ${esc(u.example(n, { ...EX, prevN: nameIn(EX.prev, lang), prevElN: u.elN[EX.prevEl], elN: u.elN[EX.el] }, (x) => fmtD(x, lang)))}</p>
+  </section>
 
   <div class="pf-trio" id="lucky">
     <section class="fx-gframe pf-lucky" aria-labelledby="pf-lk-${lang}">
@@ -450,6 +510,7 @@ ${ELEMENTS.map((e) => `        <li class="pf-el pf-el-${e.toLowerCase()}"><img s
       <div class="fx-gframe pf-gridbox"><ul class="pf-grid12">
 ${ORDER.map((b) => { const t = typeOf(b); return `        <li class="pf-g pf-g-${t}${b === A ? " is-self" : ""}"><a href="${link(b)}">${medal(b, 56)}<strong>${esc(nameIn(b, lang))}</strong><span class="pf-cat">${esc(u.cat[t])}</span></a></li>`; }).join("\n")}
       </ul>
+      <div class="pf-why"><h3>${esc(u.whyH)}</h3><ul>${u.why(n, { best: nmL(best).map(esc), support: nmL(support).map(esc), clash: nmL(clash).map(esc), tri: nmL(TRI).map(esc), neutral: 12 - 1 - best.length - support.length - clash.length }).map((li) => `<li>${li}</li>`).join("")}</ul><p class="pf-small">${esc(u.whyFoot)}</p></div>
       <p class="pf-btnrow"><a class="fx-btn fx-btn-sm" href="/compatibility">${esc(u.compBtn)}</a></p></div>
     </section>
     <aside aria-labelledby="pf-mr-${lang}">
@@ -471,7 +532,7 @@ ${ORDER.map((b) => { const t = typeOf(b); return `        <li class="pf-g pf-g-$
   <section class="fx-sec pf-today" aria-labelledby="pf-td-${lang}">
     <div class="fx-gframe pf-today-in" ${todayData}>
       <h2 id="pf-td-${lang}">${esc(u.todayH(n))}</h2>
-      <p class="pf-today-line" data-today-line>${esc(u.todayLink)}</p>
+      <p class="pf-today-line" data-today-line></p>
       <p><a class="fx-btn fx-btn-sm" href="${latestDaily}">${esc(u.todayLink)}</a></p>
     </div>
   </section>
@@ -510,7 +571,7 @@ ${u.tools.map((x) => `        <li><a href="${x[3]}"><span class="fx-t-ico" aria-
 
 // ---------------------------------------------------------------- SEO
 const TITLE = `Year of the ${A}: Personality, Years & Compatibility | MyBirthSign`;
-const DESC = `Explore the Year of the ${A}, including ${A} birth years, personality traits, elements, lucky signs, love, career, and Chinese zodiac compatibility.`;
+const DESC = `Explore the Year of the ${A}, including ${A} birth years with exact start and end dates, personality traits, elements, lucky signs, love, career, and Chinese zodiac compatibility.`;
 const OG = "https://mybirthsign.com/images/og/sign-" + slug + ".jpg";   // 1200x630 JPG (Facebook / Telegram friendly)
 const today = new Date().toISOString().slice(0, 10);
 const faqEn = faqs("en");
