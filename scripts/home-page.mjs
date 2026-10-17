@@ -39,7 +39,7 @@ const TRIANGLES = extractConst(zdata, "ZODIAC_TRIANGLES");
 const ELEMENTS = extractConst(zdata, "ELEMENTS");
 const KM_NAMES = extractConst(i18n, "KM_ANIMAL_NAMES");
 const UI_STRINGS = extractConst(i18n, "UI_STRINGS");
-const AU = extractConst(read("scripts/animals-page.mjs"), "UI", { KM_ELEM: extractConst(i18n, "KM_ELEMENT_NAMES"), ORDER, INFO: {}, KM_INFO: {}, KM_NAMES });   // reuse the /animals copy (cycle, elements) so both pages say the same thing
+const AU = extractConst(read("scripts/animals-page.mjs"), "UI", { KM_ELEM: extractConst(i18n, "KM_ELEMENT_NAMES"), ZH_ELEM: extractConst(i18n, "ZH_ELEMENT_NAMES"), ORDER, INFO: {}, KM_INFO: {}, KM_NAMES });   // reuse the /animals copy (cycle, elements) so both pages say the same thing
 AU.zh = AU.zh || {
   el: extractConst(i18n, "ZH_ELEMENT_NAMES"),
   cycH: "十二年生肖周期如何运作", cycP1: "生肖每 12 年循环一次。", cycP2: "你的出生年份决定传统生肖，但在 1 月或 2 月出生的人应该查看农历新年的分界。", cycB: "查询你的生肖 →",
@@ -223,7 +223,7 @@ function main2(lang) {
           <p data-hm-line>${esc(line)}</p>
           <div class="hm-digits ld ld-mini" data-lucky-digits data-animal="${a}" data-lang="${lang}" data-no-head data-no-note></div></li>`;
   };
-  const animalCard = (a) => `        <li><a class="hm-ac" href="${href(a)}">${medal(a, 96)}<strong>${esc(nm(a, lang))}</strong>${zh ? "" : `<span class="hm-han" lang="zh" aria-hidden="true">${HAN[a]}</span>`}${km ? "" : `<small lang="km">ឆ្នាំ${esc(KM_NAMES[a])}</small>`}</a></li>`;
+  const animalCard = (a) => `        <li><a class="hm-ac" href="${href(a)}">${medal(a, 96)}<strong>${esc(nm(a, lang))}</strong>${zh ? "" : `<span class="hm-han" lang="zh" aria-hidden="true">${HAN[a]}</span>`}${zh ? `<small lang="km">ឆ្នាំ${esc(KM_NAMES[a])}</small>` : ""}</a></li>`;   // English page: English only
   const postCard = (p) => {
     const dt = fmtDate(p.y, p.m, p.d, lang);
     return `        <li><a class="hm-pc" href="${p.file}"><img src="images/zodiac/${slug(p.animal)}.webp" width="360" height="542" alt="" loading="lazy" decoding="async"><div><time datetime="${p.y}-${String(p.m).padStart(2, "0")}-${String(p.d).padStart(2, "0")}">${esc(dt)}</time><h3>${esc(u.blogTitle(dt))}</h3><p>${esc(u.blogDesc)}</p><span class="hm-more">${esc(u.blogB)}</span></div></a></li>`;

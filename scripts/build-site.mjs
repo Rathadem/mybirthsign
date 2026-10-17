@@ -117,12 +117,15 @@ function variant(html, lang, p) {
     out = out.replace(/\s*<script>\s*\(adsbygoogle[\s\S]*?<\/script>/gi, "");
   }
 
-  // 6. Khmer / Chinese: write the UI strings into the HTML (the script would do it after load anyway)
-  if (lang !== "en") {
+  // 6. write this language's UI strings into the HTML (the script would do it after load anyway; this way the page
+  //    reads right without script, e.g. the English page's language buttons say "KH" / "CN", not Khmer / Chinese script)
+  {
     const S = UI[lang] || {};
     out = out.replace(/(<([a-zA-Z0-9]+)\b[^>]*\sdata-i18n="([^"]+)"[^>]*>)([^<]*)(<\/\2>)/g, (m, open, tag, key, text, close) =>
       S[key] !== undefined && String(S[key]).indexOf("<") < 0 ? open + esc(S[key]) + close : m);
     out = out.replace(/(\sdata-i18n-placeholder="([^"]+)"[^>]*?\splaceholder=")[^"]*(")/g, (m, a, key, b) => (S[key] !== undefined ? a + escAttr(S[key]) + b : m));
+  }
+  if (lang !== "en") {
     // site-internal absolute page links stay in this language (assets and other folders are left alone)
     out = out.replace(/(\shref=")\/(?!km\/|zh\/|css\/|js\/|images\/|data\/|future\/|\/)([^"#?]*)([^"]*)"/g, (m, a, pth, rest) => {
       if (/\.(?!html$)[a-z0-9]{2,5}$/i.test(pth)) return m;   // a file such as /sitemap.xml or /ads.txt

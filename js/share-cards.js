@@ -431,7 +431,7 @@
       // content measured on a spare canvas first, then placed in the panel (scaled down only if needed)
       var m = document.createElement("canvas"); m.width = W; m.height = 1600; var mx = alignByHand(m.getContext("2d"));
       var compact = format === "square", PX = 120, IW = W - PX * 2, y = 70;
-      mx.textAlign = "center"; mx.fillStyle = "#f6dc9b"; mx.font = "400 " + (compact ? 38 : 44) + "px 'Moul', 'Noto Sans Khmer', serif"; mx.fillText("ប្រតិទិនចន្ទគតិខ្មែរ", W / 2, y + 10);
+      mx.textAlign = "center"; mx.fillStyle = "#f6dc9b"; if (L === "en") { mx.font = "700 " + (compact ? 30 : 34) + "px Georgia, serif"; mx.fillText("KHMER LUNAR CALENDAR", W / 2, y + 10); } else { mx.font = "400 " + (compact ? 38 : 44) + "px 'Moul', 'Noto Sans Khmer', serif"; mx.fillText("ប្រតិទិនចន្ទគតិខ្មែរ", W / 2, y + 10); }
       y += compact ? 54 : 62; mx.fillStyle = "#fff3d1"; mx.font = "700 " + (compact ? 30 : 34) + "px " + (L === "km" ? KMF : L === "zh" ? fam("zh") : "Georgia, serif"); mx.fillText(spec.heading || "Khmer Lunar Calendar · Today", W / 2, y);
       y += 30; mx.strokeStyle = "rgba(246,220,155,.45)"; mx.lineWidth = 2; mx.beginPath(); mx.moveTo(PX + 40, y); mx.lineTo(W - PX - 40, y); mx.stroke();
       y += compact ? 82 : 100; mx.fillStyle = "#fff3d1"; mx.font = "700 " + (compact ? 66 : 78) + "px " + KMF;

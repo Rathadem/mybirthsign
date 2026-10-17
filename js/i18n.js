@@ -449,8 +449,8 @@ const UI_STRINGS = {
     nav_contact: "Contact",
     nav_more: "More",
     lang_toggle_en: "EN",
-    lang_toggle_km: "ខ្មែរ",
-    lang_toggle_zh: "中文",
+    lang_toggle_km: "KH",
+    lang_toggle_zh: "CN",
 
     animals_hero_title: "The Complete Chinese Zodiac Animal Guide",
     animals_hero_subtitle: "All 12 zodiac animals — personality, luck, and compatibility at a glance. Tap any animal to read the full profile.",
