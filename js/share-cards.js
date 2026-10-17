@@ -485,11 +485,20 @@
   // Guide articles (five elements, compatibility, calculate, personality): Angkor picture band, title, short line,
   // a row of the page's own artwork (element circles or zodiac medallions) and three key points.
   // spec: { lang, eyebrow, title, sub, icons: [[imagePath, label, color?], ...], points: [..] }
+  // Khmer card titles: Moul, served from this site under its own family name (so no phone font called "Moul" can stand in
+  // for it) and drawn only once it has really loaded. If it cannot load, the bold regular Khmer face is used instead.
+  var khTitle = null;
+  function khTitleFont() {
+    if (!khTitle) khTitle = (typeof FontFace === "undefined" || !document.fonts) ? Promise.resolve(false) :
+      new FontFace("MBS Moul", "url(" + base() + "css/fonts/moul-khmer-400.woff2) format('woff2')", { weight: "400", display: "block" })
+        .load().then(function (f) { document.fonts.add(f); return true; }, function () { return false; });
+    return khTitle;
+  }
   function guide(spec, format) {
     var L = langOf(spec), F = FORMATS[format] || FORMATS.portrait, H = F.h, compact = format === "square", story = format === "story";
     var icons = (spec.icons || []).slice(0, 12), pts = (spec.points || []).slice(0, compact ? 2 : 3);
-    return Promise.all([loadImg(base() + "images/guides/khmer-lunar-wide.webp"), Promise.all(icons.map(function (ic) { return loadImg(base() + ic[0]); })), fontsReady(L, spec)]).then(function (r) {
-      var art = r[0], imgs = r[1];
+    return Promise.all([loadImg(base() + "images/guides/khmer-lunar-wide.webp"), Promise.all(icons.map(function (ic) { return loadImg(base() + ic[0]); })), fontsReady(L, spec), L === "km" ? khTitleFont() : false]).then(function (r) {
+      var art = r[0], imgs = r[1], moul = r[3] === true;
       // content first, on a spare canvas, so it can be fitted into the panel
       var m = document.createElement("canvas"); m.width = W; m.height = 1800; var mx = alignByHand(m.getContext("2d"));
       var PX = 120, IW = W - PX * 2, y = 74;
@@ -498,8 +507,11 @@
       // Khmer titles: the regular Khmer face in a solid colour. The display face with a gradient fill dropped all but the
       // first letter of each line on some phones (same choice as the "big" Khmer lines further up).
       mx.fillStyle = L === "km" ? "#fff1c8" : tg; mx.textAlign = "center";
-      if (L === "km") font(mx, L, "body", compact ? 46 : 52, 700); else font(mx, L, "head", compact ? 56 : 64, 700);
-      y = drawLines(mx, wrap(mx, spec.title || "", IW, L, 3), W / 2, y + (L === "km" ? 62 : 64), L === "km" ? 78 : 72, "center");
+      if (L === "km" && moul) mx.font = "400 " + (compact ? 42 : 48) + "px 'MBS Moul', 'Noto Sans Khmer', serif";
+      else if (L === "km") font(mx, L, "body", compact ? 46 : 52, 700); else font(mx, L, "head", compact ? 56 : 64, 700);
+      if (L === "km") { mx.save(); mx.shadowColor = "rgba(0,0,0,.45)"; mx.shadowBlur = 10; mx.shadowOffsetY = 3; }
+      y = drawLines(mx, wrap(mx, spec.title || "", IW, L, 3), W / 2, y + (L === "km" ? (moul ? 70 : 62) : 64), L === "km" ? (moul ? 88 : 78) : 72, "center");
+      if (L === "km") { mx.restore(); y += moul ? 8 : 0; }
       if (spec.sub) { font(mx, L, "body", L === "km" ? 28 : 30, 400); mx.fillStyle = INK; y = drawLines(mx, wrap(mx, spec.sub, IW, L, 2), W / 2, y + 18, L === "km" ? 46 : 42, "center"); }
       // ornament
       y += 26; mx.strokeStyle = "rgba(231,194,122,.6)"; mx.lineWidth = 2; mx.beginPath(); mx.moveTo(W / 2 - 150, y); mx.lineTo(W / 2 - 18, y); mx.moveTo(W / 2 + 18, y); mx.lineTo(W / 2 + 150, y); mx.stroke();
