@@ -4049,3 +4049,34 @@ html { scroll-padding-top: calc(var(--hdr-h, 60px) + 16px); }
   .nav-toggle { width: 36px; }
 }
 @media (max-width: 340px) { header.site-header .logo-text { display: none; } }
+
+/* ===== Khmer New Year guide (blog/khmer-new-year-animal-year.html) ===== */
+.kny-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0 0 8px; }
+.kny-card { margin: 0 !important; }
+.kny-card h3 { margin: 4px 0 8px !important; color: #fff3d1 !important; font-size: 1.2rem; }
+.kny-card p { margin: 0 !important; line-height: 1.65; color: #e4ddf7; }
+.kny-card .kny-tag, .kny-tag { display: inline-block; margin: 0 !important; padding: 3px 12px; border-radius: 999px; font-size: .8rem; font-weight: 700; color: #2a1d05 !important; background: #f1dfae; line-height: 1.5; }
+.kny-card.kny-kny .kny-tag { background: linear-gradient(90deg, #f6d98d, #e7b24c); }
+.kny-days { list-style: none; margin: 0 !important; padding: 0 !important; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; counter-reset: none; }
+.kny-days li { margin: 0 !important; }
+.kny-day { display: inline-block; font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #e7c27a; }
+.kny-days h3 { margin: 4px 0 6px !important; color: #fff3d1 !important; font-size: 1.02rem; }
+.kny-days p { margin: 0 !important; font-size: .92rem; line-height: 1.6; color: #d9d2ee; }
+.kny-table td { vertical-align: top; }
+.kny-an { display: block; font-size: .8rem; color: #b9b0de; }
+.kny-note { font-size: .86rem; color: var(--text-muted); line-height: 1.6; }
+.kny-exs { list-style: none; margin: 0 !important; padding: 0 !important; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.kny-exs li { margin: 0 !important; display: flex; flex-direction: column; }
+.kny-ex-meds { display: flex; gap: 6px; margin-bottom: 6px; }
+.kny-ex-meds img { width: 48px; height: 48px; border-radius: 50%; }
+.kny-exs h3 { margin: 0 0 4px !important; color: #fff3d1 !important; font-size: .98rem; }
+.kny-exs p { margin: 0 0 8px !important; font-size: .86rem; line-height: 1.5; color: #cfc6ee !important; flex: 1; }
+.kny-your { display: block; padding: 6px 10px; border-radius: 10px; font-size: .88rem; color: #fff; background: linear-gradient(90deg, #4a3a8c, #33286b); }
+.kny-your.kny-diff { background: linear-gradient(90deg, #d9468c, #b8327a); }
+.kny-calc { margin: 22px 0 !important; }
+.kny-res { display: flex; gap: 14px; flex-wrap: wrap; margin: 10px 0 6px; }
+.kny-res > div { flex: 1 1 140px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px; border-radius: 14px; border: 1px solid rgba(231, 194, 122, .35); background: rgba(8, 6, 24, .5); }
+.kny-res img { width: 64px; height: 64px; border-radius: 50%; }
+.kny-res span { font-size: .8rem; color: #b9b0de; }
+.kny-res b { font-size: 1.15rem; color: #fff3d1; }
+@media (max-width: 760px) { .kny-two, .kny-days, .kny-exs { grid-template-columns: 1fr; } }
