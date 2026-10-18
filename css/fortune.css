@@ -356,3 +356,7 @@ html[lang="km"] .fx-sign .fx-trade .fx-trade-meta { font-size: .82rem; }
 @media (max-width: 600px) {
   .fx-hero[class*="fx-hero--"] { background-image: radial-gradient(ellipse 210px 140px at 50% 135px, rgba(255, 190, 90, .24), rgba(255, 190, 90, 0) 75%), url("../images/fortune/hero-night-m.webp"); }
 }
+.fx-sign-why { margin: 2px 0 8px; font-size: .84rem; line-height: 1.55; color: #d9d1f2; }
+.fx-sign-why strong { color: #f6dc9b; margin-right: 2px; }
+.fx-pillar { margin: 6px 0 0; color: #f6dc9b; font-size: .95rem; }
+.fx-pillar span[lang="zh"] { font-size: 1.1rem; letter-spacing: .05em; }

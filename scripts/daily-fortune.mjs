@@ -126,6 +126,31 @@ function tierOf(a) {
 }
 const RANK = { great: 0, good: 1, ordinary: 2, caution: 3 };
 
+// ---------------------------------------------------------------- day pillar and "why this rating" (traditional rules only)
+// Day stem and branch follow the continuous 60-day cycle: JDN 2433191 (1 October 1949) is a 甲子 day, so stem = (JDN + 9) % 10
+// and branch = (JDN + 1) % 12 (the same branch rule as dayAnimal above). The rating itself still comes only from tierOf();
+// the element note is extra context and never changes a rating.
+const STEM_CH = "甲乙丙丁戊己庚辛壬癸", BRANCH_CH = "子丑寅卯辰巳午未申酉戌亥";
+const STEM_EL = ["Wood", "Wood", "Fire", "Fire", "Earth", "Earth", "Metal", "Metal", "Water", "Water"];
+const FIXED_EL = { Rat: "Water", Ox: "Earth", Tiger: "Wood", Rabbit: "Wood", Dragon: "Earth", Snake: "Fire", Horse: "Fire", Goat: "Earth", Monkey: "Metal", Rooster: "Metal", Dog: "Earth", Pig: "Water" };
+const GEN = { Wood: "Fire", Fire: "Earth", Earth: "Metal", Metal: "Water", Water: "Wood" }, CTRL = { Wood: "Earth", Earth: "Water", Water: "Fire", Fire: "Metal", Metal: "Wood" };
+const FRAME_EL = (a) => ({ Rat: "Water", Dragon: "Water", Monkey: "Water", Ox: "Metal", Snake: "Metal", Rooster: "Metal", Tiger: "Fire", Horse: "Fire", Dog: "Fire", Rabbit: "Wood", Goat: "Wood", Pig: "Wood" })[a];
+const dayStem = (jdn + 9) % 10, dayEl = STEM_EL[dayStem], pillarCh = STEM_CH[dayStem] + BRANCH_CH[(jdn + 1) % 12];
+const EL_N = { en: { Wood: "Wood", Fire: "Fire", Earth: "Earth", Metal: "Metal", Water: "Water" }, km: { Wood: "ឈើ", Fire: "ភ្លើង", Earth: "ដី", Metal: "លោហៈ", Water: "ទឹក" }, zh: { Wood: "木", Fire: "火", Earth: "土", Metal: "金", Water: "水" } };
+function whyLine(a, lang) {
+  const n = nameIn(a, lang), dn = nameIn(dayAnimal, lang), E = EL_N[lang], se = FIXED_EL[a], rel = a === dayAnimal ? "same" : sameTriangle(a, dayAnimal) ? "tri" : isClash(a, dayAnimal) ? "clash" : "none";
+  const elRel = dayEl === se ? "same" : GEN[dayEl] === se ? "feeds" : GEN[se] === dayEl ? "draws" : CTRL[dayEl] === se ? "checks" : "checked";
+  const T = {
+    en: { same: `Today is the ${n}'s own day.`, tri: `The ${n} and today's ${dn} share the ${FRAME_EL(a)} triangle.`, clash: `The ${n} sits opposite today's ${dn} on the wheel (a clash).`, none: `No triangle or clash links the ${n} to today's ${dn}.`,
+      el: { same: `Today's stem is ${E[dayEl]}, the ${n}'s own element.`, feeds: `Today's ${E[dayEl]} stem feeds ${E[se]}, the ${n}'s own element.`, draws: `The ${n}'s ${E[se]} feeds today's ${E[dayEl]} stem, so the day asks more of it.`, checks: `Today's ${E[dayEl]} stem keeps the ${n}'s ${E[se]} in check.`, checked: `The ${n}'s ${E[se]} keeps today's ${E[dayEl]} stem in check.` }, lab: "Why:" },
+    km: { same: `ថ្ងៃនេះជាថ្ងៃរបស់${n}ផ្ទាល់។`, tri: `${n} និង${dn}ថ្ងៃនេះ ស្ថិតក្នុងក្រុមបីធាតុ${E[FRAME_EL(a)]}តែមួយ។`, clash: `${n}នៅទល់មុខ${dn}ថ្ងៃនេះលើរង្វង់ (ការប៉ះទង្គិច)។`, none: `គ្មានក្រុមបី ឬការប៉ះទង្គិចភ្ជាប់${n}ជាមួយ${dn}ថ្ងៃនេះទេ។`,
+      el: { same: `ដើមថ្ងៃនេះជាធាតុ${E[dayEl]} ដែលជាធាតុរបស់${n}ផ្ទាល់។`, feeds: `ធាតុ${E[dayEl]}នៃថ្ងៃនេះ ចិញ្ចឹមធាតុ${E[se]}របស់${n}។`, draws: `ធាតុ${E[se]}របស់${n} ចិញ្ចឹមធាតុ${E[dayEl]}នៃថ្ងៃនេះ ដូច្នេះថ្ងៃនេះទាមទារច្រើនពីវា។`, checks: `ធាតុ${E[dayEl]}នៃថ្ងៃនេះ គ្រប់គ្រងធាតុ${E[se]}របស់${n}។`, checked: `ធាតុ${E[se]}របស់${n} គ្រប់គ្រងធាតុ${E[dayEl]}នៃថ្ងៃនេះ។` }, lab: "ហេតុអ្វី៖" },
+    zh: { same: `今天是${n}自己的日子。`, tri: `${n}与今天的${dn}同属${E[FRAME_EL(a)]}局三合。`, clash: `${n}与今天的${dn}在生肖轮上正好相对（六冲）。`, none: `${n}与今天的${dn}之间没有三合或六冲。`,
+      el: { same: `今天的天干五行是${E[dayEl]}，正是${n}的本命五行。`, feeds: `今天天干的${E[dayEl]}生${n}的本命五行${E[se]}。`, draws: `${n}的${E[se]}生今天天干的${E[dayEl]}，所以今天消耗多一些。`, checks: `今天天干的${E[dayEl]}克${n}的${E[se]}。`, checked: `${n}的${E[se]}克今天天干的${E[dayEl]}。` }, lab: "原因：" },
+  }[lang];
+  return `<p class="fx-sign-why"><strong>${T.lab}</strong> ${esc(T[rel])} ${esc(T.el[elRel])}</p>`;
+}
+
 // ---------------------------------------------------------------- copy banks
 const TIER_LABEL = {
   en: { great: "Great Day", good: "Good Day", ordinary: "Ordinary Day", caution: "Take It Easy" },
@@ -451,6 +476,7 @@ function signCard(c, lang, t) {
           <span class="fx-tier fx-tier-${tier}">${I[tier]}${esc(TIER_LABEL[lang][tier])}</span>
           ${share}
         </div>
+        ${whyLine(a, lang)}
         ${inner}
         <a class="fx-more" href="${guideHref(a)}">${esc(t.view(name))}</a>
       </li>`;
@@ -480,6 +506,7 @@ function body(lang) {
     <p class="fx-sub">${t.sub}</p>
     <p class="fx-date">${CAL}<time datetime="${iso}">${esc(dateTxt)}</time><span class="fx-wd">${esc(wd)}</span></p>
     <p class="fx-pill"><span aria-hidden="true">${EMOJI[A]}</span> ${esc(t.dayWord(nm(A)))}</p>
+    <p class="fx-pillar">${isKm ? `សសរថ្ងៃ៖ <span lang="zh">${pillarCh}</span> (${EL_N.km[dayEl]} ${nm(A)})` : isZh ? `日柱：${pillarCh}（${EL_N.zh[dayEl]}${nm(A)}日）` : `Day pillar: <span lang="zh">${pillarCh}</span> (${dayEl} ${A} day)`}</p>
     <div class="fx-chips">
       <p class="fx-chip">${I.great.replace("<svg", '<svg style="color:#f6dc9b"')}<span>${t.favors(esc(favorsList))}</span></p>
       <p class="fx-chip fx-chip-care">${I.caution.replace("<svg", '<svg style="color:#ff8aa5"')}<span>${t.care(esc(careList))}</span></p>

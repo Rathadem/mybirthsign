@@ -30,8 +30,9 @@ ABOUT = {
   </ul>
   <h2>How we write and correct content</h2>
   <p>Articles describe traditional beliefs as traditions, explain where they come from, and never promise outcomes. Where traditions disagree, for example on when the animal year changes in the Chinese and Khmer calendars, we explain both instead of quietly choosing one. If you find a wrong date, result or translation, please tell us and we will correct the page.</p>
+  <p>Daily fortune ratings, lucky numbers and calendar dates come from fixed rules and data in the site's code. The wording of each day's fortune is drafted with an AI model (Anthropic's Claude) and is published only after it passes automatic checks against those rules. Other articles may also be drafted with AI help, but their dates and facts come from the calculators or from the sources listed on the page.</p>
   <h2>Languages</h2>
-  <p>Every page is available in English, Khmer and Simplified Chinese, each at its own address. Use the language buttons at the top of any page.</p>
+  <p>Pages are available in English, Khmer and Simplified Chinese, each at its own address; a few articles, such as the business compatibility guide, are not yet translated into every language. Use the language buttons at the top of any page. Khmer pages carry no advertising.</p>
 """,
 "km": """
   <h2>អ្វីដែលអ្នកអាចធ្វើនៅទីនេះ</h2>
@@ -51,8 +52,9 @@ ABOUT = {
   </ul>
   <h2>របៀបដែលយើងសរសេរ និងកែតម្រូវខ្លឹមសារ</h2>
   <p>អត្ថបទពិពណ៌នាជំនឿប្រពៃណីថាជាប្រពៃណី ពន្យល់ពីប្រភពរបស់វា ហើយមិនដែលសន្យាលទ្ធផលទេ។ កន្លែងដែលប្រពៃណីខុសគ្នា ឧទាហរណ៍ពេលដែលឆ្នាំសត្វប្តូរក្នុងប្រតិទិនចិន និងខ្មែរ យើងពន្យល់ទាំងពីរ ជាជាងជ្រើសមួយដោយស្ងាត់ៗ។ ប្រសិនបើអ្នករកឃើញកាលបរិច្ឆេទ លទ្ធផល ឬការបកប្រែខុស សូមប្រាប់យើង ហើយយើងនឹងកែតម្រូវទំព័រនោះ។</p>
+  <p>ការវាយតម្លៃជោគជតាប្រចាំថ្ងៃ លេខសំណាង និងកាលបរិច្ឆេទប្រតិទិន មកពីវិធាន និងទិន្នន័យថេរក្នុងកូដរបស់គេហទំព័រ។ ពាក្យពេចន៍នៃជោគជតាប្រចាំថ្ងៃនីមួយៗ ត្រូវបានព្រាងដោយប្រើម៉ូដែល AI (Claude របស់ Anthropic) ហើយចុះផ្សាយតែបន្ទាប់ពីឆ្លងកាត់ការពិនិត្យស្វ័យប្រវត្តិធៀបនឹងវិធានទាំងនោះប៉ុណ្ណោះ។ អត្ថបទផ្សេងទៀតក៏អាចព្រាងដោយមានជំនួយពី AI ដែរ ប៉ុន្តែកាលបរិច្ឆេទ និងការពិតរបស់វា មកពីម៉ាស៊ីនគណនា ឬពីប្រភពដែលបានរាយក្នុងទំព័រ។</p>
   <h2>ភាសា</h2>
-  <p>ទំព័រនីមួយៗមានជាភាសាអង់គ្លេស ខ្មែរ និងចិនអក្សរកាត់ ដោយមានអាសយដ្ឋានផ្ទាល់ខ្លួន។ ប្រើប៊ូតុងភាសានៅខាងលើទំព័រណាមួយ។</p>
+  <p>ទំព័រមានជាភាសាអង់គ្លេស ខ្មែរ និងចិនអក្សរកាត់ ដោយមានអាសយដ្ឋានផ្ទាល់ខ្លួន អត្ថបទមួយចំនួន ដូចជាមគ្គុទ្ទេសក៍ភាពសមស្របអាជីវកម្ម មិនទាន់បានបកប្រែគ្រប់ភាសានៅឡើយទេ។ ប្រើប៊ូតុងភាសានៅខាងលើទំព័រណាមួយ។ ទំព័រភាសាខ្មែរមិនមានការផ្សាយពាណិជ្ជកម្មទេ។</p>
 """,
 "zh": """
   <h2>你可以在这里做什么</h2>
@@ -72,8 +74,9 @@ ABOUT = {
   </ul>
   <h2>我们如何撰写和更正内容</h2>
   <p>文章把传统信仰作为传统来介绍，说明它们的来历，从不承诺结果。当不同传统说法不一，例如中国和高棉历法中生肖年何时更换，我们会把两种都解释清楚，而不是悄悄只选一种。如果你发现日期、结果或翻译有误，请告诉我们，我们会更正页面。</p>
+  <p>每日运势的评分、幸运数字和历法日期都来自网站代码中固定的规则和数据。每天运势的文字由 AI 模型（Anthropic 的 Claude）起草，只有通过与这些规则的自动核对后才会发布。其他文章也可能借助 AI 起草，但其中的日期和事实来自计算工具或页面所列的来源。</p>
   <h2>语言</h2>
-  <p>每个页面都有英文、高棉文和简体中文版本，各有自己的网址。可以使用任意页面顶部的语言按钮切换。</p>
+  <p>页面提供英文、高棉文和简体中文版本，各有自己的网址；少数文章（例如商业配对指南）尚未翻译成所有语言。可以使用任意页面顶部的语言按钮切换。高棉文页面不展示广告。</p>
 """,
 }
 
