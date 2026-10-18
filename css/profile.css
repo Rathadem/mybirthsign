@@ -105,11 +105,17 @@ html[lang="km"] .pf-pairs h4 { letter-spacing: 0; text-transform: none; font-siz
 .pf-inline-cta { margin-top: 4px !important; }
 
 /* ---------- 12-animal grid + more links ---------- */
-.pf-duo-grid { margin-top: 56px; grid-template-columns: 2.1fr 1fr; align-items: start; }
+.pf-matrix { margin-top: 56px; }
+.pf-duo-grid { margin-top: 22px; grid-template-columns: 1.25fr 1fr; align-items: stretch; }
+.pf-whybox, .pf-more { display: flex; flex-direction: column; }
+.pf-whybox .pf-why { margin: 0; }
+.pf-whybox .pf-why h3 { font-size: 1.2rem; text-shadow: 0 2px 14px rgba(240, 111, 178, .3); }
+.pf-whybox .pf-btnrow { margin-top: auto; padding-top: 12px; }
+.pf-matrix .pf-more a { min-height: 38px; padding: 6px 12px; }
 .pf-head-left { text-align: left; margin: 0 0 16px; max-width: none; }
 .pf-head-left h2 { display: flex; gap: 9px; align-items: center; }
 .pf-head-left h2 svg { width: 26px; height: 26px; color: var(--fx-pink); }
-.pf-grid12 { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.pf-grid12 { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 10px; }
 .pf-g a { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 2px 8px; border-radius: 12px; border: 1px solid rgba(231, 194, 122, .28); background: rgba(11, 8, 32, .5); color: #fff; text-decoration: none; text-align: center; height: 100%; }
 .pf-g a:hover { border-color: var(--fx-gold-hi); background: rgba(231, 194, 122, .12); }
 .pf-g .pf-medal { width: 56px; height: 56px; }
@@ -136,15 +142,15 @@ html[lang="km"] .pf-pairs h4 { letter-spacing: 0; text-transform: none; font-siz
 .pf-cta .pf-cta-medal { width: 96px; height: 96px; margin: 0 auto 10px; box-shadow: 0 0 0 2px rgba(246, 220, 155, .7), 0 0 36px rgba(246, 200, 110, .45); }
 
 /* ---------- responsive ---------- */
+@media (max-width: 1180px) { .pf-grid12 { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 @media (max-width: 1100px) {
   .pf-cards { grid-template-columns: 1fr 1fr; }
-  .pf-grid12 { grid-template-columns: repeat(4, 1fr); }
 }
 @media (max-width: 960px) {
   .pf-trio, .pf-trio-first, #lucky.pf-trio, .pf-duo, .pf-duo-grid { grid-template-columns: 1fr; }
-  .pf-grid12 { grid-template-columns: repeat(6, 1fr); }
   .pf-spirit-in { max-width: 480px; margin: 0 auto; }
 }
+@media (max-width: 960px) and (min-width: 641px) { .pf-matrix .pf-more ul { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 720px) { .pf-grid12 { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 640px) {
   .pf-cards { grid-template-columns: 1fr; }
@@ -227,3 +233,4 @@ html[lang="km"] .pf-trad-facts dt { text-transform: none; letter-spacing: 0; fon
 .pf-trad-text h3 { margin: 14px 0 4px; color: #f6dc9b; font-size: 1.05rem; }
 .pf-trad-text p { margin: 0 0 10px; line-height: 1.7; color: #e3dcf7; max-width: 75ch; }
 @media (max-width: 820px) { .pf-trad-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+html[lang="km"] .pf-g .pf-cat { border-radius: 10px; line-height: 1.55; }

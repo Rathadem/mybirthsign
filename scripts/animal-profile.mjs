@@ -547,17 +547,15 @@ ${ELEMENTS.map((e) => `        <li class="pf-el pf-el-${e.toLowerCase()}"><img s
     <p class="fx-disc">${esc(u.disc)}</p>
   </article>
 
-  <div class="pf-duo pf-duo-grid">
-    <section aria-labelledby="pf-gr-${lang}">
-      <div class="fx-head pf-head-left"><h2 id="pf-gr-${lang}">${ICON.heart}<span>${esc(u.gridH)}</span></h2><p>${esc(u.gridP(n))}</p></div>
-      <div class="fx-gframe pf-gridbox"><ul class="pf-grid12">
+  <section class="pf-matrix" aria-labelledby="pf-gr-${lang}">
+    <div class="fx-head pf-head-left"><h2 id="pf-gr-${lang}">${ICON.heart}<span>${esc(u.gridH)}</span></h2><p>${esc(u.gridP(n))}</p></div>
+    <div class="fx-gframe pf-gridbox"><ul class="pf-grid12">
 ${ORDER.map((b) => { const t = typeOf(b); return `        <li class="pf-g pf-g-${t}${b === A ? " is-self" : ""}"><a href="${link(b)}">${medal(b, 56)}<strong>${esc(nameIn(b, lang))}</strong><span class="pf-cat">${esc(u.cat[t])}</span></a></li>`; }).join("\n")}
-      </ul>
-      <div class="pf-why"><h3>${esc(u.whyH)}</h3><ul>${u.why(n, { best: nmL(best).map(esc), support: nmL(support).map(esc), clash: nmL(clash).map(esc), tri: nmL(TRI).map(esc), frameEl: isKm ? KM_ELEM[T_.frame] : isZh ? ZH_ELEM[T_.frame] : T_.frame, frameCh: FRAME[T_.frame], neutral: 12 - 1 - best.length - support.length - clash.length }).map((li) => `<li>${li}</li>`).join("")}</ul><p class="pf-small">${u.whyFoot}</p></div>
+    </ul></div>
+    <div class="pf-duo pf-duo-grid">
+      <div class="fx-gframe pf-whybox"><div class="pf-why"><h3>${esc(u.whyH)}</h3><ul>${u.why(n, { best: nmL(best).map(esc), support: nmL(support).map(esc), clash: nmL(clash).map(esc), tri: nmL(TRI).map(esc), frameEl: isKm ? KM_ELEM[T_.frame] : isZh ? ZH_ELEM[T_.frame] : T_.frame, frameCh: FRAME[T_.frame], neutral: 12 - 1 - best.length - support.length - clash.length }).map((li) => `<li>${li}</li>`).join("")}</ul><p class="pf-small">${u.whyFoot}</p></div>
       <p class="pf-btnrow"><a class="fx-btn fx-btn-sm" href="/compatibility">${esc(u.compBtn)}</a></p></div>
-    </section>
-    <aside aria-labelledby="pf-mr-${lang}">
-      <div class="fx-gframe pf-more">
+    <aside class="fx-gframe pf-more" aria-labelledby="pf-mr-${lang}">
         <h2 id="pf-mr-${lang}">${esc(u.moreH(n))}</h2>
         <ul>
           <li><a href="#love">${ICON.heart}<span>${isKm ? "¤T¤ក្នុងស្នេហា និងទំនាក់ទំនង" : isZh ? `属${n}的爱情与感情` : `${n} in Love &amp; Relationships`}</span></a></li>
@@ -568,9 +566,9 @@ ${ORDER.map((b) => { const t = typeOf(b); return `        <li class="pf-g pf-g-$
           <li><a href="../animals.html">${ICON.star}<span>${isKm ? "មគ្គុទ្ទេសក៍សត្វទាំង12" : isZh ? "十二生肖指南" : "All 12 Zodiac Animals"}</span></a></li>
           <li><a href="../blog.html">${ICON.spark}<span>${isKm ? "អត្ថបទផ្សេងទៀត" : isZh ? "更多博客文章" : "More from the Blog"}</span></a></li>
         </ul>
-      </div>
     </aside>
-  </div>
+    </div>
+  </section>
 
   <section class="fx-sec pf-today" aria-labelledby="pf-td-${lang}">
     <div class="fx-gframe pf-today-in" ${todayData}>
