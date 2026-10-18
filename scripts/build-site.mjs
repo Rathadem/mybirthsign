@@ -332,7 +332,9 @@ const pageList = [];
     const html = fs.readFileSync(abs, "utf8");
     const p = pagePath(rel, html);
     const blk = findBlocks(html);   // only pages written in language blocks with none for a language can lack it (pages translated by data-i18n keep all three)
-    const langs = LANGS.filter((l) => l === "en" || !blk.some((x) => x.lang === "en") || blk.some((x) => x.lang === l) || hasOwnText(variant(html, l, p), l));
+    // blog articles written only in English (no language blocks at all, e.g. the holiday guides and weekly articles) are English-only
+    const enOnlyArticle = rel.startsWith("blog" + path.sep) && !blk.length && /<html lang="en"/.test(html);
+    const langs = LANGS.filter((l) => l === "en" || (!enOnlyArticle && (!blk.some((x) => x.lang === "en") || blk.some((x) => x.lang === l) || hasOwnText(variant(html, l, p), l))));
     for (const lang of LANGS) {
       if (!langs.includes(lang)) { noOwn.push([lang, p]); continue; }
       const dest = path.join(DIST, lang === "en" ? "" : lang, rel);
@@ -350,7 +352,7 @@ if (fs.existsSync(smPath)) {
   const sm = fs.readFileSync(smPath, "utf8");
   const out = sm.replace(/  <url><loc>https:\/\/mybirthsign\.com([^<]*)<\/loc>(.*?)<\/url>\n?/g, (m, p, rest) =>
     /^\/blog\/daily-fortune-/.test(p) ? "" :   // noindex pages stay out of the sitemap (see step 3c)
-    LANGS.filter((l) => !noOwn.some(([nl, np]) => nl === l && np === (p || "/"))).map((l) => `  <url><loc>${urlFor(p || "/", l)}</loc>${rest}</url>`).join("\n") + "\n");
+    LANGS.filter((l) => !noOwn.some(([nl, np]) => nl === l && np === ((p || "/").replace(/\.html$/, "")))).map((l) => `  <url><loc>${urlFor(p || "/", l)}</loc>${rest}</url>`).join("\n") + "\n");
   fs.writeFileSync(smPath, out);
 }
 
@@ -362,7 +364,7 @@ for (const l of ["km", "zh"]) {
     const st = fs.statSync(path.join(DIST, f));
     if (st.isFile() && !f.endsWith(".html") && !["_redirects", "sitemap.xml", "robots.txt", "ads.txt"].includes(f)) R.push(`/${l}/${f}  /${f}  200`);
   }
-  for (const [nl, np] of noOwn) if (nl === l) { R.push(`${prefix(l)}${np}  ${np}  301`); if (np.endsWith("/")) R.push(`${prefix(l)}${np}index.html  ${np}  301`); }
+  for (const [nl, np] of noOwn) if (nl === l) { R.push(`${prefix(l)}${np}  ${np}  301`); if (np.endsWith("/")) R.push(`${prefix(l)}${np}index.html  ${np}  301`); else R.push(`${prefix(l)}${np}.html  ${np}  301`); }
   R.push(`/${l}/zodiac-guide  /${l}/animals.html  200`);
   R.push(`/${l}/khmer-lunar-calendar-birth-date  /${l}/blog/khmer-lunar-calendar-birth-date.html  301`);
   R.push(`/${l}/khmer-lunar-calendar-birth-date.html  /${l}/blog/khmer-lunar-calendar-birth-date.html  301`);
