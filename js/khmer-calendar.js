@@ -189,6 +189,10 @@
     $("week").innerHTML = w.week.map(function (d) { return "<div>" + d + "</div>"; }).join("");
     $("monthTitle").firstChild.textContent = w.months[shown.getMonth()] + " ";
     $("yearTitle").textContent = shown.getFullYear();
+    // the Khmer lunar month(s) this Gregorian month spans, and the Buddhist Era year
+    var t1 = Date.UTC(shown.getFullYear(), shown.getMonth(), 1), tN = Date.UTC(shown.getFullYear(), shown.getMonth() + 1, 0), mons = [], beS = [];
+    for (var tt = t1; tt <= tN; tt += DAY) { var kx = kh(tt).khmer, mn = lang === "km" ? kx.monthName : MEN[kx.monthIndex]; if (mons.indexOf(mn) < 0) mons.push(mn); if (beS.indexOf(kx.beYear) < 0) beS.push(kx.beYear); }
+    if ($("lunarMonths")) $("lunarMonths").textContent = mons.join(" – ") + " · " + (lang === "km" ? "ព.ស. " : lang === "zh" ? "佛历" : "B.E. ") + beS.join("–");
     var first = new Date(shown.getFullYear(), shown.getMonth(), 1).getDay(), count = new Date(shown.getFullYear(), shown.getMonth() + 1, 0).getDate();
     var html = "", todayT = utc(new Date()), selT = utc(selected);
     for (var i = 0; i < first; i++) html += '<div class="day empty"></div>';
@@ -197,7 +201,8 @@
       var label = fmtDate(new Date(shown.getFullYear(), shown.getMonth(), d), { day: "numeric", month: "long" }) + ", " + cellLunar(t, true) + (ev.length ? ", " + ev.map(function (e) { return EV[e][lang]; }).join(", ") : "") + (sil ? ", " + w.sil : "");
       var evHtml = main ? '<span class="day-event"><span class="event-icon">' + EV[main].i + '</span><span class="event-name">' + esc(EV[main][lang]) + (ev.length > 1 ? " +" + (ev.length - 1) : "") + "</span></span>"
         : sil ? '<span class="day-event"><span class="event-icon">•</span><span class="event-name">' + esc(w.sil) + "</span></span>" : "";
-      html += '<button class="day ' + (t === todayT ? "today " : "") + (t === selT ? "selected " : "") + (sil ? "sil" : "") + '" data-day="' + d + '" aria-label="' + esc(label) + '"><span class="num">' + d + '</span><span class="lunar">' + esc(cellLunar(t, d === 1)) + "</span>" + evHtml + '<span class="moon-phase">' + mi + "</span></button>";
+      var kk = kh(t).khmer, shortL = lang === "km" ? kk.day + w[kk.moonPhase ? "waning" : "waxing"] : String(kk.day);
+      html += '<button class="day ' + (t === todayT ? "today " : "") + (t === selT ? "selected " : "") + (sil ? "sil " : "") + (kk.moonPhase ? "wan" : "wax") + '" data-day="' + d + '" aria-label="' + esc(label) + '" title="' + esc(ev.map(function (e) { return EV[e][lang]; }).join(" · ")) + '"><span class="num">' + d + '</span><span class="lunar">' + esc(cellLunar(t, d === 1)) + '</span><span class="lunar-s">' + esc(shortL) + "</span>" + evHtml + '<span class="moon-phase">' + mi + "</span></button>";
     }
     $("days").innerHTML = html;
     $("days").querySelectorAll("[data-day]").forEach(function (b) { b.addEventListener("click", function () { selected = new Date(shown.getFullYear(), shown.getMonth(), +b.dataset.day); render(); }); });
@@ -210,7 +215,7 @@
     $("lunarText").textContent = fullLunar(t);
     if (lang === "km") $("lunarText").setAttribute("lang", "km"); else $("lunarText").removeAttribute("lang");
     var rows = $("eventsTitle").parentElement.querySelectorAll(".info-row");
-    rows[0].querySelector(".info-icon").textContent = ev.length ? EV[ev[0]].i : sil ? "🪷" : "·";
+    rows[0].querySelector(".info-icon").textContent = ev.length ? EV[ev[0]].i : sil ? "🪷" : "📅";
     rows[0].querySelectorAll("span")[1].textContent = w.rowEvent;
     rows[0].querySelector("strong").textContent = ev.length || sil ? ev.map(function (e) { return EV[e][lang]; }).concat(sil ? [w.sil] : []).join(" · ") : w.none;
     rows[1].querySelector(".info-icon").textContent = moonIcon(t);
@@ -221,7 +226,7 @@
     rows[2].querySelector("strong").textContent = yearLine(t);
     // the next five holidays and Buddhist days from the selected date
     var up = [], seen = {}, s = t;
-    for (var i = 0; i < 400 && up.length < 5; i++, s += DAY) eventsOn(s).forEach(function (e) { if (EV[e].k !== "minor" && !seen[e + new Date(s).getUTCFullYear()] && up.length < 5) { seen[e + new Date(s).getUTCFullYear()] = 1; up.push([s, e]); } });
+    for (var i = 0; i < 400 && up.length < 6; i++, s += DAY) eventsOn(s).forEach(function (e) { if (EV[e].k !== "minor" && !seen[e + new Date(s).getUTCFullYear()] && up.length < 6) { seen[e + new Date(s).getUTCFullYear()] = 1; up.push([s, e]); } });
     if ($("upcoming")) $("upcoming").innerHTML = up.map(function (u) { return "<li><span>" + EV[u[1]].i + " " + esc(EV[u[1]][lang]) + "</span><b>" + esc(fmtDate(localOf(u[0]), { day: "numeric", month: "short", year: "numeric" })) + "</b></li>"; }).join("");
     $("yearNow").textContent = new Date().getFullYear();
   }
