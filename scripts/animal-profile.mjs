@@ -219,6 +219,8 @@ const COPY = {
 import { EXTRA } from "./profile-copy.mjs";
 import { PROFILE_ZH } from "./profile-zh.mjs";
 import { TRAD, DIR, FRAME } from "./profile-tradition.mjs";
+// English indefinite article: "an Ox", "an Earth Dragon", "a Rat"
+const aan = (w) => (/^[AEIOU]/i.test(String(w)) ? "an" : "a");
 Object.assign(COPY, EXTRA);
 // Chinese copy + article text (scripts/profile-zh.mjs); the article keeps the English section order (index 4, lucky items, is not shown)
 if (COPY[A] && PROFILE_ZH[A]) {
@@ -233,7 +235,7 @@ const UI = {
   en: {
     nav: [["overview", "home", "Overview"], ["dates", "cal", "Exact Dates"], ["tradition", "star", "Tradition"], ["personality", "user", "Personality"], ["elements", "leaf", "Elements"], ["lucky", "clover", "Lucky Signs"], ["compat", "heart", "Compatibility"], ["career", "brief", "Career"], ["love", "heart", "Love"], ["health", "health", "Health"]],
     navLabel: (n) => `${n} sections`,
-    btnCheck: (n) => `Check if You're a ${n} →`, btnCompat: "Check Compatibility →",
+    btnCheck: (n) => `Check if You're ${aan(n)} ${n} →`, btnCompat: "Check Compatibility →",
     ovH: (n) => `${n} Overview`, traitsH: "Key Traits", yearsH: (n) => `Zodiac Years for ${n}`,
     yearsNote: "If you were born in January or February, check the Lunar New Year date to confirm your zodiac sign.", yearsBtn: "Check My Birth Year →",
     luckyH: (n) => `Lucky Signs for ${n}`, colors: "Lucky Colors", numbers: "Lucky Numbers", days: "Lucky Days",
@@ -250,8 +252,8 @@ const UI = {
     moreH: (n) => `More About the ${n}`,
     todayH: (n) => `Today's Fortune for ${n}`, todayLink: "See the full daily fortune for all 12 signs →",
     todayTier: { great: "Great Day", good: "Good Day", ordinary: "Ordinary Day", caution: "Take It Easy" },
-    todayLine: (d, t) => `Today is a ${d} day — for you it is ${/^[AEIOU]/i.test(t) ? "an" : "a"} ${t}.`,
-    ctaH: (n) => `Are You a ${n}?`, ctaP: "Enter your birthday to discover your Chinese zodiac animal, element, lucky signs, and more.", ctaB: "🔮 Check My Zodiac Sign →",
+    todayLine: (d, t) => `Today is ${aan(d)} ${d} day — for you it is ${aan(t)} ${t}.`,
+    ctaH: (n) => `Are You ${aan(n)} ${n}?`, ctaP: "Enter your birthday to discover your Chinese zodiac animal, element, lucky signs, and more.", ctaB: "🔮 Check My Zodiac Sign →",
     faqH: "Frequently Asked Questions", toolsH: "Explore MyBirthSign",
     tools: [["🔮", "Chinese Zodiac Checker", "Find your animal and element", "/checker"], ["💗", "Compatibility Calculator", "Check love, friendship and more", "/compatibility"], ["💍", "Wedding Date Picker", "Find auspicious dates", "/wedding-date"], ["💼", "Business Partner Compatibility", "See if you work well together", "/business-partner"], ["📚", "Chinese Zodiac Guide", "Learn about all 12 animals", "../animals.html"]],
     disc: "For entertainment purposes only. Chinese zodiac interpretations are traditional and cultural, not scientifically proven.",
@@ -259,7 +261,7 @@ const UI = {
     datesH: (n) => `Exact ${n} Year Dates`,
     datesP: "A zodiac year starts on Lunar New Year and ends the day before the next one. These dates come from the same Lunar New Year table the Zodiac Checker uses.",
     th: ["Year", "Starts", "Ends", "Element"], exL: "Example:",
-    example: (n, e, d) => `someone born on ${d(e.before)} is not a ${n}. The ${EX_Y} ${n} year began on ${d(e.start)}, so that birthday still belongs to the ${e.prevElN} ${e.prevN} year that started in ${EX_Y - 1}. Anyone born from ${d(e.start)} to ${d(e.end)} is a ${e.elN} ${n}.`,
+    example: (n, e, d) => `someone born on ${d(e.before)} is not ${aan(n)} ${n}. The ${EX_Y} ${n} year began on ${d(e.start)}, so that birthday still belongs to the ${e.prevElN} ${e.prevN} year that started in ${EX_Y - 1}. Anyone born from ${d(e.start)} to ${d(e.end)} is ${aan(e.elN)} ${e.elN} ${n}.`,
     whyH: "Why these matches?",
     why: (n, x) => [
       `<strong>Good — ${x.best.join(" and ")}.</strong> Same triangle as the ${n} (${x.tri.join(" · ")}), the triangle traditionally linked with ${x.frameEl}.`,
@@ -433,12 +435,14 @@ function body(lang) {
         ${bullets(c.cards[key])}
         ${key === "money" ? `<p class="pf-note">${esc(c.moneyNote)}</p>` : ""}${key === "health" ? `<p class="pf-note">${esc(c.healthNote)}</p>` : ""}
       </article>`;
-  const compRow = (label, list, cls) => `<div class="pf-pairs ${cls}"><h4>${esc(label)}</h4><ul>${list.map((b) => `<li><a href="${link(b)}">${medal(b, 54)}<span>${esc(nameIn(b, lang))}</span></a></li>`).join("")}</ul></div>`;
   const sec = (h2, ps) => ps.map((p) => `<p>${p}</p>`).join("");
   const secBy = (i) => ct.sections[i][1];
 
   // article text pulled from the old page (all of it is kept)
-  const [persP, relP, workP, watchP, , compP, careerP] = [secBy(0), secBy(1), secBy(2), secBy(3), secBy(4), secBy(5), secBy(6)];
+  // Trimmed to avoid repeating other blocks on the page: the Personality summary line is already the second Overview
+  // paragraph, the "Best matches / Can clash with" lines are covered (more precisely) by the 12-animal grid, and the
+  // career list repeats the Career & Work card.
+  const [persP, relP, workP, watchP, , compP, careerP] = [secBy(0).slice(1), secBy(1), secBy(2), secBy(3), secBy(4), secBy(5).filter((p) => !p.startsWith("<strong>")), secBy(6).slice(0, 1)];
   const todayData = `data-today data-animal="${A}" data-lang="${lang}"`;
 
   return `<div class="pf-body">
@@ -466,12 +470,6 @@ ${u.nav.map(([id, ico, label]) => `  <li><a href="#${id}">${ICON[ico]}<span>${es
     <section class="fx-gframe pf-traits" aria-labelledby="pf-tr-${lang}">
       <h2 id="pf-tr-${lang}">${ICON.spark}<span>${esc(u.traitsH)}</span></h2>
       <ul class="pf-trait-grid">${c.traits.map(([i, l]) => `<li><span class="pf-ring">${ICON[i]}</span>${esc(l)}</li>`).join("")}</ul>
-    </section>
-    <section class="fx-gframe pf-years-card" aria-labelledby="pf-yr-${lang}">
-      <h2 id="pf-yr-${lang}">${ICON.cal}<span>${esc(u.yearsH(n))}</span></h2>
-      <ul class="pf-year-grid">${years.map((y) => `<li>${y}</li>`).join("")}</ul>
-      <p class="pf-small">${esc(u.yearsNote)}</p>
-      <a class="fx-btn fx-btn-sm" href="${CHK}">${esc(u.yearsBtn)}</a>
     </section>
   </div>
 
@@ -507,11 +505,6 @@ ${ELEMENTS.map((e) => `        <li class="pf-el pf-el-${e.toLowerCase()}"><img s
       ${u.elNote ? `<p class="pf-small pf-el-note">${esc(u.elNote)}</p>` : ""}
       <a class="fx-btn fx-btn-sm" href="../blog/five-elements-explained.html">${esc(u.elBtn)}</a>
     </section>
-    <section class="fx-gframe pf-compat" id="compat" aria-labelledby="pf-cp-${lang}">
-      <h2 id="pf-cp-${lang}">${ICON.heart}<span>${esc(u.compH)}</span></h2>
-      ${compRow(u.bestL, best, "pf-best")}<div class="pf-pairs-2">${support.length ? compRow(u.supL, support, "pf-sup") : ""}${compRow(u.chalL, clash, "pf-chal")}</div>
-      <a class="fx-btn fx-btn-sm" href="/compatibility">${esc(u.compBtn)}</a>
-    </section>
   </div>
 
   <section class="fx-sec" id="personality" aria-labelledby="pf-ps-${lang}">
@@ -529,7 +522,6 @@ ${ELEMENTS.map((e) => `        <li class="pf-el pf-el-${e.toLowerCase()}"><img s
         <div class="fx-gframe pf-spirit-in">
           <h2 id="pf-sp-${lang}">${esc(u.spiritH(n))}</h2>
           <div class="pf-moon"><img src="../images/profile/spirit-${slug}.webp" width="520" height="462" alt="${isKm ? `រូបសត្វ${KM_NAMES[A]}ក្នុងសំពត់មាសជាមួយផ្កាឈូក` : isZh ? `饰有莲花的华丽金${ZH_NAMES[A]}` : `An ornate golden ${A} with lotus flowers`}" loading="lazy" decoding="async"></div>
-          <p>${esc(c.spiritText)}</p>
         </div>
       </aside>
     </div>
@@ -547,7 +539,7 @@ ${ELEMENTS.map((e) => `        <li class="pf-el pf-el-${e.toLowerCase()}"><img s
     <p class="fx-disc">${esc(u.disc)}</p>
   </article>
 
-  <section class="pf-matrix" aria-labelledby="pf-gr-${lang}">
+  <section class="pf-matrix" id="compat" aria-labelledby="pf-gr-${lang}">
     <div class="fx-head pf-head-left"><h2 id="pf-gr-${lang}">${ICON.heart}<span>${esc(u.gridH)}</span></h2><p>${esc(u.gridP(n))}</p></div>
     <div class="fx-gframe pf-gridbox"><ul class="pf-grid12">
 ${ORDER.map((b) => { const t = typeOf(b); return `        <li class="pf-g pf-g-${t}${b === A ? " is-self" : ""}"><a href="${link(b)}">${medal(b, 56)}<strong>${esc(nameIn(b, lang))}</strong><span class="pf-cat">${esc(u.cat[t])}</span></a></li>`; }).join("\n")}
@@ -562,7 +554,6 @@ ${ORDER.map((b) => { const t = typeOf(b); return `        <li class="pf-g pf-g-$
           <li><a href="#career">${ICON.brief}<span>${isKm ? "¤T¤ក្នុងអាជីព និងការងារ" : isZh ? `属${n}的事业与工作` : `${n} in Career &amp; Work`}</span></a></li>
           <li><a href="#money">${ICON.coins}<span>${isKm ? "¤T¤ក្នុងលុយកាក់ និងទ្រព្យសម្បត្តិ" : isZh ? `属${n}的金钱与财富` : `${n} in Money &amp; Wealth`}</span></a></li>
           <li><a href="#elements">${ICON.leaf}<span>${isKm ? "¤T¤ និងធាតុផ្សេងៗ" : isZh ? `属${n}与五行` : `${n} &amp; Different Elements`}</span></a></li>
-          <li><a href="/compatibility">${ICON.heart}<span>${isKm ? "ភាពសមស្របរបស់¤T¤" : isZh ? `属${n}的配对` : `${n} Compatibility`}</span></a></li>
           <li><a href="../animals.html">${ICON.star}<span>${isKm ? "មគ្គុទ្ទេសក៍សត្វទាំង12" : isZh ? "十二生肖指南" : "All 12 Zodiac Animals"}</span></a></li>
           <li><a href="../blog.html">${ICON.spark}<span>${isKm ? "អត្ថបទផ្សេងទៀត" : isZh ? "更多博客文章" : "More from the Blog"}</span></a></li>
         </ul>

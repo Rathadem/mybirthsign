@@ -226,6 +226,8 @@ document.addEventListener("DOMContentLoaded", function () {
     { min: 40, en: "Average", km: "មធ្យម", emoji: "💛" },
     { min: 0, en: "Challenging", km: "មានបញ្ហាប្រឈម", emoji: "🧡" }
   ];
+  // English indefinite article ("an excellent match", "a good match")
+  function aan(w) { return /^[aeiou]/i.test(String(w)) ? "an" : "a"; }
   function levelFor(score) { return LEVELS.find(function (l) { return score >= l.min; }); }
 
   function heartsRowHtml(score) {
@@ -329,11 +331,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const summaryText = isKm
       ? `${animalName(bziA.animal)} និង ${animalName(bziB.animal)} បង្កើតបានជាគូដែល${levelLabel} (${overall}%)។ ចំណុចខ្លាំងបំផុតគឺ${CATEGORY_LABEL[topCat.key]} ខណៈដែល${CATEGORY_LABEL[bottomCat.key]}ទាមទារការយកចិត្តទុកដាក់បន្ថែម។ ${elRel.note}`
-      : `${bziA.animal} and ${bziB.animal} make a ${levelLabel.toLowerCase()} match (${overall}%). The strongest area is ${CATEGORY_LABEL[topCat.key]}, while ${CATEGORY_LABEL[bottomCat.key]} needs a little more attention. ${elRel.note}`;
+      : `${bziA.animal} and ${bziB.animal} make ${aan(levelLabel)} ${levelLabel.toLowerCase()} match (${overall}%). The strongest area is ${CATEGORY_LABEL[topCat.key]}, while ${CATEGORY_LABEL[bottomCat.key]} needs a little more attention. ${elRel.note}`;
 
     const overallExplain = isKm
       ? `ពិន្ទុនេះផ្អែកលើទំនាក់ទំនងនិមិត្តសញ្ញារវាង${animalName(bziA.animal)} និង${animalName(bziB.animal)} (${animalRelType === "same" ? "ដូចគ្នា" : animalRelType === "triangle" ? "ក្រុមសុខដុម" : animalRelType === "clash" ? "ប៉ះទង្គិច" : "អព្យាក្រឹត"}), ទំនាក់ទំនងធាតុ ${elementName(bziA.element)} ↔ ${elementName(bziB.element)} (${elRel.relation}), និងលក្ខណៈយិន-យ៉ាងរបស់អ្នកទាំងពីរ។ ជារួម នេះជាគូ${levelLabel} តាមការអានតាមប្រពៃណី។`
-      : `This score is based on the traditional zodiac relationship between ${bziA.animal} and ${bziB.animal} (${animalRelType}), the Five-Element relationship between ${bziA.element} and ${bziB.element} (${elRel.relation}), and both partners' Yin/Yang polarity. Overall, this is a ${levelLabel.toLowerCase()} match by the traditional reading.`;
+      : `This score is based on the traditional zodiac relationship between ${bziA.animal} and ${bziB.animal} (${animalRelType}), the Five-Element relationship between ${bziA.element} and ${bziB.element} (${elRel.relation}), and both partners' Yin/Yang polarity. Overall, this is ${aan(levelLabel)} ${levelLabel.toLowerCase()} match by the traditional reading.`;
 
     resultBox.innerHTML = `
       <div class="romance-card">

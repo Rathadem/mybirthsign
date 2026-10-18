@@ -25,6 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  // English indefinite article ("an Aries", "a Leo")
+  function aan(w) { return /^[aeiou]/i.test(String(w)) ? "an" : "a"; }
   function parseDobInput(value) {
     if (!value) return null;
     const d = new Date(value + "T00:00:00");
@@ -237,14 +239,14 @@ document.addEventListener("DOMContentLoaded", function () {
           growth: `ក្នុងនាមជាបុគ្គលម្នាក់ៗដែលរីកចម្រើនជាមួយគ្នា (លេខផ្លូវជីវិត ${rootA} និង ${rootB})`
         }
       : {
-          love: `As a ${signA.element}-${signB.element} pairing (${signA.name} and ${signB.name}), how you express affection`,
-          emotional: `Emotionally, a ${signA.name}-${signB.name} pair`,
+          love: `As ${aan(signA.element)} ${signA.element}-${signB.element} pairing (${signA.name} and ${signB.name}), how you express affection`,
+          emotional: `Emotionally, ${aan(signA.name)} ${signA.name}-${signB.name} pair`,
           communication: `Between ${signA.modality} ${signA.name} and ${signB.modality} ${signB.name}, day-to-day communication`,
           trust: `Building trust between you (modality: ${signA.modality}/${signB.modality}, life paths ${rootA} and ${rootB})`,
           family: `When it comes to home life and family`,
           financial: `Financially, with life path numbers ${rootA} and ${rootB} in the mix`,
           chemistry: `Chemistry between ${signA.element} and ${signB.element} energy`,
-          personality: `Overall personality fit between a ${signA.name} and a ${signB.name}`,
+          personality: `Overall personality fit between ${aan(signA.name)} ${signA.name} and ${aan(signB.name)} ${signB.name}`,
           conflict: `When disagreements happen between two ${signA.modality}/${signB.modality} signs`,
           longterm: `Looking at the long run`,
           growth: `As individuals growing side by side (life paths ${rootA} & ${rootB})`
@@ -312,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
           `ប្រើប្រាស់ប្រភេទខ្លាំងបំផុតរបស់អ្នកខាងលើ នៅពេលម្នាក់ណាម្នាក់មានភាពតានតឹង — វាជាចំណុចភ្ជាប់ដែលអាចទុកចិត្តបានបំផុតដែលអ្នកមាន។`
         ]
       : [
-          `Since ${pA} is a ${signA.name} and ${pB} is a ${signB.name}, try naming your different paces out loud instead of assuming the other should already know — ${signA.element.toLowerCase()} energy and ${signB.element.toLowerCase()} energy don't read each other automatically.`,
+          `Since ${pA} is ${aan(signA.name)} ${signA.name} and ${pB} is ${aan(signB.name)} ${signB.name}, try naming your different paces out loud instead of assuming the other should already know — ${signA.element.toLowerCase()} energy and ${signB.element.toLowerCase()} energy don't read each other automatically.`,
           `Schedule regular, low-stakes check-ins on money and home-life logistics — numerology life paths ${numA.lifePath} and ${numB.lifePath} don't guarantee you'll default to the same habits here.`,
           `Play to your strongest category above when either of you is stressed — it's the most reliable connector you have.`
         ];

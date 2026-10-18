@@ -21,6 +21,8 @@ import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
+// English indefinite article: "an Ox day", "a Rat day"
+const aan = (w) => (/^[AEIOU]/i.test(String(w)) ? "an" : "a");
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
@@ -249,7 +251,7 @@ const cautionList = sorted.filter((c) => c.tier === "caution").map((c) => c.a);
 
 const introEN = `<p>
     Every day carries the energy of one of the 12 zodiac animals in the traditional day cycle.
-    Today is a ${dayAnimal} day: it lines up best with ${names(bestList, "en")}, and it asks for a
+    Today is ${aan(dayAnimal)} ${dayAnimal} day: it lines up best with ${names(bestList, "en")}, and it asks for a
     little extra care from ${names(cautionList, "en")}. Here's how today sits with all twelve signs —
     what it's good for, and the one thing worth watching out for, based on that animal's usual soft spot.
   </p>`;
@@ -398,7 +400,7 @@ function faqs(lang, dateTxt) {
     ["តើជោគជតារាសីមានភស្តុតាងវិទ្យាសាស្ត្រទេ?", "មិនមានទេ។ និមិត្តសញ្ញាទាំងនេះជាប្រព័ន្ធវប្បធម៌ប្រពៃណី ហើយគ្មានភស្តុតាងវិទ្យាសាស្ត្រថាវាអាចទស្សន៍ទាយអត្តចរិត ឬអនាគតបានទេ។ យើងបង្ហាញវាសម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ។"],
   ];
   return [
-    ["What is today's Chinese zodiac animal?", `Today, ${dateTxt}, is a ${A} day in the traditional 12-day cycle.`],
+    ["What is today's Chinese zodiac animal?", `Today, ${dateTxt}, is ${aan(A)} ${A} day in the traditional 12-day cycle.`],
     ["Which zodiac signs are most compatible with today's energy?", `${A} is the sign of the day, and ${andJoin(others, "en")} share its triangle of friends, so they are traditionally the best supported today.`],
     ["Which Chinese zodiac sign should be more careful today?", `${andJoin(cautionList, "en")}, the sign directly opposite ${A} in the cycle, is traditionally asked to take a little extra care today.`],
     ["How is Chinese zodiac daily fortune calculated?", "Each calendar day is assigned one of the 12 animals in a repeating cycle, counted from a fixed reference date. Each sign is then compared with the day's animal: the same animal has a Great Day, signs in the same triangle of friends have a Good Day, the sign directly opposite should Take It Easy, and every other sign has an Ordinary Day."],
@@ -426,6 +428,12 @@ const CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" strok
 const CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#3fae6b"/><path d="m7.5 12.3 3.2 3.2 5.8-6.4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const WARN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#e0566b"/><path d="M12 7v6M12 16.5v.1" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg>';
 
+const BRIEF_H = { en: "Today in Brief", km: "សង្ខេបថ្ងៃនេះ", zh: "今日概要" };
+const DAYCYCLE = {
+  en: "Every day carries the energy of one of the 12 zodiac animals in the traditional day cycle, so each sign's rating above comes from how its animal relates to today's.",
+  km: "រាល់ថ្ងៃមានថាមពលរបស់សត្វនិមិត្តសញ្ញាទាំង12មួយ តាមវដ្តថ្ងៃប្រពៃណី ដូច្នេះការវាយតម្លៃរបស់សញ្ញានីមួយៗខាងលើ មកពីទំនាក់ទំនងរវាងសត្វរបស់វា និងសត្វនៃថ្ងៃនេះ។",
+  zh: "按照传统的日序，每一天都对应十二生肖中的一个，所以上面每个生肖的评级，都来自它与今天生肖的关系。",
+};
 const attr = (v) => esc(v).replace(/"/g, "&quot;").replace(/'/g, "&#39;");   // safe inside attribute values
 const DL = {
   en: { love: "Love", career: "Career", money: "Money", number: "Number", color: "Color", direction: "Direction", time: "Time", advice: "Today's Advice", more: "Love · Work · Money", theme: "Today's Theme", loveHi: "Love highlight", bizHi: "Business highlight" },
@@ -437,7 +445,9 @@ function signCard(c, lang, t) {
   const { a, i, tier } = c, isKm = lang === "km", name = nameIn(a, lang);
   const weak = infoIn(a, lang).weaknesses.trim();
   const d = dataOf(a), F = factOf(a), L = d ? d.lucky : F.lucky, D = DL[lang], TT = TRADE_T[lang], date = isKm ? dateKM : lang === "zh" ? dateZH : dateEN;
-  const trade = pick(TRADE[lang][tier], i + 2);
+  // rotate through the tier's lines in zodiac order, so two cards with the same rating repeat a line only when the tier has more signs than lines
+  const rank = ORDER.filter((x) => tierOf(x) === tier).indexOf(a);
+  const trade = TRADE[lang][tier][(dayNumber + rank) % TRADE[lang][tier].length];
   const partner = TT.partnerName(nameIn(L.helperAnimal || F.lucky.helperAnimal, lang));
   const time = isKm ? kmNum(L.time) : L.time;
   const goodFor = pick(GOOD_FOR[lang][tier], i), watch = `${weak}${lang === "zh" ? "" : " "}${pick(AVOID_NOTE[lang][tier], i + 1)}`;
@@ -498,6 +508,9 @@ function body(lang) {
   const watchBullets = [weakA, pick(AVOID_NOTE[lang].great, aIdx + 1)];
   const faqItems = faqs(lang, dateTxt);
   const introP = isKm ? introKM : isZh ? introZH : introEN;
+  // day-specific highlights (theme, love, business) go in the "Today in brief" panel; the old static guidance panel
+  // and the generic "use this page" paragraph were the same on every post, so they are only a fallback now.
+  const HL = DATA && DATA.highlights.theme[lang] ? DATA.highlights : null;
   const wd = isKm ? KM_DAYS[weekday] : isZh ? ZH_DAYS[weekday] : weekday;
   const byZodiac = ORDER.map((a, i) => ({ a, i, tier: tierOf(a) }));
 
@@ -559,11 +572,16 @@ function body(lang) {
 
     <section aria-labelledby="fx-guide-${lang}">
       <div class="fx-gframe fx-guidepanel">
-        <h2 id="fx-guide-${lang}">${t.guideH}</h2>
+${HL ? `        <h2 id="fx-guide-${lang}">${BRIEF_H[lang]}</h2>
+        <div class="fx-guides fx-brief">
+          <div class="fx-guide"><div class="fx-guide-ico" aria-hidden="true">✨</div><div><h3>${DL[lang].theme}</h3><p>${esc(HL.theme[lang])}</p></div></div>
+          <div class="fx-guide"><div class="fx-guide-ico" aria-hidden="true">❤️</div><div><h3>${DL[lang].loveHi}</h3><p>${esc(HL.love[lang])}</p><a href="${t.guides[0][3]}">${esc(t.guides[0][4])}</a></div></div>
+          <div class="fx-guide"><div class="fx-guide-ico" aria-hidden="true">💼</div><div><h3>${DL[lang].bizHi}</h3><p>${esc(HL.business[lang])}</p><a href="${t.guides[1][3]}">${esc(t.guides[1][4])}</a></div></div>
+        </div>` : `        <h2 id="fx-guide-${lang}">${t.guideH}</h2>
         <p class="fx-guide-intro">${t.guideP}</p>
         <div class="fx-guides">
 ${t.guides.map((g) => `          <div class="fx-guide"><div class="fx-guide-ico" aria-hidden="true">${g[0]}</div><div><h3>${g[1]}</h3><p>${esc(g[2])}</p><a href="${g[3]}">${esc(g[4])}</a></div></div>`).join("\n")}
-        </div>
+        </div>`}
       </div>
     </section>
   </div>
@@ -600,12 +618,8 @@ ${ORDER.map((a) => `        <li><a href="${guideHref(a)}"${a === A ? ' class="is
 
   <article class="fx-article fx-gframe">
     <h2>${esc(t.artH(dateTxt))}</h2>
-    ${DATA && DATA.highlights.theme[lang] ? `<p class="fx-theme"><strong>${DL[lang].theme}${isZh ? "：" : ":"}</strong> ${esc(DATA.highlights.theme[lang])}</p>
-    <p>${esc(DATA.highlights.summary[lang])}</p>
-    <p><strong>${DL[lang].loveHi}${isZh ? "：" : ":"}</strong> ${esc(DATA.highlights.love[lang])}</p>
-    <p><strong>${DL[lang].bizHi}${isZh ? "：" : ":"}</strong> ${esc(DATA.highlights.business[lang])}</p>
-    ` : ""}${introP}
-    <p>${t.artP2}</p>
+    ${HL ? `<p>${esc(HL.summary[lang])}</p>
+    <p>${DAYCYCLE[lang]}</p>` : introP}
     <p class="fx-disc">${t.disc}</p>
   </article>
 

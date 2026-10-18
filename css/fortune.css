@@ -102,6 +102,7 @@ html[lang="km"] .fx-stat h3 { letter-spacing: 0; font-size: .95rem; }
 .fx-duo { display: grid; grid-template-columns: 1.3fr 1fr; gap: 26px; margin-top: 40px; align-items: stretch; }
 .fx-duo > section, .fx-duo > section > .fx-gframe { height: 100%; }
 .fx-duo-bottom { margin-top: 56px; grid-template-columns: 1fr 1fr; }
+.fx-duo:has(> section:only-child) { grid-template-columns: 1fr; }
 
 /* sign of the day */
 .fx-feature { display: grid; grid-template-columns: minmax(120px, 190px) 1fr; gap: 14px; padding: 10px 8px 10px 2px; align-items: center; }
@@ -122,6 +123,8 @@ html[lang="km"] .fx-stat h3 { letter-spacing: 0; font-size: .95rem; }
 .fx-guidepanel h2 { margin: 0 0 4px; text-align: center; font-size: clamp(1.3rem, 3vw, 1.7rem); color: var(--fx-gold-hi); }
 .fx-guide-intro { margin: 0 0 12px; text-align: center; font-size: .85rem; color: #cfc6ee; }
 .fx-guides { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fx-guides.fx-brief { grid-template-columns: 1fr; }
+.fx-brief .fx-guide p { font-size: .9rem; }
 .fx-guide { display: flex; gap: 10px; padding: 12px 12px; border: 1px solid rgba(231, 194, 122, .4); border-radius: 12px; background: rgba(11, 8, 32, .5); }
 .fx-guide-ico { font-size: 1.7rem; line-height: 1.1; flex: none; }
 .fx-guide h3 { margin: 0 0 3px; font-size: 1rem; color: var(--fx-gold-hi); }
