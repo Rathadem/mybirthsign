@@ -29,7 +29,7 @@ const clone = () => JSON.parse(JSON.stringify(good));
 const cases = {
   "wrong tier": (r) => { r.signs[0].tier = r.signs[0].tier === "great" ? "caution" : "great"; },
   "changed lucky number": (r) => { r.signs[3].lucky.number = 99; },
-  "changed lucky color": (r) => { r.signs[3].lucky.color.en = "purple"; },
+  "changed lucky color": (r) => { r.signs[3].lucky.color.en = r.signs[3].lucky.color.en === "purple" ? "orange" : "purple"; },   // always a real change
   "wrong day animal": (r) => { r.dayAnimal = r.dayAnimal === "Rat" ? "Ox" : "Rat"; },
   "missing sign": (r) => { r.signs.pop(); },
   "signs in wrong order": (r) => { [r.signs[0], r.signs[1]] = [r.signs[1], r.signs[0]]; },

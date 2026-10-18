@@ -242,7 +242,7 @@ function main2(lang) {
           <div class="hm-digits ld ld-mini" data-lucky-digits data-animal="${a}" data-lang="${lang}" data-no-head data-no-note></div>
           <a class="hm-fc-more" href="${href(a)}" tabindex="-1">${esc(u.yearOf(nm(a, lang)))}</a></li>`;
   };
-  const animalCard = (a) => `        <li><a class="hm-ac" href="${href(a)}">${medal(a, 96)}<strong>${esc(nm(a, lang))}</strong>${zh ? "" : `<span class="hm-han" lang="zh" aria-hidden="true">${HAN[a]}</span>`}${zh ? `<small lang="km">ឆ្នាំ${esc(KM_NAMES[a])}</small>` : ""}</a></li>`;   // English page: English only
+  const animalCard = (a) => `        <li><a class="hm-ac" href="${href(a)}">${medal(a, 96)}<strong>${esc(nm(a, lang))}</strong>${zh ? "" : `<span class="hm-han" lang="zh" aria-hidden="true">${HAN[a]}</span>`}</a></li>`;   // English page: English only
   const postCard = (p) => {
     const dt = fmtDate(p.y, p.m, p.d, lang);
     return `        <li><a class="hm-pc" href="${p.file}"><img src="images/zodiac/${slug(p.animal)}.webp" width="360" height="542" alt="" loading="lazy" decoding="async"><div><time datetime="${p.y}-${String(p.m).padStart(2, "0")}-${String(p.d).padStart(2, "0")}">${esc(dt)}</time><h3>${esc(u.blogTitle(dt))}</h3><p>${esc(u.blogDesc)}</p><span class="hm-more">${esc(u.blogB)}</span></div></a></li>`;

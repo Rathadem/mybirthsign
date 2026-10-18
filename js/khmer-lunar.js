@@ -45,6 +45,8 @@
   function enLunar(k) { return ord(k.day) + " " + (k.moonPhase ? "waning" : "waxing") + " day of " + MONTH_EN[k.monthIndex]; }
   function enYear(k) { return "Year of the " + ANIMAL_EN[k.animalYear] + " (" + SAK_EN[k.sak] + ")"; }
   function enFull(k, wd) { return (wd === undefined ? "" : EN_WEEK[wd] + ", ") + enLunar(k) + ", " + enYear(k) + ", B.E. " + k.beYear; }
+  function zhLine(k) { return (k.moonPhase ? "下弦" : "上弦") + k.day + "日 · " + MONTH_EN[k.monthIndex] + "月 · " + ZHA[ANIMAL_EN[k.animalYear]] + "年 · " + SAK_EN[k.sak] + " · 佛历" + k.beYear; }
+  function zhToday(M) { var t = ppToday(); return zhLine(M.fromGregorian(t[0], t[1], t[2]).khmer); }
   function enToday(M) { var t = ppToday(); return enFull(M.fromGregorian(t[0], t[1], t[2]).khmer, new Date(Date.UTC(t[0], t[1] - 1, t[2])).getUTCDay()); }
 
   var T = {
@@ -126,14 +128,14 @@
       : new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(y, m - 1, d));
     var phaseTxt = k.moonPhase ? S.waning : S.waxing;
     var en = lang === "en";
-    var lunar = en ? esc(enLunar(k)) : '<span lang="km">' + esc(lunarText(k)) + "</span>";
-    var lunarExtra = lang === "zh" ? esc(S.dayOf(k.day, k.moonPhase, MONTH_EN[k.monthIndex])) : "";
+    var lunar = en ? esc(enLunar(k)) : lang === "zh" ? esc(S.dayOf(k.day, k.moonPhase, MONTH_EN[k.monthIndex])) : '<span lang="km">' + esc(lunarText(k)) + "</span>";
+    var lunarExtra = "";
     var beTxt = lang === "km" ? "ព.ស. " + kmNum(k.beYear) : lang === "zh" ? "佛历 " + k.beYear + " 年" : k.beYear + " BE";
-    var beExtra = lang === "zh" ? '<span lang="km">ព.ស. ' + kmNum(k.beYear) + "</span>" : "";
+    var beExtra = "";
     var yearTxt = lang === "km"
       ? "ឆ្នាំ" + k.animalYearName + " " + k.sakName
       : esc(S.yearTxt(ANIMAL_EN[k.animalYear], SAK_EN[k.sak], k.jsYear));
-    var yearExtra = lang === "km" ? "ចុល្លសករាជ " + kmNum(k.jsYear) : en ? "" : '<span lang="km">ឆ្នាំ' + esc(k.animalYearName) + " " + esc(k.sakName) + "</span>";
+    var yearExtra = lang === "km" ? "ចុល្លសករាជ " + kmNum(k.jsYear) : "";
     if (lang === "km") yearTxt = '<span lang="km">' + esc(yearTxt) + "</span>";
 
     var notes = [];
@@ -151,19 +153,19 @@
     if (info.animal && ANIMAL_EN[k.animalYear] !== info.animal) notes.push(S.differs(lang === "km" && typeof KM_ANIMAL_NAMES !== "undefined" ? (KM_ANIMAL_NAMES[info.animal] || info.animal) : lang === "zh" ? ZHA[info.animal] || info.animal : info.animal));
 
     var t = ppToday(), todayLine = "";
-    try { todayLine = en ? enToday(M) : fmtKh(M, M.fromGregorian(t[0], t[1], t[2])); } catch (e) { todayLine = ""; }
+    try { todayLine = en ? enToday(M) : lang === "zh" ? zhToday(M) : fmtKh(M, M.fromGregorian(t[0], t[1], t[2])); } catch (e) { todayLine = ""; }
 
     box.innerHTML = head +
       '<div class="kl-main"><p class="kl-main-label">' + esc(S.lunar) + '</p><p class="kl-main-date">' + lunar + "</p>" + (lunarExtra ? '<p class="kl-main-extra">' + lunarExtra + "</p>" : "") + "</div>" +
       '<dl class="kl-grid">' +
         row(S.greg, esc(gregTxt)) +
-        row(S.phase, esc(phaseTxt), lang === "zh" ? '<span lang="km">' + esc(k.moonPhaseName) + "</span>" : "") +
+        row(S.phase, esc(phaseTxt), "") +
         row(S.be, esc(beTxt), beExtra) +
         row(S.year, yearTxt, yearExtra) +
       "</dl>" +
-      (en ? "" : '<p class="kl-full"><span>' + esc(S.full) + '</span> <span lang="km">' + esc(fmtKh(M, r)) + "</span></p>") +
+      (lang === "km" ? '<p class="kl-full"><span>' + esc(S.full) + '</span> <span lang="km">' + esc(fmtKh(M, r)) + "</span></p>" : "") +
       (notes.length ? '<ul class="kl-notes">' + notes.map(function (n) { return "<li>" + esc(n) + "</li>"; }).join("") + "</ul>" : "") +
-      (todayLine ? '<p class="kl-today">' + esc(S.today) + (en ? " " + esc(todayLine) : ' <span lang="km">' + esc(todayLine) + "</span>") + "</p>" : "") +
+      (todayLine ? '<p class="kl-today">' + esc(S.today) + (lang === "km" ? ' <span lang="km">' + esc(todayLine) + "</span>" : " " + esc(todayLine)) + "</p>" : "") +
       '<p class="kl-method">' + esc(S.method) + "</p></div>";
     box.hidden = false;
   }
@@ -258,7 +260,7 @@
     var IWHL = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 4v16M4 12h16M6.3 6.3l11.4 11.4M17.7 6.3 6.3 17.7" stroke="currentColor" stroke-width="1.1"/></svg>';
     var dateMain = km ? "ថ្ងៃ" + KM_WEEK[wd] + " ទី" + kmNum(d) + " ខែ" + KM_SOLAR[m - 1] + " ឆ្នាំ" + kmNum(y) : zh ? esc(y + "年" + m + "月" + d + "日 " + ZH_WEEK[wd]) : esc(weekEn + ", " + d + " " + monEn + " " + y);
     var enP = lang === "en";
-    var lunar = enP ? esc(enLunar(k)) : '<span lang="km">' + esc(kmNum(k.day) + k.moonPhaseName + " ខែ" + k.monthName) + "</span>";
+    var lunar = enP ? esc(enLunar(k)) : zh ? esc((k.moonPhase ? "下弦" : "上弦") + k.day + "日 · " + MONTH_EN[k.monthIndex] + "月") : '<span lang="km">' + esc(kmNum(k.day) + k.moonPhaseName + " ខែ" + k.monthName) + "</span>";
     var rows = enP ?
       r(ICAL, "Today (Cambodia time)", dateMain, "") +
       r(moonSvg(k, monthLen), "Lunar day", esc(ord(k.day) + " day, " + (k.moonPhase ? "waning" : "waxing") + " moon"), mo === "wax" || mo === "wane" ? "" : esc(MOON_EN[mo])) +
@@ -266,12 +268,11 @@
       r(ITEM, "Khmer year", esc("Year of the " + ANIMAL_EN[k.animalYear]), esc(SAK_EN[k.sak])) +
       r(IWHL, "Buddhist Era", esc("B.E. " + k.beYear), "")
       : zh ?
-      r(ICAL, "今天（柬埔寨时间）", dateMain, '<span lang="km">ថ្ងៃ' + esc(KM_WEEK[wd]) + "</span>") +
-      r(moonSvg(k, monthLen), "农历日", '<span lang="km">' + esc(kmNum(k.day) + k.moonPhaseName) + "</span>",
-        esc((k.moonPhase ? "下弦第" : "上弦第") + k.day + "天" + (MOON_ZH[mo] ? " · " + MOON_ZH[mo] : ""))) +
-      r(ILOT, "农历月", '<span lang="km">ខែ' + esc(k.monthName) + "</span>", esc(MONTH_EN[k.monthIndex])) +
-      r(ITEM, "高棉年份与ស័ក", '<span lang="km">ឆ្នាំ' + esc(k.animalYearName) + " " + esc(k.sakName) + "</span>", esc(ZHA[ANIMAL_EN[k.animalYear]] + "年 · " + SAK_EN[k.sak])) +
-      r(IWHL, "佛历", '<span lang="km">ព.ស. ' + kmNum(k.beYear) + "</span>", esc("佛历 " + k.beYear + " 年"))
+      r(ICAL, "今天（柬埔寨时间）", dateMain, "") +
+      r(moonSvg(k, monthLen), "农历日", esc((k.moonPhase ? "下弦第" : "上弦第") + k.day + "天"), MOON_ZH[mo] ? esc(MOON_ZH[mo]) : "") +
+      r(ILOT, "农历月", esc(MONTH_EN[k.monthIndex] + "月"), "") +
+      r(ITEM, "高棉年份与 Sak", esc(ZHA[ANIMAL_EN[k.animalYear]] + "年"), esc(SAK_EN[k.sak])) +
+      r(IWHL, "佛历", esc("佛历 " + k.beYear + " 年"), "")
       :
       r(ICAL, km ? "ថ្ងៃនេះ (ម៉ោងកម្ពុជា)" : "Today (Cambodia time)", dateMain, km ? "" : '<span lang="km">ថ្ងៃ' + esc(KM_WEEK[wd]) + "</span>") +
       r(moonSvg(k, monthLen), km ? "ថ្ងៃតាមចន្ទគតិ" : "Lunar day", '<span lang="km">' + esc(kmNum(k.day) + k.moonPhaseName) + "</span>",
@@ -287,14 +288,14 @@
       var l = li.querySelector(".klc-l"), st = li.querySelector("strong"), sb = li.querySelector(".klc-s");
       shareRows.push([l ? l.textContent : "", st ? st.textContent : "", sb ? sb.textContent : ""]);
     });
-    var bigTxt = strip(lunar), full = enP ? enFull(k, wd) : fmtKh(M, M.fromGregorian(y, m, d));
+    var bigTxt = strip(lunar), full = enP ? enFull(k, wd) : zh ? zhLine(k) : fmtKh(M, M.fromGregorian(y, m, d));
     var share = typeof shareRowHtml === "function" ? '<div class="klc-share">' + shareRowHtml(
       (km ? "ថ្ងៃនេះ " : zh ? "今天：" : "Today: ") + bigTxt + " — " + (km ? "ប្រតិទិនចន្ទគតិខ្មែរ" : zh ? "高棉农历" : "Khmer Lunar Calendar"),
       { cardType: "lunar", lang: lang, heading: km ? "ថ្ងៃនេះ" : zh ? "高棉农历 · 今天" : "Khmer Lunar Calendar · Today", big: bigTxt, rows: shareRows, full: full, moonD: moonSvg.lastD || "", note: km ? "ប្រតិទិនចន្ទគតិខ្មែរ តាមវិធានប្រពៃណី · ម៉ោងកម្ពុជា" : zh ? "高棉农历 · 传统规则 · 柬埔寨时间" : "Khmer lunar calendar · traditional rules · Cambodia time" },
       "/blog/khmer-lunar-calendar-birth-date.html") + "</div>" : "";
     return '<p class="klc-big">' + lunar + "</p>" +
       '<ul class="klc-rows">' + rows + "</ul>" +
-      (enP ? '<p class="klc-full">' + esc(full) + "</p>" : '<p class="klc-full" lang="km">' + esc(fmtKh(M, M.fromGregorian(y, m, d))) + "</p>") +
+      (km ? '<p class="klc-full" lang="km">' + esc(fmtKh(M, M.fromGregorian(y, m, d))) + "</p>" : '<p class="klc-full">' + esc(full) + "</p>") +
       '<p class="klc-note">' + esc(km
         ? "គណនាសម្រាប់ថ្ងៃនេះតាមម៉ោងកម្ពុជា ហើយប្តូរដោយស្វ័យប្រវត្តិនៅម៉ោង 12 យប់ (ម៉ោងកម្ពុជា)។ ព្រះចន្ទ គឺតាមថ្ងៃខែក្នុងប្រតិទិន។"
         : zh ? "按柬埔寨（Asia/Phnom_Penh）的今天计算，并在柬埔寨时间午夜自动更新。显示的月相依照历法上的农历日。"
@@ -340,9 +341,9 @@
     var foot = document.querySelector("footer.site-footer");
     if (!foot || foot.querySelector(".kl-today-strip")) return;
     loadLib().then(function (M) {
-      var t = ppToday(), en = pageLang() === "en", line; try { line = en ? enToday(M) : fmtKh(M, M.fromGregorian(t[0], t[1], t[2])); } catch (e) { return; }
+      var t = ppToday(), en = pageLang() === "en", zhP = pageLang() === "zh", line; try { line = en ? enToday(M) : zhP ? zhToday(M) : fmtKh(M, M.fromGregorian(t[0], t[1], t[2])); } catch (e) { return; }
       var km = pageLang() === "km", p = document.createElement("p"); p.className = "kl-today-strip";
-      p.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><span>' + esc(km ? "ថ្ងៃនេះតាមចន្ទគតិខ្មែរ៖" : pageLang() === "zh" ? "今天的高棉农历：" : "Today on the Khmer lunar calendar:") + "</span> " + (en ? "<span>" + esc(line) + "</span>" : '<span lang="km">' + esc(line) + "</span>");
+      p.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><span>' + esc(km ? "ថ្ងៃនេះតាមចន្ទគតិខ្មែរ៖" : pageLang() === "zh" ? "今天的高棉农历：" : "Today on the Khmer lunar calendar:") + "</span> " + (km ? '<span lang="km">' + esc(line) + "</span>" : "<span>" + esc(line) + "</span>");
       foot.insertBefore(p, foot.firstChild);
     }, function () { /* optional */ });
   }
@@ -359,6 +360,7 @@
       Array.prototype.forEach.call(els, function (el) {
         var L = el.getAttribute("data-lang") || pageLang(), km = L === "km";
         if (L === "en") { el.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><b>Today:</b> <span>' + esc(enToday(M)) + "</span>"; return; }
+        if (L === "zh") { el.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><b>今天：</b> <span>' + esc(zhToday(M)) + "</span>"; return; }
         el.innerHTML = '<span class="kl-moon kl-moon-sm" aria-hidden="true"></span><b>' + esc(km ? "ថ្ងៃនេះ៖" : L === "zh" ? "今天：" : "Today:") + '</b> <span lang="km">' + esc(line) + "</span>";
       });
     }, function () { /* the card still links to the guide */ });

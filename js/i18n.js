@@ -1120,7 +1120,7 @@ const UI_STRINGS = {
     nav_contact: "联系我们",
     nav_more: "更多",
     lang_toggle_en: "EN",
-    lang_toggle_km: "ខ្មែរ",
+    lang_toggle_km: "KH",
     lang_toggle_zh: "中文",
     animals_hero_title: "十二生肖完整指南",
     animals_hero_subtitle: "十二生肖一览——性格、运气与配对。点击任意生肖查看完整介绍。",
@@ -1446,6 +1446,10 @@ function pickLang(table, lang) { lang = lang || getLang(); return table && table
 const PAGE_LANG = (function () {
   try { const l = document.documentElement.getAttribute("data-site-lang"); return SITE_LANGS.indexOf(l) > -1 ? l : null; } catch (e) { return null; }
 })();
+// languages this page exists in (the build lists them only when one is missing, e.g. a page with no Chinese version)
+const PAGE_LANGS = (function () {
+  try { const v = document.documentElement.getAttribute("data-site-langs"); return v ? v.split(/\s+/) : SITE_LANGS; } catch (e) { return SITE_LANGS; }
+})();
 /** this page's address in another language, e.g. /km/blog/x for /blog/x (query and #hash kept, ?lang dropped) */
 function langUrl(lang) {
   const u = new URL(window.location.href);
@@ -1462,12 +1466,11 @@ function storeLang(lang) { try { window.localStorage.setItem(LANG_STORAGE_KEY, l
     const q = new URLSearchParams(window.location.search).get("lang");
     if (SITE_LANGS.indexOf(q) > -1) {
       storeLang(q);
-      window.location.replace(langUrl(q));
-      return;
+      if (PAGE_LANGS.indexOf(q) > -1) { window.location.replace(langUrl(q)); return; }
     }
     if (PAGE_LANG === "en") {
       const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
-      if (stored === "km" || stored === "zh") { window.location.replace(langUrl(stored)); return; }
+      if ((stored === "km" || stored === "zh") && PAGE_LANGS.indexOf(stored) > -1) { window.location.replace(langUrl(stored)); return; }
     } else {
       storeLang(PAGE_LANG);
     }
@@ -1503,7 +1506,7 @@ function getLang() {
 function setLang(lang) {
   if (SITE_LANGS.indexOf(lang) < 0) return;
   storeLang(lang);
-  if (PAGE_LANG) { if (lang !== PAGE_LANG) window.location.href = langUrl(lang); return; }
+  if (PAGE_LANG) { if (lang !== PAGE_LANG) window.location.href = PAGE_LANGS.indexOf(lang) > -1 ? langUrl(lang) : (lang === "en" ? "/" : "/" + lang + "/"); return; }
   if (typeof window !== "undefined" && window.location && typeof window.location.reload === "function") {
     // drop a shared ?lang=… so the visitor's own choice wins after the reload
     try {
@@ -1711,7 +1714,8 @@ function mountBarLangToggle() {
   const copy = inner.cloneNode(true);
   copy.classList.add("lang-toggle-bar");
   copy.setAttribute("role", "group");
-  copy.setAttribute("aria-label", "Language / ភាសា");
+  const sl = document.documentElement.getAttribute("data-site-lang") || "en";
+  copy.setAttribute("aria-label", sl === "km" ? "ភាសា" : sl === "zh" ? "语言" : "Language");
   btn.parentNode.insertBefore(copy, btn);
 }
 

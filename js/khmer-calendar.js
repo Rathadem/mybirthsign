@@ -41,7 +41,7 @@
       week: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
       waxing: "waxing", waning: "waning", sil: "Holy day", langs: ["English", "Khmer", "Chinese"],
-      footer: "Lunar dates: traditional Khmer calendar rules (momentkh)",
+      footer: "Lunar dates: traditional Khmer calendar rules (momentkh)", aboutH: "Discover the Khmer Calendar", aboutP: "Guides to every part of the calendar: holy days, holidays, moon days, years and leap months.", lunarHead: "Khmer Lunar Date", pick: "Choose a date from the calendar", hint: "Choose a day to see its Khmer lunar date, animal year, Sak and Buddhist Era.", lkAbout: "About", lkPrivacy: "Privacy", lkContact: "Contact", aPrev: "Previous month", aNext: "Next month", aDate: "Choose a date", aDays: "Calendar days",
     },
     km: {
       eyebrow: "មរតកខ្មែរ · កាលបរិច្ឆេទចន្ទគតិ និងសុរិយគតិ", title: "ប្រតិទិនចន្ទគតិខ្មែរ",
@@ -60,7 +60,7 @@
       week: ["អាទិត្យ", "ចន្ទ", "អង្គារ", "ពុធ", "ព្រហស្បតិ៍", "សុក្រ", "សៅរ៍"],
       months: ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"],
       waxing: "កើត", waning: "រោច", sil: "ថ្ងៃសីល", langs: ["English", "ខ្មែរ", "中文"],
-      footer: "ថ្ងៃខែចន្ទគតិ៖ វិធានប្រតិទិនខ្មែរបែបប្រពៃណី (momentkh)",
+      footer: "ថ្ងៃខែចន្ទគតិ៖ វិធានប្រតិទិនខ្មែរបែបប្រពៃណី (momentkh)", aboutH: "ស្វែងយល់ពីប្រតិទិនខ្មែរ", aboutP: "មគ្គុទ្ទេសក៍សម្រាប់គ្រប់ផ្នែកនៃប្រតិទិន៖ ថ្ងៃសីល ថ្ងៃបុណ្យ ថ្ងៃកើតរោច ឆ្នាំ និងអធិកមាស។", lunarHead: "ថ្ងៃខែចន្ទគតិខ្មែរ", pick: "ជ្រើសរើសថ្ងៃពីប្រតិទិន", hint: "ជ្រើសរើសថ្ងៃមួយ ដើម្បីមើលថ្ងៃខែចន្ទគតិ ឆ្នាំសត្វ ស័ក និងពុទ្ធសករាជ។", lkAbout: "អំពីយើង", lkPrivacy: "ឯកជនភាព", lkContact: "ទំនាក់ទំនង", aPrev: "ខែមុន", aNext: "ខែបន្ទាប់", aDate: "ជ្រើសរើសកាលបរិច្ឆេទ", aDays: "ថ្ងៃក្នុងខែ",
     },
     zh: {
       eyebrow: "柬埔寨文化 · 阴历与阳历", title: "高棉农历",
@@ -79,7 +79,7 @@
       week: ["日", "一", "二", "三", "四", "五", "六"],
       months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
       waxing: "上弦", waning: "下弦", sil: "斋日", langs: ["English", "ខ្មែរ", "中文"],
-      footer: "农历日期：传统高棉历法规则（momentkh）",
+      footer: "农历日期：传统高棉历法规则（momentkh）", aboutH: "了解高棉日历", aboutP: "日历每个部分的指南：佛教斋日、节日、月相日、年份和闰月。", lunarHead: "高棉农历日期", pick: "从日历中选择日期", hint: "选择一天，查看它的高棉农历日期、生肖年、Sak 和佛历。", lkAbout: "关于我们", lkPrivacy: "隐私政策", lkContact: "联系我们", aPrev: "上个月", aNext: "下个月", aDate: "选择日期", aDays: "日历日期",
     },
   };
   var EV = {
@@ -185,8 +185,10 @@
     if (w.more) document.querySelectorAll(".feature-more").forEach(function (e) { e.textContent = w.more; });
     var map = { detailsTitle: "details", gregorianLabel: "greg", lunarTitle: "lunar", accuracyNote: "note", eventsTitle: "events", eventsText: "eventsText", upcomingTitle: "upcoming" };
     Object.keys(map).forEach(function (id) { if ($(id)) $(id).textContent = w[map[id]]; });
-    var kt = document.querySelector(".khmer-title"); if (kt) { kt.textContent = lang === "km" ? "ប្រតិទិនចន្ទគតិខ្មែរ" : ""; kt.hidden = lang !== "km"; }
-    if ($("title")) $("title").hidden = lang === "km";
+    var kt = document.querySelector(".khmer-title"); if (kt) kt.hidden = true;   // the h1 itself carries the title in every language
+    ["aboutH", "aboutP", "lunarHead", "lkAbout", "lkPrivacy", "lkContact"].forEach(function (id) { if ($(id) && w[id]) $(id).textContent = w[id]; });
+    if ($("prev")) $("prev").setAttribute("aria-label", w.aPrev); if ($("next")) $("next").setAttribute("aria-label", w.aNext);
+    if ($("dateJump")) $("dateJump").setAttribute("aria-label", w.aDate); if ($("days")) $("days").setAttribute("aria-label", w.aDays);
     $("todayBtn").textContent = w.today; $("jumpLabel").textContent = w.jump;
     var sel = $("language"); if (sel) { for (var o = 0; o < sel.options.length; o++) sel.options[o].textContent = w.langs[o]; sel.value = lang; }
     var key = document.querySelector(".calendar-key"); if (key) key.innerHTML = w.key.map(function (x) { return "<span>" + esc(x) + "</span>"; }).join("");
