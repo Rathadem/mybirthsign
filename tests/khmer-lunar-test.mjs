@@ -33,6 +33,16 @@ for (const y of [2018, 2023, 2026]) {
 // BE changes on Visak Bochea; animal year changes at New Year
 // library convention: the new BE year starts on 1 រោច ពិសាខ (the day after Visak Bochea) — the change day itself is NOT independently verified
 ok("BE 2569 → 2570 the day after Visak Bochea 2026 (library convention)", K("2026-05-01").beYear === 2569 && K("2026-05-02").beYear === 2570);
+// the day after Visak Bochea (1 រោច ពិសាខ): animal, Sak and JS year stay the same as the day before (the original library
+// jumps one year ahead for that single day; js/vendor/momentkh.min.js corrects it), BE moves on that day
+for (let y = 1990; y <= 2040; y++) {
+  let t = Date.UTC(y, 3, 1), found = false;
+  for (; t < Date.UTC(y, 5, 30); t += 86400000) { const d = new Date(t), k = M.fromGregorian(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate()).khmer; if (k.monthIndex === PISAKH && k.moonPhase === 1 && k.day === 1) { found = true; break; } }
+  if (!found) continue;
+  const g = (ms) => { const d = new Date(ms); return M.fromGregorian(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate()).khmer; };
+  const a = g(t - 86400000), b = g(t), c = g(t + 86400000);
+  ok(`${y}: no one-day animal/Sak jump on 1 រោច ពិសាខ`, a.animalYear === b.animalYear && b.animalYear === c.animalYear && a.sak === b.sak && b.sak === c.sak && a.jsYear === b.jsYear && b.beYear === a.beYear + 1, JSON.stringify([a.animalYear, b.animalYear, c.animalYear, a.sak, b.sak, c.sak]));
+}
 ok("animal year Snake → Horse over Khmer New Year 2026", K("2026-04-13").animalYear === 5 && K("2026-04-17").animalYear === 6);
 
 if (process.argv.includes("--cross")) {
@@ -43,7 +53,7 @@ if (process.argv.includes("--cross")) {
   for (let t = Date.UTC(1900, 0, 1); t <= Date.UTC(2100, 11, 31); t += 86400000) {
     const d = new Date(t), y = d.getUTCFullYear(), m = d.getUTCMonth() + 1, dd = d.getUTCDate(); days++;
     const a = M.fromGregorian(y, m, dd).khmer, b = orig.fromGregorian(y, m, dd).khmer;
-    if (JSON.stringify(a) !== JSON.stringify(b)) vsOrig++;
+    if (JSON.stringify(a) !== JSON.stringify(b) && !(a.monthIndex === 5 && a.moonPhase === 1 && a.day === 1)) vsOrig++;   // 1 រោច ពិសាខ: our documented fix
     const c = lunar(new Date(y, m - 1, dd));
     if (!(a.day === c.period[0] && a.moonPhase === (c.period[1] === "K" ? 0 : 1) && a.monthIndex === MAP[c.month.name] && a.beYear === c.years.BE)) { vsOther++; otherBad.push(`${y}-${m}-${dd}`); }
   }

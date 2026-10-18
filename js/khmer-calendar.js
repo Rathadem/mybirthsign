@@ -36,7 +36,7 @@
       f2: "🪷 Buddhist holy days", f2d: "Thngai Sil and the full-moon festivals, worked out for every month.",
       f3: "🇰🇭 Cambodian holidays", f3d: "Khmer New Year, Pchum Ben, the Water Festival and national days.",
       f4: "☯️ Animal year & Sak", f4d: "Each date shows its Khmer animal year, Sak and Buddhist Era.",
-      f5: "🗓️ Leap months", f5d: "Years with two Asadh months, such as 2026 and 2029, are handled automatically.",
+      f5: "🗓️ Leap months", f5d: "Years with two Asadh months, such as 2026 and 2029, are handled automatically.", more: "Read guide →",
       key: ["🌑 Last waning day", "🌓 8th day", "🌕 Full moon", "🪷 Buddhist day", "🏯 Holiday", "🚣 Water Festival", "• Holy day (Sil)"],
       week: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -55,7 +55,7 @@
       f2: "🪷 ថ្ងៃសីល", f2d: "ថ្ងៃសីល និងពិធីបុណ្យពេញបូណ៌មី សម្រាប់គ្រប់ខែ។",
       f3: "🇰🇭 ពិធីបុណ្យខ្មែរ", f3d: "ចូលឆ្នាំខ្មែរ ភ្ជុំបិណ្ឌ បុណ្យអុំទូក និងទិវាជាតិ។",
       f4: "☯️ ឆ្នាំសត្វ និងស័ក", f4d: "ថ្ងៃនីមួយៗបង្ហាញឆ្នាំសត្វ ស័ក និងពុទ្ធសករាជ។",
-      f5: "🗓️ ខែអធិកមាស", f5d: "ឆ្នាំដែលមានខែអាសាឍពីរ ដូចជាឆ្នាំ 2026 និង 2029 ត្រូវបានគណនាដោយស្វ័យប្រវត្តិ។",
+      f5: "🗓️ ខែអធិកមាស", f5d: "ឆ្នាំដែលមានខែអាសាឍពីរ ដូចជាឆ្នាំ 2026 និង 2029 ត្រូវបានគណនាដោយស្វ័យប្រវត្តិ។", more: "អានអត្ថបទ →",
       key: ["🌑 ថ្ងៃរោចចុងខែ", "🌓 ថ្ងៃ 8", "🌕 ពេញបូណ៌មី", "🪷 ថ្ងៃបុណ្យសាសនា", "🏯 ថ្ងៃបុណ្យ", "🚣 បុណ្យអុំទូក", "• ថ្ងៃសីល"],
       week: ["អាទិត្យ", "ចន្ទ", "អង្គារ", "ពុធ", "ព្រហស្បតិ៍", "សុក្រ", "សៅរ៍"],
       months: ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"],
@@ -74,7 +74,7 @@
       f2: "🪷 佛教斋日", f2d: "每个月的斋日（Thngai Sil）和满月节日。",
       f3: "🇰🇭 柬埔寨节日", f3d: "高棉新年、亡人节、送水节和国家纪念日。",
       f4: "☯️ 生肖年与 Sak", f4d: "每个日期都显示高棉生肖年、Sak 和佛历。",
-      f5: "🗓️ 闰月", f5d: "有两个阿沙荼月的年份（例如2026年和2029年）会自动处理。",
+      f5: "🗓️ 闰月", f5d: "有两个阿沙荼月的年份（例如2026年和2029年）会自动处理。", more: "阅读指南 →",
       key: ["🌑 下弦最后一天", "🌓 第8天", "🌕 满月", "🪷 佛教节日", "🏯 节日", "🚣 送水节", "• 斋日"],
       week: ["日", "一", "二", "三", "四", "五", "六"],
       months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
@@ -181,7 +181,8 @@
 
   function render() {
     var w = W[lang];
-    ["eyebrow", "title", "intro", "f1", "f1d", "f2", "f2d", "f3", "f3d", "f4", "f4d", "f5", "f5d"].forEach(function (k) { if ($(k)) $(k).textContent = w[k]; });
+    ["eyebrow", "title", "intro", "f1", "f1d", "f2", "f2d", "f3", "f3d", "f4", "f4d", "f5", "f5d"].forEach(function (k) { if ($(k)) $(k).textContent = /^f\d$/.test(k) ? w[k].replace(/^[\p{Extended_Pictographic}\p{Regional_Indicator}\uFE0F\u200D]+\s+/u, "") : w[k]; });
+    if (w.more) document.querySelectorAll(".feature-more").forEach(function (e) { e.textContent = w.more; });
     var map = { detailsTitle: "details", gregorianLabel: "greg", lunarTitle: "lunar", accuracyNote: "note", eventsTitle: "events", eventsText: "eventsText", upcomingTitle: "upcoming" };
     Object.keys(map).forEach(function (id) { if ($(id)) $(id).textContent = w[map[id]]; });
     var kt = document.querySelector(".khmer-title"); if (kt) { kt.textContent = lang === "km" ? "ប្រតិទិនចន្ទគតិខ្មែរ" : ""; kt.hidden = lang !== "km"; }

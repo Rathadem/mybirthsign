@@ -4218,3 +4218,42 @@ html { scroll-padding-top: calc(var(--hdr-h, 60px) + 16px); }
 .hd-next-list small { color: #b9b0de; font-size: .8rem; }
 @media (max-width: 820px) { .hd-fests, .hd-rel { grid-template-columns: 1fr; } .hd-do { grid-template-columns: 1fr; } }
 @media (max-width: 560px) { .hd-kinds, .hd-next-list { grid-template-columns: 1fr; } .hd-strip ol { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ===== Khmer Calendar guides (cambodian-public-holidays, khmer-animal-year-sak, khmer-leap-months) ===== */
+.ph-kinds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ph-table .hd-tag { display: inline-block; white-space: nowrap; }
+@media (max-width: 640px) { .ph-table td, .ph-table th { padding: 7px 6px; font-size: .86rem; } }
+.hd-tag-fixed { background: #d7f0de; color: #1f6b3a; }
+.hd-tag-lunar { background: #f8d6d4; color: #8a2420; }
+.hd-tag-solar { background: #f6e3b8; color: #7a5410; }
+.ph-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 10px; }
+.ph-group { margin: 0 !important; min-width: 0; border-top: 3px solid #e09a3a !important; }
+.ph-group h3 { margin: 0 0 8px !important; color: #f6dc9b !important; font-size: 1.1rem; }
+.ph-group ul { margin: 0 !important; padding-left: 1.1em !important; display: grid; gap: 7px; }
+.ph-group li { margin: 0 !important; color: #d9d1f2; font-size: .9rem; line-height: 1.55; }
+.ph-group li b { color: #fff3d1; }
+.ph-tips { display: grid; gap: 8px; }
+.ys-time { list-style: none; max-width: 820px; margin: 10px auto !important; padding: 0 0 0 18px !important; border-left: 2px solid rgba(231, 194, 122, .45); display: grid; gap: 12px; }
+.ys-time li { margin: 0 !important; position: relative; }
+.ys-time li::before { content: ""; position: absolute; left: -25px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: #f3d78f; box-shadow: 0 0 10px rgba(243, 215, 143, .5); }
+.ys-time time { color: #f6dc9b; font-weight: 700; font-size: .95rem; }
+.ys-time p { margin: 2px 0 0 !important; color: #d9d1f2; font-size: .92rem; line-height: 1.55; }
+.ys-out { max-width: 820px; margin: 12px auto !important; padding: 12px 16px; border-radius: 14px; background: #f7efdf; color: #2a2140 !important; border: 1px solid #e3cf9e; }
+.ys-out b { color: #1d1a45; }
+.ys-table tr.ys-now td { background: rgba(231, 194, 122, .14); }
+.ys-table td { font-variant-numeric: tabular-nums; }
+.ys-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 8px 0 6px; }
+.ys-cell { display: flex; flex-direction: column; gap: 2px; padding: 9px 10px; border-radius: 10px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(231, 194, 122, .22); min-width: 0; }
+.ys-cell small { color: #b9b0de; font-size: .74rem; }
+.ys-cell b { color: #fff3d1; font-size: 1rem; overflow-wrap: anywhere; }
+.lm-bars { display: grid; gap: 12px; max-width: 980px; margin: 10px auto 6px; }
+.lm-row { min-width: 0; }
+.lm-lab { margin: 0 0 4px !important; color: #f6dc9b; font-size: .85rem; font-weight: 700; }
+.lm-bar { display: flex; gap: 3px; }
+.lm-m { min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 7px 2px; border-radius: 7px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(231, 194, 122, .2); text-align: center; }
+.lm-m b { color: #e6def8; font-size: .66rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.lm-m small { color: #b9b0de; font-size: .7rem; font-variant-numeric: tabular-nums; }
+.lm-gold { background: #f3d78f; border-color: #f3d78f; }
+.lm-gold b, .lm-gold small { color: #2a2140; }
+@media (max-width: 820px) { .ph-groups { grid-template-columns: 1fr; } .ph-kinds { grid-template-columns: 1fr; } .ys-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .lm-m b { writing-mode: vertical-rl; transform: rotate(180deg); font-size: .62rem; } .lm-m { padding: 6px 0; } .lm-bar { gap: 2px; } }

@@ -59,3 +59,11 @@ The "Your Khmer Lunar Birth Date" card on `/checker` shows the visitor's birthda
   - a page left open across midnight;
   - the library failing to load;
   - phone and desktop, English and Khmer.
+
+## Fix: one-day year jump after Visak Bochea (October 2026)
+
+momentkh 3.0.3 (the latest release, same as the original npm package `@thyrith/momentkh`) returns the *next* year's
+animal, Sak and JS year for exactly one day, 1 រោច ពិសាខ (the day after Visak Bochea), and the previous values again the
+next day (for example 2 May 2026 showed ឆ្នាំមមែ នព្វស័ក between two days of ឆ្នាំមមី អដ្ឋស័ក). The second Khmer calendar
+library used for cross-checks (khmercal) shows no such jump. `js/vendor/momentkh.min.js` now takes those three values
+from the day before on that one day; the BE year still changes that day. `tests/khmer-lunar-test.mjs` checks 1990–2040.
