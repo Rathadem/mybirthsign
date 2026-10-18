@@ -23,7 +23,7 @@ SITE = "https://mybirthsign.com"
 ADS = "ca-pub-9939402104083173"
 
 spec = json.load(open(sys.argv[1], encoding="utf-8"))
-e = lambda s: html.escape(s, quote=True)          # for plain text / attributes
+e = lambda s: html.escape(s, quote=False).replace('"', "&quot;")   # text and double-quoted attributes
 slug = spec["slug"]
 assert re.fullmatch(r"[a-z0-9-]+", slug), "slug must be lowercase letters, digits and dashes"
 title, desc = spec["title"], spec["description"]
