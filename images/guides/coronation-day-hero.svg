@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 700" role="img" aria-labelledby="title desc">
+<title id="title">Cambodian Royal Coronation — palace-inspired illustration</title>
+<desc id="desc">An original illustration of ornate Khmer palace roofs glowing gold beneath a twilight sky, with lotus motifs and soft ceremonial light.</desc>
+<defs>
+ <linearGradient id="sky" x1="0" y1="0" x2="0.9" y2="1"><stop stop-color="#080d29"/><stop offset=".53" stop-color="#292051"/><stop offset="1" stop-color="#642e61"/></linearGradient>
+ <radialGradient id="moon"><stop stop-color="#fff4c7"/><stop offset=".55" stop-color="#e9c778"/><stop offset="1" stop-color="#d49c52" stop-opacity=".06"/></radialGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0ae"/><stop offset=".4" stop-color="#dcb45d"/><stop offset="1" stop-color="#87602d"/></linearGradient>
+ <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#44336c"/><stop offset="1" stop-color="#11182f"/></linearGradient>
+ <pattern id="stars" width="118" height="91" patternUnits="userSpaceOnUse"><circle cx="15" cy="18" r="1.6" fill="#f6e8b5" opacity=".8"/><circle cx="71" cy="53" r="1" fill="#fff" opacity=".75"/><circle cx="105" cy="9" r="1.3" fill="#d8c4ff" opacity=".65"/></pattern>
+ <filter id="glow"><feGaussianBlur stdDeviation="17"/></filter>
+</defs>
+<rect width="1600" height="700" fill="url(#sky)"/><rect width="1600" height="500" fill="url(#stars)" opacity=".8"/>
+<circle cx="1230" cy="150" r="135" fill="url(#moon)"/><circle cx="1230" cy="150" r="80" fill="#fae5a0" opacity=".22" filter="url(#glow)"/>
+<g fill="none" stroke="#e8c879" opacity=".26"><circle cx="1230" cy="150" r="170"/><circle cx="1230" cy="150" r="193" stroke-dasharray="2 14"/></g>
+<path d="M0 480 Q200 430 360 476 T720 464 T1120 450 T1600 468 V700 H0Z" fill="#12152d" opacity=".7"/>
+<!-- palace silhouette -->
+<g stroke="url(#gold)" stroke-width="4" stroke-linejoin="round">
+ <path d="M130 544H1470V700H130Z" fill="#15152f"/>
+ <path d="M205 544V449H345V544M398 544V414H535V544M583 544V365H1017V544M1066 544V414H1202V544M1250 544V449H1390V544" fill="url(#wall)"/>
+ <path d="M165 452L275 390L385 452Z M357 417L466 345L576 417Z M535 369L800 210L1065 369Z M1019 417L1129 345L1239 417Z M1215 452L1325 390L1435 452Z" fill="#251d48"/>
+ <path d="M174 445L275 383L376 445M367 410L466 338L565 410M548 360L800 199L1052 360M1029 410L1129 338L1229 410M1227 445L1325 383L1423 445" fill="none" stroke-width="7"/>
+ <path d="M800 199L788 163L800 116L812 163Z M466 338L456 308L466 277L476 308Z M1129 338L1119 308L1129 277L1139 308Z M275 383L266 356L275 329L284 356Z M1325 383L1316 356L1325 329L1334 356Z" fill="url(#gold)"/>
+ <path d="M610 369V337Q800 276 990 337V369Z" fill="#17172f"/>
+ <path d="M625 336Q800 282 975 336M652 319Q800 274 948 319M683 301Q800 265 917 301" fill="none" stroke-width="3"/>
+ <path d="M200 540V472H350V540M397 540V437H536V540M1065 540V437H1203V540M1250 540V472H1400V540" fill="none" stroke="#b98c48" stroke-width="2"/>
+ <path d="M164 544V529H386V544M355 544V527H579V544M530 544V524H1070V544M1021 544V527H1245V544M1213 544V529H1436V544" fill="#d5ac57"/>
+</g>
+<g fill="#e8c879" opacity=".92"><rect x="247" y="470" width="9" height="51" rx="4"/><rect x="296" y="470" width="9" height="51" rx="4"/><rect x="434" y="444" width="9" height="69" rx="4"/><rect x="487" y="444" width="9" height="69" rx="4"/><rect x="1097" y="444" width="9" height="69" rx="4"/><rect x="1150" y="444" width="9" height="69" rx="4"/><rect x="1296" y="470" width="9" height="51" rx="4"/><rect x="1345" y="470" width="9" height="51" rx="4"/></g>
+<g fill="none" stroke="#c9a7ef" stroke-width="2" opacity=".7"><path d="M60 640Q105 595 150 640T240 640M1360 640Q1405 595 1450 640T1540 640"/><path d="M72 657Q105 625 138 657T204 657M1396 657Q1429 625 1462 657T1528 657"/></g>
+<!-- lotus line ornaments -->
+<g transform="translate(180 170)" stroke="#e9c87e" stroke-width="2.4" fill="none" opacity=".85"><path d="M0 36Q-27 8 -18 -8Q0 0 0 36Q3 0 23 -10Q28 12 0 36Q22 13 42 22Q32 44 0 36Q-22 48 -42 22Q-18 13 0 36Z"/><path d="M0 38V61M-22 60Q0 48 22 60"/></g>
+<g transform="translate(1405 295) scale(.72)" stroke="#e9c87e" stroke-width="3" fill="none" opacity=".8"><path d="M0 36Q-27 8 -18 -8Q0 0 0 36Q3 0 23 -10Q28 12 0 36Q22 13 42 22Q32 44 0 36Q-22 48 -42 22Q-18 13 0 36Z"/><path d="M0 38V61M-22 60Q0 48 22 60"/></g>
+<rect y="681" width="1600" height="19" fill="url(#gold)" opacity=".8"/>
+</svg>
