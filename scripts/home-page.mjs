@@ -117,7 +117,8 @@ const UI = {
     howP: "Chinese zodiac signs follow a traditional 12-year cycle. Because the zodiac year follows the Lunar New Year calendar, people born in January or February should check their exact birth date.", howB: "Check My Zodiac →",
     crossH1: "Planning Your Wedding?", crossP1: "Explore traditionally favorable wedding months based on both zodiac signs.", crossB1: "Wedding Date Picker →",
     crossH2: "Choosing a Business Partner?", crossP2: "Compare two birth dates using traditional Chinese zodiac compatibility.", crossB2: "Business Partner Match →",
-    blogH: "From the MyBirthSign Blog", blogB: "Read More →", blogAll: "View All Articles →",
+    blogH: "From the MyBirthSign Blog", blogP: "Guides to the Chinese zodiac, the Khmer calendar and Cambodian traditions.", blogB: "Read More →", blogAll: "View All Articles →", guideB: "Read guide →", dailyH: "Recent Daily Fortunes", prev: "Previous articles", next: "Next articles",
+    tdTag: "Updated Today", tdCat: "Daily Fortune", tdP: "Discover your luck, opportunities, and advice for today. See how the 12 zodiac signs are influenced in love, career, money, and relationships.", tdRead: "3 min read", tdBtn: "Read Today's Fortune →", tdAlt: (a) => `Illustration of the ${a}, today's luckiest Chinese zodiac sign`, gridP: "Tap any card to see that animal's years and profile.", yearOf: (a) => `Year of the ${a} →`,
     blogDesc: "Today's Chinese zodiac fortune for all 12 animals, with the best signs of the day and signs needing extra care.", blogTitle: (d) => `Chinese Zodiac Daily Fortune — ${d}`,
     finalH: "Your Journey with the Stars", finalP: "Explore the wisdom of the Chinese zodiac and discover more about love, career, compatibility, and harmony.", finalB: "Start Your Zodiac Journey →",
   },
@@ -148,7 +149,8 @@ const UI = {
     howP: "中国生肖遵循传统的 12 年周期。由于生肖年以农历新年为准，1 月或 2 月出生的人应该查看自己的确切出生日期。", howB: "查询我的生肖 →",
     crossH1: "正在筹备婚礼？", crossP1: "根据双方生肖，查看传统上适合结婚的月份。", crossB1: "结婚吉月挑选 →",
     crossH2: "正在选择合作伙伴？", crossP2: "用传统中国生肖配对比较两个出生日期。", crossB2: "合作伙伴配对 →",
-    blogH: "MyBirthSign 博客", blogB: "阅读更多 →", blogAll: "查看全部文章 →",
+    blogH: "MyBirthSign 博客", blogP: "关于中国生肖、高棉历法和柬埔寨传统的指南。", blogB: "阅读更多 →", blogAll: "查看全部文章 →", guideB: "阅读指南 →", dailyH: "近期每日运势", prev: "上一篇", next: "下一篇",
+    tdTag: "今日更新", tdCat: "每日运势", tdP: "了解你今天的运气、机会和建议。看看十二生肖今天在爱情、事业、财运和人际关系方面受到怎样的影响。", tdRead: "阅读约3分钟", tdBtn: "阅读今日运势 →", tdAlt: () => "今日最幸运生肖插图", gridP: "点按任意卡片，查看该生肖的年份和介绍。", yearOf: (a) => `${a}年 →`,
     blogDesc: "十二生肖今日运势，包括今天最旺的生肖和需要多加小心的生肖。", blogTitle: (d) => `生肖每日运势 — ${d}`,
     finalH: "与星辰同行", finalP: "探索中国生肖的智慧，进一步了解爱情、事业、配对与和谐。", finalB: "开始你的生肖之旅 →",
   },
@@ -179,7 +181,8 @@ const UI = {
     howP: "រាសីវិលជុំតាមវដ្ត 12ឆ្នាំ។ ដោយសារឆ្នាំរាសីតាមប្រតិទិនចូលឆ្នាំចន្ទគតិ អ្នកដែលកើតក្នុងខែមករា ឬកុម្ភៈ គួរពិនិត្យថ្ងៃកំណើតជាក់លាក់របស់ខ្លួន។", howB: "ពិនិត្យរាសីរបស់ខ្ញុំ →",
     crossH1: "កំពុងរៀបចំពិធីមង្គលការ?", crossP1: "ស្វែងរកខែមង្គលតាមប្រពៃណី ដោយផ្អែកលើរាសីទាំងពីរ។", crossB1: "ជ្រើសរើសថ្ងៃរៀបការ →",
     crossH2: "កំពុងជ្រើសរើសដៃគូអាជីវកម្ម?", crossP2: "ប្រៀបធៀបថ្ងៃកំណើតពីរ តាមភាពត្រូវគ្នានៃរាសីតាមប្រពៃណី។", crossB2: "ភាពសមស្រប​ដៃគូអាជីវកម្ម →",
-    blogH: "ពីប្លុករបស់ MyBirthSign", blogB: "អានបន្ថែម →", blogAll: "មើលអត្ថបទទាំងអស់ →",
+    blogH: "ពីប្លុករបស់ MyBirthSign", blogP: "មគ្គុទ្ទេសក៍អំពីរាសីចិន ប្រតិទិនខ្មែរ និងប្រពៃណីកម្ពុជា។", blogB: "អានបន្ថែម →", blogAll: "មើលអត្ថបទទាំងអស់ →", guideB: "អានមគ្គុទ្ទេសក៍ →", dailyH: "ជោគជតារាសីប្រចាំថ្ងៃថ្មីៗ", prev: "អត្ថបទមុន", next: "អត្ថបទបន្ទាប់",
+    tdTag: "ធ្វើបច្ចុប្បន្នភាពថ្ងៃនេះ", tdCat: "សំណាងប្រចាំថ្ងៃ", tdP: "ស្វែងយល់អំពីសំណាង ឱកាស និងដំបូន្មានសម្រាប់ថ្ងៃនេះ។ មើលថាសត្វរាសីទាំង 12 ត្រូវបានជះឥទ្ធិពលយ៉ាងណាលើស្នេហា មុខរបរ ប្រាក់កាស និងទំនាក់ទំនង។", tdRead: "អានប្រហែល 3 នាទី", tdBtn: "អានជោគជតាថ្ងៃនេះ →", tdAlt: (a) => `រូបឆ្នាំ${a} សត្វរាសីដែលមានសំណាងបំផុតថ្ងៃនេះ`, gridP: "ចុចលើកាតណាមួយ ដើម្បីមើលឆ្នាំ និងព័ត៌មានរបស់សត្វនោះ។", yearOf: (a) => `ឆ្នាំ${a} →`,
     blogDesc: "ជោគជតារាសីថ្ងៃនេះសម្រាប់សត្វទាំង 12 រួមទាំងសត្វដែលសំណាងល្អបំផុត និងសត្វដែលត្រូវប្រុងប្រយ័ត្ន។", blogTitle: (d) => `ជោគជតារាសីប្រចាំថ្ងៃ — ${d}`,
     finalH: "ដំណើររបស់អ្នកជាមួយផ្កាយ", finalP: "ស្វែងយល់ប្រាជ្ញារាសី ហើយស្គាល់បន្ថែមអំពីស្នេហា អាជីព ភាពត្រូវគ្នា និងសុខដុមរមនា។", finalB: "ចាប់ផ្តើមដំណើររាសីរបស់អ្នក →",
   },
@@ -192,6 +195,21 @@ const posts = fs.readdirSync(path.join(ROOT, "blog")).filter((f) => /^daily-fort
   return { file: `blog/${f}`, y, m, d, animal: dayAnimal(y, m, d) };
 });
 const latestPost = posts[0];
+
+// ---------------------------------------------------------------- blog guide cards (read from blog.html, so the homepage slider shows the same guides as the blog page)
+const BLOG_CARDS = (() => {
+  const src = read("blog.html"), out = {};
+  for (const lang of ["en", "km", "zh"]) {
+    const i = src.indexOf(`id="guides-track-${lang}"`);
+    if (i < 0) { out[lang] = []; continue; }
+    const blk = src.slice(i, src.indexOf("</section>", i));
+    out[lang] = [...blk.matchAll(/<a class="bv2-guide-card[^"]*" href="([^"]+)">\s*<img class="bv2-guide-art" src="([^"]+)" alt="([^"]*)"[^>]*>\s*<div class="bv2-guide-body">\s*<h3>([\s\S]*?)<\/h3>\s*<p>([\s\S]*?)<\/p>/g)]
+      .map(([, h, img, alt, t, d]) => ({ h, img, alt, t, d }));
+  }
+  return out;
+})();
+const WEEK = { en: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], km: ["ថ្ងៃអាទិត្យ", "ថ្ងៃចន្ទ", "ថ្ងៃអង្គារ", "ថ្ងៃពុធ", "ថ្ងៃព្រហស្បតិ៍", "ថ្ងៃសុក្រ", "ថ្ងៃសៅរ៍"], zh: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"] };
+const longDate = (y, m, d, lang) => { const w = new Date(Date.UTC(y, m - 1, d)).getUTCDay(); return lang === "km" ? `${WEEK.km[w]} ទី${d} ខែ${KM_MONTHS[m - 1]} ឆ្នាំ${y}` : lang === "zh" ? `${y}年${m}月${d}日 ${WEEK.zh[w]}` : `${WEEK.en[w]}, ${EN_MONTHS[m - 1]} ${d}, ${y}`; };
 
 // ---------------------------------------------------------------- sections (one language each)
 function body(lang) {
@@ -221,7 +239,8 @@ function main2(lang) {
     return `        <li class="hm-fc fx-tier-${t}" data-hm-card data-animal="${a}"><a class="hm-fc-name" href="${href(a)}">${medal(a, 76)}<span>${esc(nm(a, lang))}</span></a>
           <span class="hm-status" data-hm-status><span aria-hidden="true" data-hm-ico>${ico}</span> <span data-hm-lab>${esc(lab)}</span></span>
           <p data-hm-line>${esc(line)}</p>
-          <div class="hm-digits ld ld-mini" data-lucky-digits data-animal="${a}" data-lang="${lang}" data-no-head data-no-note></div></li>`;
+          <div class="hm-digits ld ld-mini" data-lucky-digits data-animal="${a}" data-lang="${lang}" data-no-head data-no-note></div>
+          <a class="hm-fc-more" href="${href(a)}" tabindex="-1">${esc(u.yearOf(nm(a, lang)))}</a></li>`;
   };
   const animalCard = (a) => `        <li><a class="hm-ac" href="${href(a)}">${medal(a, 96)}<strong>${esc(nm(a, lang))}</strong>${zh ? "" : `<span class="hm-han" lang="zh" aria-hidden="true">${HAN[a]}</span>`}${zh ? `<small lang="km">ឆ្នាំ${esc(KM_NAMES[a])}</small>` : ""}</a></li>`;   // English page: English only
   const postCard = (p) => {
@@ -234,10 +253,21 @@ function main2(lang) {
 // Section builders that sit between the two shared (form) sections.
 function partA(lang) {   // fortune, animals, tools
   const { card, animalCard, ID, km, zh, u } = main2(lang);
+  const lp = latestPost, lpAnimal = lp ? lp.animal : TODAY_ANIMAL;
   const L3 = (en, k, z) => (km ? k : zh ? z : en);
   return `<div class="fx-wrap">
   <section class="fx-sec fx-sec-first" id="fortune" aria-labelledby="${ID("fo")}">
-    <div class="fx-head"><h2 id="${ID("fo")}">${esc(u.todayH)}</h2>${ICON.orn}<p>${esc(u.todayP)}</p></div>
+    <a class="hm-today" href="${latestPost.file}" data-hm-fulllink>
+      <span class="hm-today-art"><img src="images/zodiac/${slug(lpAnimal)}.webp" data-hm-today-img data-lang="${lang}" alt="${esc(u.tdAlt(nm(lpAnimal, lang)))}" width="360" height="544" loading="lazy" decoding="async"></span>
+      <span class="hm-today-body">
+        <span class="hm-tags"><span class="hm-tag hm-tag-new">${esc(u.tdTag)}</span><span class="hm-tag hm-tag-cat">${esc(u.tdCat)}</span></span>
+        <h2 id="${ID("fo")}">${esc(u.todayH)}</h2>
+        <span class="hm-today-p">${esc(u.tdP)}</span>
+        <span class="hm-today-meta"><span data-hm-today-long data-lang="${lang}">${esc(longDate(TY, TM, TD, lang))}</span><span>${esc(u.tdRead)}</span></span>
+        <span class="hm-today-btn">${esc(u.tdBtn)}</span>
+      </span>
+    </a>
+    <p class="hm-fgrid-p">${esc(u.todayP)} ${esc(u.gridP)}</p>
     <ul class="hm-fgrid">
 ${ORDER.map(card).join("\n")}
     </ul>
@@ -284,11 +314,16 @@ function partB(lang) {   // why, guides, how, cycle, elements, cross, blog, fina
     <ul class="hm-why">${u.why.map(([i, t, d]) => `<li class="fx-gframe"><span class="hm-bi">${ICON[i]}</span><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`).join("")}</ul>
   </section>
 
-  <section class="fx-sec" id="guides" aria-labelledby="${ID("gd")}">
-    <div class="fx-head"><h2 id="${ID("gd")}">${esc(u.guidesH)}</h2>${ICON.orn}</div>
-    <ul class="hm-guides">
-${u.guides.map(([img, cat, t, d, h]) => `      <li><a class="hm-gc" href="${h}"><img src="${img}" width="440" height="440" alt="" loading="lazy" decoding="async"><div><span class="hm-cat">${esc(cat)}</span><h3>${esc(t)}</h3><p>${esc(d)}</p><span class="hm-more">${esc(u.guidesB)}</span></div></a></li>`).join("\n")}
-    </ul>
+  <section class="fx-sec hm-blog-sec" id="guides" aria-labelledby="${ID("gd")}">
+    <div class="fx-head"><h2 id="${ID("gd")}">${esc(u.blogH)}</h2>${ICON.orn}<p>${esc(u.blogP)}</p></div>
+    <div class="hm-slider" data-hm-slider>
+      <button type="button" class="hm-sl-btn hm-sl-prev" data-hm-sl="-1" aria-label="${esc(u.prev)}" aria-controls="hm-slides-${lang}" disabled><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <ul class="hm-slides" id="hm-slides-${lang}" tabindex="0" role="region" aria-roledescription="carousel" aria-label="${esc(u.blogH)}">
+${(BLOG_CARDS[lang].length ? BLOG_CARDS[lang] : u.guides.map(([img, , t, d, h]) => ({ h, img, alt: "", t: esc(t), d: esc(d) }))).map((c) => `        <li><a class="hm-bc" href="${c.h}"><img src="${c.img}" width="900" height="373" alt="${c.alt}" loading="lazy" decoding="async"><span class="hm-bc-body"><h3>${c.t}</h3><span class="hm-bc-p">${c.d}</span><span class="hm-more">${esc(u.guideB)}</span></span></a></li>`).join("\n")}
+      </ul>
+      <button type="button" class="hm-sl-btn hm-sl-next" data-hm-sl="1" aria-label="${esc(u.next)}" aria-controls="hm-slides-${lang}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+    <p class="hm-center"><a class="fx-btn fx-btn-sm" href="/blog">${esc(u.blogAll)}</a></p>
   </section>
 
   <section class="fx-sec" id="how" aria-labelledby="${ID("hw")}">
@@ -320,11 +355,10 @@ ${u.guides.map(([img, cat, t, d, h]) => `      <li><a class="hm-gc" href="${h}">
   </div>
 
   <section class="fx-sec" id="blog" aria-labelledby="${ID("bl")}">
-    <div class="fx-head"><h2 id="${ID("bl")}">${esc(u.blogH)}</h2>${ICON.orn}</div>
+    <div class="fx-head"><h2 id="${ID("bl")}">${esc(u.dailyH)}</h2>${ICON.orn}</div>
     <ul class="hm-posts">
 ${posts.map(postCard).join("\n")}
     </ul>
-    <p class="hm-center"><a class="fx-btn fx-btn-sm" href="/blog">${esc(u.blogAll)}</a></p>
   </section>
 </div>
 
@@ -400,7 +434,9 @@ document.querySelectorAll("[data-hm-card]").forEach(function(li){
 var KMM=${JSON.stringify(KM_MONTHS)},ENM=${JSON.stringify(EN_MONTHS)},KD="0123456789";
 function kd(n){return String(n).replace(/\\d/g,function(c){return KD[c];});}
 function fdt(lang){return lang==="km"?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):lang==="zh"?p[0]+"年"+p[1]+"月"+p[2]+"日":ENM[p[1]-1]+" "+p[2]+", "+p[0];}
-function setDate(){document.querySelectorAll("[data-hm-today]").forEach(function(el){el.textContent=fdt(el.getAttribute("data-lang"));});}
+var WK=${JSON.stringify(WEEK)},TDALT=${JSON.stringify({ en: "Illustration of the {A}, today's luckiest Chinese zodiac sign", km: "រូបឆ្នាំ{A} សត្វរាសីដែលមានសំណាងបំផុតថ្ងៃនេះ", zh: "今日最幸运生肖插图" })};
+function ldt(lang){var w=WK[lang]||WK.en,d=w[new Date(Date.UTC(p[0],p[1]-1,p[2])).getUTCDay()];return lang==="km"?d+" ទី"+p[2]+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+p[0]:lang==="zh"?p[0]+"年"+p[1]+"月"+p[2]+"日 "+d:d+", "+ENM[p[1]-1]+" "+p[2]+", "+p[0];}
+function setDate(){document.querySelectorAll("[data-hm-today]").forEach(function(el){el.textContent=fdt(el.getAttribute("data-lang"));});document.querySelectorAll("[data-hm-today-long]").forEach(function(el){el.textContent=ldt(el.getAttribute("data-lang"));});}
 setDate();document.addEventListener("DOMContentLoaded",setDate);window.addEventListener("load",setDate);document.querySelectorAll("[data-lang-switch]").forEach(function(a){a.addEventListener("click",function(){setTimeout(setDate,0);});});
 // daily data (rules + Claude wording): when today's record exists, each card shows that sign's
 // advice for today and its lucky number & color. If it is missing or old, the cards stay as above.
@@ -416,7 +452,7 @@ if(window.fetch){getj("/data/daily/"+dsx+".json").then(function(rec){return rec&
     var km=lang==="km",x=li.querySelector(".hm-lucky")||document.createElement("p");x.className="hm-lucky";x.textContent="";
     var n=document.createElement("span");n.textContent=(km?"លេខសំណាង ":lang==="zh"?"幸运数字 ":"Lucky no. ")+(km?kd(s.lucky.number):s.lucky.number);
     var c=document.createElement("span"),dot=document.createElement("i");dot.className="hm-dot";dot.style.background=s.lucky.color.hex||"#ccc";c.appendChild(dot);c.appendChild(document.createTextNode(s.lucky.color[lang]));
-    x.appendChild(n);x.appendChild(c);li.appendChild(x);});
+    x.appendChild(n);x.appendChild(c);li.insertBefore(x,li.querySelector(".hm-fc-more"));});
 }).catch(function(){});}
 // "Who is lucky today" share: the same rules as the cards above (sign of the day + its triangle friends;
 // its opposite sign takes it easy). The image card is drawn only when someone shares.
@@ -431,7 +467,16 @@ document.querySelectorAll("[data-hm-share]").forEach(function(el){
     text:LK[lang].t.split("{D}").join(n(top[0])).replace("{P}",n(top[1])).replace("{Q}",n(top[2]))}));});
 // point "full fortune" (and the lucky-today share link) at today's post when it exists, otherwise keep the latest published one
 var ds=p[0]+"-"+String(p[1]).padStart(2,"0")+"-"+String(p[2]).padStart(2,"0"),u="blog/daily-fortune-"+ds+".html";
-if(window.fetch){fetch(u,{method:"HEAD"}).then(function(r){if(r.ok){document.querySelectorAll("[data-hm-fulllink]").forEach(function(a){a.setAttribute("href",u);});document.querySelectorAll("[data-hm-share]").forEach(function(el){el.setAttribute("data-share-url","/"+u);});}}).catch(function(){});}
+if(window.fetch){fetch(u,{method:"HEAD"}).then(function(r){if(r.ok){document.querySelectorAll("[data-hm-today-img]").forEach(function(im){var lg=im.getAttribute("data-lang"),nmA=lg==="km"?KMN[day]:lg==="zh"?ZHN[day]:day;im.setAttribute("src","images/zodiac/"+day.toLowerCase()+".webp");im.setAttribute("alt",TDALT[lg].replace("{A}",nmA));});document.querySelectorAll("[data-hm-fulllink]").forEach(function(a){a.setAttribute("href",u);});document.querySelectorAll("[data-hm-share]").forEach(function(el){el.setAttribute("data-share-url","/"+u);});}}).catch(function(){});}
+// whole fortune card opens that animal's "Year of the …" page (the name and the link at the bottom stay real links)
+document.querySelectorAll("[data-hm-card]").forEach(function(li){var a=li.querySelector(".hm-fc-name");if(!a)return;li.classList.add("hm-fc-link");
+  li.addEventListener("click",function(e){if(e.target.closest("a,button,input,select,textarea"))return;var s=window.getSelection&&String(window.getSelection());if(s)return;if(e.ctrlKey||e.metaKey||e.shiftKey)window.open(a.href,"_blank");else location.href=a.href;});});
+// blog slider: arrows move one card; they switch off at the ends
+document.querySelectorAll("[data-hm-slider]").forEach(function(sl){var tr=sl.querySelector(".hm-slides"),bt=sl.querySelectorAll("[data-hm-sl]");if(!tr)return;
+  function step(){var li=tr.querySelector("li");return li?li.getBoundingClientRect().width+parseFloat(getComputedStyle(tr).columnGap||16):tr.clientWidth*.8;}
+  function upd(){var mx=tr.scrollWidth-tr.clientWidth-2;bt[0].disabled=tr.scrollLeft<=2;bt[1].disabled=tr.scrollLeft>=mx;}
+  bt.forEach(function(b){b.addEventListener("click",function(){tr.scrollBy({left:step()*Number(b.getAttribute("data-hm-sl")),behavior:"smooth"});});});
+  tr.addEventListener("scroll",function(){window.requestAnimationFrame(upd);},{passive:true});window.addEventListener("resize",upd);upd();setTimeout(upd,600);});
 // "Find my sign": the date field is replaced by the site's date picker, so check the value ourselves
 var f=document.getElementById("hm-find-form");
 if(f)f.addEventListener("submit",function(e){var i=document.getElementById("hm-dob");if(!i||!i.value){e.preventDefault();var v=f.querySelector(".dp-input,input[type=text]");if(v)v.focus();}});
