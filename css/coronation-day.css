@@ -22,3 +22,13 @@
 .coronation-article .coronation-related a{display:block;text-decoration:none;border:1px solid rgba(216,180,98,.36);border-radius:14px;padding:16px;background:rgba(40,31,68,.38)}
 .coronation-article .coronation-related a strong{display:block;color:#c6a254;margin-bottom:5px}
 @media(max-width:640px){.coronation-article .coronation-facts{grid-template-columns:1fr}.coronation-article .coronation-timeline li{grid-template-columns:1fr;gap:4px}.coronation-article .coronation-related{grid-template-columns:1fr}}
+
+/* Editorial illustrations added for the Coronation Day feature */
+.coronation-article .coronation-figure{margin:28px 0 34px;overflow:hidden;border:1px solid rgba(216,180,98,.34);border-radius:18px;background:linear-gradient(145deg,rgba(31,27,58,.72),rgba(12,18,39,.92));box-shadow:0 14px 38px rgba(5,9,25,.12)}
+.coronation-article .coronation-figure img{display:block;width:100%;height:auto;aspect-ratio:1200/760;object-fit:cover;background:#121a35}
+.coronation-article .coronation-figure figcaption{padding:13px 17px 16px;color:var(--text-muted,#767889);font-size:.92rem;line-height:1.65}
+.coronation-article .coronation-figure figcaption strong{color:#c6a254}
+.coronation-article .coronation-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:26px 0 34px}
+.coronation-article .coronation-gallery .coronation-figure{margin:0;min-width:0}
+.coronation-article .coronation-gallery .coronation-figure img{aspect-ratio:3/2}
+@media(max-width:700px){.coronation-article .coronation-gallery{grid-template-columns:1fr;gap:16px}.coronation-article .coronation-figure{border-radius:14px}.coronation-article .coronation-figure figcaption{padding:12px 14px 14px}}
