@@ -250,13 +250,29 @@ function main2(lang) {
   return { card, animalCard, postCard, ID, km, zh, u, au, tr };
 }
 
+function blogSlider(lang) {   // blog guide cards, first section under the hero
+  const { ID, u } = main2(lang);
+  return `  <section class="fx-sec fx-sec-first hm-blog-sec" id="guides" aria-labelledby="${ID("gd")}">
+    <div class="fx-head"><h2 id="${ID("gd")}">${esc(u.blogH)}</h2>${ICON.orn}<p>${esc(u.blogP)}</p></div>
+    <div class="hm-slider" data-hm-slider>
+      <button type="button" class="hm-sl-btn hm-sl-prev" data-hm-sl="-1" aria-label="${esc(u.prev)}" aria-controls="hm-slides-${lang}" disabled><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <ul class="hm-slides" id="hm-slides-${lang}" tabindex="0" role="region" aria-roledescription="carousel" aria-label="${esc(u.blogH)}">
+${(BLOG_CARDS[lang].length ? BLOG_CARDS[lang] : u.guides.map(([img, , t, d, h]) => ({ h, img, alt: "", t: esc(t), d: esc(d) }))).map((c) => `        <li><a class="hm-bc" href="${c.h}"><img src="${c.img}" width="900" height="373" alt="${c.alt}" loading="lazy" decoding="async"><span class="hm-bc-body"><h3>${c.t}</h3><span class="hm-bc-p">${c.d}</span><span class="hm-more">${esc(u.guideB)}</span></span></a></li>`).join("\n")}
+      </ul>
+      <button type="button" class="hm-sl-btn hm-sl-next" data-hm-sl="1" aria-label="${esc(u.next)}" aria-controls="hm-slides-${lang}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+    <p class="hm-center"><a class="fx-btn fx-btn-sm" href="/blog">${esc(u.blogAll)}</a></p>
+  </section>`;
+}
+
 // Section builders that sit between the two shared (form) sections.
 function partA(lang) {   // fortune, animals, tools
   const { card, animalCard, ID, km, zh, u } = main2(lang);
   const lp = latestPost, lpAnimal = lp ? lp.animal : TODAY_ANIMAL;
   const L3 = (en, k, z) => (km ? k : zh ? z : en);
   return `<div class="fx-wrap">
-  <section class="fx-sec fx-sec-first" id="fortune" aria-labelledby="${ID("fo")}">
+${blogSlider(lang)}
+  <section class="fx-sec" id="fortune" aria-labelledby="${ID("fo")}">
     <a class="hm-today" href="${latestPost.file}" data-hm-fulllink>
       <span class="hm-today-art"><img src="images/zodiac/${slug(lpAnimal)}.webp" data-hm-today-img data-lang="${lang}" alt="${esc(u.tdAlt(nm(lpAnimal, lang)))}" width="360" height="544" loading="lazy" decoding="async"></span>
       <span class="hm-today-body">
@@ -312,18 +328,6 @@ function partB(lang) {   // why, guides, how, cycle, elements, cross, blog, fina
   <section class="fx-sec" id="why" aria-labelledby="${ID("wh")}">
     <div class="fx-head"><h2 id="${ID("wh")}">${esc(u.whyH)}</h2>${ICON.orn}<p>${esc(u.whyP)}</p></div>
     <ul class="hm-why">${u.why.map(([i, t, d]) => `<li class="fx-gframe"><span class="hm-bi">${ICON[i]}</span><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`).join("")}</ul>
-  </section>
-
-  <section class="fx-sec hm-blog-sec" id="guides" aria-labelledby="${ID("gd")}">
-    <div class="fx-head"><h2 id="${ID("gd")}">${esc(u.blogH)}</h2>${ICON.orn}<p>${esc(u.blogP)}</p></div>
-    <div class="hm-slider" data-hm-slider>
-      <button type="button" class="hm-sl-btn hm-sl-prev" data-hm-sl="-1" aria-label="${esc(u.prev)}" aria-controls="hm-slides-${lang}" disabled><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
-      <ul class="hm-slides" id="hm-slides-${lang}" tabindex="0" role="region" aria-roledescription="carousel" aria-label="${esc(u.blogH)}">
-${(BLOG_CARDS[lang].length ? BLOG_CARDS[lang] : u.guides.map(([img, , t, d, h]) => ({ h, img, alt: "", t: esc(t), d: esc(d) }))).map((c) => `        <li><a class="hm-bc" href="${c.h}"><img src="${c.img}" width="900" height="373" alt="${c.alt}" loading="lazy" decoding="async"><span class="hm-bc-body"><h3>${c.t}</h3><span class="hm-bc-p">${c.d}</span><span class="hm-more">${esc(u.guideB)}</span></span></a></li>`).join("\n")}
-      </ul>
-      <button type="button" class="hm-sl-btn hm-sl-next" data-hm-sl="1" aria-label="${esc(u.next)}" aria-controls="hm-slides-${lang}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
-    </div>
-    <p class="hm-center"><a class="fx-btn fx-btn-sm" href="/blog">${esc(u.blogAll)}</a></p>
   </section>
 
   <section class="fx-sec" id="how" aria-labelledby="${ID("hw")}">
@@ -548,9 +552,6 @@ ${body("km")}
 <div data-lang-content="zh">
 ${body("zh")}
 </div>
-
-${FIND}
-
 
 <div data-lang-content="en">
 ${partA("en")}
