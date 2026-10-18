@@ -24,6 +24,11 @@
 .kc-up h3{margin:0 0 6px;font-size:1.05rem;color:var(--gold2)}
 .kc-up .upcoming{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
 @media(max-width:640px){.kc-up .upcoming{grid-template-columns:1fr}}
+/* boxed layout: the page sits in a centred box instead of running edge to edge */
+.wrap{max-width:1180px}
+.kc-hero{margin:18px 0 0;border:1px solid #3b4264;border-radius:20px;overflow:hidden}
+@media(max-width:950px){.kc-hero{margin:12px 0 0}}
+@media(max-width:520px){.kc-hero{border-radius:14px}}
 /* layout fit: calendar keeps its own height, equal rows, moon in the corner, compact cells on phones */
 .layout{align-items:start}
 .days{grid-auto-rows:1fr}
