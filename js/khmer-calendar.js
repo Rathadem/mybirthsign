@@ -93,6 +93,9 @@
     pchumben: { i: "🏯", k: "holiday", en: "Pchum Ben", km: "ពិធីបុណ្យភ្ជុំបិណ្ឌ", zh: "亡人节" },
     chenhvassa: { i: "🕯️", k: "buddhist", en: "Chenh Vassa (Lent ends)", km: "ចេញព្រះវស្សា", zh: "出雨安居" },
     water: { i: "🚣", k: "holiday", en: "Water Festival", km: "ព្រះរាជពិធីបុណ្យអុំទូក", zh: "送水节" },
+    newyearday: { i: "🎆", k: "national", en: "International New Year's Day", km: "ទិវាចូលឆ្នាំសកល", zh: "元旦" },
+    queenmother: { i: "👑", k: "national", en: "Queen Mother's Birthday", km: "ព្រះរាជពិធីបុណ្យចម្រើនព្រះជន្ម សម្តេចព្រះមហាក្សត្រី", zh: "太后诞辰" },
+    peace: { i: "🕊️", k: "national", en: "Peace Day", km: "ទិវាសន្តិភាព", zh: "和平日" },
     victory: { i: "🕊️", k: "national", en: "Victory over Genocide Day", km: "ទិវាជ័យជម្នះលើរបបប្រល័យពូជសាសន៍", zh: "战胜种族灭绝纪念日" },
     women: { i: "💐", k: "national", en: "International Women's Day", km: "ទិវានារីអន្តរជាតិ", zh: "国际妇女节" },
     labour: { i: "🛠️", k: "national", en: "International Labour Day", km: "ទិវាពលកម្មអន្តរជាតិ", zh: "国际劳动节" },
@@ -103,7 +106,8 @@
     independence: { i: "🇰🇭", k: "national", en: "Independence Day", km: "ពិធីបុណ្យឯករាជ្យជាតិ", zh: "独立日" },
   };
   var ORDER = { holiday: 0, national: 1, buddhist: 2, minor: 3 };
-  var FIXED = [[1, 7, "victory"], [3, 8, "women"], [5, 1, "labour"], [5, 14, "kingbday"], [9, 24, "constitution"], [10, 15, "kingfather"], [10, 29, "coronation"], [11, 9, "independence"]];
+  // fixed-date days on the 2026 official list (Sub-Decree No. 167)
+  var FIXED = [[1, 1, "newyearday"], [1, 7, "victory"], [3, 8, "women"], [5, 1, "labour"], [5, 14, "kingbday"], [6, 18, "queenmother"], [9, 24, "constitution"], [10, 15, "kingfather"], [10, 29, "coronation"], [11, 9, "independence"], [12, 29, "peace"]];
 
   function west(t) { return String(t).replace(/[០-៩]/g, function (c) { return String(c.charCodeAt(0) - 0x17E0); }); }
   function ord(n) { var s = ["th", "st", "nd", "rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
