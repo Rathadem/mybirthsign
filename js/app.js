@@ -50,8 +50,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   const todayNumberEls = document.querySelectorAll("#today-number, [data-today-number]");
   if (todayNumberEls.length) {
-    const today = new Date();
-    const digits = (today.getMonth() + 1).toString() + today.getDate().toString() + today.getFullYear().toString();
+    // the site's "today" is the Cambodian date (the same day the homepage date, daily fortune and lunar dates use)
+    const pp = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()).split("-").map(Number);
+    const digits = String(pp[1]) + String(pp[2]) + String(pp[0]);
     let sum = digits.split("").reduce((a, b) => a + parseInt(b, 10), 0);
     while (sum > 9) {
       sum = sum.toString().split("").reduce((a, b) => a + parseInt(b, 10), 0);

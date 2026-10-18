@@ -28,9 +28,9 @@
       eyebrow: "Cambodian Heritage · Lunar & Solar Dates", title: "Khmer Lunar Calendar",
       intro: "Every day of the year with its Khmer lunar date, moon day, holy days and Cambodian celebrations, calculated with the traditional Khmer calendar rules.",
       today: "Today", jump: "Jump to date", details: "Selected date", greg: "Gregorian date", lunar: "Khmer lunar date",
-      note: "Lunar dates are calculated with the traditional Khmer calendar rules (the open-source momentkh library, also used by our Zodiac Checker). Official public holidays are confirmed each year by the Royal Government of Cambodia, so check the announcement before you plan travel.",
+      note: "Lunar dates are calculated with the traditional Khmer calendar rules (the open-source momentkh library, also used by our Zodiac Checker), in Cambodia time. The moon icons follow the calendar's lunar day (15th waxing day = full moon), not an astronomical observation, so the real full or new moon can be a day apart. Official public holidays are confirmed each year by the Royal Government of Cambodia, so check the announcement before you plan travel.",
       events: "Holidays & observances", upcoming: "Coming up",
-      eventsText: "Lunar holidays move with the moon; national days keep the same date every year.",
+      eventsText: "Lunar holidays move with the moon; national days keep the same date every year.", verified: "{y}: public holidays as listed in the official 2026 sub-decree.", unverified: "{y}: national days are shown on their usual dates and festivals are calculated with the traditional rules; the official {y} list may differ, so check the government announcement.",
       rowEvent: "Holiday / observance", rowMoon: "Moon day", rowYear: "Khmer year", none: "No holiday or holy day",
       f1: "🌙 Lunar dates", f1d: "Koeut (waxing) and Roach (waning) days with the correct month names.",
       f2: "🪷 Buddhist holy days", f2d: "Thngai Sil and the full-moon festivals, worked out for every month.",
@@ -41,15 +41,15 @@
       week: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
       waxing: "waxing", waning: "waning", sil: "Holy day", langs: ["English", "Khmer", "Chinese"],
-      footer: "Lunar dates: traditional Khmer calendar rules (momentkh)", aboutH: "Discover the Khmer Calendar", aboutP: "Guides to every part of the calendar: holy days, holidays, moon days, years and leap months.", lunarHead: "Khmer Lunar Date", pick: "Choose a date from the calendar", hint: "Choose a day to see its Khmer lunar date, animal year, Sak and Buddhist Era.", lkAbout: "About", lkPrivacy: "Privacy", lkContact: "Contact", aPrev: "Previous month", aNext: "Next month", aDate: "Choose a date", aDays: "Calendar days",
+      footer: "Lunar dates: traditional Khmer calendar rules (momentkh)", srcH: "Sources and limits", src1: "Lunar dates, holy days and festival days are calculated with the traditional Khmer calendar rules in the open-source momentkh library.", src2: "2026 public holidays: Sub-Decree No. 167, as published by Andersen Cambodia.", src3: "For other years, national days are shown on their usual dates and festivals are calculated; the Royal Government of Cambodia confirms each year's official list.", aboutH: "Discover the Khmer Calendar", aboutP: "Guides to every part of the calendar: holy days, holidays, moon days, years and leap months.", lunarHead: "Khmer Lunar Date", pick: "Choose a date from the calendar", hint: "Choose a day to see its Khmer lunar date, animal year, Sak and Buddhist Era.", lkAbout: "About", lkPrivacy: "Privacy", lkTerms: "Terms", lkContact: "Contact", aPrev: "Previous month", aNext: "Next month", aDate: "Choose a date", aDays: "Calendar days",
     },
     km: {
       eyebrow: "មរតកខ្មែរ · កាលបរិច្ឆេទចន្ទគតិ និងសុរិយគតិ", title: "ប្រតិទិនចន្ទគតិខ្មែរ",
       intro: "ថ្ងៃនីមួយៗក្នុងឆ្នាំ ជាមួយថ្ងៃខែតាមចន្ទគតិខ្មែរ ថ្ងៃកើត ថ្ងៃរោច ថ្ងៃសីល និងពិធីបុណ្យខ្មែរ ដែលគណនាតាមវិធានប្រតិទិនខ្មែរបែបប្រពៃណី។",
       today: "ថ្ងៃនេះ", jump: "ជ្រើសរើសកាលបរិច្ឆេទ", details: "កាលបរិច្ឆេទដែលបានជ្រើស", greg: "កាលបរិច្ឆេទសុរិយគតិ", lunar: "កាលបរិច្ឆេទចន្ទគតិខ្មែរ",
-      note: "ថ្ងៃខែចន្ទគតិត្រូវបានគណនាតាមវិធានប្រតិទិនខ្មែរបែបប្រពៃណី (បណ្ណាល័យកូដចំហ momentkh ដែលម៉ាស៊ីនពិនិត្យរាសីរបស់យើងប្រើផងដែរ)។ ថ្ងៃឈប់សម្រាកផ្លូវការ ត្រូវបានរាជរដ្ឋាភិបាលកម្ពុជាប្រកាសរៀងរាល់ឆ្នាំ ដូច្នេះសូមពិនិត្យសេចក្តីប្រកាសមុនរៀបចំការធ្វើដំណើរ។",
+      note: "ថ្ងៃខែចន្ទគតិត្រូវបានគណនាតាមវិធានប្រតិទិនខ្មែរបែបប្រពៃណី (បណ្ណាល័យកូដចំហ momentkh ដែលម៉ាស៊ីនពិនិត្យរាសីរបស់យើងប្រើផងដែរ)។ ថ្ងៃឈប់សម្រាកផ្លូវការ ត្រូវបានរាជរដ្ឋាភិបាលកម្ពុជាប្រកាសរៀងរាល់ឆ្នាំ ដូច្នេះសូមពិនិត្យសេចក្តីប្រកាសមុនរៀបចំការធ្វើដំណើរ។ រូបព្រះចន្ទដើរតាមថ្ងៃចន្ទគតិក្នុងប្រតិទិន (15កើត = ពេញបូណ៌មី) មិនមែនតាមការសង្កេតតារាសាស្ត្រទេ ដូច្នេះព្រះចន្ទពេញវង់ពិតអាចឃ្លាតមួយថ្ងៃ។ ពេលវេលាគឺម៉ោងកម្ពុជា។",
       events: "ថ្ងៃបុណ្យ និងថ្ងៃសីល", upcoming: "ខាងមុខនេះ",
-      eventsText: "ពិធីបុណ្យតាមចន្ទគតិប្តូរថ្ងៃតាមព្រះចន្ទ ចំណែកទិវាជាតិនៅថ្ងៃដដែលរៀងរាល់ឆ្នាំ។",
+      eventsText: "ពិធីបុណ្យតាមចន្ទគតិប្តូរថ្ងៃតាមព្រះចន្ទ ចំណែកទិវាជាតិនៅថ្ងៃដដែលរៀងរាល់ឆ្នាំ។", verified: "{y}៖ ថ្ងៃឈប់សម្រាកតាមអនុក្រឹត្យផ្លូវការឆ្នាំ 2026។", unverified: "{y}៖ ទិវាជាតិបង្ហាញនៅថ្ងៃធម្មតារបស់វា ហើយពិធីបុណ្យគណនាតាមវិធានប្រពៃណី។ បញ្ជីផ្លូវការឆ្នាំ {y} អាចខុសពីនេះ សូមពិនិត្យសេចក្តីប្រកាសរបស់រដ្ឋាភិបាល។",
       rowEvent: "ថ្ងៃបុណ្យ / ពិធី", rowMoon: "ថ្ងៃចន្ទគតិ", rowYear: "ឆ្នាំខ្មែរ", none: "មិនមែនថ្ងៃបុណ្យ ឬថ្ងៃសីលទេ",
       f1: "🌙 កាលបរិច្ឆេទចន្ទគតិ", f1d: "ថ្ងៃកើត និងថ្ងៃរោច ព្រមទាំងឈ្មោះខែដែលត្រឹមត្រូវ។",
       f2: "🪷 ថ្ងៃសីល", f2d: "ថ្ងៃសីល និងពិធីបុណ្យពេញបូណ៌មី សម្រាប់គ្រប់ខែ។",
@@ -60,15 +60,15 @@
       week: ["អាទិត្យ", "ចន្ទ", "អង្គារ", "ពុធ", "ព្រហស្បតិ៍", "សុក្រ", "សៅរ៍"],
       months: ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"],
       waxing: "កើត", waning: "រោច", sil: "ថ្ងៃសីល", langs: ["English", "ខ្មែរ", "中文"],
-      footer: "ថ្ងៃខែចន្ទគតិ៖ វិធានប្រតិទិនខ្មែរបែបប្រពៃណី (momentkh)", aboutH: "ស្វែងយល់ពីប្រតិទិនខ្មែរ", aboutP: "មគ្គុទ្ទេសក៍សម្រាប់គ្រប់ផ្នែកនៃប្រតិទិន៖ ថ្ងៃសីល ថ្ងៃបុណ្យ ថ្ងៃកើតរោច ឆ្នាំ និងអធិកមាស។", lunarHead: "ថ្ងៃខែចន្ទគតិខ្មែរ", pick: "ជ្រើសរើសថ្ងៃពីប្រតិទិន", hint: "ជ្រើសរើសថ្ងៃមួយ ដើម្បីមើលថ្ងៃខែចន្ទគតិ ឆ្នាំសត្វ ស័ក និងពុទ្ធសករាជ។", lkAbout: "អំពីយើង", lkPrivacy: "ឯកជនភាព", lkContact: "ទំនាក់ទំនង", aPrev: "ខែមុន", aNext: "ខែបន្ទាប់", aDate: "ជ្រើសរើសកាលបរិច្ឆេទ", aDays: "ថ្ងៃក្នុងខែ",
+      footer: "ថ្ងៃខែចន្ទគតិ៖ វិធានប្រតិទិនខ្មែរបែបប្រពៃណី (momentkh)", srcH: "ប្រភព និងដែនកំណត់", src1: "ថ្ងៃខែចន្ទគតិ ថ្ងៃសីល និងថ្ងៃបុណ្យ គណនាតាមវិធានប្រតិទិនខ្មែរបែបប្រពៃណី ក្នុងបណ្ណាល័យកូដចំហ momentkh។", src2: "ថ្ងៃឈប់សម្រាកឆ្នាំ 2026៖ អនុក្រឹត្យលេខ 167 ដែលផ្សព្វផ្សាយដោយ Andersen Cambodia។", src3: "សម្រាប់ឆ្នាំផ្សេង ទិវាជាតិបង្ហាញនៅថ្ងៃធម្មតារបស់វា ហើយពិធីបុណ្យត្រូវបានគណនា។ រាជរដ្ឋាភិបាលកម្ពុជាបញ្ជាក់បញ្ជីផ្លូវការរៀងរាល់ឆ្នាំ។", aboutH: "ស្វែងយល់ពីប្រតិទិនខ្មែរ", aboutP: "មគ្គុទ្ទេសក៍សម្រាប់គ្រប់ផ្នែកនៃប្រតិទិន៖ ថ្ងៃសីល ថ្ងៃបុណ្យ ថ្ងៃកើតរោច ឆ្នាំ និងអធិកមាស។", lunarHead: "ថ្ងៃខែចន្ទគតិខ្មែរ", pick: "ជ្រើសរើសថ្ងៃពីប្រតិទិន", hint: "ជ្រើសរើសថ្ងៃមួយ ដើម្បីមើលថ្ងៃខែចន្ទគតិ ឆ្នាំសត្វ ស័ក និងពុទ្ធសករាជ។", lkAbout: "អំពីយើង", lkPrivacy: "ឯកជនភាព", lkTerms: "លក្ខខណ្ឌ", lkContact: "ទំនាក់ទំនង", aPrev: "ខែមុន", aNext: "ខែបន្ទាប់", aDate: "ជ្រើសរើសកាលបរិច្ឆេទ", aDays: "ថ្ងៃក្នុងខែ",
     },
     zh: {
       eyebrow: "柬埔寨文化 · 阴历与阳历", title: "高棉农历",
       intro: "一年中的每一天，附有高棉农历日期、上弦与下弦日、佛教斋日和柬埔寨节日，均按传统高棉历法规则计算。",
       today: "今天", jump: "跳转日期", details: "所选日期", greg: "公历日期", lunar: "高棉农历日期",
-      note: "农历日期按传统高棉历法规则计算（开源程序库 momentkh，我们的生肖查询也使用它）。官方公共假期由柬埔寨王国政府每年公布，出行前请查看当年的公告。",
+      note: "农历日期按传统高棉历法规则计算（开源程序库 momentkh，我们的生肖查询也使用它）。官方公共假期由柬埔寨王国政府每年公布，出行前请查看当年的公告。月相图标依照历法上的农历日（上弦15日为满月），并非天文观测，所以真正的满月或新月可能相差一天。时间以柬埔寨时间为准。",
       events: "节日与佛教斋日", upcoming: "即将到来",
-      eventsText: "农历节日随月亮变化，国家纪念日每年日期不变。",
+      eventsText: "农历节日随月亮变化，国家纪念日每年日期不变。", verified: "{y}年：公共假期依据2026年官方次级法令。", unverified: "{y}年：国家纪念日按惯常日期显示，节日按传统规则计算；{y}年的官方名单可能不同，请以政府公告为准。",
       rowEvent: "节日 / 纪念日", rowMoon: "农历日", rowYear: "高棉年", none: "不是节日或斋日",
       f1: "🌙 农历日期", f1d: "显示正确的月名以及上弦和下弦日。",
       f2: "🪷 佛教斋日", f2d: "每个月的斋日（Thngai Sil）和满月节日。",
@@ -79,7 +79,7 @@
       week: ["日", "一", "二", "三", "四", "五", "六"],
       months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
       waxing: "上弦", waning: "下弦", sil: "斋日", langs: ["English", "ខ្មែរ", "中文"],
-      footer: "农历日期：传统高棉历法规则（momentkh）", aboutH: "了解高棉日历", aboutP: "日历每个部分的指南：佛教斋日、节日、月相日、年份和闰月。", lunarHead: "高棉农历日期", pick: "从日历中选择日期", hint: "选择一天，查看它的高棉农历日期、生肖年、Sak 和佛历。", lkAbout: "关于我们", lkPrivacy: "隐私政策", lkContact: "联系我们", aPrev: "上个月", aNext: "下个月", aDate: "选择日期", aDays: "日历日期",
+      footer: "农历日期：传统高棉历法规则（momentkh）", srcH: "来源与限制", src1: "农历日期、斋日和节日按开源程序库 momentkh 中的传统高棉历法规则计算。", src2: "2026年公共假期：第167号次级法令，由 Andersen Cambodia 公布。", src3: "其他年份的国家纪念日按惯常日期显示，节日为计算所得；每年的官方名单由柬埔寨王国政府确认。", aboutH: "了解高棉日历", aboutP: "日历每个部分的指南：佛教斋日、节日、月相日、年份和闰月。", lunarHead: "高棉农历日期", pick: "从日历中选择日期", hint: "选择一天，查看它的高棉农历日期、生肖年、Sak 和佛历。", lkAbout: "关于我们", lkPrivacy: "隐私政策", lkTerms: "使用条款", lkContact: "联系我们", aPrev: "上个月", aNext: "下个月", aDate: "选择日期", aDays: "日历日期",
     },
   };
   var EV = {
@@ -107,7 +107,10 @@
   };
   var ORDER = { holiday: 0, national: 1, buddhist: 2, minor: 3 };
   // fixed-date days on the 2026 official list (Sub-Decree No. 167)
-  var FIXED = [[1, 1, "newyearday"], [1, 7, "victory"], [3, 8, "women"], [5, 1, "labour"], [5, 14, "kingbday"], [6, 18, "queenmother"], [9, 24, "constitution"], [10, 15, "kingfather"], [10, 29, "coronation"], [11, 9, "independence"], [12, 29, "peace"]];
+  // [month, day, id, first year it can apply]. Only the 2026 list is confirmed here (VERIFIED); in other years these are
+  // shown on their usual dates and labelled as such, and never before the event they mark (e.g. Peace Day: holiday since 2024).
+  var FIXED = [[1, 1, "newyearday", 0], [1, 7, "victory", 1980], [3, 8, "women", 0], [5, 1, "labour", 0], [5, 14, "kingbday", 2005], [6, 18, "queenmother", 2005], [9, 24, "constitution", 1993], [10, 15, "kingfather", 2013], [10, 29, "coronation", 2005], [11, 9, "independence", 1953], [12, 29, "peace", 2024]];
+  var VERIFIED = [2026];   // years whose official public-holiday list (sub-decree) this page was checked against
 
   function west(t) { return String(t).replace(/[០-៩]/g, function (c) { return String(c.charCodeAt(0) - 0x17E0); }); }
   function ord(n) { var s = ["th", "st", "nd", "rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
@@ -123,7 +126,7 @@
   function eventsOf(y) {
     if (yearCache[y]) return yearCache[y];
     var E = {}, add = function (t, id) { var k = keyOf(t); (E[k] = E[k] || []).push(id); };
-    FIXED.forEach(function (f) { add(Date.UTC(y, f[0] - 1, f[1]), f[2]); });
+    FIXED.forEach(function (f) { if (y >= f[3]) add(Date.UTC(y, f[0] - 1, f[1]), f[2]); });
     var ny = KM.getNewYear(y);
     if (ny) { var t0 = Date.UTC(y, ny.month - 1, ny.day), s0 = kh(t0).khmer.sak; for (var i = 0; i < 5; i++) { add(t0 + i * DAY, "newyear"); if (kh(t0 + i * DAY).khmer.sak !== s0) break; } }
     for (var t = Date.UTC(y, 0, 1); t < Date.UTC(y + 1, 0, 1); t += DAY) {
@@ -186,7 +189,7 @@
     var map = { detailsTitle: "details", gregorianLabel: "greg", lunarTitle: "lunar", accuracyNote: "note", eventsTitle: "events", eventsText: "eventsText", upcomingTitle: "upcoming" };
     Object.keys(map).forEach(function (id) { if ($(id)) $(id).textContent = w[map[id]]; });
     var kt = document.querySelector(".khmer-title"); if (kt) kt.hidden = true;   // the h1 itself carries the title in every language
-    ["aboutH", "aboutP", "lunarHead", "lkAbout", "lkPrivacy", "lkContact"].forEach(function (id) { if ($(id) && w[id]) $(id).textContent = w[id]; });
+    ["aboutH", "aboutP", "lunarHead", "lkAbout", "lkPrivacy", "lkTerms", "lkContact", "srcH", "src1", "src2", "src3"].forEach(function (id) { if ($(id) && w[id]) $(id).textContent = w[id]; });
     if ($("prev")) $("prev").setAttribute("aria-label", w.aPrev); if ($("next")) $("next").setAttribute("aria-label", w.aNext);
     if ($("dateJump")) $("dateJump").setAttribute("aria-label", w.aDate); if ($("days")) $("days").setAttribute("aria-label", w.aDays);
     $("todayBtn").textContent = w.today; $("jumpLabel").textContent = w.jump;
@@ -231,6 +234,8 @@
     rows[2].querySelector(".info-icon").textContent = AEMO[k.animalYear];
     rows[2].querySelectorAll("span")[1].textContent = w.rowYear;
     rows[2].querySelector("strong").textContent = yearLine(t);
+    var yy = new Date(t).getUTCFullYear();
+    if ($("eventsText")) $("eventsText").textContent = w.eventsText + " " + (VERIFIED.indexOf(yy) > -1 ? w.verified : w.unverified).split("{y}").join(yy);
     // the next five holidays and Buddhist days from the selected date
     var up = [], seen = {}, s = t;
     for (var i = 0; i < 400 && up.length < 6; i++, s += DAY) eventsOn(s).forEach(function (e) { if (EV[e].k !== "minor" && !seen[e + new Date(s).getUTCFullYear()] && up.length < 6) { seen[e + new Date(s).getUTCFullYear()] = 1; up.push([s, e]); } });

@@ -120,7 +120,7 @@ function prerenderPageText(out, lang) {
     const W = KC_W[lang], noIcon = (x) => String(x).replace(/^[\p{Extended_Pictographic}\p{Regional_Indicator}\uFE0F\u200D]+\s+/u, "");
     const ids = { eyebrow: "eyebrow", title: "title", intro: "intro", f1: "f1", f1d: "f1d", f2: "f2", f2d: "f2d", f3: "f3", f3d: "f3d", f4: "f4", f4d: "f4d", f5: "f5", f5d: "f5d",
       detailsTitle: "details", gregorianLabel: "greg", lunarTitle: "lunar", accuracyNote: "note", eventsTitle: "events", eventsText: "eventsText", upcomingTitle: "upcoming",
-      todayBtn: "today", jumpLabel: "jump", footerData: "footer", aboutH: "aboutH", aboutP: "aboutP", lunarHead: "lunarHead", weekday: "pick", lunarText: "hint", lkAbout: "lkAbout", lkPrivacy: "lkPrivacy", lkContact: "lkContact" };
+      todayBtn: "today", jumpLabel: "jump", footerData: "footer", aboutH: "aboutH", aboutP: "aboutP", lunarHead: "lunarHead", weekday: "pick", lunarText: "hint", lkAbout: "lkAbout", lkPrivacy: "lkPrivacy", lkTerms: "lkTerms", lkContact: "lkContact", srcH: "srcH", src1: "src1", src2: "src2", src3: "src3" };
     for (const [id, k] of Object.entries(ids)) {
       if (W[k] === undefined) continue;
       out = out.replace(new RegExp(`(<([a-z0-9]+)\\b[^>]*\\bid="${id}"[^>]*>)([^<]*)(</\\2>)`), (m, a, tag, t, b) => a + escH(/^f\d$/.test(k) ? noIcon(W[k]) : W[k]) + b);
@@ -218,6 +218,7 @@ function hasOwnText(out, lang) {
 }
 
 function variant(html, lang, p, langs = LANGS) {
+  if (p === "/404") langs = [];   // the not-found page: no alternates, and no saved-language redirect (it is shown at any address)
   // 1. drop the other languages' blocks (in Chinese an English block stays where there is no Chinese block next to it)
   const blocks = findBlocks(html).filter((b) => !b.parent);
   const remove = [];
@@ -264,12 +265,17 @@ function variant(html, lang, p, langs = LANGS) {
   out = out.replace(/\s*<link rel="alternate" hreflang="[^"]*" href="[^"]*">/g, "");
   const alts = langs.map((l) => `<link rel="alternate" hreflang="${HREFLANG[l]}" href="${urlFor(p, l)}">`).join("\n") +
     `\n<link rel="alternate" hreflang="x-default" href="${urlFor(p, "en")}">`;
-  out = out.replace(/(<link rel="canonical" href="[^"]*">)/, `$1\n${alts}`);
-  if (!/hreflang="x-default"/.test(out)) out = out.replace(/<\/head>/i, `${alts}\n</head>`);
+  if (langs.length) {
+    out = out.replace(/(<link rel="canonical" href="[^"]*">)/, `$1\n${alts}`);
+    if (!/hreflang="x-default"/.test(out)) out = out.replace(/<\/head>/i, `${alts}\n</head>`);
+  }
   if (lang !== "en") out = out.replace(/<meta property="og:locale" content="[^"]*">/, `<meta property="og:locale" content="${lang === "km" ? "km_KH" : "zh_CN"}">`);
 
   // 2b. title and description in this page's language
   out = setMeta(out, lang, p);
+  // 2c. structured data is written in English (headline, FAQ text, English URL); it must match the visible page, so the
+  //     Khmer and Chinese versions carry none rather than English markup
+  if (lang !== "en") out = out.replace(/\s*<script type="application\/ld\+json">[\s\S]*?<\/script>/g, "");
 
   // 3b. empty "Ad space" placeholder boxes (hidden by CSS, but still text in the HTML) are left out of the published pages
   out = out.replace(/\s*<div class="ad-slot[^"]*"[^>]*>[^<]*<\/div>/g, "");

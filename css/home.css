@@ -296,3 +296,4 @@ html[lang="km"] .hm-bc h3 { line-height: 1.6; }
 .hm-fc > .hm-status { align-self: flex-start; }
 .hm-fc > .hm-fc-more { margin-top: auto; padding-top: 4px; align-self: flex-start; }
 html[lang="km"] .hm-tag { font-family: "Kantumruy Pro", "Noto Sans Khmer", sans-serif; letter-spacing: 0; text-transform: none; font-size: .78rem; }
+.hm-tz { font-size: .78rem; color: #b9b0de; font-weight: 400; }

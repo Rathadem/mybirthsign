@@ -716,7 +716,7 @@ const UI_STRINGS = {
     blog_link: "Read more about zodiac compatibility, yearly forecasts, and the five elements →",
 
     footer_about: "About",
-    footer_privacy: "Privacy Policy",
+    footer_privacy: "Privacy Policy", footer_terms: "Terms of Use",
     footer_contact: "Contact",
     footer_copyright: "© 2026 MyBirthSign. For entertainment purposes only.",
 
@@ -1051,7 +1051,7 @@ const UI_STRINGS = {
     blog_link: "អានបន្ថែមអំពីភាពសមស្របនិមិត្តសញ្ញា ទស្សន៍ទាយប្រចាំឆ្នាំ និងធាតុទាំងប្រាំ →",
 
     footer_about: "អំពីយើង",
-    footer_privacy: "គោលការណ៍ឯកជនភាព",
+    footer_privacy: "គោលការណ៍ឯកជនភាព", footer_terms: "លក្ខខណ្ឌប្រើប្រាស់",
     footer_contact: "ទាក់ទង",
     footer_copyright: "© 2026 MyBirthSign។ សម្រាប់តែការកម្សាន្តប៉ុណ្ណោះ។",
 
@@ -1378,7 +1378,7 @@ const UI_STRINGS = {
     blog_heading: "博客文章",
     blog_link: "阅读更多关于生肖配对、年度运势和五行的文章 →",
     footer_about: "关于我们",
-    footer_privacy: "隐私政策",
+    footer_privacy: "隐私政策", footer_terms: "使用条款",
     footer_contact: "联系我们",
     footer_copyright: "© 2026 MyBirthSign。仅供娱乐。",
     result_born: "出生",
@@ -1448,7 +1448,7 @@ const PAGE_LANG = (function () {
 })();
 // languages this page exists in (the build lists them only when one is missing, e.g. a page with no Chinese version)
 const PAGE_LANGS = (function () {
-  try { const v = document.documentElement.getAttribute("data-site-langs"); return v ? v.split(/\s+/) : SITE_LANGS; } catch (e) { return SITE_LANGS; }
+  try { const el = document.documentElement; return el.hasAttribute("data-site-langs") ? el.getAttribute("data-site-langs").split(/\s+/).filter(Boolean) : SITE_LANGS; } catch (e) { return SITE_LANGS; }
 })();
 /** this page's address in another language, e.g. /km/blog/x for /blog/x (query and #hash kept, ?lang dropped) */
 function langUrl(lang) {

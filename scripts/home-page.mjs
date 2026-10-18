@@ -63,6 +63,8 @@ const tierOf = (a, d) => a === d ? "great" : TRIANGLES.some((t) => t.includes(a)
 const phnom = () => { const p = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()).split("-").map(Number); return p; };
 const [TY, TM, TD] = phnom();
 const TODAY_ANIMAL = dayAnimal(TY, TM, TD);
+const digitRoot = (y, m, d) => { let n = String(m) + String(d) + String(y); while (n.length > 1) n = String([...n].reduce((a, c) => a + +c, 0)); return n; };   // same rule as js/app.js
+const TODAY_NUMBER = digitRoot(TY, TM, TD);
 
 const sk = (d) => `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
 const ICON = {
@@ -118,7 +120,7 @@ const UI = {
     crossH1: "Planning Your Wedding?", crossP1: "Explore traditionally favorable wedding months based on both zodiac signs.", crossB1: "Wedding Date Picker →",
     crossH2: "Choosing a Business Partner?", crossP2: "Compare two birth dates using traditional Chinese zodiac compatibility.", crossB2: "Business Partner Match →",
     blogH: "From the MyBirthSign Blog", blogP: "Guides to the Chinese zodiac, the Khmer calendar and Cambodian traditions.", blogB: "Read More →", blogAll: "View All Articles →", guideB: "Read guide →", dailyH: "Recent Daily Fortunes", prev: "Previous articles", next: "Next articles",
-    tdTag: "Updated Today", tdCat: "Daily Fortune", tdP: "Discover your luck, opportunities, and advice for today. See how the 12 zodiac signs are influenced in love, career, money, and relationships.", tdRead: "3 min read", tdBtn: "Read Today's Fortune →", tdAlt: (a) => `Illustration of the ${a}, today's luckiest Chinese zodiac sign`, gridP: "Tap any card to see that animal's years and profile.", yearOf: (a) => `Year of the ${a} →`,
+    tdTag: "Updated Today", tdLatest: "Latest", tdCat: "Daily Fortune", tdP: "Discover your luck, opportunities, and advice for today. See how the 12 zodiac signs are influenced in love, career, money, and relationships.", tdRead: "3 min read", tdBtn: "Read Today's Fortune →", tdAlt: (a) => `Illustration of the ${a}, today's luckiest Chinese zodiac sign`, gridP: "Tap any card to see that animal's years and profile.", yearOf: (a) => `Year of the ${a} →`,
     blogDesc: "Today's Chinese zodiac fortune for all 12 animals, with the best signs of the day and signs needing extra care.", blogTitle: (d) => `Chinese Zodiac Daily Fortune — ${d}`,
     finalH: "Your Journey with the Stars", finalP: "Explore the wisdom of the Chinese zodiac and discover more about love, career, compatibility, and harmony.", finalB: "Start Your Zodiac Journey →",
   },
@@ -150,7 +152,7 @@ const UI = {
     crossH1: "正在筹备婚礼？", crossP1: "根据双方生肖，查看传统上适合结婚的月份。", crossB1: "结婚吉月挑选 →",
     crossH2: "正在选择合作伙伴？", crossP2: "用传统中国生肖配对比较两个出生日期。", crossB2: "合作伙伴配对 →",
     blogH: "MyBirthSign 博客", blogP: "关于中国生肖、高棉历法和柬埔寨传统的指南。", blogB: "阅读更多 →", blogAll: "查看全部文章 →", guideB: "阅读指南 →", dailyH: "近期每日运势", prev: "上一篇", next: "下一篇",
-    tdTag: "今日更新", tdCat: "每日运势", tdP: "了解你今天的运气、机会和建议。看看十二生肖今天在爱情、事业、财运和人际关系方面受到怎样的影响。", tdRead: "阅读约3分钟", tdBtn: "阅读今日运势 →", tdAlt: () => "今日最幸运生肖插图", gridP: "点按任意卡片，查看该生肖的年份和介绍。", yearOf: (a) => `${a}年 →`,
+    tdTag: "今日更新", tdLatest: "最新", tdCat: "每日运势", tdP: "了解你今天的运气、机会和建议。看看十二生肖今天在爱情、事业、财运和人际关系方面受到怎样的影响。", tdRead: "阅读约3分钟", tdBtn: "阅读今日运势 →", tdAlt: () => "今日最幸运生肖插图", gridP: "点按任意卡片，查看该生肖的年份和介绍。", yearOf: (a) => `${a}年 →`,
     blogDesc: "十二生肖今日运势，包括今天最旺的生肖和需要多加小心的生肖。", blogTitle: (d) => `生肖每日运势 — ${d}`,
     finalH: "与星辰同行", finalP: "探索中国生肖的智慧，进一步了解爱情、事业、配对与和谐。", finalB: "开始你的生肖之旅 →",
   },
@@ -182,7 +184,7 @@ const UI = {
     crossH1: "កំពុងរៀបចំពិធីមង្គលការ?", crossP1: "ស្វែងរកខែមង្គលតាមប្រពៃណី ដោយផ្អែកលើរាសីទាំងពីរ។", crossB1: "ជ្រើសរើសថ្ងៃរៀបការ →",
     crossH2: "កំពុងជ្រើសរើសដៃគូអាជីវកម្ម?", crossP2: "ប្រៀបធៀបថ្ងៃកំណើតពីរ តាមភាពត្រូវគ្នានៃរាសីតាមប្រពៃណី។", crossB2: "ភាពសមស្រប​ដៃគូអាជីវកម្ម →",
     blogH: "ពីប្លុករបស់ MyBirthSign", blogP: "មគ្គុទ្ទេសក៍អំពីរាសីចិន ប្រតិទិនខ្មែរ និងប្រពៃណីកម្ពុជា។", blogB: "អានបន្ថែម →", blogAll: "មើលអត្ថបទទាំងអស់ →", guideB: "អានមគ្គុទ្ទេសក៍ →", dailyH: "ជោគជតារាសីប្រចាំថ្ងៃថ្មីៗ", prev: "អត្ថបទមុន", next: "អត្ថបទបន្ទាប់",
-    tdTag: "ធ្វើបច្ចុប្បន្នភាពថ្ងៃនេះ", tdCat: "សំណាងប្រចាំថ្ងៃ", tdP: "ស្វែងយល់អំពីសំណាង ឱកាស និងដំបូន្មានសម្រាប់ថ្ងៃនេះ។ មើលថាសត្វរាសីទាំង 12 ត្រូវបានជះឥទ្ធិពលយ៉ាងណាលើស្នេហា មុខរបរ ប្រាក់កាស និងទំនាក់ទំនង។", tdRead: "អានប្រហែល 3 នាទី", tdBtn: "អានជោគជតាថ្ងៃនេះ →", tdAlt: (a) => `រូបឆ្នាំ${a} សត្វរាសីដែលមានសំណាងបំផុតថ្ងៃនេះ`, gridP: "ចុចលើកាតណាមួយ ដើម្បីមើលឆ្នាំ និងព័ត៌មានរបស់សត្វនោះ។", yearOf: (a) => `ឆ្នាំ${a} →`,
+    tdTag: "ធ្វើបច្ចុប្បន្នភាពថ្ងៃនេះ", tdLatest: "ថ្មីបំផុត", tdCat: "សំណាងប្រចាំថ្ងៃ", tdP: "ស្វែងយល់អំពីសំណាង ឱកាស និងដំបូន្មានសម្រាប់ថ្ងៃនេះ។ មើលថាសត្វរាសីទាំង 12 ត្រូវបានជះឥទ្ធិពលយ៉ាងណាលើស្នេហា មុខរបរ ប្រាក់កាស និងទំនាក់ទំនង។", tdRead: "អានប្រហែល 3 នាទី", tdBtn: "អានជោគជតាថ្ងៃនេះ →", tdAlt: (a) => `រូបឆ្នាំ${a} សត្វរាសីដែលមានសំណាងបំផុតថ្ងៃនេះ`, gridP: "ចុចលើកាតណាមួយ ដើម្បីមើលឆ្នាំ និងព័ត៌មានរបស់សត្វនោះ។", yearOf: (a) => `ឆ្នាំ${a} →`,
     blogDesc: "ជោគជតារាសីថ្ងៃនេះសម្រាប់សត្វទាំង 12 រួមទាំងសត្វដែលសំណាងល្អបំផុត និងសត្វដែលត្រូវប្រុងប្រយ័ត្ន។", blogTitle: (d) => `ជោគជតារាសីប្រចាំថ្ងៃ — ${d}`,
     finalH: "ដំណើររបស់អ្នកជាមួយផ្កាយ", finalP: "ស្វែងយល់ប្រាជ្ញារាសី ហើយស្គាល់បន្ថែមអំពីស្នេហា អាជីព ភាពត្រូវគ្នា និងសុខដុមរមនា។", finalB: "ចាប់ផ្តើមដំណើររាសីរបស់អ្នក →",
   },
@@ -222,7 +224,7 @@ function body(lang) {
     <div class="an-hero-text">
       <p class="fx-eyebrow">${esc(u.eyebrow)}</p>
       <h1 id="${ID("h1")}"><strong>${esc(u.h1)}</strong></h1>
-      <p class="hm-strip hm-strip-top"><span>${km ? "ថ្ងៃនេះ" : zh ? "今天" : "Today"}${zh ? "：" : ": "}<strong data-hm-today data-lang="${lang}">${fmtDate(TY, TM, TD, lang)}</strong></span><span>${km ? "លេខថ្ងៃនេះ" : zh ? "今日数字" : "Today's Number"}${zh ? "：" : ": "}<strong data-today-number>—</strong></span></p>
+      <p class="hm-strip hm-strip-top"><span>${km ? "ថ្ងៃនេះ" : zh ? "今天" : "Today"}${zh ? "：" : ": "}<strong data-hm-today data-lang="${lang}">${fmtDate(TY, TM, TD, lang)}</strong> <small class="hm-tz">${km ? "(ម៉ោងកម្ពុជា)" : zh ? "（柬埔寨时间）" : "(Cambodia time)"}</small></span><span>${km ? "លេខថ្ងៃនេះ" : zh ? "今日数字" : "Today's Number"}${zh ? "：" : ": "}<strong data-today-number>${TODAY_NUMBER}</strong></span></p>
       <p class="fx-sub">${esc(u.sub)}</p>
       <div class="pf-cta-row"><a class="fx-btn" href="/checker">${esc(u.btnFind)}</a><a class="fx-btn fx-btn-rose" href="/compatibility">${esc(u.btnCompat)}</a></div>
       <ul class="hm-benefits">${u.benefits.map(([i, t]) => `<li><span class="hm-bi">${ICON[i]}</span><span>${esc(t)}</span></li>`).join("")}</ul>
@@ -276,10 +278,10 @@ ${blogSlider(lang)}
     <a class="hm-today" href="${latestPost.file}" data-hm-fulllink>
       <span class="hm-today-art"><img src="images/zodiac/${slug(lpAnimal)}.webp" data-hm-today-img data-lang="${lang}" alt="${esc(u.tdAlt(nm(lpAnimal, lang)))}" width="360" height="544" loading="lazy" decoding="async"></span>
       <span class="hm-today-body">
-        <span class="hm-tags"><span class="hm-tag hm-tag-new">${esc(u.tdTag)}</span><span class="hm-tag hm-tag-cat">${esc(u.tdCat)}</span></span>
+        <span class="hm-tags"><span class="hm-tag hm-tag-new" data-hm-today-tag data-lang="${lang}">${esc(lp && (lp.y !== TY || lp.m !== TM || lp.d !== TD) ? u.tdLatest : u.tdTag)}</span><span class="hm-tag hm-tag-cat">${esc(u.tdCat)}</span></span>
         <h2 id="${ID("fo")}">${esc(u.todayH)}</h2>
         <span class="hm-today-p">${esc(u.tdP)}</span>
-        <span class="hm-today-meta"><span data-hm-today-long data-lang="${lang}">${esc(longDate(TY, TM, TD, lang))}</span><span>${esc(u.tdRead)}</span></span>
+        <span class="hm-today-meta"><span data-hm-post-date data-lang="${lang}">${esc(lp ? longDate(lp.y, lp.m, lp.d, lang) : longDate(TY, TM, TD, lang))}</span><span>${esc(u.tdRead)}</span></span>
         <span class="hm-today-btn">${esc(u.tdBtn)}</span>
       </span>
     </a>
@@ -377,10 +379,10 @@ ${posts.map(postCard).join("\n")}
 function footer(lang) {
   const km = lang === "km";
   const L = lang === "zh"
-    ? { blurb: "了解你的中国生肖，探索关于性格、配对、幸运象征等的传统解读。", explore: "探索", res: "资源", legal: "法律", links: [["/checker", "生肖查询"], ["/animals", "十二生肖"], ["/compatibility", "生肖配对"], ["/wedding-date", "结婚吉日"], ["/business-partner", "合作伙伴"], ["/zodiac-guide", "生肖指南"]], res2: [["/blog", "博客"], ["/about", "关于我们"], ["/contact", "联系我们"]], legal2: [["/privacy", "隐私政策"]], note: "仅供娱乐与自我反思。中国生肖解读属于传统与文化，并未经过科学证实。" }
+    ? { blurb: "了解你的中国生肖，探索关于性格、配对、幸运象征等的传统解读。", explore: "探索", res: "资源", legal: "法律", links: [["/checker", "生肖查询"], ["/animals", "十二生肖"], ["/compatibility", "生肖配对"], ["/wedding-date", "结婚吉日"], ["/business-partner", "合作伙伴"], ["/zodiac-guide", "生肖指南"]], res2: [["/blog", "博客"], ["/about", "关于我们"], ["/contact", "联系我们"]], legal2: [["/privacy", "隐私政策"], ["/terms", "使用条款"]], note: "仅供娱乐与自我反思。中国生肖解读属于传统与文化，并未经过科学证实。" }
     : km
-    ? { blurb: "ស្វែងយល់រាសីរបស់អ្នក និងអានការបកស្រាយតាមប្រពៃណីអំពីបុគ្គលិកលក្ខណៈ ភាពត្រូវគ្នា សំណាង និងច្រើនទៀត។", explore: "ស្វែងយល់", res: "ធនធាន", legal: "ច្បាប់", links: [["/checker", "ពិនិត្យរាសី"], ["/animals", "សត្វរាសី"], ["/compatibility", "ភាពត្រូវគ្នា"], ["/wedding-date", "ថ្ងៃរៀបការ"], ["/business-partner", "ដៃគូអាជីវកម្ម"], ["/zodiac-guide", "មគ្គុទ្ទេសក៍រាសី"]], res2: [["/blog", "ប្លុក"], ["/about", "អំពីយើង"], ["/contact", "ទំនាក់ទំនង"]], legal2: [["/privacy", "គោលការណ៍ឯកជនភាព"]], note: "សម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ។ ការបកស្រាយរាសីគឺជាប្រពៃណី និងវប្បធម៌ មិនត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រទេ។" }
-    : { blurb: "Discover your Chinese zodiac and explore traditional insights into personality, compatibility, lucky signs and more.", explore: "Explore", res: "Resources", legal: "Legal", links: [["/checker", "Checker"], ["/animals", "Animals"], ["/compatibility", "Compatibility"], ["/wedding-date", "Wedding Date"], ["/business-partner", "Business Partner"], ["/zodiac-guide", "Zodiac Guide"]], res2: [["/blog", "Blog"], ["/about", "About"], ["/contact", "Contact"]], legal2: [["/privacy", "Privacy Policy"]], note: "For entertainment and self-reflection only. Chinese zodiac interpretations are traditional/cultural and are not scientifically proven." };
+    ? { blurb: "ស្វែងយល់រាសីរបស់អ្នក និងអានការបកស្រាយតាមប្រពៃណីអំពីបុគ្គលិកលក្ខណៈ ភាពត្រូវគ្នា សំណាង និងច្រើនទៀត។", explore: "ស្វែងយល់", res: "ធនធាន", legal: "ច្បាប់", links: [["/checker", "ពិនិត្យរាសី"], ["/animals", "សត្វរាសី"], ["/compatibility", "ភាពត្រូវគ្នា"], ["/wedding-date", "ថ្ងៃរៀបការ"], ["/business-partner", "ដៃគូអាជីវកម្ម"], ["/zodiac-guide", "មគ្គុទ្ទេសក៍រាសី"]], res2: [["/blog", "ប្លុក"], ["/about", "អំពីយើង"], ["/contact", "ទំនាក់ទំនង"]], legal2: [["/privacy", "គោលការណ៍ឯកជនភាព"], ["/terms", "លក្ខខណ្ឌប្រើប្រាស់"]], note: "សម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ។ ការបកស្រាយរាសីគឺជាប្រពៃណី និងវប្បធម៌ មិនត្រូវបានបញ្ជាក់ដោយវិទ្យាសាស្ត្រទេ។" }
+    : { blurb: "Discover your Chinese zodiac and explore traditional insights into personality, compatibility, lucky signs and more.", explore: "Explore", res: "Resources", legal: "Legal", links: [["/checker", "Checker"], ["/animals", "Animals"], ["/compatibility", "Compatibility"], ["/wedding-date", "Wedding Date"], ["/business-partner", "Business Partner"], ["/zodiac-guide", "Zodiac Guide"]], res2: [["/blog", "Blog"], ["/about", "About"], ["/contact", "Contact"]], legal2: [["/privacy", "Privacy Policy"], ["/terms", "Terms of Use"]], note: "For entertainment and self-reflection only. Chinese zodiac interpretations are traditional/cultural and are not scientifically proven." };
   const col = (h, ls) => `<nav aria-label="${esc(h)}"><h2>${esc(h)}</h2><ul>${ls.map(([h2, t]) => `<li><a href="${h2}">${esc(t)}</a></li>`).join("")}</ul></nav>`;
   return `<div class="hm-foot-in"><div class="hm-foot-brand"><p class="hm-foot-logo">MyBirthSign</p><p>${esc(L.blurb)}</p></div>${col(L.explore, L.links)}${col(L.res, L.res2)}${col(L.legal, L.legal2)}</div><p class="hm-foot-note">&copy; 2026 MyBirthSign — ${esc(L.note)}</p>`;
 }
@@ -440,7 +442,7 @@ function kd(n){return String(n).replace(/\\d/g,function(c){return KD[c];});}
 function fdt(lang){return lang==="km"?"ថ្ងៃទី"+kd(p[2])+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+kd(p[0]):lang==="zh"?p[0]+"年"+p[1]+"月"+p[2]+"日":ENM[p[1]-1]+" "+p[2]+", "+p[0];}
 var WK=${JSON.stringify(WEEK)},TDALT=${JSON.stringify({ en: "Illustration of the {A}, today's luckiest Chinese zodiac sign", km: "រូបឆ្នាំ{A} សត្វរាសីដែលមានសំណាងបំផុតថ្ងៃនេះ", zh: "今日最幸运生肖插图" })};
 function ldt(lang){var w=WK[lang]||WK.en,d=w[new Date(Date.UTC(p[0],p[1]-1,p[2])).getUTCDay()];return lang==="km"?d+" ទី"+p[2]+" ខែ"+KMM[p[1]-1]+" ឆ្នាំ"+p[0]:lang==="zh"?p[0]+"年"+p[1]+"月"+p[2]+"日 "+d:d+", "+ENM[p[1]-1]+" "+p[2]+", "+p[0];}
-function setDate(){document.querySelectorAll("[data-hm-today]").forEach(function(el){el.textContent=fdt(el.getAttribute("data-lang"));});document.querySelectorAll("[data-hm-today-long]").forEach(function(el){el.textContent=ldt(el.getAttribute("data-lang"));});}
+function setDate(){document.querySelectorAll("[data-hm-today]").forEach(function(el){el.textContent=fdt(el.getAttribute("data-lang"));});}
 setDate();document.addEventListener("DOMContentLoaded",setDate);window.addEventListener("load",setDate);document.querySelectorAll("[data-lang-switch]").forEach(function(a){a.addEventListener("click",function(){setTimeout(setDate,0);});});
 // daily data (rules + Claude wording): when today's record exists, each card shows that sign's
 // advice for today and its lucky number & color. If it is missing or old, the cards stay as above.
@@ -471,7 +473,9 @@ document.querySelectorAll("[data-hm-share]").forEach(function(el){
     text:LK[lang].t.split("{D}").join(n(top[0])).replace("{P}",n(top[1])).replace("{Q}",n(top[2]))}));});
 // point "full fortune" (and the lucky-today share link) at today's post when it exists, otherwise keep the latest published one
 var ds=p[0]+"-"+String(p[1]).padStart(2,"0")+"-"+String(p[2]).padStart(2,"0"),u="blog/daily-fortune-"+ds+".html";
-if(window.fetch){fetch(u,{method:"HEAD"}).then(function(r){if(r.ok){document.querySelectorAll("[data-hm-today-img]").forEach(function(im){var lg=im.getAttribute("data-lang"),nmA=lg==="km"?KMN[day]:lg==="zh"?ZHN[day]:day;im.setAttribute("src","images/zodiac/"+day.toLowerCase()+".webp");im.setAttribute("alt",TDALT[lg].replace("{A}",nmA));});document.querySelectorAll("[data-hm-fulllink]").forEach(function(a){a.setAttribute("href",u);});document.querySelectorAll("[data-hm-share]").forEach(function(el){el.setAttribute("data-share-url","/"+u);});}}).catch(function(){});}
+var TAGS=${JSON.stringify({ en: [UI.en.tdTag, UI.en.tdLatest], km: [UI.km.tdTag, UI.km.tdLatest], zh: [UI.zh.tdTag, UI.zh.tdLatest] })};
+if(window.fetch){fetch(u,{method:"HEAD"}).then(function(r){if(r.ok){document.querySelectorAll("[data-hm-post-date]").forEach(function(el){el.textContent=ldt(el.getAttribute("data-lang"));});document.querySelectorAll("[data-hm-today-tag]").forEach(function(el){el.textContent=TAGS[el.getAttribute("data-lang")][0];});document.querySelectorAll("[data-hm-today-img]").forEach(function(im){var lg=im.getAttribute("data-lang"),nmA=lg==="km"?KMN[day]:lg==="zh"?ZHN[day]:day;im.setAttribute("src","images/zodiac/"+day.toLowerCase()+".webp");im.setAttribute("alt",TDALT[lg].replace("{A}",nmA));});document.querySelectorAll("[data-hm-fulllink]").forEach(function(a){a.setAttribute("href",u);});document.querySelectorAll("[data-hm-share]").forEach(function(el){el.setAttribute("data-share-url","/"+u);});}
+  else if(r.status===404){document.querySelectorAll("[data-hm-today-tag]").forEach(function(el){el.textContent=TAGS[el.getAttribute("data-lang")][1];});}}).catch(function(){});}
 // whole fortune card opens that animal's "Year of the …" page (the name and the link at the bottom stay real links)
 document.querySelectorAll("[data-hm-card]").forEach(function(li){var a=li.querySelector(".hm-fc-name");if(!a)return;li.classList.add("hm-fc-link");
   li.addEventListener("click",function(e){if(e.target.closest("a,button,input,select,textarea"))return;var s=window.getSelection&&String(window.getSelection());if(s)return;if(e.ctrlKey||e.metaKey||e.shiftKey)window.open(a.href,"_blank");else location.href=a.href;});});
@@ -481,6 +485,10 @@ document.querySelectorAll("[data-hm-slider]").forEach(function(sl){var tr=sl.que
   function upd(){var mx=tr.scrollWidth-tr.clientWidth-2;bt[0].disabled=tr.scrollLeft<=2;bt[1].disabled=tr.scrollLeft>=mx;}
   bt.forEach(function(b){b.addEventListener("click",function(){tr.scrollBy({left:step()*Number(b.getAttribute("data-hm-sl")),behavior:"smooth"});});});
   tr.addEventListener("scroll",function(){window.requestAnimationFrame(upd);},{passive:true});window.addEventListener("resize",upd);upd();setTimeout(upd,600);});
+// the page belongs to one Cambodian day: when that day is over (tab left open past midnight), load the new day
+function dayKey(){var q=pp();return q.join("-");}var loadedDay=dayKey();
+function checkDay(){if(dayKey()!==loadedDay)window.location.reload();}
+document.addEventListener("visibilitychange",function(){if(!document.hidden)checkDay();});window.addEventListener("focus",checkDay);setInterval(checkDay,60000);
 // "Find my sign": the date field is replaced by the site's date picker, so check the value ourselves
 var f=document.getElementById("hm-find-form");
 if(f)f.addEventListener("submit",function(e){var i=document.getElementById("hm-dob");if(!i||!i.value){e.preventDefault();var v=f.querySelector(".dp-input,input[type=text]");if(v)v.focus();}});
