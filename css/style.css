@@ -3697,7 +3697,7 @@ article.post.fe { max-width: 1240px; --fe-c: #e7c27a; }
 html[lang="km"] .fe-eyebrow { letter-spacing: 0; font-size: .95rem; }
 .fe-hero h1 { margin: 0; font-size: clamp(2rem, 5.4vw, 3.6rem); line-height: 1.15; text-wrap: balance;
   background: linear-gradient(180deg, #fff1c8, #e7c27a 55%, #b8862f); -webkit-background-clip: text; background-clip: text; color: transparent !important; text-shadow: none; }
-html[lang="km"] .fe-hero h1 { line-height: 1.5; font-family: "Moul", "Kantumruy Pro", "Noto Sans Khmer", serif; font-weight: 400; font-size: clamp(1.7rem, 4.6vw, 3rem); }
+html[lang="km"] .fe-hero h1 { line-height: 1.7; padding: .12em 0 .34em; margin-bottom: -.22em; font-family: "Moul", "Kantumruy Pro", "Noto Sans Khmer", serif; font-weight: 400; font-size: clamp(1.7rem, 4.6vw, 3rem); }
 .fe-sub { margin: 10px 0 0 !important; color: #fff3d1 !important; font-size: clamp(1.1rem, 2.6vw, 1.6rem); }
 .fe-sub span { color: #e7c27a; font-size: .7em; }
 .fe-lead { max-width: 640px; margin: 10px auto 0 !important; color: #d9d1f2 !important; font-size: 1.02rem; }

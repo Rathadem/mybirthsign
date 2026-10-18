@@ -262,7 +262,7 @@ const UI = {
     example: (n, e, d) => `someone born on ${d(e.before)} is not a ${n}. The ${EX_Y} ${n} year began on ${d(e.start)}, so that birthday still belongs to the ${e.prevElN} ${e.prevN} year that started in ${EX_Y - 1}. Anyone born from ${d(e.start)} to ${d(e.end)} is a ${e.elN} ${n}.`,
     whyH: "Why these matches?",
     why: (n, x) => [
-      `<strong>Good — ${x.best.join(" and ")}.</strong> Same triangle as the ${n} (${x.tri.join(" · ")}), which forms the ${x.frameEl} frame (${x.frameCh}).`,
+      `<strong>Good — ${x.best.join(" and ")}.</strong> Same triangle as the ${n} (${x.tri.join(" · ")}), the triangle traditionally linked with ${x.frameEl}.`,
       `<strong>Supportive — ${x.support.join(", ")}.</strong> The ${n}'s one “six harmony” partner.`,
       `<strong>Challenging — ${x.clash.join(", ")}.</strong> Directly opposite the ${n} on the wheel (a “clash”), which calls for patience rather than ruling the match out.`,
       `<strong>Neutral — the other ${x.neutral} signs.</strong>`],
@@ -384,8 +384,8 @@ function faqs(lang) {
     [`What are the ${n}'s lucky colors and numbers?`, `In our guide the ${n}'s lucky colors are ${colors.join(", ")} and its lucky numbers are ${info.luckyNumbers.join(", ")}. Sources differ on these lists.`],
     [`Which zodiac animals are compatible with the ${n}?`, `Best matches are ${nmL(best).join(" and ")}, which share the ${n}'s compatibility triangle. ${nmL(support).join(", ")} ${support.length > 1 ? "are" : "is"} also listed as a supportive match in our guide, while ${nmL(clash).join(", ")} can be the most challenging pairing.`],
     [`What element is my ${n} year?`, `It depends on your birth year — ${elList}. Use the Zodiac Checker to confirm yours.`],
-    [`What time of day belongs to the ${n}?`, `The ${n} rules the double hour ${T_.hour}, the ${T_.py} (${T_.branch}) hour. ${T_.en.hour.split(". ")[1] ? T_.en.hour.split(". ")[1].replace(/\.?$/, ".") : ""}`],
-    [`Why is the ${n} ${ordEn(T_.pos)} in the zodiac?`, `The order follows the twelve Earthly Branches, where the ${n} is ${T_.branch} (${T_.py}). The popular explanation is the Great Race folk tale: ${T_.en.race.split(". ")[0].replace(/^In the (best-known version of the )?Great Race folk tale,? /, "").replace(/^\w/, (c) => c.toLowerCase())}.`],
+    [`What time of day belongs to the ${n}?`, `The ${n} rules the double hour ${T_.hour}, the ${T_.py} hour. ${T_.en.hour.split(". ")[1] ? T_.en.hour.split(". ")[1].replace(/\.?$/, ".") : ""}`],
+    [`Why is the ${n} ${ordEn(T_.pos)} in the zodiac?`, `The order follows the twelve Earthly Branches, where the ${n} is ${T_.py}. The popular explanation is the Great Race folk tale: ${T_.en.race.split(". ")[0].replace(/^In the (best-known version of the )?Great Race folk tale,? /, "").replace(/^\w/, (c) => c.toLowerCase())}.`],
     [`What is the ${n}'s fixed element?`, `${T_.el} (${T_.yy}). It is separate from your birth-year element${sameElYears.length ? `, which is also ${T_.el} only in ${sameElYears.join(" and ")}` : ""}.`],
   ];
 }
@@ -407,7 +407,7 @@ function tradition(lang) {
   return `<section class="fx-gframe pf-trad" id="tradition" aria-labelledby="pf-trd-${lang}">
     <h2 id="pf-trd-${lang}">${ICON.star}<span>${esc(t.h(n))}</span></h2>
     <dl class="pf-trad-facts">
-      ${row(t.branch, `<span lang="zh">${T_.branch}</span> <i>${T_.py}</i>`)}${row(t.pos, esc(t.posV(T_.pos)))}${row(t.el, esc(elN(T_.el)))}${row(t.yy, esc(t.yyV[T_.yy]))}
+      ${row(t.branch, lang === "en" ? `<i>${T_.py}</i>` : `<span lang="zh">${T_.branch}</span> <i>${T_.py}</i>`)}${row(t.pos, esc(t.posV(T_.pos)))}${row(t.el, esc(elN(T_.el)))}${row(t.yy, esc(t.yyV[T_.yy]))}
       ${row(t.hour, esc(T_.hour))}${row(t.dir, esc(DIR[lang][T_.dir]))}${row(t.month, esc(t.monthV(T_.month)))}${isKm ? "" : row(t.km, esc(T_.khmer))}
     </dl>
     <div class="pf-trad-text">

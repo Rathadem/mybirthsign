@@ -131,11 +131,13 @@ const RANK = { great: 0, good: 1, ordinary: 2, caution: 3 };
 // and branch = (JDN + 1) % 12 (the same branch rule as dayAnimal above). The rating itself still comes only from tierOf();
 // the element note is extra context and never changes a rating.
 const STEM_CH = "甲乙丙丁戊己庚辛壬癸", BRANCH_CH = "子丑寅卯辰巳午未申酉戌亥";
+const STEM_PY = ["jiǎ", "yǐ", "bǐng", "dīng", "wù", "jǐ", "gēng", "xīn", "rén", "guǐ"], BRANCH_PY = ["zǐ", "chǒu", "yín", "mǎo", "chén", "sì", "wǔ", "wèi", "shēn", "yǒu", "xū", "hài"];
 const STEM_EL = ["Wood", "Wood", "Fire", "Fire", "Earth", "Earth", "Metal", "Metal", "Water", "Water"];
 const FIXED_EL = { Rat: "Water", Ox: "Earth", Tiger: "Wood", Rabbit: "Wood", Dragon: "Earth", Snake: "Fire", Horse: "Fire", Goat: "Earth", Monkey: "Metal", Rooster: "Metal", Dog: "Earth", Pig: "Water" };
 const GEN = { Wood: "Fire", Fire: "Earth", Earth: "Metal", Metal: "Water", Water: "Wood" }, CTRL = { Wood: "Earth", Earth: "Water", Water: "Fire", Fire: "Metal", Metal: "Wood" };
 const FRAME_EL = (a) => ({ Rat: "Water", Dragon: "Water", Monkey: "Water", Ox: "Metal", Snake: "Metal", Rooster: "Metal", Tiger: "Fire", Horse: "Fire", Dog: "Fire", Rabbit: "Wood", Goat: "Wood", Pig: "Wood" })[a];
 const dayStem = (jdn + 9) % 10, dayEl = STEM_EL[dayStem], pillarCh = STEM_CH[dayStem] + BRANCH_CH[(jdn + 1) % 12];
+const pillarPy = STEM_PY[dayStem] + " " + BRANCH_PY[(jdn + 1) % 12];
 const EL_N = { en: { Wood: "Wood", Fire: "Fire", Earth: "Earth", Metal: "Metal", Water: "Water" }, km: { Wood: "ឈើ", Fire: "ភ្លើង", Earth: "ដី", Metal: "លោហៈ", Water: "ទឹក" }, zh: { Wood: "木", Fire: "火", Earth: "土", Metal: "金", Water: "水" } };
 function whyLine(a, lang) {
   const n = nameIn(a, lang), dn = nameIn(dayAnimal, lang), E = EL_N[lang], se = FIXED_EL[a], rel = a === dayAnimal ? "same" : sameTriangle(a, dayAnimal) ? "tri" : isClash(a, dayAnimal) ? "clash" : "none";
@@ -506,7 +508,7 @@ function body(lang) {
     <p class="fx-sub">${t.sub}</p>
     <p class="fx-date">${CAL}<time datetime="${iso}">${esc(dateTxt)}</time><span class="fx-wd">${esc(wd)}</span></p>
     <p class="fx-pill"><span aria-hidden="true">${EMOJI[A]}</span> ${esc(t.dayWord(nm(A)))}</p>
-    <p class="fx-pillar">${isKm ? `សសរថ្ងៃ៖ <span lang="zh">${pillarCh}</span> (${EL_N.km[dayEl]} ${nm(A)})` : isZh ? `日柱：${pillarCh}（${EL_N.zh[dayEl]}${nm(A)}日）` : `Day pillar: <span lang="zh">${pillarCh}</span> (${dayEl} ${A} day)`}</p>
+    <p class="fx-pillar">${isKm ? `សសរថ្ងៃ៖ <span lang="zh">${pillarCh}</span> (${EL_N.km[dayEl]} ${nm(A)})` : isZh ? `日柱：${pillarCh}（${EL_N.zh[dayEl]}${nm(A)}日）` : `Day pillar: ${dayEl} ${A} (${pillarPy})`}</p>
     <div class="fx-chips">
       <p class="fx-chip">${I.great.replace("<svg", '<svg style="color:#f6dc9b"')}<span>${t.favors(esc(favorsList))}</span></p>
       <p class="fx-chip fx-chip-care">${I.caution.replace("<svg", '<svg style="color:#ff8aa5"')}<span>${t.care(esc(careList))}</span></p>

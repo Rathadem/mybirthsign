@@ -115,7 +115,7 @@ export const TRAD = {
   Goat: {
     branch: "未", py: "wèi", pos: 8, el: "Earth", yy: "Yin", hour: "13:00–15:00", month: 6, dir: "SSW", frame: "Wood", khmer: "Momae",
     en: {
-      hour: "The Goat rules the early afternoon, from 1 to 3 p.m. A traditional explanation is that this is a good time for goats to graze, after the heat of noon has passed. The character 未 is also read as the Sheep, which is why English sources use both names.",
+      hour: "The Goat rules the early afternoon, from 1 to 3 p.m. A traditional explanation is that this is a good time for goats to graze, after the heat of noon has passed. Its animal is translated as both Goat and Sheep, which is why English sources use both names.",
       race: "In the Great Race folk tale the Goat did not cross alone but shared a raft with the Monkey and the Rooster, and the three helped each other reach the far bank, arriving eighth, ninth and tenth. The story suits the Goat's gentle, cooperative reputation.",
     },
     km: {
