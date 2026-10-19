@@ -373,14 +373,12 @@ function buildPack(iso, F, forSign, data = null) {
     `ជោគជតារាសីប្រចាំថ្ងៃនេះ ថ្ងៃទី ${D}។`,
     summaryKm,
     `លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2} និង ${n.d3}។`).join(" ")}`,
-    "លេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការណែនាំឱ្យភ្នាល់ទេ។",
     "ចូលមើលលេខសំណាង និងលម្អិតសម្រាប់រាសីទាំង 12 នៅ mybirthsign.com",
   ];
   const voiceEn = [
     `Your Chinese zodiac fortune for ${LD}.`,
     summaryEn,
     `Today's lucky numbers for the lucky signs: ${nums.map((n) => `${n.a}, ${n.d2} and ${n.d3}.`).join(" ")}`,
-    "Lucky numbers are for fun only, not betting advice.",
     "See all 12 signs and full lucky numbers at mybirthsign.com.",
   ];
   const srtKm = srt(voiceKm.flatMap((v) => splitLines(v, "km")));
@@ -408,21 +406,16 @@ function buildPack(iso, F, forSign, data = null) {
       `Born in the Year of the ${day}? Today is your day to shine. Stay ${S9.mood}.`, `អ្នកកើតឆ្នាំ${dayKm} ថ្ងៃនេះជាថ្ងៃរបស់អ្នក! ចូររក្សាចិត្តល្អ និងធ្វើអ្វីៗដោយស្ងប់។`],
     ["Lucky color and lucky time", `The ${dl} lands softly on the temple steps. Glowing ${dd.lucky.color.en} lanterns light up one by one around it, and a shining circle of golden light like a sundial appears on the stone. The ${dl} smiles and touches a ${dd.lucky.color.en} lantern. Warm ${dd.lucky.color.en} and gold light.`,
       `Your lucky color today is ${dd.lucky.color.en}, and your best time is ${sayTime(dd.lucky.time)}.`, `ពណ៌សំណាងថ្ងៃនេះគឺពណ៌${dd.lucky.color.km} ហើយពេលល្អបំផុតគឺ${sayTimeKm(dd.lucky.time)}។`],
-    ["Lucky friends arrive", `${cap(looks(friends))} fly in on trails of golden light and land beside the ${dl} on glowing lotus pedestals, matching their reference images. A ring of golden energy bursts outward and lotus flowers bloom across the pond. The friends cheer together. Camera orbits around them.`,
-      `${cap(list(friends.map((a) => `the ${a}`)))} are lucky today too. Good friends bring good fortune!`, `${kmList(friends.map((a) => `ឆ្នាំ${km(a)}`))} ក៏មានសំណាងល្អនៅថ្ងៃនេះដែរ។ មិត្តល្អ នាំមកនូវសំណាងល្អ!`],
-    ["Lucky numbers", `A huge glowing golden wheel rises out of the lotus pond in front of the temple and spins with beams of golden light, then slows to a gentle shining turn. ${cap(list([day, ...friends].map((a) => `the ${a.toLowerCase()}`)))} watch it happily from their lotus pedestals. Open space in the middle and lower part of the frame for number captions. Slow push-in.`,
-      `Lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Just for fun.`, `លេខសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2}`).join(" ")}! សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។`],
-    careful.length
-      ? [`${list(careful)}, take it easy`, `${cap(LOOK[careful[0]])} rests calmly beside the still lotus pond as a soft protective bubble of golden light forms around it. Gentle glowing butterflies circle it and the moon shines calmly on the water. Peaceful and safe, not sad. Slow camera move in.`,
-        `${list(careful)}, take it easy today. Slow down, rest, and don't rush big decisions.`, `ឆ្នាំ${kmList(careful.map(km))} ថ្ងៃនេះគួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់សម្រេចចិត្ត។`]
-      : ["A calm moment", "A still lotus pond at night, pink lotus flowers swaying gently and the full moon shimmering on the water. Slow camera move in.", "Take a calm breath and enjoy the day.", "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
+    ["Lucky direction", `The ${dl} stands on the temple steps as a glowing golden path of light unrolls across the pond toward the ${dd.lucky.direction.en.toLowerCase()}, lotus flowers lighting up one by one along it. The ${dl} looks along the path, smiles and starts walking forward. Camera follows behind it.`, "", ""],
+    ["Lucky numbers", `A huge glowing golden wheel rises out of the lotus pond in front of the temple and spins with beams of golden light, then slows to a gentle shining turn. The ${dl} watches it happily from its lotus pedestal, its golden details sparkling. Open space in the middle and lower part of the frame for number captions. Slow push-in.`, "", ""],
+    ["A wish on the water", `The ${dl} gently places a small glowing lotus lantern on the pond and makes a wish. The lantern drifts away across the moonlit water, and tiny golden sparkles rise from it into the night sky. Peaceful, warm and magical mood. Slow camera move following the lantern.`, "", ""],
     ["Golden ending", `The ${dl} floats gently up toward the full moon, waving goodbye. Golden light beams shoot up from the temple towers and burst into soft lotus-shaped golden fireworks, and hundreds of lanterns rise over the glowing pond. The camera rises and pulls back for a wide, epic view, with open sky at the top for a title.`,
       "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
   ];
   // 90-second voice-over for the 9-scene video (about 10 seconds per scene)
   const KMDAY = ["ថ្ងៃអាទិត្យ", "ថ្ងៃច័ន្ទ", "ថ្ងៃអង្គារ", "ថ្ងៃពុធ", "ថ្ងៃព្រហស្បតិ៍", "ថ្ងៃសុក្រ", "ថ្ងៃសៅរ៍"];
   const wdKm = KMDAY[new Date(iso + "T00:00:00Z").getUTCDay()];
-  const ckm = dd.lucky.color.km, cen = dd.lucky.color.en;
+  const ckm = dd.lucky.color.km, cen = dd.lucky.color.en, n0 = nums[0];
   const vo90 = [
     ["Welcome to MyBirthSign. Tonight the full moon rises over the ancient temple, the lotus flowers glow on the water, and a very special friend is waking up.",
       "សូមស្វាគមន៍មកកាន់ MyBirthSign។ យប់នេះ ព្រះចន្ទពេញវង់រះលើប្រាសាទបុរាណ ផ្កាឈូកភ្លឺចែងចាំងលើផ្ទៃទឹក ហើយមានមិត្តពិសេសម្នាក់កំពុងភ្ញាក់ឡើង។"],
@@ -433,14 +426,12 @@ function buildPack(iso, F, forSign, data = null) {
       `អ្នកកើតឆ្នាំ${dayKm} ថ្ងៃនេះសំណាងរបស់អ្នកខ្លាំងណាស់។ ចូររក្សាចិត្តស្ងប់ ទទួលយកឱកាសល្អៗ និងចែករំលែកភាពរីករាយទៅកាន់មនុស្សជុំវិញខ្លួន។`],
     [`Your lucky color today is ${cen}. Wear it, or carry something ${cen} with you. Your best time is ${sayTime(dd.lucky.time)}, a good moment for important plans.`,
       `ពណ៌សំណាងថ្ងៃនេះគឺពណ៌${ckm}។ ស្លៀកពាក់ ឬយករបស់ពណ៌${ckm}ជាប់ខ្លួន។ ពេលល្អបំផុតគឺ${sayTimeKm(dd.lucky.time)} ជាពេលល្អសម្រាប់ផែនការសំខាន់ៗ។`],
-    [`Your lucky friends today are ${list(friends.map((a) => `the ${a}`))}. They are having a good day too. Spend time together, work together, and let good fortune grow.`,
-      `មិត្តសំណាងរបស់អ្នកថ្ងៃនេះគឺ ${kmList(friends.map((a) => `ឆ្នាំ${km(a)}`))}។ ពួកគេក៏មានថ្ងៃល្អដែរ។ ចំណាយពេលជាមួយគ្នា ធ្វើការជាមួយគ្នា ហើយឲ្យសំណាងល្អកាន់តែកើនឡើង។`],
-    [`Here are today's lucky numbers. ${nums.map((n) => `${n.a}: ${n.d2} and ${n.d3}.`).join(" ")} Lucky numbers are just for fun, not betting advice.`,
-      `នេះគឺជាលេខសំណាងថ្ងៃនេះ។ ${nums.map((n) => `ឆ្នាំ${km(n.a)}៖ ${n.d2} និង ${n.d3}។`).join(" ")} លេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការណែនាំឱ្យភ្នាល់ទេ។`],
-    careful.length
-      ? [`${list(careful)}, today is a day to take it easy. Slow down, rest well, and don't rush big decisions. Calm steps today lead to better days ahead.`,
-        `ឆ្នាំ${kmList(careful.map(km))} ថ្ងៃនេះគួរសម្រាកឲ្យស្រួលខ្លួន។ ធ្វើអ្វីៗយឺតៗ សម្រាកឲ្យបានគ្រប់គ្រាន់ និងកុំប្រញាប់សម្រេចចិត្តរឿងធំៗ។ ជំហានស្ងប់ៗថ្ងៃនេះ នាំទៅរកថ្ងៃល្អៗខាងមុខ។`]
-      : ["Whatever your sign, take a calm breath today. Slow, steady steps lead to better days ahead.", "មិនថាអ្នកកើតឆ្នាំអ្វីទេ ថ្ងៃនេះសូមដកដង្ហើមឲ្យស្ងប់។ ជំហានស្ងប់ៗ នាំទៅរកថ្ងៃល្អៗខាងមុខ។"],
+    [`Your lucky direction today is the ${dd.lucky.direction.en.toLowerCase()}. When you start something new, let it face the ${dd.lucky.direction.en.toLowerCase()}, and walk forward with a calm and happy heart.`,
+      `ទិសសំណាងថ្ងៃនេះគឺទិស${dd.lucky.direction.km}។ ពេលចាប់ផ្ដើមធ្វើអ្វីថ្មី សូមបែរមុខទៅទិស${dd.lucky.direction.km} ហើយដើរទៅមុខដោយចិត្តស្ងប់ និងរីករាយ។`],
+    [`Your lucky numbers today are ${n0.d1}, ${n0.d2} and ${n0.d3}. Keep them in mind, and let them remind you that today is your lucky day.`,
+      `លេខសំណាងរបស់អ្នកថ្ងៃនេះគឺ ${n0.d1}, ${n0.d2} និង ${n0.d3}។ ចងចាំលេខទាំងនេះ ហើយឲ្យវារំលឹកអ្នកថា ថ្ងៃនេះជាថ្ងៃសំណាងរបស់អ្នក។`],
+    ["Make a small wish today and take one kind step toward it. A peaceful heart helps good luck find its way to you.",
+      `សូមធ្វើការប្រាថ្នាតូចមួយនៅថ្ងៃនេះ ហើយបោះជំហានល្អមួយឆ្ពោះទៅរកវា។ ចិត្តស្ងប់ ជួយឲ្យសំណាងល្អរកឃើញផ្លូវមករកអ្នក។`],
     ["That's your Chinese zodiac fortune for today. See all twelve signs and your full lucky numbers at mybirthsign dot com. Follow us for tomorrow's fortune, and have a lucky day!",
       "នេះជាជោគជតារាសីចិនសម្រាប់ថ្ងៃនេះ។ ចូលមើលរាសីទាំង 12 និងលេខសំណាងពេញលេញនៅ mybirthsign.com។ តាមដានយើងសម្រាប់ជោគជតាថ្ងៃស្អែក ហើយសូមឲ្យមានសំណាងល្អ!"],
   ];
@@ -482,7 +473,7 @@ ${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for th
 ${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).label.km}សម្រាប់ឆ្នាំ${dayKm}។ លេខសំណាង៖ ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ)។ មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
 
 ## 9-scene video – luckiest animal (about 90 seconds)
-A longer video about the ${day}, today's luckiest animal: 9 clips of 10 seconds (about 90 seconds). Set the clip length in Flow to 10 seconds. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Add the reference pictures of ${list([...new Set([day, ...lucky, ...careful])])} as ingredients in Flow. Put the clips in order 1 to 9.
+A longer video about the ${day}, today's luckiest animal: 9 clips of 10 seconds (about 90 seconds). Set the clip length in Flow to 10 seconds. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Add the reference picture of the ${day} as an ingredient in Flow. The whole video is about the ${day} only. Put the clips in order 1 to 9.
 
 ${nine.map(([t, prompt], i) => [t, prompt, vo90[i][0], vo90[i][1]]).map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
 
