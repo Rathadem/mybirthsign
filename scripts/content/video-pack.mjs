@@ -1,13 +1,15 @@
-// Daily video prompt pack (Google Flow / Veo + captions + subtitles) for the MyBirthSign Khmer video channel.
+// Daily video prompt pack (Google Flow / Veo + captions + subtitles) for the MyBirthSign video channel.
 //
 //   node scripts/content/video-pack.mjs 2026-10-26            one day
 //   node scripts/content/video-pack.mjs 2026-10-26 7          seven days from that date
 //
-// Writes docs/video-prompts/<date>.md and <date>.srt (docs/ is not published). Everything comes from the same
-// rules the website uses, so it can be made weeks ahead: ratings, lucky signs and the careful sign from
-// computeFacts() in scripts/daily-data-lib.mjs, lucky numbers from js/lucky-digits.js, Khmer animal names
-// and labels from the site's own data. The Khmer voice-over uses a fixed standard script (the site's
-// AI-written daily wording only exists a day ahead).
+// Writes docs/video-prompts/<date>.md, <date>.srt (Khmer subtitles) and <date>.en.srt (English subtitles);
+// docs/ is not published. Everything comes from the same rules the website uses, so it can be made weeks
+// ahead: ratings, lucky signs and the careful sign from computeFacts() in scripts/daily-data-lib.mjs, lucky
+// numbers from js/lucky-digits.js, Khmer names and labels from the site's own data. When the day's data file
+// (data/daily/<date>.json) already exists, its written summary is used for the voice-overs; otherwise a fixed
+// standard script is used (the site's AI-written daily wording is only made a day ahead).
+// Pictures: photorealistic (real animals, real Cambodian temple and lotus-pond settings).
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
@@ -18,38 +20,51 @@ const [start, nDays = "1"] = process.argv.slice(2);
 if (!/^\d{4}-\d{2}-\d{2}$/.test(start || "")) { console.error("Usage: node scripts/content/video-pack.mjs YYYY-MM-DD [days]"); process.exit(1); }
 
 const EMO = { Rat: "🐀", Ox: "🐂", Tiger: "🐯", Rabbit: "🐇", Dragon: "🐉", Snake: "🐍", Horse: "🐎", Goat: "🐐", Monkey: "🐒", Rooster: "🐓", Dog: "🐕", Pig: "🐖" };
+// realistic look of each animal (Cambodian where it makes sense; the dragon is the one mythical animal)
 const LOOK = {
-  Rat: "a small, clever golden rat with bright eyes and finely engraved fur",
-  Ox: "a strong, calm golden ox with curved horns and engraved patterns",
-  Tiger: "a majestic golden tiger with engraved stripes",
-  Rabbit: "a gentle golden rabbit with long ears and engraved patterns",
-  Dragon: "a long, coiling golden dragon with flowing whiskers and engraved scales",
-  Snake: "an elegant coiled golden snake with engraved scales",
-  Horse: "a proud golden horse with a flowing golden mane",
-  Goat: "a gentle golden goat with curled horns and engraved patterns",
-  Monkey: "a small, playful golden monkey with engraved patterns",
-  Rooster: "a proud golden rooster with a tall comb and flowing tail feathers",
-  Dog: "a loyal, friendly golden dog with engraved patterns",
-  Pig: "a cheerful, round golden pig with engraved patterns",
+  Rat: "a real brown field rat with bright black eyes, soft fur and twitching whiskers",
+  Ox: "a strong white Cambodian ox with a humped back and curved horns",
+  Tiger: "a majestic Indochinese tiger with vivid orange and black stripes",
+  Rabbit: "a soft brown rabbit with long upright ears",
+  Dragon: "a majestic Asian dragon with a long serpentine body, golden-green scales, flowing whiskers and a pearl, rendered as realistic cinematic CGI",
+  Snake: "a beautiful patterned python with glossy scales",
+  Horse: "a strong chestnut horse with a flowing dark mane",
+  Goat: "a white goat with gently curved horns",
+  Monkey: "a long-tailed macaque monkey with expressive eyes",
+  Rooster: "a proud rooster with a red comb and glossy bronze-green tail feathers",
+  Dog: "a friendly, loyal golden-brown dog",
+  Pig: "a healthy pink pig with a gentle face",
 };
 const POSE = {
-  Rat: "sits up on its hind legs, whiskers twitching", Ox: "stands firm with its head raised", Tiger: "raises its head proudly",
-  Rabbit: "lifts its ears and looks up at the moon", Dragon: "uncoils and rises into the air", Snake: "slowly uncoils and lifts its head",
-  Horse: "lifts one front hoof and tosses its mane", Goat: "lifts its head and looks out calmly", Monkey: "looks around with bright curiosity",
-  Rooster: "spreads its wings and lifts its head", Dog: "sits alert and wags its tail", Pig: "looks up happily with a gentle smile",
+  Rat: "sits up on its hind legs, whiskers twitching", Ox: "lifts its head and breathes out a soft mist", Tiger: "raises its head proudly and looks into the distance",
+  Rabbit: "lifts its ears and sniffs the evening air", Dragon: "uncoils and rises slowly into the sky", Snake: "slowly uncoils and lifts its head",
+  Horse: "tosses its mane and paws the ground", Goat: "lifts its head and looks out calmly", Monkey: "looks around with bright curiosity",
+  Rooster: "spreads its wings and lifts its head", Dog: "sits alert and wags its tail", Pig: "looks up happily, ears twitching",
 };
-const STYLE = "Vertical 9:16. Ornate golden Chinese zodiac animal figures decorated with pink lotus flowers, deep indigo night sky with soft stars, a glowing full moon, silhouettes of Khmer temple roofs, warm gold light, gentle slow camera movement, cinematic, high detail. No text, no letters, no subtitles, no logos.";
-const SITE_IMG = (a) => `https://mybirthsign.com/images/profile/spirit-${a.toLowerCase()}.webp`;
+const STYLE = "Vertical 9:16. Photorealistic, cinematic, real animals in a real Cambodian setting: an ancient Khmer sandstone temple with carved towers, lotus ponds, palm trees, soft evening mist and a full moon rising in a deep blue dusk sky with the last golden light. Natural colors, shallow depth of field, gentle slow camera movement, 4K detail, like a nature documentary. No text, no letters, no subtitles, no logos, no cartoon or illustration style.";
+const cap = (s) => s[0].toUpperCase() + s.slice(1);
 const dmy = (iso) => iso.split("-").reverse().join("/");
+const longDate = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).replace(/^(\w+) /, "$1, ");
 const list = (arr) => (arr.length <= 1 ? arr.join("") : arr.length === 2 ? `${arr[0]} and ${arr[1]}` : `${arr.slice(0, -1).join(", ")} and ${arr.at(-1)}`);
-const lowerList = (arr) => list(arr.map((a) => `a golden ${a.toLowerCase()}`));
 const kmList = (arr) => (arr.length === 1 ? arr[0] : `${arr.slice(0, -1).join(" ")} និង${arr.at(-1)}`);
+const looks = (arr) => list(arr.map((a) => LOOK[a]));
 
 function ts(t) { const ms = Math.round(t * 1000); return `${String(Math.floor(ms / 3600000)).padStart(2, "0")}:${String(Math.floor(ms / 60000) % 60).padStart(2, "0")}:${String(Math.floor(ms / 1000) % 60).padStart(2, "0")},${String(ms % 1000).padStart(3, "0")}`; }
 function srt(lines, total = 45) {
   const w = lines.map((l) => Math.max(l.length, 12)), sum = w.reduce((a, b) => a + b, 0);
   let t = 0;
   return lines.map((l, i) => { const d = (total * w[i]) / sum; const s = `${i + 1}\n${ts(t)} --> ${ts(t + d - 0.05)}\n${l}\n`; t += d; return s; }).join("\n");
+}
+// split long sentences for subtitles (Khmer at a space after ~45 chars, English at ", ")
+function splitLines(text, lang) {
+  const sents = lang === "km" ? text.split(/(?<=។)\s*/) : text.split(/(?<=[.!?])\s+/);
+  const out = [];
+  for (const s of sents.filter(Boolean)) {
+    if (s.length <= (lang === "km" ? 60 : 70)) { out.push(s); continue; }
+    const cut = lang === "km" ? s.indexOf(" ", 40) : s.indexOf(", ", 30);
+    if (cut > 0) { out.push(s.slice(0, lang === "km" ? cut : cut + 1).trim()); out.push(s.slice(cut + 1).trim()); } else out.push(s);
+  }
+  return out;
 }
 
 function pack(iso) {
@@ -59,111 +74,134 @@ function pack(iso) {
   const km = (a) => KM_NAMES[a];
   const nums = lucky.map((a) => { const v = LUCKY.forSign(a, iso); if (String(v.d1) !== String(sign(a).lucky.number)) throw new Error(`${iso} ${a}: lucky number mismatch`); return { a, ...v }; });
   const inVideo = [...new Set([day, ...lucky, ...careful])];
-  const numLine = (n) => `${km(n.a)}  ${n.d1} · ${n.d2} · ${n.d3} · ${n.d4} · ${n.d5}`;
-  const D = dmy(iso);
+  const numLine = (n, name) => `${name}  ${n.d1} · ${n.d2} · ${n.d3} · ${n.d4} · ${n.d5}`;
+  const D = dmy(iso), LD = longDate(iso);
 
-  const summary = [
+  // written summary: the site's own daily wording if it exists already, otherwise the standard script
+  let data = null;
+  try { data = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "daily", `${iso}.json`), "utf8")); } catch (e) { /* made ahead */ }
+  const same = data && JSON.stringify(data.highlights.topLucky) === JSON.stringify(lucky) && JSON.stringify(data.highlights.careful) === JSON.stringify(careful);
+  const summaryKm = same && data.highlights.summary?.km ? data.highlights.summary.km : [
     `ថ្ងៃនេះជាថ្ងៃ${dayKm}។`,
     `ឆ្នាំ${kmList(lucky.map(km))} មានសំណាងល្អជាងគេនៅថ្ងៃនេះ។`,
     ...(careful.length ? [`ចំណែកឆ្នាំ${kmList(careful.map(km))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់ក្នុងការសម្រេចចិត្ត។`] : []),
-  ];
-  const voice = [
+  ].join(" ");
+  const summaryEn = same && data.highlights.summary?.en ? data.highlights.summary.en : [
+    `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day.`,
+    `${list(lucky)} are the luckiest signs today.`,
+    ...(careful.length ? [`${list(careful)} should take it easy, slow down and avoid rushing big decisions.`] : []),
+  ].join(" ");
+
+  const voiceKm = [
     `ជោគជតារាសីប្រចាំថ្ងៃនេះ ថ្ងៃទី ${D}។`,
-    ...summary,
-    "លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖",
-    ...nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2} និង ${n.d3}។`),
+    summaryKm,
+    `លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2} និង ${n.d3}។`).join(" ")}`,
     "លេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការណែនាំឱ្យភ្នាល់ទេ។",
     "ចូលមើលលេខសំណាង និងលម្អិតសម្រាប់រាសីទាំង 12 នៅ mybirthsign.com",
   ];
-  const luckyLabels = lucky.map((a) => `${km(a)} – ${sign(a).label.km}`).join(" · ");
-  const carefulLine = careful.map((a) => `${km(a)} – ${sign(a).label.km} · គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ`).join("\n   ");
+  const voiceEn = [
+    `Your Chinese zodiac fortune for ${LD}.`,
+    summaryEn,
+    `Today's lucky numbers for the lucky signs: ${nums.map((n) => `${n.a}, ${n.d2} and ${n.d3}.`).join(" ")}`,
+    "Lucky numbers are for fun only, not betting advice.",
+    "See all 12 signs and full lucky numbers at mybirthsign.com.",
+  ];
+  const srtKm = srt(voiceKm.flatMap((v) => splitLines(v, "km")));
+  const srtEn = srt(voiceEn.flatMap((v) => splitLines(v, "en")));
+
+  const luckyLabelsKm = lucky.map((a) => `${km(a)} – ${sign(a).label.km}`).join(" · ");
+  const luckyLabelsEn = lucky.map((a) => `${a} – ${sign(a).label.en}`).join(" · ");
   const disclaimerNums = "លេខសំណាង (1 ដល់ 5 ខ្ទង់) សម្រាប់ថ្ងៃនេះ គឺសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។";
   const disclaimer = "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ មិនមែនជាការព្យាករណ៍វិទ្យាសាស្ត្រទេ។";
   const tags = `#ជោគជតារាសី #រាសីប្រចាំថ្ងៃ #ឆ្នាំ${dayKm} #ផ្កាយកំណើត`;
-  const subtitles = srt(voice);
-
-  const charPrompt = (a) => `- **${a}:** A single ornate ${LOOK[a].replace(/^an? /, "")}, full body, three-quarter view. A few pink lotus flowers around it. Plain deep indigo background with a soft gold glow behind it. Warm golden light, high detail, square 1:1. No text, no letters, no logos.`;
 
   const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
 Format: vertical 9:16 (YouTube Shorts, Facebook Reels, TikTok), about 45 seconds: 4 Veo scenes of about 8 seconds, then a lucky-numbers scene of about 10–12 seconds.
-Made ahead from the site's fixed rules: the ratings, lucky signs and lucky numbers match the website's daily fortune for this date.
+Two versions: make the pictures once, then record a Khmer voice-over and an English voice-over (two videos, or one video with both subtitle tracks).
+Ratings, lucky signs and lucky numbers come from the site's fixed rules and match the website's daily fortune for this date.${same ? "" : "\nVoice-over wording: standard script (this pack was made ahead; the site's own daily wording appears the day before)."}
 
 ## Style (paste first in every scene)
 ${STYLE}
 
-## Reference pictures (make or download these first)
-Using the same pictures every day keeps each animal looking the same from video to video.
+## Reference pictures (make these first, so each animal looks the same in every scene)
+Make each picture once, then add it as a reference image ("ingredient") in Flow, or use it as the starting image of a scene.
 
-### Site reference images (download and add as references / "ingredients" in Flow)
-${inVideo.map((a) => `- ${a}: ${SITE_IMG(a)}`).join("\n")}
-- Zodiac wheel (for scene 5): https://mybirthsign.com/images/profile/zodiac-wheel.webp
-
-These are your site's own golden artworks. You can also use one as the starting image of a scene.
-
-### Character reference image prompts (if you want fresh art)
-${inVideo.map(charPrompt).join("\n")}
+### Character reference image prompts
+${inVideo.map((a) => `- **${a}:** Photorealistic portrait of ${LOOK[a]}, full body, three-quarter view, standing in the soft golden evening light of an ancient Khmer sandstone temple courtyard, temple towers softly blurred behind, a few pink lotus flowers nearby. Natural colors, sharp detail in the fur or scales, shallow depth of field, square 1:1. No text, no letters, no logos.`).join("\n")}
 
 ### Start-frame image prompts (make the picture, then animate it with "frames to video")
-1. Vertical 9:16. ${LOOK[day][0].toUpperCase() + LOOK[day].slice(1)} stands on a moonlit stone terrace in front of silhouettes of Khmer temple roofs, pink lotus flowers around it, a glowing full moon and soft stars in a deep indigo sky, warm golden light on its body. Cinematic, high detail. No text.
-2. Vertical 9:16. ${lowerList(lucky).replace(/^a/, "A")}, each decorated with pink lotus flowers, stand side by side on a glowing terrace beneath a large full moon, warm golden light around them, small sparkles rising into the indigo night sky. Cinematic, high detail. No text.
-${careful.length ? `3. Vertical 9:16. ${LOOK[careful[0]][0].toUpperCase() + LOOK[careful[0]].slice(1)} rests peacefully beside a still lotus pond under a full moon, soft blue and gold reflections on the water, faint Khmer temple silhouettes in the distance. Calm, restful mood. Cinematic, high detail. No text.` : "3. Vertical 9:16. A still lotus pond under a full moon with soft blue and gold reflections and faint Khmer temple silhouettes. Calm mood. Cinematic. No text."}
-4. Vertical 9:16. A wide, calm view of a glowing full moon over a lotus pond, Khmer temple roof silhouettes on the horizon, pink lotus flowers in the foreground, golden reflections on the water, soft stars in a deep indigo sky, open sky at the top of the frame. Cinematic. No text.
-5. Vertical 9:16. A large ornate golden zodiac wheel with all twelve golden animals around its rim, glowing under a full moon in a deep indigo sky, pink lotus flowers along the bottom, soft gold light, open space in the middle and lower part of the frame for captions. Cinematic, high detail. No text.
+1. Vertical 9:16. Photorealistic. ${cap(LOOK[day])} stands on the worn stone steps of an ancient Khmer temple at dusk, carved sandstone towers behind it, a full moon rising in a deep blue sky, warm last light on its face. Shallow depth of field. No text.
+2. Vertical 9:16. Photorealistic. ${cap(looks(lucky))} together on the grass in front of an ancient Khmer temple at golden hour, palm trees and soft mist behind them, warm light on their faces. Natural, calm, documentary style. No text.
+${careful.length ? `3. Vertical 9:16. Photorealistic. ${cap(LOOK[careful[0]])} resting quietly beside a still lotus pond at dusk, pink lotus flowers in the foreground, the reflection of a temple tower and the full moon on the water. Peaceful mood. No text.` : "3. Vertical 9:16. Photorealistic. A still lotus pond at dusk, pink lotus flowers in the foreground, the reflection of a temple tower and the full moon on the water. Peaceful mood. No text."}
+4. Vertical 9:16. Photorealistic. A full moon rising over a wide lotus pond, the silhouette of an ancient Khmer temple with carved towers on the horizon, palm trees, soft mist on the water, deep blue dusk sky with open space at the top of the frame. No text.
+5. Vertical 9:16. Photorealistic. A large round sandstone relief carved with the twelve Chinese zodiac animals in a ring, set in an ancient temple wall, lit by warm candlelight and the moon, pink lotus offerings below, open space in the middle and lower part of the frame for captions. No text.
 
 ### YouTube thumbnail image prompt
-Vertical 9:16 (can be cropped to 16:9). A large, bright ${LOOK[day].replace(/^an? /, "")} in the center facing the viewer with a confident expression, ${lowerList(lucky.filter((a) => a !== day))} smaller behind it, pink lotus flowers in front, a glowing full moon and sparkles in a deep indigo sky, strong warm gold light, vivid and eye-catching. No text, no letters, no logos. (Add the Khmer title and date in your editor.)
+Vertical 9:16 (can be cropped to 16:9). Photorealistic close-up of ${LOOK[day]} facing the viewer in warm golden evening light, an ancient Khmer temple and a glowing full moon softly blurred behind, ${lucky.filter((a) => a !== day).length ? `${looks(lucky.filter((a) => a !== day))} smaller in the background, ` : ""}vivid, sharp and eye-catching. No text, no letters, no logos. (Add the title and date in your editor.)
 
 ## Scene 1 – ${day} day
-${LOOK[day][0].toUpperCase() + LOOK[day].slice(1)}, decorated with pink lotus flowers, steps forward onto a moonlit stone terrace in front of Khmer temple silhouettes and ${POSE[day]} as warm golden light sweeps across its body. Soft stars twinkle in the indigo sky and lotus petals drift slowly through the air. The camera starts low and slowly rises to a heroic close-up. The ${day.toLowerCase()} matches the reference image.
+Photorealistic. ${cap(LOOK[day])} walks slowly onto the worn stone steps of an ancient Khmer temple at dusk and ${POSE[day]}. Warm last sunlight touches its face while a full moon rises behind the carved sandstone towers. Light mist drifts across the courtyard. The camera starts low and slowly rises to a close-up. Natural, documentary style, matching the reference image.
 
 ## Scene 2 – Lucky signs
-${lowerList(lucky).replace(/^a/, "A")}, each richly decorated with pink lotus flowers, stand together on a glowing terrace beneath a large full moon. Warm golden light pulses gently around them, like a blessing, and small sparkles rise into the indigo night sky. Each animal moves gently in its own way. The camera glides slowly from left to right across them. The animals match the reference images.
+Photorealistic. ${cap(looks(lucky))} stand calmly together on the grass in front of an ancient Khmer temple at golden hour. Soft warm light glows on their faces, palm trees sway gently and a few fireflies drift up into the evening air. Each animal moves naturally in its own way. The camera glides slowly from left to right across them. The animals match the reference images.
 
 ## Scene 3 – ${careful.length ? `${careful.join(", ")}, take it easy` : "A calm moment"}
-${careful.length ? `${LOOK[careful[0]][0].toUpperCase() + LOOK[careful[0]].slice(1)}, decorated with pink lotus flowers, rests calmly beside a still lotus pond under the full moon, breathing slowly. Soft blue and gold reflections ripple across the water, and the Khmer temple silhouettes glow faintly in the distance. The mood is peaceful and restful, not sad. The camera moves in slowly as a few petals float down onto the water. The ${careful[0].toLowerCase()} matches the reference image.` : "A still lotus pond under the full moon, soft blue and gold reflections rippling across the water, Khmer temple silhouettes glowing faintly in the distance. The camera moves in slowly as a few petals float down."}
+${careful.length ? `Photorealistic. ${cap(LOOK[careful[0]])} rests quietly beside a still lotus pond at dusk, breathing slowly. Pink lotus flowers sway gently, and the reflection of a temple tower and the full moon shimmers on the water. The mood is peaceful and restful, not sad. The camera moves in slowly as a few petals float on the water. The ${careful[0].toLowerCase()} matches the reference image.` : "Photorealistic. A still lotus pond at dusk, pink lotus flowers swaying gently, the reflection of a temple tower and the full moon shimmering on the water. The camera moves in slowly."}
 
 ## Scene 4 – Outro
-A wide, calm view of a glowing full moon over a lotus pond, with silhouettes of Khmer temple roofs on the horizon and pink lotus flowers in the foreground. Golden light reflects on the gently rippling water and soft stars fill the indigo sky. The camera slowly pulls back and tilts up, leaving open sky at the top of the frame for a title.
+Photorealistic. A full moon rises over a wide lotus pond with the silhouette of an ancient Khmer temple on the horizon. Soft mist moves across the water, palm trees frame the scene and the moonlight sparkles on the ripples. The camera slowly pulls back and tilts up, leaving open sky at the top of the frame for a title.
 
 ## Scene 5 – Lucky numbers (about 10–12 seconds)
-A large ornate golden zodiac wheel with all twelve golden animals around its rim turns slowly under a glowing full moon in a deep indigo sky. Soft golden light pulses from its center, pink lotus flowers sway along the bottom of the frame and small sparkles drift upward. The camera slowly pushes in, keeping open space in the middle and lower part of the frame for the number captions. (Loop this clip, or use the zodiac wheel picture with a slow zoom in your editor, to fill the time.)
+Photorealistic. A large round sandstone relief carved with the twelve Chinese zodiac animals in a ring, set in an ancient temple wall. Warm candlelight flickers across the carvings and moonlight falls from above; pink lotus offerings rest below. The camera slowly pushes in, keeping open space in the middle and lower part of the frame for the number captions. (Loop this clip, or slow-zoom a still picture, to fill the time.)
 
-## Khmer captions (add in the editor)
+## On-screen captions (add in the editor)
+### Khmer version
 1. ជោគជតារាសីប្រចាំថ្ងៃនេះ · ${D} · ថ្ងៃ${dayKm}
-2. ${luckyLabels}
-${careful.length ? `3. ${carefulLine}` : "3. —"}
+2. ${luckyLabelsKm}
+${careful.length ? `3. ${careful.map((a) => `${km(a)} – ${sign(a).label.km} · គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ`).join(" ")}` : "3. —"}
 4. ចូលមើលលម្អិតនៅ mybirthsign.com
 5. លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង
-${nums.map(numLine).join("\n")}
+${nums.map((n) => numLine(n, km(n.a))).join("\n")}
    សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ
 
-## Khmer voice-over (about 45 seconds)
-${voice[0]}
-${summary.join(" ")}
-លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2} និង ${n.d3}។`).join(" ")}
-${voice.at(-2)}
-${voice.at(-1)}
+### English version
+1. Daily Chinese Zodiac Fortune · ${D} · ${day} Day
+2. ${luckyLabelsEn}
+${careful.length ? `3. ${careful.map((a) => `${a} – ${sign(a).label.en} · slow down and rest`).join(" ")}` : "3. —"}
+4. More at mybirthsign.com
+5. Today's lucky numbers for the lucky signs
+${nums.map((n) => numLine(n, n.a)).join("\n")}
+   For fun only
 
-(Record the voice yourself or use a Khmer text-to-speech voice; AI video tools may not pronounce Khmer well.)
+## Voice-over – Khmer (about 45 seconds)
+${voiceKm.join("\n")}
+
+## Voice-over – English (about 45 seconds)
+${voiceEn.join("\n")}
+
+(Record the voices yourself or use text-to-speech; AI video tools may not pronounce Khmer well.)
 
 ## YouTube
-Title: ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃ${dayKm}
+Title (Khmer): ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃ${dayKm}
+Title (English): Daily Chinese Zodiac Fortune – ${D} | ${day} Day
 
 Description:
-${summary.join(" ")}
+${summaryKm}
 
 ${inVideo.map((a) => `${km(a)}៖ ពណ៌${sign(a).lucky.color.km} · ${sign(a).lucky.time}`).join("\n")}
 
 លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង (1 ដល់ 5 ខ្ទង់)៖
-${nums.map(numLine).join("\n")}
+${nums.map((n) => numLine(n, km(n.a))).join("\n")}
 
 ${disclaimerNums}
 
 មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
 
 ${disclaimer}
+
+English: ${summaryEn} Lucky numbers (for fun only): ${nums.map((n) => `${n.a} ${n.d1} · ${n.d2} · ${n.d3}`).join(" | ")}. All 12 signs: https://mybirthsign.com
 
 Hashtags: ${tags} #ChineseZodiac #DailyHoroscope #Shorts
 
@@ -173,7 +211,7 @@ Hashtags: ${tags} #ChineseZodiac #DailyHoroscope #Shorts
 ✨ ឆ្នាំសំណាងថ្ងៃនេះ៖ ${lucky.map((a) => `${km(a)} (${sign(a).label.km})`).join(" · ")}
 ${careful.length ? `🌿 គួរប្រុងប្រយ័ត្ន៖ ${careful.map(km).join(" ")} – គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់ក្នុងការសម្រេចចិត្ត។\n` : ""}
 🔢 លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖
-${nums.map(numLine).join("\n")}
+${nums.map((n) => numLine(n, km(n.a))).join("\n")}
 
 👉 មើលរាសីទាំង 12 និងលេខសំណាងពេញលេញ៖ https://mybirthsign.com/km/
 
@@ -185,20 +223,29 @@ ${tags} #លេខសំណាង
 ជោគជតារាសីថ្ងៃនេះ ${D} ${EMO[day]} ថ្ងៃ${dayKm}! ឆ្នាំសំណាង៖ ${lucky.map(km).join(" ")} ✨ លេខសំណាង៖ ${nums.map((n) => `${km(n.a)} ${n.d2}`).join(" · ")} 🔢 ឆ្នាំអ្នកជាអ្វី? Comment ប្រាប់ផង 👇 (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ) Link នៅក្នុង bio 🌙
 ${tags} #fyp #ChineseZodiac
 
+English version: ${EMO[day]} ${day} day, ${D}! Lucky signs: ${lucky.join(", ")} ✨ Lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(" · ")} 🔢 What's your sign? 👇 (for fun only) Link in bio 🌙 #ChineseZodiac #DailyHoroscope #fyp
+
 (TikTok links in captions are not clickable, so put https://mybirthsign.com/km/ in your profile bio.)
 
-## YouTube subtitles (captions file)
-Upload this in YouTube Studio → Subtitles → Add language: Khmer → Upload file → "With timing". It is also saved next to this file as \`${iso}.srt\`.
-The timings are estimates for a 45-second voice-over; after you record the voice, open YouTube Studio's subtitle editor and drag each line to match, or let YouTube's "Auto-sync" align the text.
+## YouTube subtitles (captions files)
+Two files are saved next to this one: \`${iso}.srt\` (Khmer) and \`${iso}.en.srt\` (English).
+Upload in YouTube Studio → Subtitles → Add language → choose Khmer or English → Upload file → "With timing". You can add both to the same video.
+The timings are estimates for a 45-second voice-over; after you record the voice, drag each line to match in YouTube's subtitle editor, or use "Auto-sync".
 
+### Khmer (${iso}.srt)
 \`\`\`
-${subtitles}\`\`\`
+${srtKm}\`\`\`
+
+### English (${iso}.en.srt)
+\`\`\`
+${srtEn}\`\`\`
 `;
   const dir = path.join(ROOT, "docs", "video-prompts");
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, `${iso}.md`), md);
-  fs.writeFileSync(path.join(dir, `${iso}.srt`), subtitles);
-  return `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}`;
+  fs.writeFileSync(path.join(dir, `${iso}.srt`), srtKm);
+  fs.writeFileSync(path.join(dir, `${iso}.en.srt`), srtEn);
+  return `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}`;
 }
 
 const t0 = new Date(start + "T00:00:00Z");
