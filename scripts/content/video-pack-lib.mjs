@@ -41,6 +41,23 @@ export const STYLE = "Vertical 9:16. Premium 3D animated fantasy film quality, i
 export const VOICE_EN = "a warm, cheerful young female narrator with a soft, magical storytelling tone, clear and friendly";
 export const VOICE_KM = "a warm, cheerful young Cambodian female narrator speaking clear Khmer, soft and friendly";
 export const MUSIC = "Gentle magical background music with soft chimes and a light Asian flute. No other speech.";
+// the luckiest animal of the day (the day animal): one-line symbolism for the hero picture, video and caption
+// (Rabbit line written by the owner; the others follow the same pattern with common traditional symbolism)
+export const SYMBOL = {
+  Rat: { en: "Clever and quick, the first animal of the zodiac, the Rat symbolizes wit, resourcefulness, and new beginnings.", km: "ឆ្លាតវៃ និងរហ័សរហួន ជាសត្វទីមួយនៃរាសីទាំង 12 ឆ្នាំជូតតំណាងឲ្យប្រាជ្ញា ភាពប៉ិនប្រសប់ និងការចាប់ផ្ដើមថ្មី។", traits: "wit, resourcefulness and new beginnings", mood: "bright, clever and lively" },
+  Ox: { en: "Steady and strong, the Ox symbolizes hard work, patience, and honest strength.", km: "នឹងនរ និងរឹងមាំ ឆ្នាំឆ្លូវតំណាងឲ្យការខិតខំ ការអត់ធ្មត់ និងកម្លាំងដ៏ស្មោះត្រង់។", traits: "hard work, patience and honest strength", mood: "calm, steady and strong" },
+  Tiger: { en: "King of the mountains, the Tiger symbolizes courage, protection, and bold power.", km: "ស្ដេចនៃព្រៃភ្នំ ឆ្នាំខាលតំណាងឲ្យភាពក្លាហាន ការការពារ និងថាមពលដ៏អង់អាច។", traits: "courage, protection and bold power", mood: "brave, proud and protective" },
+  Rabbit: { en: "Beloved companion of the Moon Goddess, the Rabbit symbolizes purity, longevity, and peaceful elegance.", km: "ជាដៃគូជាទីស្រឡាញ់របស់ទេពធីតាព្រះចន្ទ ឆ្នាំថោះតំណាងឲ្យភាពបរិសុទ្ធ អាយុវែង និងភាពថ្លៃថ្នូរដ៏ស្ងប់ស្ងាត់។", traits: "purity, longevity and peaceful elegance", mood: "calm, gentle and graceful" },
+  Dragon: { en: "Ruler of the clouds and rain, the Dragon symbolizes power, good fortune, and a noble spirit.", km: "ជាម្ចាស់នៃពពក និងភ្លៀង ឆ្នាំរោងតំណាងឲ្យអំណាច សំណាងល្អ និងចិត្តថ្លៃថ្នូរ។", traits: "power, good fortune and a noble spirit", mood: "majestic, proud and noble" },
+  Snake: { en: "Wise and graceful, the Snake symbolizes wisdom, intuition, and quiet elegance.", km: "ឈ្លាសវៃ និងស្រស់ស្អាត ឆ្នាំម្សាញ់តំណាងឲ្យប្រាជ្ញា វិចារណញាណ និងភាពថ្លៃថ្នូរដ៏ស្ងប់ស្ងាត់។", traits: "wisdom, intuition and quiet elegance", mood: "wise, calm and elegant" },
+  Horse: { en: "Free and spirited, the Horse symbolizes energy, freedom, and success on the road ahead.", km: "សេរី និងពោរពេញដោយស្មារតី ឆ្នាំមមីតំណាងឲ្យថាមពល សេរីភាព និងភាពជោគជ័យលើផ្លូវខាងមុខ។", traits: "energy, freedom and success", mood: "free, energetic and joyful" },
+  Goat: { en: "Gentle and kind, the Goat symbolizes peace, harmony, and a caring heart.", km: "ស្លូតបូត និងចិត្តល្អ ឆ្នាំមមែតំណាងឲ្យសន្តិភាព ភាពសុខដុម និងចិត្តមេត្តា។", traits: "peace, harmony and a caring heart", mood: "gentle, kind and peaceful" },
+  Monkey: { en: "Playful and clever, the Monkey symbolizes intelligence, curiosity, and joyful energy.", km: "លេងសើច និងឆ្លាតវៃ ឆ្នាំវកតំណាងឲ្យបញ្ញា ការចង់ដឹងចង់ឃើញ និងថាមពលដ៏រីករាយ។", traits: "intelligence, curiosity and joyful energy", mood: "playful, clever and cheerful" },
+  Rooster: { en: "Herald of the dawn, the Rooster symbolizes honesty, confidence, and a bright new day.", km: "ជាអ្នកប្រកាសពេលព្រឹកព្រលឹម ឆ្នាំរកាតំណាងឲ្យភាពស្មោះត្រង់ ទំនុកចិត្ត និងថ្ងៃថ្មីដ៏ភ្លឺស្វាង។", traits: "honesty, confidence and a bright new day", mood: "proud, confident and bright" },
+  Dog: { en: "Faithful guardian of the home, the Dog symbolizes loyalty, protection, and honest friendship.", km: "ជាអ្នកយាមផ្ទះដ៏ស្មោះត្រង់ ឆ្នាំចតំណាងឲ្យភាពស្មោះស្ម័គ្រ ការការពារ និងមិត្តភាពដ៏ពិតប្រាកដ។", traits: "loyalty, protection and honest friendship", mood: "loyal, warm and protective" },
+  Pig: { en: "Generous and warm-hearted, the Pig symbolizes abundance, good fortune, and a happy home.", km: "ចិត្តទូលាយ និងកក់ក្ដៅ ឆ្នាំកុរតំណាងឲ្យភាពសម្បូរសប្បាយ សំណាងល្អ និងគ្រួសារដ៏រីករាយ។", traits: "abundance, good fortune and a happy home", mood: "happy, warm and generous" },
+};
+export const HERO = (a) => `Create a premium-quality 3D animated fantasy character of ${LOOK[a]}, the ${a} of the Chinese zodiac, inspired by the charm and enchanting visual appeal of classic Disney and Pixar-style animated family films. The ${a.toLowerCase()} symbolizes ${SYMBOL[a].traits}: a ${SYMBOL[a].mood} expression and pose that show this. Body in creamy white-gold with shining engraved gold patterns, pink inner ears or rosy cheeks, polished gold textures, luminous highlights and delicate pink and gold accents. It sits on a round golden pedestal inside a large glowing pink lotus floating on a still pond. Behind it, a huge glowing full moon with a soft silver-gold halo, a deep indigo starry sky, a softly illuminated Khmer temple inspired by Angkor Wat with warm golden lights, palm tree silhouettes, small floating lanterns, glowing lotus flowers on the water, gentle moonbeams falling on the ${a.toLowerCase()}, magical sparkles and soft silver-and-gold reflections. Cinematic lighting, soft atmospheric glow, realistic metallic reflections, beautiful depth of field, professional animated-movie-quality rendering. Square 1:1, full body visible, three-quarter view, centered, with space around the character. No text, no letters, no watermark, no logo, no cropped body parts.`;
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
 const dmy = (iso) => iso.split("-").reverse().join("/");
 const longDate = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).replace(/^(\w+) /, "$1, ");
@@ -117,6 +134,23 @@ Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(
 Format: vertical 9:16 (YouTube Shorts, Facebook Reels, TikTok), about 45 seconds: 4 Veo scenes of about 8 seconds, then a lucky-numbers scene of about 10–12 seconds.
 Two versions: make the pictures once, then record a Khmer voice-over and an English voice-over (two videos, or one video with both subtitle tracks).
 Ratings, lucky signs and lucky numbers come from the site's fixed rules and match the website's daily fortune for this date.${same ? "" : "\nVoice-over wording: standard script (this pack was made ahead; the site's own daily wording appears the day before)."}
+
+## Luckiest animal today – ${day} (${km(day)}) · ${sign(day).label.en}
+One hero post for the day's luckiest animal: a picture, a short video and a caption. Lucky color ${sign(day).lucky.color.en} (${sign(day).lucky.color.km}) · best time ${sign(day).lucky.time} · lucky numbers ${[nums[0].d1, nums[0].d2, nums[0].d3, nums[0].d4, nums[0].d5].join(" · ")} (for fun only).
+
+### Picture prompt (square 1:1)
+${HERO(day)}
+
+### Video prompt for Flow (9:16, about 8 seconds)
+Vertical 9:16. Premium 3D animated golden style, same ${day.toLowerCase()} as the reference picture. ${cap(LOOK[day])} sits peacefully on its glowing lotus under a huge full moon. A soft beam of moonlight falls on it, its golden details glow, and it rises gently into the air, floating slowly toward the moon with a trail of silver-gold sparkles and lotus petals. ${cap(SYMBOL[day].mood)} mood. Slow, smooth camera rising with it. No text.
+Audio: ${VOICE_EN} says: "Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! ${SYMBOL[day].en}" ${MUSIC}
+Khmer audio (use instead for the Khmer video): Audio: ${VOICE_KM} says in Khmer: "ថ្ងៃនេះជាថ្ងៃ${dayKm}! ${SYMBOL[day].km}" ${MUSIC}
+
+### Caption – English
+${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for the ${day}. Lucky numbers: ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (for fun only). All 12 signs: https://mybirthsign.com
+
+### Caption – Khmer
+${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).label.km}សម្រាប់ឆ្នាំ${dayKm}។ លេខសំណាង៖ ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ)។ មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
 
 ## Style (paste first in every scene)
 ${STYLE}
