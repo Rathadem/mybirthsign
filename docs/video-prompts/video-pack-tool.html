@@ -336,15 +336,44 @@ function srt(lines, total = 45) {
   return lines.map((l, i) => { const d = (total * w[i]) / sum; const s = `${i + 1}\n${ts(t)} --> ${ts(t + d - 0.05)}\n${l}\n`; t += d; return s; }).join("\n");
 }
 // split long sentences for subtitles (Khmer at a space after ~45 chars, English at ", ")
+// subtitle lines: short, one line each (fits a 9:16 phone screen), broken at sentence ends, then at commas
+// or between words, never leaving a tiny last piece; trailing commas dropped; "dot com" shown as ".com"
+const SUB_MAX = { en: 42, km: 46 };   // characters (Khmer counted in code points: vowels and subscripts are extra code points)
 function splitLines(text, lang) {
-  const sents = lang === "km" ? text.split(/(?<=។)\s*/) : text.split(/(?<=[.!?])\s+/);
+  const max = SUB_MAX[lang] || 38, len = (x) => [...x].length;
+  const clean = (x) => x.replace(/ dot com\b/g, ".com").replace(/[,،]\s*$/, "").trim();
+  const sents = (lang === "km" ? text.split(/(?<=[។!?])\s*/) : text.split(/(?<=[.!?])\s+/)).map((x) => x.trim()).filter(Boolean);
   const out = [];
-  for (const s of sents.filter(Boolean)) {
-    if (s.length <= (lang === "km" ? 60 : 70)) { out.push(s); continue; }
-    const cut = lang === "km" ? s.indexOf(" ", 40) : s.indexOf(", ", 30);
-    if (cut > 0) { out.push(s.slice(0, lang === "km" ? cut : cut + 1).trim()); out.push(s.slice(cut + 1).trim()); } else out.push(s);
+  for (const sent of sents) {
+    const s = sent.replace(/ dot com\b/g, ".com");
+    if (len(s) <= max) { out.push(clean(s)); continue; }
+    // best line breaks for the whole sentence (dynamic programming): break after commas or before
+    // "and / or / so / that…", never right after "the / a / your…", lines evenly filled, no tiny lines
+    const words = s.split(/\s+/), n = words.length;
+    const NOEND = /^(the|a|an|of|to|and|or|but|in|on|at|for|with|from|is|are|your|my|our|their|its|this|that|very|be|let|good|kind|small|full|lucky|new|calm|big|special|happy|Chinese)$/i;
+    const GOODSTART = /^(and|or|but|so|that|to|with|for|at|in|on|when|because|while|then|as)$/i;
+    const best = [0], from = [0];
+    for (let j = 1; j <= n; j++) {
+      best[j] = Infinity;
+      for (let i = j - 1; i >= 0; i--) {
+        const seg = words.slice(i, j).join(" "), L = len(seg);
+        if (L > max && j - i > 1) break;
+        let c = 20 + 40 * ((max - L) / max) ** 2 + (L < 16 ? 50 : 0);
+        if (j < n) {
+          const last = words[j - 1], next = words[j];
+          const inList = /,$/.test(next) || words[j + 1] === "and" || words[j + 1] === "និង";   // "purity, longevity, and…" / "Rabbit, Goat and Pig"
+          c += /[,;:]$/.test(last) && !inList ? 0 : lang === "en" && NOEND.test(last) ? 80 : lang === "en" && GOODSTART.test(next) ? 10 : 35;
+          if (/^\d/.test(next) || (/\d,?$/.test(last) && !/^\d{4}[,.]?$/.test(last))) c += 100;   // keep numbers with their words
+          if ((next === "and" || next === "និង") && /,$/.test(words[j - 2] || "")) c += 60;              // "Rabbit, Goat | and Pig"
+        }
+        if (best[i] + c < best[j]) { best[j] = best[i] + c; from[j] = i; }
+      }
+    }
+    const parts = [];
+    for (let j = n; j > 0; j = from[j]) parts.unshift(words.slice(from[j], j).join(" "));
+    parts.forEach((x) => out.push(clean(x)));
   }
-  return out;
+  return out.filter(Boolean);
 }
 
 function buildPack(iso, F, forSign, data = null) {

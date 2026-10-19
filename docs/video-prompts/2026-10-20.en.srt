@@ -1,31 +1,51 @@
 1
-00:00:00,000 --> 00:00:07,196
-Your Chinese zodiac fortune for Tuesday, 20 October 2026.
+00:00:00,000 --> 00:00:03,441
+Your Chinese zodiac fortune
 
 2
-00:00:07,246 --> 00:00:09,992
-Today is a Rabbit day.
+00:00:03,491 --> 00:00:07,191
+for Tuesday, 20 October 2026.
 
 3
-00:00:10,042 --> 00:00:16,348
-Rabbit, Goat and Pig are the luckiest signs today.
+00:00:07,241 --> 00:00:10,036
+Today is a Rabbit day.
 
 4
-00:00:16,398 --> 00:00:25,374
-Rooster should take it easy, slow down and avoid rushing big decisions.
+00:00:10,086 --> 00:00:12,622
+Rabbit, Goat and Pig
 
 5
-00:00:25,424 --> 00:00:33,255
-Today's lucky numbers for the lucky signs: Rabbit, 64 and 436.
+00:00:12,672 --> 00:00:16,372
+are the luckiest signs today.
 
 6
-00:00:33,305 --> 00:00:35,416
-Goat, 21 and 292.
+00:00:16,422 --> 00:00:19,864
+Rooster should take it easy
 
 7
-00:00:35,466 --> 00:00:37,450
-Pig, 88 and 827.
+00:00:19,914 --> 00:00:25,295
+slow down and avoid rushing big decisions.
 
 8
-00:00:37,500 --> 00:00:44,950
-See all 12 signs and full lucky numbers at mybirthsign.com.
+00:00:25,345 --> 00:00:28,010
+Today's lucky numbers
+
+9
+00:00:28,060 --> 00:00:33,183
+for the lucky signs: Rabbit, 64 and 436.
+
+10
+00:00:33,233 --> 00:00:35,381
+Goat, 21 and 292.
+
+11
+00:00:35,431 --> 00:00:37,450
+Pig, 88 and 827.
+
+12
+00:00:37,500 --> 00:00:42,493
+See all 12 signs and full lucky numbers
+
+13
+00:00:42,543 --> 00:00:44,950
+at mybirthsign.com.

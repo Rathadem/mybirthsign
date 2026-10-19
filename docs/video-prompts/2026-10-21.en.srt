@@ -1,31 +1,51 @@
 1
-00:00:00,000 --> 00:00:07,408
-Your Chinese zodiac fortune for Wednesday, 21 October 2026.
+00:00:00,000 --> 00:00:03,421
+Your Chinese zodiac fortune
 
 2
-00:00:07,458 --> 00:00:10,189
-Today is a Dragon day.
+00:00:03,471 --> 00:00:07,407
+for Wednesday, 21 October 2026.
 
 3
-00:00:10,239 --> 00:00:16,762
-Dragon, Rat and Monkey are the luckiest signs today.
+00:00:07,457 --> 00:00:10,236
+Today is a Dragon day.
 
 4
-00:00:16,812 --> 00:00:25,231
-Dog should take it easy, slow down and avoid rushing big decisions.
+00:00:10,286 --> 00:00:13,064
+Dragon, Rat and Monkey
 
 5
-00:00:25,281 --> 00:00:33,068
-Today's lucky numbers for the lucky signs: Dragon, 65 and 110.
+00:00:13,114 --> 00:00:16,793
+are the luckiest signs today.
 
 6
-00:00:33,118 --> 00:00:35,090
-Rat, 32 and 299.
+00:00:16,843 --> 00:00:19,750
+Dog should take it easy
 
 7
-00:00:35,140 --> 00:00:37,492
-Monkey, 97 and 449.
+00:00:19,800 --> 00:00:25,150
+slow down and avoid rushing big decisions.
 
 8
-00:00:37,542 --> 00:00:44,950
-See all 12 signs and full lucky numbers at mybirthsign.com.
+00:00:25,200 --> 00:00:27,850
+Today's lucky numbers
+
+9
+00:00:27,900 --> 00:00:32,993
+for the lucky signs: Dragon, 65 and 110.
+
+10
+00:00:33,043 --> 00:00:35,050
+Rat, 32 and 299.
+
+11
+00:00:35,100 --> 00:00:37,493
+Monkey, 97 and 449.
+
+12
+00:00:37,543 --> 00:00:42,507
+See all 12 signs and full lucky numbers
+
+13
+00:00:42,557 --> 00:00:44,950
+at mybirthsign.com.

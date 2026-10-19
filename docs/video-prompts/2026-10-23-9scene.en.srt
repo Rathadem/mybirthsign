@@ -1,107 +1,179 @@
 1
-00:00:00,000 --> 00:00:01,473
+00:00:00,000 --> 00:00:01,515
 Welcome to MyBirthSign.
 
 2
-00:00:01,523 --> 00:00:04,917
-Tonight the full moon rises over the ancient temple,
+00:00:01,565 --> 00:00:03,351
+Tonight the full moon rises
 
 3
-00:00:04,967 --> 00:00:09,950
-the lotus flowers glow on the water, and a very special friend is waking up.
+00:00:03,401 --> 00:00:04,916
+over the ancient temple
 
 4
-00:00:10,000 --> 00:00:13,307
-Today, Friday, 23 October 2026, is a Horse day.
+00:00:04,966 --> 00:00:07,297
+the lotus flowers glow on the water
 
 5
-00:00:13,357 --> 00:00:17,664
-It is a Great Day for everyone born in the Year of the Horse,
+00:00:07,347 --> 00:00:09,950
+and a very special friend is waking up.
 
 6
-00:00:17,714 --> 00:00:19,950
-so this is your moment to shine.
+00:00:10,000 --> 00:00:12,156
+Today, Friday, 23 October 2026
 
 7
-00:00:20,000 --> 00:00:23,622
-Free and spirited, the Horse symbolizes energy,
+00:00:12,206 --> 00:00:13,259
+is a Horse day.
 
 8
-00:00:23,672 --> 00:00:26,669
-freedom, and success on the road ahead.
+00:00:13,309 --> 00:00:15,832
+It is a Great Day for everyone born
 
 9
-00:00:26,719 --> 00:00:29,950
-Today, that good energy is shining on you.
+00:00:15,882 --> 00:00:17,597
+in the Year of the Horse
 
 10
-00:00:30,000 --> 00:00:31,768
-Born in the Year of the Horse?
+00:00:17,647 --> 00:00:19,950
+so this is your moment to shine.
 
 11
-00:00:31,818 --> 00:00:33,344
-Your luck is strong today.
+00:00:20,000 --> 00:00:21,310
+Free and spirited
 
 12
-00:00:33,394 --> 00:00:35,283
-Stay free, energetic and joyful,
+00:00:21,360 --> 00:00:23,470
+the Horse symbolizes energy
 
 13
-00:00:35,333 --> 00:00:39,950
-say yes to good chances, and share your good mood with the people around you.
+00:00:23,520 --> 00:00:26,590
+freedom, and success on the road ahead.
 
 14
-00:00:40,000 --> 00:00:41,913
-Your lucky color today is green.
+00:00:26,640 --> 00:00:29,950
+Today, that good energy is shining on you.
 
 15
-00:00:41,963 --> 00:00:44,551
-Wear it, or carry something green with you.
+00:00:30,000 --> 00:00:31,779
+Born in the Year of the Horse?
 
 16
-00:00:44,601 --> 00:00:47,864
-Your best time is from 7 in the evening to 9 at night,
+00:00:31,829 --> 00:00:33,365
+Your luck is strong today.
 
 17
-00:00:47,914 --> 00:00:49,950
-a good moment for important plans.
+00:00:33,415 --> 00:00:35,804
+Stay free, energetic and joyful, say yes
 
 18
-00:00:50,000 --> 00:00:52,984
-Your lucky direction today is the northwest.
+00:00:35,854 --> 00:00:38,304
+to good chances, and share your good mood
 
 19
-00:00:53,034 --> 00:00:56,847
-When you start something new, let it face the northwest,
+00:00:38,354 --> 00:00:39,950
+with the people around you.
 
 20
-00:00:56,897 --> 00:00:59,950
-and walk forward with a calm and happy heart.
+00:00:40,000 --> 00:00:41,938
+Your lucky color today is green.
 
 21
-00:01:00,000 --> 00:01:03,689
-Your lucky numbers today are 3, 73 and 339.
+00:00:41,988 --> 00:00:42,993
+Wear it, or carry
 
 22
-00:01:03,739 --> 00:01:09,950
-Keep them in mind, and let them remind you that today is your lucky day.
+00:00:43,043 --> 00:00:44,546
+something green with you.
 
 23
-00:01:10,000 --> 00:01:15,132
-Make a small wish today and take one kind step toward it.
+00:00:44,596 --> 00:00:46,969
+Your best time is from 7 in the evening
 
 24
-00:01:15,182 --> 00:01:19,950
-A peaceful heart helps good luck find its way to you.
+00:00:47,019 --> 00:00:48,708
+to 9 at night, a good moment
 
 25
-00:01:20,000 --> 00:01:22,566
-That's your Chinese zodiac fortune for today.
+00:00:48,758 --> 00:00:49,950
+for important plans.
 
 26
-00:01:22,616 --> 00:01:26,752
-See all twelve signs and your full lucky numbers at mybirthsign dot com.
+00:00:50,000 --> 00:00:51,358
+Your lucky direction
 
 27
-00:01:26,802 --> 00:01:29,950
-Follow us for tomorrow's fortune, and have a lucky day!
+00:00:51,408 --> 00:00:52,978
+today is the northwest.
+
+28
+00:00:53,028 --> 00:00:54,950
+When you start something new
+
+29
+00:00:55,000 --> 00:00:57,415
+let it face the northwest, and walk
+
+30
+00:00:57,465 --> 00:00:59,950
+forward with a calm and happy heart.
+
+31
+00:01:00,000 --> 00:01:02,074
+Your lucky numbers today
+
+32
+00:01:02,124 --> 00:01:03,667
+are 3, 73 and 339.
+
+33
+00:01:03,717 --> 00:01:07,384
+Keep them in mind, and let them remind you
+
+34
+00:01:07,434 --> 00:01:09,950
+that today is your lucky day.
+
+35
+00:01:10,000 --> 00:01:12,080
+Make a small wish today
+
+36
+00:01:12,130 --> 00:01:15,135
+and take one kind step toward it.
+
+37
+00:01:15,185 --> 00:01:17,172
+A peaceful heart helps
+
+38
+00:01:17,222 --> 00:01:19,950
+good luck find its way to you.
+
+39
+00:01:20,000 --> 00:01:21,545
+That's your Chinese zodiac
+
+40
+00:01:21,595 --> 00:01:22,649
+fortune for today.
+
+41
+00:01:22,699 --> 00:01:23,876
+See all twelve signs
+
+42
+00:01:23,926 --> 00:01:25,533
+and your full lucky numbers
+
+43
+00:01:25,583 --> 00:01:26,698
+at mybirthsign.com.
+
+44
+00:01:26,748 --> 00:01:28,662
+Follow us for tomorrow's fortune
+
+45
+00:01:28,712 --> 00:01:29,950
+and have a lucky day!

@@ -1,31 +1,51 @@
 1
-00:00:00,000 --> 00:00:07,365
-Your Chinese zodiac fortune for Thursday, 22 October 2026.
+00:00:00,000 --> 00:00:03,462
+Your Chinese zodiac fortune
 
 2
-00:00:07,415 --> 00:00:10,049
-Today is a Snake day.
+00:00:03,512 --> 00:00:07,363
+for Thursday, 22 October 2026.
 
 3
-00:00:10,099 --> 00:00:16,569
-Snake, Ox and Rooster are the luckiest signs today.
+00:00:07,413 --> 00:00:10,095
+Today is a Snake day.
 
 4
-00:00:16,619 --> 00:00:25,135
-Pig should take it easy, slow down and avoid rushing big decisions.
+00:00:10,145 --> 00:00:12,826
+Snake, Ox and Rooster
 
 5
-00:00:25,185 --> 00:00:32,933
-Today's lucky numbers for the lucky signs: Snake, 92 and 987.
+00:00:12,876 --> 00:00:16,597
+are the luckiest signs today.
 
 6
-00:00:32,983 --> 00:00:34,851
-Ox, 18 and 414.
+00:00:16,647 --> 00:00:19,589
+Pig should take it easy
 
 7
-00:00:34,901 --> 00:00:37,407
-Rooster, 72 and 848.
+00:00:19,639 --> 00:00:25,051
+slow down and avoid rushing big decisions.
 
 8
-00:00:37,457 --> 00:00:44,950
-See all 12 signs and full lucky numbers at mybirthsign.com.
+00:00:25,101 --> 00:00:27,782
+Today's lucky numbers
+
+9
+00:00:27,832 --> 00:00:32,855
+for the lucky signs: Snake, 92 and 987.
+
+10
+00:00:32,905 --> 00:00:34,805
+Ox, 18 and 414.
+
+11
+00:00:34,855 --> 00:00:37,407
+Rooster, 72 and 848.
+
+12
+00:00:37,457 --> 00:00:42,479
+See all 12 signs and full lucky numbers
+
+13
+00:00:42,529 --> 00:00:44,950
+at mybirthsign.com.

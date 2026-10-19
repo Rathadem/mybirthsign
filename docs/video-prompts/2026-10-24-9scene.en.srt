@@ -1,107 +1,171 @@
 1
-00:00:00,000 --> 00:00:01,473
+00:00:00,000 --> 00:00:01,515
 Welcome to MyBirthSign.
 
 2
-00:00:01,523 --> 00:00:04,917
-Tonight the full moon rises over the ancient temple,
+00:00:01,565 --> 00:00:03,351
+Tonight the full moon rises
 
 3
-00:00:04,967 --> 00:00:09,950
-the lotus flowers glow on the water, and a very special friend is waking up.
+00:00:03,401 --> 00:00:04,916
+over the ancient temple
 
 4
-00:00:10,000 --> 00:00:13,379
-Today, Saturday, 24 October 2026, is a Goat day.
+00:00:04,966 --> 00:00:07,297
+the lotus flowers glow on the water
 
 5
-00:00:13,429 --> 00:00:17,664
-It is a Great Day for everyone born in the Year of the Goat,
+00:00:07,347 --> 00:00:09,950
+and a very special friend is waking up.
 
 6
-00:00:17,714 --> 00:00:19,950
-so this is your moment to shine.
+00:00:10,000 --> 00:00:12,303
+Today, Saturday, 24 October 2026
 
 7
-00:00:20,000 --> 00:00:23,755
-Gentle and kind, the Goat symbolizes peace,
+00:00:12,353 --> 00:00:13,332
+is a Goat day.
 
 8
-00:00:23,805 --> 00:00:26,233
-harmony, and a caring heart.
+00:00:13,382 --> 00:00:15,906
+It is a Great Day for everyone born
 
 9
+00:00:15,956 --> 00:00:17,597
+in the Year of the Goat
+
+10
+00:00:17,647 --> 00:00:19,950
+so this is your moment to shine.
+
+11
+00:00:20,000 --> 00:00:23,136
+Gentle and kind, the Goat symbolizes
+
+12
+00:00:23,186 --> 00:00:26,233
+peace, harmony, and a caring heart.
+
+13
 00:00:26,283 --> 00:00:29,950
 Today, that good energy is shining on you.
 
-10
-00:00:30,000 --> 00:00:31,729
+14
+00:00:30,000 --> 00:00:31,740
 Born in the Year of the Goat?
 
-11
-00:00:31,779 --> 00:00:33,324
+15
+00:00:31,790 --> 00:00:33,345
 Your luck is strong today.
 
-12
-00:00:33,374 --> 00:00:35,226
-Stay gentle, kind and peaceful,
-
-13
-00:00:35,276 --> 00:00:39,950
-say yes to good chances, and share your good mood with the people around you.
-
-14
-00:00:40,000 --> 00:00:42,028
-Your lucky color today is green.
-
-15
-00:00:42,078 --> 00:00:44,820
-Wear it, or carry something green with you.
-
 16
-00:00:44,870 --> 00:00:47,742
-Your best time is from 5 to 7 in the morning,
+00:00:33,395 --> 00:00:35,752
+Stay gentle, kind and peaceful, say yes
 
 17
-00:00:47,792 --> 00:00:49,950
-a good moment for important plans.
+00:00:35,802 --> 00:00:38,283
+to good chances, and share your good mood
 
 18
-00:00:50,000 --> 00:00:52,839
-Your lucky direction today is the east.
+00:00:38,333 --> 00:00:39,950
+with the people around you.
 
 19
-00:00:52,889 --> 00:00:56,617
-When you start something new, let it face the east,
+00:00:40,000 --> 00:00:42,069
+Your lucky color today is green.
 
 20
-00:00:56,667 --> 00:00:59,950
-and walk forward with a calm and happy heart.
+00:00:42,119 --> 00:00:43,195
+Wear it, or carry
 
 21
-00:01:00,000 --> 00:01:03,689
-Your lucky numbers today are 7, 27 and 292.
+00:00:43,245 --> 00:00:44,851
+something green with you.
 
 22
-00:01:03,739 --> 00:01:09,950
-Keep them in mind, and let them remind you that today is your lucky day.
+00:00:44,901 --> 00:00:45,976
+Your best time is
 
 23
-00:01:10,000 --> 00:01:15,132
-Make a small wish today and take one kind step toward it.
+00:00:46,026 --> 00:00:47,698
+from 5 to 7 in the morning
 
 24
-00:01:15,182 --> 00:01:19,950
-A peaceful heart helps good luck find its way to you.
+00:00:47,748 --> 00:00:49,950
+a good moment for important plans.
 
 25
-00:01:20,000 --> 00:01:22,566
-That's your Chinese zodiac fortune for today.
+00:00:50,000 --> 00:00:52,882
+Your lucky direction today is the east.
 
 26
-00:01:22,616 --> 00:01:26,752
-See all twelve signs and your full lucky numbers at mybirthsign dot com.
+00:00:52,932 --> 00:00:54,988
+When you start something new
 
 27
-00:01:26,802 --> 00:01:29,950
-Follow us for tomorrow's fortune, and have a lucky day!
+00:00:55,038 --> 00:00:57,845
+let it face the east, and walk forward
+
+28
+00:00:57,895 --> 00:00:59,950
+with a calm and happy heart.
+
+29
+00:01:00,000 --> 00:01:02,074
+Your lucky numbers today
+
+30
+00:01:02,124 --> 00:01:03,667
+are 7, 27 and 292.
+
+31
+00:01:03,717 --> 00:01:07,384
+Keep them in mind, and let them remind you
+
+32
+00:01:07,434 --> 00:01:09,950
+that today is your lucky day.
+
+33
+00:01:10,000 --> 00:01:12,080
+Make a small wish today
+
+34
+00:01:12,130 --> 00:01:15,135
+and take one kind step toward it.
+
+35
+00:01:15,185 --> 00:01:17,172
+A peaceful heart helps
+
+36
+00:01:17,222 --> 00:01:19,950
+good luck find its way to you.
+
+37
+00:01:20,000 --> 00:01:21,545
+That's your Chinese zodiac
+
+38
+00:01:21,595 --> 00:01:22,649
+fortune for today.
+
+39
+00:01:22,699 --> 00:01:23,876
+See all twelve signs
+
+40
+00:01:23,926 --> 00:01:25,533
+and your full lucky numbers
+
+41
+00:01:25,583 --> 00:01:26,698
+at mybirthsign.com.
+
+42
+00:01:26,748 --> 00:01:28,662
+Follow us for tomorrow's fortune
+
+43
+00:01:28,712 --> 00:01:29,950
+and have a lucky day!

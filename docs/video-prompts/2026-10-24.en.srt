@@ -1,31 +1,51 @@
 1
-00:00:00,000 --> 00:00:07,450
-Your Chinese zodiac fortune for Saturday, 24 October 2026.
+00:00:00,000 --> 00:00:03,503
+Your Chinese zodiac fortune
 
 2
-00:00:07,500 --> 00:00:10,036
-Today is a Goat day.
+00:00:03,553 --> 00:00:07,450
+for Saturday, 24 October 2026.
 
 3
-00:00:10,086 --> 00:00:16,502
-Goat, Rabbit and Pig are the luckiest signs today.
+00:00:07,500 --> 00:00:10,082
+Today is a Goat day.
 
 4
-00:00:16,552 --> 00:00:25,036
-Ox should take it easy, slow down and avoid rushing big decisions.
+00:00:10,132 --> 00:00:12,713
+Goat, Rabbit and Pig
 
 5
-00:00:25,086 --> 00:00:32,795
-Today's lucky numbers for the lucky signs: Goat, 27 and 292.
+00:00:12,763 --> 00:00:16,529
+are the luckiest signs today.
 
 6
-00:00:32,845 --> 00:00:35,252
-Rabbit, 49 and 664.
+00:00:16,579 --> 00:00:19,424
+Ox should take it easy
 
 7
-00:00:35,302 --> 00:00:37,321
-Pig, 52 and 858.
+00:00:19,474 --> 00:00:24,950
+slow down and avoid rushing big decisions.
 
 8
-00:00:37,371 --> 00:00:44,950
-See all 12 signs and full lucky numbers at mybirthsign.com.
+00:00:25,000 --> 00:00:27,713
+Today's lucky numbers
+
+9
+00:00:27,763 --> 00:00:32,713
+for the lucky signs: Goat, 27 and 292.
+
+10
+00:00:32,763 --> 00:00:35,213
+Rabbit, 49 and 664.
+
+11
+00:00:35,263 --> 00:00:37,318
+Pig, 52 and 858.
+
+12
+00:00:37,368 --> 00:00:42,450
+See all 12 signs and full lucky numbers
+
+13
+00:00:42,500 --> 00:00:44,950
+at mybirthsign.com.

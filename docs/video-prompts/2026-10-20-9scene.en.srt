@@ -1,107 +1,175 @@
 1
-00:00:00,000 --> 00:00:01,473
+00:00:00,000 --> 00:00:01,515
 Welcome to MyBirthSign.
 
 2
-00:00:01,523 --> 00:00:04,917
-Tonight the full moon rises over the ancient temple,
+00:00:01,565 --> 00:00:03,351
+Tonight the full moon rises
 
 3
-00:00:04,967 --> 00:00:09,950
-the lotus flowers glow on the water, and a very special friend is waking up.
+00:00:03,401 --> 00:00:04,916
+over the ancient temple
 
 4
-00:00:10,000 --> 00:00:13,377
-Today, Tuesday, 20 October 2026, is a Rabbit day.
+00:00:04,966 --> 00:00:07,297
+the lotus flowers glow on the water
 
 5
-00:00:13,427 --> 00:00:17,712
-It is a Great Day for everyone born in the Year of the Rabbit,
+00:00:07,347 --> 00:00:09,950
+and a very special friend is waking up.
 
 6
-00:00:17,762 --> 00:00:19,950
-so this is your moment to shine.
+00:00:10,000 --> 00:00:12,180
+Today, Tuesday, 20 October 2026
 
 7
-00:00:20,000 --> 00:00:22,607
-Beloved companion of the Moon Goddess,
+00:00:12,230 --> 00:00:13,331
+is a Rabbit day.
 
 8
-00:00:22,657 --> 00:00:27,013
-the Rabbit symbolizes purity, longevity, and peaceful elegance.
+00:00:13,381 --> 00:00:15,849
+It is a Great Day for everyone born
 
 9
-00:00:27,063 --> 00:00:29,950
-Today, that good energy is shining on you.
+00:00:15,899 --> 00:00:17,648
+in the Year of the Rabbit
 
 10
-00:00:30,000 --> 00:00:31,829
-Born in the Year of the Rabbit?
+00:00:17,698 --> 00:00:19,950
+so this is your moment to shine.
 
 11
-00:00:31,879 --> 00:00:33,405
-Your luck is strong today.
+00:00:20,000 --> 00:00:22,593
+Beloved companion of the Moon Goddess
 
 12
-00:00:33,455 --> 00:00:35,283
-Stay calm, gentle and graceful,
+00:00:22,643 --> 00:00:24,593
+the Rabbit symbolizes purity
 
 13
-00:00:35,333 --> 00:00:39,950
-say yes to good chances, and share your good mood with the people around you.
+00:00:24,643 --> 00:00:26,950
+longevity, and peaceful elegance.
 
 14
-00:00:40,000 --> 00:00:41,924
-Your lucky color today is red.
+00:00:27,000 --> 00:00:29,950
+Today, that good energy is shining on you.
 
 15
-00:00:41,974 --> 00:00:44,621
-Wear it, or carry something red with you.
+00:00:30,000 --> 00:00:31,840
+Born in the Year of the Rabbit?
 
 16
-00:00:44,671 --> 00:00:47,713
-Your best time is from 1 to 3 in the afternoon,
+00:00:31,890 --> 00:00:33,426
+Your luck is strong today.
 
 17
-00:00:47,763 --> 00:00:49,950
-a good moment for important plans.
+00:00:33,476 --> 00:00:35,804
+Stay calm, gentle and graceful, say yes
 
 18
-00:00:50,000 --> 00:00:52,984
-Your lucky direction today is the southwest.
+00:00:35,854 --> 00:00:38,304
+to good chances, and share your good mood
 
 19
-00:00:53,034 --> 00:00:56,847
-When you start something new, let it face the southwest,
+00:00:38,354 --> 00:00:39,950
+with the people around you.
 
 20
-00:00:56,897 --> 00:00:59,950
-and walk forward with a calm and happy heart.
+00:00:40,000 --> 00:00:41,950
+Your lucky color today is red.
 
 21
-00:01:00,000 --> 00:01:03,689
-Your lucky numbers today are 4, 64 and 436.
+00:00:42,000 --> 00:00:44,683
+Wear it, or carry something red with you.
 
 22
-00:01:03,739 --> 00:01:09,950
-Keep them in mind, and let them remind you that today is your lucky day.
+00:00:44,733 --> 00:00:45,817
+Your best time is
 
 23
-00:01:10,000 --> 00:01:15,132
-Make a small wish today and take one kind step toward it.
+00:00:45,867 --> 00:00:47,683
+from 1 to 3 in the afternoon
 
 24
-00:01:15,182 --> 00:01:19,950
-A peaceful heart helps good luck find its way to you.
+00:00:47,733 --> 00:00:49,950
+a good moment for important plans.
 
 25
-00:01:20,000 --> 00:01:22,566
-That's your Chinese zodiac fortune for today.
+00:00:50,000 --> 00:00:51,358
+Your lucky direction
 
 26
-00:01:22,616 --> 00:01:26,752
-See all twelve signs and your full lucky numbers at mybirthsign dot com.
+00:00:51,408 --> 00:00:52,978
+today is the southwest.
 
 27
-00:01:26,802 --> 00:01:29,950
-Follow us for tomorrow's fortune, and have a lucky day!
+00:00:53,028 --> 00:00:54,950
+When you start something new
+
+28
+00:00:55,000 --> 00:00:57,415
+let it face the southwest, and walk
+
+29
+00:00:57,465 --> 00:00:59,950
+forward with a calm and happy heart.
+
+30
+00:01:00,000 --> 00:01:02,074
+Your lucky numbers today
+
+31
+00:01:02,124 --> 00:01:03,667
+are 4, 64 and 436.
+
+32
+00:01:03,717 --> 00:01:07,384
+Keep them in mind, and let them remind you
+
+33
+00:01:07,434 --> 00:01:09,950
+that today is your lucky day.
+
+34
+00:01:10,000 --> 00:01:12,080
+Make a small wish today
+
+35
+00:01:12,130 --> 00:01:15,135
+and take one kind step toward it.
+
+36
+00:01:15,185 --> 00:01:17,172
+A peaceful heart helps
+
+37
+00:01:17,222 --> 00:01:19,950
+good luck find its way to you.
+
+38
+00:01:20,000 --> 00:01:21,545
+That's your Chinese zodiac
+
+39
+00:01:21,595 --> 00:01:22,649
+fortune for today.
+
+40
+00:01:22,699 --> 00:01:23,876
+See all twelve signs
+
+41
+00:01:23,926 --> 00:01:25,533
+and your full lucky numbers
+
+42
+00:01:25,583 --> 00:01:26,698
+at mybirthsign.com.
+
+43
+00:01:26,748 --> 00:01:28,662
+Follow us for tomorrow's fortune
+
+44
+00:01:28,712 --> 00:01:29,950
+and have a lucky day!
