@@ -213,13 +213,13 @@ ${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for th
 ### Caption – Khmer
 ${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).label.km}សម្រាប់ឆ្នាំ${dayKm}។ លេខសំណាង៖ ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ)។ មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
 
-## 9-scene video – luckiest animal (about 72 seconds)
-A longer video about the ${day}, today's luckiest animal: 9 clips of 8 seconds. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Add the reference pictures of ${list([...new Set([day, ...lucky, ...careful])])} as ingredients in Flow. Put the clips in order 1 to 9.
+## 9-scene video – luckiest animal (about 90 seconds)
+A longer video about the ${day}, today's luckiest animal: 9 clips of 10 seconds (about 90 seconds). Set the clip length in Flow to 10 seconds. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Add the reference pictures of ${list([...new Set([day, ...lucky, ...careful])])} as ingredients in Flow. Put the clips in order 1 to 9.
 
-${nine.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t}\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
+${nine.map(([t, prompt], i) => [t, prompt, vo90[i][0], vo90[i][1]]).map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
 
 ## Voice-over – 9-scene video (about 90 seconds)
-Record this over the 9 clips (about 10 seconds each). Flow clips are 8 seconds, so slow each clip to about 80% speed in your editor, or extend it in Flow. Read calmly; English is about 230 words, a comfortable 90 seconds.
+The same lines as the voice in each 10-second scene above, all together. Use it if you record the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too). English is about 230 words, a calm 90 seconds.
 
 ### English
 ${voLines(0)}
