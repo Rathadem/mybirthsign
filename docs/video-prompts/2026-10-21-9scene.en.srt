@@ -1,133 +1,133 @@
 1
-00:00:00,000 --> 00:00:01,515
-Welcome to MyBirthSign.
+00:00:00,000 --> 00:00:02,245
+Tonight, the full moon rises
 
 2
-00:00:01,565 --> 00:00:03,351
-Tonight the full moon rises
+00:00:02,295 --> 00:00:04,212
+over the ancient temple.
 
 3
-00:00:03,401 --> 00:00:04,916
-over the ancient temple
+00:00:04,262 --> 00:00:06,753
+Lotus flowers glow on the water
 
 4
-00:00:04,966 --> 00:00:07,297
-the lotus flowers glow on the water
-
-5
-00:00:07,347 --> 00:00:09,950
+00:00:06,803 --> 00:00:09,950
 and a very special friend is waking up.
 
-6
-00:00:10,000 --> 00:00:12,290
+5
+00:00:10,000 --> 00:00:12,376
 Today, Wednesday, 21 October 2026
 
-7
-00:00:12,340 --> 00:00:13,425
+6
+00:00:12,426 --> 00:00:13,553
 is a Dragon day.
 
-8
-00:00:13,475 --> 00:00:15,907
+7
+00:00:13,603 --> 00:00:16,126
 It is a Great Day for everyone born
 
+8
+00:00:16,176 --> 00:00:18,038
+in the Year of the Dragon.
+
 9
-00:00:15,957 --> 00:00:17,680
-in the Year of the Dragon
+00:00:18,088 --> 00:00:19,950
+This is your day to shine!
 
 10
-00:00:17,730 --> 00:00:19,950
-so this is your moment to shine.
-
-11
-00:00:20,000 --> 00:00:22,104
+00:00:20,000 --> 00:00:22,208
 Ruler of the clouds and rain
 
-12
-00:00:22,154 --> 00:00:24,181
+11
+00:00:22,258 --> 00:00:24,385
 the Dragon symbolizes power
 
-13
-00:00:24,231 --> 00:00:26,719
+12
+00:00:24,435 --> 00:00:27,047
 good fortune, and a noble spirit.
 
-14
-00:00:26,769 --> 00:00:29,950
-Today, that good energy is shining on you.
+13
+00:00:27,097 --> 00:00:29,950
+Today, this good energy is with you.
 
-15
+14
 00:00:30,000 --> 00:00:31,840
 Born in the Year of the Dragon?
 
-16
+15
 00:00:31,890 --> 00:00:33,426
 Your luck is strong today.
 
+16
+00:00:33,476 --> 00:00:35,316
+Stay majestic, proud and noble.
+
 17
-00:00:33,476 --> 00:00:35,804
-Stay majestic, proud and noble, say yes
+00:00:35,366 --> 00:00:37,389
+Say yes to good chances, and share
 
 18
-00:00:35,854 --> 00:00:38,304
-to good chances, and share your good mood
+00:00:37,439 --> 00:00:39,950
+your happiness with the people around you.
 
 19
-00:00:38,354 --> 00:00:39,950
-with the people around you.
-
-20
-00:00:40,000 --> 00:00:41,806
+00:00:40,000 --> 00:00:41,925
 Your lucky color today is gold.
 
-21
-00:00:41,856 --> 00:00:44,321
+20
+00:00:41,975 --> 00:00:44,600
 Wear it, or carry something gold with you.
 
+21
+00:00:44,650 --> 00:00:45,682
+Your best time is
+
 22
-00:00:44,371 --> 00:00:46,776
-Your best time is from 3 in the afternoon
+00:00:45,732 --> 00:00:47,530
+from 3 to 5 in the afternoon.
 
 23
-00:00:46,826 --> 00:00:47,914
-to 5 in the evening
+00:00:47,580 --> 00:00:49,950
+It is a good time for important plans.
 
 24
-00:00:47,964 --> 00:00:49,950
-a good moment for important plans.
-
-25
-00:00:50,000 --> 00:00:51,358
+00:00:50,000 --> 00:00:51,431
 Your lucky direction
 
-26
-00:00:51,408 --> 00:00:52,978
+25
+00:00:51,481 --> 00:00:53,135
 today is the southwest.
 
-27
-00:00:53,028 --> 00:00:54,950
+26
+00:00:53,185 --> 00:00:55,209
 When you start something new
 
+27
+00:00:55,259 --> 00:00:57,876
+face the southwest, and walk forward
+
 28
-00:00:55,000 --> 00:00:57,415
-let it face the southwest, and walk
+00:00:57,926 --> 00:00:59,950
+with a calm and happy heart.
 
 29
-00:00:57,465 --> 00:00:59,950
-forward with a calm and happy heart.
-
-30
-00:01:00,000 --> 00:01:02,074
+00:01:00,000 --> 00:01:02,152
 Your lucky numbers today
 
+30
+00:01:02,202 --> 00:01:03,895
+are 1, 65, and 110.
+
 31
-00:01:02,124 --> 00:01:03,667
-are 1, 65 and 110.
+00:01:03,945 --> 00:01:05,546
+Keep them in mind.
 
 32
-00:01:03,717 --> 00:01:07,384
-Keep them in mind, and let them remind you
+00:01:05,596 --> 00:01:07,289
+Let them remind you
 
 33
-00:01:07,434 --> 00:01:09,950
+00:01:07,339 --> 00:01:09,950
 that today is your lucky day.
 
 34
@@ -147,29 +147,25 @@ A peaceful heart helps
 good luck find its way to you.
 
 38
-00:01:20,000 --> 00:01:21,545
+00:01:20,000 --> 00:01:21,617
 That's your Chinese zodiac
 
 39
-00:01:21,595 --> 00:01:22,649
+00:01:21,667 --> 00:01:22,771
 fortune for today.
 
 40
-00:01:22,699 --> 00:01:23,876
+00:01:22,821 --> 00:01:24,053
 See all twelve signs
 
 41
-00:01:23,926 --> 00:01:25,533
-and your full lucky numbers
+00:01:24,103 --> 00:01:26,745
+and your lucky numbers at mybirthsign.com.
 
 42
-00:01:25,583 --> 00:01:26,698
-at mybirthsign.com.
+00:01:26,795 --> 00:01:28,860
+Follow us for tomorrow's fortune.
 
 43
-00:01:26,748 --> 00:01:28,662
-Follow us for tomorrow's fortune
-
-44
-00:01:28,712 --> 00:01:29,950
-and have a lucky day!
+00:01:28,910 --> 00:01:29,950
+Have a lucky day!
