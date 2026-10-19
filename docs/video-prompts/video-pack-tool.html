@@ -417,6 +417,35 @@ function buildPack(iso, F, forSign, data = null) {
     ["Golden ending", `The ${dl} floats gently up toward the full moon, waving goodbye. Golden light beams shoot up from the temple towers and burst into soft lotus-shaped golden fireworks, and hundreds of lanterns rise over the glowing pond. The camera rises and pulls back for a wide, epic view, with open sky at the top for a title.`,
       "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
   ];
+  // 90-second voice-over for the 9-scene video (about 10 seconds per scene)
+  const KMDAY = ["ថ្ងៃអាទិត្យ", "ថ្ងៃច័ន្ទ", "ថ្ងៃអង្គារ", "ថ្ងៃពុធ", "ថ្ងៃព្រហស្បតិ៍", "ថ្ងៃសុក្រ", "ថ្ងៃសៅរ៍"];
+  const wdKm = KMDAY[new Date(iso + "T00:00:00Z").getUTCDay()];
+  const ckm = dd.lucky.color.km, cen = dd.lucky.color.en;
+  const vo90 = [
+    ["Welcome to MyBirthSign. Tonight the full moon rises over the ancient temple, the lotus flowers glow on the water, and a very special friend is waking up.",
+      "សូមស្វាគមន៍មកកាន់ MyBirthSign។ យប់នេះ ព្រះចន្ទពេញវង់រះលើប្រាសាទបុរាណ ផ្កាឈូកភ្លឺចែងចាំងលើផ្ទៃទឹក ហើយមានមិត្តពិសេសម្នាក់កំពុងភ្ញាក់ឡើង។"],
+    [`Today, ${LD}, is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day. It is a ${dd.label.en} for everyone born in the Year of the ${day}, so this is your moment to shine.`,
+      `ថ្ងៃនេះ ${wdKm} ទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)} ជាថ្ងៃ${dayKm}។ ជា${dd.label.km}សម្រាប់អ្នកកើតឆ្នាំ${dayKm} ដូច្នេះនេះជាពេលដែលអ្នកត្រូវបញ្ចេញពន្លឺ។`],
+    [`${S9.en} Today, that good energy is shining on you.`, `${S9.km} ថ្ងៃនេះ ថាមពលល្អនោះកំពុងរះចាំងមកលើអ្នក។`],
+    [`Born in the Year of the ${day}? Your luck is strong today. Stay ${S9.mood}, say yes to good chances, and share your good mood with the people around you.`,
+      `អ្នកកើតឆ្នាំ${dayKm} ថ្ងៃនេះសំណាងរបស់អ្នកខ្លាំងណាស់។ ចូររក្សាចិត្តស្ងប់ ទទួលយកឱកាសល្អៗ និងចែករំលែកភាពរីករាយទៅកាន់មនុស្សជុំវិញខ្លួន។`],
+    [`Your lucky color today is ${cen}. Wear it, or carry something ${cen} with you. Your best time is ${sayTime(dd.lucky.time)}, a good moment for important plans.`,
+      `ពណ៌សំណាងថ្ងៃនេះគឺពណ៌${ckm}។ ស្លៀកពាក់ ឬយករបស់ពណ៌${ckm}ជាប់ខ្លួន។ ពេលល្អបំផុតគឺ${sayTimeKm(dd.lucky.time)} ជាពេលល្អសម្រាប់ផែនការសំខាន់ៗ។`],
+    [`Your lucky friends today are ${list(friends.map((a) => `the ${a}`))}. They are having a good day too. Spend time together, work together, and let good fortune grow.`,
+      `មិត្តសំណាងរបស់អ្នកថ្ងៃនេះគឺ ${kmList(friends.map((a) => `ឆ្នាំ${km(a)}`))}។ ពួកគេក៏មានថ្ងៃល្អដែរ។ ចំណាយពេលជាមួយគ្នា ធ្វើការជាមួយគ្នា ហើយឲ្យសំណាងល្អកាន់តែកើនឡើង។`],
+    [`Here are today's lucky numbers. ${nums.map((n) => `${n.a}: ${n.d2} and ${n.d3}.`).join(" ")} Lucky numbers are just for fun, not betting advice.`,
+      `នេះគឺជាលេខសំណាងថ្ងៃនេះ។ ${nums.map((n) => `ឆ្នាំ${km(n.a)}៖ ${n.d2} និង ${n.d3}។`).join(" ")} លេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការណែនាំឱ្យភ្នាល់ទេ។`],
+    careful.length
+      ? [`${list(careful)}, today is a day to take it easy. Slow down, rest well, and don't rush big decisions. Calm steps today lead to better days ahead.`,
+        `ឆ្នាំ${kmList(careful.map(km))} ថ្ងៃនេះគួរសម្រាកឲ្យស្រួលខ្លួន។ ធ្វើអ្វីៗយឺតៗ សម្រាកឲ្យបានគ្រប់គ្រាន់ និងកុំប្រញាប់សម្រេចចិត្តរឿងធំៗ។ ជំហានស្ងប់ៗថ្ងៃនេះ នាំទៅរកថ្ងៃល្អៗខាងមុខ។`]
+      : ["Whatever your sign, take a calm breath today. Slow, steady steps lead to better days ahead.", "មិនថាអ្នកកើតឆ្នាំអ្វីទេ ថ្ងៃនេះសូមដកដង្ហើមឲ្យស្ងប់។ ជំហានស្ងប់ៗ នាំទៅរកថ្ងៃល្អៗខាងមុខ។"],
+    ["That's your Chinese zodiac fortune for today. See all twelve signs and your full lucky numbers at mybirthsign dot com. Follow us for tomorrow's fortune, and have a lucky day!",
+      "នេះជាជោគជតារាសីចិនសម្រាប់ថ្ងៃនេះ។ ចូលមើលរាសីទាំង 12 និងលេខសំណាងពេញលេញនៅ mybirthsign.com។ តាមដានយើងសម្រាប់ជោគជតាថ្ងៃស្អែក ហើយសូមឲ្យមានសំណាងល្អ!"],
+  ];
+  const mmss = (t) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`;
+  const voLines = (k) => vo90.map((v, i) => `Scene ${i + 1} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${v[k]}`).join("\n\n");
+  const srt90Km = srt(vo90.flatMap((v) => splitLines(v[1], "km")), 90);
+  const srt90En = srt(vo90.flatMap((v) => splitLines(v[0], "en")), 90);
   const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
@@ -445,6 +474,23 @@ ${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).l
 A longer video about the ${day}, today's luckiest animal: 9 clips of 8 seconds. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Add the reference pictures of ${list([...new Set([day, ...lucky, ...careful])])} as ingredients in Flow. Put the clips in order 1 to 9.
 
 ${nine.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t}\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
+
+## Voice-over – 9-scene video (about 90 seconds)
+Record this over the 9 clips (about 10 seconds each). Flow clips are 8 seconds, so slow each clip to about 80% speed in your editor, or extend it in Flow. Read calmly; English is about 230 words, a comfortable 90 seconds.
+
+### English
+${voLines(0)}
+
+### Khmer
+${voLines(1)}
+
+### Subtitles – Khmer (${iso}-9scene.srt)
+\`\`\`
+${srt90Km}\`\`\`
+
+### Subtitles – English (${iso}-9scene.en.srt)
+\`\`\`
+${srt90En}\`\`\`
 
 ## Style (paste first in every scene)
 ${STYLE}
