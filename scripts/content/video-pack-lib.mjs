@@ -187,8 +187,17 @@ export function buildPack(iso, F, forSign, data = null) {
   ];
   const mmss = (t) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`;
   const voLines = (k) => vo90.map((v, i) => `Scene ${i + 1} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${v[k]}`).join("\n\n");
-  const srt90Km = srt(vo90.flatMap((v) => splitLines(v[1], "km")), 90);
-  const srt90En = srt(vo90.flatMap((v) => splitLines(v[0], "en")), 90);
+  // subtitles locked to the scenes: each scene's lines share its own 10 seconds
+  const srtScenes = (k, lang) => {
+    let n = 0;
+    return vo90.map((v, si) => {
+      const lines = splitLines(v[k], lang), w = lines.map((l) => Math.max(l.length, 12)), sum = w.reduce((a, b) => a + b, 0);
+      let t = si * 10;
+      return lines.map((l, i) => { const d = (10 * w[i]) / sum; const out = `${++n}\n${ts(t)} --> ${ts(t + d - 0.05)}\n${l}\n`; t += d; return out; }).join("\n");
+    }).join("\n");
+  };
+  const srt90Km = srtScenes(1, "km");
+  const srt90En = srtScenes(0, "en");
   const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
@@ -367,7 +376,7 @@ ${srtKm}\`\`\`
 \`\`\`
 ${srtEn}\`\`\`
 `;
-  return { md, srtKm, srtEn, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
+  return { md, srtKm, srtEn, srt90Km, srt90En, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
 }
 
 // the full set of 12 character prompts (profile pictures / collection artwork / video references)

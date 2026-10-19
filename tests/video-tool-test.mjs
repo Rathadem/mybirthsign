@@ -25,7 +25,7 @@ const got = await page.evaluate((ds) => ds.map((d) => window.__pack(d)), dates);
 let bad = 0;
 dates.forEach((d, i) => {
   const want = buildPack(d, computeFacts(d), forSign, null);
-  for (const k of ["md", "srtKm", "srtEn"]) if (got[i][k] !== want[k]) { bad++; if (bad < 5) console.error(`DIFF ${d} ${k}`); }
+  for (const k of ["md", "srtKm", "srtEn", "srt90Km", "srt90En"]) if (got[i][k] !== want[k]) { bad++; if (bad < 5) console.error(`DIFF ${d} ${k}`); }
 });
 const sections = await page.locator("details.sec").count();
 await browser.close();

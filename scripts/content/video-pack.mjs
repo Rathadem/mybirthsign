@@ -31,6 +31,8 @@ for (let i = 0; i < Number(nDays); i++) {
   fs.writeFileSync(path.join(dir, `${iso}.md`), p.md);
   fs.writeFileSync(path.join(dir, `${iso}.srt`), p.srtKm);
   fs.writeFileSync(path.join(dir, `${iso}.en.srt`), p.srtEn);
+  fs.writeFileSync(path.join(dir, `${iso}-9scene.srt`), p.srt90Km);
+  fs.writeFileSync(path.join(dir, `${iso}-9scene.en.srt`), p.srt90En);
   console.log(p.line);
 }
 fs.writeFileSync(path.join(dir, "characters.md"), charactersMd(KM_NAMES));
