@@ -82,6 +82,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     <button id="next" aria-label="Next day">▶</button>
     <button id="today">Today</button>
     <span class="spacer"></span>
+    <button class="dl" id="dlsrt" hidden>Download subtitles (.zip)</button>
     <button class="primary" id="copyall">Copy whole pack</button>
   </div>
 
@@ -97,6 +98,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 </div>
 <div class="toast" id="toast" hidden></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 /*__CODE__*/
 </script>
@@ -155,8 +157,8 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   function render(iso) {
     var F = computeFacts(iso);
     var p = buildPack(iso, F, window.MBSLuckyDigits.forSign, null);
-    var md = p.md.replace(/Two files are saved next to this one: `[^`]+` \(Khmer\) and `[^`]+` \(English\)\.\n/, "Copy each file below into a plain text file named " + iso + ".srt (Khmer) and " + iso + ".en.srt (English), or paste the voice-over text into YouTube's “Auto-sync”.\n");
-    window.__lastMd = md;
+    var md = p.md.replace(/Two files are saved next to this one: `[^`]+` \(Khmer\) and `[^`]+` \(English\)\.\n/, "Press “Download subtitles (.zip)” at the top to save all four subtitle files for this date (" + iso + ".srt Khmer, " + iso + ".en.srt English, and the -9scene versions for the 90-second video). Or copy a block below into a plain text file ending in .srt.\n");
+    window.__lastMd = md; window.__lastPack = p;
     var voices = voiceLines(md);
     var sign = function (a) { return F.signs.filter(function (s) { return s.animal === a; })[0]; };
     var lucky = F.highlights.topLucky, careful = F.highlights.careful;
@@ -191,6 +193,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
         html += '<div class="block">' + (b.title ? "<h3>" + esc(b.title) + "</h3>" : "") +
           '<pre class="txt' + (b.code ? " code" : "") + '" id="' + id + '">' + (b.code ? esc(b.text) : rich(b.text)) + "</pre>" +
           '<div class="row"><button data-copy="' + id + '">Copy</button>' +
+          (b.code && /\.srt/.test(b.title) ? '<button class="dl" data-dlsrt="1"' + (dl ? "" : " hidden") + '>Download subtitles (.zip)</button>' : "") +
           (scene && voices[scene[1]] ? '<button data-flow="' + scene[1] + '|en" data-pre="' + id + '">Copy + English voice</button><button data-flow="' + scene[1] + '|km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
           (/\nEnglish voice: /.test(b.text) ? '<button data-nine="en" data-pre="' + id + '">Copy + English voice</button><button data-nine="km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
           "</div></div>";
@@ -224,6 +227,29 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       copy(STYLE + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English|Khmer) voice: /, ""), b, document.getElementById(b.dataset.pre));
     } else if (b.dataset.go) set(b.dataset.go);
   });
+  // subtitle files: .srt is not a format the viewer can save directly, so the four files go in one .zip
+  var dl = null;
+  if (window.claude && window.claude.use) window.claude.use("downloads").then(function (x) {
+    dl = x && window.JSZip ? x : null;
+    document.querySelectorAll(".dl").forEach(function (b) { b.hidden = !dl; });
+  }, function () {});
+  function saveSubtitles(btn) {
+    var p = window.__lastPack, iso = D.value;
+    if (!dl || !p) return;
+    var z = new JSZip();
+    z.file(iso + ".srt", p.srtKm); z.file(iso + ".en.srt", p.srtEn);
+    z.file(iso + "-9scene.srt", p.srt90Km); z.file(iso + "-9scene.en.srt", p.srt90En);
+    z.generateAsync({ type: "blob" }).then(function (blob) {
+      return dl.save({ filename: "mybirthsign-subtitles-" + iso + ".zip", data: blob });
+    }).then(function (r) { if (r && r.status === "saved") toast("Saved"); }, function (e) {
+      var c = e && e.code;
+      if (c === "declined") return;
+      if (c === "rate_limited") toast("A save is already open. Try again in a moment.");
+      else { toast("Saving is not available here. Use the Copy buttons instead."); if (c !== "too_large") { dl = null; document.querySelectorAll(".dl").forEach(function (b) { b.hidden = true; }); } }
+    });
+  }
+  $("dlsrt").addEventListener("click", function (e) { saveSubtitles(e.currentTarget); });
+  document.addEventListener("click", function (e) { var b = e.target.closest("button[data-dlsrt]"); if (b) { e.preventDefault(); saveSubtitles(b); } });
   $("copyall").addEventListener("click", function (e) { copy(plain(window.__lastMd || ""), e.currentTarget); });
 
   function set(iso) {
