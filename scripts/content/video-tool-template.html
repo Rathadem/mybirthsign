@@ -151,7 +151,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     return out;
   }
 
-  var ORDER_OPEN = /^Luckiest|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
+  var ORDER_OPEN = /^Luckiest|^9-scene|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
   function render(iso) {
     var F = computeFacts(iso);
     var p = buildPack(iso, F, window.MBSLuckyDigits.forSign, null);
@@ -192,6 +192,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
           '<pre class="txt' + (b.code ? " code" : "") + '" id="' + id + '">' + (b.code ? esc(b.text) : rich(b.text)) + "</pre>" +
           '<div class="row"><button data-copy="' + id + '">Copy</button>' +
           (scene && voices[scene[1]] ? '<button data-flow="' + scene[1] + '|en" data-pre="' + id + '">Copy + English voice</button><button data-flow="' + scene[1] + '|km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
+          (/\nEnglish voice: /.test(b.text) ? '<button data-nine="en" data-pre="' + id + '">Copy + English voice</button><button data-nine="km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
           "</div></div>";
       });
       html += "</div></details>";
@@ -216,6 +217,11 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     else if (b.dataset.flow) {
       var k = b.dataset.flow.split("|"), v = $("pack").__voices[k[0]][k[1]];
       copy(STYLE + "\n\n" + T[b.dataset.pre] + "\n\n" + v, b, document.getElementById(b.dataset.pre));
+    } else if (b.dataset.nine) {
+      var full = T[b.dataset.pre], lines = full.split("\n");
+      var scene9 = lines.filter(function (l) { return !/^(English|Khmer) voice: /.test(l); }).join("\n");
+      var vl = lines.filter(function (l) { return l.indexOf(b.dataset.nine === "en" ? "English voice: " : "Khmer voice: ") === 0; })[0] || "";
+      copy(STYLE + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English|Khmer) voice: /, ""), b, document.getElementById(b.dataset.pre));
     } else if (b.dataset.go) set(b.dataset.go);
   });
   $("copyall").addEventListener("click", function (e) { copy(plain(window.__lastMd || ""), e.currentTarget); });

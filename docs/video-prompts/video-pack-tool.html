@@ -301,20 +301,25 @@ const MUSIC = "Gentle magical background music with soft chimes and a light Asia
 // the luckiest animal of the day (the day animal): one-line symbolism for the hero picture, video and caption
 // (Rabbit line written by the owner; the others follow the same pattern with common traditional symbolism)
 const SYMBOL = {
-  Rat: { en: "Clever and quick, the first animal of the zodiac, the Rat symbolizes wit, resourcefulness, and new beginnings.", km: "ឆ្លាតវៃ និងរហ័សរហួន ជាសត្វទីមួយនៃរាសីទាំង 12 ឆ្នាំជូតតំណាងឲ្យប្រាជ្ញា ភាពប៉ិនប្រសប់ និងការចាប់ផ្ដើមថ្មី។", traits: "wit, resourcefulness and new beginnings", mood: "bright, clever and lively" },
-  Ox: { en: "Steady and strong, the Ox symbolizes hard work, patience, and honest strength.", km: "នឹងនរ និងរឹងមាំ ឆ្នាំឆ្លូវតំណាងឲ្យការខិតខំ ការអត់ធ្មត់ និងកម្លាំងដ៏ស្មោះត្រង់។", traits: "hard work, patience and honest strength", mood: "calm, steady and strong" },
-  Tiger: { en: "King of the mountains, the Tiger symbolizes courage, protection, and bold power.", km: "ស្ដេចនៃព្រៃភ្នំ ឆ្នាំខាលតំណាងឲ្យភាពក្លាហាន ការការពារ និងថាមពលដ៏អង់អាច។", traits: "courage, protection and bold power", mood: "brave, proud and protective" },
-  Rabbit: { en: "Beloved companion of the Moon Goddess, the Rabbit symbolizes purity, longevity, and peaceful elegance.", km: "ជាដៃគូជាទីស្រឡាញ់របស់ទេពធីតាព្រះចន្ទ ឆ្នាំថោះតំណាងឲ្យភាពបរិសុទ្ធ អាយុវែង និងភាពថ្លៃថ្នូរដ៏ស្ងប់ស្ងាត់។", traits: "purity, longevity and peaceful elegance", mood: "calm, gentle and graceful" },
-  Dragon: { en: "Ruler of the clouds and rain, the Dragon symbolizes power, good fortune, and a noble spirit.", km: "ជាម្ចាស់នៃពពក និងភ្លៀង ឆ្នាំរោងតំណាងឲ្យអំណាច សំណាងល្អ និងចិត្តថ្លៃថ្នូរ។", traits: "power, good fortune and a noble spirit", mood: "majestic, proud and noble" },
-  Snake: { en: "Wise and graceful, the Snake symbolizes wisdom, intuition, and quiet elegance.", km: "ឈ្លាសវៃ និងស្រស់ស្អាត ឆ្នាំម្សាញ់តំណាងឲ្យប្រាជ្ញា វិចារណញាណ និងភាពថ្លៃថ្នូរដ៏ស្ងប់ស្ងាត់។", traits: "wisdom, intuition and quiet elegance", mood: "wise, calm and elegant" },
-  Horse: { en: "Free and spirited, the Horse symbolizes energy, freedom, and success on the road ahead.", km: "សេរី និងពោរពេញដោយស្មារតី ឆ្នាំមមីតំណាងឲ្យថាមពល សេរីភាព និងភាពជោគជ័យលើផ្លូវខាងមុខ។", traits: "energy, freedom and success", mood: "free, energetic and joyful" },
-  Goat: { en: "Gentle and kind, the Goat symbolizes peace, harmony, and a caring heart.", km: "ស្លូតបូត និងចិត្តល្អ ឆ្នាំមមែតំណាងឲ្យសន្តិភាព ភាពសុខដុម និងចិត្តមេត្តា។", traits: "peace, harmony and a caring heart", mood: "gentle, kind and peaceful" },
-  Monkey: { en: "Playful and clever, the Monkey symbolizes intelligence, curiosity, and joyful energy.", km: "លេងសើច និងឆ្លាតវៃ ឆ្នាំវកតំណាងឲ្យបញ្ញា ការចង់ដឹងចង់ឃើញ និងថាមពលដ៏រីករាយ។", traits: "intelligence, curiosity and joyful energy", mood: "playful, clever and cheerful" },
-  Rooster: { en: "Herald of the dawn, the Rooster symbolizes honesty, confidence, and a bright new day.", km: "ជាអ្នកប្រកាសពេលព្រឹកព្រលឹម ឆ្នាំរកាតំណាងឲ្យភាពស្មោះត្រង់ ទំនុកចិត្ត និងថ្ងៃថ្មីដ៏ភ្លឺស្វាង។", traits: "honesty, confidence and a bright new day", mood: "proud, confident and bright" },
-  Dog: { en: "Faithful guardian of the home, the Dog symbolizes loyalty, protection, and honest friendship.", km: "ជាអ្នកយាមផ្ទះដ៏ស្មោះត្រង់ ឆ្នាំចតំណាងឲ្យភាពស្មោះស្ម័គ្រ ការការពារ និងមិត្តភាពដ៏ពិតប្រាកដ។", traits: "loyalty, protection and honest friendship", mood: "loyal, warm and protective" },
-  Pig: { en: "Generous and warm-hearted, the Pig symbolizes abundance, good fortune, and a happy home.", km: "ចិត្តទូលាយ និងកក់ក្ដៅ ឆ្នាំកុរតំណាងឲ្យភាពសម្បូរសប្បាយ សំណាងល្អ និងគ្រួសារដ៏រីករាយ។", traits: "abundance, good fortune and a happy home", mood: "happy, warm and generous" },
+  Rat: { en: "Clever and quick, the first animal of the zodiac, the Rat symbolizes wit, resourcefulness, and new beginnings.", km: "ឆ្លាតវៃ និងរហ័សរហួន ជាសត្វទីមួយនៃរាសីទាំង 12 ឆ្នាំជូតតំណាងឲ្យប្រាជ្ញា ភាពប៉ិនប្រសប់ និងការចាប់ផ្ដើមថ្មី។", traits: "wit, resourcefulness and new beginnings", mood: "bright, clever and lively", vis: "a glowing golden path of stars appears in front of it and it races ahead first, while faint golden silhouettes of the other zodiac animals follow behind in the moonlight" },
+  Ox: { en: "Steady and strong, the Ox symbolizes hard work, patience, and honest strength.", km: "នឹងនរ និងរឹងមាំ ឆ្នាំឆ្លូវតំណាងឲ្យការខិតខំ ការអត់ធ្មត់ និងកម្លាំងដ៏ស្មោះត្រង់។", traits: "hard work, patience and honest strength", mood: "calm, steady and strong", vis: "it plants its hooves firmly as golden rice fields light up around the temple and sway in the night breeze" },
+  Tiger: { en: "King of the mountains, the Tiger symbolizes courage, protection, and bold power.", km: "ស្ដេចនៃព្រៃភ្នំ ឆ្នាំខាលតំណាងឲ្យភាពក្លាហាន ការការពារ និងថាមពលដ៏អង់អាច។", traits: "courage, protection and bold power", mood: "brave, proud and protective", vis: "it stands tall on a rock as a protective golden shield of light spreads over the temple and the hills behind it" },
+  Rabbit: { en: "Beloved companion of the Moon Goddess, the Rabbit symbolizes purity, longevity, and peaceful elegance.", km: "ជាដៃគូជាទីស្រឡាញ់របស់ទេពធីតាព្រះចន្ទ ឆ្នាំថោះតំណាងឲ្យភាពបរិសុទ្ធ អាយុវែង និងភាពថ្លៃថ្នូរដ៏ស្ងប់ស្ងាត់។", traits: "purity, longevity and peaceful elegance", mood: "calm, gentle and graceful", vis: "a soft, graceful silhouette of a goddess made of silver moonlight appears faintly in the moon's glow and smiles down, and a ribbon of moonlight curls down and wraps gently around the rabbit, making it shine" },
+  Dragon: { en: "Ruler of the clouds and rain, the Dragon symbolizes power, good fortune, and a noble spirit.", km: "ជាម្ចាស់នៃពពក និងភ្លៀង ឆ្នាំរោងតំណាងឲ្យអំណាច សំណាងល្អ និងចិត្តថ្លៃថ្នូរ។", traits: "power, good fortune and a noble spirit", mood: "majestic, proud and noble", vis: "swirling clouds gather around it and a gentle golden rain of sparkles falls over the lotus pond as it circles above the temple" },
+  Snake: { en: "Wise and graceful, the Snake symbolizes wisdom, intuition, and quiet elegance.", km: "ឈ្លាសវៃ និងស្រស់ស្អាត ឆ្នាំម្សាញ់តំណាងឲ្យប្រាជ្ញា វិចារណញាណ និងភាពថ្លៃថ្នូរដ៏ស្ងប់ស្ងាត់។", traits: "wisdom, intuition and quiet elegance", mood: "wise, calm and elegant", vis: "glowing golden rings of light ripple outward around it as its eyes shine with quiet wisdom" },
+  Horse: { en: "Free and spirited, the Horse symbolizes energy, freedom, and success on the road ahead.", km: "សេរី និងពោរពេញដោយស្មារតី ឆ្នាំមមីតំណាងឲ្យថាមពល សេរីភាព និងភាពជោគជ័យលើផ្លូវខាងមុខ។", traits: "energy, freedom and success", mood: "free, energetic and joyful", vis: "a shining golden road of light opens across the sky in front of it, stretching toward the horizon" },
+  Goat: { en: "Gentle and kind, the Goat symbolizes peace, harmony, and a caring heart.", km: "ស្លូតបូត និងចិត្តល្អ ឆ្នាំមមែតំណាងឲ្យសន្តិភាព ភាពសុខដុម និងចិត្តមេត្តា។", traits: "peace, harmony and a caring heart", mood: "gentle, kind and peaceful", vis: "soft flowers bloom wherever it steps and small glowing birds settle peacefully around it" },
+  Monkey: { en: "Playful and clever, the Monkey symbolizes intelligence, curiosity, and joyful energy.", km: "លេងសើច និងឆ្លាតវៃ ឆ្នាំវកតំណាងឲ្យបញ្ញា ការចង់ដឹងចង់ឃើញ និងថាមពលដ៏រីករាយ។", traits: "intelligence, curiosity and joyful energy", mood: "playful, clever and cheerful", vis: "it juggles glowing golden orbs of light that turn into stars as it laughs" },
+  Rooster: { en: "Herald of the dawn, the Rooster symbolizes honesty, confidence, and a bright new day.", km: "ជាអ្នកប្រកាសពេលព្រឹកព្រលឹម ឆ្នាំរកាតំណាងឲ្យភាពស្មោះត្រង់ ទំនុកចិត្ត និងថ្ងៃថ្មីដ៏ភ្លឺស្វាង។", traits: "honesty, confidence and a bright new day", mood: "proud, confident and bright", vis: "the first rays of a golden dawn spread across the sky behind it as it stands proudly on the temple wall" },
+  Dog: { en: "Faithful guardian of the home, the Dog symbolizes loyalty, protection, and honest friendship.", km: "ជាអ្នកយាមផ្ទះដ៏ស្មោះត្រង់ ឆ្នាំចតំណាងឲ្យភាពស្មោះស្ម័គ្រ ការការពារ និងមិត្តភាពដ៏ពិតប្រាកដ។", traits: "loyalty, protection and honest friendship", mood: "loyal, warm and protective", vis: "it sits faithfully at the temple gate as a warm golden glow surrounds a small traditional wooden house nearby" },
+  Pig: { en: "Generous and warm-hearted, the Pig symbolizes abundance, good fortune, and a happy home.", km: "ចិត្តទូលាយ និងកក់ក្ដៅ ឆ្នាំកុរតំណាងឲ្យភាពសម្បូរសប្បាយ សំណាងល្អ និងគ្រួសារដ៏រីករាយ។", traits: "abundance, good fortune and a happy home", mood: "happy, warm and generous", vis: "golden coins, fruit and flowers gently fill a lotus-shaped basket around it until it overflows" },
 };
 const HERO = (a) => `Create a premium-quality 3D animated fantasy character of ${LOOK[a]}, the ${a} of the Chinese zodiac, inspired by the charm and enchanting visual appeal of classic Disney and Pixar-style animated family films. The ${a.toLowerCase()} symbolizes ${SYMBOL[a].traits}: a ${SYMBOL[a].mood} expression and pose that show this. Body in creamy white-gold with shining engraved gold patterns, pink inner ears or rosy cheeks, polished gold textures, luminous highlights and delicate pink and gold accents. It sits on a round golden pedestal inside a large glowing pink lotus floating on a still pond. Behind it, a huge glowing full moon with a soft silver-gold halo, a deep indigo starry sky, a softly illuminated Khmer temple inspired by Angkor Wat with warm golden lights, palm tree silhouettes, small floating lanterns, glowing lotus flowers on the water, gentle moonbeams falling on the ${a.toLowerCase()}, magical sparkles and soft silver-and-gold reflections. Cinematic lighting, soft atmospheric glow, realistic metallic reflections, beautiful depth of field, professional animated-movie-quality rendering. Square 1:1, full body visible, three-quarter view, centered, with space around the character. No text, no letters, no watermark, no logo, no cropped body parts.`;
+// spoken time, e.g. "13:00–15:00" -> "from 1 to 3 in the afternoon"
+const partOfDay = (h) => (h >= 5 && h < 12 ? "in the morning" : h >= 12 && h < 17 ? "in the afternoon" : h >= 17 && h < 20 ? "in the evening" : "at night");
+const h12 = (h) => (h % 12 === 0 ? 12 : h % 12);
+const sayTime = (t) => { const [a, b] = t.split("–").map((x) => Number(x.slice(0, 2))); return partOfDay(a) === partOfDay(b) ? `from ${h12(a)} to ${h12(b)} ${partOfDay(b)}` : `from ${h12(a)} ${partOfDay(a)} to ${h12(b)} ${partOfDay(b)}`; };
+const sayTimeKm = (t) => `ម៉ោង ${t.replace("–", " ដល់ ")}`;
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
 const dmy = (iso) => iso.split("-").reverse().join("/");
 const longDate = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).replace(/^(\w+) /, "$1, ");
@@ -385,6 +390,33 @@ function buildPack(iso, F, forSign, data = null) {
   const disclaimer = "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ មិនមែនជាការព្យាករណ៍វិទ្យាសាស្ត្រទេ។";
   const tags = `#ជោគជតារាសី #រាសីប្រចាំថ្ងៃ #ឆ្នាំ${dayKm} #ផ្កាយកំណើត`;
 
+  // 9-scene video for the luckiest animal
+  const dl = day.toLowerCase(), friends = lucky.filter((a) => a !== day), S9 = SYMBOL[day], dd = sign(day);
+  const dateEn = LD.replace(/^\w+, /, "").replace(/ \d{4}$/, "");
+  const MKM = ["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"];
+  const dateKm = `ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]}`;
+  const nine = [
+    ["The full moon rises", "A huge full moon rises slowly over the Angkor-style temple and the still lotus pond. Lanterns drift upward, and a single beam of silver-gold moonlight falls onto a closed pink lotus in the middle of the pond. Slow push-in toward the lotus.",
+      "Tonight the full moon rises over the temple, and a special friend is waking up.", "យប់នេះ ព្រះចន្ទពេញវង់រះលើប្រាសាទ ហើយមានមិត្តពិសេសម្នាក់កំពុងភ្ញាក់ឡើង។"],
+    [`The ${day} appears`, `The pink lotus opens petal by petal in the moonlight, revealing ${LOOK[day]} on a round golden pedestal. It opens its big sparkling eyes and its golden details begin to glow. Gentle close-up on its face, then pull back.`,
+      `Today, ${dateEn}, is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! A great day for everyone born in the Year of the ${day}.`, `${dateKm} ជាថ្ងៃ${dayKm}! ជាថ្ងៃល្អខ្លាំងសម្រាប់អ្នកកើតឆ្នាំ${dayKm}។`],
+    [`What the ${day} means`, `The ${dl} looks up at the full moon, and ${S9.vis}. ${cap(S9.mood)} mood. Slow upward camera tilt.`,
+      S9.en, S9.km],
+    ["The magical moment", `The ${dl} ${POSE[day]}. Lotus petals and sparkles swirl up behind it. Dynamic camera following the movement.`,
+      `Born in the Year of the ${day}? Today is your day to shine. Stay ${S9.mood}.`, `អ្នកកើតឆ្នាំ${dayKm} ថ្ងៃនេះជាថ្ងៃរបស់អ្នក! ចូររក្សាចិត្តល្អ និងធ្វើអ្វីៗដោយស្ងប់។`],
+    ["Lucky color and lucky time", `The ${dl} lands softly on the temple steps. Glowing ${dd.lucky.color.en} lanterns light up one by one around it, and a shining circle of golden light like a sundial appears on the stone. The ${dl} smiles and touches a ${dd.lucky.color.en} lantern. Warm ${dd.lucky.color.en} and gold light.`,
+      `Your lucky color today is ${dd.lucky.color.en}, and your best time is ${sayTime(dd.lucky.time)}.`, `ពណ៌សំណាងថ្ងៃនេះគឺពណ៌${dd.lucky.color.km} ហើយពេលល្អបំផុតគឺ${sayTimeKm(dd.lucky.time)}។`],
+    ["Lucky friends arrive", `${cap(looks(friends))} fly in on trails of golden light and land beside the ${dl} on glowing lotus pedestals, matching their reference images. A ring of golden energy bursts outward and lotus flowers bloom across the pond. The friends cheer together. Camera orbits around them.`,
+      `${cap(list(friends.map((a) => `the ${a}`)))} are lucky today too. Good friends bring good fortune!`, `${kmList(friends.map((a) => `ឆ្នាំ${km(a)}`))} ក៏មានសំណាងល្អនៅថ្ងៃនេះដែរ។ មិត្តល្អ នាំមកនូវសំណាងល្អ!`],
+    ["Lucky numbers", `A huge glowing golden wheel rises out of the lotus pond in front of the temple and spins with beams of golden light, then slows to a gentle shining turn. ${cap(list([day, ...friends].map((a) => `the ${a.toLowerCase()}`)))} watch it happily from their lotus pedestals. Open space in the middle and lower part of the frame for number captions. Slow push-in.`,
+      `Lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Just for fun.`, `លេខសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2}`).join(" ")}! សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។`],
+    careful.length
+      ? [`${list(careful)}, take it easy`, `${cap(LOOK[careful[0]])} rests calmly beside the still lotus pond as a soft protective bubble of golden light forms around it. Gentle glowing butterflies circle it and the moon shines calmly on the water. Peaceful and safe, not sad. Slow camera move in.`,
+        `${list(careful)}, take it easy today. Slow down, rest, and don't rush big decisions.`, `ឆ្នាំ${kmList(careful.map(km))} ថ្ងៃនេះគួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់សម្រេចចិត្ត។`]
+      : ["A calm moment", "A still lotus pond at night, pink lotus flowers swaying gently and the full moon shimmering on the water. Slow camera move in.", "Take a calm breath and enjoy the day.", "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
+    ["Golden ending", `The ${dl} floats gently up toward the full moon, waving goodbye. Golden light beams shoot up from the temple towers and burst into soft lotus-shaped golden fireworks, and hundreds of lanterns rise over the glowing pond. The camera rises and pulls back for a wide, epic view, with open sky at the top for a title.`,
+      "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
+  ];
   const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
@@ -408,6 +440,11 @@ ${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for th
 
 ### Caption – Khmer
 ${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).label.km}សម្រាប់ឆ្នាំ${dayKm}។ លេខសំណាង៖ ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ)។ មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
+
+## 9-scene video – luckiest animal (about 72 seconds)
+A longer video about the ${day}, today's luckiest animal: 9 clips of 8 seconds. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Add the reference pictures of ${list([...new Set([day, ...lucky, ...careful])])} as ingredients in Flow. Put the clips in order 1 to 9.
+
+${nine.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t}\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
 
 ## Style (paste first in every scene)
 ${STYLE}
@@ -602,7 +639,7 @@ function charactersMd(KM_NAMES) {
     return out;
   }
 
-  var ORDER_OPEN = /^Luckiest|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
+  var ORDER_OPEN = /^Luckiest|^9-scene|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
   function render(iso) {
     var F = computeFacts(iso);
     var p = buildPack(iso, F, window.MBSLuckyDigits.forSign, null);
@@ -643,6 +680,7 @@ function charactersMd(KM_NAMES) {
           '<pre class="txt' + (b.code ? " code" : "") + '" id="' + id + '">' + (b.code ? esc(b.text) : rich(b.text)) + "</pre>" +
           '<div class="row"><button data-copy="' + id + '">Copy</button>' +
           (scene && voices[scene[1]] ? '<button data-flow="' + scene[1] + '|en" data-pre="' + id + '">Copy + English voice</button><button data-flow="' + scene[1] + '|km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
+          (/\nEnglish voice: /.test(b.text) ? '<button data-nine="en" data-pre="' + id + '">Copy + English voice</button><button data-nine="km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
           "</div></div>";
       });
       html += "</div></details>";
@@ -667,6 +705,11 @@ function charactersMd(KM_NAMES) {
     else if (b.dataset.flow) {
       var k = b.dataset.flow.split("|"), v = $("pack").__voices[k[0]][k[1]];
       copy(STYLE + "\n\n" + T[b.dataset.pre] + "\n\n" + v, b, document.getElementById(b.dataset.pre));
+    } else if (b.dataset.nine) {
+      var full = T[b.dataset.pre], lines = full.split("\n");
+      var scene9 = lines.filter(function (l) { return !/^(English|Khmer) voice: /.test(l); }).join("\n");
+      var vl = lines.filter(function (l) { return l.indexOf(b.dataset.nine === "en" ? "English voice: " : "Khmer voice: ") === 0; })[0] || "";
+      copy(STYLE + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English|Khmer) voice: /, ""), b, document.getElementById(b.dataset.pre));
     } else if (b.dataset.go) set(b.dataset.go);
   });
   $("copyall").addEventListener("click", function (e) { copy(plain(window.__lastMd || ""), e.currentTarget); });
