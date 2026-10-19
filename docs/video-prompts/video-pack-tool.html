@@ -1,0 +1,652 @@
+<title>MyBirthSign Video Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Noto+Sans:wght@400;600&family=Noto+Sans+Khmer:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: one working column — date bar on top, the day at a glance, then the pack as copyable sections in video order. */
+/* Deliberately single-theme: the site's own night-indigo and temple gold. */
+:root {
+  color-scheme: dark;
+  --bg: #0f0b1f;
+  --card: #1a1430;
+  --card-2: #221a3d;
+  --line: #332a52;
+  --gold: #d4af37;
+  --gold-soft: #f2d27d;
+  --violet: #9b7fd4;
+  --text: #f1ecff;
+  --muted: #b4a9d6;
+  --good: #7fd4a3;
+  --care: #f0a37f;
+  --display: "Playfair Display", Georgia, serif;
+  --body: "Noto Sans", "Noto Sans Khmer", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+body { background: var(--bg); color: var(--text); font: 15px/1.6 var(--body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 920px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 60px; display: grid; gap: 18px; }
+h1 { font: 700 clamp(1.6rem, 4vw, 2.3rem)/1.15 var(--display); color: var(--gold-soft); margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); margin: 4px 0 0; max-width: 65ch; }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.bar label { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+input[type=date] { font: 600 1rem var(--body); background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+button { font: 600 .9rem var(--body); cursor: pointer; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--text); padding: 8px 12px; }
+button:hover { border-color: var(--gold); }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 2px; }
+button.primary { background: var(--gold); color: #1a1430; border-color: var(--gold); }
+button.done { border-color: var(--good); color: var(--good); }
+.spacer { flex: 1; }
+.glance { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 14px; }
+.glance .day { font: 700 1.4rem/1.2 var(--display); color: var(--gold-soft); margin: 0; }
+.glance .day small { font: 400 .95rem var(--body); color: var(--muted); display: block; margin-top: 4px; }
+.signs { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.sign { background: var(--card-2); border-radius: 12px; padding: 10px 12px; border-top: 3px solid var(--good); min-width: 0; }
+.sign.care { border-top-color: var(--care); }
+.sign b { display: block; }
+.sign .tag { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+.sign .nums { font: 400 .9rem var(--mono); color: var(--gold-soft); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.note { font-size: .85rem; color: var(--muted); margin: 0; }
+.week { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+.week button { flex: 0 0 auto; text-align: left; padding: 6px 10px; font-weight: 400; font-size: .8rem; line-height: 1.35; }
+.week button[aria-current=true] { border-color: var(--gold); background: var(--card-2); }
+.week button b { display: block; font-size: .85rem; }
+.steps { margin: 0; padding-left: 1.2em; color: var(--muted); font-size: .9rem; display: grid; gap: 2px; }
+.steps b { color: var(--text); }
+details.sec { background: var(--card); border: 1px solid var(--line); border-radius: 14px; min-width: 0; }
+details.sec > summary { list-style: none; cursor: pointer; padding: 12px 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+details.sec > summary::-webkit-details-marker { display: none; }
+details.sec > summary h2 { font: 600 1.05rem/1.3 var(--display); color: var(--gold-soft); margin: 0; flex: 1; min-width: 12ch; }
+details.sec > summary::before { content: "▸"; color: var(--gold); transition: transform .15s; }
+details.sec[open] > summary::before { transform: rotate(90deg); }
+.secbody { padding: 0 16px 16px; display: grid; gap: 12px; min-width: 0; }
+.block { background: var(--card-2); border-radius: 10px; padding: 12px; min-width: 0; display: grid; gap: 8px; }
+.block h3 { margin: 0; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--violet); }
+.txt { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; font-size: .92rem; }
+.txt.code { font: .82rem/1.5 var(--mono); max-height: 320px; overflow: auto; }
+.row { display: flex; flex-wrap: wrap; gap: 6px; }
+.row button { font-size: .8rem; padding: 6px 10px; }
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--gold); color: #1a1430; padding: 8px 14px; border-radius: 999px; font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>MyBirthSign Video Studio</h1>
+    <p class="sub">Pick a date and get that day's full video pack: picture prompts, Google Flow scenes with voice, captions, voice-overs, YouTube, Facebook and TikTok text, and subtitles. Every rating and lucky number follows the website's own rules for that date.</p>
+  </header>
+
+  <div class="bar">
+    <label for="d">Date</label>
+    <input type="date" id="d">
+    <button id="prev" aria-label="Previous day">◀</button>
+    <button id="next" aria-label="Next day">▶</button>
+    <button id="today">Today</button>
+    <span class="spacer"></span>
+    <button class="primary" id="copyall">Copy whole pack</button>
+  </div>
+
+  <section class="glance" id="glance" aria-live="polite"></section>
+
+  <ol class="steps">
+    <li><b>Once:</b> make the 12 character pictures (Character prompts below) and keep them.</li>
+    <li><b>Each day:</b> in Google Flow, add the characters as ingredients, then paste each scene with “Copy + English voice” or “Copy + Khmer voice”.</li>
+    <li>Put the clips in order 1, 2, 3, 5, 4, add the on-screen captions, then post with the YouTube, Facebook and TikTok text.</li>
+  </ol>
+
+  <div id="pack"></div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* generated by scripts/content/build-video-tool.mjs — do not edit by hand */
+var DATA = {"INFO":{"Rat":{"luckyNumbers":[2,3],"luckyColors":["blue","gold","green"],"compatible":["Dragon","Monkey","Ox"]},"Ox":{"luckyNumbers":[1,4],"luckyColors":["white","yellow","green"],"compatible":["Rat","Snake","Rooster"]},"Tiger":{"luckyNumbers":[1,3,4],"luckyColors":["blue","gray","orange"],"compatible":["Horse","Dog","Pig"]},"Rabbit":{"luckyNumbers":[3,4,6],"luckyColors":["pink","red","purple"],"compatible":["Goat","Pig","Dog"]},"Dragon":{"luckyNumbers":[1,6,7],"luckyColors":["gold","silver","gray"],"compatible":["Rat","Monkey","Rooster"]},"Snake":{"luckyNumbers":[2,8,9],"luckyColors":["black","red","yellow"],"compatible":["Ox","Rooster","Monkey"]},"Horse":{"luckyNumbers":[2,3,7],"luckyColors":["yellow","green","purple"],"compatible":["Tiger","Goat","Dog"]},"Goat":{"luckyNumbers":[2,7],"luckyColors":["green","red","purple"],"compatible":["Rabbit","Horse","Pig"]},"Monkey":{"luckyNumbers":[4,9],"luckyColors":["white","gold","blue"],"compatible":["Rat","Dragon","Snake"]},"Rooster":{"luckyNumbers":[5,7,8],"luckyColors":["gold","brown","yellow"],"compatible":["Ox","Snake","Dragon"]},"Dog":{"luckyNumbers":[3,4,9],"luckyColors":["red","green","purple"],"compatible":["Tiger","Horse","Rabbit"]},"Pig":{"luckyNumbers":[2,5,8],"luckyColors":["yellow","gray","brown"],"compatible":["Tiger","Rabbit","Goat"]}},"TRIANGLES":[["Rat","Dragon","Monkey"],["Ox","Snake","Rooster"],["Tiger","Horse","Dog"],["Rabbit","Goat","Pig"]],"KM_NAMES":{"Rat":"ជូត","Ox":"ឆ្លូវ","Tiger":"ខាល","Rabbit":"ថោះ","Dragon":"រោង","Snake":"ម្សាញ់","Horse":"មមី","Goat":"មមែ","Monkey":"វក","Rooster":"រកា","Dog":"ច","Pig":"កុរ"},"KM_INFO":{"Rat":{"luckyColors":["ខៀវ","មាស","បៃតង"]},"Ox":{"luckyColors":["ស","លឿង","បៃតង"]},"Tiger":{"luckyColors":["ខៀវ","ប្រផេះ","ទឹកក្រូច"]},"Rabbit":{"luckyColors":["ផ្កាឈូក","ក្រហម","ស្វាយ"]},"Dragon":{"luckyColors":["មាស","ប្រាក់","ប្រផេះ"]},"Snake":{"luckyColors":["ខ្មៅ","ក្រហម","លឿង"]},"Horse":{"luckyColors":["លឿង","បៃតង","ស្វាយ"]},"Goat":{"luckyColors":["បៃតង","ក្រហម","ស្វាយ"]},"Monkey":{"luckyColors":["ស","មាស","ខៀវ"]},"Rooster":{"luckyColors":["មាស","ត្នោត","លឿង"]},"Dog":{"luckyColors":["ក្រហម","បៃតង","ស្វាយ"]},"Pig":{"luckyColors":["លឿង","ប្រផេះ","ត្នោត"]}},"COLOR_HEX":{"blue":"#3b82f6","gold":"#d4af37","green":"#22c55e","white":"#f5f5f5","yellow":"#eab308","gray":"#9ca3af","orange":"#f97316","pink":"#ec4899","red":"#ef4444","purple":"#a855f7","silver":"#c7ccd1","black":"#1a1a1a","brown":"#92400e"}};
+var INFO = DATA.INFO, TRIANGLES = DATA.TRIANGLES, KM_NAMES = DATA.KM_NAMES, KM_INFO = DATA.KM_INFO, COLOR_HEX = DATA.COLOR_HEX;
+const ORDER = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
+const TIERS = ["great", "good", "ordinary", "caution"];
+const TIER_LABEL = {
+  en: { great: "Great Day", good: "Good Day", ordinary: "Ordinary Day", caution: "Take It Easy" },
+  km: { great: "ថ្ងៃល្អខ្លាំង", good: "ថ្ងៃល្អ", ordinary: "ថ្ងៃធម្មតា", caution: "ថ្ងៃគួរប្រុងប្រយ័ត្ន" },
+};
+
+// Traditional direction and two-hour period ("double hour") of each earthly-branch animal.
+// Directions are the usual 8-point simplification of the 12 branches.
+const DIRECTION = {
+  Rat: ["North", "ខាងជើង"], Ox: ["Northeast", "ឦសាន"], Tiger: ["Northeast", "ឦសាន"], Rabbit: ["East", "ខាងកើត"],
+  Dragon: ["Southeast", "អាគ្នេយ៍"], Snake: ["Southeast", "អាគ្នេយ៍"], Horse: ["South", "ខាងត្បូង"], Goat: ["Southwest", "និរតី"],
+  Monkey: ["Southwest", "និរតី"], Rooster: ["West", "ខាងលិច"], Dog: ["Northwest", "ពាយព្យ"], Pig: ["Northwest", "ពាយព្យ"],
+};
+const HOURS = {
+  Rat: "23:00–01:00", Ox: "01:00–03:00", Tiger: "03:00–05:00", Rabbit: "05:00–07:00", Dragon: "07:00–09:00", Snake: "09:00–11:00",
+  Horse: "11:00–13:00", Goat: "13:00–15:00", Monkey: "15:00–17:00", Rooster: "17:00–19:00", Dog: "19:00–21:00", Pig: "21:00–23:00",
+};
+
+const sameTriangle = (a, b) => TRIANGLES.some((t) => t.includes(a) && t.includes(b));
+const partnersOf = (a) => TRIANGLES.find((t) => t.includes(a)).filter((x) => x !== a);
+const clashOf = (a) => ORDER[(ORDER.indexOf(a) + 6) % 12];
+// the "supportive" match listed in the site data that is not a triangle partner (traditional six-harmony friend)
+const supportOf = (a) => (INFO[a].compatible || []).find((b) => !sameTriangle(a, b)) || partnersOf(a)[0];
+
+function dayNumberOf(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return Math.floor(Date.UTC(y, m - 1, d) / 86400000);
+}
+function dayAnimalOf(iso) {
+  return ORDER[(dayNumberOf(iso) + 2440588 + 1) % 12];   // same rule as scripts/daily-fortune.mjs
+}
+function tierOf(a, day) {
+  if (a === day) return "great";
+  if (sameTriangle(a, day)) return "good";
+  if (clashOf(a) === day) return "caution";
+  return "ordinary";
+}
+
+/** Every fact of the day, decided by rules only. */
+function computeFacts(iso) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) throw new Error("bad date " + iso);
+  const day = dayAnimalOf(iso), dn = dayNumberOf(iso);
+  const signs = ORDER.map((a, idx) => {
+    const info = INFO[a], km = KM_INFO[a];
+    const nums = info.luckyNumbers, cols = info.luckyColors;
+    const n = nums[(dn + idx) % nums.length];
+    const ci = (dn + idx) % cols.length;
+    const helper = partnersOf(a)[dn % 2];                    // today's harmony animal for this sign
+    const tier = tierOf(a, day);
+    return {
+      animal: a, nameKm: KM_NAMES[a], tier,
+      label: { en: TIER_LABEL.en[tier], km: TIER_LABEL.km[tier] },
+      lucky: {
+        number: n,
+        color: { en: cols[ci], km: km.luckyColors[ci], hex: COLOR_HEX[cols[ci]] || null },
+        direction: { en: DIRECTION[helper][0], km: DIRECTION[helper][1] },
+        time: HOURS[helper],
+        helperAnimal: helper,
+      },
+    };
+  });
+  const top = [day, ...partnersOf(day)];
+  const careful = ORDER.filter((a) => tierOf(a, day) === "caution");
+  const loveP = partnersOf(day), bizP = [day, supportOf(day)];
+  return {
+    date: iso, dayAnimal: day, dayAnimalKm: KM_NAMES[day],
+    signs,
+    highlights: { topLucky: top, careful, lovePair: loveP, businessPair: bizP },
+  };
+}
+
+
+/* Lucky numbers of 1 to 5 digits, per zodiac sign, per day (Cambodia date).
+ *
+ * Same answer for everyone with that sign on that day, on every page and in the daily blog post.
+ *   - 1 digit: the sign's lucky number of the day — exactly the "Number" already shown in the daily data
+ *     (traditional lucky numbers from js/zodiac-data.js, picked by the same day rule as scripts/daily-data-lib.mjs).
+ *   - 2–5 digits: start with one of the sign's traditional lucky numbers; the other digits come from a fixed
+ *     pseudo-random sequence seeded by sign + date (no Math.random, so it never changes on reload).
+ * For fun only: these are not predictions and not betting advice (the pages say so next to the numbers).
+ *
+ * Browser: fills every [data-lucky-digits][data-animal] (optional data-date="YYYY-MM-DD", default today in
+ * Cambodia; optional data-lang). window.MBSLuckyDigits = { forSign, fill }.  Node: module.exports = { forSign }.
+ */
+(function (root) {
+  "use strict";
+  var ORDER = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
+  // traditional lucky numbers — must match ANIMAL_INFO[...].luckyNumbers in js/zodiac-data.js (tests/lucky-digits-test.mjs checks)
+  var LUCKY = { Rat: [2, 3], Ox: [1, 4], Tiger: [1, 3, 4], Rabbit: [3, 4, 6], Dragon: [1, 6, 7], Snake: [2, 8, 9], Horse: [2, 3, 7], Goat: [2, 7], Monkey: [4, 9], Rooster: [5, 7, 8], Dog: [3, 4, 9], Pig: [2, 5, 8] };
+
+  function dayNumber(iso) { var p = iso.split("-").map(Number); return Math.floor(Date.UTC(p[0], p[1] - 1, p[2]) / 86400000); }
+  function seedOf(str) { var h = 2166136261; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function rng(seed) {                               // mulberry32
+    return function () { seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+  /** { d1, d2, d3, d4, d5 } as strings for this sign on this date (YYYY-MM-DD, Cambodia) */
+  function forSign(animal, iso) {
+    var nums = LUCKY[animal], idx = ORDER.indexOf(animal);
+    if (!nums || idx < 0 || !/^\d{4}-\d{2}-\d{2}$/.test(iso || "")) return null;
+    var dn = dayNumber(iso), r = rng(seedOf(animal + "|" + iso));
+    var out = { d1: String(nums[(dn + idx) % nums.length]) };
+    for (var len = 2; len <= 5; len++) {
+      var s = String(nums[Math.floor(r() * nums.length)]);
+      while (s.length < len) s += r() < 0.5 ? String(nums[Math.floor(r() * nums.length)]) : String(Math.floor(r() * 10));
+      out["d" + len] = s;
+    }
+    return out;
+  }
+
+  if (typeof module === "object" && module.exports) { module.exports = { forSign: forSign, LUCKY: LUCKY }; return; }
+
+  var KD = "0123456789";
+  function kmNum(s) { return String(s).replace(/\d/g, function (d) { return KD[d]; }); }
+  function ppToday() {
+    try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); }
+    catch (e) { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  }
+  var T = {
+    en: { h: "Lucky numbers today", d: function (n) { return n + (n === 1 ? " digit" : " digits"); }, note: "For fun only, not a prediction or betting advice." },
+    km: { h: "លេខសំណាងថ្ងៃនេះ", d: function (n) { return kmNum(n) + " ខ្ទង់"; }, note: "សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។" },
+    zh: { h: "今日幸运数字", d: function (n) { return n + " 位数"; }, note: "仅供娱乐，不是预测，也不是投注建议。" }
+  };
+  function html(v, lang, opts) {
+    if (!T[lang]) lang = "en";
+    var S = T[lang], km = lang === "km";
+    var chips = [1, 2, 3, 4, 5].map(function (n) {
+      return '<li><span class="ld-l">' + S.d(n) + '</span><b class="ld-n">' + (km ? kmNum(v["d" + n]) : v["d" + n]) + "</b></li>";
+    }).join("");
+    return (opts.noHead ? "" : '<p class="ld-h">' + S.h + "</p>") + '<ul class="ld-list">' + chips + "</ul>" + (opts.noNote ? "" : '<p class="ld-note">' + S.note + "</p>");
+  }
+  function fill(scope) {
+    var els = (scope || document).querySelectorAll("[data-lucky-digits][data-animal]");
+    Array.prototype.forEach.call(els, function (el) {
+      var iso = el.getAttribute("data-date") || ppToday();
+      var hl = document.documentElement.getAttribute("data-site-lang") || document.documentElement.lang || "";
+      var lang = el.getAttribute("data-lang") || (hl === "km" ? "km" : hl.indexOf("zh") === 0 ? "zh" : "en");
+      var v = forSign(el.getAttribute("data-animal"), iso);
+      if (!v) { el.hidden = true; return; }
+      el.innerHTML = html(v, lang, { noHead: el.hasAttribute("data-no-head"), noNote: el.hasAttribute("data-no-note") });
+      el.setAttribute("data-lucky-day", iso);
+    });
+  }
+  root.MBSLuckyDigits = { forSign: forSign, fill: fill, html: html };
+  function boot() { fill(document); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+  // the numbers follow the Cambodia date: refresh when the tab comes back on a new day
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) return;
+    var today = ppToday();
+    if ([].some.call(document.querySelectorAll("[data-lucky-digits]:not([data-date])"), function (el) { return el.getAttribute("data-lucky-day") !== today; })) fill(document);
+  });
+})(typeof window !== "undefined" ? window : this);
+
+// Text of the daily video prompt pack, shared by the command-line generator (video-pack.mjs) and the
+// browser tool (docs/video-prompts/video-pack-tool.html, built by build-video-tool.mjs).
+// No Node imports here, so the same code runs in a browser.
+//   buildPack(iso, facts, forSign, data) -> { md, srtKm, srtEn, line }
+//     facts   = computeFacts(iso) from scripts/daily-data-lib.mjs
+//     forSign = forSign from js/lucky-digits.js
+//     data    = the day's data/daily/<iso>.json if it exists (its summary is used), otherwise null
+const EMO = { Rat: "🐀", Ox: "🐂", Tiger: "🐯", Rabbit: "🐇", Dragon: "🐉", Snake: "🐍", Horse: "🐎", Goat: "🐐", Monkey: "🐒", Rooster: "🐓", Dog: "🐕", Pig: "🐖" };
+// look of each animal: cute but powerful, shining gold (3D animated-film quality)
+const LOOK = {
+  Rat: "an adorable golden rat with big sparkling eyes, tiny jade-green ear jewels and a proud little smile",
+  Ox: "a strong, adorable golden ox with big gentle eyes, polished curved horns and ruby studs on its harness",
+  Tiger: "a powerful yet adorable golden tiger cub with big bright eyes and glowing engraved stripes",
+  Rabbit: "an adorable golden rabbit with long shining ears, big sparkling eyes and a tiny pearl necklace",
+  Dragon: "an adorable but mighty golden dragon with big friendly eyes, shimmering scales, flowing whiskers and a glowing pearl",
+  Snake: "a cute, elegant golden snake with big shiny eyes and jewel-like patterned scales",
+  Horse: "a proud, adorable golden horse with big sparkling eyes and a flowing shining mane",
+  Goat: "an adorable golden goat with big soft eyes, curled shining horns and a tiny bell",
+  Monkey: "a playful, adorable golden monkey with big curious eyes and a cheeky smile",
+  Rooster: "a proud, adorable golden rooster with big bright eyes, a ruby-red comb and shimmering tail feathers",
+  Dog: "a loyal, adorable golden puppy with big shining eyes and a jeweled collar",
+  Pig: "a chubby, adorable golden piglet with big happy eyes and rosy cheeks",
+};
+const CHAR = (a) => `Create a premium-quality 3D animated fantasy character of ${LOOK[a]}, the ${a} of the Chinese zodiac, inspired by the charm, expressive storytelling and enchanting visual appeal of classic Disney and Pixar-style animated family films. Give the character oversized sparkling eyes, an adorable expressive face, soft rounded features, a small cute nose, beautifully shaped proportions and a warm, lovable personality. Combine whimsical character design with luxurious golden craftsmanship: polished gold textures, intricate engraved ornaments, luminous highlights, delicate pink and gold accents and beautifully sculpted details. The character should feel alive, emotionally expressive, magical, cute and majestic, with a memorable silhouette and a high-end theatrical animation finish. Body in creamy white-gold with shining gold engraved patterns and pink inner ears or cheeks. Place the full-body character on a round golden pedestal set inside a large glowing pink lotus that floats on a pond, surrounded by a glowing full moon, a deep indigo starry sky, a softly illuminated Khmer temple inspired by Angkor Wat with warm golden lights, palm tree silhouettes, small floating lanterns, glowing pink lotus flowers on the water, magical sparkles and warm golden reflections. Use cinematic lighting, rich colors, soft atmospheric glow, realistic metallic reflections, smooth 3D materials, beautiful depth of field and professional animated-movie-quality rendering. Composition: square 1:1, full body visible, three-quarter view, centered character, balanced framing, consistent design across all 12 Chinese zodiac animals, with space around the character. Restrictions: no text, no letters, no watermark, no logo, no cropped body parts.`;
+// magical, powerful action for each animal (scene 1 hero moment)
+const POSE = {
+  Rat: "leaps off the lotus and dashes through the air in a spiral, leaving a trail of glittering gold coins and stars",
+  Ox: "stamps a hoof and a shockwave of golden light ripples across the pond, then it rises into the air on glowing golden clouds",
+  Tiger: "lets out a mighty but cute roar that sends a wave of golden light and petals outward, then leaps high into the moonlit sky",
+  Rabbit: "springs from the lotus in a huge magical leap, flying in an arc across the full moon with a sparkling golden trail",
+  Dragon: "uncoils and soars up into the sky, circling the temple towers with a long ribbon of golden light and swirling clouds",
+  Snake: "rises in a graceful spiral as glowing golden rings of light expand around it, its jewel scales shimmering",
+  Horse: "rears up as golden wings of light unfold from its sides, then gallops into the sky across the moon",
+  Goat: "leaps from lotus to lotus across the pond, each landing bursting into golden light and blossoming flowers",
+  Monkey: "somersaults high into the air, spinning a glowing golden staff that scatters sparkles across the sky",
+  Rooster: "spreads its shimmering wings and flies up in a burst of golden feathers, crowing as light rays fan out behind it",
+  Dog: "bounds joyfully into the air and flies in a loop, a golden glowing trail and paw-print sparkles behind it",
+  Pig: "floats up from the lotus inside a glowing golden bubble, spinning happily as golden coins and petals swirl around it",
+};
+const STYLE = "Vertical 9:16. Premium 3D animated fantasy film quality, inspired by classic Disney and Pixar-style animated family films: cute and majestic golden zodiac characters with oversized sparkling eyes, adorable expressive faces, soft rounded features, polished gold textures with intricate engraved ornaments and delicate pink and gold accents, alive and emotionally expressive. Setting: a softly illuminated Khmer temple inspired by Angkor Wat under a glowing full moon and a deep indigo starry sky, floating lotus flowers, ornate pink-and-gold lotus details, magical sparkles and warm golden reflections. Cinematic lighting, rich colors, soft atmospheric glow, realistic metallic reflections, beautiful depth of field, gentle slow camera movement, professional animated-movie rendering. No text, no letters, no subtitles, no watermark, no logos.";
+const VOICE_EN = "a warm, cheerful young female narrator with a soft, magical storytelling tone, clear and friendly";
+const VOICE_KM = "a warm, cheerful young Cambodian female narrator speaking clear Khmer, soft and friendly";
+const MUSIC = "Gentle magical background music with soft chimes and a light Asian flute. No other speech.";
+const cap = (s) => s[0].toUpperCase() + s.slice(1);
+const dmy = (iso) => iso.split("-").reverse().join("/");
+const longDate = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).replace(/^(\w+) /, "$1, ");
+const list = (arr) => (arr.length <= 1 ? arr.join("") : arr.length === 2 ? `${arr[0]} and ${arr[1]}` : `${arr.slice(0, -1).join(", ")} and ${arr.at(-1)}`);
+const kmList = (arr) => (arr.length === 1 ? arr[0] : `${arr.slice(0, -1).join(" ")} និង${arr.at(-1)}`);
+const looks = (arr) => list(arr.map((a) => LOOK[a]));
+
+function ts(t) { const ms = Math.round(t * 1000); return `${String(Math.floor(ms / 3600000)).padStart(2, "0")}:${String(Math.floor(ms / 60000) % 60).padStart(2, "0")}:${String(Math.floor(ms / 1000) % 60).padStart(2, "0")},${String(ms % 1000).padStart(3, "0")}`; }
+function srt(lines, total = 45) {
+  const w = lines.map((l) => Math.max(l.length, 12)), sum = w.reduce((a, b) => a + b, 0);
+  let t = 0;
+  return lines.map((l, i) => { const d = (total * w[i]) / sum; const s = `${i + 1}\n${ts(t)} --> ${ts(t + d - 0.05)}\n${l}\n`; t += d; return s; }).join("\n");
+}
+// split long sentences for subtitles (Khmer at a space after ~45 chars, English at ", ")
+function splitLines(text, lang) {
+  const sents = lang === "km" ? text.split(/(?<=។)\s*/) : text.split(/(?<=[.!?])\s+/);
+  const out = [];
+  for (const s of sents.filter(Boolean)) {
+    if (s.length <= (lang === "km" ? 60 : 70)) { out.push(s); continue; }
+    const cut = lang === "km" ? s.indexOf(" ", 40) : s.indexOf(", ", 30);
+    if (cut > 0) { out.push(s.slice(0, lang === "km" ? cut : cut + 1).trim()); out.push(s.slice(cut + 1).trim()); } else out.push(s);
+  }
+  return out;
+}
+
+function buildPack(iso, F, forSign, data = null) {
+  const sign = (a) => F.signs.find((s) => s.animal === a);
+  const day = F.dayAnimal, dayKm = F.dayAnimalKm, lucky = F.highlights.topLucky, careful = F.highlights.careful;
+  const km = (a) => sign(a).nameKm;
+  const nums = lucky.map((a) => { const v = forSign(a, iso); if (String(v.d1) !== String(sign(a).lucky.number)) throw new Error(`${iso} ${a}: lucky number mismatch`); return { a, ...v }; });
+  const inVideo = [...new Set([day, ...lucky, ...careful])];
+  const numLine = (n, name) => `${name}  ${n.d1} · ${n.d2} · ${n.d3} · ${n.d4} · ${n.d5}`;
+  const D = dmy(iso), LD = longDate(iso);
+
+  // written summary: the site's own daily wording if it exists already, otherwise the standard script
+  const same = data && JSON.stringify(data.highlights.topLucky) === JSON.stringify(lucky) && JSON.stringify(data.highlights.careful) === JSON.stringify(careful);
+  const summaryKm = same && data.highlights.summary?.km ? data.highlights.summary.km : [
+    `ថ្ងៃនេះជាថ្ងៃ${dayKm}។`,
+    `ឆ្នាំ${kmList(lucky.map(km))} មានសំណាងល្អជាងគេនៅថ្ងៃនេះ។`,
+    ...(careful.length ? [`ចំណែកឆ្នាំ${kmList(careful.map(km))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់ក្នុងការសម្រេចចិត្ត។`] : []),
+  ].join(" ");
+  const summaryEn = same && data.highlights.summary?.en ? data.highlights.summary.en : [
+    `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day.`,
+    `${list(lucky)} are the luckiest signs today.`,
+    ...(careful.length ? [`${list(careful)} should take it easy, slow down and avoid rushing big decisions.`] : []),
+  ].join(" ");
+
+  const voiceKm = [
+    `ជោគជតារាសីប្រចាំថ្ងៃនេះ ថ្ងៃទី ${D}។`,
+    summaryKm,
+    `លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2} និង ${n.d3}។`).join(" ")}`,
+    "លេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការណែនាំឱ្យភ្នាល់ទេ។",
+    "ចូលមើលលេខសំណាង និងលម្អិតសម្រាប់រាសីទាំង 12 នៅ mybirthsign.com",
+  ];
+  const voiceEn = [
+    `Your Chinese zodiac fortune for ${LD}.`,
+    summaryEn,
+    `Today's lucky numbers for the lucky signs: ${nums.map((n) => `${n.a}, ${n.d2} and ${n.d3}.`).join(" ")}`,
+    "Lucky numbers are for fun only, not betting advice.",
+    "See all 12 signs and full lucky numbers at mybirthsign.com.",
+  ];
+  const srtKm = srt(voiceKm.flatMap((v) => splitLines(v, "km")));
+  const srtEn = srt(voiceEn.flatMap((v) => splitLines(v, "en")));
+
+  const luckyLabelsKm = lucky.map((a) => `${km(a)} – ${sign(a).label.km}`).join(" · ");
+  const luckyLabelsEn = lucky.map((a) => `${a} – ${sign(a).label.en}`).join(" · ");
+  const disclaimerNums = "លេខសំណាង (1 ដល់ 5 ខ្ទង់) សម្រាប់ថ្ងៃនេះ គឺសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។";
+  const disclaimer = "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ មិនមែនជាការព្យាករណ៍វិទ្យាសាស្ត្រទេ។";
+  const tags = `#ជោគជតារាសី #រាសីប្រចាំថ្ងៃ #ឆ្នាំ${dayKm} #ផ្កាយកំណើត`;
+
+  const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃ${dayKm})
+
+Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
+Format: vertical 9:16 (YouTube Shorts, Facebook Reels, TikTok), about 45 seconds: 4 Veo scenes of about 8 seconds, then a lucky-numbers scene of about 10–12 seconds.
+Two versions: make the pictures once, then record a Khmer voice-over and an English voice-over (two videos, or one video with both subtitle tracks).
+Ratings, lucky signs and lucky numbers come from the site's fixed rules and match the website's daily fortune for this date.${same ? "" : "\nVoice-over wording: standard script (this pack was made ahead; the site's own daily wording appears the day before)."}
+
+## Style (paste first in every scene)
+${STYLE}
+
+## Reference pictures (make these first, so each animal looks the same in every scene)
+Optional ready-made references: your site's golden animal pictures, e.g. https://mybirthsign.com/images/profile/spirit-tiger.webp. Make each picture once, then add it as a reference image ("ingredient") in Flow, or use it as the starting image of a scene.
+
+### Character reference image prompts
+${inVideo.map((a) => `- **${a}:** ${CHAR(a)}`).join("\n")}
+
+### Start-frame image prompts (make the picture, then animate it with "frames to video")
+1. Vertical 9:16. Premium 3D animated golden style, same characters as the reference pictures. ${cap(LOOK[day])} stands on the worn stone steps of an ancient Khmer temple at dusk, carved sandstone towers behind it, a full moon rising in a deep blue sky, warm last light on its face. Shallow depth of field. No text.
+2. Vertical 9:16. Premium 3D animated golden style, same characters as the reference pictures. ${cap(looks(lucky))} together on the grass in front of an ancient Khmer temple at golden hour, palm trees and soft mist behind them, warm light on their faces. Glowing golden aura, cute but powerful. No text.
+${careful.length ? `3. Vertical 9:16. Premium 3D animated golden style, same characters as the reference pictures. ${cap(LOOK[careful[0]])} resting quietly beside a still lotus pond at dusk, pink lotus flowers in the foreground, the reflection of a temple tower and the full moon on the water. Peaceful mood. No text.` : "3. Vertical 9:16. Premium 3D animated golden style, same characters as the reference pictures. A still lotus pond at dusk, pink lotus flowers in the foreground, the reflection of a temple tower and the full moon on the water. Peaceful mood. No text."}
+4. Vertical 9:16. Premium 3D animated golden style, same characters as the reference pictures. A full moon rising over a wide lotus pond, the silhouette of an ancient Khmer temple with carved towers on the horizon, palm trees, soft mist on the water, deep blue dusk sky with open space at the top of the frame. No text.
+5. Vertical 9:16. Premium 3D animated golden style, same characters as the reference pictures. A huge glowing golden zodiac wheel with twelve cute golden zodiac animals around its rim, floating in front of an ancient Khmer temple, lit by the full moon and golden light rays, pink lotus offerings below, open space in the middle and lower part of the frame for captions. No text.
+
+### YouTube thumbnail image prompt
+Vertical 9:16 (can be cropped to 16:9). Premium 3D golden-style close-up of ${LOOK[day]} facing the viewer in warm golden evening light, an ancient Khmer temple and a glowing full moon softly blurred behind, ${lucky.filter((a) => a !== day).length ? `${looks(lucky.filter((a) => a !== day))} smaller in the background, ` : ""}glowing golden aura, vivid, powerful and eye-catching. No text, no letters, no logos. (Add the title and date in your editor.)
+
+## Scene 1 – ${day} day
+Magical and powerful. ${cap(LOOK[day])} stands on its glowing lotus pedestal on the pond in front of the Angkor-style temple under a huge full moon. Its eyes light up, a golden aura bursts around it, and it ${POSE[day]}. The lotus pond ripples with golden light and lanterns rise into the sky. Dynamic camera: start close on its face, then sweep up and follow it through the air. Cute, majestic and full of energy, matching the reference image.
+
+## Scene 2 – Lucky signs
+Magical and powerful. ${cap(looks(lucky))} fly in from three directions on trails of golden light and land together on glowing lotus pedestals in front of the temple. As they land, a ring of golden energy explodes outward, lotus flowers bloom across the pond and a shower of sparkles and gold coins falls from the sky. They look at each other and cheer. The camera orbits around them in a smooth circle. The animals match the reference images.
+
+## Scene 3 – ${careful.length ? `${careful.join(", ")}, take it easy` : "A calm moment"}
+${careful.length ? `Premium 3D animated golden style, same characters as the reference pictures. ${cap(LOOK[careful[0]])} curls up on a lotus pedestal as a soft protective bubble of golden light forms around it like a shield. Gentle glowing butterflies and petals circle it, and the full moon shines calmly on the still water. The mood is peaceful, safe and magical, not sad. The camera moves in slowly. The ${careful[0].toLowerCase()} matches the reference image.` : "Premium 3D animated golden style, same characters as the reference pictures. A still lotus pond at dusk, pink lotus flowers swaying gently, the reflection of a temple tower and the full moon shimmering on the water. The camera moves in slowly."}
+
+## Scene 4 – Outro
+Magical and powerful. Golden light beams shoot up from the temple towers into the night sky and burst into gentle golden fireworks shaped like lotus flowers. Hundreds of floating lanterns rise over the glowing pond and the huge full moon. The camera rises up and pulls back for a wide, epic view, leaving open sky at the top of the frame for a title.
+
+## Scene 5 – Lucky numbers (about 10–12 seconds)
+Magical and powerful. A huge glowing golden zodiac wheel rises out of the lotus pond in front of the temple, with twelve cute golden zodiac animals around its rim. It spins faster and faster, shooting beams of golden light and sparkles, then slows to a gentle, shining turn under the full moon. The camera slowly pushes in, keeping open space in the middle and lower part of the frame for the number captions. (Loop the slow-turning part, or slow-zoom a still picture, to fill the time.)
+
+## On-screen captions (add in the editor)
+### Khmer version
+1. ជោគជតារាសីប្រចាំថ្ងៃនេះ · ${D} · ថ្ងៃ${dayKm}
+2. ${luckyLabelsKm}
+${careful.length ? `3. ${careful.map((a) => `${km(a)} – ${sign(a).label.km} · គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ`).join(" ")}` : "3. —"}
+4. ចូលមើលលម្អិតនៅ mybirthsign.com
+5. លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង
+${nums.map((n) => numLine(n, km(n.a))).join("\n")}
+   សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ
+
+### English version
+1. Daily Chinese Zodiac Fortune · ${D} · ${day} Day
+2. ${luckyLabelsEn}
+${careful.length ? `3. ${careful.map((a) => `${a} – ${sign(a).label.en} · slow down and rest`).join(" ")}` : "3. —"}
+4. More at mybirthsign.com
+5. Today's lucky numbers for the lucky signs
+${nums.map((n) => numLine(n, n.a)).join("\n")}
+   For fun only
+
+## Voice in Google Flow (spoken inside each clip)
+Flow (Veo) can make the voice and music together with the picture. Add ONE of these lines to the END of each scene prompt: the English one for the English video, the Khmer one for the Khmer video. Each line is short enough for an 8-second clip.
+Put the clips in this order in your editor: 1, 2, 3, 5 (lucky numbers), 4 (ending).
+Voice style (keep it the same every day so the channel has one recognisable voice): ${VOICE_EN}
+Khmer note: if Flow does not pronounce Khmer well, use the English version in Flow and record the Khmer voice-over below yourself or with a Khmer text-to-speech app.
+
+${[
+  ["1", `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! Here is your Chinese zodiac fortune for ${LD.replace(/^\w+, /, "")}.`, `ជោគជតារាសីប្រចាំថ្ងៃនេះ ថ្ងៃទី ${Number(iso.slice(8))} ខែ${["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"][Number(iso.slice(5,7))-1]}។ ថ្ងៃនេះជាថ្ងៃ${dayKm}!`],
+  ["2", `${list(lucky)} are the luckiest signs today!`, `ឆ្នាំ${kmList(lucky.map(km))} មានសំណាងល្អជាងគេនៅថ្ងៃនេះ!`],
+  ["3", careful.length ? `${list(careful)}, take it easy today. Slow down and rest.` : "Take a calm breath and enjoy the day.", careful.length ? `ឆ្នាំ${kmList(careful.map(km))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ។` : "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
+  ["5", `Lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Just for fun.`, `លេខសំណាង៖ ${nums.map((n) => `${km(n.a)} ${n.d2}`).join(" ")}! សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។`],
+  ["4", "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
+].map(([n, en, kmL]) => `- **Scene ${n}**\n  - English: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\n  - Khmer: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n")}
+
+## Voice-over – Khmer (about 45 seconds)
+${voiceKm.join("\n")}
+
+## Voice-over – English (about 45 seconds)
+${voiceEn.join("\n")}
+
+(Record the voices yourself or use text-to-speech; AI video tools may not pronounce Khmer well.)
+
+## YouTube
+Title (Khmer): ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃ${dayKm}
+Title (English): Daily Chinese Zodiac Fortune – ${D} | ${day} Day
+
+Description:
+${summaryKm}
+
+${inVideo.map((a) => `${km(a)}៖ ពណ៌${sign(a).lucky.color.km} · ${sign(a).lucky.time}`).join("\n")}
+
+លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង (1 ដល់ 5 ខ្ទង់)៖
+${nums.map((n) => numLine(n, km(n.a))).join("\n")}
+
+${disclaimerNums}
+
+មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
+
+${disclaimer}
+
+English: ${summaryEn} Lucky numbers (for fun only): ${nums.map((n) => `${n.a} ${n.d1} · ${n.d2} · ${n.d3}`).join(" | ")}. All 12 signs: https://mybirthsign.com
+
+Hashtags: ${tags} #ChineseZodiac #DailyHoroscope #Shorts
+
+## Facebook post caption
+🌙 ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃ${dayKm} ${EMO[day]}
+
+✨ ឆ្នាំសំណាងថ្ងៃនេះ៖ ${lucky.map((a) => `${km(a)} (${sign(a).label.km})`).join(" · ")}
+${careful.length ? `🌿 គួរប្រុងប្រយ័ត្ន៖ ${careful.map(km).join(" ")} – គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់ក្នុងការសម្រេចចិត្ត។\n` : ""}
+🔢 លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖
+${nums.map((n) => numLine(n, km(n.a))).join("\n")}
+
+👉 មើលរាសីទាំង 12 និងលេខសំណាងពេញលេញ៖ https://mybirthsign.com/km/
+
+${disclaimerNums}
+
+${tags} #លេខសំណាង
+
+## TikTok caption
+ជោគជតារាសីថ្ងៃនេះ ${D} ${EMO[day]} ថ្ងៃ${dayKm}! ឆ្នាំសំណាង៖ ${lucky.map(km).join(" ")} ✨ លេខសំណាង៖ ${nums.map((n) => `${km(n.a)} ${n.d2}`).join(" · ")} 🔢 ឆ្នាំអ្នកជាអ្វី? Comment ប្រាប់ផង 👇 (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ) Link នៅក្នុង bio 🌙
+${tags} #fyp #ChineseZodiac
+
+English version: ${EMO[day]} ${day} day, ${D}! Lucky signs: ${lucky.join(", ")} ✨ Lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(" · ")} 🔢 What's your sign? 👇 (for fun only) Link in bio 🌙 #ChineseZodiac #DailyHoroscope #fyp
+
+(TikTok links in captions are not clickable, so put https://mybirthsign.com/km/ in your profile bio.)
+
+## YouTube subtitles (captions files)
+Two files are saved next to this one: \`${iso}.srt\` (Khmer) and \`${iso}.en.srt\` (English).
+Upload in YouTube Studio → Subtitles → Add language → choose Khmer or English → Upload file → "With timing". You can add both to the same video.
+The timings are estimates for a 45-second voice-over; after you record the voice, drag each line to match in YouTube's subtitle editor, or use "Auto-sync".
+
+### Khmer (${iso}.srt)
+\`\`\`
+${srtKm}\`\`\`
+
+### English (${iso}.en.srt)
+\`\`\`
+${srtEn}\`\`\`
+`;
+  return { md, srtKm, srtEn, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
+}
+
+// the full set of 12 character prompts (profile pictures / collection artwork / video references)
+function charactersMd(KM_NAMES) {
+  const ORDER = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
+  return `# 12 Zodiac Characters — the look you chose (see characters/*.jpg for the approved examples)\n\n# 12 Zodiac Characters — master prompts (Disney/Pixar-inspired golden style)\n\nMake each character once (square 1:1), keep the pictures, and add them as reference images ("ingredients") in Flow for every video, so each animal always looks the same.\nIf a tool refuses brand names, remove "inspired by … Disney and Pixar-style" — the rest of the description keeps the look.\n\n${ORDER.map((a) => `## ${a} (${KM_NAMES[a]})\n${CHAR(a)}\n`).join("\n")}`;
+}
+
+</script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var D = $("d");
+  var KMD = { great: "Great Day", good: "Good Day", ordinary: "Ordinary Day", caution: "Take It Easy" };
+
+  function ppToday() {
+    try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); }
+    catch (e) { return new Date().toISOString().slice(0, 10); }
+  }
+  function addDays(iso, n) { return new Date(Date.parse(iso + "T00:00:00Z") + n * 86400000).toISOString().slice(0, 10); }
+  function dmy(iso) { return iso.split("-").reverse().join("/"); }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function rich(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>"); }
+  function plain(s) { return s.replace(/\*\*(.+?)\*\*/g, "$1"); }
+
+  var toastT;
+  function toast(msg) { var t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, 1600); }
+  function copy(text, btn, pre) {
+    var ok = function () { toast("Copied"); if (btn) { var o = btn.textContent; btn.classList.add("done"); btn.textContent = "Copied ✓"; setTimeout(function () { btn.classList.remove("done"); btn.textContent = o; }, 1400); } };
+    var fallback = function () {
+      if (pre) { var r = document.createRange(); r.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+      toast("Copy blocked here: the text is selected, press Ctrl+C / long-press Copy");
+    };
+    try { navigator.clipboard.writeText(text).then(ok, fallback); } catch (e) { fallback(); }
+  }
+
+  // split the markdown pack into ## sections, each with ### blocks (code fences kept as code)
+  function parse(md) {
+    var secs = [], cur = null, blk = null, inCode = false;
+    md.split("\n").forEach(function (line) {
+      if (line.indexOf("```") === 0) { inCode = !inCode; if (blk) blk.code = true; return; }
+      if (!inCode && /^# /.test(line)) return;
+      if (!inCode && /^## /.test(line)) { cur = { title: line.slice(3), blocks: [] }; blk = { title: "", lines: [] }; cur.blocks.push(blk); secs.push(cur); return; }
+      if (!inCode && /^### /.test(line) && cur) { blk = { title: line.slice(4), lines: [] }; cur.blocks.push(blk); return; }
+      if (blk) blk.lines.push(line); else { if (!secs.pre) secs.pre = []; secs.pre.push(line); }
+    });
+    secs.forEach(function (s) {
+      s.blocks = s.blocks.map(function (b) { b.text = b.lines.join("\n").trim(); return b; }).filter(function (b) { return b.text; });
+    });
+    return secs;
+  }
+
+  // per-scene voice lines from the "Voice in Google Flow" section
+  function voiceLines(md) {
+    var out = {}, re = /- \*\*Scene (\d)\*\*\n  - English: (.+)\n  - Khmer: (.+)/g, m;
+    while ((m = re.exec(md))) out[m[1]] = { en: m[2], km: m[3] };
+    return out;
+  }
+
+  var ORDER_OPEN = /^Scene|^Reference|^Voice in Google Flow|^On-screen/;
+  function render(iso) {
+    var F = computeFacts(iso);
+    var p = buildPack(iso, F, window.MBSLuckyDigits.forSign, null);
+    var md = p.md.replace(/Two files are saved next to this one: `[^`]+` \(Khmer\) and `[^`]+` \(English\)\.\n/, "Copy each file below into a plain text file named " + iso + ".srt (Khmer) and " + iso + ".en.srt (English), or paste the voice-over text into YouTube's “Auto-sync”.\n");
+    window.__lastMd = md;
+    var voices = voiceLines(md);
+    var sign = function (a) { return F.signs.filter(function (s) { return s.animal === a; })[0]; };
+    var lucky = F.highlights.topLucky, careful = F.highlights.careful;
+
+    var cards = lucky.map(function (a) {
+      var n = window.MBSLuckyDigits.forSign(a, iso), s = sign(a);
+      return '<div class="sign"><span class="tag">' + esc(KMD[s.tier]) + '</span><b>' + EMO[a] + " " + a + " · " + esc(s.nameKm) + '</b><span class="nums">' + [n.d1, n.d2, n.d3, n.d4, n.d5].join(" · ") + "</span></div>";
+    }).concat(careful.map(function (a) {
+      var s = sign(a);
+      return '<div class="sign care"><span class="tag">Take It Easy</span><b>' + EMO[a] + " " + a + " · " + esc(s.nameKm) + '</b><span class="nums">no lucky numbers in the video</span></div>';
+    })).join("");
+
+    var week = "";
+    for (var i = -1; i < 6; i++) {
+      var w = addDays(iso, i), f = computeFacts(w);
+      week += '<button data-go="' + w + '"' + (i === 0 ? ' aria-current="true"' : "") + "><b>" + dmy(w).slice(0, 5) + " " + EMO[f.dayAnimal] + "</b>" + f.dayAnimal + " day</button>";
+    }
+
+    $("glance").innerHTML =
+      '<p class="day">' + dmy(iso) + " · " + EMO[F.dayAnimal] + " " + F.dayAnimal + " day (ថ្ងៃ" + esc(F.dayAnimalKm) + ")" +
+      "<small>Lucky signs " + lucky.join(", ") + (careful.length ? " · take it easy: " + careful.join(", ") : "") + "</small></p>" +
+      '<div class="signs">' + cards + "</div>" +
+      '<nav class="week" aria-label="Nearby days">' + week + "</nav>" +
+      '<p class="note">Voice-overs here use the standard script. The command-line version in the repo swaps in the site\'s own written summary once that day\'s fortune is published (a day ahead). Lucky numbers are for fun only, not betting advice.</p>';
+
+    var secs = parse(md), html = "";
+    secs.forEach(function (s, si) {
+      var scene = /^Scene (\d)/.exec(s.title);
+      html += '<details class="sec"' + (ORDER_OPEN.test(s.title) ? " open" : "") + '><summary><h2>' + esc(s.title) + '</h2><button data-copy="s' + si + '">Copy section</button></summary><div class="secbody">';
+      s.blocks.forEach(function (b, bi) {
+        var id = "b" + si + "_" + bi;
+        html += '<div class="block">' + (b.title ? "<h3>" + esc(b.title) + "</h3>" : "") +
+          '<pre class="txt' + (b.code ? " code" : "") + '" id="' + id + '">' + (b.code ? esc(b.text) : rich(b.text)) + "</pre>" +
+          '<div class="row"><button data-copy="' + id + '">Copy</button>' +
+          (scene && voices[scene[1]] ? '<button data-flow="' + scene[1] + '|en" data-pre="' + id + '">Copy + English voice</button><button data-flow="' + scene[1] + '|km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
+          "</div></div>";
+      });
+      html += "</div></details>";
+    });
+    html += '<details class="sec"><summary><h2>Character prompts – all 12 animals</h2><button data-copy="chars">Copy section</button></summary><div class="secbody">' +
+      ORDER.map(function (a, i) { return '<div class="block"><h3>' + a + " · " + esc(KM_NAMES[a]) + '</h3><pre class="txt" id="c' + i + '">' + esc(CHAR(a)) + '</pre><div class="row"><button data-copy="c' + i + '">Copy</button></div></div>'; }).join("") +
+      "</div></details>";
+    $("pack").innerHTML = html;
+
+    var texts = {};
+    secs.forEach(function (s, si) { texts["s" + si] = "## " + s.title + "\n" + s.blocks.map(function (b) { return (b.title ? "### " + b.title + "\n" : "") + (b.code ? b.text : plain(b.text)); }).join("\n\n"); });
+    secs.forEach(function (s, si) { s.blocks.forEach(function (b, bi) { texts["b" + si + "_" + bi] = b.code ? b.text : plain(b.text); }); });
+    texts.chars = ORDER.map(function (a) { return a + " (" + KM_NAMES[a] + ")\n" + CHAR(a); }).join("\n\n");
+    ORDER.forEach(function (a, i) { texts["c" + i] = CHAR(a); });
+    $("pack").__texts = texts; $("pack").__voices = voices;
+  }
+
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var T = $("pack").__texts || {};
+    if (b.dataset.copy) { e.preventDefault(); copy(T[b.dataset.copy], b, document.getElementById(b.dataset.copy)); }
+    else if (b.dataset.flow) {
+      var k = b.dataset.flow.split("|"), v = $("pack").__voices[k[0]][k[1]];
+      copy(STYLE + "\n\n" + T[b.dataset.pre] + "\n\n" + v, b, document.getElementById(b.dataset.pre));
+    } else if (b.dataset.go) set(b.dataset.go);
+  });
+  $("copyall").addEventListener("click", function (e) { copy(plain(window.__lastMd || ""), e.currentTarget); });
+
+  function set(iso) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
+    D.value = iso; render(iso);
+    try { localStorage.setItem("mbs-video-date", iso); } catch (e) {}
+  }
+  D.addEventListener("change", function () { set(D.value); });
+  $("prev").addEventListener("click", function () { set(addDays(D.value, -1)); });
+  $("next").addEventListener("click", function () { set(addDays(D.value, 1)); });
+  $("today").addEventListener("click", function () { set(ppToday()); });
+  window.__pack = function (iso) { var p = buildPack(iso, computeFacts(iso), window.MBSLuckyDigits.forSign, null); return p; };
+  set(addDays(ppToday(), 1));   // open on tomorrow: videos are made a day ahead
+})();
+</script>
