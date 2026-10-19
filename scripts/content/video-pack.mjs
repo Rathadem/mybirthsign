@@ -9,7 +9,7 @@
 // numbers from js/lucky-digits.js, Khmer names and labels from the site's own data. When the day's data file
 // (data/daily/<date>.json) already exists, its written summary is used for the voice-overs; otherwise a fixed
 // standard script is used (the site's AI-written daily wording is only made a day ahead).
-// Pictures: photorealistic (real animals, real Cambodian temple and lotus-pond settings).
+// Pictures: cute but powerful golden 3D animals in a cinematic Khmer temple setting.
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
@@ -20,20 +20,20 @@ const [start, nDays = "1"] = process.argv.slice(2);
 if (!/^\d{4}-\d{2}-\d{2}$/.test(start || "")) { console.error("Usage: node scripts/content/video-pack.mjs YYYY-MM-DD [days]"); process.exit(1); }
 
 const EMO = { Rat: "🐀", Ox: "🐂", Tiger: "🐯", Rabbit: "🐇", Dragon: "🐉", Snake: "🐍", Horse: "🐎", Goat: "🐐", Monkey: "🐒", Rooster: "🐓", Dog: "🐕", Pig: "🐖" };
-// realistic look of each animal (Cambodian where it makes sense; the dragon is the one mythical animal)
+// look of each animal: cute but powerful, shining gold (3D animated-film quality)
 const LOOK = {
-  Rat: "a real brown field rat with bright black eyes, soft fur and twitching whiskers",
-  Ox: "a strong white Cambodian ox with a humped back and curved horns",
-  Tiger: "a majestic Indochinese tiger with vivid orange and black stripes",
-  Rabbit: "a soft brown rabbit with long upright ears",
-  Dragon: "a majestic Asian dragon with a long serpentine body, golden-green scales, flowing whiskers and a pearl, rendered as realistic cinematic CGI",
-  Snake: "a beautiful patterned python with glossy scales",
-  Horse: "a strong chestnut horse with a flowing dark mane",
-  Goat: "a white goat with gently curved horns",
-  Monkey: "a long-tailed macaque monkey with expressive eyes",
-  Rooster: "a proud rooster with a red comb and glossy bronze-green tail feathers",
-  Dog: "a friendly, loyal golden-brown dog",
-  Pig: "a healthy pink pig with a gentle face",
+  Rat: "an adorable golden rat with big sparkling eyes, tiny jade-green ear jewels and a proud little smile",
+  Ox: "a strong, adorable golden ox with big gentle eyes, polished curved horns and ruby studs on its harness",
+  Tiger: "a powerful yet adorable golden tiger cub with big bright eyes and glowing engraved stripes",
+  Rabbit: "an adorable golden rabbit with long shining ears, big sparkling eyes and a tiny pearl necklace",
+  Dragon: "an adorable but mighty golden dragon with big friendly eyes, shimmering scales, flowing whiskers and a glowing pearl",
+  Snake: "a cute, elegant golden snake with big shiny eyes and jewel-like patterned scales",
+  Horse: "a proud, adorable golden horse with big sparkling eyes and a flowing shining mane",
+  Goat: "an adorable golden goat with big soft eyes, curled shining horns and a tiny bell",
+  Monkey: "a playful, adorable golden monkey with big curious eyes and a cheeky smile",
+  Rooster: "a proud, adorable golden rooster with big bright eyes, a ruby-red comb and shimmering tail feathers",
+  Dog: "a loyal, adorable golden puppy with big shining eyes and a jeweled collar",
+  Pig: "a chubby, adorable golden piglet with big happy eyes and rosy cheeks",
 };
 const POSE = {
   Rat: "sits up on its hind legs, whiskers twitching", Ox: "lifts its head and breathes out a soft mist", Tiger: "raises its head proudly and looks into the distance",
@@ -41,7 +41,7 @@ const POSE = {
   Horse: "tosses its mane and paws the ground", Goat: "lifts its head and looks out calmly", Monkey: "looks around with bright curiosity",
   Rooster: "spreads its wings and lifts its head", Dog: "sits alert and wags its tail", Pig: "looks up happily, ears twitching",
 };
-const STYLE = "Vertical 9:16. Photorealistic, cinematic, real animals in a real Cambodian setting: an ancient Khmer sandstone temple with carved towers, lotus ponds, palm trees, soft evening mist and a full moon rising in a deep blue dusk sky with the last golden light. Natural colors, shallow depth of field, gentle slow camera movement, 4K detail, like a nature documentary. No text, no letters, no subtitles, no logos, no cartoon or illustration style.";
+const STYLE = "Vertical 9:16. Premium 3D animated-film quality (like a high-end animation studio): cute but powerful golden zodiac animals made of polished, glowing 24k gold with soft jewel accents, big expressive eyes, a warm magical golden aura and floating light sparkles. Cinematic setting: a majestic ancient Khmer temple at night, glowing lotus ponds, a huge full moon, soft mist and golden light rays. Rich, vivid colors, dramatic lighting, shallow depth of field, gentle slow camera movement, ultra detailed. No text, no letters, no subtitles, no logos.";
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
 const dmy = (iso) => iso.split("-").reverse().join("/");
 const longDate = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).replace(/^(\w+) /, "$1, ");
@@ -126,35 +126,35 @@ Ratings, lucky signs and lucky numbers come from the site's fixed rules and matc
 ${STYLE}
 
 ## Reference pictures (make these first, so each animal looks the same in every scene)
-Make each picture once, then add it as a reference image ("ingredient") in Flow, or use it as the starting image of a scene.
+Optional ready-made references: your site's golden animal pictures, e.g. https://mybirthsign.com/images/profile/spirit-tiger.webp. Make each picture once, then add it as a reference image ("ingredient") in Flow, or use it as the starting image of a scene.
 
 ### Character reference image prompts
-${inVideo.map((a) => `- **${a}:** Photorealistic portrait of ${LOOK[a]}, full body, three-quarter view, standing in the soft golden evening light of an ancient Khmer sandstone temple courtyard, temple towers softly blurred behind, a few pink lotus flowers nearby. Natural colors, sharp detail in the fur or scales, shallow depth of field, square 1:1. No text, no letters, no logos.`).join("\n")}
+${inVideo.map((a) => `- **${a}:** Premium 3D character portrait of ${LOOK[a]}, full body, three-quarter view, made of polished glowing gold, a soft golden aura and floating sparkles around it, standing on a lotus-shaped pedestal with a softly blurred Khmer temple and full moon behind. Cute but powerful, dramatic warm lighting, ultra detailed, square 1:1. No text, no letters, no logos.`).join("\n")}
 
 ### Start-frame image prompts (make the picture, then animate it with "frames to video")
-1. Vertical 9:16. Photorealistic. ${cap(LOOK[day])} stands on the worn stone steps of an ancient Khmer temple at dusk, carved sandstone towers behind it, a full moon rising in a deep blue sky, warm last light on its face. Shallow depth of field. No text.
-2. Vertical 9:16. Photorealistic. ${cap(looks(lucky))} together on the grass in front of an ancient Khmer temple at golden hour, palm trees and soft mist behind them, warm light on their faces. Natural, calm, documentary style. No text.
-${careful.length ? `3. Vertical 9:16. Photorealistic. ${cap(LOOK[careful[0]])} resting quietly beside a still lotus pond at dusk, pink lotus flowers in the foreground, the reflection of a temple tower and the full moon on the water. Peaceful mood. No text.` : "3. Vertical 9:16. Photorealistic. A still lotus pond at dusk, pink lotus flowers in the foreground, the reflection of a temple tower and the full moon on the water. Peaceful mood. No text."}
-4. Vertical 9:16. Photorealistic. A full moon rising over a wide lotus pond, the silhouette of an ancient Khmer temple with carved towers on the horizon, palm trees, soft mist on the water, deep blue dusk sky with open space at the top of the frame. No text.
-5. Vertical 9:16. Photorealistic. A large round sandstone relief carved with the twelve Chinese zodiac animals in a ring, set in an ancient temple wall, lit by warm candlelight and the moon, pink lotus offerings below, open space in the middle and lower part of the frame for captions. No text.
+1. Vertical 9:16. Premium 3D golden style. ${cap(LOOK[day])} stands on the worn stone steps of an ancient Khmer temple at dusk, carved sandstone towers behind it, a full moon rising in a deep blue sky, warm last light on its face. Shallow depth of field. No text.
+2. Vertical 9:16. Premium 3D golden style. ${cap(looks(lucky))} together on the grass in front of an ancient Khmer temple at golden hour, palm trees and soft mist behind them, warm light on their faces. Glowing golden aura, cute but powerful. No text.
+${careful.length ? `3. Vertical 9:16. Premium 3D golden style. ${cap(LOOK[careful[0]])} resting quietly beside a still lotus pond at dusk, pink lotus flowers in the foreground, the reflection of a temple tower and the full moon on the water. Peaceful mood. No text.` : "3. Vertical 9:16. Premium 3D golden style. A still lotus pond at dusk, pink lotus flowers in the foreground, the reflection of a temple tower and the full moon on the water. Peaceful mood. No text."}
+4. Vertical 9:16. Premium 3D golden style. A full moon rising over a wide lotus pond, the silhouette of an ancient Khmer temple with carved towers on the horizon, palm trees, soft mist on the water, deep blue dusk sky with open space at the top of the frame. No text.
+5. Vertical 9:16. Premium 3D golden style. A huge glowing golden zodiac wheel with twelve cute golden zodiac animals around its rim, floating in front of an ancient Khmer temple, lit by the full moon and golden light rays, pink lotus offerings below, open space in the middle and lower part of the frame for captions. No text.
 
 ### YouTube thumbnail image prompt
-Vertical 9:16 (can be cropped to 16:9). Photorealistic close-up of ${LOOK[day]} facing the viewer in warm golden evening light, an ancient Khmer temple and a glowing full moon softly blurred behind, ${lucky.filter((a) => a !== day).length ? `${looks(lucky.filter((a) => a !== day))} smaller in the background, ` : ""}vivid, sharp and eye-catching. No text, no letters, no logos. (Add the title and date in your editor.)
+Vertical 9:16 (can be cropped to 16:9). Premium 3D golden-style close-up of ${LOOK[day]} facing the viewer in warm golden evening light, an ancient Khmer temple and a glowing full moon softly blurred behind, ${lucky.filter((a) => a !== day).length ? `${looks(lucky.filter((a) => a !== day))} smaller in the background, ` : ""}glowing golden aura, vivid, powerful and eye-catching. No text, no letters, no logos. (Add the title and date in your editor.)
 
 ## Scene 1 – ${day} day
-Photorealistic. ${cap(LOOK[day])} walks slowly onto the worn stone steps of an ancient Khmer temple at dusk and ${POSE[day]}. Warm last sunlight touches its face while a full moon rises behind the carved sandstone towers. Light mist drifts across the courtyard. The camera starts low and slowly rises to a close-up. Natural, documentary style, matching the reference image.
+Premium 3D golden style. ${cap(LOOK[day])} walks slowly onto the worn stone steps of an ancient Khmer temple at dusk and ${POSE[day]}. Warm last sunlight touches its face while a full moon rises behind the carved sandstone towers. Light mist drifts across the courtyard. The camera starts low and slowly rises to a close-up. Golden sparkles swirl around it; cute but powerful, matching the reference image.
 
 ## Scene 2 – Lucky signs
-Photorealistic. ${cap(looks(lucky))} stand calmly together on the grass in front of an ancient Khmer temple at golden hour. Soft warm light glows on their faces, palm trees sway gently and a few fireflies drift up into the evening air. Each animal moves naturally in its own way. The camera glides slowly from left to right across them. The animals match the reference images.
+Premium 3D golden style. ${cap(looks(lucky))} stand calmly together on the grass in front of an ancient Khmer temple at golden hour. Soft warm light glows on their faces, palm trees sway gently and a few fireflies drift up into the evening air. Each animal moves in its own playful, confident way as golden sparkles rise around them. The camera glides slowly from left to right across them. The animals match the reference images.
 
 ## Scene 3 – ${careful.length ? `${careful.join(", ")}, take it easy` : "A calm moment"}
-${careful.length ? `Photorealistic. ${cap(LOOK[careful[0]])} rests quietly beside a still lotus pond at dusk, breathing slowly. Pink lotus flowers sway gently, and the reflection of a temple tower and the full moon shimmers on the water. The mood is peaceful and restful, not sad. The camera moves in slowly as a few petals float on the water. The ${careful[0].toLowerCase()} matches the reference image.` : "Photorealistic. A still lotus pond at dusk, pink lotus flowers swaying gently, the reflection of a temple tower and the full moon shimmering on the water. The camera moves in slowly."}
+${careful.length ? `Premium 3D golden style. ${cap(LOOK[careful[0]])} rests quietly beside a still lotus pond at dusk, breathing slowly. Pink lotus flowers sway gently, and the reflection of a temple tower and the full moon shimmers on the water. The mood is peaceful and restful, not sad. The camera moves in slowly as a few petals float on the water. The ${careful[0].toLowerCase()} matches the reference image.` : "Premium 3D golden style. A still lotus pond at dusk, pink lotus flowers swaying gently, the reflection of a temple tower and the full moon shimmering on the water. The camera moves in slowly."}
 
 ## Scene 4 – Outro
-Photorealistic. A full moon rises over a wide lotus pond with the silhouette of an ancient Khmer temple on the horizon. Soft mist moves across the water, palm trees frame the scene and the moonlight sparkles on the ripples. The camera slowly pulls back and tilts up, leaving open sky at the top of the frame for a title.
+Premium 3D golden style. A full moon rises over a wide lotus pond with the silhouette of an ancient Khmer temple on the horizon. Soft mist moves across the water, palm trees frame the scene and the moonlight sparkles on the ripples. The camera slowly pulls back and tilts up, leaving open sky at the top of the frame for a title.
 
 ## Scene 5 – Lucky numbers (about 10–12 seconds)
-Photorealistic. A large round sandstone relief carved with the twelve Chinese zodiac animals in a ring, set in an ancient temple wall. Warm candlelight flickers across the carvings and moonlight falls from above; pink lotus offerings rest below. The camera slowly pushes in, keeping open space in the middle and lower part of the frame for the number captions. (Loop this clip, or slow-zoom a still picture, to fill the time.)
+Premium 3D golden style. A huge glowing golden zodiac wheel with twelve cute golden zodiac animals around its rim turns slowly in front of an ancient Khmer temple. Golden light rays and sparkles pour from its center and glowing lotus flowers float below. The camera slowly pushes in, keeping open space in the middle and lower part of the frame for the number captions. (Loop this clip, or slow-zoom a still picture, to fill the time.)
 
 ## On-screen captions (add in the editor)
 ### Khmer version
