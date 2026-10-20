@@ -1,519 +1,527 @@
 1
-00:00:00,000 --> 00:00:03,084
+00:00:00,000 --> 00:00:03,061
 Once upon a time, beside an ancient temple
 
 2
-00:00:03,134 --> 00:00:06,219
-in Cambodia, there was a quiet lotus pond.
+00:00:03,111 --> 00:00:06,098
+in Cambodia, a giant golden lotus bloomed
 
 3
-00:00:06,269 --> 00:00:08,084
-Every night, a magic moon
+00:00:06,148 --> 00:00:07,876
+on every full-moon night
 
 4
-00:00:08,134 --> 00:00:09,950
-lantern lit up the water.
+00:00:07,926 --> 00:00:09,950
+filling the pond with light.
 
 5
-00:00:10,000 --> 00:00:11,240
+00:00:10,000 --> 00:00:11,306
 But this morning
 
 6
-00:00:11,290 --> 00:00:13,337
-the moon lantern grew dim.
+00:00:11,356 --> 00:00:14,018
+the lotus's magic seed was gone.
 
 7
-00:00:13,387 --> 00:00:15,434
-Its light was almost gone.
+00:00:14,068 --> 00:00:17,153
+Without it, the lotus could not bloom
 
 8
-00:00:15,484 --> 00:00:17,934
-Without it, tonight's full-moon
+00:00:17,203 --> 00:00:19,950
+and the festival could not begin.
 
 9
-00:00:17,984 --> 00:00:19,950
-festival could not begin.
-
-10
 00:00:20,000 --> 00:00:22,900
 In the middle of the pond, a golden lotus
 
-11
+10
 00:00:22,950 --> 00:00:25,921
 opened, and out came a little golden goat.
 
-12
+11
 00:00:25,971 --> 00:00:27,360
 Today was a Goat day
 
-13
+12
 00:00:27,410 --> 00:00:29,950
 and the goat felt something special.
 
+13
+00:00:30,000 --> 00:00:32,782
+A firefly named Phleu flew down.
+
 14
-00:00:30,000 --> 00:00:32,910
-A tiny firefly named Phleu flew down.
+00:00:32,832 --> 00:00:34,817
+"Little Goat," she said
 
 15
-00:00:32,960 --> 00:00:35,150
-"Little Goat," she whispered
+00:00:34,867 --> 00:00:37,738
+"only you can find the lost seed.
 
 16
-00:00:35,200 --> 00:00:37,950
-"only you can bring the light back.
-
-17
-00:00:38,000 --> 00:00:39,950
+00:00:37,788 --> 00:00:39,950
 Today is your lucky day!"
 
-18
+17
 00:00:40,000 --> 00:00:42,785
 Gentle and kind, the Goat symbolizes
 
-19
+18
 00:00:42,835 --> 00:00:45,541
 peace, harmony, and a caring heart.
 
-20
+19
 00:00:45,591 --> 00:00:46,564
 Phleu smiled.
 
-21
+20
 00:00:46,614 --> 00:00:48,139
 That was exactly why
 
-22
+21
 00:00:48,189 --> 00:00:49,950
 the moon had chosen it.
 
+22
+00:00:50,000 --> 00:00:52,172
+To bring back the lotus seed
+
 23
-00:00:50,000 --> 00:00:52,760
-To relight the lantern, the little
+00:00:52,222 --> 00:00:54,394
+the little hero needed three
 
 24
-00:00:52,810 --> 00:00:55,570
-hero needed three lucky treasures:
+00:00:54,444 --> 00:00:56,934
+lucky treasures: its lucky color
 
 25
-00:00:55,620 --> 00:00:58,132
-its lucky color, its lucky path
+00:00:56,984 --> 00:00:59,950
+its lucky path, and its lucky numbers.
 
 26
-00:00:58,182 --> 00:00:59,950
-and its lucky numbers.
-
-27
-00:01:00,000 --> 00:01:02,638
+00:01:00,000 --> 00:01:02,891
 "Let's go!" said the goat
 
+27
+00:01:02,941 --> 00:01:06,538
+and it set off on its adventure
+
 28
-00:01:02,688 --> 00:01:05,864
-and it set off across the pond
+00:01:06,588 --> 00:01:09,950
+with Phleu right by its side.
 
 29
-00:01:05,914 --> 00:01:09,950
-with Phleu glowing brightly beside it.
-
-30
 00:01:10,000 --> 00:01:12,415
 People born in the Year of the Goat
 
-31
+30
 00:01:12,465 --> 00:01:15,232
 are gentle, creative, and compassionate.
 
-32
+31
 00:01:15,282 --> 00:01:18,049
 Goats have a strong artistic sensibility
 
-33
+32
 00:01:18,099 --> 00:01:19,950
 and care deeply for others.
 
-34
+33
 00:01:20,000 --> 00:01:22,223
 The first treasure was waiting
 
-35
+34
 00:01:22,273 --> 00:01:24,874
 in a garden of a thousand lanterns.
 
-36
+35
 00:01:24,924 --> 00:01:26,768
 Only one shone brightest.
 
-37
+36
 00:01:26,818 --> 00:01:28,586
 It was green, the goat's
 
-38
+37
 00:01:28,636 --> 00:01:29,950
 lucky color today.
 
-39
+38
 00:01:30,000 --> 00:01:31,792
 The goat tied a green
 
-40
+39
 00:01:31,842 --> 00:01:33,810
 ribbon around its neck.
 
-41
+40
 00:01:33,860 --> 00:01:36,880
 "Wear your lucky color," said Phleu
 
-42
+41
 00:01:36,930 --> 00:01:39,950
 "and good luck stays close to you."
 
-43
+42
 00:01:40,000 --> 00:01:42,555
 Next, they came to a crossroads
 
-44
+43
 00:01:42,605 --> 00:01:43,900
 with many paths.
 
-45
+44
 00:01:43,950 --> 00:01:45,832
 One path began to glow.
 
-46
+45
 00:01:45,882 --> 00:01:47,681
 It pointed to the east
 
-47
+46
 00:01:47,731 --> 00:01:49,950
 the goat's lucky direction.
 
+47
+00:01:50,000 --> 00:01:51,724
+But a wide river blocked the path
+
 48
-00:01:50,000 --> 00:01:51,332
-But on the path stood
+00:01:51,774 --> 00:01:53,015
+with only small stepping
 
 49
-00:01:51,382 --> 00:01:52,713
-an old, shaky bridge.
+00:01:53,065 --> 00:01:54,036
+stones to cross it.
 
 50
-00:01:52,763 --> 00:01:53,832
+00:01:54,086 --> 00:01:54,950
 The goat stopped.
 
 51
-00:01:53,882 --> 00:01:55,279
+00:01:55,000 --> 00:01:56,133
 Sometimes, people born
 
 52
-00:01:55,329 --> 00:01:57,976
+00:01:56,183 --> 00:01:58,337
 in the Year of the Goat can be indecisive
 
 53
-00:01:58,026 --> 00:01:59,950
+00:01:58,387 --> 00:01:59,950
 or overly dependent on others.
 
 54
-00:02:00,000 --> 00:02:02,859
-Phleu landed softly on its nose.
+00:02:00,000 --> 00:02:02,592
+Phleu came close and smiled.
 
 55
-00:02:02,909 --> 00:02:05,314
+00:02:02,642 --> 00:02:05,139
 "Breathe slowly," she said.
 
 56
-00:02:05,364 --> 00:02:06,950
+00:02:05,189 --> 00:02:06,837
 "Trust your heart.
 
 57
-00:02:07,000 --> 00:02:09,950
+00:02:06,887 --> 00:02:09,950
 You are stronger than you think."
 
 58
-00:02:10,000 --> 00:02:13,421
-Step by step, the goat crossed the bridge.
+00:02:10,000 --> 00:02:11,870
+Stone by stone, the goat
 
 59
-00:02:13,471 --> 00:02:16,727
-With every step, the planks glowed gold.
+00:02:11,920 --> 00:02:13,790
+hopped across the river.
 
 60
-00:02:16,777 --> 00:02:19,950
-On the other side, it laughed with joy.
+00:02:13,840 --> 00:02:16,830
+Each stone glowed gold under its feet.
 
 61
+00:02:16,880 --> 00:02:19,950
+On the other side, it laughed with joy.
+
+62
 00:02:20,000 --> 00:02:23,311
 The little hero learned that its worries
 
-62
+63
 00:02:23,361 --> 00:02:26,589
 were small, and its good heart was big.
 
-63
+64
 00:02:26,639 --> 00:02:29,950
 Balance and courage always help us grow.
 
-64
+65
 00:02:30,000 --> 00:02:32,347
 At last, they reached a great
 
-65
+66
 00:02:32,397 --> 00:02:34,413
 stone door in the temple.
 
-66
+67
 00:02:34,463 --> 00:02:36,562
 Carved above it were bells
 
-67
+68
 00:02:36,612 --> 00:02:39,950
 stairs, and a riddle about lucky numbers.
 
-68
+69
 00:02:40,000 --> 00:02:41,537
 "The door opens only
 
-69
+70
 00:02:41,587 --> 00:02:43,998
 at your best time," said Phleu.
 
-70
+71
 00:02:44,048 --> 00:02:45,426
 For the Goat today
 
-71
+72
 00:02:45,476 --> 00:02:48,204
 that is from 5 to 7 in the morning.
 
-72
+73
 00:02:48,254 --> 00:02:49,950
 They waited patiently.
 
-73
+74
 00:02:50,000 --> 00:02:51,515
 When the time came
 
-74
+75
 00:02:51,565 --> 00:02:54,820
 the goat rang the golden bells 7 times
 
-75
+76
 00:02:54,870 --> 00:02:56,820
 its first lucky number.
 
-76
+77
 00:02:56,870 --> 00:02:57,863
 Ding!
 
-77
+78
 00:02:57,913 --> 00:02:59,950
 The door began to shine.
 
-78
+79
 00:03:00,000 --> 00:03:01,095
 The door opened
 
-79
+80
 00:03:01,145 --> 00:03:03,614
 and a stairway of light appeared.
 
-80
+81
 00:03:03,664 --> 00:03:06,133
 The goat climbed 27 glowing steps
 
-81
+82
 00:03:06,183 --> 00:03:07,889
 its second lucky number
 
-82
+83
 00:03:07,939 --> 00:03:09,950
 up to the top of the tower.
 
-83
-00:03:10,000 --> 00:03:13,154
-At the top, inside a golden lotus
-
 84
-00:03:13,204 --> 00:03:16,358
-lay a shining pearl of moonlight.
+00:03:10,000 --> 00:03:11,968
+At the top of the tower
 
 85
-00:03:16,408 --> 00:03:19,950
-It was the heart of the moon lantern!
+00:03:12,018 --> 00:03:14,687
+they found the magic lotus seed
 
 86
-00:03:20,000 --> 00:03:22,774
-Inside the pearl, seven little lights
+00:03:14,737 --> 00:03:16,792
+glowing like a tiny sun.
 
 87
-00:03:22,824 --> 00:03:25,752
-twinkled, one for each day of the week.
+00:03:16,842 --> 00:03:19,950
+It was the heart of the giant lotus!
 
 88
-00:03:25,802 --> 00:03:28,271
-Friday and Sunday shone brightest
+00:03:20,000 --> 00:03:22,719
+Around the seed, seven little lights
 
 89
-00:03:28,321 --> 00:03:29,950
-the Goat's lucky days.
+00:03:22,769 --> 00:03:25,719
+twinkled, one for each day of the week.
 
 90
-00:03:30,000 --> 00:03:31,591
-Time was running out.
+00:03:25,769 --> 00:03:28,258
+Friday and Sunday shone brightest
 
 91
-00:03:31,641 --> 00:03:34,638
-Holding the pearl carefully, the little
+00:03:28,308 --> 00:03:29,950
+the Goat's lucky days.
 
 92
-00:03:34,688 --> 00:03:37,763
-hero hurried home along the glowing path
+00:03:30,000 --> 00:03:32,009
+Time was running out.
 
 93
-00:03:37,813 --> 00:03:39,950
-with Phleu lighting the way.
+00:03:32,059 --> 00:03:34,558
+Holding the seed carefully
 
 94
+00:03:34,608 --> 00:03:37,303
+the little hero hurried home
+
+95
+00:03:37,353 --> 00:03:39,950
+with Phleu right beside it.
+
+96
 00:03:40,000 --> 00:03:43,774
 Back at the pond, everyone was waiting.
 
-95
+97
 00:03:43,824 --> 00:03:45,538
 The night was dark
 
-96
+98
 00:03:45,588 --> 00:03:48,381
 and the full moon was rising.
 
-97
+99
 00:03:48,431 --> 00:03:49,950
 Was it too late?
 
-98
-00:03:50,000 --> 00:03:51,919
-The goat placed the pearl
-
-99
-00:03:51,969 --> 00:03:53,808
-inside the moon lantern.
-
 100
-00:03:53,858 --> 00:03:56,249
-For a moment, nothing happened.
+00:03:50,000 --> 00:03:51,796
+The goat placed the seed
 
 101
-00:03:56,299 --> 00:03:57,273
-Then, whoosh!
+00:03:51,846 --> 00:03:53,258
+in the giant lotus.
 
 102
-00:03:57,323 --> 00:03:59,950
-A golden light burst into the sky!
+00:03:53,308 --> 00:03:55,642
+For a moment, nothing happened.
 
 103
-00:04:00,000 --> 00:04:02,104
-The lotus pond glowed again.
+00:03:55,692 --> 00:03:56,642
+Then, whoosh!
 
 104
-00:04:02,154 --> 00:04:04,104
-Lanterns rose into the sky
+00:03:56,692 --> 00:03:57,873
+The lotus opened
 
 105
-00:04:04,154 --> 00:04:06,642
-and the full-moon festival began.
+00:03:57,923 --> 00:03:59,950
+in a burst of golden light!
 
 106
-00:04:06,692 --> 00:04:07,873
-Everyone cheered
+00:04:00,000 --> 00:04:02,223
+The giant lotus bloomed again.
 
 107
-00:04:07,923 --> 00:04:09,950
-for the little golden hero!
+00:04:02,273 --> 00:04:04,192
+Lanterns rose into the sky
 
 108
+00:04:04,242 --> 00:04:06,692
+and the full-moon festival began.
+
+109
+00:04:06,742 --> 00:04:07,905
+Everyone cheered
+
+110
+00:04:07,955 --> 00:04:09,950
+for the little golden hero!
+
+111
 00:04:10,000 --> 00:04:12,693
 The full moon shone down warmly
 
-109
+112
 00:04:12,743 --> 00:04:14,729
 as if to say thank you.
 
-110
+113
 00:04:14,779 --> 00:04:17,649
 The goat felt peaceful and proud.
 
-111
+114
 00:04:17,699 --> 00:04:19,950
 It had done its very best.
 
-112
+115
 00:04:20,000 --> 00:04:23,256
 If you were born in the Year of the Goat
 
-113
+116
 00:04:23,306 --> 00:04:25,074
 today is your day too.
 
-114
+117
 00:04:25,124 --> 00:04:27,719
 Like our hero, be brave, be kind
 
-115
+118
 00:04:27,769 --> 00:04:29,950
 and follow your good heart.
 
-116
+119
 00:04:30,000 --> 00:04:31,994
 Let's remember today's luck.
 
-117
+120
 00:04:32,044 --> 00:04:33,381
 Lucky color: green.
 
-118
+121
 00:04:33,431 --> 00:04:36,154
 Best time: from 5 to 7 in the morning.
 
-119
+122
 00:04:36,204 --> 00:04:37,760
 Lucky direction: east.
 
-120
+123
 00:04:37,810 --> 00:04:39,950
 Lucky numbers: 7, 27, and 292.
 
-121
-00:04:40,000 --> 00:04:42,783
+124
+00:04:40,000 --> 00:04:43,188
 And so, under the bright full moon
 
-122
-00:04:42,833 --> 00:04:45,450
-the little golden hero curled up
-
-123
-00:04:45,500 --> 00:04:48,200
-on its lotus and fell fast asleep
-
-124
-00:04:48,250 --> 00:04:49,950
-dreaming of tomorrow.
-
 125
+00:04:43,238 --> 00:04:46,712
+the little golden hero and Phleu fell
+
+126
+00:04:46,762 --> 00:04:49,950
+fast asleep, dreaming of tomorrow.
+
+127
 00:04:50,000 --> 00:04:51,617
 That's your Chinese zodiac
 
-126
+128
 00:04:51,667 --> 00:04:52,771
 fortune for today.
 
-127
+129
 00:04:52,821 --> 00:04:54,053
 See all twelve signs
 
-128
+130
 00:04:54,103 --> 00:04:56,745
 and your lucky numbers at mybirthsign.com.
 
-129
+131
 00:04:56,795 --> 00:04:58,860
 Follow us for tomorrow's fortune.
 
-130
+132
 00:04:58,910 --> 00:04:59,950
 Have a lucky day!

@@ -1,531 +1,535 @@
 1
-00:00:00,000 --> 00:00:03,084
-Once upon a time, beside an ancient temple
+00:00:00,000 --> 00:00:00,989
+Once upon a time
 
 2
-00:00:03,134 --> 00:00:06,219
-in Cambodia, there was a quiet lotus pond.
+00:00:01,039 --> 00:00:03,327
+beside an ancient temple in Cambodia
 
 3
-00:00:06,269 --> 00:00:08,084
-Every night, a magic moon
+00:00:03,377 --> 00:00:06,054
+there was a garden of magic night flowers.
 
 4
-00:00:08,134 --> 00:00:09,950
-lantern lit up the water.
+00:00:06,104 --> 00:00:07,288
+On full-moon nights
 
 5
-00:00:10,000 --> 00:00:11,240
-But this morning
+00:00:07,338 --> 00:00:09,950
+they opened and glowed like little stars.
 
 6
-00:00:11,290 --> 00:00:13,337
-the moon lantern grew dim.
+00:00:10,000 --> 00:00:11,261
+But this morning
 
 7
-00:00:13,387 --> 00:00:15,434
-Its light was almost gone.
+00:00:11,311 --> 00:00:14,130
+the flowers fell into a deep sleep.
 
 8
-00:00:15,484 --> 00:00:17,934
-Without it, tonight's full-moon
+00:00:14,180 --> 00:00:16,098
+Nothing could wake them.
 
 9
-00:00:17,984 --> 00:00:19,950
-festival could not begin.
+00:00:16,148 --> 00:00:17,573
+Without their glow
 
 10
+00:00:17,623 --> 00:00:19,950
+the festival could not begin.
+
+11
 00:00:20,000 --> 00:00:21,711
 In the middle of the pond
 
-11
+12
 00:00:21,761 --> 00:00:23,189
 a golden lotus opened
 
-12
+13
 00:00:23,239 --> 00:00:25,725
 and out came a little golden dragon.
 
-13
+14
 00:00:25,775 --> 00:00:27,274
 Today was a Dragon day
 
-14
+15
 00:00:27,324 --> 00:00:29,950
 and the dragon felt something special.
 
-15
-00:00:30,000 --> 00:00:32,863
-A tiny firefly named Phleu flew down.
-
 16
-00:00:32,913 --> 00:00:35,226
-"Little Dragon," she whispered
+00:00:30,000 --> 00:00:31,529
+A baby elephant named
 
 17
-00:00:35,276 --> 00:00:37,981
-"only you can bring the light back.
+00:00:31,579 --> 00:00:33,484
+Sovann came trotting over.
 
 18
-00:00:38,031 --> 00:00:39,950
-Today is your lucky day!"
+00:00:33,534 --> 00:00:35,288
+"Little Dragon," he said
 
 19
-00:00:40,000 --> 00:00:41,894
-Ruler of the clouds and rain
+00:00:35,338 --> 00:00:38,070
+"only you can wake the night flowers.
 
 20
-00:00:41,944 --> 00:00:43,769
-the Dragon symbolizes power
+00:00:38,120 --> 00:00:39,950
+Today is your lucky day!"
 
 21
-00:00:43,819 --> 00:00:46,061
-good fortune, and a noble spirit.
+00:00:40,000 --> 00:00:41,881
+Ruler of the clouds and rain
 
 22
-00:00:46,111 --> 00:00:46,964
-Phleu smiled.
+00:00:41,931 --> 00:00:43,743
+the Dragon symbolizes power
 
 23
-00:00:47,014 --> 00:00:48,353
-That was exactly why
+00:00:43,793 --> 00:00:46,019
+good fortune, and a noble spirit.
 
 24
-00:00:48,403 --> 00:00:49,950
-the moon had chosen it.
+00:00:46,069 --> 00:00:46,984
+Sovann smiled.
 
 25
-00:00:50,000 --> 00:00:52,760
-To relight the lantern, the little
+00:00:47,034 --> 00:00:48,364
+That was exactly why
 
 26
-00:00:52,810 --> 00:00:55,570
-hero needed three lucky treasures:
+00:00:48,414 --> 00:00:49,950
+the moon had chosen it.
 
 27
-00:00:55,620 --> 00:00:58,132
-its lucky color, its lucky path
+00:00:50,000 --> 00:00:51,983
+To wake the night flowers
 
 28
-00:00:58,182 --> 00:00:59,950
-and its lucky numbers.
+00:00:52,033 --> 00:00:54,259
+the little hero needed three
 
 29
-00:01:00,000 --> 00:01:02,792
-"Let's go!" said the dragon
+00:00:54,309 --> 00:00:56,861
+lucky treasures: its lucky color
 
 30
-00:01:02,842 --> 00:01:05,950
-and it set off across the pond
+00:00:56,911 --> 00:00:59,950
+its lucky path, and its lucky numbers.
 
 31
-00:01:06,000 --> 00:01:09,950
-with Phleu glowing brightly beside it.
+00:01:00,000 --> 00:01:03,018
+"Let's go!" said the dragon
 
 32
+00:01:03,068 --> 00:01:06,541
+and it set off on its adventure
+
+33
+00:01:06,591 --> 00:01:09,950
+with Sovann right by its side.
+
+34
 00:01:10,000 --> 00:01:12,593
 People born in the Year of the Dragon
 
-33
+35
 00:01:12,643 --> 00:01:15,593
 are confident, charismatic, and ambitious.
 
-34
+36
 00:01:15,643 --> 00:01:18,236
 Dragons draw attention and often rise
 
-35
+37
 00:01:18,286 --> 00:01:19,950
 to leadership naturally.
 
-36
+38
 00:01:20,000 --> 00:01:22,206
 The first treasure was waiting
 
-37
+39
 00:01:22,256 --> 00:01:24,837
 in a garden of a thousand lanterns.
 
-38
+40
 00:01:24,887 --> 00:01:26,717
 Only one shone brightest.
 
-39
+41
 00:01:26,767 --> 00:01:28,597
 It was gold, the dragon's
 
-40
+42
 00:01:28,647 --> 00:01:29,950
 lucky color today.
 
-41
-00:01:30,000 --> 00:01:31,863
+43
+00:01:30,000 --> 00:01:31,847
 The dragon tied a gold
 
-42
-00:01:31,913 --> 00:01:33,863
+44
+00:01:31,897 --> 00:01:33,829
 ribbon around its neck.
 
-43
-00:01:33,913 --> 00:01:36,907
-"Wear your lucky color," said Phleu
+45
+00:01:33,879 --> 00:01:36,933
+"Wear your lucky color," said Sovann
 
-44
-00:01:36,957 --> 00:01:39,950
+46
+00:01:36,983 --> 00:01:39,950
 "and good luck stays close to you."
 
-45
+47
 00:01:40,000 --> 00:01:42,410
 Next, they came to a crossroads
 
-46
+48
 00:01:42,460 --> 00:01:43,680
 with many paths.
 
-47
+49
 00:01:43,730 --> 00:01:45,506
 One path began to glow.
 
-48
+50
 00:01:45,556 --> 00:01:47,648
 It pointed to the southwest
 
-49
+51
 00:01:47,698 --> 00:01:49,950
 the dragon's lucky direction.
 
-50
-00:01:50,000 --> 00:01:51,238
-But on the path stood
-
-51
-00:01:51,288 --> 00:01:52,527
-an old, shaky bridge.
-
 52
-00:01:52,577 --> 00:01:53,692
-The dragon stopped.
+00:01:50,000 --> 00:01:52,036
+But the path climbed a steep stone hill
 
 53
-00:01:53,742 --> 00:01:55,042
-Sometimes, people born
+00:01:52,086 --> 00:01:53,479
+with a strong wind blowing.
 
 54
-00:01:55,092 --> 00:01:57,557
-in the Year of the Dragon can come across
+00:01:53,529 --> 00:01:54,495
+The dragon stopped.
 
 55
-00:01:57,607 --> 00:01:59,950
-as proud or impatient with limitations.
+00:01:54,545 --> 00:01:55,672
+Sometimes, people born
 
 56
-00:02:00,000 --> 00:02:02,859
-Phleu landed softly on its nose.
+00:01:55,722 --> 00:01:57,864
+in the Year of the Dragon can come across
 
 57
-00:02:02,909 --> 00:02:05,314
-"Breathe slowly," she said.
+00:01:57,914 --> 00:01:59,950
+as proud or impatient with limitations.
 
 58
-00:02:05,364 --> 00:02:06,950
-"Trust your heart.
+00:02:00,000 --> 00:02:02,686
+Sovann came close and smiled.
 
 59
-00:02:07,000 --> 00:02:09,950
-You are stronger than you think."
+00:02:02,736 --> 00:02:05,139
+"Breathe slowly," he said.
 
 60
-00:02:10,000 --> 00:02:11,917
-Step by step, the dragon
+00:02:05,189 --> 00:02:06,837
+"Trust your heart.
 
 61
-00:02:11,967 --> 00:02:13,475
-crossed the bridge.
+00:02:06,887 --> 00:02:09,950
+You are stronger than you think."
 
 62
-00:02:13,525 --> 00:02:16,753
-With every step, the planks glowed gold.
+00:02:10,000 --> 00:02:14,236
+Step by step, the dragon climbed the hill.
 
 63
-00:02:16,803 --> 00:02:19,950
-On the other side, it laughed with joy.
+00:02:14,286 --> 00:02:16,277
+The wind grew softer
 
 64
+00:02:16,327 --> 00:02:19,950
+and at the top, it laughed with joy.
+
+65
 00:02:20,000 --> 00:02:23,311
 The little hero learned that its worries
 
-65
+66
 00:02:23,361 --> 00:02:26,589
 were small, and its good heart was big.
 
-66
+67
 00:02:26,639 --> 00:02:29,950
 Balance and courage always help us grow.
 
-67
+68
 00:02:30,000 --> 00:02:32,347
 At last, they reached a great
 
-68
+69
 00:02:32,397 --> 00:02:34,413
 stone door in the temple.
 
-69
+70
 00:02:34,463 --> 00:02:36,562
 Carved above it were bells
 
-70
+71
 00:02:36,612 --> 00:02:39,950
 stairs, and a riddle about lucky numbers.
 
-71
-00:02:40,000 --> 00:02:41,488
+72
+00:02:40,000 --> 00:02:41,477
 "The door opens only
 
-72
-00:02:41,538 --> 00:02:43,873
-at your best time," said Phleu.
-
 73
-00:02:43,923 --> 00:02:45,412
-For the Dragon today
+00:02:41,527 --> 00:02:43,919
+at your best time," said Sovann.
 
 74
-00:02:45,462 --> 00:02:48,258
-that is from 3 to 5 in the afternoon.
+00:02:43,969 --> 00:02:45,446
+For the Dragon today
 
 75
-00:02:48,308 --> 00:02:49,950
-They waited patiently.
+00:02:45,496 --> 00:02:48,271
+that is from 3 to 5 in the afternoon.
 
 76
+00:02:48,321 --> 00:02:49,950
+They waited patiently.
+
+77
 00:02:50,000 --> 00:02:51,529
 When the time came
 
-77
+78
 00:02:51,579 --> 00:02:54,775
 the dragon rang the golden bells once
 
-78
+79
 00:02:54,825 --> 00:02:56,792
 its first lucky number.
 
-79
+80
 00:02:56,842 --> 00:02:57,845
 Ding!
 
-80
+81
 00:02:57,895 --> 00:02:59,950
 The door began to shine.
 
-81
+82
 00:03:00,000 --> 00:03:01,078
 The door opened
 
-82
+83
 00:03:01,128 --> 00:03:03,559
 and a stairway of light appeared.
 
-83
+84
 00:03:03,609 --> 00:03:06,191
 The dragon climbed 65 glowing steps
 
-84
+85
 00:03:06,241 --> 00:03:07,920
 its second lucky number
 
-85
+86
 00:03:07,970 --> 00:03:09,950
 up to the top of the tower.
 
-86
-00:03:10,000 --> 00:03:13,154
-At the top, inside a golden lotus
-
 87
-00:03:13,204 --> 00:03:16,358
-lay a shining pearl of moonlight.
+00:03:10,000 --> 00:03:11,719
+At the top of the tower
 
 88
-00:03:16,408 --> 00:03:19,950
-It was the heart of the moon lantern!
+00:03:11,769 --> 00:03:14,642
+they found a single drop of golden dew
 
 89
-00:03:20,000 --> 00:03:22,671
-Inside the pearl, seven little lights
+00:03:14,692 --> 00:03:16,873
+sparkling in a crystal shell.
 
 90
-00:03:22,721 --> 00:03:25,538
-twinkled, one for each day of the week.
+00:03:16,923 --> 00:03:19,950
+It was the magic that wakes the flowers!
 
 91
-00:03:25,588 --> 00:03:28,185
-Tuesday and Saturday shone brightest
+00:03:20,000 --> 00:03:22,828
+Around the dew drop, seven little lights
 
 92
-00:03:28,235 --> 00:03:29,950
-the Dragon's lucky days.
+00:03:22,878 --> 00:03:25,633
+twinkled, one for each day of the week.
 
 93
-00:03:30,000 --> 00:03:31,591
-Time was running out.
+00:03:25,683 --> 00:03:28,223
+Tuesday and Saturday shone brightest
 
 94
-00:03:31,641 --> 00:03:34,638
-Holding the pearl carefully, the little
+00:03:28,273 --> 00:03:29,950
+the Dragon's lucky days.
 
 95
-00:03:34,688 --> 00:03:37,763
-hero hurried home along the glowing path
+00:03:30,000 --> 00:03:31,913
+Time was running out.
 
 96
-00:03:37,813 --> 00:03:39,950
-with Phleu lighting the way.
+00:03:31,963 --> 00:03:34,716
+Holding the dew drop carefully
 
 97
+00:03:34,766 --> 00:03:37,333
+the little hero hurried home
+
+98
+00:03:37,383 --> 00:03:39,950
+with Sovann right beside it.
+
+99
 00:03:40,000 --> 00:03:43,774
 Back at the pond, everyone was waiting.
 
-98
+100
 00:03:43,824 --> 00:03:45,538
 The night was dark
 
-99
+101
 00:03:45,588 --> 00:03:48,381
 and the full moon was rising.
 
-100
+102
 00:03:48,431 --> 00:03:49,950
 Was it too late?
 
-101
-00:03:50,000 --> 00:03:52,043
-The dragon placed the pearl
-
-102
-00:03:52,093 --> 00:03:53,903
-inside the moon lantern.
-
 103
-00:03:53,953 --> 00:03:56,307
-For a moment, nothing happened.
+00:03:50,000 --> 00:03:51,934
+The dragon let the golden
 
 104
-00:03:56,357 --> 00:03:57,314
-Then, whoosh!
+00:03:51,984 --> 00:03:53,839
+dew fall on the flowers.
 
 105
-00:03:57,364 --> 00:03:59,950
-A golden light burst into the sky!
+00:03:53,889 --> 00:03:56,299
+For a moment, nothing happened.
 
 106
-00:04:00,000 --> 00:04:02,104
-The lotus pond glowed again.
+00:03:56,349 --> 00:03:57,569
+Then, one by one
 
 107
-00:04:02,154 --> 00:04:04,104
-Lanterns rose into the sky
+00:03:57,619 --> 00:03:59,950
+the flowers opened and glowed!
 
 108
-00:04:04,154 --> 00:04:06,642
-and the full-moon festival began.
+00:04:00,000 --> 00:04:02,281
+The night flowers glowed again.
 
 109
-00:04:06,692 --> 00:04:07,873
-Everyone cheered
+00:04:02,331 --> 00:04:04,236
+Lanterns rose into the sky
 
 110
-00:04:07,923 --> 00:04:09,950
-for the little golden hero!
+00:04:04,286 --> 00:04:06,717
+and the full-moon festival began.
 
 111
+00:04:06,767 --> 00:04:07,920
+Everyone cheered
+
+112
+00:04:07,970 --> 00:04:09,950
+for the little golden hero!
+
+113
 00:04:10,000 --> 00:04:12,646
 The full moon shone down warmly
 
-112
+114
 00:04:12,696 --> 00:04:14,646
 as if to say thank you.
 
-113
+115
 00:04:14,696 --> 00:04:17,689
 The dragon felt peaceful and proud.
 
-114
+116
 00:04:17,739 --> 00:04:19,950
 It had done its very best.
 
-115
+117
 00:04:20,000 --> 00:04:22,208
 If you were born in the Year
 
-116
+118
 00:04:22,258 --> 00:04:25,192
 of the Dragon, today is your day too.
 
-117
+119
 00:04:25,242 --> 00:04:27,773
 Like our hero, be brave, be kind
 
-118
+120
 00:04:27,823 --> 00:04:29,950
 and follow your good heart.
 
-119
+121
 00:04:30,000 --> 00:04:31,908
 Let's remember today's luck.
 
-120
+122
 00:04:31,958 --> 00:04:33,167
 Lucky color: gold.
 
-121
+123
 00:04:33,217 --> 00:04:35,964
 Best time: from 3 to 5 in the afternoon.
 
-122
+124
 00:04:36,014 --> 00:04:37,852
 Lucky direction: southwest.
 
-123
+125
 00:04:37,902 --> 00:04:39,950
 Lucky numbers: 1, 65, and 110.
 
-124
-00:04:40,000 --> 00:04:42,783
+126
+00:04:40,000 --> 00:04:43,158
 And so, under the bright full moon
 
-125
-00:04:42,833 --> 00:04:45,450
-the little golden hero curled up
-
-126
-00:04:45,500 --> 00:04:48,200
-on its lotus and fell fast asleep
-
 127
-00:04:48,250 --> 00:04:49,950
-dreaming of tomorrow.
+00:04:43,208 --> 00:04:46,742
+the little golden hero and Sovann fell
 
 128
+00:04:46,792 --> 00:04:49,950
+fast asleep, dreaming of tomorrow.
+
+129
 00:04:50,000 --> 00:04:51,617
 That's your Chinese zodiac
 
-129
+130
 00:04:51,667 --> 00:04:52,771
 fortune for today.
 
-130
+131
 00:04:52,821 --> 00:04:54,053
 See all twelve signs
 
-131
+132
 00:04:54,103 --> 00:04:56,745
 and your lucky numbers at mybirthsign.com.
 
-132
+133
 00:04:56,795 --> 00:04:58,860
 Follow us for tomorrow's fortune.
 
-133
+134
 00:04:58,910 --> 00:04:59,950
 Have a lucky day!

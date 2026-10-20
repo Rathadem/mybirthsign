@@ -55,68 +55,68 @@ Today was a Snake day
 and the snake felt something special.
 
 15
-00:00:30,000 --> 00:00:32,887
-A tiny firefly named Phleu flew down.
+00:00:30,000 --> 00:00:33,065
+A butterfly named Pich fluttered down.
 
 16
-00:00:32,937 --> 00:00:35,188
-"Little Snake," she whispered
+00:00:33,115 --> 00:00:35,032
+"Little Snake," she said
 
 17
-00:00:35,238 --> 00:00:37,966
+00:00:35,082 --> 00:00:37,901
 "only you can bring the light back.
 
 18
-00:00:38,016 --> 00:00:39,950
+00:00:37,951 --> 00:00:39,950
 Today is your lucky day!"
 
 19
-00:00:40,000 --> 00:00:42,882
+00:00:40,000 --> 00:00:42,905
 Wise and graceful, the Snake symbolizes
 
 20
-00:00:42,932 --> 00:00:45,739
+00:00:42,955 --> 00:00:45,783
 wisdom, intuition, and quiet elegance.
 
 21
-00:00:45,789 --> 00:00:46,717
-Phleu smiled.
+00:00:45,833 --> 00:00:46,692
+Pich smiled.
 
 22
-00:00:46,767 --> 00:00:48,221
+00:00:46,742 --> 00:00:48,208
 That was exactly why
 
 23
-00:00:48,271 --> 00:00:49,950
+00:00:48,258 --> 00:00:49,950
 the moon had chosen it.
 
 24
-00:00:50,000 --> 00:00:52,760
-To relight the lantern, the little
+00:00:50,000 --> 00:00:52,110
+To relight the moon lantern
 
 25
-00:00:52,810 --> 00:00:55,570
-hero needed three lucky treasures:
+00:00:52,160 --> 00:00:54,350
+the little hero needed three
 
 26
-00:00:55,620 --> 00:00:58,132
-its lucky color, its lucky path
+00:00:54,400 --> 00:00:56,910
+lucky treasures: its lucky color
 
 27
-00:00:58,182 --> 00:00:59,950
-and its lucky numbers.
+00:00:56,960 --> 00:00:59,950
+its lucky path, and its lucky numbers.
 
 28
-00:01:00,000 --> 00:01:02,716
+00:01:00,000 --> 00:01:03,009
 "Let's go!" said the snake
 
 29
-00:01:02,766 --> 00:01:05,907
-and it set off across the pond
+00:01:03,059 --> 00:01:06,656
+and it set off on its adventure
 
 30
-00:01:05,957 --> 00:01:09,950
-with Phleu glowing brightly beside it.
+00:01:06,706 --> 00:01:09,950
+with Pich right by its side.
 
 31
 00:01:10,000 --> 00:01:12,807
@@ -155,19 +155,19 @@ It was yellow, the snake's
 lucky color today.
 
 40
-00:01:30,000 --> 00:01:31,933
+00:01:30,000 --> 00:01:31,950
 The snake tied a yellow
 
 41
-00:01:31,983 --> 00:01:33,916
+00:01:32,000 --> 00:01:33,950
 ribbon around its neck.
 
 42
-00:01:33,966 --> 00:01:36,933
-"Wear your lucky color," said Phleu
+00:01:34,000 --> 00:01:36,907
+"Wear your lucky color," said Pich
 
 43
-00:01:36,983 --> 00:01:39,950
+00:01:36,957 --> 00:01:39,950
 "and good luck stays close to you."
 
 44
@@ -215,19 +215,19 @@ in the Year of the Snake can be secretive
 or prone to overthinking.
 
 55
-00:02:00,000 --> 00:02:02,859
-Phleu landed softly on its nose.
+00:02:00,000 --> 00:02:02,521
+Pich came close and smiled.
 
 56
-00:02:02,909 --> 00:02:05,314
+00:02:02,571 --> 00:02:05,093
 "Breathe slowly," she said.
 
 57
-00:02:05,364 --> 00:02:06,950
+00:02:05,143 --> 00:02:06,807
 "Trust your heart.
 
 58
-00:02:07,000 --> 00:02:09,950
+00:02:06,857 --> 00:02:09,950
 You are stronger than you think."
 
 59
@@ -275,23 +275,23 @@ Carved above it were bells
 stairs, and a riddle about lucky numbers.
 
 70
-00:02:40,000 --> 00:02:41,454
+00:02:40,000 --> 00:02:41,465
 "The door opens only
 
 71
-00:02:41,504 --> 00:02:43,785
-at your best time," said Phleu.
+00:02:41,515 --> 00:02:43,738
+at your best time," said Pich.
 
 72
-00:02:43,835 --> 00:02:45,213
+00:02:43,788 --> 00:02:45,177
 For the Snake today
 
 73
-00:02:45,263 --> 00:02:48,296
+00:02:45,227 --> 00:02:48,283
 that is from 1 to 3 in the early morning.
 
 74
-00:02:48,346 --> 00:02:49,950
+00:02:48,333 --> 00:02:49,950
 They waited patiently.
 
 75
@@ -335,20 +335,20 @@ its second lucky number
 up to the top of the tower.
 
 85
-00:03:10,000 --> 00:03:13,154
-At the top, inside a golden lotus
+00:03:10,000 --> 00:03:12,250
+At the top of the tower
 
 86
-00:03:13,204 --> 00:03:16,358
-lay a shining pearl of moonlight.
+00:03:12,300 --> 00:03:16,250
+they found a shining pearl of moonlight.
 
 87
-00:03:16,408 --> 00:03:19,950
+00:03:16,300 --> 00:03:19,950
 It was the heart of the moon lantern!
 
 88
 00:03:20,000 --> 00:03:22,651
-Inside the pearl, seven little lights
+Around the pearl, seven little lights
 
 89
 00:03:22,701 --> 00:03:25,497
@@ -363,20 +363,20 @@ Wednesday and Saturday shone brightest
 the Snake's lucky days.
 
 92
-00:03:30,000 --> 00:03:31,591
+00:03:30,000 --> 00:03:32,009
 Time was running out.
 
 93
-00:03:31,641 --> 00:03:34,638
-Holding the pearl carefully, the little
+00:03:32,059 --> 00:03:34,656
+Holding the pearl carefully
 
 94
-00:03:34,688 --> 00:03:37,763
-hero hurried home along the glowing path
+00:03:34,706 --> 00:03:37,401
+the little hero hurried home
 
 95
-00:03:37,813 --> 00:03:39,950
-with Phleu lighting the way.
+00:03:37,451 --> 00:03:39,950
+with Pich right beside it.
 
 96
 00:03:40,000 --> 00:03:43,774
@@ -491,41 +491,37 @@ Lucky direction: northeast.
 Lucky numbers: 9, 92, and 987.
 
 124
-00:04:40,000 --> 00:04:42,783
+00:04:40,000 --> 00:04:43,219
 And so, under the bright full moon
 
 125
-00:04:42,833 --> 00:04:45,450
-the little golden hero curled up
+00:04:43,269 --> 00:04:46,681
+the little golden hero and Pich fell
 
 126
-00:04:45,500 --> 00:04:48,200
-on its lotus and fell fast asleep
+00:04:46,731 --> 00:04:49,950
+fast asleep, dreaming of tomorrow.
 
 127
-00:04:48,250 --> 00:04:49,950
-dreaming of tomorrow.
-
-128
 00:04:50,000 --> 00:04:51,617
 That's your Chinese zodiac
 
-129
+128
 00:04:51,667 --> 00:04:52,771
 fortune for today.
 
-130
+129
 00:04:52,821 --> 00:04:54,053
 See all twelve signs
 
-131
+130
 00:04:54,103 --> 00:04:56,745
 and your lucky numbers at mybirthsign.com.
 
-132
+131
 00:04:56,795 --> 00:04:58,860
 Follow us for tomorrow's fortune.
 
-133
+132
 00:04:58,910 --> 00:04:59,950
 Have a lucky day!
