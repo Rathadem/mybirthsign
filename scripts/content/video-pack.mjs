@@ -13,7 +13,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
-import { computeFacts, ROOT, KM_NAMES } from "../daily-data-lib.mjs";
+import { computeFacts, ROOT, KM_NAMES, INFO, KM_INFO } from "../daily-data-lib.mjs";
 import { buildPack, charactersMd } from "./video-pack-lib.mjs";
 
 const LUCKY = createRequire(import.meta.url)("../../js/lucky-digits.js");
@@ -27,12 +27,11 @@ for (let i = 0; i < Number(nDays); i++) {
   const iso = new Date(t0.getTime() + i * 86400000).toISOString().slice(0, 10);
   let data = null;
   try { data = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "daily", `${iso}.json`), "utf8")); } catch (e) { /* made ahead */ }
-  const p = buildPack(iso, computeFacts(iso), LUCKY.forSign, data);
+  const p = buildPack(iso, computeFacts(iso), LUCKY.forSign, data, { INFO, KM_INFO });
   fs.writeFileSync(path.join(dir, `${iso}.md`), p.md);
   fs.writeFileSync(path.join(dir, `${iso}.srt`), p.srtKm);
   fs.writeFileSync(path.join(dir, `${iso}.en.srt`), p.srtEn);
-  fs.writeFileSync(path.join(dir, `${iso}-9scene.srt`), p.srt90Km);
-  fs.writeFileSync(path.join(dir, `${iso}-9scene.en.srt`), p.srt90En);
+  for (const [id, x] of Object.entries(p.srtVid)) { fs.writeFileSync(path.join(dir, `${iso}-${id}.srt`), x.km); fs.writeFileSync(path.join(dir, `${iso}-${id}.en.srt`), x.en); }
   console.log(p.line);
 }
 fs.writeFileSync(path.join(dir, "characters.md"), charactersMd(KM_NAMES));

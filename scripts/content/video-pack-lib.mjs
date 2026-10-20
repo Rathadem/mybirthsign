@@ -5,6 +5,7 @@
 //     facts   = computeFacts(iso) from scripts/daily-data-lib.mjs
 //     forSign = forSign from js/lucky-digits.js
 //     data    = the day's data/daily/<iso>.json if it exists (its summary is used), otherwise null
+//     P       = { INFO, KM_INFO } from daily-data-lib (traits, weaknesses, lucky days for the long video)
 export const EMO = { Rat: "🐀", Ox: "🐂", Tiger: "🐯", Rabbit: "🐇", Dragon: "🐉", Snake: "🐍", Horse: "🐎", Goat: "🐐", Monkey: "🐒", Rooster: "🐓", Dog: "🐕", Pig: "🐖" };
 // look of each animal: cute but powerful, shining gold (3D animated-film quality)
 export const LOOK = {
@@ -130,7 +131,7 @@ function splitLines(text, lang) {
   return out.filter(Boolean);
 }
 
-export function buildPack(iso, F, forSign, data = null) {
+export function buildPack(iso, F, forSign, data = null, P = null) {
   const sign = (a) => F.signs.find((s) => s.animal === a);
   const day = F.dayAnimal, dayKm = F.dayAnimalKm, lucky = F.highlights.topLucky, careful = F.highlights.careful;
   const km = (a) => sign(a).nameKm;
@@ -218,18 +219,87 @@ export function buildPack(iso, F, forSign, data = null) {
       "នេះគឺជាជោគជតារាសីចិន សម្រាប់ថ្ងៃនេះ។ អ្នកអាចមើលរាសីទាំង 12 និងលេខសំណាង នៅលើគេហទំព័រ mybirthsign.com។ សូមតាមដានយើង សម្រាប់ជោគជតាថ្ងៃស្អែក។ សូមឲ្យអ្នកមានសំណាងល្អ!"],
   ];
   const mmss = (t) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`;
-  const voLines = (k) => vo90.map((v, i) => `Scene ${i + 1} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${v[k]}`).join("\n\n");
+  // ---- luckiest-animal videos: 60 seconds (Facebook, TikTok) and 180 seconds (YouTube), 10-second scenes
+  const PI = P && P.INFO[day], PK = P && P.KM_INFO[day];
+  const dir = dd.lucky.direction.en.toLowerCase(), dirKm = dd.lucky.direction.km;
+  const traitsEn = PI ? PI.traits.replace(/^(\w)/, (m) => m.toLowerCase()) : "";
+  const weakEn = PI ? PI.weaknesses.replace(/^(\w)/, (m) => m.toLowerCase()).replace(/\.$/, "") : "";
+  const SC = {
+    moon: [nine[0][0], nine[0][1], ...vo90[0]],
+    appear: [nine[1][0], nine[1][1], ...vo90[1]],
+    meaning: [nine[2][0], nine[2][1], ...vo90[2]],
+    personality: [`The ${day}'s character`, `Close-up of the ${dl} on its glowing lotus, its face showing a ${S9.mood} expression. Soft golden light circles it, and small glowing lotus petals float around it like a halo. Gentle slow orbit around the ${dl}.`,
+      `People born in the Year of the ${day} are ${traitsEn}`, PK ? `អ្នកកើតឆ្នាំ${dayKm} ជាមនុស្ស${PK.traits.replace(/ឱនភាព/g, "ឱ្យតម្លៃលើភាព")}` : ""],
+    magic: [nine[3][0], nine[3][1], ...vo90[3]],
+    love: ["Love and family", `The ${dl} sits by the lotus pond as warm pink lanterns rise around it, and a soft glowing heart of golden light forms in the air in front of it. It smiles warmly. Gentle, loving mood. Slow push-in.`,
+      "For love and family today, be warm and kind. A kind word, a smile, or a small gift can bring you closer to the people you love.",
+      "សម្រាប់ស្នេហា និងគ្រួសារ ថ្ងៃនេះ សូមមានចិត្តកក់ក្ដៅ និងសប្បុរស។ ពាក្យសម្ដីល្អ ស្នាមញញឹម ឬអំណោយតូចមួយ អាចនាំឲ្យអ្នកកាន់តែជិតស្និទ្ធ នឹងមនុស្សដែលអ្នកស្រឡាញ់។"],
+    work: ["Work and study", `The ${dl} climbs the glowing temple steps one by one, and each step lights up in gold under its feet. At the top it looks out proudly over the moonlit temple. Determined, hopeful mood. Camera rises with it.`,
+      "For work and study, take one clear step at a time. Finish what matters most first, and ask for help when you need it.",
+      "សម្រាប់ការងារ និងការសិក្សា សូមធ្វើម្ដងមួយជំហាន ឲ្យបានច្បាស់លាស់។ សូមធ្វើរឿងសំខាន់បំផុតមុនគេ ហើយកុំខ្មាសក្នុងការសុំជំនួយ ពេលអ្នកត្រូវការ។"],
+    money: ["Money", `The ${dl} sits beside a lotus-shaped basket of softly glowing golden coins and carefully drops one shining coin into a small golden jar. Warm, calm light. Slow push-in on the jar.`,
+      "For money, keep things simple and careful today. Plan before you spend, and save a little for tomorrow.",
+      "សម្រាប់លុយកាក់ ថ្ងៃនេះ សូមចាយវាយឲ្យសាមញ្ញ និងប្រុងប្រយ័ត្ន។ សូមគិតគូរមុននឹងចាយ ហើយសន្សំទុកបន្តិច សម្រាប់ថ្ងៃស្អែក។"],
+    colortime: [nine[4][0], nine[4][1], ...vo90[4]],
+    color: ["Lucky color", `The ${dl} lands softly on the temple steps. Glowing ${cen} lanterns light up one by one around it, and the ${dl} smiles and touches a ${cen} lantern with its paw. Warm ${cen} and gold light. Slow orbit.`,
+      `Your lucky color today is ${cen}. Wear something ${cen}, or carry a small ${cen} item with you, to keep good luck close.`,
+      `ពណ៌សំណាងរបស់អ្នកថ្ងៃនេះ គឺពណ៌${ckm}។ សូមស្លៀកពាក់ពណ៌${ckm} ឬយករបស់ពណ៌${ckm}មួយ ជាប់ខ្លួន ដើម្បីរក្សាសំណាងល្អ ឲ្យនៅជិតអ្នក។`],
+    time: ["Best time", `A shining circle of golden light like a sundial appears on the temple stone, and its glowing shadow turns slowly as the ${dl} watches. Stars and lanterns move gently in the sky. Calm, magical mood. Slow push-in.`,
+      `Your best time today is ${sayTime(dd.lucky.time)}. It is a good time for important plans, meetings, or a fresh start.`,
+      `ពេលល្អបំផុតរបស់អ្នកថ្ងៃនេះ គឺ${sayTimeKm(dd.lucky.time)}។ ជាពេលល្អ សម្រាប់ផែនការសំខាន់ៗ ការជួបជុំ ឬការចាប់ផ្ដើមថ្មី។`],
+    direction: [nine[5][0], nine[5][1], ...vo90[5]],
+    numbers: [nine[6][0], nine[6][1], ...vo90[6]],
+    luckydays: ["Lucky days of the week", `Seven glowing lanterns float in a row above the lotus pond, and two of them shine brighter than the others. The ${dl} looks up at the two bright lanterns and smiles. Slow pan along the row.`,
+      PI ? `The ${day}'s lucky days of the week are ${PI.luckyDays.join(" and ")}. Keep them in mind for plans that matter to you.` : "",
+      PK ? `ថ្ងៃសំណាងប្រចាំសប្ដាហ៍ របស់ឆ្នាំ${dayKm} គឺ${PK.luckyDays.join(" និង")}។ សូមចងចាំថ្ងៃទាំងនេះ សម្រាប់ផែនការសំខាន់ៗ របស់អ្នក។` : ""],
+    reminder: ["A gentle reminder", `The ${dl} looks at its reflection in the still lotus pond. The reflection smiles back, and a soft ring of golden light spreads across the water. Thoughtful, peaceful mood. Slow camera move down to the reflection.`,
+      `A gentle reminder: people born in the Year of the ${day} ${weakEn}. Today, stay balanced, and listen to your heart.`,
+      PK ? `សូមរំលឹកបន្តិច៖ អ្នកកើតឆ្នាំ${dayKm} ${PK.weaknesses} ថ្ងៃនេះ សូមរក្សាតុល្យភាព និងស្ដាប់ចិត្តខ្លួនឯង។` : ""],
+    wish: [nine[7][0], nine[7][1], ...vo90[7]],
+    thanks: ["Thank you", `The ${dl} bows gently with its paws together in front of the glowing temple, as pink lotus petals fall softly around it like rain. Warm, grateful mood. Slow pull-back.`,
+      "Before the day ends, take a quiet moment to say thank you. Thank the people who help you, and thank yourself for trying your best.",
+      "មុនថ្ងៃនេះបញ្ចប់ សូមចំណាយពេលស្ងាត់មួយភ្លែត ដើម្បីអរគុណ។ អរគុណមនុស្សដែលជួយអ្នក ហើយអរគុណខ្លួនឯង ដែលបានព្យាយាមអស់ពីសមត្ថភាព។"],
+    recap: ["Today's luck in one look", `The ${dl} sits on its glowing lotus while a ${cen} lantern, a golden compass of light and three glowing golden orbs circle slowly around it. Magical, cheerful mood. Slow orbit.`,
+      `Let's remember today's luck. Lucky color: ${cen}. Best time: ${sayTime(dd.lucky.time)}. Lucky direction: ${dir}. Lucky numbers: ${n0.d1}, ${n0.d2}, and ${n0.d3}.`,
+      `សូមចងចាំសំណាងថ្ងៃនេះ។ ពណ៌សំណាង៖ ពណ៌${ckm}។ ពេលល្អ៖ ${sayTimeKm(dd.lucky.time)}។ ទិសសំណាង៖ ទិស${dirKm}។ លេខសំណាង៖ លេខ ${n0.d1} លេខ ${n0.d2} និងលេខ ${n0.d3}។`],
+    end: [nine[8][0], nine[8][1], ...vo90[8]],
+  };
+  const VIDEOS = [
+    { id: "60s", name: "60-second video – Facebook & TikTok", secs: 60, keys: ["appear", "meaning", "magic", "colortime", "numbers", "end"] },
+    { id: "180s", name: "180-second video – YouTube", secs: 180, keys: ["moon", "appear", "meaning", "personality", "magic", "love", "work", "money", "color", "time", "direction", "numbers", "luckydays", "reminder", "wish", "thanks", "recap", "end"] },
+  ].map((v) => ({ ...v, scenes: v.keys.map((k) => SC[k]) }));
   // subtitles locked to the scenes: each scene's lines share its own 10 seconds
-  const srtScenes = (k, lang) => {
+  const srtFor = (scenes, lang) => {
     let n = 0;
-    return vo90.map((v, si) => {
-      const lines = splitLines(v[k], lang), w = lines.map((l) => Math.max(l.length, 12)), sum = w.reduce((a, b) => a + b, 0);
+    return scenes.map((v, si) => {
+      const lines = splitLines(lang === "km" ? v[3] : v[2], lang), w = lines.map((l) => Math.max(l.length, 12)), sum = w.reduce((a, b) => a + b, 0);
       let t = si * 10;
       return lines.map((l, i) => { const d = (10 * w[i]) / sum; const out = `${++n}\n${ts(t)} --> ${ts(t + d - 0.05)}\n${l}\n`; t += d; return out; }).join("\n");
     }).join("\n");
   };
-  const srt90Km = srtScenes(1, "km");
-  const srt90En = srtScenes(0, "en");
+  const srtVid = {};
+  VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
+  const videoMd = (v) => `## ${v.name}
+A ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference picture of the ${day} as an ingredient. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.
+
+${v.scenes.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
+
+## Voice-over – ${v.secs}-second video
+The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
+
+### English
+${v.scenes.map((x, i) => `Scene ${i + 1} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${x[2]}`).join("\n\n")}
+
+### Khmer
+${v.scenes.map((x, i) => `Scene ${i + 1} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${x[3]}`).join("\n\n")}
+
+### Subtitles – Khmer (${iso}-${v.id}.srt)
+\`\`\`
+${srtVid[v.id].km}\`\`\`
+
+### Subtitles – English (${iso}-${v.id}.en.srt)
+\`\`\`
+${srtVid[v.id].en}\`\`\``;
   const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
@@ -254,27 +324,7 @@ ${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for th
 ### Caption – Khmer
 ${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).label.km}សម្រាប់ឆ្នាំ${dayKm}។ លេខសំណាង៖ ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ)។ មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
 
-## 9-scene video – luckiest animal (about 90 seconds)
-A longer video about the ${day}, today's luckiest animal: 9 clips of 10 seconds (about 90 seconds). Set the clip length in Flow to 10 seconds. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Add the reference picture of the ${day} as an ingredient in Flow. The whole video is about the ${day} only. Put the clips in order 1 to 9.
-
-${nine.map(([t, prompt], i) => [t, prompt, vo90[i][0], vo90[i][1]]).map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
-
-## Voice-over – 9-scene video (about 90 seconds)
-The same lines as the voice in each 10-second scene above, all together. Use it if you record the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too). English is about 230 words, a calm 90 seconds.
-
-### English
-${voLines(0)}
-
-### Khmer
-${voLines(1)}
-
-### Subtitles – Khmer (${iso}-9scene.srt)
-\`\`\`
-${srt90Km}\`\`\`
-
-### Subtitles – English (${iso}-9scene.en.srt)
-\`\`\`
-${srt90En}\`\`\`
+${VIDEOS.map(videoMd).join("\n\n")}
 
 ## Style (paste first in every scene)
 ${STYLE}
@@ -408,7 +458,7 @@ ${srtKm}\`\`\`
 \`\`\`
 ${srtEn}\`\`\`
 `;
-  return { md, srtKm, srtEn, srt90Km, srt90En, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
+  return { md, srtKm, srtEn, srtVid, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
 }
 
 // the full set of 12 character prompts (profile pictures / collection artwork / video references)

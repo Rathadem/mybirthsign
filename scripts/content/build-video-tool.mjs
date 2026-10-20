@@ -24,9 +24,9 @@ const rules = strip(libSrc.slice(a, b));
 
 const pick = (o, f) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, f(v)]));
 const DATA = {
-  INFO: pick(INFO, (v) => ({ luckyNumbers: v.luckyNumbers, luckyColors: v.luckyColors, compatible: v.compatible })),
+  INFO: pick(INFO, (v) => ({ luckyNumbers: v.luckyNumbers, luckyColors: v.luckyColors, compatible: v.compatible, traits: v.traits, weaknesses: v.weaknesses, luckyDays: v.luckyDays })),
   TRIANGLES, KM_NAMES,
-  KM_INFO: pick(KM_INFO, (v) => ({ luckyColors: v.luckyColors })),
+  KM_INFO: pick(KM_INFO, (v) => ({ luckyColors: v.luckyColors, traits: v.traits, weaknesses: v.weaknesses, luckyDays: v.luckyDays })),
   COLOR_HEX,
 };
 const code = [
