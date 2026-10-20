@@ -40,7 +40,20 @@ export const POSE = {
 };
 export const STYLE = "Vertical 9:16. Premium 3D animated fantasy film quality, inspired by classic Disney and Pixar-style animated family films: cute and majestic golden zodiac characters with oversized sparkling eyes, adorable expressive faces, soft rounded features, polished gold textures with intricate engraved ornaments and delicate pink and gold accents, alive and emotionally expressive. Setting: a softly illuminated Khmer temple inspired by Angkor Wat under a glowing full moon and a deep indigo starry sky, floating lotus flowers, ornate pink-and-gold lotus details, magical sparkles and warm golden reflections. Cinematic lighting, rich colors, soft atmospheric glow, realistic metallic reflections, beautiful depth of field, gentle slow camera movement, professional animated-movie rendering. No text, no letters, no subtitles, no watermark, no logos.";
 export const VOICE_EN = "a warm, cheerful young female narrator with a soft, magical storytelling tone, clear and friendly";
-export const VOICE_KM = "a warm, cheerful young Cambodian female narrator speaking clear Khmer, soft and friendly";
+export const VOICE_KM = "a native Cambodian Khmer female narrator with clear, standard Phnom Penh pronunciation, warm, friendly and youthful, medium pitch, smooth and gentle, speaking slightly slowly (about 85 to 90 percent of normal speed), pronouncing every Khmer word fully and clearly, with natural Khmer rhythm and a short pause at each ។ (not English-accented, not robotic, not dramatic),";
+// Khmer for speaking: numbers written out as Khmer words, so a voice reads them in Khmer and not in English
+// ("64" -> "ហុកសិបបួន", "2026" -> "ពីរពាន់ម្ភៃប្រាំមួយ"). Subtitles and captions keep the digits.
+const KM_ONES = ["សូន្យ", "មួយ", "ពីរ", "បី", "បួន", "ប្រាំ", "ប្រាំមួយ", "ប្រាំពីរ", "ប្រាំបី", "ប្រាំបួន"];
+const KM_TENS = ["", "ដប់", "ម្ភៃ", "សាមសិប", "សែសិប", "ហាសិប", "ហុកសិប", "ចិតសិប", "ប៉ែតសិប", "កៅសិប"];
+function kmNumber(n) {
+  if (n < 10) return KM_ONES[n];
+  if (n < 100) return KM_TENS[Math.floor(n / 10)] + (n % 10 ? KM_ONES[n % 10] : "");
+  if (n < 1000) return KM_ONES[Math.floor(n / 100)] + "រយ" + (n % 100 ? kmNumber(n % 100) : "");
+  if (n < 10000) return KM_ONES[Math.floor(n / 1000)] + "ពាន់" + (n % 1000 ? kmNumber(n % 1000) : "");
+  if (n < 100000) return kmNumber(Math.floor(n / 10000)) + "ម៉ឺន" + (n % 10000 ? kmNumber(n % 10000) : "");
+  return String(n);
+}
+export const kmSpeak = (t) => t.replace(/([\u1780-\u17ff]) (?=\d)/g, "$1").replace(/\d+/g, (d) => kmNumber(Number(d)));
 export const MUSIC = "Gentle magical background music with soft chimes and a light Asian flute. No other speech.";
 // the luckiest animal of the day (the day animal): one-line symbolism for the hero picture, video and caption
 // (Rabbit line written by the owner; the others follow the same pattern with common traditional symbolism)
@@ -548,7 +561,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const videoMd = (v) => `## ${v.name}
 ${v.intro || `A ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference picture of the ${day} as an ingredient. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
 ${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
-${v.scenes.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
+${v.scenes.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmSpeak(kmL)}" ${MUSIC}`).join("\n\n")}
 
 ## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : `${v.secs}-second video`}
 The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
@@ -557,7 +570,7 @@ The same lines as the voice in each scene above, all together, for recording the
 ${v.scenes.map((x, i) => `Scene ${i + 1} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${x[2]}`).join("\n\n")}
 
 ### Khmer
-${v.scenes.map((x, i) => `Scene ${i + 1} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${x[3]}`).join("\n\n")}
+${v.scenes.map((x, i) => `Scene ${i + 1} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${kmSpeak(x[3])}`).join("\n\n")}
 
 ### Subtitles – Khmer (${iso}-${v.id}.srt)
 \`\`\`
@@ -582,7 +595,7 @@ ${HERO(day)}
 ### Video prompt for Flow (9:16, about 8 seconds)
 Vertical 9:16. Premium 3D animated golden style, same ${day.toLowerCase()} as the reference picture. ${cap(LOOK[day])} sits peacefully on its glowing lotus under a huge full moon. A soft beam of moonlight falls on it, its golden details glow, and it rises gently into the air, floating slowly toward the moon with a trail of silver-gold sparkles and lotus petals. ${cap(SYMBOL[day].mood)} mood. Slow, smooth camera rising with it. No text.
 Audio: ${VOICE_EN} says: "Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! ${SYMBOL[day].en}" ${MUSIC}
-Khmer audio (use instead for the Khmer video): Audio: ${VOICE_KM} says in Khmer: "ថ្ងៃនេះជាថ្ងៃ${dayKm}! ${SYMBOL[day].km}" ${MUSIC}
+Khmer audio (use instead for the Khmer video): Audio: ${VOICE_KM} says in Khmer: "${kmSpeak(`ថ្ងៃនេះជាថ្ងៃ${dayKm}! ${SYMBOL[day].km}`)}" ${MUSIC}
 
 ### Caption – English
 ${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for the ${day}. Lucky numbers: ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (for fun only). All 12 signs: https://mybirthsign.com
@@ -591,6 +604,25 @@ ${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for th
 ${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).label.km}សម្រាប់ឆ្នាំ${dayKm}។ លេខសំណាង៖ ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ)។ មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
 
 ${VIDEOS.map(videoMd).join("\n\n")}
+
+## Khmer voice – how to get clear Khmer
+Every Khmer voice line in this pack is written for speaking: short sentences, a ។ at each pause, and numbers written out in Khmer words (for example ហុកសិបបួន, not 64) so the voice does not read them in English. Subtitles and captions keep the digits.
+
+### If you use Google Flow
+Use "Copy + Khmer voice" for each scene; the voice description is already included. Flow's Khmer can be unclear on some clips. Listen to every clip, and remake any clip where words are wrong, cut off or English-sounding. If Khmer stays unclear, make the clips without voice ("Copy") and add a recorded Khmer voice-over instead.
+
+### If you use a text-to-speech app
+- Language: Cambodian Khmer (km-KH). Pick a real Khmer voice, for example Microsoft Azure's female voice "km-KH-SreymomNeural" (used by many TTS apps and sites). Do not use an English voice with Khmer text.
+- Speed: 0.85× to 0.9×. Pitch: natural. Pause between sentences: normal.
+- Paste the Khmer voice-over text from this pack exactly as it is (Khmer script, no romanization).
+- Make one scene at a time if the app cuts off long text, then join the clips in your editor.
+- Before using a new voice, test it with these two sentences and listen carefully:
+  សួស្តីអ្នកទាំងអស់គ្នា! សូមស្វាគមន៍មកកាន់ MyBirthSign.com។
+  ថ្ងៃនេះជាថ្ងៃល្អសម្រាប់អ្នកកើតឆ្នាំខ្លា។ សូមជឿជាក់លើខ្លួនឯង ហើយកុំភ្លេចអត់ធ្មត់។
+  Check that every word is clear Cambodian Khmer, sentence endings are complete, and speed and volume stay even.
+
+### Record it yourself
+A native speaker reading the Khmer voice-over slowly and clearly is always the most natural choice.
 
 ## Style (paste first in every scene)
 ${STYLE}
@@ -657,10 +689,10 @@ ${[
   ["3", careful.length ? `${list(careful)}, take it easy today. Slow down and rest.` : "Take a calm breath and enjoy the day.", careful.length ? `ឆ្នាំ${kmList(careful.map(km))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ។` : "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
   ["5", `Lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Just for fun.`, `លេខសំណាង៖ ${nums.map((n) => `${km(n.a)} ${n.d2}`).join(" ")}! សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។`],
   ["4", "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
-].map(([n, en, kmL]) => `- **Scene ${n}**\n  - English: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\n  - Khmer: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n")}
+].map(([n, en, kmL]) => `- **Scene ${n}**\n  - English: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\n  - Khmer: Audio: ${VOICE_KM} says in Khmer: "${kmSpeak(kmL)}" ${MUSIC}`).join("\n")}
 
 ## Voice-over – Khmer (about 45 seconds)
-${voiceKm.join("\n")}
+${voiceKm.map(kmSpeak).join("\n")}
 
 ## Voice-over – English (about 45 seconds)
 ${voiceEn.join("\n")}
