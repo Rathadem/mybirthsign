@@ -1152,7 +1152,7 @@ function charactersMd(KM_NAMES) {
         html += '<div class="block">' + (b.title ? "<h3>" + esc(b.title) + "</h3>" : "") +
           '<pre class="txt' + (b.code ? " code" : "") + '" id="' + id + '">' + (b.code ? esc(b.text) : rich(b.text)) + "</pre>" +
           '<div class="row"><button data-copy="' + id + '">Copy</button>' +
-          (b.code && /\.srt/.test(b.title) ? '<button class="dl" data-dlsrt="1"' + (dl ? "" : " hidden") + '>Download subtitles (.zip)</button>' : "") +
+          (b.code && /\(([^)]+\.srt)\)/.test(b.title) ? '<button class="primary" data-srtfile="' + /\(([^)]+\.srt)\)/.exec(b.title)[1] + '" data-pre="' + id + '">Download ' + /\(([^)]+\.srt)\)/.exec(b.title)[1] + '</button>' : "") +
           (scene && voices[scene[1]] ? '<button data-flow="' + scene[1] + '|en" data-pre="' + id + '">Copy + English voice</button><button data-flow="' + scene[1] + '|km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
           (/\nEnglish voice: /.test(b.text) ? '<button data-nine="en" data-pre="' + id + '">Copy + English voice</button><button data-nine="km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
           "</div></div>";
@@ -1268,6 +1268,23 @@ function charactersMd(KM_NAMES) {
     });
   }
   $("dlsrt").addEventListener("click", function (e) { saveSubtitles(e.currentTarget); });
+  // one subtitle file: saved inside a small .zip (the viewer cannot save .srt directly); if saving is not
+  // available here, the text is copied so it can be pasted into a plain text file with that name
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-srtfile]"); if (!b) return;
+    e.preventDefault();
+    var name = b.dataset.srtfile, text = ($("pack").__texts || {})[b.dataset.pre] || "";
+    if (!dl) { copy(text, b, document.getElementById(b.dataset.pre)); toast("Copied. Paste it into a plain text file named " + name); return; }
+    var z = new JSZip(); z.file(name, text);
+    z.generateAsync({ type: "blob" }).then(function (blob) {
+      return dl.save({ filename: name.replace(/\.srt$/, "") + "-srt.zip", data: blob });
+    }).then(function (r) { if (r && r.status === "saved") toast("Saved " + name + " (inside a .zip)"); }, function (er) {
+      var c = er && er.code;
+      if (c === "declined") return;
+      if (c === "rate_limited") { toast("A save is already open. Try again in a moment."); return; }
+      copy(text, b, document.getElementById(b.dataset.pre)); toast("Saving is not available here, so the text was copied. Paste it into a file named " + name);
+    });
+  });
   document.addEventListener("click", function (e) { var b = e.target.closest("button[data-dlsrt]"); if (b) { e.preventDefault(); saveSubtitles(b); } });
   $("copyall").addEventListener("click", function (e) { copy(plain(window.__lastMd || ""), e.currentTarget); });
 
