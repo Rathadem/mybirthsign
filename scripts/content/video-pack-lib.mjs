@@ -312,6 +312,105 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
       return lines.map((l, i) => { const d = (10 * w[i]) / sum; const out = `${++n}\n${ts(t)} --> ${ts(t + d - 0.05)}\n${l}\n`; t += d; return out; }).join("\n");
     }).join("\n");
   };
+  // ---- story video for YouTube (about 5 minutes): an original fairy tale starring the luckiest animal,
+  // with its lucky color, direction, best time, numbers and lucky days woven into the plot
+  const KMN = { Rat: "កណ្ដុរ", Ox: "គោ", Tiger: "ខ្លា", Rabbit: "ទន្សាយ", Dragon: "នាគ", Snake: "ពស់", Horse: "សេះ", Goat: "ពពែ", Monkey: "ស្វា", Rooster: "មាន់", Dog: "ឆ្កែ", Pig: "ជ្រូក" };
+  const kA = KMN[day], d1 = n0.d1, d2 = n0.d2;
+  const ldEn = PI ? PI.luckyDays : ["", ""], ldKm = PK ? PK.luckyDays : ["", ""];
+  const storyTitle = [`The Golden ${day} and the Moon Lantern`, `${kA}មាស និងចង្កៀងព្រះចន្ទ`];
+  const FIREFLY = "Phleu, a tiny cute glowing firefly with big sparkling eyes, a soft golden-green glow and delicate translucent wings";
+  const SS = (t, prompt, en, kmL) => [t, `${prompt} Phleu the firefly matches her reference image; the ${dl} matches its reference image.`, en, kmL];
+  const storyScenes = [
+    ["Once upon a time", "Dawn over an ancient Angkor-style temple. Soft mist drifts over a quiet lotus pond, pink lotus flowers open, and an ornate golden lantern stands on a stone pillar at the water's edge. Slow, wide establishing shot moving forward.",
+      "Once upon a time, beside an ancient temple in Cambodia, there was a quiet lotus pond. Every night, a magic moon lantern lit up the water.",
+      "កាលពីព្រេងនាយ នៅក្បែរប្រាសាទបុរាណមួយ ក្នុងប្រទេសកម្ពុជា មានស្រះផ្កាឈូកដ៏ស្ងប់ស្ងាត់មួយ។ រៀងរាល់យប់ ចង្កៀងវេទមន្តនៃព្រះចន្ទ បំភ្លឺផ្ទៃទឹក។"],
+    ["The lantern grows dim", "Close-up of the ornate golden moon lantern on its stone pillar. Its light flickers weakly and fades, and a few tiny sparks drift away like dying embers. Quiet, worried mood. Slow push-in.",
+      "But this morning, the moon lantern grew dim. Its light was almost gone. Without it, tonight's full-moon festival could not begin.",
+      "ប៉ុន្តែព្រឹកនេះ ចង្កៀងនៃព្រះចន្ទ ស្រអាប់ទៅវិញ។ ពន្លឺរបស់វា ស្ទើរតែរលត់។ បើគ្មានវា ពិធីបុណ្យព្រះចន្ទពេញវង់យប់នេះ មិនអាចចាប់ផ្ដើមបានទេ។"],
+    SS(`The ${day} wakes up`, `In the middle of the pond, a golden lotus opens petal by petal, revealing ${LOOK[day]}, who wakes up, stretches and blinks its big sparkling eyes in the morning light. Gentle push-in.`,
+      `In the middle of the pond, a golden lotus opened, and out came a little golden ${dl}. Today was ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day, and the ${dl} felt something special.`,
+      `នៅកណ្ដាលស្រះ ផ្កាឈូកមាសមួយបានរីក ហើយមាន${kA}មាសតូចមួយ ចេញមក។ ថ្ងៃនេះជាថ្ងៃ${dayKm} ហើយ${kA}មានអារម្មណ៍ពិសេសណាស់។`),
+    SS("Phleu the firefly", `${cap(FIREFLY)} flies down and hovers in front of the ${dl}'s nose, glowing softly. The ${dl} looks at her with wide, curious eyes. Close two-shot.`,
+      `A tiny firefly named Phleu flew down. "Little ${day}," she whispered, "only you can bring the light back. Today is your lucky day!"`,
+      `សត្វអំពិលអំពែកតូចមួយ ឈ្មោះភ្លឺ ហោះចុះមក។ នាងខ្សឹបថា "${kA}តូចអើយ មានតែអ្នកទេ ដែលអាចនាំពន្លឺត្រឡប់មកវិញ។ ថ្ងៃនេះ ជាថ្ងៃសំណាងរបស់អ្នក!"`),
+    SS("Chosen by the moon", `The ${dl} looks up at the pale morning moon still in the sky, and ${S9.vis}. Phleu circles happily around it. ${cap(S9.mood)} mood. Slow upward tilt.`,
+      `${S9.en} Phleu smiled. That was exactly why the moon had chosen it.`,
+      `${S9.km} ភ្លឺញញឹម។ នេះហើយ ជាហេតុដែលព្រះចន្ទ បានជ្រើសរើសវា។`),
+    SS("Three lucky treasures", `Phleu draws three glowing golden symbols in the air with her light: a small lantern, a compass and a bell. The ${dl} watches with excitement. Magical sparkles. Slow orbit.`,
+      "To relight the lantern, the little hero needed three lucky treasures: its lucky color, its lucky path, and its lucky numbers.",
+      "ដើម្បីបំភ្លឺចង្កៀងឡើងវិញ វីរបុរសតូច ត្រូវការរតនសម្បត្តិសំណាងបី៖ ពណ៌សំណាង ផ្លូវសំណាង និងលេខសំណាង។"),
+    SS("The journey begins", `The ${dl} ${POSE[day]}, then lands on the far bank of the pond as Phleu glows beside it. Dynamic camera following the movement.`,
+      `"Let's go!" said the ${dl}, and it set off across the pond, with Phleu glowing brightly beside it.`,
+      `${kA}និយាយថា "តោះទៅ!" ហើយវាក៏ចេញដំណើរ ឆ្លងកាត់ស្រះ ដោយមានភ្លឺ ហោះភ្លឺចែងចាំងនៅក្បែរ។`),
+    SS("A good heart", `The ${dl} walks through a small Khmer village in the morning, wooden houses on stilts and palm trees around, and gently helps a little bird back into its nest. Warm sunlight. Smooth tracking shot.`,
+      SC.personality[2], SC.personality[3]),
+    SS("The first treasure", `A magical garden filled with a thousand floating lanterns of every color. Among them, one ${cen} lantern begins to glow brighter than all the others. The ${dl} and Phleu stare in wonder. Slow push-in toward the ${cen} lantern.`,
+      `The first treasure was waiting in a garden of a thousand lanterns. Only one shone brightest. It was ${cen}, the ${dl}'s lucky color today.`,
+      `រតនសម្បត្តិទីមួយ កំពុងរង់ចាំ នៅក្នុងសួនចង្កៀងមួយពាន់។ មានតែមួយប៉ុណ្ណោះ ដែលភ្លឺជាងគេ។ វាគឺពណ៌${ckm} ដែលជាពណ៌សំណាងរបស់${kA}ថ្ងៃនេះ។`),
+    SS("Wearing the lucky color", `The ${cen} lantern melts into a soft glowing ${cen} ribbon that ties itself around the ${dl}'s neck. The ${dl} smiles and spins happily. Close-up, then pull back.`,
+      `The ${dl} tied a ${cen} ribbon around its neck. "Wear your lucky color," said Phleu, "and good luck stays close to you."`,
+      `${kA}ចងខ្សែបូពណ៌${ckm} ជុំវិញក។ ភ្លឺនិយាយថា "ស្លៀកពាក់ពណ៌សំណាងរបស់អ្នក ហើយសំណាងល្អ នឹងនៅជិតអ្នក។"`),
+    SS("The lucky path", `A crossroads of old stone paths in a palm forest. One path begins to glow with golden light, stretching toward the ${dir}. The ${dl} looks at it, then at Phleu. Wide shot, then push-in along the glowing path.`,
+      `Next, they came to a crossroads with many paths. One path began to glow. It pointed to the ${dir}, the ${dl}'s lucky direction.`,
+      `បន្ទាប់មក ពួកគេមកដល់ផ្លូវបំបែកមួយ ដែលមានផ្លូវជាច្រើន។ ផ្លូវមួយ ចាប់ផ្ដើមភ្លឺ។ វាចង្អុលទៅទិស${dirKm} ដែលជាទិសសំណាងរបស់${kA}។`),
+    SS("The shaky bridge", `On the glowing path stands an old, shaky rope bridge over a misty stream. The ${dl} stops at the edge and looks down nervously, its ears and shoulders drooping. Slightly tense but gentle mood. Slow push-in on its face.`,
+      `But on the path stood an old, shaky bridge. The ${dl} stopped. Sometimes, people born in the Year of the ${day} ${weakEn}.`,
+      `ប៉ុន្តែនៅលើផ្លូវនោះ មានស្ពានចាស់មួយ ដែលរង្គើ។ ${kA}ឈប់។ អ្នកកើតឆ្នាំ${dayKm} ${PK ? PK.weaknesses : ""}`),
+    SS("Trust your heart", `Phleu lands softly on the ${dl}'s nose and glows warmly. The ${dl} closes its eyes and takes a slow, deep breath, and a gentle golden aura grows around it. Close-up, calm and encouraging mood.`,
+      `Phleu landed softly on its nose. "Breathe slowly," she said. "Trust your heart. You are stronger than you think."`,
+      `ភ្លឺចុះទំលើច្រមុះរបស់វាថ្នមៗ។ នាងនិយាយថា "ដកដង្ហើមយឺតៗ។ ជឿលើចិត្តរបស់អ្នក។ អ្នកខ្លាំងជាងអ្វីដែលអ្នកគិត។"`),
+    SS("Across the bridge", `The ${dl} steps onto the rope bridge. With every step, the wooden planks light up in gold beneath its feet. It reaches the other side and jumps for joy. Tracking shot from the side.`,
+      `Step by step, the ${dl} crossed the bridge. With every step, the planks glowed gold. On the other side, it laughed with joy.`,
+      `ម្ដងមួយជំហានៗ ${kA}ឆ្លងកាត់ស្ពាន។ រាល់ជំហាន ក្ដារស្ពានភ្លឺពណ៌មាស។ នៅម្ខាងទៀត វាសើចយ៉ាងសប្បាយ។`),
+    SS("A lesson learned", `The ${dl} stands on a small hill looking back at the glowing bridge, golden afternoon light around it, Phleu glowing on its shoulder. Peaceful, proud mood. Slow pull-back.`,
+      "The little hero learned that its worries were small, and its good heart was big. Balance and courage always help us grow.",
+      "វីរបុរសតូចបានរៀនថា ការព្រួយបារម្ភរបស់វា តូចទេ តែចិត្តល្អរបស់វា ធំណាស់។ តុល្យភាព និងភាពក្លាហាន តែងជួយឲ្យយើងរីកចម្រើន។"),
+    SS("The stone door", "A great carved stone door deep in the ancient temple, decorated with lotus flowers, a row of small golden bells and carved stairs. Light beams fall through the ruins. The hero and Phleu look up at it in awe. Slow upward tilt.",
+      "At last, they reached a great stone door in the temple. Carved above it were bells, stairs, and a riddle about lucky numbers.",
+      "ទីបំផុត ពួកគេមកដល់ទ្វារថ្មដ៏ធំមួយ នៅក្នុងប្រាសាទ។ នៅខាងលើទ្វារ មានរូបចម្លាក់កណ្ដឹង ជណ្ដើរ និងប្រស្នាអំពីលេខសំណាង។"),
+    SS("Waiting for the best time", `A circle of golden light like a sundial glows on the temple stone, and its shadow turns slowly while the ${dl} sits patiently beside Phleu. Time-lapse of light and shadow moving. Calm mood.`,
+      `"The door opens only at your best time," said Phleu. For the ${day} today, that is ${sayTime(dd.lucky.time)}. They waited patiently.`,
+      `ភ្លឺនិយាយថា "ទ្វារនេះ បើកតែនៅពេលល្អបំផុតរបស់អ្នកប៉ុណ្ណោះ។" សម្រាប់${kA}ថ្ងៃនេះ គឺ${sayTimeKm(dd.lucky.time)}។ ពួកគេរង់ចាំដោយអត់ធ្មត់។`),
+    SS("Ringing the bells", `The ${dl} rings a row of small golden bells one by one with its paw. Each bell sends out a ripple of golden light, and the carvings on the stone door begin to glow. Close-up on the bells, then the door.`,
+      `When the time came, the ${dl} rang the golden bells ${d1 === "1" ? "once" : `${d1} times`}, its first lucky number. Ding! The door began to shine.`,
+      `ពេលដល់ម៉ោង ${kA}វាយកណ្ដឹងមាស ចំនួន ${d1} ដង ដែលជាលេខសំណាងទីមួយរបស់វា។ ទីង! ទ្វារចាប់ផ្ដើមភ្លឺ។`),
+    SS("The stairway of light", `The stone door slides open, revealing a spiral stairway of glowing golden steps rising up inside the temple tower. The ${dl} climbs quickly, Phleu flying ahead. Camera spirals upward with them.`,
+      `The door opened, and a stairway of light appeared. The ${dl} climbed ${d2} glowing steps, its second lucky number, up to the top of the tower.`,
+      `ទ្វារបើក ហើយមានជណ្ដើរពន្លឺមួយ លេចឡើង។ ${kA}ឡើងជណ្ដើរភ្លឺ ចំនួន ${d2} កាំ ដែលជាលេខសំណាងទីពីររបស់វា រហូតដល់កំពូលប្រាង្គ។`),
+    SS("The pearl of moonlight", `At the top of the tower, inside a golden lotus, rests a shining pearl of silver moonlight. The ${dl} gently lifts it, and its face lights up with wonder. Close-up, glowing light.`,
+      "At the top, inside a golden lotus, lay a shining pearl of moonlight. It was the heart of the moon lantern!",
+      "នៅលើកំពូល ក្នុងផ្កាឈូកមាសមួយ មានគុជពន្លឺព្រះចន្ទ ភ្លឺចែងចាំង។ វាគឺជាបេះដូង នៃចង្កៀងព្រះចន្ទ!"),
+    SS("Seven little lights", `Inside the glowing pearl, seven tiny lights twinkle in a circle, and two of them shine brighter than the rest. The ${dl} and Phleu look closely. Extreme close-up on the pearl, magical sparkles.`,
+      `Inside the pearl, seven little lights twinkled, one for each day of the week. ${ldEn[0]} and ${ldEn[1]} shone brightest, the ${day}'s lucky days.`,
+      `នៅក្នុងគុជ មានពន្លឺតូចៗប្រាំពីរ ភ្លឺភ្លឹបភ្លែតៗ មួយសម្រាប់ថ្ងៃនីមួយៗក្នុងសប្ដាហ៍។ ${ldKm[0]} និង${ldKm[1]} ភ្លឺជាងគេ ដែលជាថ្ងៃសំណាងរបស់ឆ្នាំ${dayKm}។`),
+    SS("Racing the sunset", `The ${dl} hurries home along the glowing path at sunset, holding the pearl carefully, Phleu lighting the way. Orange and pink sky, temple towers in silhouette. Fast tracking shot.`,
+      "Time was running out. Holding the pearl carefully, the little hero hurried home along the glowing path, with Phleu lighting the way.",
+      "ពេលវេលាជិតអស់ហើយ។ វីរបុរសតូច កាន់គុជយ៉ាងប្រុងប្រយ័ត្ន ហើយប្រញាប់ត្រឡប់ទៅផ្ទះវិញ តាមផ្លូវដែលភ្លឺ ដោយមានភ្លឺ បំភ្លឺផ្លូវឲ្យ។"),
+    ["Is it too late?", "Night at the lotus pond. The full moon is rising behind the temple, the dim moon lantern barely glows, and small cute golden animals and fireflies wait anxiously around the water. Quiet, suspenseful mood. Slow pan.",
+      "Back at the pond, everyone was waiting. The night was dark, and the full moon was rising. Was it too late?",
+      "នៅឯស្រះវិញ អ្នកទាំងអស់គ្នា កំពុងរង់ចាំ។ យប់ងងឹត ហើយព្រះចន្ទពេញវង់ កំពុងរះ។ តើយឺតពេលហើយឬ?"],
+    SS("The light returns", `The ${dl} places the pearl inside the moon lantern. A quiet pause, then a huge burst of golden light shoots up into the night sky and spreads across the pond. Dramatic, joyful moment. Camera rises with the light.`,
+      `The ${dl} placed the pearl inside the moon lantern. For a moment, nothing happened. Then, whoosh! A golden light burst into the sky!`,
+      `${kA}ដាក់គុជចូលក្នុងចង្កៀងព្រះចន្ទ។ មួយសន្ទុះ គ្មានអ្វីកើតឡើងទេ។ បន្ទាប់មក វឺត! ពន្លឺមាសមួយ បាញ់ឡើងទៅលើមេឃ!`),
+    SS("The full-moon festival", `The lotus pond glows brightly, hundreds of lanterns rise into the sky, and soft lotus-shaped golden fireworks burst over the temple. Little golden animals cheer around the ${dl}. Wide, celebratory shot.`,
+      "The lotus pond glowed again. Lanterns rose into the sky, and the full-moon festival began. Everyone cheered for the little golden hero!",
+      "ស្រះផ្កាឈូក ភ្លឺចែងចាំងម្ដងទៀត។ គោមហោះឡើងលើមេឃ ហើយពិធីបុណ្យព្រះចន្ទពេញវង់ ក៏ចាប់ផ្ដើម។ អ្នកទាំងអស់គ្នា អបអរសាទរវីរបុរសមាសតូច!"),
+    SS("Thank you from the moon", `A soft beam of moonlight falls from the full moon onto the ${dl}, which glows brighter and closes its eyes with a peaceful smile. Phleu rests on its head. Warm, gentle mood. Slow push-in.`,
+      `The full moon shone down warmly, as if to say thank you. The ${dl} felt peaceful and proud. It had done its very best.`,
+      `ព្រះចន្ទពេញវង់ បញ្ចាំងពន្លឺកក់ក្ដៅចុះមក ហាក់ដូចជាពោលពាក្យអរគុណ។ ${kA}មានអារម្មណ៍ស្ងប់ និងមានមោទនភាព។ វាបានព្យាយាមអស់ពីសមត្ថភាព។`),
+    SS("Your day too", `The ${dl} turns to the camera and waves happily, wearing its ${cen} ribbon, with the glowing lantern and full moon behind it. Phleu waves a tiny wing. Medium close-up.`,
+      `If you were born in the Year of the ${day}, today is your day too. Like our hero, be brave, be kind, and follow your good heart.`,
+      `បើអ្នកកើតឆ្នាំ${dayKm} ថ្ងៃនេះ ក៏ជាថ្ងៃរបស់អ្នកដែរ។ ដូចវីរបុរសតូចរបស់យើង សូមក្លាហាន មានចិត្តល្អ ហើយធ្វើតាមចិត្តល្អរបស់អ្នក។`),
+    SC.recap,
+    SS("Sweet dreams", `Under the bright full moon, the ${dl} curls up on its glowing lotus and falls asleep, Phleu sleeping beside it. The lanterns slowly drift away into the stars. Calm, dreamy mood. Slow pull-back.`,
+      "And so, under the bright full moon, the little golden hero curled up on its lotus and fell fast asleep, dreaming of tomorrow.",
+      "ហើយដូច្នេះ នៅក្រោមពន្លឺព្រះចន្ទពេញវង់ វីរបុរសមាសតូច ក៏ដេកកោងលើផ្កាឈូករបស់វា ហើយលង់លក់ ដោយសុបិនអំពីថ្ងៃស្អែក។"),
+    SC.end,
+  ];
+  const storyChapters = [[0, "Once upon a time", "កាលពីព្រេងនាយ"], [8, "The lucky color", "ពណ៌សំណាង"], [10, "The lucky path", "ផ្លូវសំណាង"], [15, "The stone door", "ទ្វារថ្ម"], [22, "The full-moon festival", "ពិធីបុណ្យព្រះចន្ទពេញវង់"], [27, "Today's luck", "សំណាងថ្ងៃនេះ"]].map(([i, en, kmn]) => [mmss(i * 10), en, kmn]);
+  VIDEOS.push({ id: "story", name: `Story video – YouTube (about ${Math.round(storyScenes.length * 10 / 60)} minutes)`, secs: storyScenes.length * 10, scenes: storyScenes,
+    chapters: storyChapters.map(([t, en]) => [t, en]),
+    intro: `"${storyTitle[0]}" (${storyTitle[1]}): an original fairy tale (${mmss(storyScenes.length * 10)}) starring today's luckiest animal. On a ${day} day, the golden ${dl} and Phleu the firefly find three lucky treasures to relight the moon lantern before the full-moon festival. Today's lucky color, direction, best time, lucky numbers and lucky days are part of the story. Make the picture of Phleu once (prompt below) and add it and the ${day} picture as ingredients in Flow. ${storyScenes.length} clips of 10 seconds, in order 1 to ${storyScenes.length}.\n\n### Character prompt – Phleu the firefly (make once, keep it)\nCreate a premium-quality 3D animated fantasy character of ${FIREFLY}, inspired by the charm of classic Disney and Pixar-style animated family films. Adorable expressive face, a tiny pink-and-gold flower crown, warm magical glow, floating above a glowing pink lotus on a pond at night, a softly lit Khmer temple inspired by Angkor Wat and a full moon behind. Cinematic lighting, beautiful depth of field. Square 1:1, full body visible, centered. No text, no letters, no watermark.` });
   // titles and captions for the luckiest-animal videos, in both languages
   const longDateKm = `ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)}`;
   const factsEn = [`Lucky color: ${cen}`, `Best time: ${dd.lucky.time}`, `Lucky direction: ${dir}`, `Lucky numbers: ${n0.d1} · ${n0.d2} · ${n0.d3}`];
@@ -337,6 +436,12 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
       ["Description – Khmer", `ជោគជតារាសីទាំង 12 សម្រាប់${longDateKm}។ ${summaryKm}\n\nជំពូក៖\n${chapKm.map(([t, n]) => `${t} ${n}`).join("\n")}\n\n${disclaimerNums}\n\nមើលរាសីរបស់អ្នក៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags}`],
     ],
   };
+  POSTS.story = [
+    ["Title – English", `${storyTitle[0]} ${EMO[day]} | Bedtime Story & ${day} Day Fortune – ${D}`],
+    ["Title – Khmer", `${storyTitle[1]} ${EMO[day]} | រឿងនិទាន និងជោគជតាថ្ងៃ${dayKm} – ${D}`],
+    ["Description – English", `On a ${day} day, a little golden ${dl} and Phleu the firefly must find three lucky treasures to relight the magic moon lantern before the full-moon festival. A gentle animated story for the whole family, with today's real lucky color, direction, best time and numbers for the Year of the ${day}.\n\nChapters:\n${storyChapters.map(([t, en]) => `${t} ${en}`).join("\n")}\n\n${factsEn.join("\n")}\n\nAn original story by MyBirthSign. Lucky numbers are for fun only.\nSee all 12 signs: https://mybirthsign.com\n\n${DISC_EN}\n\n${tagsEn} #BedtimeStory #KidsStory`],
+    ["Description – Khmer", `នៅថ្ងៃ${dayKm} ${kA}មាសតូចមួយ និងសត្វអំពិលអំពែកឈ្មោះភ្លឺ ត្រូវស្វែងរករតនសម្បត្តិសំណាងបី ដើម្បីបំភ្លឺចង្កៀងវេទមន្តនៃព្រះចន្ទឡើងវិញ មុនពិធីបុណ្យព្រះចន្ទពេញវង់។ ជារឿងនិទានគំនូរជីវចលសម្រាប់គ្រួសារទាំងមូល ជាមួយពណ៌សំណាង ទិសសំណាង ពេលល្អ និងលេខសំណាងពិតប្រាកដ សម្រាប់អ្នកកើតឆ្នាំ${dayKm}ថ្ងៃនេះ។\n\nជំពូក៖\n${storyChapters.map(([t, , kmn]) => `${t} ${kmn}`).join("\n")}\n\n${factsKm.join("\n")}\n\nរឿងនិទានដើម ដោយ MyBirthSign។ លេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags} #រឿងនិទាន`],
+  ];
   VIDEOS.forEach((v) => { v.posts = POSTS[v.id]; });
   const srtVid = {};
   VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
@@ -345,7 +450,7 @@ ${v.intro || `A ${v.secs}-second video about the ${day}, today's luckiest animal
 ${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
 ${v.scenes.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
 
-## Voice-over – ${v.id === "long" ? "long YouTube video" : `${v.secs}-second video`}
+## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : `${v.secs}-second video`}
 The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
 
 ### English
