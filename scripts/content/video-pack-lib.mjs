@@ -264,10 +264,43 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
       `សូមចងចាំសំណាងថ្ងៃនេះ។ ពណ៌សំណាង៖ ពណ៌${ckm}។ ពេលល្អ៖ ${sayTimeKm(dd.lucky.time)}។ ទិសសំណាង៖ ទិស${dirKm}។ លេខសំណាង៖ លេខ ${n0.d1} លេខ ${n0.d2} និងលេខ ${n0.d3}។`],
     end: [nine[8][0], nine[8][1], ...vo90[8]],
   };
+  // ---- long YouTube video: the luckiest animal, then all 12 signs (two 10-second clips each), then a short closing
+  const DAYPH = { great: ["a great day", "ថ្ងៃល្អខ្លាំង"], good: ["a good day", "ថ្ងៃល្អ"], ordinary: ["an ordinary, steady day", "ថ្ងៃធម្មតា"], caution: ["a quiet day", "ថ្ងៃគួរប្រុងប្រយ័ត្ន"] };
+  const ADVICE = {
+    great: [["This is your day. Say yes to good chances, and lead with confidence.", "ថ្ងៃនេះ គឺជាថ្ងៃរបស់អ្នក។ សូមទទួលយកឱកាសល្អៗ និងធ្វើអ្វីៗដោយទំនុកចិត្ត។"]],
+    good: [["Good luck is with you. Work together with friends, and good results come more easily.", "សំណាងល្អកំពុងនៅជាមួយអ្នក។ សូមធ្វើការជាមួយមិត្តភក្តិ ហើយលទ្ធផលល្អ នឹងមកដល់កាន់តែងាយ។"],
+      ["A good day to meet people and start something nice. Keep smiling.", "ថ្ងៃនេះ ល្អសម្រាប់ជួបមនុស្ស និងចាប់ផ្ដើមរឿងល្អៗ។ សូមរក្សាស្នាមញញឹម។"]],
+    ordinary: [["A steady, normal day. Keep a calm pace, and finish what you start.", "ជាថ្ងៃធម្មតា និងនឹងនរ។ សូមធ្វើការដោយស្ងប់ៗ ហើយបញ្ចប់អ្វីដែលអ្នកបានចាប់ផ្ដើម។"],
+      ["Keep things simple today. Small, steady steps are better than big jumps.", "ថ្ងៃនេះ សូមធ្វើអ្វីៗឲ្យសាមញ្ញ។ ជំហានតូចៗ និងនឹងនរ ល្អជាងការលោតធំៗ។"],
+      ["A quiet day for planning. Tidy up, think ahead, and rest well tonight.", "ជាថ្ងៃស្ងប់ស្ងាត់ សម្រាប់រៀបចំផែនការ។ សូមរៀបចំរបស់របរ គិតទុកមុន និងសម្រាកឲ្យបានល្អនៅយប់នេះ។"]],
+    caution: [["Take it easy today. Slow down, rest well, and don't rush big decisions.", "ថ្ងៃនេះ គួរសម្រាកឲ្យស្រួលខ្លួន។ ធ្វើអ្វីៗយឺតៗ សម្រាកឲ្យបានគ្រប់គ្រាន់ និងកុំប្រញាប់សម្រេចចិត្តរឿងធំៗ។"]],
+  };
+  const LOOKTIER = { great: "bursting with a bright golden aura", good: "glowing with a warm golden light", ordinary: "calm and content, softly lit by the moon", caution: "resting peacefully inside a soft protective bubble of golden light" };
+  const tierCount = { great: 0, good: 0, ordinary: 0, caution: 0 };
+  const signScenes = F.signs.flatMap((sg) => {
+    const a = sg.animal, al = a.toLowerCase(), t = sg.tier, L = sg.lucky, nn = nums.find((x) => x.a === a);
+    const adv = ADVICE[t][tierCount[t]++ % ADVICE[t].length];
+    const act = t === "great" || t === "good" ? POSE[a] : t === "ordinary" ? "looks around happily as lanterns drift slowly past" : "curls up calmly as glowing butterflies circle it";
+    return [
+      [`${a} – ${sg.label.en}`, `${cap(LOOK[a])} appears on a glowing lotus pedestal in front of the Angkor-style temple under the full moon, ${LOOKTIER[t]}. ${L.color.en === "gold" ? "Golden" : cap(L.color.en)} lanterns glow softly around it. Slow push-in, matching its reference image.`,
+        `Year of the ${a}. Today is ${DAYPH[t][0]} for you. Your lucky color is ${L.color.en}, and your best time is ${sayTime(L.time)}.`,
+        `ឆ្នាំ${sg.nameKm}។ ថ្ងៃនេះ ជា${DAYPH[t][1]} សម្រាប់អ្នក។ ពណ៌សំណាងរបស់អ្នក គឺពណ៌${L.color.km} ហើយពេលល្អបំផុត គឺ${sayTimeKm(L.time)}។`],
+      [`${a} – advice`, `The ${al} ${act}. ${t === "caution" ? "Peaceful and safe, not sad." : "Magical and joyful."} Camera follows it smoothly.`,
+        `${adv[0]} Your lucky direction is the ${L.direction.en.toLowerCase()}.${nn ? ` Lucky numbers: ${nn.d2} and ${nn.d3}.` : ""}`,
+        `${adv[1]} ទិសសំណាង គឺទិស${L.direction.km}។${nn ? ` លេខសំណាង៖ លេខ ${nn.d2} និងលេខ ${nn.d3}។` : ""}`],
+    ];
+  });
+  const overview = ["Today's lucky signs", "Twelve cute golden zodiac animals sit on glowing lotus pedestals in a wide circle around the moonlit pond in front of the temple. Three of them shine brighter than the others with a golden aura. Slow, wide circling camera.",
+    `Today's luckiest signs are the ${list(lucky)}.${careful.length ? ` ${list(careful)}, take it easy today.` : ""} Find your own sign in the chapters below.`,
+    `ឆ្នាំដែលមានសំណាងល្អជាងគេថ្ងៃនេះ គឺ${kmList(lucky.map((a) => `ឆ្នាំ${km(a)}`))}។${careful.length ? ` ចំណែក${kmList(careful.map((a) => `ឆ្នាំ${km(a)}`))} គួរសម្រាកឲ្យស្រួលខ្លួន។` : ""} សូមរករាសីរបស់អ្នក នៅក្នុងជំពូកខាងក្រោម។`];
+  const longScenes = [SC.moon, SC.appear, SC.meaning, overview, ...signScenes, SC.wish, SC.thanks, SC.end];
+  const longChapters = [["0:00", "Introduction"], ...F.signs.map((sg, i) => [mmss((4 + i * 2) * 10), `${sg.animal} (${sg.nameKm}) – ${sg.label.en}`]), [mmss((4 + 24) * 10), "Closing"]];
   const VIDEOS = [
     { id: "60s", name: "60-second video – Facebook & TikTok", secs: 60, keys: ["appear", "meaning", "magic", "colortime", "numbers", "end"] },
     { id: "180s", name: "180-second video – YouTube", secs: 180, keys: ["moon", "appear", "meaning", "personality", "magic", "love", "work", "money", "color", "time", "direction", "numbers", "luckydays", "reminder", "wish", "thanks", "recap", "end"] },
   ].map((v) => ({ ...v, scenes: v.keys.map((k) => SC[k]) }));
+  VIDEOS.push({ id: "long", name: `Long YouTube video – all 12 signs (about ${Math.round(longScenes.length * 10 / 60)} minutes)`, secs: longScenes.length * 10, scenes: longScenes, chapters: longChapters,
+    intro: `A long YouTube video (${mmss(longScenes.length * 10)}): today's luckiest animal, an overview, then all 12 signs in order (two 10-second clips each), then a short closing. Lucky numbers are given only for today's lucky signs. Add the 12 character pictures as ingredients (each sign's clips use its own picture). Set the clip length in Flow to 10 seconds. For each scene, press "Copy + English voice" or "Copy + Khmer voice". Put the clips in order 1 to ${longScenes.length}.` });
   // subtitles locked to the scenes: each scene's lines share its own 10 seconds
   const srtFor = (scenes, lang) => {
     let n = 0;
@@ -280,11 +313,11 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const srtVid = {};
   VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
   const videoMd = (v) => `## ${v.name}
-A ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference picture of the ${day} as an ingredient. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.
-
+${v.intro || `A ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference picture of the ${day} as an ingredient. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
+${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}
 ${v.scenes.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
 
-## Voice-over – ${v.secs}-second video
+## Voice-over – ${v.id === "long" ? "long YouTube video" : `${v.secs}-second video`}
 The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
 
 ### English

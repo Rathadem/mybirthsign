@@ -185,11 +185,11 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     return out;
   }
 
-  var ORDER_OPEN = /^Luckiest|^60-second|^180-second|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
+  var ORDER_OPEN = /^Luckiest|^60-second|^180-second|^Long YouTube|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
   function render(iso) {
     var F = computeFacts(iso);
     var p = buildPack(iso, F, window.MBSLuckyDigits.forSign, null, { INFO: INFO, KM_INFO: KM_INFO });
-    var md = p.md.replace(/Two files are saved next to this one: `[^`]+` \(Khmer\) and `[^`]+` \(English\)\.\n/, "Press “Download subtitles (.zip)” at the top to save all subtitle files for this date (" + iso + ".srt Khmer and " + iso + ".en.srt English for this video, plus the -60s and -180s versions). Or copy a block below into a plain text file ending in .srt.\n");
+    var md = p.md.replace(/Two files are saved next to this one: `[^`]+` \(Khmer\) and `[^`]+` \(English\)\.\n/, "Press “Download subtitles (.zip)” at the top to save all subtitle files for this date (" + iso + ".srt Khmer and " + iso + ".en.srt English for this video, plus the -60s, -180s and -long versions). Or copy a block below into a plain text file ending in .srt.\n");
     window.__lastMd = md; window.__lastPack = p;
     var voices = voiceLines(md);
     var sign = function (a) { return F.signs.filter(function (s) { return s.animal === a; })[0]; };
@@ -248,7 +248,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 
   // side menu: every section, grouped; a slide-in drawer on phones
   function group(t) {
-    if (/^Luckiest|^60-second|^180-second|^Voice-over – (60|180)-second/.test(t)) return "Luckiest animal";
+    if (/^Luckiest|^60-second|^180-second|^Long YouTube|^Voice-over – (60|180)-second|^Voice-over – long/.test(t)) return "Luckiest animal";
     if (/^YouTube|^Facebook|^TikTok/.test(t)) return "Post it";
     return "Daily video";
   }
@@ -257,7 +257,9 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       .replace(/^Luckiest animal today – (\w+).*$/, "$1: picture & post")
       .replace(/^60-second video – Facebook & TikTok/, "60s video (Facebook, TikTok)")
       .replace(/^180-second video – YouTube/, "180s video (YouTube)")
-      .replace(/^Voice-over – (\d+)-second video/, "$1s voice-over & subtitles");
+      .replace(/^Voice-over – (\d+)-second video/, "$1s voice-over & subtitles")
+      .replace(/^Long YouTube video – all 12 signs.*$/, "Long video, all 12 signs (YouTube)")
+      .replace(/^Voice-over – long YouTube video/, "Long video voice-over & subtitles");
   }
   function buildMenu(secs) {
     var cur = null, out = '<button class="close" id="menuclose" aria-label="Close menu">✕</button><a href="#top" data-go-sec="top">Today at a glance</a>';
