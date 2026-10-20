@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Noto+Sans:wght@400;600&family=Noto+Sans+Khmer:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
 <style>
-/* Layout: one working column — date bar on top, the day at a glance, then the pack as copyable sections in video order. */
+/* Layout: a side menu of every section (a slide-in drawer on phones) beside one working column — date bar, the day at a glance, then the pack as copyable sections. */
 /* Deliberately single-theme: the site's own night-indigo and temple gold. */
 :root {
   color-scheme: dark;
@@ -24,7 +24,7 @@
 }
 body { background: var(--bg); color: var(--text); font: 15px/1.6 var(--body); }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
-.wrap { max-width: 920px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 60px; display: grid; gap: 18px; }
+.wrap { max-width: 1220px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 60px; display: grid; gap: 18px; }
 h1 { font: 700 clamp(1.6rem, 4vw, 2.3rem)/1.15 var(--display); color: var(--gold-soft); margin: 0; text-wrap: balance; }
 .sub { color: var(--muted); margin: 4px 0 0; max-width: 65ch; }
 .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -61,11 +61,36 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 .secbody { padding: 0 16px 16px; display: grid; gap: 12px; min-width: 0; }
 .block { background: var(--card-2); border-radius: 10px; padding: 12px; min-width: 0; display: grid; gap: 8px; }
 .block h3 { margin: 0; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--violet); }
-.txt { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; font-size: .92rem; }
+.txt { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; font: .92rem/1.6 var(--body); }
 .txt.code { font: .82rem/1.5 var(--mono); max-height: 320px; overflow: auto; }
 .row { display: flex; flex-wrap: wrap; gap: 6px; }
 .row button { font-size: .8rem; padding: 6px 10px; }
 .toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--gold); color: #1a1430; padding: 8px 14px; border-radius: 999px; font-weight: 600; }
+.layout { display: grid; gap: 18px; min-width: 0; }
+.main { display: grid; gap: 18px; min-width: 0; }
+.menu { display: grid; gap: 2px; align-content: start; font-size: .88rem; }
+.menu .mh { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--violet); margin: 12px 0 4px; padding-left: 10px; }
+.menu .mh:first-child { margin-top: 0; }
+.menu a { display: block; color: var(--muted); text-decoration: none; padding: 6px 10px; border-radius: 8px; border-left: 2px solid transparent; line-height: 1.35; }
+.menu a:hover { color: var(--text); background: var(--card); }
+.menu a.on { color: var(--gold-soft); border-left-color: var(--gold); background: var(--card); }
+.menu a:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 1px; }
+.menu .close { display: none; }
+#menubtn { display: inline-block; }
+.scrim { position: fixed; inset: 0; background: rgba(8, 5, 18, .6); z-index: 19; }
+@media (min-width: 960px) {
+  .layout { grid-template-columns: 220px minmax(0, 1fr); gap: 28px; align-items: start; }
+  .menu { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); max-height: calc(100vh - 24px); overflow-y: auto; padding-right: 4px; }
+  #menubtn { display: none; }
+  .scrim { display: none; }
+}
+@media (max-width: 959.98px) {
+  .menu { position: fixed; inset: 0 auto 0 0; width: min(300px, 86vw); z-index: 20; background: var(--card); border-right: 1px solid var(--line); overflow-y: auto;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 12px calc(16px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+    transform: translateX(-105%); transition: transform .2s ease; visibility: hidden; }
+  .menu.open { transform: none; visibility: visible; }
+  .menu .close { display: block; justify-self: end; margin-bottom: 4px; }
+}
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -75,7 +100,11 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     <p class="sub">Pick a date and get that day's full video pack: picture prompts, Google Flow scenes with voice, captions, voice-overs, YouTube, Facebook and TikTok text, and subtitles. Every rating and lucky number follows the website's own rules for that date.</p>
   </header>
 
+  <div class="layout">
+  <nav class="menu" id="menu" aria-label="Sections"></nav>
+  <div class="main">
   <div class="bar">
+    <button id="menubtn" aria-controls="menu" aria-expanded="false">☰ Menu</button>
     <label for="d">Date</label>
     <input type="date" id="d">
     <button id="prev" aria-label="Previous day">◀</button>
@@ -86,7 +115,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     <button class="primary" id="copyall">Copy whole pack</button>
   </div>
 
-  <section class="glance" id="glance" aria-live="polite"></section>
+  <section class="glance" id="top" aria-live="polite"></section>
 
   <ol class="steps">
     <li><b>Once:</b> make the 12 character pictures (Character prompts below) and keep them.</li>
@@ -95,7 +124,10 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   </ol>
 
   <div id="pack"></div>
+  </div>
+  </div>
 </div>
+<div class="scrim" id="scrim" hidden></div>
 <div class="toast" id="toast" hidden></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -177,7 +209,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       week += '<button data-go="' + w + '"' + (i === 0 ? ' aria-current="true"' : "") + "><b>" + dmy(w).slice(0, 5) + " " + EMO[f.dayAnimal] + "</b>" + f.dayAnimal + " day</button>";
     }
 
-    $("glance").innerHTML =
+    $("top").innerHTML =
       '<p class="day">' + dmy(iso) + " · " + EMO[F.dayAnimal] + " " + F.dayAnimal + " day (ថ្ងៃ" + esc(F.dayAnimalKm) + ")" +
       "<small>Lucky signs " + lucky.join(", ") + (careful.length ? " · take it easy: " + careful.join(", ") : "") + "</small></p>" +
       '<div class="signs">' + cards + "</div>" +
@@ -187,7 +219,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     var secs = parse(md), html = "";
     secs.forEach(function (s, si) {
       var scene = /^Scene (\d)/.exec(s.title);
-      html += '<details class="sec"' + (ORDER_OPEN.test(s.title) ? " open" : "") + '><summary><h2>' + esc(s.title) + '</h2><button data-copy="s' + si + '">Copy section</button></summary><div class="secbody">';
+      html += '<details class="sec" id="sec' + si + '"' + (ORDER_OPEN.test(s.title) ? " open" : "") + '><summary><h2>' + esc(s.title) + '</h2><button data-copy="s' + si + '">Copy section</button></summary><div class="secbody">';
       s.blocks.forEach(function (b, bi) {
         var id = "b" + si + "_" + bi;
         html += '<div class="block">' + (b.title ? "<h3>" + esc(b.title) + "</h3>" : "") +
@@ -200,10 +232,11 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       });
       html += "</div></details>";
     });
-    html += '<details class="sec"><summary><h2>Character prompts – all 12 animals</h2><button data-copy="chars">Copy section</button></summary><div class="secbody">' +
+    html += '<details class="sec" id="secchars"><summary><h2>Character prompts – all 12 animals</h2><button data-copy="chars">Copy section</button></summary><div class="secbody">' +
       ORDER.map(function (a, i) { return '<div class="block"><h3>' + a + " · " + esc(KM_NAMES[a]) + '</h3><pre class="txt" id="c' + i + '">' + esc(CHAR(a)) + '</pre><div class="row"><button data-copy="c' + i + '">Copy</button></div></div>'; }).join("") +
       "</div></details>";
     $("pack").innerHTML = html;
+    buildMenu(secs);
 
     var texts = {};
     secs.forEach(function (s, si) { texts["s" + si] = "## " + s.title + "\n" + s.blocks.map(function (b) { return (b.title ? "### " + b.title + "\n" : "") + (b.code ? b.text : plain(b.text)); }).join("\n\n"); });
@@ -212,6 +245,60 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     ORDER.forEach(function (a, i) { texts["c" + i] = CHAR(a); });
     $("pack").__texts = texts; $("pack").__voices = voices;
   }
+
+  // side menu: every section, grouped; a slide-in drawer on phones
+  function group(t) {
+    if (/^Luckiest|^9-scene|^Voice-over – 9-scene/.test(t)) return "Luckiest animal";
+    if (/^YouTube|^Facebook|^TikTok/.test(t)) return "Post it";
+    return "Daily video";
+  }
+  function shortName(t) {
+    return t.replace(/ \(paste first in every scene\)| \(make these first.*\)| \(about [^)]*\)| \(add in the editor\)| \(spoken inside each clip\)| \(captions files\)/g, "")
+      .replace(/^Luckiest animal today – (\w+).*$/, "$1: picture & post")
+      .replace(/^9-scene video – luckiest animal/, "9-scene video")
+      .replace(/^Voice-over – 9-scene video/, "90-second voice-over");
+  }
+  function buildMenu(secs) {
+    var cur = null, out = '<button class="close" id="menuclose" aria-label="Close menu">✕</button><a href="#top" data-go-sec="top">Today at a glance</a>';
+    secs.forEach(function (s, si) {
+      var g = group(s.title);
+      if (g !== cur) { out += '<p class="mh">' + g + "</p>"; cur = g; }
+      out += '<a href="#sec' + si + '" data-go-sec="sec' + si + '">' + esc(shortName(s.title)) + "</a>";
+    });
+    out += '<p class="mh">Characters</p><a href="#secchars" data-go-sec="secchars">All 12 character prompts</a>';
+    $("menu").innerHTML = out;
+    watchMenu();
+  }
+  function setMenu(open) {
+    $("menu").classList.toggle("open", open); $("scrim").hidden = !open;
+    $("menubtn").setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  var io;
+  function watchMenu() {
+    if (io) io.disconnect();
+    if (!window.IntersectionObserver) return;
+    io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        document.querySelectorAll(".menu a").forEach(function (a) { a.classList.toggle("on", a.dataset.goSec === en.target.id); });
+      });
+    }, { rootMargin: "-20% 0px -70% 0px" });
+    document.querySelectorAll("#top, details.sec").forEach(function (el) { io.observe(el); });
+  }
+  $("menubtn").addEventListener("click", function () { setMenu(!$("menu").classList.contains("open")); });
+  $("scrim").addEventListener("click", function () { setMenu(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
+  $("menu").addEventListener("click", function (e) {
+    if (e.target.closest("#menuclose")) { setMenu(false); return; }
+    var a = e.target.closest("a[data-go-sec]"); if (!a) return;
+    e.preventDefault();
+    var el = document.getElementById(a.dataset.goSec); if (!el) return;
+    if (el.tagName === "DETAILS") el.open = true;
+    setMenu(false);
+    var y = el.getBoundingClientRect().top + window.scrollY - ($("menubtn").offsetParent ? 0 : 0) - document.querySelector(".bar").offsetHeight - 10;
+    window.scrollTo({ top: y, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    document.querySelectorAll(".menu a").forEach(function (x) { x.classList.toggle("on", x === a); });
+  });
 
   document.addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
