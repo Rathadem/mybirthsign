@@ -173,6 +173,8 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const disclaimerNums = "លេខសំណាង (1 ដល់ 5 ខ្ទង់) សម្រាប់ថ្ងៃនេះ គឺសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។";
   const disclaimer = "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ មិនមែនជាការព្យាករណ៍វិទ្យាសាស្ត្រទេ។";
   const tags = `#ជោគជតារាសី #រាសីប្រចាំថ្ងៃ #ឆ្នាំ${dayKm} #ផ្កាយកំណើត`;
+  const tagsEn = `#ChineseZodiac #DailyHoroscope #YearOfThe${day} #LuckyNumbers`;
+  const DISC_EN = "Traditional Chinese zodiac reading for entertainment and self-reflection only, not a scientific prediction.";
 
   // 9-scene video for the luckiest animal
   const dl = day.toLowerCase(), friends = lucky.filter((a) => a !== day), S9 = SYMBOL[day], dd = sign(day);
@@ -310,11 +312,37 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
       return lines.map((l, i) => { const d = (10 * w[i]) / sum; const out = `${++n}\n${ts(t)} --> ${ts(t + d - 0.05)}\n${l}\n`; t += d; return out; }).join("\n");
     }).join("\n");
   };
+  // titles and captions for the luckiest-animal videos, in both languages
+  const longDateKm = `ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)}`;
+  const factsEn = [`Lucky color: ${cen}`, `Best time: ${dd.lucky.time}`, `Lucky direction: ${dir}`, `Lucky numbers: ${n0.d1} · ${n0.d2} · ${n0.d3}`];
+  const factsKm = [`ពណ៌សំណាង៖ ពណ៌${ckm}`, `ពេលល្អ៖ ${dd.lucky.time}`, `ទិសសំណាង៖ ទិស${dirKm}`, `លេខសំណាង៖ ${n0.d1} · ${n0.d2} · ${n0.d3}`];
+  const chapKm = [["0:00", "សេចក្ដីផ្ដើម"], ...F.signs.map((sg, i) => [mmss((4 + i * 2) * 10), `ឆ្នាំ${sg.nameKm} – ${sg.label.km}`]), [mmss((4 + 24) * 10), "បញ្ចប់"]];
+  const POSTS = {
+    "60s": [
+      ["Title – English", `${EMO[day]} ${day} Day – Today's Luckiest Sign! | ${D}`],
+      ["Title – Khmer", `${EMO[day]} ថ្ងៃ${dayKm} – ឆ្នាំដែលសំណាងបំផុតថ្ងៃនេះ! | ${D}`],
+      ["Caption – English (Facebook, TikTok)", `${S9.en} ${EMO[day]}🌕\n\nToday, ${D}, is a ${dd.label.en} for the ${day}.\n${factsEn.map((x) => `✨ ${x}`).join("\n")}\n\nBorn in the Year of the ${day}? Comment ${EMO[day]} below! 👇\nAll 12 signs: https://mybirthsign.com (TikTok: link in bio)\nLucky numbers are for fun only.\n\n${tagsEn} #fyp #Reels`],
+      ["Caption – Khmer (Facebook, TikTok)", `${S9.km} ${EMO[day]}🌕\n\nថ្ងៃនេះ ${D} ជា${dd.label.km} សម្រាប់ឆ្នាំ${dayKm}។\n${factsKm.map((x) => `✨ ${x}`).join("\n")}\n\nអ្នកកើតឆ្នាំ${dayKm}មែនទេ? Comment ${EMO[day]} ប្រាប់ផង! 👇\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/ (TikTok៖ Link នៅក្នុង bio)\nលេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។\n\n${tags} #fyp #Reels`],
+    ],
+    "180s": [
+      ["Title – English", `${day} Day Fortune – ${D} | Lucky Color, Time & Numbers for the Year of the ${day} ${EMO[day]}`],
+      ["Title – Khmer", `ជោគជតាឆ្នាំ${dayKm} – ${D} | ពណ៌ ពេលវេលា និងលេខសំណាង ${EMO[day]}`],
+      ["Description – English", `Today, ${LD}, is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day: a ${dd.label.en} for everyone born in the Year of the ${day}. ${S9.en}\n\n${factsEn.join("\n")}${PI ? `\nLucky days of the week: ${PI.luckyDays.join(" and ")}` : ""}\n\nLucky numbers are for fun only, not a prediction or betting advice.\n\nSee all 12 signs: https://mybirthsign.com\n\n${DISC_EN}\n\n${tagsEn}`],
+      ["Description – Khmer", `ថ្ងៃនេះ ${longDateKm} ជាថ្ងៃ${dayKm} ដែលជា${dd.label.km} សម្រាប់អ្នកកើតឆ្នាំ${dayKm}។ ${S9.km}\n\n${factsKm.join("\n")}${PK ? `\nថ្ងៃសំណាងប្រចាំសប្ដាហ៍៖ ${PK.luckyDays.join(" និង")}` : ""}\n\n${disclaimerNums}\n\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags}`],
+    ],
+    long: [
+      ["Title – English", `Daily Chinese Zodiac Fortune for All 12 Signs – ${D} | ${day} Day ${EMO[day]}`],
+      ["Title – Khmer", `ជោគជតារាសីទាំង 12 ប្រចាំថ្ងៃ – ${D} | ថ្ងៃ${dayKm} ${EMO[day]}`],
+      ["Description – English", `Your Chinese zodiac fortune for all 12 signs, ${LD}. ${summaryEn}\n\nChapters:\n${longChapters.map(([t, n]) => `${t} ${n.replace(/ \([^)]*\)/, "")}`).join("\n")}\n\nLucky numbers are given for today's lucky signs, for fun only, not betting advice.\n\nSee your sign: https://mybirthsign.com\n\n${DISC_EN}\n\n${tagsEn}`],
+      ["Description – Khmer", `ជោគជតារាសីទាំង 12 សម្រាប់${longDateKm}។ ${summaryKm}\n\nជំពូក៖\n${chapKm.map(([t, n]) => `${t} ${n}`).join("\n")}\n\n${disclaimerNums}\n\nមើលរាសីរបស់អ្នក៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags}`],
+    ],
+  };
+  VIDEOS.forEach((v) => { v.posts = POSTS[v.id]; });
   const srtVid = {};
   VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
   const videoMd = (v) => `## ${v.name}
 ${v.intro || `A ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference picture of the ${day} as an ingredient. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
-${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}
+${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
 ${v.scenes.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmL}" ${MUSIC}`).join("\n\n")}
 
 ## Voice-over – ${v.id === "long" ? "long YouTube video" : `${v.secs}-second video`}
@@ -435,10 +463,13 @@ ${voiceEn.join("\n")}
 (Record the voices yourself or use text-to-speech; AI video tools may not pronounce Khmer well.)
 
 ## YouTube
-Title (Khmer): ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃ${dayKm}
-Title (English): Daily Chinese Zodiac Fortune – ${D} | ${day} Day
+### Title – Khmer
+ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃ${dayKm}
 
-Description:
+### Title – English
+Daily Chinese Zodiac Fortune – ${D} | ${day} Day
+
+### Description – Khmer
 ${summaryKm}
 
 ${inVideo.map((a) => `${km(a)}៖ ពណ៌${sign(a).lucky.color.km} · ${sign(a).lucky.time}`).join("\n")}
@@ -452,11 +483,26 @@ ${disclaimerNums}
 
 ${disclaimer}
 
-English: ${summaryEn} Lucky numbers (for fun only): ${nums.map((n) => `${n.a} ${n.d1} · ${n.d2} · ${n.d3}`).join(" | ")}. All 12 signs: https://mybirthsign.com
+${tags} #ChineseZodiac #Shorts
 
-Hashtags: ${tags} #ChineseZodiac #DailyHoroscope #Shorts
+### Description – English
+${summaryEn}
+
+${inVideo.map((a) => `${a}: ${sign(a).lucky.color.en} · ${sign(a).lucky.time}`).join("\n")}
+
+Today's lucky numbers for the lucky signs (1 to 5 digits):
+${nums.map((n) => numLine(n, n.a)).join("\n")}
+
+Lucky numbers are for fun only, not a prediction or betting advice.
+
+All 12 signs: https://mybirthsign.com
+
+${DISC_EN}
+
+${tagsEn} #Shorts
 
 ## Facebook post caption
+### Khmer
 🌙 ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃ${dayKm} ${EMO[day]}
 
 ✨ ឆ្នាំសំណាងថ្ងៃនេះ៖ ${lucky.map((a) => `${km(a)} (${sign(a).label.km})`).join(" · ")}
@@ -470,13 +516,31 @@ ${disclaimerNums}
 
 ${tags} #លេខសំណាង
 
+### English
+🌙 Daily Chinese Zodiac Fortune – ${D} | ${day} Day ${EMO[day]}
+
+✨ Lucky signs today: ${lucky.map((a) => `${a} (${sign(a).label.en})`).join(" · ")}
+${careful.length ? `🌿 Take it easy: ${list(careful)} – slow down, rest and don't rush big decisions.\n` : ""}
+🔢 Today's lucky numbers for the lucky signs:
+${nums.map((n) => numLine(n, n.a)).join("\n")}
+
+👉 All 12 signs and full lucky numbers: https://mybirthsign.com
+
+Lucky numbers are for fun only, not a prediction or betting advice.
+
+${tagsEn}
+
 ## TikTok caption
+### Khmer
 ជោគជតារាសីថ្ងៃនេះ ${D} ${EMO[day]} ថ្ងៃ${dayKm}! ឆ្នាំសំណាង៖ ${lucky.map(km).join(" ")} ✨ លេខសំណាង៖ ${nums.map((n) => `${km(n.a)} ${n.d2}`).join(" · ")} 🔢 ឆ្នាំអ្នកជាអ្វី? Comment ប្រាប់ផង 👇 (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ) Link នៅក្នុង bio 🌙
 ${tags} #fyp #ChineseZodiac
 
-English version: ${EMO[day]} ${day} day, ${D}! Lucky signs: ${lucky.join(", ")} ✨ Lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(" · ")} 🔢 What's your sign? 👇 (for fun only) Link in bio 🌙 #ChineseZodiac #DailyHoroscope #fyp
+### English
+${EMO[day]} ${day} day, ${D}! Lucky signs: ${lucky.join(", ")} ✨ Lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(" · ")} 🔢 What's your sign? 👇 (for fun only) Link in bio 🌙
+${tagsEn} #fyp
 
-(TikTok links in captions are not clickable, so put https://mybirthsign.com/km/ in your profile bio.)
+### Note
+TikTok links in captions are not clickable, so put https://mybirthsign.com/km/ in your profile bio.
 
 ## YouTube subtitles (captions files)
 Two files are saved next to this one: \`${iso}.srt\` (Khmer) and \`${iso}.en.srt\` (English).
