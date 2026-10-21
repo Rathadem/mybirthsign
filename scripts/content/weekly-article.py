@@ -14,6 +14,10 @@ JSON fields:
   sections: [{h2, paras: [html, ...], list: [html, ...] (optional)}, ...],
   faq: [[question, answer], ...], sources: [[title, url, note], ...],
   related: [[label, href], ...]   (href relative to /blog/, e.g. "chol-vassa-buddhist-lent")
+Optional: listing (default true; false = do not add a card to blog.html), note (text of the closing note box,
+  "" for none), back ([label, href] for the back link, href relative to /blog/),
+  youtube (a real YouTube video ID; the video is embedded only when this is set),
+  label_folklore (true = add a "Folk tale" / "History" key under the lead).
 """
 import html, json, os, re, sys
 
@@ -44,6 +48,9 @@ STYLE = (".festival-article{max-width:900px;margin:40px auto;padding:0 22px;colo
          ".festival-article .note{border-left:3px solid #d8b962;padding:12px 16px;background:#211a39}"
          ".festival-article .meta{color:#cfc6ee;font-size:.9rem}"
          ".festival-article a{color:#f2d27d}.festival-article .back{display:inline-block;margin:20px 0;color:#f2d27d}"
+         ".festival-article .video{position:relative;aspect-ratio:16/9;margin:0 0 30px;border-radius:14px;overflow:hidden}"
+         ".festival-article .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}"
+         ".festival-article .tale{border:1px solid #6f5a9e;border-radius:14px;padding:16px 18px;background:#1b1734;margin:20px 0}"
          "@media(max-width:620px){.festival-article .facts{grid-template-columns:1fr}}")
 
 # header/nav: copied from an existing guide so menus stay identical across the site
@@ -53,7 +60,7 @@ header = re.search(r'<header class="site-header">.*?</header>', tpl, re.S).group
 from datetime import date
 pub = date.fromisoformat(spec["published"])
 pub_txt = f"{pub.strftime('%B')} {pub.day}, {pub.year}"
-og_img = f"{SITE}/{img['src']}" if img else f"{SITE}/images/guides/cambodian-holidays-card.webp"
+og_img = f"{SITE}/{spec['og_image']}" if spec.get("og_image") else f"{SITE}/{img['src']}" if img else f"{SITE}/images/guides/cambodian-holidays-card.webp"
 
 ld = {"@context": "https://schema.org", "@graph": [
     {"@type": "Article", "headline": title, "description": desc, "image": og_img, "datePublished": spec["published"],
@@ -73,6 +80,14 @@ facts = "".join(f'<div class="fact"><strong>{e(k)}</strong>{e(v)}</div>' for k, 
 figure = (f'<figure><img src="../{img["src"]}" alt="{e(img["alt"])}" width="{img["width"]}" height="{img["height"]}" fetchpriority="high" decoding="async">'
           f'<figcaption>{e(img["caption"])}</figcaption></figure>') if img else ""
 faq = "".join(f"<h3>{e(q)}</h3><p>{a}</p>" for q, a in spec["faq"])
+DEFAULT_NOTE = "Dates for lunar observances follow the Khmer lunar calendar and can differ by a day locally. Check with your pagoda or official announcements for exact times."
+note_txt = spec.get("note", DEFAULT_NOTE)
+note = f'<p class="note">{note_txt}</p>' if note_txt else ""
+back_label, back_href = spec.get("back", ["Back to the MyBirthSign Blog", "../blog.html"])
+yt = spec.get("youtube")
+assert not yt or re.fullmatch(r"[A-Za-z0-9_-]{11}", yt), "youtube must be a real 11-character video ID"
+video = (f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{yt}" title="{e(title)} (video)" loading="lazy" '
+         f'allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>') if yt else ""
 sources = "".join(f'<li><a href="{e(u)}" target="_blank" rel="noopener">{e(t)}</a> — {e(n)}</li>' for t, u, n in spec["sources"])
 related = " · ".join(f'<a href="{e(h)}">{e(l)}</a>' for l, h in spec["related"])
 
@@ -87,18 +102,23 @@ page = f"""<!doctype html>
 <style>{STYLE}</style></head>
 <body class="fx-page">
 {header}
-<main class="festival-article"><p class="eyebrow">{e(spec['eyebrow'])}</p><h1>{e(title)}</h1><p class="lead">{spec['lead']}</p><p class="meta">Published <time datetime="{spec['published']}">{pub_txt}</time> · MyBirthSign</p><div class="facts">{facts}</div>{figure}
+<main class="festival-article"><p class="eyebrow">{e(spec['eyebrow'])}</p><h1>{e(title)}</h1><p class="lead">{spec['lead']}</p><p class="meta">Published <time datetime="{spec['published']}">{pub_txt}</time> · MyBirthSign</p><div class="facts">{facts}</div>{figure}{video}
 {chr(10).join(parts)}
 <section><h2>Frequently asked questions</h2>{faq}</section>
 <section><h2>Sources and further reading</h2><ul>{sources}</ul>
-<p class="note">Dates for lunar observances follow the Khmer lunar calendar and can differ by a day locally. Check with your pagoda or official announcements for exact times.</p></section>
-<p><strong>Explore more:</strong> {related}</p><a class="back" href="../blog.html">← Back to the MyBirthSign Blog</a></main>
+{note}</section>
+<p><strong>Explore more:</strong> {related}</p><a class="back" href="{back_href}">← {back_label}</a></main>
 <footer class="site-footer"><div class="container"><a href="../about.html">About</a> · <a href="../privacy.html">Privacy Policy</a> · <a href="../terms.html">Terms of Use</a> · <a href="../contact.html">Contact</a><p>© {pub.year} MyBirthSign. Cultural information for education; verify official announcements for current events.</p></div></footer><script src="../js/i18n.js"></script>
 <script src="../js/app.js"></script></body></html>
 """
 open(os.path.join(ROOT, "blog", f"{slug}.html"), "w", encoding="utf-8").write(page)
 
 # blog.html: newest first in the English "Latest Articles" grid
+if spec.get("listing", True) is False:
+    sp = os.path.join(ROOT, "sitemap.xml"); sm = open(sp, encoding="utf-8").read(); loc = f"{SITE}/blog/{slug}.html"
+    if loc not in sm:
+        open(sp, "w", encoding="utf-8").write(sm.replace("</urlset>", f"  <url><loc>{loc}</loc></url>\n</urlset>"))
+    print("wrote blog/%s.html (not listed on blog.html), sitemap updated" % slug); sys.exit(0)
 bp = os.path.join(ROOT, "blog.html")
 b = open(bp, encoding="utf-8").read()
 card_img = img["src"] if img else "images/guides/cambodian-holidays-card.webp"

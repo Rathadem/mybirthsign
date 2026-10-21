@@ -1,0 +1,130 @@
+{
+  "slug": "tiger-chinese-culture",
+  "title": "The Tiger in Chinese Culture: Courage and Strength",
+  "seo_title": "The Tiger in Chinese Culture: King of Beasts and Zodiac Sign",
+  "description": "Why the tiger is called the king of beasts in Chinese culture, the White Tiger of the West, tiger-head shoes for children, and how the Tiger finished third in the Great Race.",
+  "eyebrow": "Zodiac Stories & Legends",
+  "lead": "Look closely at the stripes on a tiger's forehead. In Chinese tradition, people see a word written there: king.",
+  "kicker": "Zodiac Stories & Legends",
+  "card_text": "King of beasts, guardian of the west and protector of children: the tiger's place in Chinese culture and the zodiac.",
+  "facts": [
+    [
+      "Zodiac position",
+      "3rd of 12"
+    ],
+    [
+      "Symbol of",
+      "Courage and protection"
+    ],
+    [
+      "Khmer name",
+      "Khal"
+    ]
+  ],
+  "image": {
+    "src": "images/stories/tiger-culture.webp",
+    "alt": "A tiger standing on a rocky cliff above crashing waves, with mountains and a pale full moon behind",
+    "width": 1100,
+    "height": 720,
+    "caption": "Illustration of a tiger in a traditional print style."
+  },
+  "sections": [
+    {
+      "h2": "The king of beasts",
+      "paras": [
+        "Long before the zodiac took its present form, the tiger was the most respected animal in Chinese tradition. Ying Shao, a scholar of the Eastern Han dynasty (25–220 CE), called the tiger \"the king of all beasts\" and wrote that it could quell war and devour ghosts.",
+        "The dark stripes on a tiger's forehead are often drawn to look like the Chinese character for \"king\" (wang). For many people this marking is the tiger's crown, written on its face."
+      ]
+    },
+    {
+      "h2": "Guardian of the west",
+      "paras": [
+        "In Chinese astronomy the sky is divided among four great symbols: the Azure Dragon of the east, the Vermilion Bird of the south, the Black Tortoise of the north, and the White Tiger of the west. The White Tiger was honored as the guardian of the west, and it is the only one of the four based on a real animal."
+      ]
+    },
+    {
+      "h2": "A protector at home",
+      "paras": [
+        "The tiger's strength made it a guardian in everyday life too. Ying Shao wrote that a picture of a tiger on the door would keep ghosts from entering, and tiger pictures are still hung for protection. Children are given tiger-head shoes and tiger-head hats, wishing them health and courage.",
+        "Tigers also stood for authority. During the Spring and Autumn and Warring States periods, bronze tiger tallies were split in two: a general would act on an order only when the ruler's half matched his own."
+      ]
+    },
+    {
+      "h2": "The Tiger in the Great Race",
+      "paras": [
+        "In the folk tale of the Great Race, the Tiger was one of the strongest swimmers, yet it finished third. When the Jade Emperor asked why, the Tiger admitted that the current kept pushing it downstream, and it had to fight its way back again and again. It is a story about effort: the Tiger did not take shortcuts, and it earned its place through sheer strength. The full race is told in <a href=\"great-zodiac-race\">The Great Zodiac Race</a>."
+      ]
+    },
+    {
+      "h2": "What this means for the Tiger sign",
+      "paras": [
+        "Our <a href=\"zodiac-year-tiger\">Year of the Tiger guide</a> describes the sign as brave, confident and competitive, a natural leader who acts decisively, which matches the king of beasts. Traditional readings add a balancing note: Tigers can be impulsive or impatient with people who move more slowly. The river in the race is a good image for that: even the strongest swimmer has to respect the current."
+      ]
+    },
+    {
+      "h2": "The Tiger in Cambodia",
+      "paras": [
+        "In the Khmer zodiac, the Tiger year is called Khal. It follows the same twelve-animal order and begins at Khmer New Year in April; see <a href=\"khmer-animal-year-sak\">Khmer animal years</a>."
+      ],
+      "after": [
+        "Born in the Year of the Tiger? <a href=\"../checker\">Check your zodiac animal and element</a> and read the full <a href=\"zodiac-year-tiger\">Tiger guide</a>."
+      ]
+    }
+  ],
+  "faq": [
+    [
+      "Why is the tiger called the king of beasts in China?",
+      "Han-dynasty writer Ying Shao called it the king of all beasts, and its forehead stripes are often drawn like the character for \"king\"."
+    ],
+    [
+      "What is the White Tiger?",
+      "One of the four symbols of Chinese astronomy, the guardian of the west."
+    ],
+    [
+      "Why do children wear tiger-head shoes?",
+      "It is a tradition to wish them protection, health and courage."
+    ]
+  ],
+  "related": [
+    [
+      "The Great Zodiac Race",
+      "great-zodiac-race"
+    ],
+    [
+      "Year of the Tiger guide",
+      "zodiac-year-tiger"
+    ],
+    [
+      "The Horse in the Zodiac",
+      "horse-in-the-zodiac"
+    ],
+    [
+      "Khmer animal years",
+      "khmer-animal-year-sak"
+    ],
+    [
+      "All Zodiac Stories & Legends",
+      "zodiac-stories-legends"
+    ]
+  ],
+  "published": "2026-10-21",
+  "sources": [
+    [
+      "The World of Chinese: What Do Tigers Symbolize in China?",
+      "https://www.theworldofchinese.com/2022/01/what-do-tigers-symbolize-in-china/",
+      "Ying Shao on the tiger as king of beasts, the White Tiger of the West, tiger-head shoes and tiger tallies."
+    ],
+    [
+      "Wikipedia: Chinese zodiac",
+      "https://en.wikipedia.org/wiki/Chinese_zodiac",
+      "the Great Race folk tale and its variants, and the link between the animals and the Earthly Branches."
+    ]
+  ],
+  "note": "The Great Race and the other tales here are folk tales, told in many versions; they are not historical events. Personality traits are traditional zodiac beliefs, shared for culture and entertainment.",
+  "back": [
+    "Back to Zodiac Stories & Legends",
+    "zodiac-stories-legends"
+  ],
+  "listing": false,
+  "og_image": "images/stories/tiger-culture-og.jpg"
+}

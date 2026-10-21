@@ -1,0 +1,153 @@
+{
+  "slug": "why-12-animals-chinese-zodiac",
+  "title": "Why Are There 12 Animals in the Chinese Zodiac?",
+  "seo_title": "Why Are There 12 Animals in the Chinese Zodiac? History and Legend",
+  "description": "The real history behind the twelve zodiac animals: the Earthly Branches, the twelve-year Jupiter theory, the oldest written records, and the legends people tell to explain the number twelve.",
+  "eyebrow": "Zodiac Stories & Legends",
+  "lead": "Twelve animals, twelve years, twelve two-hour periods in a day. The number twelve runs right through the Chinese calendar, and the reason is older than any of the legends.",
+  "kicker": "Zodiac Stories & Legends",
+  "card_text": "The Earthly Branches, the Year Star and the oldest records: the history behind the number twelve, and the legends that explain it.",
+  "facts": [
+    [
+      "Cycle length",
+      "12 years"
+    ],
+    [
+      "Linked to",
+      "The 12 Earthly Branches"
+    ],
+    [
+      "Full cycle",
+      "60 years with the 10 Stems"
+    ]
+  ],
+  "image": {
+    "src": "images/stories/why-12-animals.webp",
+    "alt": "A decorative wheel of twelve zodiac animals around a golden star on a purple starry background",
+    "width": 1100,
+    "height": 720,
+    "caption": "Decorative illustration of a zodiac wheel. The animals are not shown in their traditional order."
+  },
+  "sections": [
+    {
+      "h2": "The short answer",
+      "paras": [
+        "The twelve animals match the twelve Earthly Branches, an ancient Chinese counting system. The branches were used to count years, months, days and the twelve two-hour periods of the day. Over time each branch was paired with an animal, and the animals became the friendlier, easier-to-remember face of the system."
+      ]
+    },
+    {
+      "h2": "The Earthly Branches",
+      "paras": [
+        "The branches are very old: they are at least as old as the ten Heavenly Stems, which were already used to count days in the Shang dynasty (about 1600 to 1050 BCE). Each branch has its own two-hour period, starting with <em>zi</em>, the Rat's branch, from 23:00 to 01:00, and ending with <em>hai</em>, the Pig's, from 21:00 to 23:00.",
+        "When the twelve branches are combined with the ten stems, they form a cycle of sixty, used for naming years. That is why each zodiac animal also comes with an element, such as Fire Horse or Water Rabbit, and why the same animal-and-element pair returns only every sixty years."
+      ]
+    },
+    {
+      "h2": "The Year Star",
+      "paras": [
+        "Why twelve in the first place? One widely discussed theory points to the sky. Jupiter takes roughly twelve years to travel around the sun, and Chinese astronomers called it the Year Star (Suixing) and used its slow movement to mark years. The twelve branches may have been adapted from those observations. Another scholarly suggestion links them to phases of the moon. Neither theory is proven, but both show how naturally the number twelve fits a calendar: there are also about twelve lunar months in a year."
+      ]
+    },
+    {
+      "h2": "The oldest records",
+      "paras": [
+        "Archaeology shows the animals were around long before they settled into today's list. Bamboo slips from a Qin tomb at Shuihudi in Hubei, sealed in 217 BCE and recovered in 1975, already record a cycle of animals, but a few differ: a deer stands where the Horse is now, and a horse where the Goat is. The first surviving text to name exactly the twelve animals we use today is the <em>Lunheng</em>, written by the Han-dynasty scholar Wang Chong in the first century CE."
+      ]
+    },
+    {
+      "h2": "The legends behind the number",
+      "paras": [
+        "Folk tales give a simpler answer: twelve animals came. In the most famous story, the Jade Emperor held a race across a river, and the first twelve animals to arrive earned a year each; see <a href=\"great-zodiac-race\">The Great Zodiac Race</a>. In a Buddhist version, the Buddha invited all the animals to visit him, and only twelve came. These stories are much loved, but they explain the order of the animals rather than the true origin of the system."
+      ]
+    },
+    {
+      "h2": "Twelve animals across Asia",
+      "paras": [
+        "The same twelve-animal cycle is used in many places. In Cambodia the animals have Khmer names, from Choot (Rat) to Kor (Pig), and the animal year changes at Khmer New Year in April rather than at Lunar New Year, as explained in <a href=\"khmer-animal-year-sak\">Khmer animal years</a> and <a href=\"khmer-new-year-animal-year\">Khmer New Year and the animal year</a>. Because Lunar New Year falls in January or February, people born early in the year should check their animal with a birth-date tool rather than the year alone."
+      ],
+      "after": [
+        "Find your own animal and element in seconds with the <a href=\"../checker\">Chinese Zodiac Checker</a>, or browse <a href=\"../animals.html\">all twelve animals</a>."
+      ]
+    }
+  ],
+  "faq": [
+    [
+      "Why does the Chinese zodiac have 12 animals?",
+      "The animals are paired with the twelve Earthly Branches, an ancient counting system for years, months and hours."
+    ],
+    [
+      "Is the zodiac linked to Jupiter?",
+      "One theory says the twelve branches came from observing Jupiter, the Year Star, which takes about twelve years to circle the sun. It is a theory, not a proven fact."
+    ],
+    [
+      "What is the oldest record of the zodiac animals?",
+      "Bamboo slips from Shuihudi (217 BCE) record an early animal cycle; Wang Chong's Lunheng (first century CE) is the earliest text with today's twelve animals."
+    ],
+    [
+      "Why do the animals come with elements?",
+      "The twelve branches combine with ten Heavenly Stems to make a sixty-year cycle, which gives each animal year an element."
+    ]
+  ],
+  "related": [
+    [
+      "The Great Zodiac Race",
+      "great-zodiac-race"
+    ],
+    [
+      "How to calculate your zodiac sign",
+      "how-to-calculate-zodiac-sign"
+    ],
+    [
+      "Khmer animal years",
+      "khmer-animal-year-sak"
+    ],
+    [
+      "Why the Rat Came First",
+      "why-rat-came-first"
+    ],
+    [
+      "All Zodiac Stories & Legends",
+      "zodiac-stories-legends"
+    ]
+  ],
+  "published": "2026-10-21",
+  "sources": [
+    [
+      "Wikipedia: Earthly Branches",
+      "https://en.wikipedia.org/wiki/Earthly_Branches",
+      "the twelve branches, their two-hour periods and the theory linking them to Jupiter, the Year Star."
+    ],
+    [
+      "Wikipedia: Chinese zodiac",
+      "https://en.wikipedia.org/wiki/Chinese_zodiac",
+      "the Great Race folk tale and its variants, and the link between the animals and the Earthly Branches."
+    ],
+    [
+      "Wikipedia: Rishu (daybooks)",
+      "https://en.wikipedia.org/wiki/Rishu",
+      "the Shuihudi daybook, recovered in 1975 from a tomb dated 217 BCE."
+    ],
+    [
+      "StudyCLI: Chinese Zodiac Explained",
+      "https://studycli.org/chinese-zodiac/",
+      "notes that the Shuihudi slips (tomb sealed in 217 BCE) record an animal cycle with a deer where the Horse is now."
+    ],
+    [
+      "Macao Communications Museum: Chinese Zodiac in Postage Stamps",
+      "https://www.cmm.gov.mo/special/zodiac/eng/introduction.html",
+      "names Wang Chong's Lunheng as the earliest surviving text with today's twelve signs."
+    ],
+    [
+      "Britannica: Chinese zodiac",
+      "https://www.britannica.com/topic/Chinese-zodiac",
+      "the zodiac as a classification of years in a repeating twelve-year cycle."
+    ]
+  ],
+  "note": "The Great Race and the other tales here are folk tales, told in many versions; they are not historical events. Personality traits are traditional zodiac beliefs, shared for culture and entertainment.",
+  "back": [
+    "Back to Zodiac Stories & Legends",
+    "zodiac-stories-legends"
+  ],
+  "listing": false,
+  "og_image": "images/stories/why-12-animals-og.jpg"
+}

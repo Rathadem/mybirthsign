@@ -1,0 +1,130 @@
+{
+  "slug": "rabbit-clever-crossing",
+  "title": "The Rabbit's Clever Crossing: A Zodiac Legend",
+  "seo_title": "The Rabbit in the Great Zodiac Race and the Moon Rabbit Legend",
+  "description": "How the small Rabbit crossed the river in the Great Race by hopping on stones and riding a log, plus the moon rabbit legends of China, the Buddhist Jataka and Cambodia.",
+  "eyebrow": "Zodiac Stories & Legends",
+  "lead": "The Rabbit could not swim and could not fly, yet it finished fourth, ahead of the Dragon and the Horse. Here is how it crossed the river, and why rabbits are said to live on the moon.",
+  "kicker": "Zodiac Stories & Legends",
+  "card_text": "Stepping stones, a floating log and a helping breath from the Dragon: how the Rabbit won fourth place, and the legend of the moon rabbit.",
+  "facts": [
+    [
+      "Zodiac position",
+      "4th of 12"
+    ],
+    [
+      "Crossed by",
+      "Stones, a log and the Dragon's help"
+    ],
+    [
+      "Khmer name",
+      "Thos"
+    ]
+  ],
+  "image": {
+    "src": "images/stories/rabbit-crossing.webp",
+    "alt": "A white rabbit sitting by a moonlit lake under a large full moon, surrounded by red-leafed trees",
+    "width": 1100,
+    "height": 720,
+    "caption": "Illustration of a rabbit under the full moon. Many Asian traditions see a rabbit in the moon."
+  },
+  "sections": [
+    {
+      "h2": "A small animal and a wide river",
+      "paras": [
+        "In the folk tale of the Great Race, the Jade Emperor promised a place in the calendar to each animal that crossed the river to reach him. For the Rabbit this was a serious problem. It was quick on land, but it could not swim, and the current was strong."
+      ]
+    },
+    {
+      "h2": "Stone by stone",
+      "paras": [
+        "The Rabbit did not jump in and hope for the best. It studied the river and spotted a line of stones just above the water. Light and nimble, it hopped from one stone to the next, never staying long enough to slip.",
+        "Halfway across, the stones ran out. The Rabbit grabbed a floating log and held on as the current carried it along. It was safe, but drifting, and the far bank was still out of reach."
+      ]
+    },
+    {
+      "h2": "A helping breath from the Dragon",
+      "paras": [
+        "Above the river flew the Dragon, which had stopped to bring rain to a village. Seeing the Rabbit stuck on its log, the Dragon blew a gentle breath that pushed the log to the shore. The Rabbit hopped off and reached the Emperor in fourth place, just ahead of the Dragon itself. The kind Dragon's side of the story is told in <a href=\"dragon-legend\">The Dragon's Legend</a>."
+      ]
+    },
+    {
+      "h2": "What the crossing says about the Rabbit sign",
+      "paras": [
+        "The Rabbit's crossing is a story of careful thinking rather than force. It fits how our <a href=\"zodiac-year-rabbit\">Year of the Rabbit guide</a> describes the sign: gentle, thoughtful and diplomatic, valuing harmony and skilled at avoiding conflict. The same guide notes the Rabbit's weak side: it can be overly cautious and avoid confrontations that are actually needed. In the race, caution worked, but the Rabbit still needed help to finish, and it accepted that help gratefully."
+      ]
+    },
+    {
+      "h2": "The rabbit in the moon",
+      "paras": [
+        "The Rabbit is linked to another famous legend that has nothing to do with the race. Look at the full moon, and many people across Asia see the shape of a rabbit. In China, poems from the Warring States period already mention a hare on the moon, and Han-dynasty poets called it the Jade Hare. Later stories make it the companion of Chang'e, the moon goddess, pounding the elixir of life in a mortar.",
+        "A Buddhist tale, one of the Jataka stories of the Buddha's past lives, tells it differently. A monkey, an otter, a jackal and a hare vow to give to anyone in need. When an old man asks for food, the hare has only grass to offer, so it throws itself into his fire. The old man is the god Sakka (Indra) in disguise, and, moved by the hare's selflessness, he draws its likeness on the moon for everyone to see."
+      ]
+    },
+    {
+      "h2": "The moon rabbit in Cambodia",
+      "paras": [
+        "The moon rabbit is part of local folklore across Asia, including Cambodia, Thailand, Myanmar, Vietnam, Sri Lanka and India. In Cambodia it is linked with the full-moon celebrations of the <a href=\"cambodia-water-festival-bon-om-touk\">Water Festival (Bon Om Touk)</a>. In the Khmer zodiac the Rabbit year is called Thos."
+      ],
+      "after": [
+        "Born in the Year of the Rabbit? <a href=\"../checker\">Find your zodiac animal and element</a> and read the full <a href=\"zodiac-year-rabbit\">Rabbit guide</a>."
+      ]
+    }
+  ],
+  "faq": [
+    [
+      "How did the Rabbit cross the river in the Great Race?",
+      "It hopped across on stones, then clung to a floating log, and the Dragon blew the log to the shore."
+    ],
+    [
+      "What place did the Rabbit finish?",
+      "Fourth, after the Rat, Ox and Tiger, and just ahead of the Dragon."
+    ],
+    [
+      "Why is there a rabbit on the moon?",
+      "Chinese legend makes it the Jade Hare, companion of the moon goddess Chang'e. A Buddhist Jataka tale says the god Sakka drew the hare on the moon to honor its selflessness."
+    ]
+  ],
+  "related": [
+    [
+      "The Great Zodiac Race",
+      "great-zodiac-race"
+    ],
+    [
+      "Year of the Rabbit guide",
+      "zodiac-year-rabbit"
+    ],
+    [
+      "The Dragon's Legend",
+      "dragon-legend"
+    ],
+    [
+      "Water Festival (Bon Om Touk)",
+      "cambodia-water-festival-bon-om-touk"
+    ],
+    [
+      "All Zodiac Stories & Legends",
+      "zodiac-stories-legends"
+    ]
+  ],
+  "published": "2026-10-21",
+  "sources": [
+    [
+      "Wikipedia: Chinese zodiac",
+      "https://en.wikipedia.org/wiki/Chinese_zodiac",
+      "the Great Race folk tale and its variants, and the link between the animals and the Earthly Branches."
+    ],
+    [
+      "Wikipedia: Moon rabbit",
+      "https://en.wikipedia.org/wiki/Moon_rabbit",
+      "the Jade Hare and Chang'e, the Buddhist Jataka tale, and the legend's place in Cambodian folklore."
+    ]
+  ],
+  "note": "The Great Race and the other tales here are folk tales, told in many versions; they are not historical events. Personality traits are traditional zodiac beliefs, shared for culture and entertainment.",
+  "back": [
+    "Back to Zodiac Stories & Legends",
+    "zodiac-stories-legends"
+  ],
+  "listing": false,
+  "og_image": "images/stories/rabbit-crossing-og.jpg"
+}
