@@ -461,13 +461,13 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   const voiceKm = [
     `តើរាសីរបស់អ្នក ស្ថិតក្នុងចំណោមបីឆ្នាំ ដែលមានសំណាងជាងគេថ្ងៃនេះឬទេ? នេះគឺជោគជតារាសី សម្រាប់ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)}។`,
     summaryKm,
-    `លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2} និង ${n.d3}។`).join(" ")}`,
+    `សម្រាប់លេខសំណាងថ្ងៃនេះ៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2} និង ${n.d3}។`).join(" ")} សូមសរសេរលេខសំណាងរបស់អ្នក នៅក្នុងមតិយោបល់ ហើយនិយាយម្ដងទៀត!`,
     "ចូលមើលលេខសំណាង និងលម្អិតសម្រាប់រាសីទាំង 12 នៅ mybirthsign.com",
   ];
   const voiceEn = [
     `Is your sign one of today's three luckiest? Here's your Chinese zodiac fortune for ${LD}.`,
     summaryEn,
-    `Today's lucky numbers for the lucky signs: ${nums.map((n) => `${n.a}, ${n.d2} and ${n.d3}.`).join(" ")}`,
+    `For lucky numbers today: ${nums.map((n) => `${n.a}, ${n.d2} and ${n.d3}.`).join(" ")} Comment your lucky number below, and say it again!`,
     "See all 12 signs and full lucky numbers at mybirthsign.com.",
   ];
   const srtKm = srt(voiceKm.flatMap((v) => splitLines(v, "km")));
@@ -518,8 +518,8 @@ function buildPack(iso, F, forSign, data = null, P = null) {
       `ពណ៌សំណាងរបស់អ្នកថ្ងៃនេះ គឺពណ៌${ckm}។ សូមស្លៀកពាក់ពណ៌${ckm} ឬយករបស់ពណ៌${ckm}មួយ ជាប់ខ្លួន។ ពេលល្អបំផុតរបស់អ្នក គឺ${sayTimeKm(dd.lucky.time)}។ ជាពេលល្អ សម្រាប់ធ្វើរឿងសំខាន់ៗ។`],
     [`Your lucky direction today is the ${dd.lucky.direction.en.toLowerCase()}. When you start something new, face the ${dd.lucky.direction.en.toLowerCase()}, and walk forward with a calm and happy heart.`,
       `ទិសសំណាងរបស់អ្នកថ្ងៃនេះ គឺទិស${dd.lucky.direction.km}។ ពេលចាប់ផ្ដើមធ្វើអ្វីថ្មី សូមបែរមុខទៅទិស${dd.lucky.direction.km} ហើយបោះជំហានទៅមុខ ដោយចិត្តស្ងប់ និងរីករាយ។`],
-    [`Your lucky numbers today are ${n0.d1}, ${n0.d2}, and ${n0.d3}. Keep them in mind. Let them remind you that today is your lucky day.`,
-      `លេខសំណាងរបស់អ្នកថ្ងៃនេះ គឺលេខ ${n0.d1} លេខ ${n0.d2} និងលេខ ${n0.d3}។ សូមចងចាំលេខទាំងនេះ ដើម្បីរំលឹកខ្លួនឯងថា ថ្ងៃនេះ គឺជាថ្ងៃសំណាងរបស់អ្នក។`],
+    [`For lucky numbers: ${n0.d1}, ${n0.d2}, and ${n0.d3}. Comment your lucky number below, and let's say it again: ${n0.d1}, ${n0.d2}, ${n0.d3}!`,
+      `សម្រាប់លេខសំណាង៖ លេខ ${n0.d1} លេខ ${n0.d2} និងលេខ ${n0.d3}។ សូមសរសេរលេខសំណាងរបស់អ្នក នៅក្នុងមតិយោបល់ ហើយតោះនិយាយម្ដងទៀត៖ ${n0.d1} ${n0.d2} ${n0.d3}!`],
     ["Make a small wish today, and take one kind step toward it. A peaceful heart helps good luck find its way to you.",
       "ថ្ងៃនេះ សូមប្រាថ្នាអ្វីមួយតូចៗ ហើយធ្វើរឿងល្អមួយ ដើម្បីឈានទៅរកក្ដីប្រាថ្នានោះ។ ចិត្តដែលស្ងប់ នឹងជួយនាំសំណាងល្អ មករកអ្នក។"],
     ["That's your Chinese zodiac fortune for today. See all twelve signs and your lucky numbers at mybirthsign dot com. Follow us for tomorrow's fortune. Have a lucky day!",
@@ -1044,7 +1044,7 @@ ${[
   ["1", `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! Here is your Chinese zodiac fortune for ${LD.replace(/^\w+, /, "")}.`, `ជោគជតារាសីប្រចាំថ្ងៃនេះ ថ្ងៃទី ${Number(iso.slice(8))} ខែ${["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"][Number(iso.slice(5,7))-1]}។ ថ្ងៃនេះជាថ្ងៃ${dayKm}!`],
   ["2", `${list(lucky)} are the luckiest signs today!`, `ឆ្នាំ${kmList(lucky.map(km))} មានសំណាងល្អជាងគេនៅថ្ងៃនេះ!`],
   ["3", careful.length ? `${list(careful)}, take it easy today. Slow down and rest.` : "Take a calm breath and enjoy the day.", careful.length ? `ឆ្នាំ${kmList(careful.map(km))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ។` : "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
-  ["5", `Lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Just for fun.`, `លេខសំណាង៖ ${nums.map((n) => `${km(n.a)} ${n.d2}`).join(" ")}! សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។`],
+  ["5", `For lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Comment your lucky number and say it again!`, `សម្រាប់លេខសំណាង៖ ${nums.map((n) => `${km(n.a)} ${n.d2}`).join(" ")}! សូមសរសេរលេខសំណាងរបស់អ្នក ហើយនិយាយម្ដងទៀត!`],
   ["4", "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
 ].map(([n, en, kmL]) => `- **Scene ${n}**\n  - English: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\n  - Khmer: Audio: ${VOICE_KM} says in Khmer: "${kmSpeak(kmL)}" ${MUSIC}`).join("\n")}
 
