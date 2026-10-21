@@ -158,8 +158,11 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
 
   // written summary: the site's own daily wording if it exists already, otherwise the standard script
   const same = data && JSON.stringify(data.highlights.topLucky) === JSON.stringify(lucky) && JSON.stringify(data.highlights.careful) === JSON.stringify(careful);
-  const summaryKm = same && data.highlights.summary?.km ? data.highlights.summary.km : [
-    `ថ្ងៃនេះជាថ្ងៃ${dayKm}។`,
+  // "ឆ្នាំ" before every animal name in the site's Khmer summary (e.g. ថ្ងៃម្សាញ់ -> ថ្ងៃឆ្នាំម្សាញ់), as in the rest of the pack
+  const KMN12 = F.signs.map((x) => x.nameKm);
+  const addYear = (t) => t.replace(new RegExp(`(^|[\\s៖,(]|ថ្ងៃ)(${KMN12.join("|")})(?=[\\s។!?,៖)]|$)`, "g"), (m, pre, nm) => `${pre}ឆ្នាំ${nm}`);
+  const summaryKm = same && data.highlights.summary?.km ? addYear(data.highlights.summary.km) : [
+    `ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}។`,
     `${kmList(lucky.map((a) => `ឆ្នាំ${km(a)}`))} មានសំណាងល្អជាងគេនៅថ្ងៃនេះ។`,
     ...(careful.length ? [`ចំណែក${kmList(careful.map((a) => `ឆ្នាំ${km(a)}`))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់ក្នុងការសម្រេចចិត្ត។`] : []),
   ].join(" ");
@@ -184,7 +187,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const srtKm = srt(voiceKm.flatMap((v) => splitLines(v, "km")));
   const srtEn = srt(voiceEn.flatMap((v) => splitLines(v, "en")));
 
-  const luckyLabelsKm = lucky.map((a) => `${km(a)} – ${sign(a).label.km}`).join(" · ");
+  const luckyLabelsKm = lucky.map((a) => `ឆ្នាំ${km(a)} – ${sign(a).label.km}`).join(" · ");
   const luckyLabelsEn = lucky.map((a) => `${a} – ${sign(a).label.en}`).join(" · ");
   const disclaimerNums = "លេខសំណាង (1 ដល់ 5 ខ្ទង់) សម្រាប់ថ្ងៃនេះ គឺសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ មិនមែនជាការទស្សន៍ទាយ ឬការណែនាំឱ្យភ្នាល់ទេ។";
   const disclaimer = "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ មិនមែនជាការព្យាករណ៍វិទ្យាសាស្ត្រទេ។";
@@ -200,7 +203,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
     ["The full moon rises", "A huge full moon rises slowly over the Angkor-style temple and the still lotus pond. Lanterns drift upward, and a single beam of silver-gold moonlight falls onto a closed pink lotus in the middle of the pond. Slow push-in toward the lotus.",
       "Tonight the full moon rises over the temple, and a special friend is waking up.", "យប់នេះ ព្រះចន្ទពេញវង់រះលើប្រាសាទ ហើយមានមិត្តពិសេសម្នាក់កំពុងភ្ញាក់ឡើង។"],
     [`The ${day} appears`, `The pink lotus opens petal by petal in the moonlight, revealing ${LOOK[day]} on a round golden pedestal. It opens its big sparkling eyes and its golden details begin to glow. Gentle close-up on its face, then pull back.`,
-      `Today, ${dateEn}, is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! A great day for everyone born in the Year of the ${day}.`, `${dateKm} ជាថ្ងៃ${dayKm}! ជាថ្ងៃល្អខ្លាំងសម្រាប់អ្នកកើតឆ្នាំ${dayKm}។`],
+      `Today, ${dateEn}, is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! A great day for everyone born in the Year of the ${day}.`, `${dateKm} ជាថ្ងៃឆ្នាំ${dayKm}! ជាថ្ងៃល្អខ្លាំងសម្រាប់អ្នកកើតឆ្នាំ${dayKm}។`],
     [`What the ${day} means`, `The ${dl} looks up at the full moon, and ${S9.vis}. ${cap(S9.mood)} mood. Slow upward camera tilt.`,
       S9.en, S9.km],
     ["The magical moment", `The ${dl} ${POSE[day]}. Lotus petals and sparkles swirl up behind it. Dynamic camera following the movement.`,
@@ -221,7 +224,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
     ["Tonight, the full moon rises over the ancient temple. Lotus flowers glow on the water, and a very special friend is waking up.",
       "យប់នេះ ព្រះចន្ទពេញវង់រះឡើងលើប្រាសាទបុរាណ។ ផ្កាឈូកភ្លឺចែងចាំងលើផ្ទៃទឹក ហើយមិត្តពិសេសម្នាក់ កំពុងភ្ញាក់ពីដំណេក។"],
     [`Today, ${LD}, is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day. It is a ${dd.label.en} for everyone born in the Year of the ${day}. This is your day to shine!`,
-      `ថ្ងៃនេះ ${wdKm} ទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)} គឺជាថ្ងៃ${dayKm}។ នេះជា${dd.label.km} សម្រាប់អ្នកកើតឆ្នាំ${dayKm}។ ថ្ងៃនេះ គឺជាថ្ងៃរបស់អ្នក!`],
+      `ថ្ងៃនេះ ${wdKm} ទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)} គឺជាថ្ងៃឆ្នាំ${dayKm}។ នេះជា${dd.label.km} សម្រាប់អ្នកកើតឆ្នាំ${dayKm}។ ថ្ងៃនេះ គឺជាថ្ងៃរបស់អ្នក!`],
     [`${S9.en} Today, this good energy is with you.`, `${S9.km} ថ្ងៃនេះ ថាមពលល្អទាំងនេះ កំពុងនៅជាមួយអ្នក។`],
     [`Born in the Year of the ${day}? Your luck is strong today. Stay ${S9.mood}. Say yes to good chances, and share your happiness with the people around you.`,
       `សម្រាប់អ្នកកើតឆ្នាំ${dayKm} ថ្ងៃនេះ សំណាងរបស់អ្នកល្អខ្លាំងណាស់។ សូមរក្សាចិត្តឲ្យស្ងប់ ទទួលយកឱកាសល្អៗ ហើយចែករំលែកភាពរីករាយ ដល់មនុស្សជុំវិញខ្លួន។`],
@@ -448,7 +451,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
     [`${cap(Q.title[0].replace(/^the /, ""))} in trouble`, ...Q.problem],
     SS(`The ${day} wakes up`, `In the middle of the pond, a golden lotus opens petal by petal, revealing ${LOOK[day]}, who wakes up, stretches and blinks its big sparkling eyes in the morning light. Gentle push-in.`,
       `In the middle of the pond, a golden lotus opened, and out came a little golden ${dl}. Today was ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day, and the ${dl} felt something special.`,
-      `នៅកណ្ដាលស្រះ ផ្កាឈូកមាសមួយបានរីក ហើយមាន${kA}មាសតូចមួយ ចេញមក។ ថ្ងៃនេះជាថ្ងៃ${dayKm} ហើយ${kA}មានអារម្មណ៍ពិសេសណាស់។`),
+      `នៅកណ្ដាលស្រះ ផ្កាឈូកមាសមួយបានរីក ហើយមាន${kA}មាសតូចមួយ ចេញមក។ ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm} ហើយ${kA}មានអារម្មណ៍ពិសេសណាស់។`),
     SS(`${hn} the ${H.kind[0]}`, `${cap(H.look)} arrives ${H.move} and stops right in front of the ${dl}, smiling. The ${dl} looks back with wide, curious eyes. Close two-shot.`,
       `A ${H.kind[0]} named ${hn} ${H.arrive[0]}. "Little ${day}," ${she} said, "only you can ${Q.mission[0]}. Today is your lucky day!"`,
       `${H.kind[1]}មួយ ឈ្មោះ${hk} ${H.arrive[1]}។ ${hk}និយាយថា "${kA}តូចអើយ មានតែអ្នកទេ ដែលអាច${Q.mission[1]}។ ថ្ងៃនេះ ជាថ្ងៃសំណាងរបស់អ្នក!"`),
@@ -532,14 +535,14 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const clueEn = PI ? PI.traits.split(". ")[0].replace(/\.$/, "").toLowerCase() : "";
   const clueKm = PK ? PK.traits.split("។")[0] : "";
   const dateLineEn = `Today, ${LD}, is ${aDay} ${day} day.`;
-  const dateLineKm = `ថ្ងៃនេះ ${wdKm} ទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} គឺជាថ្ងៃ${dayKm}។`;
+  const dateLineKm = `ថ្ងៃនេះ ${wdKm} ទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} គឺជាថ្ងៃឆ្នាំ${dayKm}។`;
   const HOOKS = {
     "60s": { win: 1, why: "Specific and true (only the day's animal has a Great Day), creates curiosity, and every viewer wants to know if it is their sign.", list: [
       ["Identity", `Born in the Year of the ${day}? Today is a Great Day for you. Here's your lucky color, time, and numbers.`, `អ្នកកើតឆ្នាំ${dayKm}មែនទេ? ថ្ងៃនេះ ជាថ្ងៃល្អខ្លាំងសម្រាប់អ្នក។ មកមើលពណ៌ ពេលវេលា និងលេខសំណាងរបស់អ្នក។`],
       ["Curiosity", "Out of all twelve zodiac signs, only one has a Great Day today. Is it yours?", "ក្នុងចំណោមរាសីទាំង 12 មានតែមួយគត់ ដែលមានថ្ងៃល្អខ្លាំងនៅថ្ងៃនេះ។ តើជារាសីរបស់អ្នកឬទេ?"],
       ["Question", "Which zodiac animal is the luckiest today? Here's the answer, and what it means for you.", "តើឆ្នាំណា មានសំណាងជាងគេនៅថ្ងៃនេះ? នេះគឺជាចម្លើយ និងអត្ថន័យសម្រាប់អ្នក។"],
       ["Challenge", `Can you guess today's luckiest zodiac animal? Three clues: ${clueEn}.`, `ទាយមើល៖ តើឆ្នាំណា មានសំណាងជាងគេថ្ងៃនេះ? តម្រុយ៖ ${clueKm}។`],
-      ["Fact", `Today is ${aDay} ${day} day, and in the twelve-day zodiac cycle, that makes the ${day} today's luckiest sign.`, `ថ្ងៃនេះជាថ្ងៃ${dayKm} ហើយតាមវដ្ដដប់ពីរថ្ងៃ ឆ្នាំ${dayKm} គឺជារាសីដែលមានសំណាងជាងគេថ្ងៃនេះ។`],
+      ["Fact", `Today is ${aDay} ${day} day, and in the twelve-day zodiac cycle, that makes the ${day} today's luckiest sign.`, `ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm} ហើយតាមវដ្ដដប់ពីរថ្ងៃ ឆ្នាំ${dayKm} គឺជារាសីដែលមានសំណាងជាងគេថ្ងៃនេះ។`],
     ] },
     "180s": { win: 0, why: "Speaks straight to the people this video is for, and promises exactly what the video delivers: lucky facts plus one honest reminder.", list: [
       ["Daily fortune", `Born in the Year of the ${day}? Here's your lucky color, best time, and numbers for today, plus one gentle reminder.`, `អ្នកកើតឆ្នាំ${dayKm}មែនទេ? នេះគឺពណ៌ ពេលវេលា និងលេខសំណាងរបស់អ្នកថ្ងៃនេះ ព្រមទាំងការរំលឹកមួយផង។`],
@@ -553,7 +556,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
       ["Question", "Which of the twelve zodiac signs is the luckiest today?", "តើរាសីណា ក្នុងចំណោមរាសីទាំង 12 មានសំណាងជាងគេថ្ងៃនេះ?"],
       ["Practical", "Your lucky color, best time, and direction for today, for all twelve signs, in about five minutes.", "ពណ៌ ពេលវេលា និងទិសសំណាងថ្ងៃនេះ សម្រាប់រាសីទាំង 12 ក្នុងរយៈពេលប្រហែលប្រាំនាទី។"],
       ["Identity", "Whatever your sign, today has a lucky color and a best time just for you.", "មិនថាអ្នកកើតឆ្នាំអ្វីទេ ថ្ងៃនេះមានពណ៌សំណាង និងពេលល្អ សម្រាប់អ្នក។"],
-      ["Daily fortune", `Today is ${aDay} ${day} day. Here's what that means for every sign.`, `ថ្ងៃនេះជាថ្ងៃ${dayKm}។ មកមើលថា វាមានន័យយ៉ាងណា សម្រាប់រាសីនីមួយៗ។`],
+      ["Daily fortune", `Today is ${aDay} ${day} day. Here's what that means for every sign.`, `ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}។ មកមើលថា វាមានន័យយ៉ាងណា សម្រាប់រាសីនីមួយៗ។`],
     ] },
     story: { win: 0, why: "Opens on the story's real question, which the ending answers, and the hero is today's luckiest animal.", list: [
       ["Story question", `Can one little golden ${dl} ${Q.mission[0]} before the full moon rises?`, `តើ${kA}មាសតូចមួយ អាច${Q.mission[1]} មុនព្រះចន្ទពេញវង់រះ បានទេ?`],
@@ -600,7 +603,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const POSTS = {
     "60s": [
       ["Title – English", `${EMO[day]} ${day} Day – Today's Luckiest Sign! | ${D}`],
-      ["Title – Khmer", `${EMO[day]} ថ្ងៃ${dayKm} – ឆ្នាំដែលសំណាងបំផុតថ្ងៃនេះ! | ${D}`],
+      ["Title – Khmer", `${EMO[day]} ថ្ងៃឆ្នាំ${dayKm} – ឆ្នាំដែលសំណាងបំផុតថ្ងៃនេះ! | ${D}`],
       ["Caption – English (Facebook, TikTok)", `${S9.en} ${EMO[day]}🌕\n\nToday, ${D}, is a ${dd.label.en} for the ${day}.\n${factsEn.map((x) => `✨ ${x}`).join("\n")}\n\nBorn in the Year of the ${day}? Comment ${EMO[day]} below! 👇\nAll 12 signs: https://mybirthsign.com (TikTok: link in bio)\nLucky numbers are for fun only.\n\n${tagsEn} #fyp #Reels`],
       ["Caption – Khmer (Facebook, TikTok)", `${S9.km} ${EMO[day]}🌕\n\nថ្ងៃនេះ ${D} ជា${dd.label.km} សម្រាប់ឆ្នាំ${dayKm}។\n${factsKm.map((x) => `✨ ${x}`).join("\n")}\n\nអ្នកកើតឆ្នាំ${dayKm}មែនទេ? Comment ${EMO[day]} ប្រាប់ផង! 👇\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/ (TikTok៖ Link នៅក្នុង bio)\nលេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។\n\n${tags} #fyp #Reels`],
     ],
@@ -608,20 +611,20 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
       ["Title – English", `${day} Day Fortune – ${D} | Lucky Color, Time & Numbers for the Year of the ${day} ${EMO[day]}`],
       ["Title – Khmer", `ជោគជតាឆ្នាំ${dayKm} – ${D} | ពណ៌ ពេលវេលា និងលេខសំណាង ${EMO[day]}`],
       ["Description – English", `Today, ${LD}, is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day: a ${dd.label.en} for everyone born in the Year of the ${day}. ${S9.en}\n\n${factsEn.join("\n")}${PI ? `\nLucky days of the week: ${PI.luckyDays.join(" and ")}` : ""}\n\nLucky numbers are for fun only, not a prediction or betting advice.\n\nSee all 12 signs: https://mybirthsign.com\n\n${DISC_EN}\n\n${tagsEn}`],
-      ["Description – Khmer", `ថ្ងៃនេះ ${longDateKm} ជាថ្ងៃ${dayKm} ដែលជា${dd.label.km} សម្រាប់អ្នកកើតឆ្នាំ${dayKm}។ ${S9.km}\n\n${factsKm.join("\n")}${PK ? `\nថ្ងៃសំណាងប្រចាំសប្ដាហ៍៖ ${PK.luckyDays.join(" និង")}` : ""}\n\n${disclaimerNums}\n\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags}`],
+      ["Description – Khmer", `ថ្ងៃនេះ ${longDateKm} ជាថ្ងៃឆ្នាំ${dayKm} ដែលជា${dd.label.km} សម្រាប់អ្នកកើតឆ្នាំ${dayKm}។ ${S9.km}\n\n${factsKm.join("\n")}${PK ? `\nថ្ងៃសំណាងប្រចាំសប្ដាហ៍៖ ${PK.luckyDays.join(" និង")}` : ""}\n\n${disclaimerNums}\n\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags}`],
     ],
     long: [
       ["Title – English", `Daily Chinese Zodiac Fortune for All 12 Signs – ${D} | ${day} Day ${EMO[day]}`],
-      ["Title – Khmer", `ជោគជតារាសីទាំង 12 ប្រចាំថ្ងៃ – ${D} | ថ្ងៃ${dayKm} ${EMO[day]}`],
+      ["Title – Khmer", `ជោគជតារាសីទាំង 12 ប្រចាំថ្ងៃ – ${D} | ថ្ងៃឆ្នាំ${dayKm} ${EMO[day]}`],
       ["Description – English", `Your Chinese zodiac fortune for all 12 signs, ${LD}. ${summaryEn}\n\nChapters:\n${longChapters.map(([t, n]) => `${t} ${n.replace(/ \([^)]*\)/, "")}`).join("\n")}\n\nLucky numbers are given for today's lucky signs, for fun only, not betting advice.\n\nSee your sign: https://mybirthsign.com\n\n${DISC_EN}\n\n${tagsEn}`],
       ["Description – Khmer", `ជោគជតារាសីទាំង 12 សម្រាប់${longDateKm}។ ${summaryKm}\n\nជំពូក៖\n${chapKm.map(([t, n]) => `${t} ${n}`).join("\n")}\n\n${disclaimerNums}\n\nមើលរាសីរបស់អ្នក៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags}`],
     ],
   };
   POSTS.story = [
     ["Title – English", `${storyTitle[0]} ${EMO[day]} | Bedtime Story & ${day} Day Fortune – ${D}`],
-    ["Title – Khmer", `${storyTitle[1]} ${EMO[day]} | រឿងនិទាន និងជោគជតាថ្ងៃ${dayKm} – ${D}`],
+    ["Title – Khmer", `${storyTitle[1]} ${EMO[day]} | រឿងនិទាន និងជោគជតាថ្ងៃឆ្នាំ${dayKm} – ${D}`],
     ["Description – English", `On a ${day} day, a little golden ${dl} and ${hn} the ${H.kind[0]} must find three lucky treasures to ${Q.goal[0]} before the full-moon festival. A gentle animated story for the whole family, with today's real lucky color, direction, best time and numbers for the Year of the ${day}.\n\nChapters:\n${storyChapters.map(([t, en]) => `${t} ${en}`).join("\n")}\n\n${factsEn.join("\n")}\n\nAn original story by MyBirthSign. Lucky numbers are for fun only.\nSee all 12 signs: https://mybirthsign.com\n\n${DISC_EN}\n\n${tagsEn} #BedtimeStory #KidsStory`],
-    ["Description – Khmer", `នៅថ្ងៃ${dayKm} ${kA}មាសតូចមួយ និង${H.kind[1]}ឈ្មោះ${hk} ត្រូវស្វែងរករតនសម្បត្តិសំណាងបី ដើម្បី${Q.goal[1]} មុនពិធីបុណ្យព្រះចន្ទពេញវង់។ ជារឿងនិទានគំនូរជីវចលសម្រាប់គ្រួសារទាំងមូល ជាមួយពណ៌សំណាង ទិសសំណាង ពេលល្អ និងលេខសំណាងពិតប្រាកដ សម្រាប់អ្នកកើតឆ្នាំ${dayKm}ថ្ងៃនេះ។\n\nជំពូក៖\n${storyChapters.map(([t, , kmn]) => `${t} ${kmn}`).join("\n")}\n\n${factsKm.join("\n")}\n\nរឿងនិទានដើម ដោយ MyBirthSign។ លេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags} #រឿងនិទាន`],
+    ["Description – Khmer", `នៅថ្ងៃឆ្នាំ${dayKm} ${kA}មាសតូចមួយ និង${H.kind[1]}ឈ្មោះ${hk} ត្រូវស្វែងរករតនសម្បត្តិសំណាងបី ដើម្បី${Q.goal[1]} មុនពិធីបុណ្យព្រះចន្ទពេញវង់។ ជារឿងនិទានគំនូរជីវចលសម្រាប់គ្រួសារទាំងមូល ជាមួយពណ៌សំណាង ទិសសំណាង ពេលល្អ និងលេខសំណាងពិតប្រាកដ សម្រាប់អ្នកកើតឆ្នាំ${dayKm}ថ្ងៃនេះ។\n\nជំពូក៖\n${storyChapters.map(([t, , kmn]) => `${t} ${kmn}`).join("\n")}\n\n${factsKm.join("\n")}\n\nរឿងនិទានដើម ដោយ MyBirthSign។ លេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags} #រឿងនិទាន`],
   ];
   VIDEOS.forEach((v) => { v.posts = POSTS[v.id]; });
   const srtVid = {};
@@ -647,7 +650,7 @@ ${srtVid[v.id].km}\`\`\`
 ### Subtitles – English (${iso}-${v.id}.en.srt)
 \`\`\`
 ${srtVid[v.id].en}\`\`\``;
-  const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃ${dayKm})
+  const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃឆ្នាំ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
 Format: vertical 9:16 (YouTube Shorts, Facebook Reels, TikTok), about 45 seconds: 4 Veo scenes of about 8 seconds, then a lucky-numbers scene of about 10–12 seconds.
@@ -663,7 +666,7 @@ ${HERO(day)}
 ### Video prompt for Flow (9:16, about 8 seconds)
 Vertical 9:16. Premium 3D animated golden style, same ${day.toLowerCase()} as the reference picture. ${cap(LOOK[day])} sits peacefully on its glowing lotus under a huge full moon. A soft beam of moonlight falls on it, its golden details glow, and it rises gently into the air, floating slowly toward the moon with a trail of silver-gold sparkles and lotus petals. ${cap(SYMBOL[day].mood)} mood. Slow, smooth camera rising with it. No text.
 Audio: ${VOICE_EN} says: "Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! ${SYMBOL[day].en}" ${MUSIC}
-Khmer audio (use instead for the Khmer video): Audio: ${VOICE_KM} says in Khmer: "${kmFlow(`ថ្ងៃនេះជាថ្ងៃ${dayKm}! ${SYMBOL[day].km}`)}" ${MUSIC}
+Khmer audio (use instead for the Khmer video): Audio: ${VOICE_KM} says in Khmer: "${kmFlow(`ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}! ${SYMBOL[day].km}`)}" ${MUSIC}
 
 ### Caption – English
 ${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for the ${day}. Lucky numbers: ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (for fun only). All 12 signs: https://mybirthsign.com
@@ -728,12 +731,12 @@ Magical and powerful. A huge glowing golden zodiac wheel rises out of the lotus 
 
 ## On-screen captions (add in the editor)
 ### Khmer version
-1. ជោគជតារាសីប្រចាំថ្ងៃនេះ · ${D} · ថ្ងៃ${dayKm}
+1. ជោគជតារាសីប្រចាំថ្ងៃនេះ · ${D} · ថ្ងៃឆ្នាំ${dayKm}
 2. ${luckyLabelsKm}
-${careful.length ? `3. ${careful.map((a) => `${km(a)} – ${sign(a).label.km} · គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ`).join(" ")}` : "3. —"}
+${careful.length ? `3. ${careful.map((a) => `ឆ្នាំ${km(a)} – ${sign(a).label.km} · គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ`).join(" ")}` : "3. —"}
 4. ចូលមើលលម្អិតនៅ mybirthsign.com
 5. លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង
-${nums.map((n) => numLine(n, km(n.a))).join("\n")}
+${nums.map((n) => numLine(n, `ឆ្នាំ${km(n.a)}`)).join("\n")}
    សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ
 
 ### English version
@@ -752,10 +755,10 @@ Voice style (keep it the same every day so the channel has one recognisable voic
 Khmer note: if Flow does not pronounce Khmer well, use the English version in Flow and record the Khmer voice-over below yourself or with a Khmer text-to-speech app.
 
 ${[
-  ["1", `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! Here is your Chinese zodiac fortune for ${LD.replace(/^\w+, /, "")}.`, `ជោគជតារាសីប្រចាំថ្ងៃនេះ ថ្ងៃទី ${Number(iso.slice(8))} ខែ${["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"][Number(iso.slice(5,7))-1]}។ ថ្ងៃនេះជាថ្ងៃ${dayKm}!`],
-  ["2", `${list(lucky)} are the luckiest signs today!`, `ឆ្នាំ${kmList(lucky.map(km))} មានសំណាងល្អជាងគេនៅថ្ងៃនេះ!`],
-  ["3", careful.length ? `${list(careful)}, take it easy today. Slow down and rest.` : "Take a calm breath and enjoy the day.", careful.length ? `ឆ្នាំ${kmList(careful.map(km))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ។` : "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
-  ["5", `For lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Comment your lucky number and say it again!`, `សម្រាប់លេខសំណាង៖ ${nums.map((n) => `${km(n.a)} ${n.d2}`).join(" ")}! សូមសរសេរលេខសំណាងរបស់អ្នក ហើយនិយាយម្ដងទៀត!`],
+  ["1", `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! Here is your Chinese zodiac fortune for ${LD.replace(/^\w+, /, "")}.`, `ជោគជតារាសីប្រចាំថ្ងៃនេះ ថ្ងៃទី ${Number(iso.slice(8))} ខែ${["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"][Number(iso.slice(5,7))-1]}។ ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}!`],
+  ["2", `${list(lucky)} are the luckiest signs today!`, `${kmList(lucky.map((a) => `ឆ្នាំ${km(a)}`))} មានសំណាងល្អជាងគេនៅថ្ងៃនេះ!`],
+  ["3", careful.length ? `${list(careful)}, take it easy today. Slow down and rest.` : "Take a calm breath and enjoy the day.", careful.length ? `${kmList(careful.map((a) => `ឆ្នាំ${km(a)}`))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ។` : "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
+  ["5", `For lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Comment your lucky number and say it again!`, `សម្រាប់លេខសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2}`).join(" ")}! សូមសរសេរលេខសំណាងរបស់អ្នក ហើយនិយាយម្ដងទៀត!`],
   ["4", "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
 ].map(([n, en, kmL]) => `- **Scene ${n}**\n  - English: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\n  - Khmer: Audio: ${VOICE_KM} says in Khmer: "${kmFlow(kmL)}" ${MUSIC}`).join("\n")}
 
@@ -769,7 +772,7 @@ ${voiceEn.join("\n")}
 
 ## YouTube
 ### Title – Khmer
-ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃ${dayKm}
+ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃឆ្នាំ${dayKm}
 
 ### Title – English
 Daily Chinese Zodiac Fortune – ${D} | ${day} Day
@@ -777,10 +780,10 @@ Daily Chinese Zodiac Fortune – ${D} | ${day} Day
 ### Description – Khmer
 ${summaryKm}
 
-${inVideo.map((a) => `${km(a)}៖ ពណ៌${sign(a).lucky.color.km} · ${sign(a).lucky.time}`).join("\n")}
+${inVideo.map((a) => `ឆ្នាំ${km(a)}៖ ពណ៌${sign(a).lucky.color.km} · ${sign(a).lucky.time}`).join("\n")}
 
 លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង (1 ដល់ 5 ខ្ទង់)៖
-${nums.map((n) => numLine(n, km(n.a))).join("\n")}
+${nums.map((n) => numLine(n, `ឆ្នាំ${km(n.a)}`)).join("\n")}
 
 ${disclaimerNums}
 
@@ -808,12 +811,12 @@ ${tagsEn} #Shorts
 
 ## Facebook post caption
 ### Khmer
-🌙 ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃ${dayKm} ${EMO[day]}
+🌙 ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃឆ្នាំ${dayKm} ${EMO[day]}
 
-✨ ឆ្នាំសំណាងថ្ងៃនេះ៖ ${lucky.map((a) => `${km(a)} (${sign(a).label.km})`).join(" · ")}
-${careful.length ? `🌿 គួរប្រុងប្រយ័ត្ន៖ ${careful.map(km).join(" ")} – គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់ក្នុងការសម្រេចចិត្ត។\n` : ""}
+✨ ឆ្នាំសំណាងថ្ងៃនេះ៖ ${lucky.map((a) => `ឆ្នាំ${km(a)} (${sign(a).label.km})`).join(" · ")}
+${careful.length ? `🌿 គួរប្រុងប្រយ័ត្ន៖ ${careful.map((a) => `ឆ្នាំ${km(a)}`).join(" ")} – គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់ក្នុងការសម្រេចចិត្ត។\n` : ""}
 🔢 លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖
-${nums.map((n) => numLine(n, km(n.a))).join("\n")}
+${nums.map((n) => numLine(n, `ឆ្នាំ${km(n.a)}`)).join("\n")}
 
 👉 មើលរាសីទាំង 12 និងលេខសំណាងពេញលេញ៖ https://mybirthsign.com/km/
 
@@ -837,7 +840,7 @@ ${tagsEn}
 
 ## TikTok caption
 ### Khmer
-ជោគជតារាសីថ្ងៃនេះ ${D} ${EMO[day]} ថ្ងៃ${dayKm}! ឆ្នាំសំណាង៖ ${lucky.map(km).join(" ")} ✨ លេខសំណាង៖ ${nums.map((n) => `${km(n.a)} ${n.d2}`).join(" · ")} 🔢 ឆ្នាំអ្នកជាអ្វី? Comment ប្រាប់ផង 👇 (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ) Link នៅក្នុង bio 🌙
+ជោគជតារាសីថ្ងៃនេះ ${D} ${EMO[day]} ថ្ងៃឆ្នាំ${dayKm}! ឆ្នាំសំណាង៖ ${lucky.map((a) => `ឆ្នាំ${km(a)}`).join(" ")} ✨ លេខសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2}`).join(" · ")} 🔢 ឆ្នាំអ្នកជាអ្វី? Comment ប្រាប់ផង 👇 (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ) Link នៅក្នុង bio 🌙
 ${tags} #fyp #ChineseZodiac
 
 ### English
