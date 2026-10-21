@@ -1,3 +1,5 @@
+// Manual / preview tool. The daily channel post itself is sent by the Netlify scheduled function
+// netlify/functions/telegram-daily.mjs (token stored on Netlify). Use --dry to preview a day's message.
 // Posts the day's zodiac fortune to the MyBirthSign Telegram channel (Khmer first, then English).
 //
 //   node scripts/telegram-post.mjs --date 2026-10-22          send (needs the two secrets below)
