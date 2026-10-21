@@ -1,67 +1,75 @@
 1
-00:00:00,000 --> 00:00:01,644
+00:00:00,000 --> 00:00:01,296
 Is your sign one
 
 2
-00:00:01,694 --> 00:00:04,397
+00:00:01,346 --> 00:00:03,483
 of today's three luckiest?
 
 3
-00:00:04,447 --> 00:00:07,997
+00:00:03,533 --> 00:00:06,343
 Here's your Chinese zodiac fortune
 
 4
-00:00:08,047 --> 00:00:11,174
+00:00:06,393 --> 00:00:08,866
 for Thursday, 22 October 2026.
 
 5
-00:00:11,224 --> 00:00:13,397
-Today is a Snake day.
+00:00:08,916 --> 00:00:12,314
+Today is a Snake day, which traditionally
 
 6
-00:00:13,447 --> 00:00:15,621
-Snake, Ox and Rooster
+00:00:12,364 --> 00:00:15,763
+favors careful thinking and calm insight.
 
 7
-00:00:15,671 --> 00:00:18,691
-are the luckiest signs today.
+00:00:15,813 --> 00:00:18,959
+Snake, Ox and Rooster are the luckiest
 
 8
-00:00:18,741 --> 00:00:21,126
-Pig should take it easy
+00:00:19,009 --> 00:00:21,399
+signs, and Ox and Rooster may
 
 9
-00:00:21,176 --> 00:00:25,574
-slow down and avoid rushing big decisions.
+00:00:21,449 --> 00:00:23,670
+enjoy warm moments in love.
 
 10
-00:00:25,624 --> 00:00:28,115
-For lucky numbers today:
+00:00:23,720 --> 00:00:26,445
+Pig is encouraged to take it easy
 
 11
-00:00:28,165 --> 00:00:30,021
-Snake, 92 and 987.
+00:00:26,495 --> 00:00:29,557
+slow down, and be gentle with itself.
 
 12
-00:00:30,071 --> 00:00:31,609
-Ox, 18 and 414.
+00:00:29,607 --> 00:00:31,576
+For lucky numbers today:
 
 13
-00:00:31,659 --> 00:00:33,726
-Rooster, 72 and 848.
+00:00:31,626 --> 00:00:33,090
+Snake, 92 and 987.
 
 14
-00:00:33,776 --> 00:00:37,009
-Comment your lucky number below
+00:00:33,140 --> 00:00:34,352
+Ox, 18 and 414.
 
 15
-00:00:37,059 --> 00:00:38,809
-and say it again!
+00:00:34,402 --> 00:00:36,034
+Rooster, 72 and 848.
 
 16
-00:00:38,859 --> 00:00:42,938
-See all 12 signs and full lucky numbers
+00:00:36,084 --> 00:00:38,642
+Comment your lucky number below
 
 17
-00:00:42,988 --> 00:00:44,950
+00:00:38,692 --> 00:00:40,071
+and say it again!
+
+18
+00:00:40,121 --> 00:00:43,352
+See all 12 signs and full lucky numbers
+
+19
+00:00:43,402 --> 00:00:44,950
 at mybirthsign.com.

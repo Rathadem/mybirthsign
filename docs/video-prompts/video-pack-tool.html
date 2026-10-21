@@ -345,7 +345,7 @@ function kmNumber(n) {
   if (n < 100000) return kmNumber(Math.floor(n / 10000)) + "ម៉ឺន" + (n % 10000 ? kmNumber(n % 10000) : "");
   return String(n);
 }
-const kmSpeak = (t) => t.replace(/([\u1780-\u17ff]) (?=\d)/g, "$1").replace(/\d+/g, (d) => kmNumber(Number(d)));
+const kmSpeak = (t) => t.replace(/([\u1780-\u17d3]) (?=\d)/g, "$1").replace(/\d+/g, (d) => kmNumber(Number(d)));
 const MUSIC = "Gentle magical background music with soft chimes and a light Asian flute. No other speech.";
 // the luckiest animal of the day (the day animal): one-line symbolism for the hero picture, video and caption
 // (Rabbit line written by the owner; the others follow the same pattern with common traditional symbolism)
