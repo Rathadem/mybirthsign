@@ -1,67 +1,75 @@
 1
-00:00:00,000 --> 00:00:02,552
-Your Chinese zodiac fortune
+00:00:00,000 --> 00:00:01,345
+Is your sign one
 
 2
-00:00:02,602 --> 00:00:05,250
-for Monday, 19 October 2026.
+00:00:01,395 --> 00:00:03,613
+of today's three luckiest?
 
 3
-00:00:05,300 --> 00:00:07,177
-Today is a Tiger day
+00:00:03,663 --> 00:00:06,578
+Here's your Chinese zodiac fortune
 
 4
-00:00:07,227 --> 00:00:10,260
-full of brave and lively energy.
+00:00:06,628 --> 00:00:09,020
+for Monday, 19 October 2026.
 
 5
-00:00:10,310 --> 00:00:12,188
-Tiger, Horse and Dog
+00:00:09,070 --> 00:00:10,764
+Today is a Tiger day
 
 6
-00:00:12,238 --> 00:00:15,657
-are traditionally the luckiest signs
+00:00:10,814 --> 00:00:13,555
+full of brave and lively energy.
 
 7
-00:00:15,707 --> 00:00:19,415
-so they may find things flowing nicely.
+00:00:13,605 --> 00:00:15,299
+Tiger, Horse and Dog
 
 8
-00:00:19,465 --> 00:00:22,884
-Monkey is encouraged to take it easy
+00:00:15,349 --> 00:00:18,438
+are traditionally the luckiest signs
 
 9
-00:00:22,934 --> 00:00:26,063
-slow down, and be kind to itself.
+00:00:18,488 --> 00:00:21,840
+so they may find things flowing nicely.
 
 10
-00:00:26,113 --> 00:00:28,569
-Everyone can enjoy the day
+00:00:21,890 --> 00:00:24,979
+Monkey is encouraged to take it easy
 
 11
-00:00:28,619 --> 00:00:30,303
-with a calm heart.
+00:00:25,029 --> 00:00:27,857
+slow down, and be kind to itself.
 
 12
-00:00:30,353 --> 00:00:32,327
-Today's lucky numbers
+00:00:27,907 --> 00:00:30,124
+Everyone can enjoy the day
 
 13
-00:00:32,377 --> 00:00:36,085
-for the lucky signs: Tiger, 34 and 330.
+00:00:30,174 --> 00:00:31,694
+with a calm heart.
 
 14
-00:00:36,135 --> 00:00:37,819
-Horse, 79 and 737.
+00:00:31,744 --> 00:00:33,526
+Today's lucky numbers
 
 15
-00:00:37,869 --> 00:00:39,361
-Dog, 98 and 933.
+00:00:33,576 --> 00:00:36,927
+for the lucky signs: Tiger, 34 and 330.
 
 16
-00:00:39,411 --> 00:00:43,119
-See all 12 signs and full lucky numbers
+00:00:36,977 --> 00:00:38,497
+Horse, 79 and 737.
 
 17
-00:00:43,169 --> 00:00:44,950
+00:00:38,547 --> 00:00:39,892
+Dog, 98 and 933.
+
+18
+00:00:39,942 --> 00:00:43,293
+See all 12 signs and full lucky numbers
+
+19
+00:00:43,343 --> 00:00:44,950
 at mybirthsign.com.

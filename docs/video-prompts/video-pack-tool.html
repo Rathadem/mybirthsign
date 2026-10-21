@@ -330,6 +330,7 @@ const POSE = {
   Pig: "floats up from the lotus inside a glowing golden bubble, spinning happily as golden coins and petals swirl around it",
 };
 const STYLE = "Vertical 9:16. Premium 3D animated fantasy film quality, inspired by classic Disney and Pixar-style animated family films: cute and majestic golden zodiac characters with oversized sparkling eyes, adorable expressive faces, soft rounded features, polished gold textures with intricate engraved ornaments and delicate pink and gold accents, alive and emotionally expressive. Setting: a softly illuminated Khmer temple inspired by Angkor Wat under a glowing full moon and a deep indigo starry sky, floating lotus flowers, ornate pink-and-gold lotus details, magical sparkles and warm golden reflections. Cinematic lighting, rich colors, soft atmospheric glow, realistic metallic reflections, beautiful depth of field, gentle slow camera movement, professional animated-movie rendering. No text, no letters, no subtitles, no watermark, no logos.";
+const STYLE_WIDE = STYLE.replace("Vertical 9:16.", "Horizontal 16:9 (standard YouTube video).");
 const VOICE_EN = "a warm, cheerful young female narrator with a soft, magical storytelling tone, clear and friendly";
 const VOICE_KM = "a native Cambodian Khmer female narrator with clear, standard Phnom Penh pronunciation, warm, friendly and youthful, medium pitch, smooth and gentle, speaking slightly slowly (about 85 to 90 percent of normal speed), pronouncing every Khmer word fully and clearly, with natural Khmer rhythm and a short pause at each ។ (not English-accented, not robotic, not dramatic),";
 // Khmer for speaking: numbers written out as Khmer words, so a voice reads them in Khmer and not in English
@@ -458,13 +459,13 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   ].join(" ");
 
   const voiceKm = [
-    `ជោគជតារាសីប្រចាំថ្ងៃ សម្រាប់ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)}។`,
+    `តើរាសីរបស់អ្នក ស្ថិតក្នុងចំណោមបីឆ្នាំ ដែលមានសំណាងជាងគេថ្ងៃនេះឬទេ? នេះគឺជោគជតារាសី សម្រាប់ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)}។`,
     summaryKm,
     `លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2} និង ${n.d3}។`).join(" ")}`,
     "ចូលមើលលេខសំណាង និងលម្អិតសម្រាប់រាសីទាំង 12 នៅ mybirthsign.com",
   ];
   const voiceEn = [
-    `Your Chinese zodiac fortune for ${LD}.`,
+    `Is your sign one of today's three luckiest? Here's your Chinese zodiac fortune for ${LD}.`,
     summaryEn,
     `Today's lucky numbers for the lucky signs: ${nums.map((n) => `${n.a}, ${n.d2} and ${n.d3}.`).join(" ")}`,
     "See all 12 signs and full lucky numbers at mybirthsign.com.",
@@ -815,6 +816,71 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   VIDEOS.push({ id: "story", name: `Story video – YouTube (about ${Math.round(storyScenes.length * 10 / 60)} minutes)`, secs: storyScenes.length * 10, scenes: storyScenes,
     chapters: storyChapters.map(([t, en]) => [t, en]),
     intro: `"${storyTitle[0]}" (${storyTitle[1]}): an original fairy tale (${mmss(storyScenes.length * 10)}) starring today's luckiest animal. A new story every day: today the golden ${dl} and ${hn} the ${H.kind[0]} must ${Q.mission[0]} before the full-moon festival. Today's lucky color, direction, best time, lucky numbers and lucky days are part of the story. Make the picture of ${hn} once (prompt below) and add it and the ${day} picture as ingredients in Flow. ${storyScenes.length} clips of 10 seconds, in order 1 to ${storyScenes.length}.\n\n### Character prompt – ${hn} the ${H.kind[0]} (make once, keep it)\nCreate a premium-quality 3D animated fantasy character of ${H.look}, inspired by the charm of classic Disney and Pixar-style animated family films. Adorable expressive face, warm magical glow, on a glowing pink lotus by a pond at night, a softly lit Khmer temple inspired by Angkor Wat and a full moon behind. Cinematic lighting, beautiful depth of field. Square 1:1, full body visible, centered. No text, no letters, no watermark.` });
+  // ---- opening hooks: five truthful candidates per video, the strongest one opens the video
+  const aDay = /^[AEIOU]/.test(day) ? "an" : "a";
+  const clueEn = PI ? PI.traits.split(". ")[0].replace(/\.$/, "").toLowerCase() : "";
+  const clueKm = PK ? PK.traits.split("។")[0] : "";
+  const dateLineEn = `Today, ${LD}, is ${aDay} ${day} day.`;
+  const dateLineKm = `ថ្ងៃនេះ ${wdKm} ទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} គឺជាថ្ងៃ${dayKm}។`;
+  const HOOKS = {
+    "60s": { win: 1, why: "Specific and true (only the day's animal has a Great Day), creates curiosity, and every viewer wants to know if it is their sign.", list: [
+      ["Identity", `Born in the Year of the ${day}? Today is a Great Day for you. Here's your lucky color, time, and numbers.`, `អ្នកកើតឆ្នាំ${dayKm}មែនទេ? ថ្ងៃនេះ ជាថ្ងៃល្អខ្លាំងសម្រាប់អ្នក។ មកមើលពណ៌ ពេលវេលា និងលេខសំណាងរបស់អ្នក។`],
+      ["Curiosity", "Out of all twelve zodiac signs, only one has a Great Day today. Is it yours?", "ក្នុងចំណោមរាសីទាំង 12 មានតែមួយគត់ ដែលមានថ្ងៃល្អខ្លាំងនៅថ្ងៃនេះ។ តើជារាសីរបស់អ្នកឬទេ?"],
+      ["Question", "Which zodiac animal is the luckiest today? Here's the answer, and what it means for you.", "តើឆ្នាំណា មានសំណាងជាងគេនៅថ្ងៃនេះ? នេះគឺជាចម្លើយ និងអត្ថន័យសម្រាប់អ្នក។"],
+      ["Challenge", `Can you guess today's luckiest zodiac animal? Three clues: ${clueEn}.`, `ទាយមើល៖ តើឆ្នាំណា មានសំណាងជាងគេថ្ងៃនេះ? តម្រុយ៖ ${clueKm}។`],
+      ["Fact", `Today is ${aDay} ${day} day, and in the twelve-day zodiac cycle, that makes the ${day} today's luckiest sign.`, `ថ្ងៃនេះជាថ្ងៃ${dayKm} ហើយតាមវដ្ដដប់ពីរថ្ងៃ ឆ្នាំ${dayKm} គឺជារាសីដែលមានសំណាងជាងគេថ្ងៃនេះ។`],
+    ] },
+    "180s": { win: 0, why: "Speaks straight to the people this video is for, and promises exactly what the video delivers: lucky facts plus one honest reminder.", list: [
+      ["Daily fortune", `Born in the Year of the ${day}? Here's your lucky color, best time, and numbers for today, plus one gentle reminder.`, `អ្នកកើតឆ្នាំ${dayKm}មែនទេ? នេះគឺពណ៌ ពេលវេលា និងលេខសំណាងរបស់អ្នកថ្ងៃនេះ ព្រមទាំងការរំលឹកមួយផង។`],
+      ["Curiosity", "Out of all twelve zodiac signs, only one has a Great Day today. Is it yours?", "ក្នុងចំណោមរាសីទាំង 12 មានតែមួយគត់ ដែលមានថ្ងៃល្អខ្លាំងនៅថ្ងៃនេះ។ តើជារាសីរបស់អ្នកឬទេ?"],
+      ["Personality", `If you were born in the Year of the ${day}, people may describe you as ${clueEn}. Today, that side of you shines.`, `បើអ្នកកើតឆ្នាំ${dayKm} មនុស្សជុំវិញខ្លួន ប្រហែលជាស្គាល់អ្នកថា ${clueKm}។ ថ្ងៃនេះ ចំណុចល្អនោះកំពុងភ្លឺ។`],
+      ["Challenge", `Can you guess today's luckiest zodiac animal? Three clues: ${clueEn}.`, `ទាយមើល៖ តើឆ្នាំណា មានសំណាងជាងគេថ្ងៃនេះ? តម្រុយ៖ ${clueKm}។`],
+      ["Symbol", `${S9.en.split(",")[0]}. Today, the ${day} has its Great Day.`, `ថ្ងៃនេះ ជាថ្ងៃល្អខ្លាំងរបស់ឆ្នាំ${dayKm}។ មកស្គាល់សំណាងរបស់វា។`],
+    ] },
+    long: { win: 0, why: "Every viewer has a sign in this video, so this gives everyone a reason to keep watching until their chapter.", list: [
+      ["Curiosity", `${careful.length ? "Three signs are lucky today, and one should take it easy." : "Three signs are lucky today."} Where does your sign stand?`, `ថ្ងៃនេះ មានបីឆ្នាំដែលមានសំណាងល្អ${careful.length ? " និងមួយឆ្នាំដែលគួរសម្រាក" : ""}។ តើឆ្នាំរបស់អ្នក នៅត្រង់ណា?`],
+      ["Question", "Which of the twelve zodiac signs is the luckiest today?", "តើរាសីណា ក្នុងចំណោមរាសីទាំង 12 មានសំណាងជាងគេថ្ងៃនេះ?"],
+      ["Practical", "Your lucky color, best time, and direction for today, for all twelve signs, in about five minutes.", "ពណ៌ ពេលវេលា និងទិសសំណាងថ្ងៃនេះ សម្រាប់រាសីទាំង 12 ក្នុងរយៈពេលប្រហែលប្រាំនាទី។"],
+      ["Identity", "Whatever your sign, today has a lucky color and a best time just for you.", "មិនថាអ្នកកើតឆ្នាំអ្វីទេ ថ្ងៃនេះមានពណ៌សំណាង និងពេលល្អ សម្រាប់អ្នក។"],
+      ["Daily fortune", `Today is ${aDay} ${day} day. Here's what that means for every sign.`, `ថ្ងៃនេះជាថ្ងៃ${dayKm}។ មកមើលថា វាមានន័យយ៉ាងណា សម្រាប់រាសីនីមួយៗ។`],
+    ] },
+    story: { win: 0, why: "Opens on the story's real question, which the ending answers, and the hero is today's luckiest animal.", list: [
+      ["Story question", `Can one little golden ${dl} ${Q.mission[0]} before the full moon rises?`, `តើ${kA}មាសតូចមួយ អាច${Q.mission[1]} មុនព្រះចន្ទពេញវង់រះ បានទេ?`],
+      ["Mystery", "On the night of the full moon, something at the temple went wrong. Only one little hero could fix it.", "នៅយប់ព្រះចន្ទពេញវង់ មានរឿងមួយមិនប្រក្រតី នៅឯប្រាសាទ។ មានតែវីរបុរសតូចម្នាក់ប៉ុណ្ណោះ ដែលអាចជួយបាន។"],
+      ["Identity", `Born in the Year of the ${day}? This bedtime story is about you.`, `អ្នកកើតឆ្នាំ${dayKm}មែនទេ? រឿងនិទាននេះ គឺនិយាយអំពីអ្នក។`],
+      ["Challenge", `Three lucky treasures. One hard challenge. One golden ${dl}. Can it make it in time?`, `រតនសម្បត្តិសំណាងបី។ ឧបសគ្គមួយ។ ${kA}មាសមួយ។ តើវាទាន់ពេលឬទេ?`],
+      ["Practical", "Today's lucky color, direction, and numbers, told as a magical story.", "ពណ៌ ទិស និងលេខសំណាងថ្ងៃនេះ ក្នុងរឿងនិទានដ៏អស្ចារ្យមួយ។"],
+    ] },
+  };
+  // the winning hook opens each video (first scene's voice), replacing slow openings
+  const OPEN = {
+    "60s": (h) => [h[1] + " " + dateLineEn, h[2] + " " + dateLineKm],
+    "180s": (h) => [h[1], h[2]],
+    long: (h) => [h[1], h[2]],
+    story: (h) => [`${h[1]} Once upon a time, beside an ancient temple in Cambodia, our story begins.`, `${h[2]} កាលពីព្រេងនាយ នៅក្បែរប្រាសាទបុរាណមួយ ក្នុងប្រទេសកម្ពុជា រឿងរបស់យើងចាប់ផ្ដើម។`],
+  };
+  VIDEOS.forEach((v) => {
+    const H0 = HOOKS[v.id]; if (!H0) return;
+    const [en, kmL] = OPEN[v.id](H0.list[H0.win]);
+    v.scenes = v.scenes.slice(); v.scenes[0] = [v.scenes[0][0], v.scenes[0][1], en, kmL];
+    v.hookMd = `### Opening hook – 5 options\n${H0.list.map(([style, e, k], i) => `${i === H0.win ? "★ " : ""}${i + 1}. ${style}\n   English: ${e}\n   Khmer: ${k}`).join("\n")}\n★ = used to open this video. Why: ${H0.why}`;
+  });
+  const storyKw = `${day.toLowerCase()} bedtime story, zodiac story for kids, Chinese zodiac ${day.toLowerCase()}, Year of the ${day}, lucky color today, Khmer story, Cambodian story`;
+  const META = {
+    "60s": { topic: `Today's luckiest zodiac animal, the ${day}, in one minute. For viewers who follow Chinese zodiac signs, especially people born in the Year of the ${day}, scrolling Facebook Reels and TikTok.`,
+      kw: `${day.toLowerCase()} zodiac today, luckiest zodiac sign today, Chinese zodiac ${day.toLowerCase()}, lucky color today, lucky numbers today` },
+    "180s": { topic: `A three-minute guide to the ${day}'s Great Day: meaning, character, love, work, money and lucky details. For people born in the Year of the ${day} and zodiac fans on YouTube Shorts.`,
+      kw: `Year of the ${day}, ${day.toLowerCase()} fortune today, ${day.toLowerCase()} personality, Chinese zodiac ${day.toLowerCase()} lucky color, lucky numbers` },
+    long: { topic: "A full daily fortune for all twelve Chinese zodiac signs. For anyone who wants their own sign's rating, lucky color, best time and direction; chapters let each viewer jump to their sign.",
+      kw: "Chinese zodiac daily fortune, 12 zodiac signs today, daily horoscope Chinese zodiac, lucky color today, Khmer zodiac, ជោគជតារាសី" },
+    story: { topic: `An original animated bedtime story starring the ${day}, with today's lucky color, direction and numbers in the plot. For families, children and zodiac fans who enjoy gentle stories.`, kw: storyKw },
+  };
+  const AUDIO = `Music: ${MUSIC.replace(" No other speech.", "")} Keep it well below the voice (about 20 dB quieter) so every word is clear. Sound effects, used lightly: a soft chime when a lucky fact is revealed, a gentle whoosh on scene changes, a warm swell at the ending. No loud or scary sounds.`;
+  VIDEOS.forEach((v) => {
+    if (!META[v.id]) return;
+    v.metaMd = `### Topic and audience\n${META[v.id].topic}\n\n${v.hookMd}\n\n### Audio design\n${AUDIO}\n\n### Search keywords (YouTube tags)\n${META[v.id].kw}${v.id === "long" || v.id === "story" ? "\n\n### Format\nHorizontal 16:9 for a standard YouTube video. \"Copy + voice\" uses the 16:9 style line for this video." : "\n\n### Format\nVertical 9:16 (Shorts, Reels, TikTok)."}`;
+  });
+
   // titles and captions for the luckiest-animal videos, in both languages
   const longDateKm = `ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)}`;
   const factsEn = [`Lucky color: ${cen}`, `Best time: ${dd.lucky.time}`, `Lucky direction: ${dir}`, `Lucky numbers: ${n0.d1} · ${n0.d2} · ${n0.d3}`];
@@ -851,7 +917,7 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
   const videoMd = (v) => `## ${v.name}
 ${v.intro || `A ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference picture of the ${day} as an ingredient. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
-${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
+${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.metaMd ? `\n${v.metaMd}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
 ${v.scenes.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmSpeak(kmL)}" ${MUSIC}`).join("\n\n")}
 
 ## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : `${v.secs}-second video`}
@@ -1275,7 +1341,8 @@ function charactersMd(KM_NAMES) {
       var full = T[b.dataset.pre], lines = full.split("\n");
       var scene9 = lines.filter(function (l) { return !/^(English|Khmer) voice: /.test(l); }).join("\n");
       var vl = lines.filter(function (l) { return l.indexOf(b.dataset.nine === "en" ? "English voice: " : "Khmer voice: ") === 0; })[0] || "";
-      copy(STYLE + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English|Khmer) voice: /, ""), b, document.getElementById(b.dataset.pre));
+      var secT = (b.closest("details.sec") && b.closest("details.sec").querySelector("h2").textContent) || "";
+      copy((/^Long YouTube|^Story video/.test(secT) ? STYLE_WIDE : STYLE) + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English|Khmer) voice: /, ""), b, document.getElementById(b.dataset.pre));
     } else if (b.dataset.go) set(b.dataset.go);
   });
   // subtitle files: .srt is not a format the viewer can save directly, so the four files go in one .zip

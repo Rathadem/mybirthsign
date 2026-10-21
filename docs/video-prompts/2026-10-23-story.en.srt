@@ -1,22 +1,22 @@
 1
-00:00:00,000 --> 00:00:01,031
-Once upon a time
+00:00:00,000 --> 00:00:01,715
+Can one little golden horse
 
 2
-00:00:01,081 --> 00:00:03,464
-beside an ancient temple in Cambodia
+00:00:01,765 --> 00:00:03,479
+bring the bell's voice back
 
 3
-00:00:03,514 --> 00:00:06,099
-a great golden bell rang every evening.
+00:00:03,529 --> 00:00:05,244
+before the full moon rises?
 
 4
-00:00:06,149 --> 00:00:08,193
-Its sweet sound called everyone
+00:00:05,294 --> 00:00:07,989
+Once upon a time, beside an ancient temple
 
 5
-00:00:08,243 --> 00:00:09,950
-to the full-moon festival.
+00:00:08,039 --> 00:00:09,950
+in Cambodia, our story begins.
 
 6
 00:00:10,000 --> 00:00:11,181

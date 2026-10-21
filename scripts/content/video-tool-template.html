@@ -316,7 +316,8 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       var full = T[b.dataset.pre], lines = full.split("\n");
       var scene9 = lines.filter(function (l) { return !/^(English|Khmer) voice: /.test(l); }).join("\n");
       var vl = lines.filter(function (l) { return l.indexOf(b.dataset.nine === "en" ? "English voice: " : "Khmer voice: ") === 0; })[0] || "";
-      copy(STYLE + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English|Khmer) voice: /, ""), b, document.getElementById(b.dataset.pre));
+      var secT = (b.closest("details.sec") && b.closest("details.sec").querySelector("h2").textContent) || "";
+      copy((/^Long YouTube|^Story video/.test(secT) ? STYLE_WIDE : STYLE) + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English|Khmer) voice: /, ""), b, document.getElementById(b.dataset.pre));
     } else if (b.dataset.go) set(b.dataset.go);
   });
   // subtitle files: .srt is not a format the viewer can save directly, so the four files go in one .zip

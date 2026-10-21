@@ -1,51 +1,59 @@
 1
-00:00:00,000 --> 00:00:03,441
-Your Chinese zodiac fortune
+00:00:00,000 --> 00:00:01,764
+Is your sign one
 
 2
-00:00:03,491 --> 00:00:07,191
-for Tuesday, 20 October 2026.
+00:00:01,814 --> 00:00:04,711
+of today's three luckiest?
 
 3
-00:00:07,241 --> 00:00:10,036
-Today is a Rabbit day.
+00:00:04,761 --> 00:00:08,565
+Here's your Chinese zodiac fortune
 
 4
-00:00:10,086 --> 00:00:12,622
-Rabbit, Goat and Pig
+00:00:08,615 --> 00:00:11,852
+for Tuesday, 20 October 2026.
 
 5
-00:00:12,672 --> 00:00:16,372
-are the luckiest signs today.
+00:00:11,902 --> 00:00:14,345
+Today is a Rabbit day.
 
 6
-00:00:16,422 --> 00:00:19,864
-Rooster should take it easy
+00:00:14,395 --> 00:00:16,612
+Rabbit, Goat and Pig
 
 7
-00:00:19,914 --> 00:00:25,295
-slow down and avoid rushing big decisions.
+00:00:16,662 --> 00:00:19,900
+are the luckiest signs today.
 
 8
-00:00:25,345 --> 00:00:28,010
-Today's lucky numbers
+00:00:19,950 --> 00:00:22,960
+Rooster should take it easy
 
 9
-00:00:28,060 --> 00:00:33,183
-for the lucky signs: Rabbit, 64 and 436.
+00:00:23,010 --> 00:00:27,721
+slow down and avoid rushing big decisions.
 
 10
-00:00:33,233 --> 00:00:35,381
-Goat, 21 and 292.
+00:00:27,771 --> 00:00:30,101
+Today's lucky numbers
 
 11
-00:00:35,431 --> 00:00:37,450
-Pig, 88 and 827.
+00:00:30,151 --> 00:00:34,635
+for the lucky signs: Rabbit, 64 and 436.
 
 12
-00:00:37,500 --> 00:00:42,493
-See all 12 signs and full lucky numbers
+00:00:34,685 --> 00:00:36,562
+Goat, 21 and 292.
 
 13
-00:00:42,543 --> 00:00:44,950
+00:00:36,612 --> 00:00:38,376
+Pig, 88 and 827.
+
+14
+00:00:38,426 --> 00:00:42,796
+See all 12 signs and full lucky numbers
+
+15
+00:00:42,846 --> 00:00:44,950
 at mybirthsign.com.

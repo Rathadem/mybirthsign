@@ -1,51 +1,59 @@
 1
-00:00:00,000 --> 00:00:03,503
-Your Chinese zodiac fortune
+00:00:00,000 --> 00:00:01,791
+Is your sign one
 
 2
-00:00:03,553 --> 00:00:07,187
-for Friday, 23 October 2026.
+00:00:01,841 --> 00:00:04,784
+of today's three luckiest?
 
 3
-00:00:07,237 --> 00:00:09,950
-Today is a Horse day.
+00:00:04,834 --> 00:00:08,697
+Here's your Chinese zodiac fortune
 
 4
-00:00:10,000 --> 00:00:12,582
-Horse, Tiger and Dog
+00:00:08,747 --> 00:00:11,919
+for Friday, 23 October 2026.
 
 5
-00:00:12,632 --> 00:00:16,397
-are the luckiest signs today.
+00:00:11,969 --> 00:00:14,336
+Today is a Horse day.
 
 6
-00:00:16,447 --> 00:00:19,424
-Rat should take it easy
+00:00:14,386 --> 00:00:16,638
+Horse, Tiger and Dog
 
 7
-00:00:19,474 --> 00:00:24,950
-slow down and avoid rushing big decisions.
+00:00:16,688 --> 00:00:19,976
+are the luckiest signs today.
 
 8
-00:00:25,000 --> 00:00:27,713
-Today's lucky numbers
+00:00:20,026 --> 00:00:22,623
+Rat should take it easy
 
 9
-00:00:27,763 --> 00:00:32,845
-for the lucky signs: Horse, 73 and 339.
+00:00:22,673 --> 00:00:27,456
+slow down and avoid rushing big decisions.
 
 10
-00:00:32,895 --> 00:00:35,213
-Tiger, 41 and 195.
+00:00:27,506 --> 00:00:29,873
+Today's lucky numbers
 
 11
-00:00:35,263 --> 00:00:37,318
-Dog, 34 and 494.
+00:00:29,923 --> 00:00:34,362
+for the lucky signs: Horse, 73 and 339.
 
 12
-00:00:37,368 --> 00:00:42,450
-See all 12 signs and full lucky numbers
+00:00:34,412 --> 00:00:36,433
+Tiger, 41 and 195.
 
 13
-00:00:42,500 --> 00:00:44,950
+00:00:36,483 --> 00:00:38,275
+Dog, 34 and 494.
+
+14
+00:00:38,325 --> 00:00:42,763
+See all 12 signs and full lucky numbers
+
+15
+00:00:42,813 --> 00:00:44,950
 at mybirthsign.com.
