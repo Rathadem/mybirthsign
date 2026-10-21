@@ -329,7 +329,7 @@ const POSE = {
   Dog: "bounds joyfully into the air and flies in a loop, a golden glowing trail and paw-print sparkles behind it",
   Pig: "floats up from the lotus inside a glowing golden bubble, spinning happily as golden coins and petals swirl around it",
 };
-const STYLE = "Vertical 9:16. Premium 3D animated fantasy film quality, inspired by classic Disney and Pixar-style animated family films: cute and majestic golden zodiac characters with oversized sparkling eyes, adorable expressive faces, soft rounded features, polished gold textures with intricate engraved ornaments and delicate pink and gold accents, alive and emotionally expressive. Setting: a softly illuminated Khmer temple inspired by Angkor Wat under a glowing full moon and a deep indigo starry sky, floating lotus flowers, ornate pink-and-gold lotus details, magical sparkles and warm golden reflections. Cinematic lighting, rich colors, soft atmospheric glow, realistic metallic reflections, beautiful depth of field, gentle slow camera movement, professional animated-movie rendering. No text, no letters, no subtitles, no watermark, no logos.";
+const STYLE = "Vertical 9:16. Premium 3D animated fantasy film quality, inspired by classic Disney and Pixar-style animated family films: cute and majestic golden zodiac characters with oversized sparkling eyes, adorable expressive faces, soft rounded features, polished gold textures with intricate engraved ornaments and delicate pink and gold accents, alive and emotionally expressive. Setting: a softly illuminated Khmer temple inspired by Angkor Wat under a glowing full moon and a deep indigo starry sky, floating lotus flowers, ornate pink-and-gold lotus details, magical sparkles and warm golden reflections. Cinematic lighting, rich colors, soft atmospheric glow, realistic metallic reflections, beautiful depth of field, gentle slow camera movement, professional animated-movie rendering. The zodiac animals never talk and never move their mouths; only Chanda, the presenter, speaks. No text, no letters, no subtitles, no watermark, no logos.";
 const STYLE_WIDE = STYLE.replace("Vertical 9:16.", "Horizontal 16:9 (standard YouTube video).");
 const VOICE_EN = "a warm, cheerful young female narrator with a soft, magical storytelling tone, clear and friendly";
 const VOICE_KM = "a native Cambodian Khmer female narrator with clear, standard Phnom Penh pronunciation, warm, friendly and youthful, medium pitch, smooth and gentle, speaking slightly slowly (about 85 to 90 percent of normal speed), pronouncing every Khmer word fully and clearly, with natural Khmer rhythm and a short pause at each ។ (not English-accented, not robotic, not dramatic),";
@@ -348,7 +348,13 @@ function kmNumber(n) {
 // Google Flow prompts only: "របស់" written "របោះ" so Flow pronounces it the way it is said
 const kmFlow = (t) => kmSpeak(t).replace(/របស់/g, "របោះ");
 const kmSpeak = (t) => t.replace(/([\u1780-\u17d3]) (?=\d)/g, "$1").replace(/\d+/g, (d) => kmNumber(Number(d)));
-const MUSIC = "Gentle magical background music with soft chimes and a light Asian flute. No other speech.";
+const MUSIC = "Gentle magical background music with soft chimes and a light Asian flute. No other voices: the animals do not speak.";
+// the channel's presenter: the only one who speaks. She is on camera in the first scene (the hook) and is the
+// off-screen narrator in every other scene.
+const HOST = ["Chanda", "ចន្ទា"];
+const HOST_LOOK = "Chanda, a friendly young Cambodian woman presenter with warm brown eyes, a bright natural smile, long black hair in a low bun with a small golden lotus hairpin, wearing a cream silk blouse, a deep navy sampot skirt with fine gold patterns and a small golden zodiac-wheel pendant";
+const HOST_CHAR = `Create a premium-quality 3D animated character, inspired by the charm and warmth of classic Disney and Pixar-style animated family films: ${HOST_LOOK}. Expressive, kind face, natural proportions, graceful and confident posture, one hand raised in a friendly welcome. She stands on a moonlit temple terrace with a softly illuminated Khmer temple inspired by Angkor Wat, a glowing full moon, floating lanterns and pink lotus flowers behind her. Cinematic lighting, warm golden rim light, deep navy and purple night sky, rich colors, beautiful depth of field, professional animated-movie rendering. Composition: vertical 9:16, from the knees up, centered, facing the camera. Restrictions: no text, no letters, no watermark, no logo. Keep her design exactly the same in every video.`;
+const audio = (lang, onCam, line) => `Audio: ${HOST[0]}${onCam ? ", on camera, looking at the viewer with natural lip movements," : " (voice-over only; she is not on screen),"} ${lang === "km" ? VOICE_KM.replace(/,$/, "") : VOICE_EN}, says${lang === "km" ? " in Khmer" : ""}: "${line}" ${MUSIC}`;
 // the luckiest animal of the day (the day animal): one-line symbolism for the hero picture, video and caption
 // (Rabbit line written by the owner; the others follow the same pattern with common traditional symbolism)
 const SYMBOL = {
@@ -612,7 +618,7 @@ function buildPack(iso, F, forSign, data = null, P = null) {
     { id: "180s", name: "180-second video – YouTube", secs: 180, keys: ["moon", "appear", "meaning", "personality", "magic", "love", "work", "money", "color", "time", "direction", "numbers", "luckydays", "reminder", "wish", "thanks", "recap", "end"] },
   ].map((v) => ({ ...v, scenes: v.keys.map((k) => SC[k]) }));
   VIDEOS.push({ id: "long", name: `Long YouTube video – all 12 signs (about ${Math.round(longScenes.length * 10 / 60)} minutes)`, secs: longScenes.length * 10, scenes: longScenes, chapters: longChapters,
-    intro: `A long YouTube video (${mmss(longScenes.length * 10)}): today's luckiest animal, an overview, then all 12 signs in order (two 10-second clips each), then a short closing. Lucky numbers are given only for today's lucky signs. Add the 12 character pictures as ingredients (each sign's clips use its own picture). Set the clip length in Flow to 10 seconds. For each scene, press "Copy + English voice" or "Copy + Khmer voice". Put the clips in order 1 to ${longScenes.length}.` });
+    intro: `A long YouTube video (${mmss(longScenes.length * 10)}): today's luckiest animal, an overview, then all 12 signs in order (two 10-second clips each), then a short closing. Lucky numbers are given only for today's lucky signs. Add Chanda and the 12 character pictures as ingredients (each sign's clips use its own picture). Chanda opens the video on camera and narrates the rest off screen; the animals never speak. Set the clip length in Flow to 10 seconds. For each scene, press "Copy + English voice" or "Copy + Khmer voice". Put the clips in order 1 to ${longScenes.length}.` });
   // subtitles locked to the scenes: each scene's lines share its own 10 seconds
   const srtFor = (scenes, lang) => {
     let n = 0;
@@ -820,7 +826,7 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   const storyChapters = [[0, "Once upon a time", "កាលពីព្រេងនាយ"], [8, "The lucky color", "ពណ៌សំណាង"], [10, "The lucky path", "ផ្លូវសំណាង"], [15, "The stone door", "ទ្វារថ្ម"], [22, "The full-moon festival", "ពិធីបុណ្យព្រះចន្ទពេញវង់"], [27, "Today's luck", "សំណាងថ្ងៃនេះ"]].map(([i, en, kmn]) => [mmss(i * 10), en, kmn]);
   VIDEOS.push({ id: "story", name: `Story video – YouTube (about ${Math.round(storyScenes.length * 10 / 60)} minutes)`, secs: storyScenes.length * 10, scenes: storyScenes,
     chapters: storyChapters.map(([t, en]) => [t, en]),
-    intro: `"${storyTitle[0]}" (${storyTitle[1]}): an original fairy tale (${mmss(storyScenes.length * 10)}) starring today's luckiest animal. A new story every day: today the golden ${dl} and ${hn} the ${H.kind[0]} must ${Q.mission[0]} before the full-moon festival. Today's lucky color, direction, best time, lucky numbers and lucky days are part of the story. Make the picture of ${hn} once (prompt below) and add it and the ${day} picture as ingredients in Flow. ${storyScenes.length} clips of 10 seconds, in order 1 to ${storyScenes.length}.\n\n### Character prompt – ${hn} the ${H.kind[0]} (make once, keep it)\nCreate a premium-quality 3D animated fantasy character of ${H.look}, inspired by the charm of classic Disney and Pixar-style animated family films. Adorable expressive face, warm magical glow, on a glowing pink lotus by a pond at night, a softly lit Khmer temple inspired by Angkor Wat and a full moon behind. Cinematic lighting, beautiful depth of field. Square 1:1, full body visible, centered. No text, no letters, no watermark.` });
+    intro: `"${storyTitle[0]}" (${storyTitle[1]}): an original fairy tale (${mmss(storyScenes.length * 10)}) starring today's luckiest animal. A new story every day: today the golden ${dl} and ${hn} the ${H.kind[0]} must ${Q.mission[0]} before the full-moon festival. Today's lucky color, direction, best time, lucky numbers and lucky days are part of the story. Make the picture of ${hn} once (prompt below) and add it, Chanda and the ${day} picture as ingredients in Flow. Chanda opens the story on camera and narrates the rest off screen; ${hn} and the animals never speak (their words are told by Chanda). ${storyScenes.length} clips of 10 seconds, in order 1 to ${storyScenes.length}.\n\n### Character prompt – ${hn} the ${H.kind[0]} (make once, keep it)\nCreate a premium-quality 3D animated fantasy character of ${H.look}, inspired by the charm of classic Disney and Pixar-style animated family films. Adorable expressive face, warm magical glow, on a glowing pink lotus by a pond at night, a softly lit Khmer temple inspired by Angkor Wat and a full moon behind. Cinematic lighting, beautiful depth of field. Square 1:1, full body visible, centered. No text, no letters, no watermark.` });
   // ---- opening hooks: five truthful candidates per video, the strongest one opens the video
   const aDay = /^[AEIOU]/.test(day) ? "an" : "a";
   const clueEn = PI ? PI.traits.split(". ")[0].replace(/\.$/, "").toLowerCase() : "";
@@ -867,7 +873,11 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   VIDEOS.forEach((v) => {
     const H0 = HOOKS[v.id]; if (!H0) return;
     const [en, kmL] = OPEN[v.id](H0.list[H0.win]);
-    v.scenes = v.scenes.slice(); v.scenes[0] = [v.scenes[0][0], v.scenes[0][1], en, kmL];
+    const behind = v.id === "long" ? "twelve cute golden zodiac animals sit on glowing lotus pedestals in a half circle, three of them shining brighter"
+      : `${LOOK[day]} glows softly on its lotus pedestal`;
+    const hostShot = `${cap(HOST_LOOK)}, stands on the moonlit temple terrace beside the lotus pond, facing the camera, smiling warmly and speaking directly to the viewer with natural lip movements and small, friendly hand gestures${v.id === "story" ? ", holding a glowing golden storybook as if about to begin a bedtime story" : ""}. Behind her, ${behind}; the animals look around curiously but do not speak. Medium shot, gentle push-in toward her face. Chanda matches her reference image${v.id === "long" ? "" : `; the ${dl} matches its reference image`}.`;
+    v.host = true;
+    v.scenes = v.scenes.slice(); v.scenes[0] = ["The hook – Chanda on camera", hostShot, en, kmL];
     v.hookMd = `### Opening hook – 5 options\n${H0.list.map(([style, e, k], i) => `${i === H0.win ? "★ " : ""}${i + 1}. ${style}\n   English: ${e}\n   Khmer: ${k}`).join("\n")}\n★ = used to open this video. Why: ${H0.why}`;
   });
   const storyKw = `${day.toLowerCase()} bedtime story, zodiac story for kids, Chinese zodiac ${day.toLowerCase()}, Year of the ${day}, lucky color today, Khmer story, Cambodian story`;
@@ -921,9 +931,9 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   const srtVid = {};
   VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
   const videoMd = (v) => `## ${v.name}
-${v.intro || `A ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference picture of the ${day} as an ingredient. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
+${v.intro || `A ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference pictures of Chanda and the ${day} as ingredients. Chanda opens the video on camera with the hook and narrates the rest off screen; the animals never speak. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
 ${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.metaMd ? `\n${v.metaMd}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
-${v.scenes.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\nKhmer voice: Audio: ${VOICE_KM} says in Khmer: "${kmFlow(kmL)}" ${MUSIC}`).join("\n\n")}
+${v.scenes.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: ${audio("en", i === 0 && v.host, en)}\nKhmer voice: ${audio("km", i === 0 && v.host, kmFlow(kmL))}`).join("\n\n")}
 
 ## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : `${v.secs}-second video`}
 The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
@@ -956,8 +966,8 @@ ${HERO(day)}
 
 ### Video prompt for Flow (9:16, about 8 seconds)
 Vertical 9:16. Premium 3D animated golden style, same ${day.toLowerCase()} as the reference picture. ${cap(LOOK[day])} sits peacefully on its glowing lotus under a huge full moon. A soft beam of moonlight falls on it, its golden details glow, and it rises gently into the air, floating slowly toward the moon with a trail of silver-gold sparkles and lotus petals. ${cap(SYMBOL[day].mood)} mood. Slow, smooth camera rising with it. No text.
-Audio: ${VOICE_EN} says: "Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! ${SYMBOL[day].en}" ${MUSIC}
-Khmer audio (use instead for the Khmer video): Audio: ${VOICE_KM} says in Khmer: "${kmFlow(`ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}! ${SYMBOL[day].km}`)}" ${MUSIC}
+${audio("en", false, `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! ${SYMBOL[day].en}`)}
+Khmer audio (use instead for the Khmer video): ${audio("km", false, kmFlow(`ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}! ${SYMBOL[day].km}`))}
 
 ### Caption – English
 ${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for the ${day}. Lucky numbers: ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (for fun only). All 12 signs: https://mybirthsign.com
@@ -993,6 +1003,7 @@ ${STYLE}
 Optional ready-made references: your site's golden animal pictures, e.g. https://mybirthsign.com/images/profile/spirit-tiger.webp. Make each picture once, then add it as a reference image ("ingredient") in Flow, or use it as the starting image of a scene.
 
 ### Character reference image prompts
+- **${HOST[0]} (${HOST[1]}), the presenter (make once, use in every video):** ${HOST_CHAR}
 ${inVideo.map((a) => `- **${a}:** ${CHAR(a)}`).join("\n")}
 
 ### Start-frame image prompts (make the picture, then animate it with "frames to video")
@@ -1005,8 +1016,8 @@ ${careful.length ? `3. Vertical 9:16. Premium 3D animated golden style, same cha
 ### YouTube thumbnail image prompt
 Vertical 9:16 (can be cropped to 16:9). Premium 3D golden-style close-up of ${LOOK[day]} facing the viewer in warm golden evening light, an ancient Khmer temple and a glowing full moon softly blurred behind, ${lucky.filter((a) => a !== day).length ? `${looks(lucky.filter((a) => a !== day))} smaller in the background, ` : ""}glowing golden aura, vivid, powerful and eye-catching. No text, no letters, no logos. (Add the title and date in your editor.)
 
-## Scene 1 – ${day} day
-Magical and powerful. ${cap(LOOK[day])} stands on its glowing lotus pedestal on the pond in front of the Angkor-style temple under a huge full moon. Its eyes light up, a golden aura bursts around it, and it ${POSE[day]}. The lotus pond ripples with golden light and lanterns rise into the sky. Dynamic camera: start close on its face, then sweep up and follow it through the air. Cute, majestic and full of energy, matching the reference image.
+## Scene 1 – ${day} day (Chanda on camera)
+${cap(HOST_LOOK)}, stands in front of the Angkor-style temple at night, facing the camera and speaking to the viewer with natural lip movements, then turns and gestures toward the pond. Chanda matches her reference image. Then: magical and powerful. ${cap(LOOK[day])} stands on its glowing lotus pedestal on the pond in front of the Angkor-style temple under a huge full moon. Its eyes light up, a golden aura bursts around it, and it ${POSE[day]}. The lotus pond ripples with golden light and lanterns rise into the sky. Dynamic camera: start close on its face, then sweep up and follow it through the air. Cute, majestic and full of energy, matching the reference image.
 
 ## Scene 2 – Lucky signs
 Magical and powerful. ${cap(looks(lucky))} fly in from three directions on trails of golden light and land together on glowing lotus pedestals in front of the temple. As they land, a ring of golden energy explodes outward, lotus flowers bloom across the pond and a shower of sparkles and gold coins falls from the sky. They look at each other and cheer. The camera orbits around them in a smooth circle. The animals match the reference images.
@@ -1051,7 +1062,7 @@ ${[
   ["3", careful.length ? `${list(careful)}, take it easy today. Slow down and rest.` : "Take a calm breath and enjoy the day.", careful.length ? `${kmList(careful.map((a) => `ឆ្នាំ${km(a)}`))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ។` : "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
   ["5", `For lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Comment your lucky number and say it again!`, `សម្រាប់លេខសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2}`).join(" ")}! សូមសរសេរលេខសំណាងរបស់អ្នក ហើយនិយាយម្ដងទៀត!`],
   ["4", "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
-].map(([n, en, kmL]) => `- **Scene ${n}**\n  - English: Audio: ${VOICE_EN} says: "${en}" ${MUSIC}\n  - Khmer: Audio: ${VOICE_KM} says in Khmer: "${kmFlow(kmL)}" ${MUSIC}`).join("\n")}
+].map(([n, en, kmL]) => `- **Scene ${n}**\n  - English: ${audio("en", n === "1", en)}\n  - Khmer: ${audio("km", n === "1", kmFlow(kmL))}`).join("\n")}
 
 ## Voice-over – Khmer (about 45 seconds)
 ${voiceKm.map(kmSpeak).join("\n")}
@@ -1160,7 +1171,7 @@ ${srtEn}\`\`\`
 // the full set of 12 character prompts (profile pictures / collection artwork / video references)
 function charactersMd(KM_NAMES) {
   const ORDER = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
-  return `# 12 Zodiac Characters — the look you chose (see characters/*.jpg for the approved examples)\n\n# 12 Zodiac Characters — master prompts (Disney/Pixar-inspired golden style)\n\nMake each character once (square 1:1), keep the pictures, and add them as reference images ("ingredients") in Flow for every video, so each animal always looks the same.\nIf a tool refuses brand names, remove "inspired by … Disney and Pixar-style" — the rest of the description keeps the look.\n\n${ORDER.map((a) => `## ${a} (${KM_NAMES[a]})\n${CHAR(a)}\n`).join("\n")}`;
+  return `# 12 Zodiac Characters — the look you chose (see characters/*.jpg for the approved examples)\n\n# 12 Zodiac Characters — master prompts (Disney/Pixar-inspired golden style)\n\nMake each character once (square 1:1), keep the pictures, and add them as reference images ("ingredients") in Flow for every video, so each animal always looks the same.\nIf a tool refuses brand names, remove "inspired by … Disney and Pixar-style" — the rest of the description keeps the look.\n\n## ${HOST[0]} (${HOST[1]}) – the presenter\n${HOST_CHAR}\n\n${ORDER.map((a) => `## ${a} (${KM_NAMES[a]})\n${CHAR(a)}\n`).join("\n")}`;
 }
 
 </script>
@@ -1262,7 +1273,8 @@ function charactersMd(KM_NAMES) {
       });
       html += "</div></details>";
     });
-    html += '<details class="sec" id="secchars"><summary><h2>Character prompts – all 12 animals</h2><button data-copy="chars">Copy section</button></summary><div class="secbody">' +
+    html += '<details class="sec" id="secchars"><summary><h2>Character prompts – Chanda and the 12 animals</h2><button data-copy="chars">Copy section</button></summary><div class="secbody">' +
+      '<div class="block"><h3>' + HOST[0] + " · " + esc(HOST[1]) + ' · the presenter</h3><pre class="txt" id="chost">' + esc(HOST_CHAR) + '</pre><div class="row"><button data-copy="chost">Copy</button></div></div>' +
       ORDER.map(function (a, i) { return '<div class="block"><h3>' + a + " · " + esc(KM_NAMES[a]) + '</h3><pre class="txt" id="c' + i + '">' + esc(CHAR(a)) + '</pre><div class="row"><button data-copy="c' + i + '">Copy</button></div></div>'; }).join("") +
       "</div></details>";
     $("pack").innerHTML = html;
@@ -1273,6 +1285,7 @@ function charactersMd(KM_NAMES) {
     secs.forEach(function (s, si) { s.blocks.forEach(function (b, bi) { texts["b" + si + "_" + bi] = b.code ? b.text : plain(b.text); }); });
     texts.chars = ORDER.map(function (a) { return a + " (" + KM_NAMES[a] + ")\n" + CHAR(a); }).join("\n\n");
     ORDER.forEach(function (a, i) { texts["c" + i] = CHAR(a); });
+    texts.chost = HOST_CHAR;
     $("pack").__texts = texts; $("pack").__voices = voices;
   }
 

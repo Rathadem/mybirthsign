@@ -232,7 +232,8 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       });
       html += "</div></details>";
     });
-    html += '<details class="sec" id="secchars"><summary><h2>Character prompts – all 12 animals</h2><button data-copy="chars">Copy section</button></summary><div class="secbody">' +
+    html += '<details class="sec" id="secchars"><summary><h2>Character prompts – Chanda and the 12 animals</h2><button data-copy="chars">Copy section</button></summary><div class="secbody">' +
+      '<div class="block"><h3>' + HOST[0] + " · " + esc(HOST[1]) + ' · the presenter</h3><pre class="txt" id="chost">' + esc(HOST_CHAR) + '</pre><div class="row"><button data-copy="chost">Copy</button></div></div>' +
       ORDER.map(function (a, i) { return '<div class="block"><h3>' + a + " · " + esc(KM_NAMES[a]) + '</h3><pre class="txt" id="c' + i + '">' + esc(CHAR(a)) + '</pre><div class="row"><button data-copy="c' + i + '">Copy</button></div></div>'; }).join("") +
       "</div></details>";
     $("pack").innerHTML = html;
@@ -243,6 +244,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     secs.forEach(function (s, si) { s.blocks.forEach(function (b, bi) { texts["b" + si + "_" + bi] = b.code ? b.text : plain(b.text); }); });
     texts.chars = ORDER.map(function (a) { return a + " (" + KM_NAMES[a] + ")\n" + CHAR(a); }).join("\n\n");
     ORDER.forEach(function (a, i) { texts["c" + i] = CHAR(a); });
+    texts.chost = HOST_CHAR;
     $("pack").__texts = texts; $("pack").__voices = voices;
   }
 
