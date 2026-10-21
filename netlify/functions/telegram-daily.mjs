@@ -10,6 +10,8 @@
 //                       about 24 hours), so setting it is recommended.
 // The facts come from the day's published data file (/data/daily/<date>.json, made by the daily GitHub job from
 // the site's fixed rules); lucky numbers from js/lucky-digits.js, the same as on the website.
+// The response status shows the outcome in Netlify's request logs: 200 posted, 503 no token, 409 no channel,
+// 424 no data file, 425 old data, 401 bad token, 403 bot is not allowed to post, 400 channel not found, 502 other.
 import luckyDigits from "../../js/lucky-digits.js";
 
 const SITE = "https://mybirthsign.com";
@@ -67,19 +69,19 @@ export function buildMessage(date, data) {
 
 export default async () => {
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  if (!token) { console.log("telegram-daily: TELEGRAM_BOT_TOKEN is not set; nothing posted."); return new Response("not configured"); }
+  if (!token) { console.log("telegram-daily: TELEGRAM_BOT_TOKEN is not set; nothing posted."); return new Response("not configured: TELEGRAM_BOT_TOKEN missing", { status: 503 }); }
   const chat = process.env.TELEGRAM_CHAT_ID || (await findChannel(token));
-  if (!chat) { console.error("telegram-daily: no channel found. Set TELEGRAM_CHAT_ID to the channel @username."); return new Response("no channel"); }
+  if (!chat) { console.error("telegram-daily: no channel found. Set TELEGRAM_CHAT_ID to the channel @username."); return new Response("no channel: set TELEGRAM_CHAT_ID", { status: 409 }); }
   const date = cambodiaToday();
   const res = await fetch(`${SITE}/data/daily/${date}.json`, { headers: { "Cache-Control": "no-cache" } });
-  if (!res.ok) { console.error(`telegram-daily: no data file for ${date} (HTTP ${res.status}); nothing posted.`); return new Response("no data"); }
+  if (!res.ok) { console.error(`telegram-daily: no data file for ${date} (HTTP ${res.status}); nothing posted.`); return new Response(`no data file for ${date} (HTTP ${res.status})`, { status: 424 }); }
   const data = await res.json();
-  if (data.date !== date) { console.error(`telegram-daily: data file is for ${data.date}, not ${date}; nothing posted.`); return new Response("stale data"); }
+  if (data.date !== date) { console.error(`telegram-daily: data file is for ${data.date}, not ${date}; nothing posted.`); return new Response(`data file is for ${data.date}, not ${date}`, { status: 425 }); }
   const { text, previewUrl } = buildMessage(date, data);
   const out = await tg(token, "sendMessage", { chat_id: chat, text, parse_mode: "HTML", link_preview_options: { url: previewUrl, prefer_large_media: true, show_above_text: true } });
-  if (!out.ok) { console.error(`telegram-daily: Telegram refused the post to ${chat}: ${out.description}`); return new Response("telegram error"); }
+  if (!out.ok) { console.error(`telegram-daily: Telegram refused the post to ${chat}: ${out.description}`); return new Response(`Telegram refused (${out.error_code}): ${out.description}`, { status: out.error_code === 401 ? 401 : out.error_code === 403 ? 403 : out.error_code === 400 ? 400 : 502 }); }
   console.log(`telegram-daily: posted ${date} to ${chat} (message ${out.result.message_id}).`);
-  return new Response("posted");
+  return new Response(`posted ${date} (message ${out.result.message_id})`, { status: 200 });
 };
 
 export const config = { schedule: "30 17 * * *" };
