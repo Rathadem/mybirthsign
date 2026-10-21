@@ -100,3 +100,30 @@ jobs:
           git commit -m "Daily fortune: ${{ steps.day.outputs.date }} (${{ steps.day.outputs.mode }})"
           git pull --rebase origin main
           git push origin HEAD:main
+
+      # Telegram channel post (Khmer + English). Only on the "today" run, after the push above has had time
+      # to deploy, so the link preview shows today's page. Needs the secrets TELEGRAM_BOT_TOKEN and
+      # TELEGRAM_CHAT_ID; without them this step does nothing. A Telegram problem never fails the daily job.
+      - name: Post to Telegram
+        if: steps.day.outputs.mode == 'today'
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DAY: ${{ steps.day.outputs.date }}
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "Telegram secrets are not set; skipping."
+            exit 0
+          fi
+          git pull --rebase origin main
+          sleep 120
+          node scripts/telegram-post.mjs --date "$DAY"
+          if [ -n "$(git status --porcelain data/telegram)" ]; then
+            git config user.name "daily-fortune-bot"
+            git config user.email "daily-fortune-bot@users.noreply.github.com"
+            git add data/telegram
+            git commit -m "Telegram: posted $DAY"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
