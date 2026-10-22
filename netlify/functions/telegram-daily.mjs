@@ -64,7 +64,8 @@ export function buildMessage(date, data) {
     "",
     "<i>Lucky numbers are for fun only. Traditional zodiac reading for entertainment.</i>",
   ];
-  return { text: [...km, "", "—", "", ...en].join("\n"), previewUrl: enUrl };
+  // the big picture above the text: the day animal (images/telegram/<animal>.jpg, from the site's own zodiac art)
+  return { text: [...km, "", "—", "", ...en].join("\n"), previewUrl: `${SITE}/images/telegram/${day.toLowerCase()}.jpg` };
 }
 
 export default async () => {

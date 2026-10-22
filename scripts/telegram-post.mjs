@@ -67,7 +67,7 @@ if (dry) { console.log(text); process.exit(0); }
 const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ chat_id: chat, text, parse_mode: "HTML", link_preview_options: { url: enUrl, prefer_large_media: true, show_above_text: true } }),
+  body: JSON.stringify({ chat_id: chat, text, parse_mode: "HTML", link_preview_options: { url: `https://mybirthsign.com/images/telegram/${F.dayAnimal.toLowerCase()}.jpg`, prefer_large_media: true, show_above_text: true } }),
 });
 const out = await res.json().catch(() => ({}));
 if (!out.ok) { console.error(`Telegram did not accept the post: ${out.description || res.status}`); process.exit(1); }
