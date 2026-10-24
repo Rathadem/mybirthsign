@@ -96,9 +96,18 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 .cardbar select { font: .9rem var(--body); background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; }
 .cardgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 12px; }
 .dcard { background: var(--card-2); border-radius: 12px; padding: 10px; display: grid; gap: 8px; align-content: start; min-width: 0; }
-.dcard img { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); display: block; }
+.cardgrid.big { grid-template-columns: minmax(0, 560px); }
+.dcard img { cursor: zoom-in; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); display: block; }
 .dcard b { font-size: .9rem; }
 .dcard a { color: var(--gold-soft); font-weight: 600; font-size: .85rem; }
+.viewer { position: fixed; inset: 0; z-index: 30; background: var(--bg); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 12px calc(12px + env(safe-area-inset-bottom, 0px)); }
+.viewer .vtop { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: .85rem; }
+.viewer .vtop b { color: var(--gold-soft); flex: 1; min-width: 0; font-size: .95rem; }
+.viewer .vimg { min-height: 0; overflow: auto; display: grid; place-items: start center; }
+.viewer .vimg img { width: min(100%, 720px); height: auto; border-radius: 10px; }
+.viewer .vbot { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.viewer .vbot a { display: inline-block; background: var(--gold); color: #1a1430; font-weight: 700; text-decoration: none; border-radius: 10px; padding: 8px 16px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -1426,8 +1435,9 @@ function charactersMd(KM_NAMES) {
     var body = onSite
       ? '<p class="note">The same share cards as on the website (lucky signs of the day + all 12 animals), for ' + dmy(iso) + '. Download them and schedule your posts before the day starts. A day\'s cards appear once its fortune page is published (about a day ahead).</p>' +
         '<div class="cardbar"><label>Language<select id="clang"><option value="en">English</option><option value="km">ខ្មែរ (Khmer)</option><option value="zh">中文 (Chinese)</option></select></label>' +
+        '<label>View<select id="cview"><option value="grid">Small (many per row)</option><option value="big">Large (one per row)</option></select></label>' +
         '<label>Size<select id="cfmt"><option value="portrait">Feed post (Facebook, Telegram)</option><option value="square">Square</option><option value="story">Story / Reel (9:16)</option></select></label>' +
-        '<button class="primary" id="czip" disabled>Download all (.zip)</button></div><div class="cardgrid" id="cardgrid"></div>'
+        '<button class="primary" id="czip" disabled>Download all (.zip)</button></div><p class="note">Tap a card to see it full size.</p><div class="cardgrid" id="cardgrid"></div>'
       : '<p class="note"><b>The cards show only in the Studio on your website.</b> This copy inside Claude cannot read the website\'s daily fortune. Open this address in your browser:</p><p><a href="https://mybirthsign.com/studio/" target="_blank" rel="noopener" style="color:var(--gold-soft);font-weight:700;font-size:1.1rem">mybirthsign.com/studio/ →</a></p>';
     return '<details class="sec" id="seccards" open><summary><h2>Daily cards – post before the day</h2></summary><div class="secbody">' + body + "</div></details>";
   }
@@ -1439,7 +1449,8 @@ function charactersMd(KM_NAMES) {
   var cardJob = 0;
   function loadCards(iso, wanted) {
     if (!onSite || !$("cardgrid")) return;
-    $("clang").value = CARD.lang; $("cfmt").value = CARD.fmt;
+    $("clang").value = CARD.lang; $("cfmt").value = CARD.fmt; $("cview").value = CARD.view || "grid";
+    $("cardgrid").classList.toggle("big", CARD.view === "big");
     var job = ++cardJob, grid = $("cardgrid"), zip = $("czip");
     CARD.blobs.forEach(function (x) { URL.revokeObjectURL(x.url); }); CARD.blobs = []; CARD.iso = iso; zip.disabled = true;
     grid.innerHTML = '<p class="note">Drawing the cards…</p>';
@@ -1460,7 +1471,9 @@ function charactersMd(KM_NAMES) {
             var name = "mybirthsign-" + iso + "-" + (sp.cardType === "lucky" ? "00-lucky-today" : String(i).padStart(2, "0") + "-" + String(sp.animal).toLowerCase()) + "-" + CARD.lang + "-" + CARD.fmt + ".png";
             var url = URL.createObjectURL(blob); CARD.blobs.push({ name: name, url: url, blob: blob });
             var d = document.createElement("div"); d.className = "dcard";
-            d.innerHTML = '<img alt="" src="' + url + '"><b>' + esc(sp.cardType === "lucky" ? "Lucky signs today" : (sp.name || sp.animal) + " · " + (sp.label || "")) + '</b><a href="' + url + '" download="' + name + '">Download</a>';
+            var title = sp.cardType === "lucky" ? "Lucky signs today" : (sp.name || sp.animal) + " · " + (sp.label || "");
+            CARD.blobs[CARD.blobs.length - 1].title = title;
+            d.innerHTML = '<img alt="' + esc(title) + '" data-view="' + (CARD.blobs.length - 1) + '" src="' + url + '"><b>' + esc(sp.cardType === "lucky" ? "Lucky signs today" : (sp.name || sp.animal) + " · " + (sp.label || "")) + '</b><a href="' + url + '" download="' + name + '">Download</a>';
             grid.appendChild(d);
           });
         });
@@ -1471,7 +1484,36 @@ function charactersMd(KM_NAMES) {
       grid.innerHTML = '<p class="note">' + (e && e.message === "nopage" ? "The fortune page for " + dmy(iso) + " is not published yet (each day's page appears about a day ahead). Try again later, or pick an earlier date." : "Could not draw the cards for this date.") + "</p>";
     });
   }
+  try { CARD.view = localStorage.getItem("mbs-card-view") || "grid"; } catch (e) {}
+  // full-size viewer: tap a card; arrows (or swipe keys) move through the day's cards
+  var vIdx = -1;
+  function viewer(i) {
+    var v = $("cardviewer");
+    if (i < 0 || !CARD.blobs.length) { if (v) v.remove(); vIdx = -1; document.body.style.overflow = ""; return; }
+    i = (i + CARD.blobs.length) % CARD.blobs.length; vIdx = i;
+    var x = CARD.blobs[i];
+    if (!v) { v = document.createElement("div"); v.id = "cardviewer"; v.className = "viewer"; v.setAttribute("role", "dialog"); v.setAttribute("aria-modal", "true"); document.body.appendChild(v); document.body.style.overflow = "hidden"; }
+    v.innerHTML = '<div class="vtop"><b>' + esc(x.title || "") + "</b><span>" + (i + 1) + " / " + CARD.blobs.length + '</span><button id="vclose" aria-label="Close">✕</button></div>' +
+      '<div class="vimg"><img alt="' + esc(x.title || "") + '" src="' + x.url + '"></div>' +
+      '<div class="vbot"><button id="vprev" aria-label="Previous card">◀</button><a href="' + x.url + '" download="' + x.name + '">Download</a><button id="vnext" aria-label="Next card">▶</button></div>';
+  }
+  document.addEventListener("click", function (e) {
+    var im = e.target.closest("img[data-view]"); if (im) { viewer(+im.dataset.view); return; }
+    if (e.target.closest("#vclose")) viewer(-1);
+    else if (e.target.closest("#vprev")) viewer(vIdx - 1);
+    else if (e.target.closest("#vnext")) viewer(vIdx + 1);
+    else if (e.target.id === "cardviewer") viewer(-1);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (vIdx < 0) return;
+    if (e.key === "Escape") viewer(-1); else if (e.key === "ArrowLeft") viewer(vIdx - 1); else if (e.key === "ArrowRight") viewer(vIdx + 1);
+  });
   document.addEventListener("change", function (e) {
+    if (e.target.id === "cview") {
+      CARD.view = e.target.value; $("cardgrid").classList.toggle("big", CARD.view === "big");
+      try { localStorage.setItem("mbs-card-view", CARD.view); } catch (er) {}
+      return;
+    }
     if (e.target.id === "clang" || e.target.id === "cfmt") {
       CARD.lang = $("clang").value; CARD.fmt = $("cfmt").value;
       try { localStorage.setItem("mbs-card-lang", CARD.lang); localStorage.setItem("mbs-card-fmt", CARD.fmt); } catch (er) {}
