@@ -372,7 +372,7 @@ const MUSIC = "Gentle magical background music with soft chimes and a light Asia
 const HOST = ["Chanda", "ចន្ទា"];
 const HOST_LOOK = "Chanda, a friendly young Cambodian woman presenter with big warm amber-brown eyes, rosy cheeks and a bright open smile, glossy black hair swept into a low side bun with a golden lotus hairpin and dangling gold chains, small gold flower earrings, a cream-and-gold brocade Khmer blouse with a high collar, puffed shoulders and three-quarter sleeves, a gold chain necklace with a large round golden medallion showing the twelve zodiac animals, an ornate gold belt with a flower buckle and a red gem, and a deep navy sampot skirt woven with gold Khmer diamond patterns and a front pleated panel";
 const HOST_CHAR = `Create a premium-quality 3D animated character, inspired by the charm and warmth of classic Disney and Pixar-style animated family films: ${HOST_LOOK}. Expressive, kind face, graceful and confident posture, one hand held open toward the temple as if presenting it, the other resting at her waist. She stands on a carved sandstone temple terrace with an ornate stone balustrade, beside a lotus pond with glowing pink lotus flowers; behind her, Angkor Wat glows golden and reflects in the water, under a deep purple night sky with a huge glowing full moon and floating sky lanterns. Cinematic lighting, warm golden rim light, rich colors, beautiful depth of field, professional animated-movie rendering. Composition: vertical 9:16, from the knees up, centered, facing the camera. Restrictions: no text, no letters, no watermark, no logo. Keep her design exactly the same in every video (see the approved picture characters/chanda.jpg).`;
-const audio = (lang, onCam, line) => `Audio: ${HOST[0]}${onCam ? ", on camera, looking at the viewer with natural lip movements," : " (voice-over only; she is not on screen),"} ${lang === "km" ? VOICE_KM.replace(/,$/, "") : VOICE_EN}, says${lang === "km" ? " in Khmer" : ""}: "${line}" ${MUSIC}`;
+const audio = (lang, onCam, line) => `Audio: ${HOST[0]}${onCam ? ", on camera, looking at the viewer with natural lip movements," : " (voice-over only; she is not on screen, and no one on screen speaks or moves their mouth),"} ${lang === "km" ? VOICE_KM.replace(/,$/, "") : VOICE_EN}, says${lang === "km" ? " in Khmer" : ""}: "${line}" ${MUSIC}`;
 // the luckiest animal of the day (the day animal): one-line symbolism for the hero picture, video and caption
 // (Rabbit line written by the owner; the others follow the same pattern with common traditional symbolism)
 const SYMBOL = {
@@ -555,7 +555,7 @@ function buildPack(iso, F, forSign, data = null, P = null) {
       "នេះគឺជាជោគជតារាសីចិន សម្រាប់ថ្ងៃនេះ។ អ្នកអាចមើលរាសីទាំង 12 និងលេខសំណាង នៅលើគេហទំព័រ mybirthsign.com។ សូមតាមដានយើង សម្រាប់ជោគជតាថ្ងៃស្អែក។ សូមឲ្យអ្នកមានសំណាងល្អ!"],
   ];
   const mmss = (t) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`;
-  // ---- luckiest-animal videos: 60 seconds (Facebook, TikTok) and 180 seconds (YouTube), 10-second scenes
+  // ---- luckiest-animal videos: the "60s" video (8 scenes, 80 seconds; Facebook, TikTok) and 180 seconds (YouTube), 10-second scenes
   const PI = P && P.INFO[day], PK = P && P.KM_INFO[day];
   const dir = dd.lucky.direction.en.toLowerCase(), dirKm = dd.lucky.direction.km;
   const traitsEn = PI ? PI.traits.replace(/^(\w)/, (m) => m.toLowerCase()) : "";
@@ -599,6 +599,12 @@ function buildPack(iso, F, forSign, data = null, P = null) {
       `Let's remember today's luck. Lucky color: ${cen}. Best time: ${sayTime(dd.lucky.time)}. Lucky direction: ${dir}. Lucky numbers: ${n0.d1}, ${n0.d2}, and ${n0.d3}.`,
       `សូមចងចាំសំណាងថ្ងៃនេះ។ ពណ៌សំណាង៖ ពណ៌${ckm}។ ពេលល្អ៖ ${sayTimeKm(dd.lucky.time)}។ ទិសសំណាង៖ ទិស${dirKm}។ លេខសំណាង៖ លេខ ${n0.d1} លេខ ${n0.d2} និងលេខ ${n0.d3}។`],
     end: [nine[8][0], nine[8][1], ...vo90[8]],
+    // Chanda on camera (5th item true = she speaks to camera with lip-sync); the animal beside her only acts
+    tip: ["Chanda's tip – Chanda on camera", `${cap(HOST_LOOK)}, stands on the moonlit temple terrace beside the lotus pond, facing the camera and speaking warmly to the viewer with natural lip movements and small, friendly hand gestures. Beside her, ${LOOK[day]} sits on its glowing lotus pedestal and acts without speaking: it listens, nods happily and ${POSE[day]}, its mouth staying closed the whole time. Medium shot, gentle push-in toward Chanda. Chanda matches her reference image; the ${dl} matches its reference image.`,
+      `My tip for the Year of the ${day}: say yes to good chances, and lead with confidence.${careful.length ? ` ${list(careful)} friends, take it easy today.` : ""}`,
+      `ដំបូន្មានរបស់ខ្ញុំ សម្រាប់ឆ្នាំ${dayKm}៖ សូមទទួលយកឱកាសល្អៗ និងធ្វើអ្វីៗដោយទំនុកចិត្ត។${careful.length ? ` ចំណែក${kmList(careful.map((a) => `ឆ្នាំ${km(a)}`))} គួរសម្រាកឲ្យស្រួលខ្លួនថ្ងៃនេះ។` : ""}`, true],
+    endHost: ["Goodbye – Chanda on camera", `${cap(HOST_LOOK)}, stands on the moonlit temple terrace, facing the camera, smiling and speaking to the viewer with natural lip movements, then gives a small wave goodbye. Beside her, ${LOOK[day]} waves its paw goodbye too, without speaking, its mouth closed. Behind them golden light beams rise from the temple towers, soft lotus-shaped golden fireworks open in the sky and hundreds of lanterns float up over the glowing pond. The camera slowly pulls back and rises for a wide, warm final view, with open sky at the top for a title. Chanda matches her reference image; the ${dl} matches its reference image.`,
+      vo90[8][0], vo90[8][1], true],
   };
   // ---- long YouTube video: the luckiest animal, then all 12 signs (two 10-second clips each), then a short closing
   const DAYPH = { great: ["a great day", "ថ្ងៃល្អខ្លាំង"], good: ["a good day", "ថ្ងៃល្អ"], ordinary: ["an ordinary, steady day", "ថ្ងៃធម្មតា"], caution: ["a quiet day", "ថ្ងៃគួរប្រុងប្រយ័ត្ន"] };
@@ -632,7 +638,7 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   const longScenes = [SC.moon, SC.appear, SC.meaning, overview, ...signScenes, SC.wish, SC.thanks, SC.end];
   const longChapters = [["0:00", "Introduction"], ...F.signs.map((sg, i) => [mmss((4 + i * 2) * 10), `${sg.animal} (${sg.nameKm}) – ${sg.label.en}`]), [mmss((4 + 24) * 10), "Closing"]];
   const VIDEOS = [
-    { id: "60s", name: "60-second video – Facebook & TikTok", secs: 60, keys: ["appear", "meaning", "magic", "colortime", "numbers", "end"] },
+    { id: "60s", name: "60-second video – Facebook & TikTok (8 scenes, 80 seconds)", secs: 80, keys: ["appear", "meaning", "magic", "colortime", "direction", "numbers", "tip", "endHost"] },
     { id: "180s", name: "180-second video – YouTube", secs: 180, keys: ["moon", "appear", "meaning", "personality", "magic", "love", "work", "money", "color", "time", "direction", "numbers", "luckydays", "reminder", "wish", "thanks", "recap", "end"] },
   ].map((v) => ({ ...v, scenes: v.keys.map((k) => SC[k]) }));
   VIDEOS.push({ id: "long", name: `Long YouTube video – all 12 signs (about ${Math.round(longScenes.length * 10 / 60)} minutes)`, secs: longScenes.length * 10, scenes: longScenes, chapters: longChapters,
@@ -900,7 +906,7 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   });
   const storyKw = `${day.toLowerCase()} bedtime story, zodiac story for kids, Chinese zodiac ${day.toLowerCase()}, Year of the ${day}, lucky color today, Khmer story, Cambodian story`;
   const META = {
-    "60s": { topic: `Today's luckiest zodiac animal, the ${day}, in one minute. For viewers who follow Chinese zodiac signs, especially people born in the Year of the ${day}, scrolling Facebook Reels and TikTok.`,
+    "60s": { topic: `Today's luckiest zodiac animal, the ${day}, in 80 seconds. For viewers who follow Chinese zodiac signs, especially people born in the Year of the ${day}, scrolling Facebook Reels and TikTok.`,
       kw: `${day.toLowerCase()} zodiac today, luckiest zodiac sign today, Chinese zodiac ${day.toLowerCase()}, lucky color today, lucky numbers today` },
     "180s": { topic: `A three-minute guide to the ${day}'s Great Day: meaning, character, love, work, money and lucky details. For people born in the Year of the ${day} and zodiac fans on YouTube Shorts.`,
       kw: `Year of the ${day}, ${day.toLowerCase()} fortune today, ${day.toLowerCase()} personality, Chinese zodiac ${day.toLowerCase()} lucky color, lucky numbers` },
@@ -949,9 +955,9 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   const srtVid = {};
   VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
   const videoMd = (v) => `## ${v.name}
-${v.intro || `A ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference pictures of Chanda and the ${day} as ingredients. Chanda opens the video on camera with the hook and narrates the rest off screen; the animals never speak. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
+${v.intro || `${v.secs === 80 ? "An" : "A"} ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference pictures of Chanda and the ${day} as ingredients. ${v.scenes.some((x) => x[4]) ? `Chanda is on camera and speaks with lip-sync in scenes ${[1, ...v.scenes.map((x, i) => x[4] ? i + 1 : 0).filter(Boolean)].join(", ")}; in the other scenes she narrates off screen` : "Chanda opens the video on camera with the hook and narrates the rest off screen"}. The animals never speak or move their mouths: they only act. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
 ${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.metaMd ? `\n${v.metaMd}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
-${v.scenes.map(([t, prompt, en, kmL], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: ${audio("en", i === 0 && v.host, en)}\nKhmer voice: ${audio("km", i === 0 && v.host, kmFlow(kmL))}`).join("\n\n")}
+${v.scenes.map(([t, prompt, en, kmL, onCam], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: ${audio("en", (i === 0 && v.host) || !!onCam, en)}\nKhmer voice: ${audio("km", (i === 0 && v.host) || !!onCam, kmFlow(kmL))}`).join("\n\n")}
 
 ## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : `${v.secs}-second video`}
 The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
@@ -1311,14 +1317,14 @@ function charactersMd(KM_NAMES) {
 
   // side menu: every section, grouped; a slide-in drawer on phones
   function group(t) {
-    if (/^Luckiest|^60-second|^180-second|^Long YouTube|^Story video|^Voice-over – (60|180)-second|^Voice-over – long|^Voice-over – story/.test(t)) return "Luckiest animal";
+    if (/^Luckiest|^60-second|^180-second|^Long YouTube|^Story video|^Voice-over – (60|80|180)-second|^Voice-over – long|^Voice-over – story/.test(t)) return "Luckiest animal";
     if (/^YouTube|^Facebook|^TikTok/.test(t)) return "Post it";
     return "Daily video";
   }
   function shortName(t) {
     return t.replace(/ \(paste first in every scene\)| \(make these first.*\)| \(about [^)]*\)| \(add in the editor\)| \(spoken inside each clip\)| \(captions files\)/g, "")
       .replace(/^Luckiest animal today – (\w+).*$/, "$1: picture & post")
-      .replace(/^60-second video – Facebook & TikTok/, "60s video (Facebook, TikTok)")
+      .replace(/^60-second video – Facebook & TikTok.*$/, "60s video (Facebook, TikTok)")
       .replace(/^180-second video – YouTube/, "180s video (YouTube)")
       .replace(/^Voice-over – (\d+)-second video/, "$1s voice-over & subtitles")
       .replace(/^Long YouTube video – all 12 signs.*$/, "Long video, all 12 signs (YouTube)")
