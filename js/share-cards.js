@@ -195,15 +195,15 @@
   }
 
   var LBL = {
-    en: { trade: "Trade today", love: "Love", career: "Career", money: "Money", advice: "Today's advice", number: "Number", color: "Color", direction: "Direction", time: "Time",
+    en: { luckyNum: "Lucky number", trade: "Trade today", love: "Love", career: "Career", money: "Money", advice: "Today's advice", number: "Number", color: "Color", direction: "Direction", time: "Time",
           note: "Traditional Chinese zodiac reading for fun and self-reflection", friend: "Friendship", business: "Business", stars: "Love {L}  ·  Business {B}",
           luckyToday: "Who is lucky today", easy: "Take it easy today", sign: "Your Chinese zodiac sign", nums: "Lucky numbers", cols: "Lucky colors",
           matches: "Best matches", patience: "Needs patience", strengths: "Strengths", discuss: "Talk through", element: "Element" },
-    km: { trade: "ការលក់ដូរថ្ងៃនេះ", love: "ស្នេហា", career: "ការងារ", money: "លុយកាក់", advice: "ដំបូន្មានថ្ងៃនេះ", number: "លេខ", color: "ពណ៌", direction: "ទិស", time: "ម៉ោង",
+    km: { luckyNum: "លេខសំណាង", trade: "ការលក់ដូរថ្ងៃនេះ", love: "ស្នេហា", career: "ការងារ", money: "លុយកាក់", advice: "ដំបូន្មានថ្ងៃនេះ", number: "លេខ", color: "ពណ៌", direction: "ទិស", time: "ម៉ោង",
           note: "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត", friend: "មិត្តភាព", business: "អាជីវកម្ម", stars: "ស្នេហា {L}  ·  អាជីវកម្ម {B}",
           luckyToday: "តើអ្នកណាមានសំណាងថ្ងៃនេះ", easy: "ថ្ងៃនេះគួរប្រុងប្រយ័ត្ន", sign: "រាសីចិនរបស់អ្នក", nums: "លេខសំណាង", cols: "ពណ៌សំណាង",
           matches: "គូដែលត្រូវគ្នាបំផុត", patience: "ឆ្នាំខុង", strengths: "ចំណុចខ្លាំង", discuss: "គួរពិភាក្សា", element: "ធាតុ" },
-    zh: { trade: "今日买卖", love: "爱情", career: "事业", money: "财运", advice: "今日建议", number: "数字", color: "颜色", direction: "方位", time: "时间",
+    zh: { luckyNum: "幸运数字", trade: "今日买卖", love: "爱情", career: "事业", money: "财运", advice: "今日建议", number: "数字", color: "颜色", direction: "方位", time: "时间",
           note: "传统生肖解读，仅供娱乐与自我反思", friend: "友情", business: "生意", stars: "爱情 {L}  ·  生意 {B}",
           luckyToday: "今天谁最幸运", easy: "今天宜小心", sign: "你的生肖", nums: "幸运数字", cols: "幸运颜色",
           matches: "最佳配对", patience: "需要耐心", strengths: "优势", discuss: "需要沟通", element: "五行" }
@@ -292,14 +292,14 @@
   function dirAngle(t) { var k = String(t || "").toLowerCase().replace(/^(ទិស)?(ខាង)?/, "").replace(/^正/, "").replace(/方$/, "").trim(); return k in DIRS ? DIRS[k] : null; }
   // the four lucky tiles: number / colour / direction / time, each with its own picture
   function luckyTiles(ctx, L, T, spec, y) {
-    var n = 4, gap = 16, tw = (INNER - gap * (n - 1)) / n, th = 156, items = [[T.number, numL(L, spec.number), "num"], [T.color, spec.color, "col"], [T.direction, spec.direction, "dir"], [T.time, numL(L, spec.time), "time"]];
+    var n = 4, gap = 16, tw = (INNER - gap * (n - 1)) / n, th = 156, items = [[spec.lucky3 ? T.luckyNum : T.number, numL(L, spec.lucky3 || spec.number), "num"], [T.color, spec.color, "col"], [T.direction, spec.direction, "dir"], [T.time, numL(L, spec.time), "time"]];
     items.forEach(function (it, i) {
       var x = PAD + i * (tw + gap), cx = x + tw / 2, iy = y + 76;
       var bg = ctx.createLinearGradient(0, y, 0, y + th); bg.addColorStop(0, "rgba(246,220,155,.16)"); bg.addColorStop(1, "rgba(246,220,155,.04)");
       roundRect(ctx, x, y, tw, th, 20); ctx.fillStyle = bg; ctx.fill(); ctx.strokeStyle = "rgba(246,220,155,.5)"; ctx.lineWidth = 1.5; ctx.stroke();
       ctx.textAlign = "center"; font(ctx, L, "body", lh(L, 21, 22), 700); ctx.fillStyle = SOFT; ctx.fillText(L === "en" ? it[0].toUpperCase() : it[0], cx, y + 34);
       ctx.strokeStyle = "#f0cf86"; ctx.lineWidth = 3;
-      if (it[2] === "num") { font(ctx, "en", "head", 76, 700); ctx.fillStyle = goldGrad(ctx, y + 64, y + th - 20); ctx.fillText(it[1], cx, y + th - 24); }
+      if (it[2] === "num") { font(ctx, "en", "head", String(it[1]).length > 3 ? 54 : 70, 700); ctx.fillStyle = goldGrad(ctx, y + 64, y + th - 20); ctx.fillText(it[1], cx, y + th - 24); }
       else if (it[2] === "col") { ctx.beginPath(); ctx.arc(cx, iy, 26, 0, Math.PI * 2); ctx.fillStyle = spec.colorHex || "#f6dc9b"; ctx.fill(); ctx.stroke(); }
       else if (it[2] === "dir") {
         ctx.beginPath(); ctx.arc(cx, iy, 26, 0, Math.PI * 2); ctx.stroke();
@@ -321,9 +321,23 @@
   var TIER = { great: ["rgb(246,211,120)", "#3a2706"], good: ["rgb(140,224,170)", "#0c2e1a"], ordinary: ["rgb(190,170,250)", "#1d1340"], caution: ["rgb(255,160,170)", "#3d0f18"] };
 
   // ---------------------------------------------------------------- card types
-  function daily(spec, format) {
-    var L = langOf(spec), T = LBL[L], tc = TIER[spec.tier] || TIER.ordinary;
-    return Promise.all([medals([spec.animal]), fontsReady(L, spec)]).then(function (r) {
+  // the 3-digit lucky number of the day: from the card (newer pages) or js/lucky-digits.js for this page's date
+  // (older pages); used only when its first digit is the card's own lucky number, so it always matches the page
+  function lucky3(spec) {
+    if (spec.lucky3) return Promise.resolve(spec);
+    var iso = spec.iso || ((location.pathname.match(/daily-fortune-(\d{4}-\d{2}-\d{2})/) || [])[1]);
+    if (!iso) return Promise.resolve(spec);
+    var ready = window.MBSLuckyDigits ? Promise.resolve() : new Promise(function (ok) { var s = document.createElement("script"); s.src = base() + "js/lucky-digits.js"; s.onload = ok; s.onerror = ok; document.head.appendChild(s); });
+    return ready.then(function () {
+      var v = window.MBSLuckyDigits && window.MBSLuckyDigits.forSign(spec.animal, iso);
+      if (v && String(v.d1) === String(spec.number)) spec = Object.assign({}, spec, { lucky3: v.d3 });
+      return spec;
+    });
+  }
+  function daily(spec0, format) {
+    var spec, L = langOf(spec0), T = LBL[L], tc = TIER[spec0.tier] || TIER.ordinary;
+    return Promise.all([medals([spec0.animal]), fontsReady(L, spec0), lucky3(spec0)]).then(function (r) {
+      spec = r[2];
       return render(L, T.note, format, function (ctx, o) {
         var R = o.compact ? 88 : 108, my = o.compact ? 214 : 262;
         // date between two short gold rules

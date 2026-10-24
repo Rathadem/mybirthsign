@@ -457,7 +457,7 @@ function signCard(c, lang, t) {
     ? { fortune: x.fortune, love: x.love, career: x.career, money: x.money, advice: x.advice }
     : { fortune: goodFor };
   const spec = Object.assign({ cardType: "daily", lang, animal: a, name, tier, label: TIER_LABEL[lang][tier], date }, card,
-    { trade, tradeLabel: TT.h, number: L.number, color: colorTxt, colorHex: L.color.hex, direction: dirTxt, time: L.time });
+    { trade, tradeLabel: TT.h, number: L.number, lucky3: (LUCKY_DIGITS.forSign(a, iso) || {}).d3, iso, color: colorTxt, colorHex: L.color.hex, direction: dirTxt, time: L.time });
   const tradeBox = `<div class="fx-trade"><h4>${esc(TT.h)}</h4><p>${esc(trade)}</p>
           <p class="fx-trade-meta"><span>${TT.hours} <strong>${time}</strong></span><span>${TT.partner} <strong>${esc(partner)}</strong></span></p></div>`;
   const lucky = `<p class="fx-sign-lucky"><span>${D.number} <strong>${isKm ? kmNum(L.number) : L.number}</strong></span><span>${D.color} <i class="fx-swatch" style="background:${L.color.hex}"></i><strong>${esc(colorTxt)}</strong></span><span>${D.direction} <strong>${esc(dirTxt)}</strong></span><span>${D.time} <strong>${time}</strong></span></p>`;
