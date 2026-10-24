@@ -32,6 +32,7 @@ const DATA = {
 // early daily cards (dates whose fortune page is not published yet): the website's own rule-based wording from
 // scripts/daily-fortune.mjs (rating labels, "good for" line, trade line) and the Chinese names from js/i18n.js
 import vm from "node:vm";
+import { EARLY_COPY } from "./early-card-copy.mjs";
 function grabConst(src, name) {
   const start = src.indexOf(`const ${name} =`); if (start < 0) throw new Error(`const ${name} not found`);
   let i = src.indexOf("=", start) + 1; while (/\s/.test(src[i])) i++;
@@ -49,6 +50,7 @@ const EARLY = {
   TIER_LABEL: grabConst(dfSrc, "TIER_LABEL"), GOOD_FOR: grabConst(dfSrc, "GOOD_FOR"), TRADE: grabConst(dfSrc, "TRADE"),
   KM_MONTHS: grabConst(dfSrc, "KM_MONTHS"), EN_MONTHS: grabConst(dfSrc, "EN_MONTHS"), ZH_DIR: grabConst(dfSrc, "ZH_DIR"),
   ZH_NAMES: grabConst(i18nSrc, "ZH_ANIMAL_NAMES"), ZH_COLORS: grabConst(i18nSrc, "ZH_COLOR_NAMES"),
+  COPY: EARLY_COPY,
   TT: Object.fromEntries(["en", "km", "zh"].map((l) => [l, { h: TT[l].h, best: TT[l].best("{L}") }])),
 };
 const code = [

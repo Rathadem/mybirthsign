@@ -432,7 +432,9 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       var rank = ORDER.filter(function (x) { return tierOf(x) === tier; }).indexOf(a), gf = EARLY.GOOD_FOR[lang][tier], tr = EARLY.TRADE[lang][tier];
       var d = window.MBSLuckyDigits.forSign(a, iso);
       out.push({ cardType: "daily", lang: lang, animal: a, name: nm(a), tier: tier, label: EARLY.TIER_LABEL[lang][tier], date: date,
-        fortune: gf[(dn + i) % gf.length], trade: tr[(dn + rank) % tr.length], tradeLabel: EARLY.TT[lang].h, number: L.number, lucky3: d && String(d.d1) === String(L.number) ? d.d3 : undefined, iso: iso,
+        fortune: gf[(dn + i) % gf.length], trade: tr[(dn + rank) % tr.length],
+        love: EARLY.COPY[lang].love[tier][(dn + i) % 2], career: EARLY.COPY[lang].career[tier][(dn + i + 1) % 2],
+        money: EARLY.COPY[lang].money[tier][(dn + rank) % 2], advice: EARLY.COPY[lang].advice[tier][(dn + rank + 1) % 2], tradeLabel: EARLY.TT[lang].h, number: L.number, lucky3: d && String(d.d1) === String(L.number) ? d.d3 : undefined, iso: iso,
         color: lang === "zh" ? (EARLY.ZH_COLORS[String(L.color.en).toLowerCase()] || L.color.en) : L.color[lang], colorHex: L.color.hex,
         direction: lang === "zh" ? (EARLY.ZH_DIR[L.direction.en] || L.direction.en) : L.direction[lang], time: L.time });
     });
@@ -458,7 +460,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       var specs = [], re = /data-share-card="([^"]+)"/g, m;
       if (!res[0]) {                                 // not published yet: early cards from the rules for this date
         specs = earlySpecs(iso, CARD.lang);
-        head = '<p class="note" style="grid-column:1/-1"><b>Early cards for ' + dmy(iso) + '</b> (rating, trade tip and lucky number, color, direction and time for this date, from the website\'s rules). The full written fortune (love, career, money, advice) is added when the day\'s page is published, the evening before around 21:00 Cambodia time.</p>';
+        head = '<p class="note" style="grid-column:1/-1"><b>Early cards for ' + dmy(iso) + '</b> (rating, trade tip, love, career, money, advice and lucky number, color, direction and time for this date, from the website\'s rules and standard wording). The day\'s own written fortune replaces them when its page is published, the evening before around 21:00 Cambodia time.</p>';
       }
       while ((m = re.exec(res[0]))) { try { var sp = JSON.parse(decode(m[1])); if (sp.cardType === "daily" || sp.cardType === "lucky") { sp.iso = sp.iso || iso; specs.push(sp); } } catch (e) {} }
       if (!specs.length) throw new Error("nocards");
