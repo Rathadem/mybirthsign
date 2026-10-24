@@ -174,17 +174,17 @@
     };
     return ctx;
   }
-  function render(L, note, format, body) {
+  function render(L, note, format, body, bg, growTo) {
     var F = FORMATS[format] || FORMATS.portrait;
     var opts = { compact: format === "square", story: format === "story" };
     var m = document.createElement("canvas"); m.width = W; m.height = 2300;
     var mctx = alignByHand(m.getContext("2d"));
     var end = Math.ceil(body(mctx, opts)) + 30;
     var H = F.h;
-    if (F.grow) H = Math.max(F.h, Math.min(F.grow, Math.ceil((end + FOOT) / 10) * 10));
+    if (F.grow) H = Math.max(F.h, Math.min(growTo || F.grow, Math.ceil((end + FOOT) / 10) * 10));
     var avail = H - FOOT, scale = Math.min(1, avail / end);
     var c = document.createElement("canvas"); c.width = W; c.height = H; var ctx = alignByHand(c.getContext("2d"));
-    background(ctx, H);
+    (bg || background)(ctx, H);
     var dw = W * scale, dh = end * scale, dy = Math.max(0, (avail - dh) / 2 + (opts.story ? 20 : 0));   // short content sits in the middle, not at the top
     ctx.drawImage(m, 0, 0, W, end, (W - dw) / 2, dy, dw, dh);
     footer(ctx, L, note, H);
@@ -213,27 +213,174 @@
   function eyebrow(ctx, L, text, y) { ctx.textAlign = "center"; ctx.fillStyle = GOLD2; font(ctx, L, "body", 28, 600); ctx.fillText(text || "", W / 2, y); }
   function para(ctx, L, text, y, lines, size) { font(ctx, L, "body", size || lh(L, 31, 29), 400); ctx.fillStyle = INK; return drawLines(ctx, wrap(ctx, text, INNER, L, lines), W / 2, y, lh(L, 42, 46), "center"); }
 
+  // ---------------------------------------------------------------- daily card artwork (drawn, no extra files)
+  // night sky with a moon glow, sparkles, an Angkor-style temple silhouette on the horizon, gold frame with corner ornaments
+  function goldGrad(ctx, y0, y1) { var g = ctx.createLinearGradient(0, y0, 0, y1); g.addColorStop(0, "#fff1c4"); g.addColorStop(0.5, "#f2cf7c"); g.addColorStop(1, "#c9973a"); return g; }
+  function sparkle(ctx, x, y, s, a) {
+    ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = "#fff6dc"; ctx.beginPath();
+    ctx.moveTo(x, y - s); ctx.quadraticCurveTo(x, y, x + s, y); ctx.quadraticCurveTo(x, y, x, y + s); ctx.quadraticCurveTo(x, y, x - s, y); ctx.quadraticCurveTo(x, y, x, y - s); ctx.fill(); ctx.restore();
+  }
+  function tower(ctx, cx, base, w, h) {      // one Angkor-style tower: a rounded lotus-bud (ogive) outline on a short plinth
+    var hw = w / 2, pl = h * 0.12;
+    ctx.beginPath(); ctx.moveTo(cx - hw * 1.12, base); ctx.lineTo(cx - hw * 1.12, base - pl); ctx.lineTo(cx - hw, base - pl);
+    ctx.bezierCurveTo(cx - hw * 1.08, base - h * 0.55, cx - hw * 0.55, base - h * 0.9, cx, base - h);
+    ctx.bezierCurveTo(cx + hw * 0.55, base - h * 0.9, cx + hw * 1.08, base - h * 0.55, cx + hw, base - pl);
+    ctx.lineTo(cx + hw * 1.12, base - pl); ctx.lineTo(cx + hw * 1.12, base); ctx.closePath();
+  }
+  function towerTiers(ctx, cx, base, w, h) {  // faint carved tiers across the tower
+    ctx.save(); tower(ctx, cx, base, w, h); ctx.clip(); ctx.strokeStyle = "rgba(246,220,155,.22)"; ctx.lineWidth = 1.2;
+    for (var i = 1; i <= 6; i++) { var y = base - h * 0.12 - i * h * 0.12; ctx.beginPath(); ctx.moveTo(cx - w, y); ctx.lineTo(cx + w, y); ctx.stroke(); }
+    ctx.restore();
+  }
+  function temple(ctx, cx, base, scale) {
+    var top = base - 236 * scale, g = ctx.createLinearGradient(0, top, 0, base);
+    g.addColorStop(0, "rgba(14,9,44,.95)"); g.addColorStop(0.75, "rgba(14,9,44,.75)"); g.addColorStop(1, "rgba(14,9,44,0)");
+    ctx.save(); ctx.fillStyle = g; ctx.strokeStyle = "rgba(246,220,155,.35)"; ctx.lineWidth = 1.5;
+    [[-310, 62, 112], [-175, 84, 160], [175, 84, 160], [310, 62, 112]].forEach(function (t) { tower(ctx, cx + t[0] * scale, base, t[1] * scale, t[2] * scale); ctx.fill(); ctx.stroke(); towerTiers(ctx, cx + t[0] * scale, base, t[1] * scale, t[2] * scale); });
+    ctx.beginPath(); ctx.moveTo(cx - 420 * scale, base); ctx.lineTo(cx - 400 * scale, base - 34 * scale); ctx.lineTo(cx + 400 * scale, base - 34 * scale); ctx.lineTo(cx + 420 * scale, base); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function dailyBackground(ctx, H, accent) {
+    var g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#2a1b66"); g.addColorStop(0.42, "#170f45"); g.addColorStop(1, "#08061c");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    var moon = ctx.createRadialGradient(W / 2, 250, 30, W / 2, 250, 620); moon.addColorStop(0, "rgba(255,226,160,.34)"); moon.addColorStop(0.45, "rgba(255,190,140,.10)"); moon.addColorStop(1, "rgba(255,190,140,0)");
+    ctx.fillStyle = moon; ctx.fillRect(0, 0, W, H);
+    var side = ctx.createRadialGradient(W, H * 0.55, 20, W, H * 0.55, 520); side.addColorStop(0, accent.replace(")", ",.16)").replace("rgb", "rgba")); side.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = side; ctx.fillRect(0, 0, W, H);
+    for (var i = 0; i < 70; i++) { var x = (i * 977 + 131) % W, y = 60 + (i * 631) % Math.round(H * 0.5), s = (i % 3) + 1; ctx.fillStyle = "rgba(255,255,255," + (0.25 + (i % 4) * 0.12) + ")"; ctx.fillRect(x, y, s, s); }
+    [[150, 160, 13], [935, 215, 10], [72, 470, 8], [1008, 560, 10], [70, 900, 7], [1010, 1080, 8]].forEach(function (p) { sparkle(ctx, p[0], p[1], p[2], 0.85); });
+    ctx.strokeStyle = "rgba(246,220,155,.8)"; ctx.lineWidth = 3; roundRect(ctx, 30, 30, W - 60, H - 60, 38); ctx.stroke();
+    ctx.strokeStyle = "rgba(246,220,155,.28)"; ctx.lineWidth = 1.5; roundRect(ctx, 46, 46, W - 92, H - 92, 30); ctx.stroke();
+    // gold corner flourishes
+    ctx.strokeStyle = "#e9c77f"; ctx.lineWidth = 3; ctx.lineCap = "round";
+    [[1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(function (d) {
+      var x0 = d[0] > 0 ? 64 : W - 64, y0 = d[1] > 0 ? 64 : H - 64;
+      ctx.beginPath(); ctx.moveTo(x0, y0 + d[1] * 70); ctx.quadraticCurveTo(x0, y0, x0 + d[0] * 70, y0); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x0 + d[0] * 16, y0 + d[1] * 16, 5, 0, Math.PI * 2); ctx.fillStyle = "#e9c77f"; ctx.fill();
+    });
+    ctx.lineCap = "butt";
+  }
+  function divider(ctx, cx, y, w) {          // thin gold rule with a small lotus in the middle
+    var gl = ctx.createLinearGradient(cx - w / 2, 0, cx + w / 2, 0); gl.addColorStop(0, "rgba(233,199,127,0)"); gl.addColorStop(0.5, "rgba(233,199,127,.9)"); gl.addColorStop(1, "rgba(233,199,127,0)");
+    ctx.fillStyle = gl; ctx.fillRect(cx - w / 2, y - 1, w / 2 - 34, 2); ctx.fillRect(cx + 34, y - 1, w / 2 - 34, 2);
+    ctx.fillStyle = "#f0cf86";
+    [[-1, 0.9], [0, 1.25], [1, 0.9]].forEach(function (p) { ctx.save(); ctx.translate(cx + p[0] * 11, y + 6); ctx.rotate(p[0] * 0.5); ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-8 * p[1], -12 * p[1], 0, -22 * p[1]); ctx.quadraticCurveTo(8 * p[1], -12 * p[1], 0, 0); ctx.fill(); ctx.restore(); });
+  }
+  // small line icons in a gold disc: trade (shop awning), love (heart), career (briefcase), money (old round coin)
+  function icon(ctx, kind, cx, cy, r) {
+    var dg = ctx.createLinearGradient(0, cy - r, 0, cy + r); dg.addColorStop(0, "#f8dd97"); dg.addColorStop(1, "#c8923a");
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fillStyle = dg; ctx.fill();
+    ctx.strokeStyle = "#2b1c06"; ctx.fillStyle = "#2b1c06"; ctx.lineWidth = 3; ctx.lineJoin = "round"; ctx.lineCap = "round";
+    var s = r * 0.5;
+    if (kind === "trade") {
+      ctx.beginPath(); ctx.moveTo(cx - s, cy - s * 0.35); ctx.lineTo(cx - s * 0.8, cy - s * 0.9); ctx.lineTo(cx + s * 0.8, cy - s * 0.9); ctx.lineTo(cx + s, cy - s * 0.35); ctx.stroke();
+      for (var i = 0; i < 4; i++) { ctx.beginPath(); ctx.arc(cx - s * 0.75 + i * s * 0.5, cy - s * 0.35, s * 0.25, 0, Math.PI); ctx.stroke(); }
+      ctx.strokeRect(cx - s * 0.8, cy - s * 0.1, s * 1.6, s * 1.0); ctx.strokeRect(cx - s * 0.2, cy + s * 0.3, s * 0.4, s * 0.6);
+    } else if (kind === "love") {
+      ctx.beginPath(); ctx.moveTo(cx, cy + s * 0.85); ctx.bezierCurveTo(cx - s * 1.4, cy - s * 0.1, cx - s * 0.6, cy - s * 1.1, cx, cy - s * 0.35); ctx.bezierCurveTo(cx + s * 0.6, cy - s * 1.1, cx + s * 1.4, cy - s * 0.1, cx, cy + s * 0.85); ctx.fillStyle = "#b8325a"; ctx.fill();
+    } else if (kind === "career") {
+      roundRect(ctx, cx - s, cy - s * 0.45, s * 2, s * 1.35, 4); ctx.stroke(); roundRect(ctx, cx - s * 0.38, cy - s * 0.85, s * 0.76, s * 0.4, 3); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx - s, cy + s * 0.1); ctx.lineTo(cx + s, cy + s * 0.1); ctx.stroke();
+    } else {
+      ctx.beginPath(); ctx.arc(cx, cy, s * 0.95, 0, Math.PI * 2); ctx.stroke(); ctx.strokeRect(cx - s * 0.3, cy - s * 0.3, s * 0.6, s * 0.6);
+    }
+    ctx.lineCap = "butt"; ctx.lineJoin = "miter";
+  }
+  var DIRS = { north: 0, northeast: 45, east: 90, southeast: 135, south: 180, southwest: 225, west: 270, northwest: 315,
+    "ជើង": 0, "ឦសាន": 45, "ឥសាន": 45, "កើត": 90, "អាគ្នេយ៍": 135, "ត្បូង": 180, "និរតី": 225, "លិច": 270, "ពាយព្យ": 315, "ពាយ័ព្យ": 315,
+    "北": 0, "东北": 45, "东": 90, "东南": 135, "南": 180, "西南": 225, "西": 270, "西北": 315 };
+  function dirAngle(t) { var k = String(t || "").toLowerCase().replace(/^(ទិស)?(ខាង)?/, "").replace(/^正/, "").replace(/方$/, "").trim(); return k in DIRS ? DIRS[k] : null; }
+  // the four lucky tiles: number / colour / direction / time, each with its own picture
+  function luckyTiles(ctx, L, T, spec, y) {
+    var n = 4, gap = 16, tw = (INNER - gap * (n - 1)) / n, th = 156, items = [[T.number, numL(L, spec.number), "num"], [T.color, spec.color, "col"], [T.direction, spec.direction, "dir"], [T.time, numL(L, spec.time), "time"]];
+    items.forEach(function (it, i) {
+      var x = PAD + i * (tw + gap), cx = x + tw / 2, iy = y + 76;
+      var bg = ctx.createLinearGradient(0, y, 0, y + th); bg.addColorStop(0, "rgba(246,220,155,.16)"); bg.addColorStop(1, "rgba(246,220,155,.04)");
+      roundRect(ctx, x, y, tw, th, 20); ctx.fillStyle = bg; ctx.fill(); ctx.strokeStyle = "rgba(246,220,155,.5)"; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.textAlign = "center"; font(ctx, L, "body", lh(L, 21, 22), 700); ctx.fillStyle = SOFT; ctx.fillText(L === "en" ? it[0].toUpperCase() : it[0], cx, y + 34);
+      ctx.strokeStyle = "#f0cf86"; ctx.lineWidth = 3;
+      if (it[2] === "num") { font(ctx, "en", "head", 76, 700); ctx.fillStyle = goldGrad(ctx, y + 64, y + th - 20); ctx.fillText(it[1], cx, y + th - 24); }
+      else if (it[2] === "col") { ctx.beginPath(); ctx.arc(cx, iy, 26, 0, Math.PI * 2); ctx.fillStyle = spec.colorHex || "#f6dc9b"; ctx.fill(); ctx.stroke(); }
+      else if (it[2] === "dir") {
+        ctx.beginPath(); ctx.arc(cx, iy, 26, 0, Math.PI * 2); ctx.stroke();
+        var a = dirAngle(spec.direction);
+        ctx.beginPath(); ctx.moveTo(cx, iy - 32); ctx.lineTo(cx, iy - 22); ctx.stroke();
+        if (a !== null) { ctx.save(); ctx.translate(cx, iy); ctx.rotate(a * Math.PI / 180); ctx.beginPath(); ctx.moveTo(0, -21); ctx.lineTo(7, 4); ctx.lineTo(0, 0); ctx.lineTo(-7, 4); ctx.closePath(); ctx.fillStyle = "#ff8f8f"; ctx.fill(); ctx.beginPath(); ctx.moveTo(0, 18); ctx.lineTo(5, 3); ctx.lineTo(-5, 3); ctx.closePath(); ctx.fillStyle = "#f0cf86"; ctx.fill(); ctx.restore(); }
+      } else {
+        ctx.beginPath(); ctx.arc(cx, iy, 26, 0, Math.PI * 2); ctx.stroke();
+        var hr = parseInt(String(spec.time), 10); if (isNaN(hr)) hr = 12;
+        ctx.save(); ctx.translate(cx, iy); ctx.lineCap = "round";
+        ctx.rotate((hr % 12) / 12 * Math.PI * 2); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -13); ctx.stroke(); ctx.rotate(-(hr % 12) / 12 * Math.PI * 2);
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -20); ctx.stroke(); ctx.restore(); ctx.lineCap = "butt";
+      }
+      var v = String(it[1]); font(ctx, L, "body", v.length > 9 ? (L === "km" ? 22 : 23) : (L === "km" ? 27 : 29), 700); ctx.fillStyle = "#fff3d1";
+      if (it[2] !== "num") ctx.fillText(wrap(ctx, v, tw - 20, L, 1)[0] || "", cx, y + th - 22);
+    });
+    return y + th;
+  }
+  var TIER = { great: ["rgb(246,211,120)", "#3a2706"], good: ["rgb(140,224,170)", "#0c2e1a"], ordinary: ["rgb(190,170,250)", "#1d1340"], caution: ["rgb(255,160,170)", "#3d0f18"] };
+
   // ---------------------------------------------------------------- card types
   function daily(spec, format) {
-    var L = langOf(spec), T = LBL[L];
+    var L = langOf(spec), T = LBL[L], tc = TIER[spec.tier] || TIER.ordinary;
     return Promise.all([medals([spec.animal]), fontsReady(L, spec)]).then(function (r) {
       return render(L, T.note, format, function (ctx, o) {
-        var R = o.compact ? 90 : 118, my = o.compact ? 214 : 262;
-        eyebrow(ctx, L, spec.date, 116); medal(ctx, r[0][0], W / 2, my, R);
-        var y = my + R + 76; ctx.textAlign = "center"; ctx.fillStyle = "#fff6dc"; font(ctx, L, "head", lh(L, 66, 52), 700); ctx.fillText(spec.name || spec.animal, W / 2, y);
-        pill(ctx, spec.label || "", W / 2, y + 22, L, spec.tier === "caution" ? WARN : GOLD);
-        y = para(ctx, L, spec.fortune, y + 134, o.compact ? 2 : 3) + 6;
-        // daily trade first (every daily card has it), then love / career / money when the day's text exists
-        var rows = [[spec.tradeLabel || T.trade, spec.trade], [T.love, spec.love], [T.career, spec.career], [T.money, spec.money]].filter(function (rw) { return rw[1]; });
+        var R = o.compact ? 88 : 108, my = o.compact ? 214 : 262;
+        // date between two short gold rules
+        font(ctx, L, "body", 28, 600); var dw = ctx.measureText(spec.date || "").width;
+        ctx.fillStyle = GOLD2; ctx.textAlign = "center"; ctx.fillText(spec.date || "", W / 2, 112);
+        ctx.fillStyle = "rgba(233,199,127,.75)"; ctx.fillRect(W / 2 - dw / 2 - 74, 102, 52, 2); ctx.fillRect(W / 2 + dw / 2 + 22, 102, 52, 2);
+        sparkle(ctx, W / 2 - dw / 2 - 84, 103, 7, 1); sparkle(ctx, W / 2 + dw / 2 + 84, 103, 7, 1);
+        // temple on the moonlit horizon behind the medal, then the medal with a halo and a double gold ring
+        temple(ctx, W / 2, my + R * 0.95, o.compact ? 0.88 : 1.05);
+        var halo = ctx.createRadialGradient(W / 2, my, R * 0.8, W / 2, my, R * 1.9); halo.addColorStop(0, "rgba(255,226,160,.45)"); halo.addColorStop(1, "rgba(255,226,160,0)");
+        ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(W / 2, my, R * 1.9, 0, Math.PI * 2); ctx.fill();
+        medal(ctx, r[0][0], W / 2, my, R);
+        ctx.lineWidth = 6; ctx.strokeStyle = goldGrad(ctx, my - R, my + R); ctx.beginPath(); ctx.arc(W / 2, my, R + 4, 0, Math.PI * 2); ctx.stroke();
+        ctx.lineWidth = 1.5; ctx.strokeStyle = "rgba(246,220,155,.6)"; ctx.beginPath(); ctx.arc(W / 2, my, R + 16, 0, Math.PI * 2); ctx.stroke();
+        // name in gold, rating as a filled ribbon in the day's colour
+        var y = my + R + (o.compact ? 80 : 90);
+        ctx.textAlign = "center"; font(ctx, L, "head", lh(L, o.compact ? 62 : 72, o.compact ? 48 : 56), 700);
+        ctx.save(); ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = 14; ctx.fillStyle = goldGrad(ctx, y - 60, y + 6); ctx.fillText(spec.name || spec.animal, W / 2, y); ctx.restore();
+        font(ctx, L, "body", 29, 700); var pw = Math.min(INNER, ctx.measureText(spec.label || "").width + 64), py = y + 26;
+        roundRect(ctx, W / 2 - pw / 2, py, pw, 54, 27); ctx.fillStyle = tc[0]; ctx.fill();
+        ctx.fillStyle = tc[1]; ctx.fillText(spec.label || "", W / 2, py + 37);
+        // the short fortune, in full (shorter type before cutting anything)
+        y = py + 54 + 52;
+        font(ctx, L, "body", lh(L, 30, 28), 400); var fl = wrap(ctx, spec.fortune, INNER, L);
+        if (fl.length > 3) { font(ctx, L, "body", lh(L, 28, 27), 400); fl = wrap(ctx, spec.fortune, INNER, L, o.compact ? 2 : 4); }
+        else if (o.compact) fl = wrap(ctx, spec.fortune, INNER, L, 2);
+        ctx.fillStyle = INK; y = drawLines(ctx, fl, W / 2, y, lh(L, 40, 46), "center") + 2;
+        // trade / love / career / money: one row each with its icon, thin gold lines between rows
+        var rows = [["trade", spec.tradeLabel || T.trade, spec.trade], ["love", T.love, spec.love], ["career", T.career, spec.career], ["money", T.money, spec.money]].filter(function (rw) { return rw[2]; });
         if (o.compact) rows = rows.slice(0, 2);
-        if (rows.length === 1) y = note(ctx, L, "✦", rows[0][0], rows[0][1], y + 4, GOLD) + 4;   // trade only: bigger box
-        else if (rows.length) y = panel(ctx, L, rows, y, rows.length > 2 ? (o.compact ? 1 : 2) : 3) + 20;
-        y = cells(ctx, L, [[T.number, numL(L, spec.number)], [T.color, spec.color, true], [T.direction, spec.direction], [T.time, numL(L, spec.time)]], y, spec.colorHex);
+        if (rows.length) {
+          var tx = PAD + 96, tw2 = INNER - 96 - 26, size = lh(L, 25, 24), line = lh(L, 34, 40), lab = lh(L, 34, 40), maxL = o.compact ? 2 : 4, padT = 22, gapR = 20;
+          var hs = rows.map(function (rw) { font(ctx, L, "body", size, 400); return wrap(ctx, rw[2], tw2, L, maxL).length; });
+          // each row: label baseline at top + 26, text lines below it, then the gap to the next row
+          var rowH = function (n) { return 26 + lab + (n - 1) * line + 12; };
+          var boxH = padT + rows.reduce(function (a, rw, i) { return a + rowH(hs[i]); }, 0) + gapR * (rows.length - 1) + padT;
+          ctx.save(); ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = 30; roundRect(ctx, PAD, y, INNER, boxH, 26); ctx.fillStyle = "rgba(12,8,40,.72)"; ctx.fill(); ctx.restore();
+          ctx.strokeStyle = "rgba(246,220,155,.45)"; ctx.lineWidth = 1.5; roundRect(ctx, PAD, y, INNER, boxH, 26); ctx.stroke();
+          var yy = y + padT;
+          rows.forEach(function (rw, i) {
+            if (i) { ctx.fillStyle = "rgba(246,220,155,.18)"; ctx.fillRect(tx, yy - gapR / 2 - 1, tw2, 1.5); }
+            icon(ctx, rw[0], PAD + 50, yy + 26, 27);
+            font(ctx, L, "body", lh(L, 23, 24), 700); ctx.fillStyle = GOLD; ctx.textAlign = "left"; ctx.fillText(rw[1], tx, yy + 26);
+            font(ctx, L, "body", size, 400); ctx.fillStyle = INK;
+            drawLines(ctx, wrap(ctx, rw[2], tw2, L, maxL), tx, yy + 26 + lab, line);
+            yy += rowH(hs[i]) + gapR;
+          });
+          y += boxH + 22;
+        }
+        y = luckyTiles(ctx, L, T, spec, y);
         if (o.compact || !spec.advice) return y;
-        y += 48; ctx.textAlign = "center"; font(ctx, L, "body", 26, 700); ctx.fillStyle = GOLD; ctx.fillText(T.advice, W / 2, y);
-        font(ctx, L, "body", lh(L, 29, 28), 400); ctx.fillStyle = INK;
-        return drawLines(ctx, wrap(ctx, spec.advice, INNER - 40, L, 2), W / 2, y + 46, lh(L, 40, 46), "center");
-      });
+        // today's advice under a lotus divider, in large quotation marks
+        y += 46; divider(ctx, W / 2, y, 520); y += 46;
+        ctx.textAlign = "center"; font(ctx, L, "body", 24, 700); ctx.fillStyle = GOLD; ctx.fillText(L === "en" ? T.advice.toUpperCase() : T.advice, W / 2, y);
+        font(ctx, L, "body", lh(L, 29, 28), 500); ctx.fillStyle = "#fff6dc";
+        return drawLines(ctx, wrap(ctx, spec.advice, INNER - 60, L, 3), W / 2, y + 46, lh(L, 40, 46), "center");
+      }, function (ctx, H) { dailyBackground(ctx, H, tc[0]); }, 1800);
     });
   }
 
