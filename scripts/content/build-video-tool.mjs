@@ -43,3 +43,12 @@ if (!tpl.includes("/*__CODE__*/")) throw new Error("template placeholder missing
 const out = path.join(ROOT, "docs", "video-prompts", "video-pack-tool.html");
 fs.writeFileSync(out, tpl.replace("/*__CODE__*/", () => code));
 console.log("wrote " + path.relative(ROOT, out) + " (" + Math.round(fs.statSync(out).size / 1024) + " KB)");
+// the same Studio as a page of the site: https://mybirthsign.com/studio/ (not linked, not indexed). There it can read
+// the published daily fortune pages and draw the website's share cards; the claude.ai copy cannot reach the site.
+// scripts/build-site.mjs copies docs/video-prompts/studio/ to dist/studio/ as it is.
+const siteDir = path.join(ROOT, "docs", "video-prompts", "studio");
+fs.mkdirSync(siteDir, { recursive: true });
+fs.writeFileSync(path.join(siteDir, "index.html"), '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow">' +
+  '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap">' +
+  "<style>@font-face{font-family:'Moul';src:url(/css/fonts/moul-khmer-400.woff2) format('woff2');font-display:swap}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body>\n" + fs.readFileSync(out, "utf8") + "\n</body></html>\n");
+console.log("wrote docs/video-prompts/studio/index.html (site copy, /studio/)");
