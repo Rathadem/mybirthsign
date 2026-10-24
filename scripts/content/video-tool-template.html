@@ -202,7 +202,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     return out;
   }
 
-  var ORDER_OPEN = /^Luckiest|^60-second|^180-second|^Long YouTube|^Story video|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
+  var ORDER_OPEN = /^Luckiest|^Take-it-easy|^60-second|^180-second|^Long YouTube|^Story video|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
   function render(iso) {
     var F = computeFacts(iso);
     var p = buildPack(iso, F, window.MBSLuckyDigits.forSign, null, { INFO: INFO, KM_INFO: KM_INFO });
@@ -270,6 +270,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   // side menu: every section, grouped; a slide-in drawer on phones
   function group(t) {
     if (/^Luckiest|^60-second|^180-second|^Long YouTube|^Story video|^Voice-over – (60|80|180)-second|^Voice-over – long|^Voice-over – story/.test(t)) return "Luckiest animal";
+    if (/^Take-it-easy|^Voice-over – take-it-easy/.test(t)) return "Unlucky sign";
     if (/^YouTube|^Facebook|^TikTok/.test(t)) return "Post it";
     return "Daily video";
   }
@@ -282,7 +283,9 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       .replace(/^Long YouTube video – all 12 signs.*$/, "Long video, all 12 signs (YouTube)")
       .replace(/^Voice-over – long YouTube video/, "Long video voice-over & subtitles")
       .replace(/^Story video – YouTube.*$/, "Story video (YouTube)")
-      .replace(/^Voice-over – story video/, "Story voice-over & subtitles");
+      .replace(/^Voice-over – story video/, "Story voice-over & subtitles")
+      .replace(/^Take-it-easy video – the unlucky sign, (\w+).*$/, "$1: take-it-easy video")
+      .replace(/^Voice-over – take-it-easy video/, "Take-it-easy voice-over & subtitles");
   }
   function buildMenu(secs) {
     var cur = null, out = '<button class="close" id="menuclose" aria-label="Close menu">✕</button><a href="#top" data-go-sec="top">Today at a glance</a>';

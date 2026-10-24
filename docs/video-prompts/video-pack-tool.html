@@ -951,6 +951,53 @@ function buildPack(iso, F, forSign, data = null, P = null) {
     ["Description – English", `On a ${day} day, a little golden ${dl} and ${hn} the ${H.kind[0]} must find three lucky treasures to ${Q.goal[0]} before the full-moon festival. A gentle animated story for the whole family, with today's real lucky color, direction, best time and numbers for the Year of the ${day}.\n\nChapters:\n${storyChapters.map(([t, en]) => `${t} ${en}`).join("\n")}\n\n${factsEn.join("\n")}\n\nAn original story by MyBirthSign. Lucky numbers are for fun only.\nSee all 12 signs: https://mybirthsign.com\n\n${DISC_EN}\n\n${tagsEn} #BedtimeStory #KidsStory`],
     ["Description – Khmer", `នៅថ្ងៃឆ្នាំ${dayKm} ${kA}មាសតូចមួយ និង${H.kind[1]}ឈ្មោះ${hk} ត្រូវស្វែងរករតនសម្បត្តិសំណាងបី ដើម្បី${Q.goal[1]} មុនពិធីបុណ្យព្រះចន្ទពេញវង់។ ជារឿងនិទានគំនូរជីវចលសម្រាប់គ្រួសារទាំងមូល ជាមួយពណ៌សំណាង ទិសសំណាង ពេលល្អ និងលេខសំណាងពិតប្រាកដ សម្រាប់អ្នកកើតឆ្នាំ${dayKm}ថ្ងៃនេះ។\n\nជំពូក៖\n${storyChapters.map(([t, , kmn]) => `${t} ${kmn}`).join("\n")}\n\n${factsKm.join("\n")}\n\nរឿងនិទានដើម ដោយ MyBirthSign។ លេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags} #រឿងនិទាន`],
   ];
+  // ---- "take it easy" video for the day's unlucky sign (the animal that clashes with the day animal): 8 scenes, 80 s.
+  // Gentle and reassuring. Uses the site's own daily wording for that sign when it exists, otherwise fixed lines.
+  if (careful.length) {
+    const c = careful[0], cs = sign(c), cl = c.toLowerCase(), ck = km(c), CL = cs.lucky, helper = CL.helperAnimal || "", hk = helper ? km(helper) : "";
+    const cdir = CL.direction.en.toLowerCase();
+    const st = same && data ? (data.signs.find((x) => x.animal === c) || {}).text : null;
+    const fs1 = (t, lang) => { const m = String(t || "").trim().match(lang === "km" ? /^[^។]+។?/ : /^[^.!?]+[.!?]?/); return m ? m[0].trim() : ""; };
+    const site = (k, lang) => (st && st[lang] && st[lang][k] ? fs1(st[lang][k], lang) : "");
+    const weakE = PI !== undefined && P && P.INFO[c] ? P.INFO[c].weaknesses.replace(/^(\w)/, (m) => m.toLowerCase()).replace(/\.$/, "") : "";
+    const weakK = P && P.KM_INFO[c] ? P.KM_INFO[c].weaknesses.replace(/។$/, "") : "";
+    const calm = "Calm, gentle and hopeful mood, never sad or scary.";
+    const hostEasy = (action) => `${cap(HOST_LOOK)}, stands on the moonlit temple terrace beside the lotus pond, facing the camera and speaking warmly to the viewer with natural lip movements and small, friendly hand gestures. ${action} Medium shot, gentle push-in toward Chanda. Chanda matches her reference image; the ${cl} matches its reference image.`;
+    const E = [
+      ["The hook – Chanda on camera", hostEasy(`Behind her, ${LOOK[c]} rests on its lotus pedestal inside a soft bubble of protective golden light; it looks around calmly and does not speak, its mouth closed.`),
+        `Is your sign the one that should take it easy today? Today, ${dateEn}, the Year of the ${c} should slow down.`,
+        `តើរាសីរបស់អ្នក ជារាសីដែលគួរសម្រាកថ្ងៃនេះឬទេ? ${dateKm} អ្នកកើតឆ្នាំ${ck} គួរធ្វើអ្វីៗយឺតៗ។`, true],
+      [`Why the ${c}`, `${cap(LOOK[c])} sits on a glowing lotus pedestal on the near side of the moonlit pond, resting peacefully inside a soft bubble of protective golden light. Far across the water, ${LOOK[day]} glows brightly on its own lotus. ${calm} Slow push-in toward the ${cl}.`,
+        `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day. The ${c} sits opposite the ${day} in the zodiac circle, so traditionally this is a clashing day.`,
+        `ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}។ ឆ្នាំ${ck} ស្ថិតនៅទល់មុខឆ្នាំ${dayKm} ក្នុងរង្វង់រាសី ដូច្នេះតាមប្រពៃណី ថ្ងៃនេះជាថ្ងៃប៉ះគ្នា។`],
+      ["Not a bad day", `The ${cl} curls up calmly on its glowing lotus as small glowing butterflies circle it, then it opens its eyes and gives a soft, relaxed smile. Warm moonlight. ${calm} Slow orbit.`,
+        "Don't worry. A quiet day is not a bad day. It is a day to rest, slow down, and be kind to yourself.",
+        "កុំបារម្ភ។ ថ្ងៃស្ងប់ស្ងាត់ មិនមែនជាថ្ងៃអាក្រក់ទេ។ វាជាថ្ងៃសម្រាប់សម្រាក ធ្វើអ្វីៗយឺតៗ និងមេត្តាចំពោះខ្លួនឯង។"],
+      ["What to watch", `The ${cl} looks at its reflection in the still lotus pond. The water ripples for a moment, then calms as a soft ring of golden light spreads across it. Thoughtful mood. Slow camera move down to the reflection.`,
+        site("careful", "en") || `Be careful today: you ${weakE}. Take a deep breath first.`,
+        site("careful", "km") || `សូមប្រយ័ត្នថ្ងៃនេះ៖ ${weakK}។ សូមដកដង្ហើមវែងៗសិន។`],
+      ["Love and work", `The ${cl} sits by the lotus pond as warm pink lanterns rise gently around it, then walks slowly up the glowing temple steps, one careful step at a time. Peaceful, patient mood. Camera follows it smoothly.`,
+        site("love", "en") ? `${site("love", "en")} At work, double-check the details.` : "In love, speak softly and give people time. At work, double-check details and finish one thing at a time.",
+        site("love", "km") ? `${site("love", "km")} ក្នុងការងារ សូមពិនិត្យលម្អិតឲ្យច្បាស់។` : "ក្នុងស្នេហា សូមនិយាយទន់ភ្លន់ ហើយផ្ដល់ពេលឲ្យគ្នា។ ក្នុងការងារ សូមពិនិត្យលម្អិតឲ្យច្បាស់ ហើយធ្វើម្ដងមួយៗ។"],
+      ["Money and a helper", `The ${cl} carefully drops one shining golden coin into a small golden jar.${helper ? ` Then ${LOOK[helper]} walks up beside it, and the two sit together happily by the glowing pond.` : ""} Warm, friendly mood. Slow push-in.`,
+        `${site("money", "en") || "With money, keep to the basics and save big buys for another day."}${helper ? ` Your helper animal today is the ${helper}.` : ""}`,
+        `${site("money", "km") || "ចំពោះលុយកាក់ សូមចំណាយតែរបស់ចាំបាច់ ហើយទុកការទិញធំៗសម្រាប់ថ្ងៃក្រោយ។"}${helper ? ` មិត្តជួយរបស់អ្នកថ្ងៃនេះ គឺឆ្នាំ${hk}។` : ""}`],
+      ["Lucky color, time and direction", `Glowing ${CL.color.en} lanterns light up one by one around the ${cl} on the temple steps, and a soft golden path of light unrolls across the pond toward the ${cdir}. The ${cl} looks along the path and smiles. Warm ${CL.color.en} and gold light. Slow orbit.`,
+        `Your lucky color is ${CL.color.en}, your best time is ${sayTime(CL.time)}, and your lucky direction is the ${cdir}.`,
+        `ពណ៌សំណាងរបស់អ្នក គឺពណ៌${CL.color.km} ពេលល្អបំផុត គឺ${sayTimeKm(CL.time)} ហើយទិសសំណាង គឺទិស${CL.direction.km}។`],
+      ["Tip and goodbye – Chanda on camera", hostEasy(`Beside her, ${LOOK[c]}, now relaxed and smiling, sits on its glowing lotus and waves its paw goodbye without speaking, its mouth closed. Lanterns float up over the glowing pond behind them.`),
+        `My tip: ${site("advice", "en").replace(/^[A-Z](?=[a-z])/, (m) => m.toLowerCase()) || "slow down, rest well, and don't rush big decisions."} Tomorrow is a new day. See all twelve signs at mybirthsign dot com.`,
+        `ដំបូន្មានរបស់ខ្ញុំ៖ ${site("advice", "km") || "សូមធ្វើអ្វីៗយឺតៗ សម្រាកឲ្យបានគ្រប់គ្រាន់ និងកុំប្រញាប់សម្រេចចិត្តរឿងធំៗ។"} ថ្ងៃស្អែក ជាថ្ងៃថ្មី។ មើលរាសីទាំង 12 នៅ mybirthsign.com។`, true],
+    ];
+    VIDEOS.push({ id: "easy", name: `Take-it-easy video – the unlucky sign, ${c} (8 scenes, 80 seconds)`, secs: 80, scenes: E,
+      intro: `An 80-second video for the ${c}, today's sign to take it easy (in the traditional day cycle the ${c} clashes with the ${day} day): 8 clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference pictures of Chanda, the ${c}${helper ? `, the ${helper}` : ""} and the ${day} as ingredients. Chanda is on camera and speaks with lip-sync in scenes 1 and 8; in the other scenes she narrates off screen. The animals never speak or move their mouths: they only act. Keep it gentle and reassuring: a quiet day, not bad luck. For each scene, press "Copy + English voice" or "Copy + Khmer voice". Put the clips in order 1 to 8.${st ? " Scenes 4 to 6 and 8 use the site's own daily wording for this sign." : ""}` });
+    POSTS.easy = [
+      ["Title – English", `${EMO[c]} ${c}, Take It Easy Today | ${D}`],
+      ["Title – Khmer", `${EMO[c]} ឆ្នាំ${ck} ថ្ងៃនេះគួរប្រុងប្រយ័ត្ន | ${D}`],
+      ["Caption – English (Facebook, TikTok)", `Born in the Year of the ${c}? Today, ${D}, is a ${cs.label.en} day for you. 🌙\n\n✨ Lucky color: ${CL.color.en}\n✨ Best time: ${CL.time}\n✨ Lucky direction: ${cdir}${helper ? `\n🤝 Helper animal: ${helper}` : ""}\n\nA quiet day is not a bad day. Comment ${EMO[c]} if this is your sign! 👇\nAll 12 signs: https://mybirthsign.com (TikTok: link in bio)\n\n${DISC_EN}\n#ChineseZodiac #DailyHoroscope #YearOfThe${c} #fyp #Reels`],
+      ["Caption – Khmer (Facebook, TikTok)", `អ្នកកើតឆ្នាំ${ck}មែនទេ? ថ្ងៃនេះ ${D} ជា${cs.label.km} សម្រាប់អ្នក។ 🌙\n\n✨ ពណ៌សំណាង៖ ពណ៌${CL.color.km}\n✨ ពេលល្អ៖ ${CL.time}\n✨ ទិសសំណាង៖ ទិស${CL.direction.km}${helper ? `\n🤝 មិត្តជួយ៖ ឆ្នាំ${hk}` : ""}\n\nថ្ងៃស្ងប់ស្ងាត់ មិនមែនជាថ្ងៃអាក្រក់ទេ។ Comment ${EMO[c]} បើនេះជារាសីរបស់អ្នក! 👇\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/ (TikTok៖ Link នៅក្នុង bio)\n\n${disclaimer}\n#ជោគជតារាសី #រាសីប្រចាំថ្ងៃ #ឆ្នាំ${ck} #fyp #Reels`],
+    ];
+  }
   VIDEOS.forEach((v) => { v.posts = POSTS[v.id]; });
   const srtVid = {};
   VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
@@ -959,7 +1006,7 @@ ${v.intro || `${v.secs === 80 ? "An" : "A"} ${v.secs}-second video about the ${d
 ${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.metaMd ? `\n${v.metaMd}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
 ${v.scenes.map(([t, prompt, en, kmL, onCam], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: ${audio("en", (i === 0 && v.host) || !!onCam, en)}\nKhmer voice: ${audio("km", (i === 0 && v.host) || !!onCam, kmFlow(kmL))}`).join("\n\n")}
 
-## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : `${v.secs}-second video`}
+## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : v.id === "easy" ? "take-it-easy video" : `${v.secs}-second video`}
 The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
 
 ### English
@@ -1250,7 +1297,7 @@ function charactersMd(KM_NAMES) {
     return out;
   }
 
-  var ORDER_OPEN = /^Luckiest|^60-second|^180-second|^Long YouTube|^Story video|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
+  var ORDER_OPEN = /^Luckiest|^Take-it-easy|^60-second|^180-second|^Long YouTube|^Story video|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
   function render(iso) {
     var F = computeFacts(iso);
     var p = buildPack(iso, F, window.MBSLuckyDigits.forSign, null, { INFO: INFO, KM_INFO: KM_INFO });
@@ -1318,6 +1365,7 @@ function charactersMd(KM_NAMES) {
   // side menu: every section, grouped; a slide-in drawer on phones
   function group(t) {
     if (/^Luckiest|^60-second|^180-second|^Long YouTube|^Story video|^Voice-over – (60|80|180)-second|^Voice-over – long|^Voice-over – story/.test(t)) return "Luckiest animal";
+    if (/^Take-it-easy|^Voice-over – take-it-easy/.test(t)) return "Unlucky sign";
     if (/^YouTube|^Facebook|^TikTok/.test(t)) return "Post it";
     return "Daily video";
   }
@@ -1330,7 +1378,9 @@ function charactersMd(KM_NAMES) {
       .replace(/^Long YouTube video – all 12 signs.*$/, "Long video, all 12 signs (YouTube)")
       .replace(/^Voice-over – long YouTube video/, "Long video voice-over & subtitles")
       .replace(/^Story video – YouTube.*$/, "Story video (YouTube)")
-      .replace(/^Voice-over – story video/, "Story voice-over & subtitles");
+      .replace(/^Voice-over – story video/, "Story voice-over & subtitles")
+      .replace(/^Take-it-easy video – the unlucky sign, (\w+).*$/, "$1: take-it-easy video")
+      .replace(/^Voice-over – take-it-easy video/, "Take-it-easy voice-over & subtitles");
   }
   function buildMenu(secs) {
     var cur = null, out = '<button class="close" id="menuclose" aria-label="Close menu">✕</button><a href="#top" data-go-sec="top">Today at a glance</a>';
