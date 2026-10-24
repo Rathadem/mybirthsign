@@ -91,6 +91,20 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   .menu.open { transform: none; visibility: visible; }
   .menu .close { display: block; justify-self: end; margin-bottom: 4px; }
 }
+.gen { border: 1px solid var(--gold); }
+.gen .fields { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; }
+.gen label { display: grid; gap: 4px; font-size: .78rem; color: var(--muted); }
+.gen label.chk { display: flex; gap: 6px; align-items: center; }
+.gen input[type=password], .gen select { font: .9rem var(--body); background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; min-width: 0; max-width: 100%; }
+.gen input[type=password] { width: min(320px, 100%); }
+.refs { display: flex; flex-wrap: wrap; gap: 12px; }
+.ref { display: flex; gap: 8px; align-items: center; font-size: .85rem; }
+.ref img { width: 52px; height: 52px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); background: var(--card); }
+.ref .none { width: 52px; height: 52px; border-radius: 8px; border: 1px dashed var(--line); display: grid; place-items: center; color: var(--muted); font-size: .7rem; text-align: center; }
+.genout { display: grid; gap: 6px; justify-items: start; }
+.genout img { max-width: min(100%, 420px); max-height: 520px; border-radius: 10px; border: 1px solid var(--line); }
+.genout a { color: var(--gold-soft); font-weight: 600; }
+.genout .err { color: var(--care); font-size: .88rem; margin: 0; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -1254,7 +1268,7 @@ function charactersMd(KM_NAMES) {
     return out;
   }
 
-  var ORDER_OPEN = /^Luckiest|^60-second|^180-second|^Long YouTube|^Story video|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
+  var ORDER_OPEN = /^Luckiest|^Background pictures|^60-second|^180-second|^Long YouTube|^Story video|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
   function render(iso) {
     var F = computeFacts(iso);
     var p = buildPack(iso, F, window.MBSLuckyDigits.forSign, null, { INFO: INFO, KM_INFO: KM_INFO });
@@ -1287,17 +1301,20 @@ function charactersMd(KM_NAMES) {
 
     var secs = parse(md), html = "";
     secs.forEach(function (s, si) {
-      var scene = /^Scene (\d)/.exec(s.title);
+      var scene = /^Scene (\d)/.exec(s.title), isBg = /^Background pictures/.test(s.title);
       html += '<details class="sec" id="sec' + si + '"' + (ORDER_OPEN.test(s.title) ? " open" : "") + '><summary><h2>' + esc(s.title) + '</h2><button data-copy="s' + si + '">Copy section</button></summary><div class="secbody">';
+      if (isBg) html += genPanel(F.dayAnimal);
       s.blocks.forEach(function (b, bi) {
         var id = "b" + si + "_" + bi;
+        var canGen = isBg && /^\d\. /.test(b.title || "");
         html += '<div class="block">' + (b.title ? "<h3>" + esc(b.title) + "</h3>" : "") +
           '<pre class="txt' + (b.code ? " code" : "") + '" id="' + id + '">' + (b.code ? esc(b.text) : rich(b.text)) + "</pre>" +
           '<div class="row"><button data-copy="' + id + '">Copy</button>' +
           (b.code && /\(([^)]+\.srt)\)/.test(b.title) ? '<button class="primary" data-srtfile="' + /\(([^)]+\.srt)\)/.exec(b.title)[1] + '" data-pre="' + id + '">Download ' + /\(([^)]+\.srt)\)/.exec(b.title)[1] + '</button>' : "") +
           (scene && voices[scene[1]] ? '<button data-flow="' + scene[1] + '|en" data-pre="' + id + '">Copy + English voice</button><button data-flow="' + scene[1] + '|km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
           (/\nEnglish voice: /.test(b.text) ? '<button data-nine="en" data-pre="' + id + '">Copy + English voice</button><button data-nine="km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
-          "</div></div>";
+          (canGen ? '<button class="primary" data-gen="' + id + '" data-n="' + b.title.charAt(0) + '">Make picture</button>' : "") +
+          "</div>" + (canGen ? '<div class="genout" id="out_' + id + '"></div>' : "") + "</div>";
       });
       html += "</div></details>";
     });
@@ -1307,6 +1324,7 @@ function charactersMd(KM_NAMES) {
       "</div></details>";
     $("pack").innerHTML = html;
     buildMenu(secs);
+    genAfterRender(F.dayAnimal);
 
     var texts = {};
     secs.forEach(function (s, si) { texts["s" + si] = "## " + s.title + "\n" + s.blocks.map(function (b) { return (b.title ? "### " + b.title + "\n" : "") + (b.code ? b.text : plain(b.text)); }).join("\n\n"); });
@@ -1433,6 +1451,127 @@ function charactersMd(KM_NAMES) {
   });
   document.addEventListener("click", function (e) { var b = e.target.closest("button[data-dlsrt]"); if (b) { e.preventDefault(); saveSubtitles(b); } });
   $("copyall").addEventListener("click", function (e) { copy(plain(window.__lastMd || ""), e.currentTarget); });
+
+  // ------------------------------------------------------------------ Nano Banana Pro: make the background pictures here
+  // Calls the Gemini API straight from this browser with the owner's own key (typed in below, kept only in this
+  // browser, sent only to Google). Works on https://mybirthsign.com/studio/; the claude.ai copy cannot reach Google.
+  var GEN = { key: "", remember: false, model: "pro", size: "1K", refs: { chanda: null, animal: null }, animalFor: "" };
+  try { GEN.key = localStorage.getItem("mbs-gemini-key") || ""; GEN.remember = !!GEN.key; } catch (e) {}
+  var MODELS = { pro: ["gemini-3-pro-image", "gemini-3-pro-image-preview"], fast: ["gemini-nano-banana-2.1", "gemini-3.1-flash-image"] };
+  var API = "https://generativelanguage.googleapis.com/v1beta/";
+  var onSite = /(^|\.)mybirthsign\.com$/.test(location.hostname) || location.hostname === "localhost" || location.protocol === "file:";
+  function genPanel(animal) {
+    var ref = function (k, label) {
+      var r = GEN.refs[k];
+      return '<div class="ref">' + (r ? '<img alt="" src="data:' + r.mime + ";base64," + r.data + '">' : '<span class="none">no picture</span>') +
+        "<span>" + label + '<br><button type="button" data-refpick="' + k + '">Choose picture</button></span>' +
+        '<input type="file" accept="image/png,image/jpeg,image/webp" id="ref_' + k + '" hidden></div>';
+    };
+    return '<div class="block gen"><h3>Make the pictures here (Gemini API)</h3>' +
+      (onSite ? "" : '<p class="note"><b>This copy cannot reach Google.</b> Open the Studio on your site to make pictures: https://mybirthsign.com/studio/ (the prompts here still copy as usual).</p>') +
+      '<p class="note">Uses your own Gemini API key from Google AI Studio (billing on). The key stays in this browser and is sent only to Google. Each picture is charged to your Google account: Nano Banana Pro about $0.13 (1K or 2K), the draft model about $0.03 to $0.07 (Google\'s price list, October 2026).</p>' +
+      '<div class="fields"><label>Gemini API key<input type="password" id="gkey" autocomplete="off" spellcheck="false" placeholder="paste your key here"></label>' +
+      '<label class="chk"><input type="checkbox" id="grem"> Remember on this device</label>' +
+      '<label>Model<select id="gmodel"><option value="pro">Nano Banana Pro (best)</option><option value="fast">Nano Banana 2.1 (cheap draft)</option></select></label>' +
+      '<label>Size<select id="gsize"><option>1K</option><option>2K</option></select></label></div>' +
+      '<p class="note">Reference pictures (pictures 4, 5 and 6 use them):</p><div class="refs">' + ref("chanda", "Chanda") + ref("animal", "The " + animal) + "</div></div>";
+  }
+  function toB64(blob) {
+    return new Promise(function (ok, no) { var r = new FileReader(); r.onload = function () { ok({ mime: blob.type || "image/jpeg", data: String(r.result).split(",")[1] }); }; r.onerror = no; r.readAsDataURL(blob); });
+  }
+  function loadRef(k, url) {
+    return fetch(url).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); }).then(toB64).then(function (x) { GEN.refs[k] = x; return true; }, function () { return false; });
+  }
+  function genAfterRender(animal) {
+    if (!$("gkey")) return;
+    $("gkey").value = GEN.key; $("grem").checked = GEN.remember; $("gmodel").value = GEN.model; $("gsize").value = GEN.size;
+    var redraw = function () { var g = document.querySelector(".gen"); if (!g) return; var t = document.createElement("div"); t.innerHTML = genPanel(animal); g.replaceWith(t.firstChild); genAfterRender(animal); };
+    var jobs = [];
+    if (onSite && !GEN.refs.chanda) jobs.push(loadRef("chanda", "chanda.jpg"));
+    if (onSite && GEN.animalFor !== animal) { GEN.refs.animal = null; GEN.animalFor = animal; jobs.push(loadRef("animal", "/images/profile/spirit-" + animal.toLowerCase() + ".webp")); }
+    if (jobs.length) Promise.all(jobs).then(function (r) { if (r.some(Boolean)) redraw(); });
+  }
+  function saveKey() {
+    GEN.key = ($("gkey") && $("gkey").value.trim()) || ""; GEN.remember = !!($("grem") && $("grem").checked);
+    try { if (GEN.remember && GEN.key) localStorage.setItem("mbs-gemini-key", GEN.key); else localStorage.removeItem("mbs-gemini-key"); } catch (e) {}
+  }
+  document.addEventListener("change", function (e) {
+    var t = e.target;
+    if (t.id === "gkey" || t.id === "grem") saveKey();
+    else if (t.id === "gmodel") GEN.model = t.value;
+    else if (t.id === "gsize") GEN.size = t.value;
+    else if (/^ref_/.test(t.id) && t.files && t.files[0]) {
+      var k = t.id.slice(4);
+      toB64(t.files[0]).then(function (x) { GEN.refs[k] = x; var g = document.querySelector(".gen"); var d = document.createElement("div"); d.innerHTML = genPanel(GEN.animalFor || ""); g.replaceWith(d.firstChild); $("gkey").value = GEN.key; $("grem").checked = GEN.remember; $("gmodel").value = GEN.model; $("gsize").value = GEN.size; });
+    }
+  });
+  // find the picture in either answer shape (generateContent: inlineData; Interactions API: an image block with data)
+  function findImage(o, depth) {
+    if (!o || typeof o !== "object" || (depth || 0) > 12) return null;
+    var d = o.inlineData || o.inline_data;
+    if (d && typeof d.data === "string" && /^image\//.test(d.mimeType || d.mime_type || "image/png")) return { mime: d.mimeType || d.mime_type || "image/png", data: d.data };
+    if (typeof o.data === "string" && o.data.length > 500 && /^image\//.test(o.mime_type || o.mimeType || (o.type === "image" ? "image/png" : ""))) return { mime: o.mime_type || o.mimeType || "image/png", data: o.data };
+    for (var k in o) { var r = findImage(o[k], (depth || 0) + 1); if (r) return r; }
+    return null;
+  }
+  function post(url, body) {
+    return fetch(url, { method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": GEN.key }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, j: j }; }); });
+  }
+  function generate(prompt, aspect, refs) {
+    var ids = MODELS[GEN.model].slice(), lastErr = "";
+    function tryModel() {
+      var m = ids.shift(); if (!m) return Promise.reject(new Error(lastErr || "Google did not return a picture."));
+      var viaInteractions = function () {
+        return post(API + "interactions", { model: m, input: [{ type: "text", text: prompt }].concat(refs.map(function (r) { return { type: "image", mime_type: r.mime, data: r.data }; })),
+          response_format: { type: "image", mime_type: "image/png", aspect_ratio: aspect, image_size: GEN.size } });
+      };
+      var viaGenerate = function () {
+        return post(API + "models/" + m + ":generateContent", { contents: [{ role: "user", parts: [{ text: prompt }].concat(refs.map(function (r) { return { inline_data: { mime_type: r.mime, data: r.data } }; })) }],
+          generationConfig: { responseModalities: ["IMAGE"], imageConfig: { aspectRatio: aspect, imageSize: GEN.size } } });
+      };
+      var check = function (res, last) {
+        var img = res.status === 200 && findImage(res.j);
+        if (img) return img;
+        var msg = (res.j && res.j.error && res.j.error.message) || ("HTTP " + res.status);
+        if (res.status === 400 && /api key/i.test(msg) || res.status === 401 || res.status === 403) throw new Error("Google refused the key: " + msg);
+        if (res.status === 429) throw new Error("Google's limit was reached (or billing is not on): " + msg);
+        if (res.status === 200 && last) throw new Error("Google answered without a picture (it may have declined the prompt). Try again or change the prompt.");
+        lastErr = msg; return null;
+      };
+      return viaInteractions().then(function (r) { return check(r, false); }).then(function (img) { return img || viaGenerate().then(function (r) { return check(r, true); }); }).then(function (img) { return img || tryModel(); });
+    }
+    return tryModel();
+  }
+  document.addEventListener("click", function (e) {
+    var p = e.target.closest("button[data-refpick]"); if (p) { e.preventDefault(); $("ref_" + p.dataset.refpick).click(); return; }
+    var b = e.target.closest("button[data-gen]"); if (!b) return;
+    e.preventDefault();
+    var out = $("out_" + b.dataset.gen), n = b.dataset.n;
+    saveKey();
+    if (!onSite) { out.innerHTML = '<p class="err">This copy cannot reach Google. Open https://mybirthsign.com/studio/ to make pictures.</p>'; return; }
+    if (!GEN.key) { out.innerHTML = '<p class="err">Paste your Gemini API key at the top of this section first.</p>'; $("gkey").focus(); return; }
+    var text = ($("pack").__texts || {})[b.dataset.gen] || "";
+    var title = (b.closest(".block").querySelector("h3") || {}).textContent || "";
+    var aspect = /16:9/.test(title) ? "16:9" : /1:1/.test(title) ? "1:1" : /9:16/.test(title) ? "9:16" : "16:9";
+    var refs = [];
+    if (n === "5") { if (!GEN.refs.chanda || !GEN.refs.animal) { out.innerHTML = '<p class="err">Picture 5 needs both reference pictures (Chanda and the animal).</p>'; return; } refs = [GEN.refs.chanda, GEN.refs.animal]; }
+    else if (n === "4" || n === "6") { if (!GEN.refs.animal) { out.innerHTML = '<p class="err">This picture needs the animal reference picture.</p>'; return; } refs = [GEN.refs.animal]; }
+    var prompt = text.split("\n").filter(function (l) { return !/^Nano Banana Pro can write/.test(l); }).join("\n")
+      .replace(/^Add the \w+ reference picture first\.\s*/, "Use the reference image for the animal's design. ")
+      .replace(/^Add two reference pictures first:[^.]*\.\s*/, "Image 1 is Chanda, image 2 is the animal. ")
+      .replace(/the first reference picture/g, "image 1").replace(/the second reference picture/g, "image 2");
+    var o = b.textContent; b.disabled = true; b.textContent = "Making… (up to a minute)";
+    out.innerHTML = "";
+    generate(prompt, aspect, refs).then(function (img) {
+      var src = "data:" + img.mime + ";base64," + img.data, ext = /jpe?g/.test(img.mime) ? "jpg" : "png";
+      out.innerHTML = '<img alt="Picture ' + n + ' for ' + D.value + '" src="' + src + '"><a href="' + src + '" download="mybirthsign-' + D.value + "-picture-" + n + "." + ext + '">Download picture ' + n + "</a>";
+    }, function (er) {
+      var m = er && er.message || String(er);
+      if (/Failed to fetch|NetworkError|Load failed/i.test(m)) m = "Could not reach Google from this page (network or browser blocked it).";
+      out.innerHTML = '<p class="err">' + esc(m) + "</p>";
+    }).then(function () { b.disabled = false; b.textContent = o; });
+  });
 
   function set(iso) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;

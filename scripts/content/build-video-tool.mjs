@@ -43,3 +43,13 @@ if (!tpl.includes("/*__CODE__*/")) throw new Error("template placeholder missing
 const out = path.join(ROOT, "docs", "video-prompts", "video-pack-tool.html");
 fs.writeFileSync(out, tpl.replace("/*__CODE__*/", () => code));
 console.log("wrote " + path.relative(ROOT, out) + " (" + Math.round(fs.statSync(out).size / 1024) + " KB)");
+// the same Studio as a page of the site: https://mybirthsign.com/studio/ (not linked, not indexed). It can call
+// the Gemini API to make the background pictures; the claude.ai copy cannot reach Google. scripts/build-site.mjs
+// copies docs/video-prompts/studio/ to dist/studio/ as it is.
+const siteDir = path.join(ROOT, "docs", "video-prompts", "studio");
+fs.mkdirSync(siteDir, { recursive: true });
+const tool = fs.readFileSync(out, "utf8");
+fs.writeFileSync(path.join(siteDir, "index.html"), '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow">' +
+  "<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body>\n" + tool + "\n</body></html>\n");
+fs.copyFileSync(path.join(ROOT, "docs", "video-prompts", "characters", "chanda.jpg"), path.join(siteDir, "chanda.jpg"));
+console.log("wrote docs/video-prompts/studio/index.html (site copy, /studio/)");
