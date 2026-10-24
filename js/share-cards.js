@@ -103,6 +103,20 @@
   // QR code for https://mybirthsign.com (generated once, dark modules on a light tile so phone cameras read it)
   var QR_SRC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAAD6CAIAAAAHjs1qAAADu0lEQVR42u3dPW7cMBCAUStgu1U2l9lD+LC+VpwLuLHbVBJAcjBD8b3W2D/5AyFgQOp4Pl5v9/L330f3a//8ft/qc+O+VU2/3mAbckfuIHeQO8gd5A5yB7nDPO38z3ETuxEj076sSWHNzx35/67YhtUdNzMgd5A7yB3kDnIHuYPcoUMbeXHcpLDmxC7uapz/3vN3jpub3q8NqztuZkDuIHeQO8gd5A5yB7lDh+YSzJI1GV1x5mp1B7mD3EHuIHeQO3IHuYPcYSHbTVXjnn6adcbvyMzV6g5yB7mD3EHuIHeQO8gd5A6Xhqaqu+10HJlf7rbftOa3srrjZgbkDnIHuYPcQe4gd5A7dLiYqt5vp2Pc7DPrtTWvpNUd5A5yB7mD3EHuIHfkDnKH22i77TcdkXWt4ua1NX+v1R3kDnIHuSN3kDvIHeQOcodSjufjdfLnmnO1rH2fWTtKa+5kjXtCbdy3srrjZgbkDnIHuYPcQe4gd5A7dGgrfum4WW/WO488VzXuc1c8l9jqDnJH7iB3kDvIHeQOcge5w3TH99dn94tXfEZpTVl7N+O+c81prtUdNzMgd5A7yB3kDnIHuYPcocPFVHXF2WfNE3FrToJr7jeNO1vY6o6bGZA7yB3kDnIHuYPcQe7Qoa14BmzNZ6PWnFDWfAat1R3kDnIHuYPcQe7IHeQOcoeFHM/Hq/vFWTPXuL2Mu+03zbqScb/3/HOt7riZAbmD3EHuIHeQO8gd5A4d2vmfa85NdztNd+QXxc1N417rBGBwMwNyB7kjd5A7yB3kDnKHUi72qtZ8+mnczLXmZLSmmmcLm6qC3JE7yB3kDnIHuYPcQe4wXRt5cc29qnF2eyZrXBtZM1erO25mQO4gd5A7yB3kDnIHuUOH4/vrc6sfXPNpoOeyZpArXmerO8gduYPcQe4gd5A7yB3kDtO1++2SPJ/YZT1nNG6OmLWDtuaZxk4ABrkjd5A7yB3kDnIHuYPcYbqLE4BXnJzFiZvIrnjicc3/vhOAQe7IHeQOcge5g9xB7iB3mG7J56reT9bctOZO5bj9tVZ33MyA3EHuIHeQO8gd5A5yhw7NJfhf3Jm3NZ+NutuZxlZ33MyA3EHuIHeQO8gd5A5yhw6mqtPETSjP33lkEpy1JzjrWlndcTMDcge5g9xB7iB3kDvIHToMTVXvd05v1v7LOHG7b2vuc7W6g9yRO8gd5A5yB7mD3EHuMN3FVLXmczdHrHjGb9bnZk1k42auVnfczIDcQe4gd5A7yB3kDnKHDj9nL1x2Gaq1pQAAAABJRU5ErkJggg==";
   var qrReady = loadImg(QR_SRC);
+  // card background picture (images/cards/card-bg.webp: moonlit lake, Angkor temple, zodiac wheel, gold frame), darkened so text stays readable
+  var bgReady = loadImg(base() + "images/cards/card-bg.webp");
+  function photoBackground(ctx, H, img) {
+    var r = W / H, ir = img.width / img.height, framed = Math.abs(r - ir) < 0.08;
+    if (framed) ctx.drawImage(img, 0, 0, W, H);                                  // close to the picture's shape: whole picture, its own gold frame
+    else { var sc = Math.max(W / img.width, H / img.height), w = img.width * sc, h = img.height * sc; ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h); }
+    var g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, "rgba(12,7,34,.38)"); g.addColorStop(0.2, "rgba(12,7,34,.5)"); g.addColorStop(0.6, "rgba(12,7,34,.6)"); g.addColorStop(1, "rgba(12,7,34,.5)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    if (!framed) {                                                               // picture cropped: draw a gold frame like the picture's own
+      ctx.strokeStyle = "rgba(246,220,155,.85)"; ctx.lineWidth = 3; roundRect(ctx, 30, 30, W - 60, H - 60, 30); ctx.stroke();
+      ctx.strokeStyle = "rgba(246,220,155,.3)"; ctx.lineWidth = 1.5; roundRect(ctx, 44, 44, W - 88, H - 88, 24); ctx.stroke();
+    }
+  }
   function qr(ctx, img, H) {
     if (!img) return;
     var s = 116, pad = 10, x = W - 62 - s - pad, y = H - 56 - s - pad;     // inside the frame, in the footer band
@@ -184,11 +198,14 @@
     if (F.grow) H = Math.max(F.h, Math.min(growTo || F.grow, Math.ceil((end + FOOT) / 10) * 10));
     var avail = H - FOOT, scale = Math.min(1, avail / end);
     var c = document.createElement("canvas"); c.width = W; c.height = H; var ctx = alignByHand(c.getContext("2d"));
-    (bg || background)(ctx, H);
     var dw = W * scale, dh = end * scale, dy = Math.max(0, (avail - dh) / 2 + (opts.story ? 20 : 0));   // short content sits in the middle, not at the top
-    ctx.drawImage(m, 0, 0, W, end, (W - dw) / 2, dy, dw, dh);
-    footer(ctx, L, note, H);
-    return qrReady.then(function (img) {
+    return Promise.all([qrReady, bgReady]).then(function (im) {
+      if (im[1]) photoBackground(ctx, H, im[1]); else (bg || background)(ctx, H);   // the moonlit-lake picture; drawn background if it cannot load
+      if (im[1]) { ctx.save(); ctx.shadowColor = "rgba(5,3,18,.85)"; ctx.shadowBlur = 10; }   // soft shadow keeps text clear over the picture
+      ctx.drawImage(m, 0, 0, W, end, (W - dw) / 2, dy, dw, dh);
+      footer(ctx, L, note, H);
+      if (im[1]) ctx.restore();
+      var img = im[0];
       qr(ctx, img, H);
       return new Promise(function (ok) { c.toBlob(function (b) { ok(b); }, "image/png"); });
     });
@@ -346,7 +363,6 @@
         ctx.fillStyle = "rgba(233,199,127,.75)"; ctx.fillRect(W / 2 - dw / 2 - 74, 102, 52, 2); ctx.fillRect(W / 2 + dw / 2 + 22, 102, 52, 2);
         sparkle(ctx, W / 2 - dw / 2 - 84, 103, 7, 1); sparkle(ctx, W / 2 + dw / 2 + 84, 103, 7, 1);
         // temple on the moonlit horizon behind the medal, then the medal with a halo and a double gold ring
-        temple(ctx, W / 2, my + R * 0.95, o.compact ? 0.88 : 1.05);
         var halo = ctx.createRadialGradient(W / 2, my, R * 0.8, W / 2, my, R * 1.9); halo.addColorStop(0, "rgba(255,226,160,.45)"); halo.addColorStop(1, "rgba(255,226,160,0)");
         ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(W / 2, my, R * 1.9, 0, Math.PI * 2); ctx.fill();
         medal(ctx, r[0][0], W / 2, my, R);
