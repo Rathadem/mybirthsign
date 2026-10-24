@@ -107,17 +107,21 @@ and brighter days
 are already on their way.
 
 28
-00:01:10,000 --> 00:01:12,750
-My tip: slow down, rest well
+00:01:10,000 --> 00:01:11,648
+Rest well tonight.
 
 29
-00:01:12,800 --> 00:01:15,650
-and don't rush big decisions.
-
-30
-00:01:15,700 --> 00:01:17,750
+00:01:11,698 --> 00:01:13,629
 Tomorrow is a new day
 
-31
-00:01:17,800 --> 00:01:19,950
+30
+00:01:13,679 --> 00:01:15,705
 and it could be yours.
+
+31
+00:01:15,755 --> 00:01:17,403
+Follow MyBirthSign
+
+32
+00:01:17,453 --> 00:01:19,950
+for your fortune every day!
