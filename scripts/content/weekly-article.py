@@ -18,6 +18,11 @@ Optional: listing (default true; false = do not add a card to blog.html), note (
   "" for none), back ([label, href] for the back link, href relative to /blog/),
   youtube (a real YouTube video ID; the video is embedded only when this is set),
   label_folklore (true = add a "Folk tale" / "History" key under the lead).
+  km: an optional Khmer version of the article — {title, eyebrow, lead, published, facts, image, sections, faq,
+  source_notes (one Khmer note per entry of "sources"; the source titles stay as published), related, note, back,
+  kicker, card_text}. The page then carries an English and a Khmer language block; the site build publishes the
+  Khmer one at /km/blog/<slug> (no ads there) and lists it in blog.html's Khmer "Latest Articles". Western digits,
+  dates written dd/mm/yyyy.
 """
 import html, json, os, re, sys
 
@@ -51,6 +56,8 @@ STYLE = (".festival-article{max-width:900px;margin:40px auto;padding:0 22px;colo
          ".festival-article .video{position:relative;aspect-ratio:16/9;margin:0 0 30px;border-radius:14px;overflow:hidden}"
          ".festival-article .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}"
          ".festival-article .tale{border:1px solid #6f5a9e;border-radius:14px;padding:16px 18px;background:#1b1734;margin:20px 0}"
+         "html[lang=km] .festival-article h1,html[lang=km] .festival-article h2,html[lang=km] .festival-article h3{font-family:'Kantumruy Pro','Noto Sans Khmer',sans-serif;line-height:1.5}"
+         "html[lang=km] .festival-article h1{font-size:clamp(1.9rem,4.4vw,3rem)}html[lang=km] .festival-article .eyebrow{letter-spacing:0}"
          "@media(max-width:620px){.festival-article .facts{grid-template-columns:1fr}}")
 
 # header/nav: copied from an existing guide so menus stay identical across the site
@@ -91,6 +98,37 @@ video = (f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embe
 sources = "".join(f'<li><a href="{e(u)}" target="_blank" rel="noopener">{e(t)}</a> — {e(n)}</li>' for t, u, n in spec["sources"])
 related = " · ".join(f'<a href="{e(h)}">{e(l)}</a>' for l, h in spec["related"])
 
+main_html = f"""<p class="eyebrow">{e(spec['eyebrow'])}</p><h1>{e(title)}</h1><p class="lead">{spec['lead']}</p><p class="meta">Published <time datetime="{spec['published']}">{pub_txt}</time> · MyBirthSign</p><div class="facts">{facts}</div>{figure}{video}
+{chr(10).join(parts)}
+<section><h2>Frequently asked questions</h2>{faq}</section>
+<section><h2>Sources and further reading</h2><ul>{sources}</ul>
+{note}</section>
+<p><strong>Explore more:</strong> {related}</p><a class="back" href="{back_href}">← {back_label}</a>"""
+K = spec.get("km")
+if K:
+    def secs(sl):
+        out = []
+        for s in sl:
+            body = "".join(f"<p>{p}</p>" for p in s.get("paras", []))
+            if s.get("list"): body += "<ul>" + "".join(f"<li>{li}</li>" for li in s["list"]) + "</ul>"
+            for p in s.get("after", []): body += f"<p>{p}</p>"
+            out.append(f"<section><h2>{e(s['h2'])}</h2>\n{body}</section>")
+        return chr(10).join(out)
+    kimg = K.get("image")
+    kfig = (f'<figure><img src="../{kimg["src"]}" alt="{e(kimg["alt"])}" width="{kimg["width"]}" height="{kimg["height"]}" decoding="async">'
+            f'<figcaption>{e(kimg["caption"])}</figcaption></figure>') if kimg else ""
+    kpub = date.fromisoformat(K["published"])
+    assert len(K["source_notes"]) == len(spec["sources"]), "km.source_notes needs one note per source"
+    ksrc = "".join(f'<li><a href="{e(u)}" target="_blank" rel="noopener">{e(t)}</a> — {e(n)}</li>' for (t, u, _), n in zip(spec["sources"], K["source_notes"]))
+    kback = K.get("back", ["ត្រឡប់ទៅប្លុក MyBirthSign", "../blog.html"])
+    main_km = f"""<p class="eyebrow">{e(K['eyebrow'])}</p><h1>{e(K['title'])}</h1><p class="lead">{K['lead']}</p><p class="meta">ចុះផ្សាយ <time datetime="{K['published']}">{kpub.day:02d}/{kpub.month:02d}/{kpub.year}</time> · MyBirthSign</p><div class="facts">{"".join(f'<div class="fact"><strong>{e(k)}</strong>{e(v)}</div>' for k, v in K["facts"])}</div>{kfig}
+{secs(K["sections"])}
+<section><h2>សំណួរដែលគេសួរញឹកញាប់</h2>{"".join(f"<h3>{e(q)}</h3><p>{a}</p>" for q, a in K["faq"])}</section>
+<section><h2>ប្រភព និងឯកសារអានបន្ថែម</h2><ul>{ksrc}</ul>
+{f'<p class="note">{K["note"]}</p>' if K.get("note") else ""}</section>
+<p><strong>អានបន្ថែម៖</strong> {" · ".join(f'<a href="{e(h)}">{e(l)}</a>' for l, h in K["related"])}</p><a class="back" href="{kback[1]}">← {kback[0]}</a>"""
+    main_html = f'<div data-lang-content="en">{main_html}</div>\n<div data-lang-content="km" lang="km">{main_km}</div>'
+
 page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(seo_title)} | MyBirthSign</title><meta name="description" content="{e(desc)}">
@@ -102,12 +140,7 @@ page = f"""<!doctype html>
 <style>{STYLE}</style></head>
 <body class="fx-page">
 {header}
-<main class="festival-article"><p class="eyebrow">{e(spec['eyebrow'])}</p><h1>{e(title)}</h1><p class="lead">{spec['lead']}</p><p class="meta">Published <time datetime="{spec['published']}">{pub_txt}</time> · MyBirthSign</p><div class="facts">{facts}</div>{figure}{video}
-{chr(10).join(parts)}
-<section><h2>Frequently asked questions</h2>{faq}</section>
-<section><h2>Sources and further reading</h2><ul>{sources}</ul>
-{note}</section>
-<p><strong>Explore more:</strong> {related}</p><a class="back" href="{back_href}">← {back_label}</a></main>
+<main class="festival-article">{main_html}</main>
 <footer class="site-footer"><div class="container"><a href="../about.html">About</a> · <a href="../privacy.html">Privacy Policy</a> · <a href="../terms.html">Terms of Use</a> · <a href="../contact.html">Contact</a><p>© {pub.year} MyBirthSign. Cultural information for education; verify official announcements for current events.</p></div></footer><script src="../js/i18n.js"></script>
 <script src="../js/app.js"></script></body></html>
 """
@@ -130,6 +163,15 @@ m = re.search(r'(<section class="bv2-section bv2-latest-section" id="latest-arti
 assert m, "English latest-articles grid not found in blog.html"
 grid = re.sub(rf'[ \t]*<a class="bv2-latest-card" href="blog/{re.escape(slug)}\.html">.*?</a>\n', "", m.group(2), flags=re.S)
 b = b[:m.start(2)] + card + grid + b[m.end(2):]
+if K:
+    ki = K.get("image") or img
+    kcard = (f'    <a class="bv2-latest-card" href="blog/{slug}.html"><img src="{ki["src"] if ki else card_img}" alt="{e(ki["alt"] if ki else card_alt)}" loading="lazy" width="440" height="260">'
+             f'<div class="bv2-latest-body"><p class="bv2-latest-kicker">{e(K["kicker"])}</p><h3>{e(K["title"])}</h3><p>{e(K["card_text"])}</p>'
+             f'<span class="bv2-latest-read">អានអត្ថបទ →</span></div></a>\n')
+    mk = re.search(r'(<section class="bv2-section bv2-latest-section" id="latest-articles-km">.*?<div class="bv2-latest-grid">\n)(.*?)(  </div>\n</section>)', b, re.S)
+    assert mk, "Khmer latest-articles grid not found in blog.html"
+    gk = re.sub(rf'[ \t]*<a class="bv2-latest-card" href="blog/{re.escape(slug)}\.html">.*?</a>\n', "", mk.group(2), flags=re.S)
+    b = b[:mk.start(2)] + kcard + gk + b[mk.end(2):]
 open(bp, "w", encoding="utf-8").write(b)
 
 # sitemap.xml
