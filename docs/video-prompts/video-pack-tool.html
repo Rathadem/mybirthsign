@@ -1456,7 +1456,7 @@ function charactersMd(KM_NAMES) {
   // Calls the Gemini API straight from this browser with the owner's own key (typed in below, kept only in this
   // browser, sent only to Google). Works on https://mybirthsign.com/studio/; the claude.ai copy cannot reach Google.
   var GEN = { key: "", remember: false, model: "pro", size: "1K", refs: { chanda: null, animal: null }, animalFor: "" };
-  try { GEN.key = localStorage.getItem("mbs-gemini-key") || ""; GEN.remember = !!GEN.key; } catch (e) {}
+  try { GEN.key = (localStorage.getItem("mbs-gemini-key") || "").replace(/[^A-Za-z0-9._-]/g, ""); GEN.remember = !!GEN.key; } catch (e) {}
   var MODELS = { pro: ["gemini-3-pro-image", "gemini-3-pro-image-preview"], fast: ["gemini-nano-banana-2.1", "gemini-3.1-flash-image"] };
   var API = "https://generativelanguage.googleapis.com/v1beta/";
   var onSite = /(^|\.)mybirthsign\.com$/.test(location.hostname) || location.hostname === "localhost" || location.protocol === "file:";
@@ -1492,7 +1492,11 @@ function charactersMd(KM_NAMES) {
     if (jobs.length) Promise.all(jobs).then(function (r) { if (r.some(Boolean)) redraw(); });
   }
   function saveKey() {
-    GEN.key = ($("gkey") && $("gkey").value.trim()) || ""; GEN.remember = !!($("grem") && $("grem").checked);
+    // keep only the characters a key can have: copying often adds invisible spaces or marks that break the request
+    var raw = ($("gkey") && $("gkey").value) || "";
+    GEN.key = raw.replace(/[^A-Za-z0-9._-]/g, "");
+    if ($("gkey") && raw !== GEN.key) $("gkey").value = GEN.key;
+    GEN.remember = !!($("grem") && $("grem").checked);
     try { if (GEN.remember && GEN.key) localStorage.setItem("mbs-gemini-key", GEN.key); else localStorage.removeItem("mbs-gemini-key"); } catch (e) {}
   }
   document.addEventListener("change", function (e) {
@@ -1550,6 +1554,7 @@ function charactersMd(KM_NAMES) {
     var out = $("out_" + b.dataset.gen), n = b.dataset.n;
     saveKey();
     if (!onSite) { out.innerHTML = '<p class="err">This copy cannot reach Google. Open https://mybirthsign.com/studio/ to make pictures.</p>'; return; }
+    if (GEN.key && GEN.key.length < 20) { out.innerHTML = '<p class="err">The key looks too short. Copy it again from Google AI Studio and paste only the key.</p>'; return; }
     if (!GEN.key) { out.innerHTML = '<p class="err">Paste your Gemini API key at the top of this section first.</p>'; $("gkey").focus(); return; }
     var text = ($("pack").__texts || {})[b.dataset.gen] || "";
     var title = (b.closest(".block").querySelector("h3") || {}).textContent || "";
