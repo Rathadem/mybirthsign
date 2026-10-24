@@ -250,14 +250,13 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 
   // side menu: every section, grouped; a slide-in drawer on phones
   function group(t) {
-    if (/^Luckiest|^Background pictures|^60-second|^180-second|^Long YouTube|^Story video|^Voice-over – (60|180)-second|^Voice-over – long|^Voice-over – story/.test(t)) return "Luckiest animal";
+    if (/^Luckiest|^60-second|^180-second|^Long YouTube|^Story video|^Voice-over – (60|180)-second|^Voice-over – long|^Voice-over – story/.test(t)) return "Luckiest animal";
     if (/^YouTube|^Facebook|^TikTok/.test(t)) return "Post it";
     return "Daily video";
   }
   function shortName(t) {
     return t.replace(/ \(paste first in every scene\)| \(make these first.*\)| \(about [^)]*\)| \(add in the editor\)| \(spoken inside each clip\)| \(captions files\)/g, "")
       .replace(/^Luckiest animal today – (\w+).*$/, "$1: picture & post")
-      .replace(/^Background pictures – Nano Banana Pro/, "Backgrounds (Nano Banana Pro)")
       .replace(/^60-second video – Facebook & TikTok/, "60s video (Facebook, TikTok)")
       .replace(/^180-second video – YouTube/, "180s video (YouTube)")
       .replace(/^Voice-over – (\d+)-second video/, "$1s voice-over & subtitles")
