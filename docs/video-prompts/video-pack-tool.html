@@ -951,6 +951,32 @@ ${srtVid[v.id].km}\`\`\`
 ### Subtitles – English (${iso}-${v.id}.en.srt)
 \`\`\`
 ${srtVid[v.id].en}\`\`\``;
+  // background pictures for Nano Banana Pro (Google's image model): one set per day, coloured by the day animal's lucky color
+  const bgCol = dd.lucky.color.en.toLowerCase(), bgDir = dd.lucky.direction.en.toLowerCase();
+  const BG_SET = `a softly illuminated Khmer temple inspired by Angkor Wat under a huge glowing full moon and a deep indigo starry sky, a still lotus pond with glowing pink lotus flowers, palm tree silhouettes, small floating lanterns glowing ${bgCol} and gold, a soft ${bgCol} glow in the sky toward the ${bgDir}, magical sparkles and warm golden reflections on the water. Premium 3D animated fantasy film look, cinematic lighting, rich colors, soft atmospheric glow, beautiful depth of field`;
+  const BG_NO = "No text, no letters, no numbers, no watermark, no logo.";
+  const bgMd = `## Background pictures – Nano Banana Pro
+Today's background set for ${D}, in the day's lucky color (${dd.lucky.color.en}, ${dd.lucky.color.km}) for the ${day}. Make these with Nano Banana Pro, Google's image model (in the Gemini app or the image tool in Flow). Write the prompts in English: it follows English best. Use them as the background behind your titles and captions in CapCut, as start frames in Flow ("frames to video"), or as post pictures. The same rules make a new set every day, so the backgrounds change with the lucky color.
+
+### 1. Video background – vertical 9:16 (Shorts, Reels, TikTok)
+Vertical 9:16 background picture, no characters: ${BG_SET}. Keep the top third and the middle of the frame calm and uncluttered, with open space for a title and for characters added later. ${BG_NO}
+
+### 2. Video background – horizontal 16:9 (YouTube, website banner)
+Horizontal 16:9 background picture, no characters: ${BG_SET}. The temple and moon sit in the right half; keep the left third calm and darker, with open space for a title. ${BG_NO}
+
+### 3. Lucky-numbers background – vertical 9:16
+Vertical 9:16 background picture, no characters: a large ornate golden frame glowing softly in the middle of the picture, decorated with engraved lotus patterns and small ${bgCol} gems, its inside empty and smooth deep indigo, floating in front of ${BG_SET}. The inside of the frame stays completely empty for numbers added in the editor. ${BG_NO}
+
+### 4. Post picture – square 1:1 (Facebook, Telegram, Instagram)
+Add the ${day} reference picture first. Square 1:1: the ${dl} from the reference picture, exactly the same design, sitting on its glowing lotus pedestal in the lower middle of the picture, ${S9.mood}, in front of ${BG_SET}. Leave open sky at the top for a title. ${BG_NO}
+
+### 5. Chanda and the ${day} – start frame (vertical 9:16)
+Add two reference pictures first: Chanda (characters/chanda.jpg) and the ${day}. Vertical 9:16: Chanda from the first reference picture, exactly the same face, hair, clothes and jewelry, standing on the carved sandstone temple terrace from the knees up, facing the camera with a warm smile and one hand held open toward the ${dl} from the second reference picture, which sits on its glowing lotus on the pond beside her. Behind them: ${BG_SET}. ${BG_NO}
+
+### 6. Thumbnail with an English title (optional)
+Nano Banana Pro can write short English text in the picture. Check the spelling before you use it. Khmer text in the picture is NOT VERIFIED; add Khmer titles in your editor instead.
+Horizontal 16:9 YouTube thumbnail: a close-up of ${LOOK[day]} on the left, facing the viewer, glowing golden aura, in front of ${BG_SET}. On the right, large bold golden title text with a dark outline, exactly: "${day.toUpperCase()} DAY" and below it, smaller: "${D}". No other text, no watermark, no logo.`;
+
   const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃឆ្នាំ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
@@ -974,6 +1000,8 @@ ${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for th
 
 ### Caption – Khmer
 ${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).label.km}សម្រាប់ឆ្នាំ${dayKm}។ លេខសំណាង៖ ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ)។ មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
+
+${bgMd}
 
 ${VIDEOS.map(videoMd).join("\n\n")}
 
@@ -1291,13 +1319,14 @@ function charactersMd(KM_NAMES) {
 
   // side menu: every section, grouped; a slide-in drawer on phones
   function group(t) {
-    if (/^Luckiest|^60-second|^180-second|^Long YouTube|^Story video|^Voice-over – (60|180)-second|^Voice-over – long|^Voice-over – story/.test(t)) return "Luckiest animal";
+    if (/^Luckiest|^Background pictures|^60-second|^180-second|^Long YouTube|^Story video|^Voice-over – (60|180)-second|^Voice-over – long|^Voice-over – story/.test(t)) return "Luckiest animal";
     if (/^YouTube|^Facebook|^TikTok/.test(t)) return "Post it";
     return "Daily video";
   }
   function shortName(t) {
     return t.replace(/ \(paste first in every scene\)| \(make these first.*\)| \(about [^)]*\)| \(add in the editor\)| \(spoken inside each clip\)| \(captions files\)/g, "")
       .replace(/^Luckiest animal today – (\w+).*$/, "$1: picture & post")
+      .replace(/^Background pictures – Nano Banana Pro/, "Backgrounds (Nano Banana Pro)")
       .replace(/^60-second video – Facebook & TikTok/, "60s video (Facebook, TikTok)")
       .replace(/^180-second video – YouTube/, "180s video (YouTube)")
       .replace(/^Voice-over – (\d+)-second video/, "$1s voice-over & subtitles")
