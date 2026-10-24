@@ -94,7 +94,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 .cardbar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; }
 .cardbar label { display: grid; gap: 4px; font-size: .78rem; color: var(--muted); }
 .cardbar select { font: .9rem var(--body); background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; }
-.cardgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 14px; }
+.cardgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 12px; }
 .dcard { background: var(--card-2); border-radius: 12px; padding: 10px; display: grid; gap: 8px; align-content: start; min-width: 0; }
 .dcard img { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); display: block; }
 .dcard b { font-size: .9rem; }
@@ -1428,7 +1428,7 @@ function charactersMd(KM_NAMES) {
         '<div class="cardbar"><label>Language<select id="clang"><option value="en">English</option><option value="km">ខ្មែរ (Khmer)</option><option value="zh">中文 (Chinese)</option></select></label>' +
         '<label>Size<select id="cfmt"><option value="portrait">Feed post (Facebook, Telegram)</option><option value="square">Square</option><option value="story">Story / Reel (9:16)</option></select></label>' +
         '<button class="primary" id="czip" disabled>Download all (.zip)</button></div><div class="cardgrid" id="cardgrid"></div>'
-      : '<p class="note"><b>Open the Studio on your site to see and download the cards:</b> https://mybirthsign.com/studio/ (this copy inside Claude cannot read the website\'s daily fortune).</p>';
+      : '<p class="note"><b>The cards show only in the Studio on your website.</b> This copy inside Claude cannot read the website\'s daily fortune. Open this address in your browser:</p><p><a href="https://mybirthsign.com/studio/" target="_blank" rel="noopener" style="color:var(--gold-soft);font-weight:700;font-size:1.1rem">mybirthsign.com/studio/ →</a></p>';
     return '<details class="sec" id="seccards" open><summary><h2>Daily cards – post before the day</h2></summary><div class="secbody">' + body + "</div></details>";
   }
   function decode(s) { var t = document.createElement("textarea"); t.innerHTML = s; return t.value; }
@@ -1437,12 +1437,13 @@ function charactersMd(KM_NAMES) {
     return new Promise(function (ok, no) { var sc = document.createElement("script"); sc.src = "/js/share-cards.js"; sc.onload = ok; sc.onerror = no; document.head.appendChild(sc); });
   }
   var cardJob = 0;
-  function loadCards(iso) {
+  function loadCards(iso, wanted) {
     if (!onSite || !$("cardgrid")) return;
     $("clang").value = CARD.lang; $("cfmt").value = CARD.fmt;
     var job = ++cardJob, grid = $("cardgrid"), zip = $("czip");
     CARD.blobs.forEach(function (x) { URL.revokeObjectURL(x.url); }); CARD.blobs = []; CARD.iso = iso; zip.disabled = true;
     grid.innerHTML = '<p class="note">Drawing the cards…</p>';
+    var head = wanted ? '<p class="note" style="grid-column:1/-1"><b>The cards for ' + dmy(wanted) + ' are not ready yet.</b> Each day\'s fortune is published the evening before, around 21:00 Cambodia time. Showing today\'s cards (' + dmy(iso) + ') for now; come back this evening for ' + dmy(wanted) + '.</p>' : "";
     var page = (CARD.lang === "en" ? "" : "/" + CARD.lang) + "/blog/daily-fortune-" + iso + ".html";
     Promise.all([fetch(page, { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error("nopage"); return r.text(); }), needCards()]).then(function (res) {
       var specs = [], re = /data-share-card="([^"]+)"/g, m;
@@ -1450,7 +1451,7 @@ function charactersMd(KM_NAMES) {
       if (!specs.length) throw new Error("nocards");
       specs.sort(function (a, b) { return (a.cardType === "lucky" ? 0 : 1) - (b.cardType === "lucky" ? 0 : 1); });
       if (job !== cardJob) return;
-      grid.innerHTML = "";
+      grid.innerHTML = head;
       return specs.reduce(function (p, sp, i) {       // one at a time, so phones keep up
         return p.then(function () {
           if (job !== cardJob) return;
@@ -1466,6 +1467,7 @@ function charactersMd(KM_NAMES) {
       }, Promise.resolve()).then(function () { if (job === cardJob) zip.disabled = !window.JSZip || !CARD.blobs.length; });
     }).catch(function (e) {
       if (job !== cardJob) return;
+      if (e && e.message === "nopage" && !wanted && iso > ppToday()) { cardJob--; return loadCards(ppToday(), iso); }   // not published yet: today's cards meanwhile
       grid.innerHTML = '<p class="note">' + (e && e.message === "nopage" ? "The fortune page for " + dmy(iso) + " is not published yet (each day's page appears about a day ahead). Try again later, or pick an earlier date." : "Could not draw the cards for this date.") + "</p>";
     });
   }
