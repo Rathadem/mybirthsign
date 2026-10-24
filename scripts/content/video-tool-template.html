@@ -99,7 +99,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 .cardgrid.big { grid-template-columns: minmax(0, 560px); }
 .dcard img { cursor: zoom-in; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); display: block; }
 .dcard b { font-size: .9rem; }
-.dcard a { color: var(--gold-soft); font-weight: 600; font-size: .85rem; }
+.dcard button { justify-self: start; }
 .viewer { position: fixed; inset: 0; z-index: 30; background: var(--bg); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px;
   padding: calc(10px + env(safe-area-inset-top, 0px)) 12px calc(12px + env(safe-area-inset-bottom, 0px)); }
 .viewer .vtop { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: .85rem; }
@@ -396,9 +396,23 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
         '<div class="cardbar"><label>Language<select id="clang"><option value="en">English</option><option value="km">ខ្មែរ (Khmer)</option><option value="zh">中文 (Chinese)</option></select></label>' +
         '<label>View<select id="cview"><option value="grid">Small (many per row)</option><option value="big">Large (one per row)</option></select></label>' +
         '<label>Size<select id="cfmt"><option value="portrait">Feed post (Facebook, Telegram)</option><option value="square">Square</option><option value="story">Story / Reel (9:16)</option></select></label>' +
-        '<button class="primary" id="czip" disabled>Download all (.zip)</button></div><p class="note">Tap a card to see it full size.</p><div class="cardgrid" id="cardgrid"></div>'
+        '<button class="primary" id="czip" disabled>Save all</button></div><p class="note">Tap a card to see it full size. On a phone, “Save” opens the share sheet: choose “Save Image” (Photos) or share straight to Facebook or Telegram.</p><div class="cardgrid" id="cardgrid"></div>'
       : '<p class="note"><b>The cards show only in the Studio on your website.</b> This copy inside Claude cannot read the website\'s daily fortune. Open this address in your browser:</p><p><a href="https://mybirthsign.com/studio/" target="_blank" rel="noopener" style="color:var(--gold-soft);font-weight:700;font-size:1.1rem">mybirthsign.com/studio/ →</a></p>';
     return '<details class="sec" id="seccards" open><summary><h2>Daily cards – post before the day</h2></summary><div class="secbody">' + body + "</div></details>";
+  }
+  // high-quality JPG (about a fifth of the PNG size): quicker to save and share, many at once
+  function toJpeg(png) {
+    if (!png) return png;
+    return new Promise(function (ok) {
+      var im = new Image(), u = URL.createObjectURL(png);
+      im.onload = function () {
+        var c = document.createElement("canvas"); c.width = im.naturalWidth; c.height = im.naturalHeight;
+        var x = c.getContext("2d"); x.fillStyle = "#0b0826"; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0);
+        URL.revokeObjectURL(u); c.toBlob(function (j) { ok(j || png); }, "image/jpeg", 0.92);
+      };
+      im.onerror = function () { URL.revokeObjectURL(u); ok(png); };
+      im.src = u;
+    });
   }
   function decode(s) { var t = document.createElement("textarea"); t.innerHTML = s; return t.value; }
   function needCards() {
@@ -425,18 +439,18 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       return specs.reduce(function (p, sp, i) {       // one at a time, so phones keep up
         return p.then(function () {
           if (job !== cardJob) return;
-          return window.MBSShareCards[sp.cardType](sp, CARD.fmt).then(function (blob) {
+          return window.MBSShareCards[sp.cardType](sp, CARD.fmt).then(toJpeg).then(function (blob) {
             if (job !== cardJob || !blob) return;
-            var name = "mybirthsign-" + iso + "-" + (sp.cardType === "lucky" ? "00-lucky-today" : String(i).padStart(2, "0") + "-" + String(sp.animal).toLowerCase()) + "-" + CARD.lang + "-" + CARD.fmt + ".png";
+            var name = "mybirthsign-" + iso + "-" + (sp.cardType === "lucky" ? "00-lucky-today" : String(i).padStart(2, "0") + "-" + String(sp.animal).toLowerCase()) + "-" + CARD.lang + "-" + CARD.fmt + ".jpg";
             var url = URL.createObjectURL(blob); CARD.blobs.push({ name: name, url: url, blob: blob });
             var d = document.createElement("div"); d.className = "dcard";
             var title = sp.cardType === "lucky" ? "Lucky signs today" : (sp.name || sp.animal) + " · " + (sp.label || "");
             CARD.blobs[CARD.blobs.length - 1].title = title;
-            d.innerHTML = '<img alt="' + esc(title) + '" data-view="' + (CARD.blobs.length - 1) + '" src="' + url + '"><b>' + esc(sp.cardType === "lucky" ? "Lucky signs today" : (sp.name || sp.animal) + " · " + (sp.label || "")) + '</b><a href="' + url + '" download="' + name + '">Download</a>';
+            d.innerHTML = '<img alt="' + esc(title) + '" data-view="' + (CARD.blobs.length - 1) + '" src="' + url + '"><b>' + esc(sp.cardType === "lucky" ? "Lucky signs today" : (sp.name || sp.animal) + " · " + (sp.label || "")) + '</b><button class="primary" data-save="' + (CARD.blobs.length - 1) + '">Save</button>';
             grid.appendChild(d);
           });
         });
-      }, Promise.resolve()).then(function () { if (job === cardJob) zip.disabled = !window.JSZip || !CARD.blobs.length; });
+      }, Promise.resolve()).then(function () { if (job === cardJob) zip.disabled = !CARD.blobs.length; });
     }).catch(function (e) {
       if (job !== cardJob) return;
       if (e && e.message === "nopage" && !wanted && iso > ppToday()) { cardJob--; return loadCards(ppToday(), iso); }   // not published yet: today's cards meanwhile
@@ -454,7 +468,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     if (!v) { v = document.createElement("div"); v.id = "cardviewer"; v.className = "viewer"; v.setAttribute("role", "dialog"); v.setAttribute("aria-modal", "true"); document.body.appendChild(v); document.body.style.overflow = "hidden"; }
     v.innerHTML = '<div class="vtop"><b>' + esc(x.title || "") + "</b><span>" + (i + 1) + " / " + CARD.blobs.length + '</span><button id="vclose" aria-label="Close">✕</button></div>' +
       '<div class="vimg"><img alt="' + esc(x.title || "") + '" src="' + x.url + '"></div>' +
-      '<div class="vbot"><button id="vprev" aria-label="Previous card">◀</button><a href="' + x.url + '" download="' + x.name + '">Download</a><button id="vnext" aria-label="Next card">▶</button></div>';
+      '<div class="vbot"><button id="vprev" aria-label="Previous card">◀</button><button class="primary" data-save="' + i + '">Save</button><button id="vnext" aria-label="Next card">▶</button></div>';
   }
   document.addEventListener("click", function (e) {
     var im = e.target.closest("img[data-view]"); if (im) { viewer(+im.dataset.view); return; }
@@ -479,8 +493,31 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       loadCards(D.value);
     }
   });
+  function fileOf(x) { try { return new File([x.blob], x.name, { type: x.blob.type || "image/jpeg" }); } catch (e) { return null; } }
+  function canShareFiles(files) { try { return !!(navigator.canShare && files.every(Boolean) && navigator.canShare({ files: files })); } catch (e) { return false; } }
+  function plainDownload(url, name) {
+    var a = document.createElement("a"); a.href = url; a.download = name; a.rel = "noopener";
+    document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 1000);
+  }
+  function saveCard(i, btn) {
+    var x = CARD.blobs[i]; if (!x) return;
+    var f = fileOf(x);
+    if (canShareFiles([f])) {
+      navigator.share({ files: [f], title: x.title || "MyBirthSign" }).catch(function (er) { if (!er || er.name !== "AbortError") { plainDownload(x.url, x.name); } });
+      return;
+    }
+    plainDownload(x.url, x.name);
+    toast("If nothing saved: open the card, then long-press it and choose Save Image");
+  }
   document.addEventListener("click", function (e) {
-    var b = e.target.closest("#czip"); if (!b || !window.JSZip || !CARD.blobs.length) return;
+    var sb = e.target.closest("button[data-save]"); if (sb) { e.preventDefault(); e.stopPropagation(); saveCard(+sb.dataset.save, sb); return; }
+    var b = e.target.closest("#czip"); if (!b || !CARD.blobs.length) return;
+    var files = CARD.blobs.map(fileOf);
+    if (canShareFiles(files)) {                    // phones: one share sheet with all the cards ("Save 13 Images")
+      navigator.share({ files: files, title: "MyBirthSign cards " + dmy(CARD.iso) }).catch(function () {});
+      return;
+    }
+    if (!window.JSZip) { toast("Save the cards one by one with their Save buttons"); return; }
     var z = new JSZip(); CARD.blobs.forEach(function (x) { z.file(x.name, x.blob); });
     b.disabled = true;
     z.generateAsync({ type: "blob" }).then(function (blob) {
