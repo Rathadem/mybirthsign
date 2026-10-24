@@ -352,7 +352,7 @@ const POSE = {
 const STYLE = "Vertical 9:16. Premium 3D animated fantasy film quality, inspired by classic Disney and Pixar-style animated family films: cute and majestic golden zodiac characters with oversized sparkling eyes, adorable expressive faces, soft rounded features, polished gold textures with intricate engraved ornaments and delicate pink and gold accents, alive and emotionally expressive. Setting: a softly illuminated Khmer temple inspired by Angkor Wat under a glowing full moon and a deep indigo starry sky, floating lotus flowers, ornate pink-and-gold lotus details, magical sparkles and warm golden reflections. Cinematic lighting, rich colors, soft atmospheric glow, realistic metallic reflections, beautiful depth of field, gentle slow camera movement, professional animated-movie rendering. The zodiac animals never talk and never move their mouths; only Chanda, the presenter, speaks. No text, no letters, no subtitles, no watermark, no logos.";
 const STYLE_WIDE = STYLE.replace("Vertical 9:16.", "Horizontal 16:9 (standard YouTube video).");
 const VOICE_EN = "a warm, cheerful young female narrator with a soft, magical storytelling tone, clear and friendly";
-const VOICE_KM = "a native Cambodian Khmer female narrator with clear, standard Phnom Penh pronunciation, warm, friendly and youthful, medium pitch, smooth and gentle, speaking slightly slowly (about 85 to 90 percent of normal speed), pronouncing every Khmer word fully and clearly, with natural Khmer rhythm and a short pause at each ។ (not English-accented, not robotic, not dramatic),";
+const VOICE_KM = "a native Cambodian Khmer female narrator with clear, standard Phnom Penh pronunciation, warm, friendly and youthful, medium pitch, smooth and gentle, speaking slightly slowly (about 85 to 90 percent of normal speed), pronouncing every Khmer word fully and clearly, with natural Khmer rhythm and a short pause between sentences (not English-accented, not robotic, not dramatic),";
 // Khmer for speaking: numbers written out as Khmer words, so a voice reads them in Khmer and not in English
 // ("64" -> "ហុកសិបបួន", "2026" -> "ពីរពាន់ម្ភៃប្រាំមួយ"). Subtitles and captions keep the digits.
 const KM_ONES = ["សូន្យ", "មួយ", "ពីរ", "បី", "បួន", "ប្រាំ", "ប្រាំមួយ", "ប្រាំពីរ", "ប្រាំបី", "ប្រាំបួន"];
@@ -366,7 +366,8 @@ function kmNumber(n) {
   return String(n);
 }
 // Google Flow prompts only: "របស់" written "របោះ" so Flow pronounces it the way it is said
-const kmFlow = (t) => kmSpeak(t).replace(/របស់/g, "របោះ");
+// Khmer inside the Google Flow prompts only: no "។" (a space marks the pause instead); subtitles and voice-over text keep it
+const kmFlow = (t) => kmSpeak(t).replace(/របស់/g, "របោះ").replace(/\s*។\s*/g, " ").replace(/ {2,}/g, " ").trim();
 const kmSpeak = (t) => t.replace(/([\u1780-\u17d3]) (?=\d)/g, "$1").replace(/\d+/g, (d) => kmNumber(Number(d)));
 const MUSIC = "Gentle magical background music with soft chimes and a light Asian flute. No other voices: the animals do not speak.";
 // the channel's presenter: the only one who speaks. She is on camera in the first scene (the hook) and is the
