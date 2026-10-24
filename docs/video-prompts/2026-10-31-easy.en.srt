@@ -1,115 +1,123 @@
 1
-00:00:00,000 --> 00:00:01,802
+00:00:00,000 --> 00:00:01,736
 Is your sign the one
 
 2
-00:00:01,852 --> 00:00:04,672
+00:00:01,786 --> 00:00:04,504
 that should take it easy today?
 
 3
-00:00:04,722 --> 00:00:06,246
-Today, 31 October
+00:00:04,554 --> 00:00:07,539
+Today, 31 October, is a slower day
 
 4
-00:00:06,296 --> 00:00:09,950
-the Year of the Monkey should slow down.
+00:00:07,589 --> 00:00:09,950
+for the Year of the Monkey.
 
 5
-00:00:10,000 --> 00:00:11,776
-Today is a Tiger day.
+00:00:10,000 --> 00:00:12,853
+Today is a Tiger day, and the Monkey
 
 6
-00:00:11,826 --> 00:00:14,733
-The Monkey sits opposite the Tiger
+00:00:12,903 --> 00:00:15,918
+sits opposite it in the zodiac circle.
 
 7
-00:00:14,783 --> 00:00:16,472
-in the zodiac circle
+00:00:15,968 --> 00:00:18,176
+Some days, things just don't
 
 8
-00:00:16,522 --> 00:00:19,950
-so traditionally this is a clashing day.
+00:00:18,226 --> 00:00:19,950
+go the way we planned.
 
 9
-00:00:20,000 --> 00:00:21,213
-Don't worry.
+00:00:20,000 --> 00:00:21,617
+And that's okay.
 
 10
-00:00:21,263 --> 00:00:24,266
-A quiet day is not a bad day.
+00:00:21,667 --> 00:00:24,533
+Everyone has days like this.
 
 11
-00:00:24,316 --> 00:00:27,424
-It is a day to rest, slow down
+00:00:24,583 --> 00:00:27,554
+A quiet day is not a bad day.
 
 12
-00:00:27,474 --> 00:00:29,950
-and be kind to yourself.
+00:00:27,604 --> 00:00:29,950
+It is a day to breathe.
 
 13
-00:00:30,000 --> 00:00:33,990
+00:00:30,000 --> 00:00:33,075
 Be careful today: you can be mischievous
 
 14
-00:00:34,040 --> 00:00:37,425
+00:00:33,125 --> 00:00:35,731
 or struggle to focus on one thing.
 
 15
-00:00:37,475 --> 00:00:39,950
-Take a deep breath first.
+00:00:35,781 --> 00:00:37,919
+Notice it, and give yourself
 
 16
-00:00:40,000 --> 00:00:42,009
-In love, speak softly
+00:00:37,969 --> 00:00:39,950
+a moment before you react.
 
 17
-00:00:42,059 --> 00:00:44,068
-and give people time.
+00:00:40,000 --> 00:00:43,492
+Be gentle with the people you love
 
 18
-00:00:44,118 --> 00:00:46,911
-At work, double-check details
+00:00:43,542 --> 00:00:45,367
+and with yourself.
 
 19
-00:00:46,961 --> 00:00:49,950
-and finish one thing at a time.
+00:00:45,417 --> 00:00:47,033
+Today the Dragon
 
 20
-00:00:50,000 --> 00:00:52,863
-With money, keep to the basics
+00:00:47,083 --> 00:00:49,950
+is a good friend to lean on.
 
 21
-00:00:52,913 --> 00:00:56,164
-and save big buys for another day.
+00:00:50,000 --> 00:00:52,700
+At work and with money
 
 22
-00:00:56,214 --> 00:00:59,950
-Your helper animal today is the Dragon.
+00:00:52,750 --> 00:00:55,950
+take small, careful steps.
 
 23
-00:01:00,000 --> 00:01:03,103
-Your lucky color is blue, your best
+00:00:56,000 --> 00:00:59,950
+Finish one thing, then the next.
 
 24
-00:01:03,153 --> 00:01:06,166
-time is from 7 to 9 in the morning
+00:01:00,000 --> 00:01:02,712
+Slow is still moving forward.
 
 25
-00:01:06,216 --> 00:01:09,950
-and your lucky direction is the southeast.
+00:01:02,762 --> 00:01:05,950
+Every quiet day makes you stronger
 
 26
-00:01:10,000 --> 00:01:12,303
-My tip: slow down, rest well
+00:01:06,000 --> 00:01:07,569
+and brighter days
 
 27
-00:01:12,353 --> 00:01:14,740
-and don't rush big decisions.
+00:01:07,619 --> 00:01:09,950
+are already on their way.
 
 28
-00:01:14,790 --> 00:01:16,589
-Tomorrow is a new day.
+00:01:10,000 --> 00:01:12,750
+My tip: slow down, rest well
 
 29
-00:01:16,639 --> 00:01:19,950
-See all twelve signs at mybirthsign.com.
+00:01:12,800 --> 00:01:15,650
+and don't rush big decisions.
+
+30
+00:01:15,700 --> 00:01:17,750
+Tomorrow is a new day
+
+31
+00:01:17,800 --> 00:01:19,950
+and it could be yours.

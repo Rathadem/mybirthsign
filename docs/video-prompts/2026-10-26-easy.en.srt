@@ -1,119 +1,127 @@
 1
-00:00:00,000 --> 00:00:01,802
+00:00:00,000 --> 00:00:01,736
 Is your sign the one
 
 2
-00:00:01,852 --> 00:00:04,672
+00:00:01,786 --> 00:00:04,504
 that should take it easy today?
 
 3
-00:00:04,722 --> 00:00:06,246
-Today, 26 October
+00:00:04,554 --> 00:00:07,539
+Today, 26 October, is a slower day
 
 4
-00:00:06,296 --> 00:00:09,950
-the Year of the Rabbit should slow down.
+00:00:07,589 --> 00:00:09,950
+for the Year of the Rabbit.
 
 5
-00:00:10,000 --> 00:00:11,883
-Today is a Rooster day.
+00:00:10,000 --> 00:00:12,966
+Today is a Rooster day, and the Rabbit
 
 6
-00:00:11,933 --> 00:00:14,908
-The Rabbit sits opposite the Rooster
+00:00:13,016 --> 00:00:15,982
+sits opposite it in the zodiac circle.
 
 7
-00:00:14,958 --> 00:00:16,589
-in the zodiac circle
+00:00:16,032 --> 00:00:18,204
+Some days, things just don't
 
 8
-00:00:16,639 --> 00:00:19,950
-so traditionally this is a clashing day.
+00:00:18,254 --> 00:00:19,950
+go the way we planned.
 
 9
-00:00:20,000 --> 00:00:21,213
-Don't worry.
+00:00:20,000 --> 00:00:21,617
+And that's okay.
 
 10
-00:00:21,263 --> 00:00:24,266
-A quiet day is not a bad day.
+00:00:21,667 --> 00:00:24,533
+Everyone has days like this.
 
 11
-00:00:24,316 --> 00:00:27,424
-It is a day to rest, slow down
+00:00:24,583 --> 00:00:27,554
+A quiet day is not a bad day.
 
 12
-00:00:27,474 --> 00:00:29,950
-and be kind to yourself.
+00:00:27,604 --> 00:00:29,950
+It is a day to breathe.
 
 13
-00:00:30,000 --> 00:00:31,617
+00:00:30,000 --> 00:00:31,248
 Be careful today:
 
 14
-00:00:31,667 --> 00:00:34,166
+00:00:31,298 --> 00:00:33,232
 you can be overly cautious
 
 15
-00:00:34,216 --> 00:00:37,499
+00:00:33,282 --> 00:00:35,828
 and avoid necessary confrontation.
 
 16
-00:00:37,549 --> 00:00:39,950
-Take a deep breath first.
+00:00:35,878 --> 00:00:37,965
+Notice it, and give yourself
 
 17
-00:00:40,000 --> 00:00:42,009
-In love, speak softly
+00:00:38,015 --> 00:00:39,950
+a moment before you react.
 
 18
-00:00:42,059 --> 00:00:44,068
-and give people time.
+00:00:40,000 --> 00:00:43,529
+Be gentle with the people you love
 
 19
-00:00:44,118 --> 00:00:46,911
-At work, double-check details
+00:00:43,579 --> 00:00:45,424
+and with yourself.
 
 20
-00:00:46,961 --> 00:00:49,950
-and finish one thing at a time.
+00:00:45,474 --> 00:00:48,687
+Today the Goat is a good friend
 
 21
-00:00:50,000 --> 00:00:52,920
-With money, keep to the basics
+00:00:48,737 --> 00:00:49,950
+to lean on.
 
 22
-00:00:52,970 --> 00:00:56,287
-and save big buys for another day.
+00:00:50,000 --> 00:00:52,700
+At work and with money
 
 23
-00:00:56,337 --> 00:00:59,950
-Your helper animal today is the Goat.
+00:00:52,750 --> 00:00:55,950
+take small, careful steps.
 
 24
-00:01:00,000 --> 00:01:02,986
-Your lucky color is red, your best
+00:00:56,000 --> 00:00:59,950
+Finish one thing, then the next.
 
 25
-00:01:03,036 --> 00:01:06,200
-time is from 1 to 3 in the afternoon
+00:01:00,000 --> 00:01:02,712
+Slow is still moving forward.
 
 26
-00:01:06,250 --> 00:01:09,950
-and your lucky direction is the southwest.
+00:01:02,762 --> 00:01:05,950
+Every quiet day makes you stronger
 
 27
-00:01:10,000 --> 00:01:12,303
-My tip: slow down, rest well
+00:01:06,000 --> 00:01:07,569
+and brighter days
 
 28
-00:01:12,353 --> 00:01:14,740
-and don't rush big decisions.
+00:01:07,619 --> 00:01:09,950
+are already on their way.
 
 29
-00:01:14,790 --> 00:01:16,589
-Tomorrow is a new day.
+00:01:10,000 --> 00:01:12,750
+My tip: slow down, rest well
 
 30
-00:01:16,639 --> 00:01:19,950
-See all twelve signs at mybirthsign.com.
+00:01:12,800 --> 00:01:15,650
+and don't rush big decisions.
+
+31
+00:01:15,700 --> 00:01:17,750
+Tomorrow is a new day
+
+32
+00:01:17,800 --> 00:01:19,950
+and it could be yours.
