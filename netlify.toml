@@ -61,10 +61,3 @@
   for = "/data/daily/*"
   [headers.values]
     Cache-Control = "public, max-age=300, stale-while-revalidate=3600"
-
-# private Video Studio (docs/video-prompts/studio): never indexed
-[[headers]]
-  for = "/studio/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
-    Cache-Control = "no-cache"

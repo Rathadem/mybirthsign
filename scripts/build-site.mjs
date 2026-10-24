@@ -346,11 +346,6 @@ const pageList = [];
   }
 })("");
 
-// ---------------------------------------------------------------- private Video Studio at /studio/ (not linked, noindex, not in the sitemap)
-// made by scripts/content/build-video-tool.mjs; copied as it is (no language versions, no ads)
-const studioDir = path.join(ROOT, "docs", "video-prompts", "studio");
-if (fs.existsSync(studioDir)) for (const f of fs.readdirSync(studioDir)) copyFile(path.join(studioDir, f), path.join(DIST, "studio", f));
-
 // ---------------------------------------------------------------- sitemap: every page in all three languages
 const smPath = path.join(DIST, "sitemap.xml");
 if (fs.existsSync(smPath)) {
