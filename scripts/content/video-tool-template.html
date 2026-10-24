@@ -414,6 +414,28 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       im.src = u;
     });
   }
+  // cards for a date whose fortune page is not published yet, from the website's rules (same as scripts/daily-fortune.mjs
+  // without the written fortune): rating, "good for" line, trade line, lucky number / color / direction / time
+  function earlySpecs(iso, lang) {
+    var F = computeFacts(iso), p = iso.split("-").map(Number), dn = Math.floor(Date.UTC(p[0], p[1] - 1, p[2]) / 86400000);
+    var date = lang === "km" ? "ថ្ងៃទី" + p[2] + " ខែ" + EARLY.KM_MONTHS[p[1] - 1] + " ឆ្នាំ" + p[0] : lang === "zh" ? p[0] + "年" + p[1] + "月" + p[2] + "日" : EARLY.EN_MONTHS[p[1] - 1] + " " + p[2] + ", " + p[0];
+    var nm = function (a) { return lang === "km" ? KM_NAMES[a] : lang === "zh" ? EARLY.ZH_NAMES[a] : a; };
+    var tierOf = function (a) { return F.signs.filter(function (x) { return x.animal === a; })[0].tier; };
+    var andJoin = function (arr) { return arr.length < 2 ? arr.join("") : lang === "zh" ? arr.slice(0, -1).join("、") + "和" + arr[arr.length - 1] : lang === "km" ? arr.slice(0, -1).join(" ") + " និង " + arr[arr.length - 1] : arr.slice(0, -1).join(", ") + " & " + arr[arr.length - 1]; };
+    var top = F.highlights.topLucky;
+    var out = [{ cardType: "lucky", lang: lang, date: date, top: top, topNames: top.map(nm), careful: F.highlights.careful.map(nm), text: EARLY.TT[lang].best.replace("{L}", andJoin(top.map(nm))) }];
+    ORDER.forEach(function (a, i) {
+      var sg = F.signs.filter(function (x) { return x.animal === a; })[0], tier = sg.tier, L = sg.lucky;
+      var rank = ORDER.filter(function (x) { return tierOf(x) === tier; }).indexOf(a), gf = EARLY.GOOD_FOR[lang][tier], tr = EARLY.TRADE[lang][tier];
+      var d = window.MBSLuckyDigits.forSign(a, iso);
+      out.push({ cardType: "daily", lang: lang, animal: a, name: nm(a), tier: tier, label: EARLY.TIER_LABEL[lang][tier], date: date,
+        fortune: gf[(dn + i) % gf.length], trade: tr[(dn + rank) % tr.length], tradeLabel: EARLY.TT[lang].h, number: L.number, lucky3: d && String(d.d1) === String(L.number) ? d.d3 : undefined, iso: iso,
+        color: lang === "zh" ? (EARLY.ZH_COLORS[String(L.color.en).toLowerCase()] || L.color.en) : L.color[lang], colorHex: L.color.hex,
+        direction: lang === "zh" ? (EARLY.ZH_DIR[L.direction.en] || L.direction.en) : L.direction[lang], time: L.time });
+    });
+    return out;
+  }
+  window.__earlySpecs = earlySpecs;   // used by the tests
   function decode(s) { var t = document.createElement("textarea"); t.innerHTML = s; return t.value; }
   function needCards() {
     if (window.MBSShareCards) return Promise.resolve();
@@ -427,10 +449,14 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     var job = ++cardJob, grid = $("cardgrid"), zip = $("czip");
     CARD.blobs.forEach(function (x) { URL.revokeObjectURL(x.url); }); CARD.blobs = []; CARD.iso = iso; zip.disabled = true;
     grid.innerHTML = '<p class="note">Drawing the cards…</p>';
-    var head = wanted ? '<p class="note" style="grid-column:1/-1"><b>The cards for ' + dmy(wanted) + ' are not ready yet.</b> Each day\'s fortune is published the evening before, around 21:00 Cambodia time. Showing today\'s cards (' + dmy(iso) + ') for now; come back this evening for ' + dmy(wanted) + '.</p>' : "";
+    var head = "";
     var page = (CARD.lang === "en" ? "" : "/" + CARD.lang) + "/blog/daily-fortune-" + iso + ".html";
-    Promise.all([fetch(page, { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error("nopage"); return r.text(); }), needCards()]).then(function (res) {
+    Promise.all([fetch(page, { cache: "no-cache" }).then(function (r) { return r.ok ? r.text() : ""; }, function () { return ""; }), needCards()]).then(function (res) {
       var specs = [], re = /data-share-card="([^"]+)"/g, m;
+      if (!res[0]) {                                 // not published yet: early cards from the rules for this date
+        specs = earlySpecs(iso, CARD.lang);
+        head = '<p class="note" style="grid-column:1/-1"><b>Early cards for ' + dmy(iso) + '</b> (rating, trade tip and lucky number, color, direction and time for this date, from the website\'s rules). The full written fortune (love, career, money, advice) is added when the day\'s page is published, the evening before around 21:00 Cambodia time.</p>';
+      }
       while ((m = re.exec(res[0]))) { try { var sp = JSON.parse(decode(m[1])); if (sp.cardType === "daily" || sp.cardType === "lucky") { sp.iso = sp.iso || iso; specs.push(sp); } } catch (e) {} }
       if (!specs.length) throw new Error("nocards");
       specs.sort(function (a, b) { return (a.cardType === "lucky" ? 0 : 1) - (b.cardType === "lucky" ? 0 : 1); });
@@ -453,7 +479,6 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       }, Promise.resolve()).then(function () { if (job === cardJob) zip.disabled = !CARD.blobs.length; });
     }).catch(function (e) {
       if (job !== cardJob) return;
-      if (e && e.message === "nopage" && !wanted && iso > ppToday()) { cardJob--; return loadCards(ppToday(), iso); }   // not published yet: today's cards meanwhile
       grid.innerHTML = '<p class="note">' + (e && e.message === "nopage" ? "The fortune page for " + dmy(iso) + " is not published yet (each day's page appears about a day ahead). Try again later, or pick an earlier date." : "Could not draw the cards for this date.") + "</p>";
     });
   }
