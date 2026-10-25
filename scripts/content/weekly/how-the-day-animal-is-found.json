@@ -40,16 +40,16 @@
     {
       "h2": "From the day's name to the day's animal",
       "paras": [
-        "The animal comes from the branch, the second half of the day's name. Each of the twelve Earthly Branches belongs to one zodiac animal, in the usual order: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog and Pig. A day whose name ends in 申 (Shen), for example, is a Monkey day.",
+        "The animal comes from the branch, the second half of the day's name. Each of the twelve Earthly Branches belongs to one zodiac animal, in the usual order: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog and Pig. A day whose name ends in Shen, for example, is a Monkey day.",
         "Because the branch moves on by one every day, the animals come round in order, one per day, and the same animal returns every twelve days. The full stem-and-branch name returns every sixty days, but for the animal only the twelve-day rhythm matters."
       ]
     },
     {
       "h2": "A worked example",
       "paras": [
-        "Wikipedia's article on the sexagenary cycle works through one famous date: 1 October 1949 was a 甲子 (Jia-zi) day, the first name in the cycle, so it was a Rat day. From that day you can find the animal of any other date by counting.",
+        "Wikipedia's article on the sexagenary cycle works through one famous date: 1 October 1949 was a Jia-zi day, the first name in the cycle, so it was a Rat day. From that day you can find the animal of any other date by counting.",
         "Take 25 October 2026. It is 28,148 days after 1 October 1949. Dividing by 12 leaves a remainder of 8. Counting 8 places on from the Rat (Rat is 0, Ox 1, Tiger 2, Rabbit 3, Dragon 4, Snake 5, Horse 6, Goat 7, Monkey 8) gives the <strong>Monkey</strong>, and our <a href=\"daily-fortune-2026-10-25.html\">daily fortune for 25/10/2026</a> indeed opens with a Monkey day. Twelve days later, on 6 November 2026, the Monkey returns.",
-        "An independent example agrees. A published guide to almanac data gives the day pillar 戊申 for 1 October 2026; its branch 申 is the Monkey, and the same count from 1949 also gives a Monkey day for that date."
+        "An independent example agrees. A published guide to almanac data gives the day pillar Wu-shen for 1 October 2026; its branch Shen is the Monkey, and the same count from 1949 also gives a Monkey day for that date."
       ]
     },
     {
@@ -107,12 +107,12 @@
     [
       "Wikipedia: “Sexagenary cycle”",
       "https://en.wikipedia.org/wiki/Sexagenary_cycle",
-      "the unbroken sexagenary day count, the worked example of 1 October 1949 as a 甲子 day, 1984 as the start of the present cycle, and Lunar New Year versus Lichun as the start of the year."
+      "the unbroken sexagenary day count, the worked example of 1 October 1949 as a Jia-zi day, 1984 as the start of the present cycle, and Lunar New Year versus Lichun as the start of the year."
     ],
     [
       "RoxyAPI: “Is There a Chinese Almanac API? Tong Shu Data Explained” (26 August 2026)",
       "https://roxyapi.com/blogs/chinese-almanac-tong-shu-api",
-      "describes the day's clash animal as a property of the day; its example gives the day pillar 戊申 and the clash animal Tiger for 1 October 2026."
+      "describes the day's clash animal as a property of the day; its example gives the day pillar Wu-shen and the clash animal Tiger for 1 October 2026."
     ]
   ],
   "related": [

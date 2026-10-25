@@ -51,14 +51,14 @@
         "<strong>Snake and Pig</strong>"
       ],
       "after": [
-        "In Chinese these are known as the six clashes (六冲, liù chōng). The same guide lists the four supportive triangles that sit alongside them: Rat, Dragon and Monkey; Ox, Snake and Rooster; Tiger, Horse and Dog; and Rabbit, Goat and Pig. Notice that the two signs of a clash pair never share a triangle."
+        "In Chinese these are known as the six clashes (liu chong). The same guide lists the four supportive triangles that sit alongside them: Rat, Dragon and Monkey; Ox, Snake and Rooster; Tiger, Horse and Dog; and Rabbit, Goat and Pig. Notice that the two signs of a clash pair never share a triangle."
       ]
     },
     {
       "h2": "Why a clash is about days, not only people",
       "paras": [
         "The clash idea is not only used to compare two people. It is also applied to time. The Chinese almanac gives an animal for every day. A South China Morning Post article on clashes explains that the almanac lists the animal that characterises each day, and that readers compare it with their own birth-year animal, for example so that a couple can avoid a wedding day that clashes with their birth year.",
-        "Seen this way, a clash is a property of the day rather than a judgement about a person. One guide to almanac data puts it plainly: the clash is a property of the day, not of the reader. Its example for 1 October 2026 gives the day pillar 戊申, which is a Monkey day, and names the Tiger as the animal that traditionally stays away from that date. Tiger and Monkey are one of the six pairs."
+        "Seen this way, a clash is a property of the day rather than a judgement about a person. One guide to almanac data puts it plainly: the clash is a property of the day, not of the reader. Its example for 1 October 2026 gives the day pillar Wu-shen, which is a Monkey day, and names the Tiger as the animal that traditionally stays away from that date. Tiger and Monkey are one of the six pairs."
       ]
     },
     {
@@ -140,7 +140,7 @@
     [
       "RoxyAPI: “Is There a Chinese Almanac API? Tong Shu Data Explained” (26 August 2026)",
       "https://roxyapi.com/blogs/chinese-almanac-tong-shu-api",
-      "describes the day's clash animal as a property of the day; its example gives the day pillar 戊申 and the clash animal Tiger for 1 October 2026."
+      "describes the day's clash animal as a property of the day; its example gives the day pillar Wu-shen and the clash animal Tiger for 1 October 2026."
     ],
     [
       "Hong Kong Observatory: “Heavenly Stems and Earthly Branches”",
