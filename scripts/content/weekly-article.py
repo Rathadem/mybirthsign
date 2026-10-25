@@ -82,10 +82,38 @@ for s in spec["sections"]:
         body += "<ul>" + "".join(f"<li>{li}</li>" for li in s["list"]) + "</ul>"
     for p in s.get("after", []):
         body += f"<p>{p}</p>"
+    si = s.get("img")  # optional picture after the section text (lazy-loaded)
+    if si:
+        body += (f'<figure><img src="../{si["src"]}" alt="{e(si["alt"])}" width="{si["width"]}" height="{si["height"]}" loading="lazy" decoding="async">'
+                 f'<figcaption>{e(si["caption"])}</figcaption></figure>')
     parts.append(f"<section><h2>{e(s['h2'])}</h2>\n{body}</section>")
 facts = "".join(f'<div class="fact"><strong>{e(k)}</strong>{e(v)}</div>' for k, v in spec["facts"])
-figure = (f'<figure><img src="../{img["src"]}" alt="{e(img["alt"])}" width="{img["width"]}" height="{img["height"]}" fetchpriority="high" decoding="async">'
-          f'<figcaption>{e(img["caption"])}</figcaption></figure>') if img else ""
+FX = spec.get("fx")  # optional CSS-only particle animation over the main picture: wood, fire, earth, metal or water
+if FX:
+    import random
+    assert FX in ("wood", "fire", "earth", "metal", "water")
+    rnd = random.Random(slug)
+    dots = "".join(f'<i style="--x:{rnd.randint(2, 97)}%;--y:{rnd.randint(8, 92)}%;--d:{rnd.uniform(5, 11):.1f}s;--t:-{rnd.uniform(0, 10):.1f}s;--s:{rnd.randint(6, 13)}px"></i>' for _ in range(28))
+    STYLE += (".festival-article figure.fx{position:relative}.fx-layer{position:absolute;inset:0;bottom:auto;aspect-ratio:900/373;pointer-events:none;overflow:hidden}"
+              ".fx-layer i{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;opacity:0;animation:var(--fx) var(--d) linear var(--t) infinite}"
+              ".fx-wood i{--fx:fxRise;background:radial-gradient(circle,#d8ffb0,#5fc46e 55%,transparent 70%);box-shadow:0 0 14px 3px #7dff9a}"
+              ".fx-wood i:nth-child(3n){--fx:fxLeaf;border-radius:0 80% 0 80%;background:#ff9fc0;box-shadow:none;top:-6%}"
+              ".fx-fire i{--fx:fxEmber;top:auto;bottom:-4%;background:radial-gradient(circle,#fff3b0,#ff8a3d 50%,transparent 70%);box-shadow:0 0 16px 4px #ff7a2e}"
+              ".fx-earth i{--fx:fxDrift;background:radial-gradient(circle,#fff0b8,#e3ab4b 55%,transparent 70%);box-shadow:0 0 14px 3px #ffd27a}"
+              ".fx-metal i{--fx:fxTwinkle;border-radius:0;background:#fff;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 10px #c9d6ff)}"
+              ".fx-metal i:nth-child(3n){--fx:fxLeaf;clip-path:none;border-radius:0 80% 0 80%;background:#e9963f;filter:none;top:-6%}"
+              ".fx-water i{--fx:fxRipple;top:auto;bottom:calc(var(--y) / 4);width:calc(var(--s) * 4);height:calc(var(--s) * 1.3);background:none;border:2px solid rgba(190,228,255,.9);box-shadow:0 0 10px rgba(124,196,255,.6)}"
+              ".fx-water i:nth-child(2n){--fx:fxRise;width:var(--s);height:var(--s);bottom:auto;border:0;background:radial-gradient(circle,#e6f6ff,#4ea2f0 55%,transparent 70%);box-shadow:0 0 14px 3px #7cc4ff}"
+              "@keyframes fxRise{0%{opacity:0;transform:translate(0,0)}20%{opacity:.95}80%{opacity:.8}100%{opacity:0;transform:translate(14px,-70px)}}"
+              "@keyframes fxLeaf{0%{opacity:0;transform:translate(0,0) rotate(0)}15%{opacity:.9}100%{opacity:0;transform:translate(-60px,320px) rotate(400deg)}}"
+              "@keyframes fxEmber{0%{opacity:0;transform:translate(0,0) scale(1)}15%{opacity:1}100%{opacity:0;transform:translate(-18px,-340px) scale(.4)}}"
+              "@keyframes fxDrift{0%,100%{opacity:0;transform:translate(0,0)}30%{opacity:.85}50%{transform:translate(22px,-16px)}70%{opacity:.7}}"
+              "@keyframes fxTwinkle{0%,100%{opacity:0;transform:scale(.3) rotate(0)}50%{opacity:1;transform:scale(1.25) rotate(45deg)}}"
+              "@keyframes fxRipple{0%{opacity:0;transform:scale(.3)}25%{opacity:.85}100%{opacity:0;transform:scale(2.2)}}"
+              "@media(prefers-reduced-motion:reduce){.fx-layer{display:none}}")
+fig_cls = ' class="fx"' if FX else ""
+figure = (f'<figure{fig_cls}><img src="../{img["src"]}" alt="{e(img["alt"])}" width="{img["width"]}" height="{img["height"]}" fetchpriority="high" decoding="async">'
+          + (f'<span class="fx-layer fx-{FX}" aria-hidden="true">{dots}</span>' if FX else "") + f'<figcaption>{e(img["caption"])}</figcaption></figure>') if img else ""
 faq = "".join(f"<h3>{e(q)}</h3><p>{a}</p>" for q, a in spec["faq"])
 DEFAULT_NOTE = "Dates for lunar observances follow the Khmer lunar calendar and can differ by a day locally. Check with your pagoda or official announcements for exact times."
 note_txt = spec.get("note", DEFAULT_NOTE)

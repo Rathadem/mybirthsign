@@ -24,7 +24,7 @@
   ],
   "image": {
     "src": "images/guides/element-metal-card.webp",
-    "alt": "A bronze temple bell and silver wind chimes glowing under a bright full moon",
+    "alt": "A bronze temple bell and silver wind chimes under a carved roof, with falling autumn leaves",
     "width": 900,
     "height": 373,
     "caption": "Illustration inspired by the Metal element; it is not a photograph."
@@ -50,7 +50,14 @@
         "<strong>Heavenly creature:</strong> the White Tiger",
         "<strong>Climate:</strong> dry",
         "<strong>Heavenly Stems:</strong> Geng (yang) and Xin (yin)"
-      ]
+      ],
+      "img": {
+        "src": "images/guides/element-metal-scene.webp",
+        "alt": "A bronze bell and wind chimes over a moonlit lake with a temple in the distance",
+        "width": 900,
+        "height": 502,
+        "caption": "Another Metal scene: an illustration, not a photograph."
+      }
     },
     {
       "h2": "Metal years",
@@ -185,5 +192,6 @@
       "../checker"
     ]
   ],
-  "note": "Traditional Chinese zodiac reading for culture and entertainment, not a scientific prediction. Element correspondences follow the sources cited above."
+  "note": "Traditional Chinese zodiac reading for culture and entertainment, not a scientific prediction. Element correspondences follow the sources cited above.",
+  "fx": "metal"
 }

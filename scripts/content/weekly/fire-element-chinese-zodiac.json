@@ -24,7 +24,7 @@
   ],
   "image": {
     "src": "images/guides/element-fire-card.webp",
-    "alt": "Floating golden lotus lanterns and candle flames above a moonlit lake",
+    "alt": "A phoenix of flame flying over floating lotus lanterns and a temple under a golden moon",
     "width": 900,
     "height": 373,
     "caption": "Illustration inspired by the Fire element; it is not a photograph."
@@ -50,7 +50,14 @@
         "<strong>Heavenly creature:</strong> the Vermilion Bird",
         "<strong>Climate:</strong> hot",
         "<strong>Heavenly Stems:</strong> Bing (yang) and Ding (yin)"
-      ]
+      ],
+      "img": {
+        "src": "images/guides/element-fire-scene.webp",
+        "alt": "Hundreds of glowing lotus lanterns on a lake beneath a flaming phoenix",
+        "width": 900,
+        "height": 502,
+        "caption": "Another Fire scene: an illustration, not a photograph."
+      }
     },
     {
       "h2": "Fire years",
@@ -190,5 +197,6 @@
       "../checker"
     ]
   ],
-  "note": "Traditional Chinese zodiac reading for culture and entertainment, not a scientific prediction. Element correspondences follow the sources cited above."
+  "note": "Traditional Chinese zodiac reading for culture and entertainment, not a scientific prediction. Element correspondences follow the sources cited above.",
+  "fx": "fire"
 }

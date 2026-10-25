@@ -24,7 +24,7 @@
   ],
   "image": {
     "src": "images/guides/element-water-card.webp",
-    "alt": "A river flowing into a calm lake under a full moon with a lantern boat",
+    "alt": "A river cascading through a moonlit forest into a calm lake with a lantern boat",
     "width": 900,
     "height": 373,
     "caption": "Illustration inspired by the Water element; it is not a photograph."
@@ -50,7 +50,14 @@
         "<strong>Heavenly creature:</strong> the Black Tortoise",
         "<strong>Climate:</strong> cold",
         "<strong>Heavenly Stems:</strong> Ren (yang) and Gui (yin)"
-      ]
+      ],
+      "img": {
+        "src": "images/guides/element-water-scene.webp",
+        "alt": "A waterfall, lotus flowers and a lantern boat on a misty lake under a full moon",
+        "width": 900,
+        "height": 502,
+        "caption": "Another Water scene: an illustration, not a photograph."
+      }
     },
     {
       "h2": "Water years",
@@ -185,5 +192,6 @@
       "../checker"
     ]
   ],
-  "note": "Traditional Chinese zodiac reading for culture and entertainment, not a scientific prediction. Element correspondences follow the sources cited above."
+  "note": "Traditional Chinese zodiac reading for culture and entertainment, not a scientific prediction. Element correspondences follow the sources cited above.",
+  "fx": "water"
 }

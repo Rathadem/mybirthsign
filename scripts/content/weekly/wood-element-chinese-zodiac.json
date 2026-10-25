@@ -24,7 +24,7 @@
   ],
   "image": {
     "src": "images/guides/element-wood-card.webp",
-    "alt": "A glowing bamboo grove and young banyan tree beside a moonlit lotus lake",
+    "alt": "Glowing green bamboo and a great banyan tree wrapped in green sparkles beside a moonlit lotus lake",
     "width": 900,
     "height": 373,
     "caption": "Illustration inspired by the Wood element; it is not a photograph."
@@ -50,7 +50,14 @@
         "<strong>Heavenly creature:</strong> the Azure Dragon",
         "<strong>Climate:</strong> windy",
         "<strong>Heavenly Stems:</strong> Jia (yang) and Yi (yin)"
-      ]
+      ],
+      "img": {
+        "src": "images/guides/element-wood-scene.webp",
+        "alt": "A banyan tree, glowing bamboo shoots and floating lotus flowers near a temple at night",
+        "width": 900,
+        "height": 502,
+        "caption": "Another Wood scene: an illustration, not a photograph."
+      }
     },
     {
       "h2": "Wood years",
@@ -187,5 +194,6 @@
       "../checker"
     ]
   ],
-  "note": "Traditional Chinese zodiac reading for culture and entertainment, not a scientific prediction. Element correspondences follow the sources cited above."
+  "note": "Traditional Chinese zodiac reading for culture and entertainment, not a scientific prediction. Element correspondences follow the sources cited above.",
+  "fx": "wood"
 }

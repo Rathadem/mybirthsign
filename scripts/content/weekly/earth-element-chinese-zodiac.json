@@ -24,7 +24,7 @@
   ],
   "image": {
     "src": "images/guides/element-earth-card.webp",
-    "alt": "Golden rice terraces and clay-coloured hills around a lake under a rising moon",
+    "alt": "Golden rice terraces, a smooth stone and a clay pot beside a misty lake at moonrise",
     "width": 900,
     "height": 373,
     "caption": "Illustration inspired by the Earth element; it is not a photograph."
@@ -50,7 +50,14 @@
         "<strong>Heavenly creature:</strong> the Yellow Dragon (or Yellow Qilin)",
         "<strong>Climate:</strong> damp",
         "<strong>Heavenly Stems:</strong> Wu (yang) and Ji (yin)"
-      ]
+      ],
+      "img": {
+        "src": "images/guides/element-earth-scene.webp",
+        "alt": "A clay pot and a round stone on a mossy bank facing golden rice terraces",
+        "width": 900,
+        "height": 502,
+        "caption": "Another Earth scene: an illustration, not a photograph."
+      }
     },
     {
       "h2": "Earth years",
@@ -185,5 +192,6 @@
       "../checker"
     ]
   ],
-  "note": "Traditional Chinese zodiac reading for culture and entertainment, not a scientific prediction. Element correspondences follow the sources cited above."
+  "note": "Traditional Chinese zodiac reading for culture and entertainment, not a scientific prediction. Element correspondences follow the sources cited above.",
+  "fx": "earth"
 }
