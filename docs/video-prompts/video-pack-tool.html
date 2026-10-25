@@ -367,8 +367,9 @@ const lockAnimal = (a) => `Keep the ${a.toLowerCase()} exactly like its referenc
 const LOCK_HOST = "Chanda looks exactly like her reference picture: same face, hairstyle, outfit and jewelry in every scene.";
 const STYLE = "Vertical 9:16. Premium 3D animated fantasy film quality, inspired by classic Disney and Pixar-style animated family films: cute and majestic golden zodiac characters with oversized sparkling eyes, adorable expressive faces, soft rounded features, polished gold textures with intricate engraved ornaments and delicate pink and gold accents, alive and emotionally expressive. Setting: a softly illuminated Khmer temple inspired by Angkor Wat under a glowing full moon and a deep indigo starry sky, floating lotus flowers, ornate pink-and-gold lotus details, magical sparkles and warm golden reflections. Cinematic lighting, rich colors, soft atmospheric glow, realistic metallic reflections, beautiful depth of field, gentle slow camera movement, professional animated-movie rendering. The zodiac animals never talk and never move their mouths; only Chanda, the presenter, speaks. No text, no letters, no subtitles, no watermark, no logos.";
 const STYLE_WIDE = STYLE.replace("Vertical 9:16.", "Horizontal 16:9 (standard YouTube video).");
-const VOICE_EN = "a warm, cheerful young female narrator with a soft, magical storytelling tone, clear and friendly";
-const VOICE_KM = "a native Cambodian Khmer female narrator with clear, standard Phnom Penh pronunciation, warm, friendly and youthful, medium pitch, smooth and gentle, speaking slightly slowly (about 85 to 90 percent of normal speed), pronouncing every Khmer word fully and clearly, with natural Khmer rhythm and a short pause between sentences (not English-accented, not robotic, not dramatic),";
+// ONE fixed voice for Chanda, word for word the same in every clip of every video, so Flow keeps the same voice
+const VOICE_EN = "always the exact same voice in every clip of this series: a young Cambodian woman in her mid-twenties speaking clear, natural English with a neutral accent, medium-high pitch, a soft, warm and bright tone, a friendly smile in her voice, a calm, steady pace (about 150 words per minute), even volume, recorded close to a good studio microphone in a quiet room (no echo, no reverb, no whispering, no singing, and no change of voice, accent, pitch, speed or energy from clip to clip)";
+const VOICE_KM = "always the exact same voice in every clip of this series: a native Cambodian woman in her mid-twenties speaking Khmer with clear, standard Phnom Penh pronunciation, medium-high pitch, a soft, warm and bright tone, a friendly smile in her voice, speaking slightly slowly (about 85 to 90 percent of normal speed), pronouncing every Khmer word fully and clearly, with natural Khmer rhythm and a short pause between sentences, even volume, recorded close to a good studio microphone in a quiet room (no echo, no reverb, not English-accented, not robotic, not dramatic, and no change of voice, pitch, speed or energy from clip to clip),";
 // Khmer for speaking: numbers written out as Khmer words, so a voice reads them in Khmer and not in English
 // ("64" -> "ហុកសិបបួន", "2026" -> "ពីរពាន់ម្ភៃប្រាំមួយ"). Subtitles and captions keep the digits.
 const KM_ONES = ["សូន្យ", "មួយ", "ពីរ", "បី", "បួន", "ប្រាំ", "ប្រាំមួយ", "ប្រាំពីរ", "ប្រាំបី", "ប្រាំបួន"];
@@ -391,6 +392,7 @@ const MUSIC = "Gentle magical background music with soft chimes and a light Asia
 const HOST = ["Chanda", "ចន្ទា"];
 const HOST_LOOK = "Chanda, a friendly young Cambodian woman presenter with big warm amber-brown eyes, rosy cheeks and a bright open smile, glossy black hair swept into a low side bun with a golden lotus hairpin and dangling gold chains, small gold flower earrings, a cream-and-gold brocade Khmer blouse with a high collar, puffed shoulders and three-quarter sleeves, a gold chain necklace with a large round golden medallion showing the twelve zodiac animals, an ornate gold belt with a flower buckle and a red gem, and a deep navy sampot skirt woven with gold Khmer diamond patterns and a front pleated panel";
 const HOST_CHAR = `Create a premium-quality 3D animated character, inspired by the charm and warmth of classic Disney and Pixar-style animated family films: ${HOST_LOOK}. Expressive, kind face, graceful and confident posture, one hand held open toward the temple as if presenting it, the other resting at her waist. She stands on a carved sandstone temple terrace with an ornate stone balustrade, beside a lotus pond with glowing pink lotus flowers; behind her, Angkor Wat glows golden and reflects in the water, under a deep purple night sky with a huge glowing full moon and floating sky lanterns. Cinematic lighting, warm golden rim light, rich colors, beautiful depth of field, professional animated-movie rendering. Composition: vertical 9:16, from the knees up, centered, facing the camera. Restrictions: no text, no letters, no watermark, no logo. Keep her design exactly the same in every video (see the approved picture characters/chanda.jpg).`;
+const silent = (onCam) => `Audio: no speech, no voices and no singing of any kind${onCam ? "; Chanda's lips move naturally as she talks, but there is no sound of her voice (it is added later)" : ""}. Only gentle magical background music with soft chimes and a light Asian flute.`;
 const audio = (lang, onCam, line) => `Audio: ${HOST[0]}${onCam ? ", on camera, looking at the viewer with natural lip movements," : " (voice-over only; she is not on screen, and no one on screen speaks or moves their mouth),"} ${lang === "km" ? VOICE_KM.replace(/,$/, "") : VOICE_EN}, says${lang === "km" ? " in Khmer" : ""}: "${line}" ${MUSIC}`;
 // the luckiest animal of the day (the day animal): one-line symbolism for the hero picture, video and caption
 // (Rabbit line written by the owner; the others follow the same pattern with common traditional symbolism)
@@ -1194,7 +1196,7 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
   const videoMd = (v) => `## ${v.name}
 ${v.intro || `${v.secs === 80 ? "An" : "A"} ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference pictures of Chanda and the ${day} as ingredients. ${v.scenes.some((x) => x[4]) ? `Chanda is on camera and speaks with lip-sync in scenes ${[1, ...v.scenes.map((x, i) => x[4] ? i + 1 : 0).filter(Boolean)].join(", ")}; in the other scenes she narrates off screen` : "Chanda opens the video on camera with the hook and narrates the rest off screen"}. The animals never speak or move their mouths: they only act. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
 ${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.metaMd ? `\n${v.metaMd}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
-${v.scenes.map(([t, prompt, en, kmL, onCam], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: ${audio("en", (i === 0 && v.host) || !!onCam, en)}\nKhmer voice: ${audio("km", (i === 0 && v.host) || !!onCam, kmFlow(kmL))}`).join("\n\n")}
+${v.scenes.map(([t, prompt, en, kmL, onCam], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: ${audio("en", (i === 0 && v.host) || !!onCam, en)}\nKhmer voice: ${audio("km", (i === 0 && v.host) || !!onCam, kmFlow(kmL))}\nNo voice: ${silent((i === 0 && v.host) || !!onCam)}`).join("\n\n")}
 
 ## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : v.id === "easy" ? "take-it-easy video" : v.id === "yt8" ? "full fortune video" : `${v.secs}-second video`}
 The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
@@ -1237,6 +1239,12 @@ ${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for th
 ${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).label.km}សម្រាប់ឆ្នាំ${dayKm}។ លេខសំណាង៖ ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ)។ មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
 
 ${VIDEOS.map(videoMd).join("\n\n")}
+
+## Keep the voice the same in every scene
+Flow makes a new voice for every clip, so even with the same words the voice can drift a little between scenes. Two ways to keep Chanda's voice the same:
+1. Most reliable – one voice-over for the whole video: make every scene with "Copy, no voice" (music only; in Chanda's on-camera scenes her lips still move). Then record the whole "Voice-over" text of that video in one go, yourself or with one text-to-speech voice (for Khmer, for example Azure's km-KH-SreymomNeural; for English, choose one voice and always use it), and lay it over the clips in CapCut, using the subtitle file to line it up. One recording = one voice from start to end.
+2. Quicker – Flow's own voice: always use "Copy + English voice" or "Copy + Khmer voice" (never retype or shorten the voice text: it describes the exact same voice every time), make all clips of one video in the same Flow project, and listen to each clip; if one sounds different, make only that clip again.
+Do not mix the two ways in one video.
 
 ## Khmer voice – how to get clear Khmer
 Every Khmer voice line in this pack is written for speaking: short sentences, a ។ at each pause, and numbers written out in Khmer words (for example ហុកសិបបួន, not 64) so the voice does not read them in English. Subtitles and captions keep the digits.
@@ -1529,7 +1537,7 @@ function charactersMd(KM_NAMES) {
           '<div class="row"><button data-copy="' + id + '">Copy</button>' +
           (b.code && /\(([^)]+\.srt)\)/.test(b.title) ? '<button class="primary" data-srtfile="' + /\(([^)]+\.srt)\)/.exec(b.title)[1] + '" data-pre="' + id + '">Download ' + /\(([^)]+\.srt)\)/.exec(b.title)[1] + '</button>' : "") +
           (scene && voices[scene[1]] ? '<button data-flow="' + scene[1] + '|en" data-pre="' + id + '">Copy + English voice</button><button data-flow="' + scene[1] + '|km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
-          (/\nEnglish voice: /.test(b.text) ? '<button data-nine="en" data-pre="' + id + '">Copy + English voice</button><button data-nine="km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
+          (/\nEnglish voice: /.test(b.text) ? '<button data-nine="en" data-pre="' + id + '">Copy + English voice</button><button data-nine="km" data-pre="' + id + '">Copy + Khmer voice</button><button data-nine="none" data-pre="' + id + '">Copy, no voice</button>' : "") +
           "</div></div>";
       });
       html += "</div></details>";
@@ -1627,10 +1635,10 @@ function charactersMd(KM_NAMES) {
       copy(STYLE + "\n\n" + T[b.dataset.pre] + "\n\n" + v, b, document.getElementById(b.dataset.pre));
     } else if (b.dataset.nine) {
       var full = T[b.dataset.pre], lines = full.split("\n");
-      var scene9 = lines.filter(function (l) { return !/^(English|Khmer) voice: /.test(l); }).join("\n");
-      var vl = lines.filter(function (l) { return l.indexOf(b.dataset.nine === "en" ? "English voice: " : "Khmer voice: ") === 0; })[0] || "";
+      var scene9 = lines.filter(function (l) { return !/^(English voice|Khmer voice|No voice): /.test(l); }).join("\n");
+      var vl = lines.filter(function (l) { return l.indexOf(b.dataset.nine === "en" ? "English voice: " : b.dataset.nine === "km" ? "Khmer voice: " : "No voice: ") === 0; })[0] || "";
       var secT = (b.closest("details.sec") && b.closest("details.sec").querySelector("h2").textContent) || "";
-      copy((/^Long YouTube|^Story video/.test(secT) ? STYLE_WIDE : STYLE) + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English|Khmer) voice: /, ""), b, document.getElementById(b.dataset.pre));
+      copy((/^Long YouTube|^Story video/.test(secT) ? STYLE_WIDE : STYLE) + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English voice|Khmer voice|No voice): /, ""), b, document.getElementById(b.dataset.pre));
     } else if (b.dataset.go) set(b.dataset.go);
   });
   // subtitle files: .srt is not a format the viewer can save directly, so the four files go in one .zip

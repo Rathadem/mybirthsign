@@ -244,7 +244,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
           '<div class="row"><button data-copy="' + id + '">Copy</button>' +
           (b.code && /\(([^)]+\.srt)\)/.test(b.title) ? '<button class="primary" data-srtfile="' + /\(([^)]+\.srt)\)/.exec(b.title)[1] + '" data-pre="' + id + '">Download ' + /\(([^)]+\.srt)\)/.exec(b.title)[1] + '</button>' : "") +
           (scene && voices[scene[1]] ? '<button data-flow="' + scene[1] + '|en" data-pre="' + id + '">Copy + English voice</button><button data-flow="' + scene[1] + '|km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
-          (/\nEnglish voice: /.test(b.text) ? '<button data-nine="en" data-pre="' + id + '">Copy + English voice</button><button data-nine="km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
+          (/\nEnglish voice: /.test(b.text) ? '<button data-nine="en" data-pre="' + id + '">Copy + English voice</button><button data-nine="km" data-pre="' + id + '">Copy + Khmer voice</button><button data-nine="none" data-pre="' + id + '">Copy, no voice</button>' : "") +
           "</div></div>";
       });
       html += "</div></details>";
@@ -342,10 +342,10 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       copy(STYLE + "\n\n" + T[b.dataset.pre] + "\n\n" + v, b, document.getElementById(b.dataset.pre));
     } else if (b.dataset.nine) {
       var full = T[b.dataset.pre], lines = full.split("\n");
-      var scene9 = lines.filter(function (l) { return !/^(English|Khmer) voice: /.test(l); }).join("\n");
-      var vl = lines.filter(function (l) { return l.indexOf(b.dataset.nine === "en" ? "English voice: " : "Khmer voice: ") === 0; })[0] || "";
+      var scene9 = lines.filter(function (l) { return !/^(English voice|Khmer voice|No voice): /.test(l); }).join("\n");
+      var vl = lines.filter(function (l) { return l.indexOf(b.dataset.nine === "en" ? "English voice: " : b.dataset.nine === "km" ? "Khmer voice: " : "No voice: ") === 0; })[0] || "";
       var secT = (b.closest("details.sec") && b.closest("details.sec").querySelector("h2").textContent) || "";
-      copy((/^Long YouTube|^Story video/.test(secT) ? STYLE_WIDE : STYLE) + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English|Khmer) voice: /, ""), b, document.getElementById(b.dataset.pre));
+      copy((/^Long YouTube|^Story video/.test(secT) ? STYLE_WIDE : STYLE) + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English voice|Khmer voice|No voice): /, ""), b, document.getElementById(b.dataset.pre));
     } else if (b.dataset.go) set(b.dataset.go);
   });
   // subtitle files: .srt is not a format the viewer can save directly, so the four files go in one .zip
