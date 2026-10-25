@@ -1,4 +1,4 @@
-// Every voice line in the two 80-second daily videos must fit its 10-second clip, and the animals must never speak.
+// Every voice line in the two 80-second daily videos and the 8-minute full-fortune video must fit its 10-second clip, and the animals must never speak.
 //   node tests/video-timing-test.mjs
 // Checks 400 days. Limits (a rough guide for a calm voice with a short breath at the end of the clip):
 // English at most 23 spoken words (numbers counted as the words that are said), Khmer at most 125 characters
@@ -18,7 +18,7 @@ for (let i = 0; i < 400; i++) {
   const d = new Date(start + i * 86400000).toISOString().slice(0, 10);
   const md = buildPack(d, computeFacts(d), forSign, null, { INFO, KM_INFO }).md;
   for (const part of md.split(/^## /m)) {
-    if (!/^(60-second|Take-it-easy)/.test(part)) continue;
+    if (!/^(60-second|Take-it-easy|Long YouTube video – full fortune)/.test(part)) continue;
     for (const m of part.matchAll(/### (Scene [^\n]+)\n(.*?)\nEnglish voice:.*?says: "(.*?)" .*?\nKhmer voice:.*?says in Khmer: "(.*?)" /gs)) {
       checked++;
       const [, title, prompt, en, km] = m, ew = enWords(en), kc = [...km].length;

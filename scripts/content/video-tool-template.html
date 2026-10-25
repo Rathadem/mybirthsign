@@ -269,6 +269,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 
   // side menu: every section, grouped; a slide-in drawer on phones
   function group(t) {
+    if (/^Long YouTube video – full fortune|^Voice-over – full fortune/.test(t)) return "Full fortune 8+ min";
     if (/^Luckiest|^60-second|^180-second|^Long YouTube|^Story video|^Voice-over – (60|80|180)-second|^Voice-over – long|^Voice-over – story/.test(t)) return "Luckiest animal";
     if (/^Take-it-easy|^Voice-over – take-it-easy/.test(t)) return "Unlucky sign";
     if (/^YouTube|^Facebook|^TikTok/.test(t)) return "Post it";
@@ -281,6 +282,8 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       .replace(/^180-second video – YouTube/, "180s video (YouTube)")
       .replace(/^Voice-over – (\d+)-second video/, "$1s voice-over & subtitles")
       .replace(/^Long YouTube video – all 12 signs.*$/, "Long video, all 12 signs (YouTube)")
+      .replace(/^Long YouTube video – full fortune, ([\d:]+).*$/, "Full fortune video, $1 (YouTube, mid-roll ads)")
+      .replace(/^Voice-over – full fortune video/, "Full fortune voice-over & subtitles")
       .replace(/^Voice-over – long YouTube video/, "Long video voice-over & subtitles")
       .replace(/^Story video – YouTube.*$/, "Story video (YouTube)")
       .replace(/^Voice-over – story video/, "Story voice-over & subtitles")

@@ -745,6 +745,120 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
       ["Caption – English (Facebook, TikTok)", `Born in the Year of the ${c}? Today, ${D}, is a ${cs.label.en} day for you. 🌙\n\nSome days just don't go to plan, and that's okay. Slow down, be gentle with yourself, and lean on a friend you trust. Slow is still moving forward, and brighter days are on their way. 💛\n\nComment ${EMO[c]} if this is your sign! 👇\nAll 12 signs: https://mybirthsign.com (TikTok: link in bio)\n\n${DISC_EN}\n#ChineseZodiac #DailyHoroscope #YearOfThe${c} #fyp #Reels`],
       ["Caption – Khmer (Facebook, TikTok)", `អ្នកកើតឆ្នាំ${ck}មែនទេ? ថ្ងៃនេះ ${D} ជា${cs.label.km} សម្រាប់អ្នក។ 🌙\n\nមានថ្ងៃខ្លះ អ្វីៗមិនដើរតាមផែនការ ហើយវាមិនអីទេ។ សូមធ្វើអ្វីៗយឺតៗ មេត្តាចំពោះខ្លួនឯង និងពឹងលើមិត្តដែលអ្នកទុកចិត្ត។ យឺត ក៏នៅតែជាការឈានទៅមុខដែរ ហើយថ្ងៃភ្លឺស្វាង កំពុងមកដល់។ 💛\n\nComment ${EMO[c]} បើនេះជារាសីរបស់អ្នក! 👇\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/ (TikTok៖ Link នៅក្នុង bio)\n\n${disclaimer}\n#ជោគជតារាសី #រាសីប្រចាំថ្ងៃ #ឆ្នាំ${ck} #fyp #Reels`],
     ];
+
+    // ---- full daily fortune for YouTube, 8 minutes or longer (YouTube allows mid-roll ads from 8:00):
+    // hook, the Great Day sign in depth, the two Good Day signs, the sign to take it easy (its little story),
+    // the other eight signs, then a recap and goodbye. 52 clips of 10 seconds = 8:40. 16:9.
+    const wide = (a, extra) => `${extra} ${alive(a)} ${lockAnimal(a)}`;
+    const fr = friends, ords = F.signs.filter((x) => x.tier === "ordinary");
+    const YT_HOOKS = [
+      ["Every sign in one line", `One sign has a Great Day today, two have a Good Day, and one should slow down. Which one are you?`,
+        `ថ្ងៃនេះ មានមួយឆ្នាំថ្ងៃល្អខ្លាំង ពីរឆ្នាំថ្ងៃល្អ និងមួយឆ្នាំគួរធ្វើអ្វីៗយឺតៗ។ តើអ្នកជាឆ្នាំណា?`],
+      ["Before a big decision", `Before you make any big decision today, watch this: your lucky color, your best time, and whether to slow down.`,
+        `មុននឹងសម្រេចចិត្តរឿងធំថ្ងៃនេះ សូមមើលវីដេអូនេះ៖ ពណ៌សំណាង ពេលល្អ និងថាតើគួរធ្វើយឺតៗឬទេ។`],
+      ["Speak to the careful sign", `Born in the Year of the ${c}? Watch this before you do anything big today. Everyone else, your luck is here too.`,
+        `អ្នកកើតឆ្នាំ${ck}មែនទេ? សូមមើលវីដេអូនេះ មុនធ្វើរឿងធំថ្ងៃនេះ។ អ្នកផ្សេងទៀត សំណាងរបស់អ្នកក៏នៅទីនេះដែរ។`],
+      ["Name the winner", `Today the ${day} has its Great Day, and one sign should take it easy. Is it yours?`,
+        `ថ្ងៃនេះ ឆ្នាំ${dayKm}មានថ្ងៃល្អខ្លាំង ហើយមានមួយឆ្នាំគួរប្រុងប្រយ័ត្ន។ តើជាឆ្នាំរបស់អ្នកឬទេ?`],
+      ["Comment first", `Comment your sign now. By the end of this video, you'll know your lucky color, best time, and direction for today.`,
+        `សូមសរសេររាសីរបស់អ្នកឥឡូវនេះ។ មុនវីដេអូនេះចប់ អ្នកនឹងដឹងពណ៌ ពេល និងទិសសំណាងថ្ងៃនេះ។`],
+    ];
+    const Y = [];
+    const add = (part, s) => { s.part = part; Y.push(s); };
+    // intro
+    add("Introduction", ["The hook – Chanda on camera", `${cap(HOST_LOOK)}, stands on the moonlit temple terrace beside the lotus pond, facing the camera, smiling warmly and speaking directly to the viewer with natural lip movements and small, friendly hand gestures. Behind her, twelve cute golden zodiac animals sit on glowing lotus pedestals in a half circle: the ${dl} shines brightest with a golden aura, and the ${cl} rests calmly inside a soft bubble of golden light. The animals move gently and look around curiously, mouths closed. Medium shot, gentle push-in toward her face. ${LOCK_HOST}`,
+      YT_HOOKS[0][1], YT_HOOKS[0][2], true]);
+    add("Introduction", ["What's coming", `Four glowing lotus lanterns rise one by one from the moonlit pond in front of the temple: one bright gold, two warm gold and one soft silver. Then many small lanterns follow them into the starry sky. Wide shot, slow crane up.`,
+      `Today is ${aDay} ${day} day. Coming up: one Great Day sign, two Good Days, one sign to take it easy, and all twelve.`,
+      `ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}។ បន្តិចទៀត៖ មួយឆ្នាំថ្ងៃល្អខ្លាំង ពីរឆ្នាំថ្ងៃល្អ មួយឆ្នាំគួរសម្រាក និងរាសីទាំង 12។`]);
+    add("Introduction", ["Today's signs at a glance", `Twelve cute golden zodiac animals sit on glowing lotus pedestals in a wide circle around the moonlit pond. Three of them shine brighter with a golden aura, and one rests inside a soft protective bubble of light. They all move gently: ears twitching, tails swaying, heads turning. Slow, wide circling camera.`,
+      `${list(lucky)} are lucky today, and the ${c} should slow down. Find your sign in the chapters below.`,
+      `${kmList(lucky.map((a) => `ឆ្នាំ${km(a)}`))} មានសំណាងថ្ងៃនេះ ហើយឆ្នាំ${ck} គួរធ្វើអ្វីៗយឺតៗ។ សូមរករាសីរបស់អ្នក ក្នុងជំពូកខាងក្រោម។`]);
+    add("Introduction", ["Comment and subscribe – Chanda on camera", `${cap(HOST_LOOK)}, stands on the temple terrace and leans a little toward the camera with a friendly smile, speaking with natural lip movements; she points down as if toward the comments, then makes a small heart shape with her hands. Close-up, soft golden light. ${LOCK_HOST}`,
+      "Before we start, comment your sign below, and subscribe so you get your fortune every day.",
+      "មុននឹងចាប់ផ្ដើម សូមសរសេររាសីរបស់អ្នក ក្នុងមតិយោបល់ ហើយ subscribe ដើម្បីទទួលជោគជតារៀងរាល់ថ្ងៃ។", true]);
+    // the Great Day sign
+    const G = `Great Day: ${day}`;
+    [SC.rev60, SC.mean60].forEach((s) => add(G, s));
+    add(G, [`The ${day}'s character`, wide(day, `Close-up of the ${dl} on its glowing lotus, its face showing a ${S9.mood} expression. Soft golden light circles it and small glowing lotus petals float around it like a halo. Gentle slow orbit.`),
+      `People born in the Year of the ${day} are often described as ${clueEn}.`,
+      `អ្នកកើតឆ្នាំ${dayKm} ជារឿយៗ ត្រូវបានគេស្គាល់ថា ${clueKm}។`]);
+    add(G, SC.magic60);
+    add(G, ["Love and family", wide(day, `The ${dl} sits by the lotus pond as warm pink lanterns rise around it, and a soft glowing heart of golden light forms in the air in front of it. It smiles warmly. Slow push-in.`),
+      "For love today, be warm and kind. A kind word or a small gift brings you closer.",
+      "សម្រាប់ស្នេហា ថ្ងៃនេះ សូមមានចិត្តកក់ក្ដៅ។ ពាក្យល្អ ឬអំណោយតូចមួយ នាំឲ្យកាន់តែជិតស្និទ្ធ។"]);
+    add(G, ["Work and study", wide(day, `The ${dl} climbs the glowing temple steps one by one, and each step lights up in gold under its feet. At the top it looks out proudly over the moonlit temple. Camera rises with it.`),
+      "For work and study, take one clear step at a time, and finish what matters most first.",
+      "សម្រាប់ការងារ និងការសិក្សា សូមធ្វើម្ដងមួយជំហាន ហើយបញ្ចប់រឿងសំខាន់មុនគេ។"]);
+    add(G, ["Money", wide(day, `The ${dl} sits beside a lotus-shaped basket of softly glowing golden coins and carefully drops one shining coin into a small golden jar. Warm, calm light. Slow push-in on the jar.`),
+      "For money, keep it simple. Plan before you spend, and save a little for tomorrow.",
+      "សម្រាប់លុយកាក់ សូមចាយឲ្យសាមញ្ញ។ គិតមុននឹងចាយ ហើយសន្សំទុកបន្តិច សម្រាប់ថ្ងៃស្អែក។"]);
+    [SC.color60, SC.timedir60, SC.num60].forEach((s) => add(G, s));
+    add(G, ["Lucky days of the week", wide(day, `Seven glowing lanterns float in a row above the lotus pond, and two of them shine brighter than the others. The ${dl} looks up at the two bright lanterns and smiles. Slow pan along the row.`),
+      PI ? `The ${day}'s lucky days of the week are ${PI.luckyDays.join(" and ")}. Keep them for plans that matter.` : "",
+      PK ? `ថ្ងៃសំណាងរបស់ឆ្នាំ${dayKm} គឺ${PK.luckyDays.join(" និង")}។ សូមទុកសម្រាប់ផែនការសំខាន់ៗ។` : ""]);
+    add(G, ["A gentle reminder", wide(day, `The ${dl} looks at its reflection in the still lotus pond. The reflection smiles back, and a soft ring of golden light spreads across the water. Slow camera move down to the reflection.`),
+      `A gentle reminder: ${day} people ${weakEn}. Stay balanced today.`,
+      PK ? `រំលឹកបន្តិច៖ អ្នកកើតឆ្នាំ${dayKm} ${PK.weaknesses.replace(/។$/, "")}។ សូមរក្សាតុល្យភាព។` : ""]);
+    // the two Good Day signs
+    const GOODTIP = [["Team up with a friend today. Shared plans go well.", "ថ្ងៃនេះ សូមសហការជាមួយមិត្ត។ ផែនការរួមគ្នា នឹងដំណើរការល្អ។"],
+      ["A good day to meet people and start something nice. Keep smiling.", "ថ្ងៃនេះ ល្អសម្រាប់ជួបមនុស្ស និងចាប់ផ្ដើមរឿងល្អៗ។ សូមរក្សាស្នាមញញឹម។"]];
+    fr.forEach((f, i) => {
+      const fs = sign(f), fl = f.toLowerCase(), FL = fs.lucky, nf = nums.find((x) => x.a === f), Gp = `Good Day: ${f}`;
+      add(Gp, [`${f} – ${fs.label.en}`, wide(f, `${cap(LOOK[f])} appears on a glowing lotus pedestal in front of the Angkor-style temple under the full moon, glowing with a warm golden light, and greets the morning with a happy stretch. Slow push-in.`),
+        `Next, the Year of the ${f}: a Good Day! The ${f} shares a lucky triangle with the ${day}.`,
+        `បន្ទាប់ ឆ្នាំ${km(f)}៖ ថ្ងៃល្អ! ឆ្នាំ${km(f)} ស្ថិតក្នុងត្រីកោណសំណាង ជាមួយឆ្នាំ${dayKm}។`]);
+      add(Gp, [`${f} – the magical moment`, wide(f, `The ${fl} ${POSE[f]}. Lotus petals and sparkles swirl up behind it. Dynamic camera following the movement.`),
+        GOODTIP[i % 2][0], GOODTIP[i % 2][1]]);
+      add(Gp, [`${f} – lucky color and time`, wide(f, `The ${fl} walks along the temple steps as glowing ${FL.color.en} lanterns light up one by one around it, and a sundial of golden light turns its glowing shadow on the stone. Warm ${FL.color.en} and gold light. Slow orbit.`),
+        `Your lucky color is ${FL.color.en}, and your best time is ${sayTime(FL.time)}.`,
+        `ពណ៌សំណាងគឺពណ៌${FL.color.km} ហើយពេលល្អបំផុតគឺ${sayTimeKm(FL.time)}។`]);
+      add(Gp, [`${f} – direction and numbers`, wide(f, `A glowing golden path of light unrolls across the pond toward the ${FL.direction.en.toLowerCase()}, and three small golden orbs of light float above it. The ${fl} follows the path happily. Open space in the lower part of the frame for number captions. Camera follows behind it.`),
+        `Your lucky direction is the ${FL.direction.en.toLowerCase()}.${nf ? ` Lucky numbers: ${nf.d1}, ${nf.d2}, and ${nf.d3}.` : ""}`,
+        `ទិសសំណាងគឺទិស${FL.direction.km}។${nf ? ` លេខសំណាង៖ ${nf.d1} ${nf.d2} និង ${nf.d3}។` : ""}`]);
+      add(Gp, [`${f} – today's tip`, wide(f, `The ${fl} sits beside the glowing ${dl} on the temple terrace; they look at each other happily, then both look up as a shower of golden sparkles falls around them. Two-shot, slow push-in.`),
+        `${f} friends, stay close to the ${day} people today. Good luck grows when you share it.`,
+        `អ្នកកើតឆ្នាំ${km(f)} ថ្ងៃនេះ សូមនៅជិតអ្នកកើតឆ្នាំ${dayKm}។ សំណាងកាន់តែច្រើន ពេលចែករំលែក។`]);
+    });
+    // the sign to take it easy: its little story (scenes 2 to 7 of the take-it-easy video)
+    const T = `Take it easy: ${c}`;
+    E.slice(1, 7).forEach((s, i) => add(T, i === 0 ? [`${c} – take it easy`, s[1].replace("Continuing from the previous scene: ", `${cap(LOOK[c])} sits at the edge of the moonlit pond, where a path of flat stepping stones leads up to the temple. `), s[2], s[3]] : s));
+    // the other eight signs
+    ords.forEach((sg, i) => {
+      const a = sg.animal, al = a.toLowerCase(), L = sg.lucky, adv = ADVICE.ordinary[i % ADVICE.ordinary.length], Op = "All the other signs";
+      add(Op, [`${a} – ${sg.label.en}`, wide(a, `${cap(LOOK[a])} appears on a glowing lotus pedestal in front of the Angkor-style temple under the full moon, calm and content, softly lit by the moon. ${L.color.en === "gold" ? "Golden" : cap(L.color.en)} lanterns glow softly around it. Slow push-in.`),
+        `Year of the ${a}: a steady day. Lucky color: ${L.color.en}. Best time: ${sayTime(L.time)}.`,
+        `ឆ្នាំ${sg.nameKm}៖ ថ្ងៃធម្មតា។ ពណ៌សំណាង៖ ពណ៌${L.color.km}។ ពេលល្អ៖ ${sayTimeKm(L.time)}។`]);
+      add(Op, [`${a} – advice`, wide(a, `The ${al} looks around happily as lanterns drift slowly past, then walks along the edge of the lotus pond. Peaceful, cheerful mood. Camera follows it smoothly.`),
+        `${adv[0]} Lucky direction: ${L.direction.en.toLowerCase()}.`,
+        `${adv[1]} ទិសសំណាង៖ ទិស${L.direction.km}។`]);
+    });
+    // recap and goodbye
+    add("Recap and goodbye", ["Quick recap", `The twelve golden zodiac animals gather on the temple terrace in a half circle; the ${dl} glows brightest in the middle, two friends glow warmly beside it, and the ${cl} rests calmly in its soft bubble of light. They all move and look around happily. Slow pull-back.`,
+      `Quick recap: the ${day} has a Great Day, ${list(fr)} have Good Days, and the ${c} should slow down.`,
+      `សរុបមកវិញ៖ ឆ្នាំ${dayKm}ថ្ងៃល្អខ្លាំង ${kmList(fr.map((a) => `ឆ្នាំ${km(a)}`))}ថ្ងៃល្អ ហើយឆ្នាំ${ck} គួរធ្វើអ្វីៗយឺតៗ។`]);
+    add("Recap and goodbye", [nine[7][0], wide(day, `The ${dl} gently places a small glowing lotus lantern on the pond and makes a wish. The lantern drifts away across the moonlit water, and tiny golden sparkles rise from it into the night sky. Slow camera move following the lantern.`), vo90[7][0], vo90[7][1]]);
+    add("Recap and goodbye", ["Thank you", wide(day, `The ${dl} bows gently with its paws together in front of the glowing temple, as pink lotus petals fall softly around it like rain. Warm, grateful mood. Slow pull-back.`),
+      "Before the day ends, say thank you: to the people who help you, and to yourself.",
+      "មុនថ្ងៃនេះបញ្ចប់ សូមអរគុណ៖ អរគុណមនុស្សដែលជួយអ្នក និងអរគុណខ្លួនឯង។"]);
+    add("Recap and goodbye", ["Goodbye – Chanda on camera", `${cap(HOST_LOOK)}, stands on the moonlit temple terrace with the twelve golden zodiac animals around her, smiling and speaking to the viewer with natural lip movements. She opens her palm, and a small golden lotus blooms in her hand and bursts into thousands of golden sparkles that swirl around her and the animals; the animals look up in wonder and wave goodbye without speaking, mouths closed. Lotus-shaped golden fireworks open in the sky. Crane shot slowly pulling back for a warm final view. ${LOCK_HOST}`,
+      "Subscribe and follow MyBirthSign for your fortune every day. Which sign are you? Tell me in the comments!",
+      "សូម subscribe និងតាមដាន MyBirthSign រៀងរាល់ថ្ងៃ។ តើអ្នកកើតឆ្នាំអ្វី? ប្រាប់ខ្ញុំក្នុងមតិយោបល់ផង!", true]);
+    const ytChapters = [];
+    Y.forEach((s, i) => { if (!ytChapters.length || ytChapters[ytChapters.length - 1][1] !== s.part) ytChapters.push([mmss(i * 10), s.part]); });
+    const partKm = (n) => n === "Introduction" ? "សេចក្ដីផ្ដើម" : n === "All the other signs" ? "រាសីផ្សេងទៀត" : n === "Recap and goodbye" ? "សរុប និងលាគ្នា"
+      : n.replace(/^Great Day: (\w+)$/, (m, a) => `ថ្ងៃល្អខ្លាំង៖ ឆ្នាំ${km(a)}`).replace(/^Good Day: (\w+)$/, (m, a) => `ថ្ងៃល្អ៖ ឆ្នាំ${km(a)}`).replace(/^Take it easy: (\w+)$/, (m, a) => `គួរប្រុងប្រយ័ត្ន៖ ឆ្នាំ${km(a)}`);
+    const ytBreaks = ytChapters.filter(([tm]) => { const [m, s] = tm.split(":").map(Number); return m * 60 + s >= 120; }).map(([tm]) => tm);
+    const ytHookMd = `### Opening hook – 5 options\n${YT_HOOKS.map(([st, e, k], i) => `${i === 0 ? "★ " : ""}${i + 1}. ${st}\n   English: ${e}\n   Khmer: ${k}`).join("\n")}\n★ = used to open this video. Why: in one line it gives every viewer a stake (a Great Day, a Good Day, or a day to slow down) and ends on a question, so people stay to find their own sign. To use another hook, replace the voice line in scene 1.`;
+    VIDEOS.push({ id: "yt8", name: `Long YouTube video – full fortune, ${mmss(Y.length * 10)} (mid-roll ads)`, secs: Y.length * 10, scenes: Y, chapters: ytChapters,
+      metaMd: `${ytHookMd}\n\n### Mid-roll ads\nYouTube lets you add ad breaks in the middle of videos that are 8 minutes or longer; this one is ${mmss(Y.length * 10)}. Put the breaks at chapter starts so they don't cut a sentence. Chapter starts after 2:00: ${ytBreaks.join(", ")}. Two or three breaks are enough; too many make viewers leave.\n\n### Thumbnail idea\nThe golden ${dl} shining big on one side and the ${cl} small and sleepy on the other, with large text: "${day.toUpperCase()}: GREAT DAY" and "${c.toUpperCase()}: SLOW DOWN".\n\n### Format\nHorizontal 16:9 for a standard YouTube video. "Copy + voice" uses the 16:9 style line for this video.`,
+      intro: `A full daily fortune for YouTube (${mmss(Y.length * 10)}, ${Y.length} clips of 10 seconds), long enough for mid-roll ads. In order: the hook, the Great Day sign (${day}) in depth, the two Good Day signs (${list(fr)}), the sign to take it easy (${c}) with its little story, the other eight signs, then a recap and goodbye. Add Chanda and the 12 character pictures as ingredients in Flow (each part uses its own animal). Chanda is on camera and speaks with lip-sync in scenes 1, 4 and ${Y.length}; in the others she narrates off screen. The animals never speak or move their mouths: they only act. Set the clip length to 10 seconds, make the clips in order 1 to ${Y.length}, and paste the chapters into the YouTube description.` });
+    POSTS.yt8 = [
+      ["Title – English", `Chinese Zodiac Fortune ${D}: ${day} Great Day, ${fr.join(" & ")} Lucky, ${c} Take It Easy ${EMO[day]}`],
+      ["Title – Khmer", `ជោគជតារាសី ${D}៖ ឆ្នាំ${dayKm}ថ្ងៃល្អខ្លាំង ${fr.map((a) => `ឆ្នាំ${km(a)}`).join(" និង")}ថ្ងៃល្អ ឆ្នាំ${ck}គួរប្រុងប្រយ័ត្ន ${EMO[day]}`],
+      ["Description – English", `Your full Chinese zodiac fortune for ${LD}: the ${day} has a Great Day, the ${list(fr)} have Good Days, and the ${c} should take it easy. Lucky color, best time and direction for all 12 signs.\n\nChapters:\n${ytChapters.map(([tm, n]) => `${tm} ${n}`).join("\n")}\n\nFor the ${day} today:\n${factsEn.join("\n")}\n\nWhich sign are you? Tell us in the comments, and subscribe for your fortune every day.\nLucky numbers are for fun only, not betting advice.\nSee your sign: https://mybirthsign.com\n\n${DISC_EN}\n\n${tagsEn} #YearOfThe${c}`],
+      ["Description – Khmer", `ជោគជតារាសីចិនពេញលេញ សម្រាប់${longDateKm}៖ ឆ្នាំ${dayKm}ថ្ងៃល្អខ្លាំង ${kmList(fr.map((a) => `ឆ្នាំ${km(a)}`))}ថ្ងៃល្អ ហើយឆ្នាំ${ck}គួរធ្វើអ្វីៗយឺតៗ។ ពណ៌ ពេល និងទិសសំណាង សម្រាប់រាសីទាំង 12។\n\nជំពូក៖\n${ytChapters.map(([tm, n]) => `${tm} ${partKm(n)}`).join("\n")}\n\nសម្រាប់ឆ្នាំ${dayKm}ថ្ងៃនេះ៖\n${factsKm.join("\n")}\n\nតើអ្នកកើតឆ្នាំអ្វី? សូមប្រាប់ក្នុងមតិយោបល់ ហើយ subscribe ដើម្បីទទួលជោគជតារៀងរាល់ថ្ងៃ។\n${disclaimerNums}\nមើលរាសីរបស់អ្នក៖ https://mybirthsign.com/km/\n\n${disclaimer}\n\n${tags}`],
+    ];
   }
   VIDEOS.forEach((v) => { v.posts = POSTS[v.id]; });
   const srtVid = {};
@@ -754,7 +868,7 @@ ${v.intro || `${v.secs === 80 ? "An" : "A"} ${v.secs}-second video about the ${d
 ${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.metaMd ? `\n${v.metaMd}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
 ${v.scenes.map(([t, prompt, en, kmL, onCam], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}\nEnglish voice: ${audio("en", (i === 0 && v.host) || !!onCam, en)}\nKhmer voice: ${audio("km", (i === 0 && v.host) || !!onCam, kmFlow(kmL))}`).join("\n\n")}
 
-## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : v.id === "easy" ? "take-it-easy video" : `${v.secs}-second video`}
+## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : v.id === "easy" ? "take-it-easy video" : v.id === "yt8" ? "full fortune video" : `${v.secs}-second video`}
 The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
 
 ### English
