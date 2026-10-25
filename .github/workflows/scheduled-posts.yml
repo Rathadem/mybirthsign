@@ -1,0 +1,45 @@
+name: Scheduled blog posts
+
+# Articles in scripts/content/weekly/*.json go live on their "published" date at 08:00 Cambodia time (UTC+7).
+# scripts/build-site.mjs hides an article until then; this job makes a small commit that morning so Netlify
+# builds again and the article appears. 01:00 UTC = 08:00 in Cambodia; the 03:00 UTC run is a back-up in case
+# GitHub starts the first one late or skips it. Nothing is committed on days with no new article.
+on:
+  schedule:
+    - cron: "0 1 * * *"
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-fortune
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Release today's scheduled articles
+        run: |
+          TODAY=$(TZ=Asia/Phnom_Penh date +%F)
+          LOG=scripts/content/released.txt
+          touch "$LOG"
+          NEW=""
+          for f in scripts/content/weekly/*.json; do
+            SLUG=$(node -e 'const s=require("./"+process.argv[1]);process.stdout.write(s.published===process.argv[2]?s.slug:"")' "$f" "$TODAY")
+            if [ -n "$SLUG" ] && ! grep -qx "$TODAY $SLUG" "$LOG"; then echo "$TODAY $SLUG" >> "$LOG"; NEW="$NEW $SLUG"; fi
+          done
+          if [ -z "$NEW" ]; then echo "No article scheduled for $TODAY."; exit 0; fi
+          echo "::notice::Releasing:$NEW"
+          git config user.name "scheduled-posts-bot"
+          git config user.email "scheduled-posts-bot@users.noreply.github.com"
+          git add "$LOG"
+          git commit -m "Scheduled posts for $TODAY:$NEW"
+          git pull --rebase origin main
+          git push origin HEAD:main

@@ -405,12 +405,51 @@ if (fs.existsSync(studioDir)) for (const f of fs.readdirSync(studioDir)) copyFil
 
 i18nBundles();
 
+// ---------------------------------------------------------------- scheduled articles: stay hidden until 08:00 Cambodia time on their date
+// An article made with scripts/content/weekly-article.py goes live on its "published" date at 08:00 (UTC+7). Until then
+// this build leaves its page out and drops every card and link to it (blog page, homepage, other articles), the sitemap
+// and its redirects. .github/workflows/scheduled-posts.yml starts a fresh build each morning so it appears on time.
+const SCHEDULED = (() => {
+  const dir = path.join(ROOT, "scripts", "content", "weekly"), now = Date.now(), out = [];
+  if (!fs.existsSync(dir)) return out;
+  for (const f of fs.readdirSync(dir)) {
+    if (!f.endsWith(".json")) continue;
+    try {
+      const s = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
+      if (s.slug && /^\d{4}-\d{2}-\d{2}$/.test(s.published || "") && Date.parse(`${s.published}T08:00:00+07:00`) > now) out.push(s.slug);
+    } catch { /* not an article spec */ }
+  }
+  return out;
+})();
+if (SCHEDULED.length) {
+  const esc = (s) => s.replace(/[-.]/g, "\\$&");
+  const alt = SCHEDULED.map(esc).join("|");
+  const href = `href="[^"]*?(?:${alt})(?:\\.html)?"`;
+  const card = new RegExp(`(?:<li[^>]*>\\s*)?<a class="(?:bv2-guide-card|bv2-latest-card|hm-bc)[^"]*" ${href}>[\\s\\S]*?</a>(?:\\s*</li>)?\\n?`, "g");
+  const link = new RegExp(`<a ${href}[^>]*>([\\s\\S]*?)</a>`, "g");
+  const isSched = new RegExp(`(?:^|/)(?:${alt})\\.html$`);
+  (function walk(d) {
+    for (const f of fs.readdirSync(d)) {
+      const p = path.join(d, f), st = fs.statSync(p);
+      if (st.isDirectory()) { walk(p); continue; }
+      if (!f.endsWith(".html")) continue;
+      if (isSched.test(p.split(path.sep).join("/"))) { fs.unlinkSync(p); continue; }
+      const h = fs.readFileSync(p, "utf8"), n = h.replace(card, "").replace(link, "$1");
+      if (n !== h) fs.writeFileSync(p, n);
+    }
+  })(DIST);
+  for (let i = noOwn.length - 1; i >= 0; i--) if (SCHEDULED.some((s) => noOwn[i][1] === `/blog/${s}`)) noOwn.splice(i, 1);
+  console.log(`build-site: scheduled, not live yet: ${SCHEDULED.join(", ")}`);
+}
+
 // ---------------------------------------------------------------- sitemap: every page in all three languages
 const smPath = path.join(DIST, "sitemap.xml");
 if (fs.existsSync(smPath)) {
   const sm = fs.readFileSync(smPath, "utf8");
   const out = sm.replace(/  <url><loc>https:\/\/mybirthsign\.com([^<]*)<\/loc>(.*?)<\/url>\n?/g, (m, p, rest) =>
     /^\/blog\/daily-fortune-/.test(p) ? "" :   // noindex pages stay out of the sitemap (see step 3c)
+    SCHEDULED.some((s) => p === `/blog/${s}` || p === `/blog/${s}.html`) ? "" :   // scheduled, not live yet
+
     LANGS.filter((l) => !noOwn.some(([nl, np]) => nl === l && np === ((p || "/").replace(/\.html$/, "")))).map((l) => `  <url><loc>${urlFor(p || "/", l)}</loc>${rest}</url>`).join("\n") + "\n");
   fs.writeFileSync(smPath, out);
 }
