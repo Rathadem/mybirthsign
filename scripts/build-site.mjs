@@ -319,7 +319,34 @@ function variant(html, lang, p, langs = LANGS) {
 // 2. The site's own scripts at the end of <body> load with "defer": downloaded in parallel and run in the same order
 //    once the page is parsed, before DOMContentLoaded, so they no longer hold up the page. Inline scripts on the site
 //    wait for DOMContentLoaded before using them. Scripts in <head>, inline scripts and external scripts are untouched.
-function speed(out) {
+// 4. One language file per language: js/i18n.<lang>.js is js/i18n.js with the interface text (UI_STRINGS) cut down to
+//    the page's language plus English (the fallback every t() lookup already uses). Each page only uses its own
+//    language, so this is the same text with much less to download and run. Made fresh from js/i18n.js on every build.
+function i18nBundles() {
+  const src = fs.readFileSync(path.join(ROOT, "js", "i18n.js"), "utf8");
+  const start = src.indexOf("const UI_STRINGS =");
+  if (start < 0) throw new Error("js/i18n.js: const UI_STRINGS not found");
+  let i = src.indexOf("{", start), depth = 0, str = null, end = -1;
+  for (let j = i; j < src.length; j++) {
+    const c = src[j];
+    if (str) { if (c === "\\") j++; else if (c === str) str = null; continue; }
+    if (c === '"' || c === "'" || c === "`") { str = c; continue; }
+    if (c === "/" && src[j + 1] === "/") { j = src.indexOf("\n", j); continue; }
+    if (c === "/" && src[j + 1] === "*") { j = src.indexOf("*/", j) + 1; continue; }
+    if (c === "{") depth++; else if (c === "}" && --depth === 0) { end = j + 1; break; }
+  }
+  if (end < 0) throw new Error("js/i18n.js: UI_STRINGS not closed");
+  const U = vm.runInNewContext("(" + src.slice(i, end) + ")");
+  for (const lang of LANGS) {
+    if (!U[lang]) throw new Error(`js/i18n.js: UI_STRINGS.${lang} missing`);
+    const keep = lang === "en" ? { en: U.en } : { en: U.en, [lang]: U[lang] };
+    const out = src.slice(0, i) + JSON.stringify(keep) + src.slice(end);
+    new vm.Script(out);   // must still be valid JavaScript
+    fs.writeFileSync(path.join(DIST, "js", `i18n.${lang}.js`), `/* made by scripts/build-site.mjs from js/i18n.js: interface text for "${lang}"${lang === "en" ? "" : " and English"} only */\n` + out);
+  }
+}
+function speed(out, lang) {
+  if (lang) out = out.replace(/(<script\b[^>]*\bsrc="[^"]*js\/)i18n\.js((?:\?[^"]*)?")/g, `$1i18n.${lang}.js$2`);
   out = out.replace(/(https:\/\/fonts\.googleapis\.com\/css2\?[^"']*?)display=swap/g, "$1display=optional");
   // 3. pages with the night-sky hero (daily fortunes, animal pages): fetch its picture and the gold animal figure at once,
   //    instead of after the stylesheet is read (they are the largest element on screen). Same address as the CSS uses.
@@ -364,7 +391,7 @@ const pageList = [];
       if (!langs.includes(lang)) { noOwn.push([lang, p]); continue; }
       const dest = path.join(DIST, lang === "en" ? "" : lang, rel);
       fs.mkdirSync(path.dirname(dest), { recursive: true });
-      fs.writeFileSync(dest, speed(variant(html, lang, p, langs)));
+      fs.writeFileSync(dest, speed(variant(html, lang, p, langs), lang));
     }
     pageList.push(p);
     pages++;
@@ -375,6 +402,8 @@ const pageList = [];
 // made by scripts/content/build-video-tool.mjs; copied as it is (no language versions, no ads)
 const studioDir = path.join(ROOT, "docs", "video-prompts", "studio");
 if (fs.existsSync(studioDir)) for (const f of fs.readdirSync(studioDir)) copyFile(path.join(studioDir, f), path.join(DIST, "studio", f));
+
+i18nBundles();
 
 // ---------------------------------------------------------------- sitemap: every page in all three languages
 const smPath = path.join(DIST, "sitemap.xml");
