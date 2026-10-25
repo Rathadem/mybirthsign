@@ -313,6 +313,31 @@ function variant(html, lang, p, langs = LANGS) {
   return out;
 }
 
+// ---------------------------------------------------------------- page speed (Core Web Vitals), applied to every published page
+// 1. Google Fonts: display=optional instead of swap. A web font that is not ready within a moment is skipped for that
+//    page view (it is cached for the next one), so text never jumps when the font arrives (layout shift).
+// 2. The site's own scripts at the end of <body> load with "defer": downloaded in parallel and run in the same order
+//    once the page is parsed, before DOMContentLoaded, so they no longer hold up the page. Inline scripts on the site
+//    wait for DOMContentLoaded before using them. Scripts in <head>, inline scripts and external scripts are untouched.
+function speed(out) {
+  out = out.replace(/(https:\/\/fonts\.googleapis\.com\/css2\?[^"']*?)display=swap/g, "$1display=optional");
+  // 3. pages with the night-sky hero (daily fortunes, animal pages): fetch its picture and the gold animal figure at once,
+  //    instead of after the stylesheet is read (they are the largest element on screen). Same address as the CSS uses.
+  const fxCss = /<link rel="stylesheet" href="([^"]*)css\/fortune\.css">/.exec(out);
+  if (fxCss && /class="fx-hero[ "]/.test(out) && !/hero-night-m\.webp" media/.test(out)) {
+    const pre = fxCss[1], fig = /class="fx-hero[^"]*fx-hero--([a-z]+)/.exec(out);
+    const tags = `<link rel="preload" as="image" href="${pre}images/fortune/hero-night-m.webp" media="(max-width: 600px)" fetchpriority="high">` +
+      `<link rel="preload" as="image" href="${pre}images/fortune/hero-night.webp" media="(min-width: 601px)">` +
+      (fig && fs.existsSync(path.join(ROOT, "images", "gold", fig[1] + ".webp")) ? `<link rel="preload" as="image" href="${pre}images/gold/${fig[1]}.webp" fetchpriority="high">` : "");
+    out = out.replace(fxCss[0], tags + fxCss[0]);
+  }
+  const i = out.indexOf("</head>");
+  if (i < 0) return out;
+  const body = out.slice(i).replace(/<script\b([^>]*\bsrc="(?!https?:|\/\/)[^"]+\.js(?:\?[^"]*)?"[^>]*)><\/script>/g, (m, attrs) =>
+    /\b(defer|async|type="module")\b/.test(attrs) ? m : `<script${attrs} defer></script>`);
+  return out.slice(0, i) + body;
+}
+
 // ---------------------------------------------------------------- walk the repo
 function copyFile(src, dest) { fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.copyFileSync(src, dest); }
 fs.rmSync(DIST, { recursive: true, force: true });
@@ -339,7 +364,7 @@ const pageList = [];
       if (!langs.includes(lang)) { noOwn.push([lang, p]); continue; }
       const dest = path.join(DIST, lang === "en" ? "" : lang, rel);
       fs.mkdirSync(path.dirname(dest), { recursive: true });
-      fs.writeFileSync(dest, variant(html, lang, p, langs));
+      fs.writeFileSync(dest, speed(variant(html, lang, p, langs)));
     }
     pageList.push(p);
     pages++;
