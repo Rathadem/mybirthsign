@@ -27,17 +27,35 @@ export const CHAR = (a) => `Create a premium-quality 3D animated fantasy charact
 export const POSE = {
   Rat: "leaps off the lotus and dashes through the air in a spiral, leaving a trail of glittering gold coins and stars",
   Ox: "stamps a hoof and a shockwave of golden light ripples across the pond, then it rises into the air on glowing golden clouds",
-  Tiger: "lets out a mighty but cute roar that sends a wave of golden light and petals outward, then leaps high into the moonlit sky",
+  Tiger: "stamps its front paws and a wave of golden light and petals bursts outward, then leaps high into the moonlit sky",
   Rabbit: "springs from the lotus in a huge magical leap, flying in an arc across the full moon with a sparkling golden trail",
   Dragon: "uncoils and soars up into the sky, circling the temple towers with a long ribbon of golden light and swirling clouds",
   Snake: "rises in a graceful spiral as glowing golden rings of light expand around it, its jewel scales shimmering",
   Horse: "rears up as golden wings of light unfold from its sides, then gallops into the sky across the moon",
   Goat: "leaps from lotus to lotus across the pond, each landing bursting into golden light and blossoming flowers",
   Monkey: "somersaults high into the air, spinning a glowing golden staff that scatters sparkles across the sky",
-  Rooster: "spreads its shimmering wings and flies up in a burst of golden feathers, crowing as light rays fan out behind it",
+  Rooster: "spreads its shimmering wings and flies up in a burst of golden feathers as light rays fan out behind it",
   Dog: "bounds joyfully into the air and flies in a loop, a golden glowing trail and paw-print sparkles behind it",
   Pig: "floats up from the lotus inside a glowing golden bubble, spinning happily as golden coins and petals swirl around it",
 };
+// how each animal moves when it acts (it never talks): used so the characters feel alive in every clip
+export const ANIM = {
+  Rat: "its whiskers twitch, its little nose sniffs the air, its long tail flicks and it scurries in quick, playful little hops",
+  Ox: "it breathes slowly and steadily, nods its big head, flicks its ears, swishes its tail and takes strong, calm steps",
+  Tiger: "it stretches like a big cat, its striped tail swishes, its ears turn toward every sound and it pads around with playful, powerful steps",
+  Rabbit: "its long ears twitch and turn, its nose wiggles and it hops lightly with soft, bouncy movements",
+  Dragon: "its long body ripples in graceful waves, its whiskers and mane float softly as if underwater, and its claws and tail curl and uncurl",
+  Snake: "it glides in smooth S-shaped curves, raises its head gracefully, tilts it with curiosity and coils and uncoils softly",
+  Horse: "it tosses its flowing mane, paws the ground, flicks its tail and prances with light, elegant steps",
+  Goat: "it tilts its head with curiosity, its ears flop and twitch, and it skips and hops playfully",
+  Monkey: "it scratches its head, claps its hands, swings its curly tail and bounces around with cheeky, playful energy",
+  Rooster: "it puffs up its chest, fluffs and ruffles its feathers, flaps its wings and struts proudly, bobbing its head",
+  Dog: "its tail wags happily, its ears perk up and flop, it tilts its head and bounces with joyful, playful energy",
+  Pig: "its curly tail wiggles, its ears flop as it trots in a happy, bouncy way and it wiggles with delight",
+};
+export const alive = (a) => `The ${a.toLowerCase()} is fully animated and alive, never still like a statue: ${ANIM[a]}. It breathes, blinks and reacts with expressive body language, and its mouth stays closed.`;
+const lockAnimal = (a) => `Keep the ${a.toLowerCase()} exactly like its reference picture (same face, colors, gold engravings and size) and the same in every scene.`;
+const LOCK_HOST = "Chanda looks exactly like her reference picture: same face, hairstyle, outfit and jewelry in every scene.";
 export const STYLE = "Vertical 9:16. Premium 3D animated fantasy film quality, inspired by classic Disney and Pixar-style animated family films: cute and majestic golden zodiac characters with oversized sparkling eyes, adorable expressive faces, soft rounded features, polished gold textures with intricate engraved ornaments and delicate pink and gold accents, alive and emotionally expressive. Setting: a softly illuminated Khmer temple inspired by Angkor Wat under a glowing full moon and a deep indigo starry sky, floating lotus flowers, ornate pink-and-gold lotus details, magical sparkles and warm golden reflections. Cinematic lighting, rich colors, soft atmospheric glow, realistic metallic reflections, beautiful depth of field, gentle slow camera movement, professional animated-movie rendering. The zodiac animals never talk and never move their mouths; only Chanda, the presenter, speaks. No text, no letters, no subtitles, no watermark, no logos.";
 export const STYLE_WIDE = STYLE.replace("Vertical 9:16.", "Horizontal 16:9 (standard YouTube video).");
 export const VOICE_EN = "a warm, cheerful young female narrator with a soft, magical storytelling tone, clear and friendly";
@@ -298,6 +316,28 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
     endHost: ["Goodbye – Chanda on camera", `Two-shot of Chanda and the ${dl} together on the moonlit temple terrace, both clearly in frame. ${cap(HOST_LOOK)}, faces the camera, smiling and speaking to the viewer with natural lip movements. As she talks she opens her palm, and a small golden lotus blooms in her hand, glows brighter and bursts into thousands of golden sparkles that swirl in a slow magical spiral around her and ${LOOK[day]}, which sits on its glowing lotus pedestal right beside her. The sparkles make the ${dl}'s golden details shine; it looks up at them in wonder, then waves its paw goodbye together with Chanda, without speaking, its mouth closed. Behind them lanterns rise over the glowing pond and soft lotus-shaped golden fireworks open in the sky. The camera slowly pulls back for a warm final view, with open sky at the top for a title. Chanda matches her reference image; the ${dl} matches its reference image.`,
       "That's your Chinese zodiac fortune for today. Follow MyBirthSign for your fortune every day, and see all twelve signs at mybirthsign dot com. Have a lucky day!",
       "នេះគឺជាជោគជតារាសីចិន សម្រាប់ថ្ងៃនេះ។ សូមតាមដាន MyBirthSign ដើម្បីដឹងជោគជតារបស់អ្នករៀងរាល់ថ្ងៃ ហើយមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យអ្នកមានសំណាងល្អ!", true],
+    // ---- 60-second video (8 clips of 10 s): short voice lines that fit each clip, a new camera idea in every scene,
+    // the animal acting in every scene, and Chanda on camera only at the start and the end
+    rev60: [`The ${day} wakes up`, `Extreme close-up of a closed pink lotus on the moonlit pond. It opens petal by petal and reveals ${LOOK[day]} curled up asleep on its golden pedestal. It wakes, blinks its big sparkling eyes, stretches its whole body and looks around with delight. Smooth pull-back from the close-up to a full-body shot. ${alive(day)} ${lockAnimal(day)}`,
+      `${LD.split(", ")[0]}, ${dateEn}: a ${dd.label.en} for everyone born in the Year of the ${day}!`,
+      `${wdKm} ${dateKm} ជា${dd.label.km} សម្រាប់អ្នកកើតឆ្នាំ${dayKm}!`],
+    mean60: [`What the ${day} means`, `Low-angle hero shot: the ${dl} looks up at the full moon, and ${S9.vis}. ${cap(S9.mood)} mood. Slow upward camera tilt. ${alive(day)} ${lockAnimal(day)}`,
+      S9.en, S9.km],
+    magic60: ["The magical moment", `The ${dl} ${POSE[day]}. Lotus petals and sparkles swirl up behind it, then it lands lightly on the temple steps, proud and happy. Fast, dynamic tracking shot circling around it. ${alive(day)} ${lockAnimal(day)}`,
+      "Your luck is strong today. Say yes to good chances, and share your happiness.",
+      "ថ្ងៃនេះ សំណាងរបស់អ្នកល្អខ្លាំង។ សូមទទួលយកឱកាសល្អៗ ហើយចែករំលែកភាពរីករាយ។"],
+    color60: ["Lucky color", `Close-up on the temple steps: the ${dl} gently nudges a ${cen} lantern with its nose, and one by one glowing ${cen} lanterns light up around it in a spiral and float upward. Rack focus from the lantern to its happy face. Warm ${cen} and gold light. ${alive(day)} ${lockAnimal(day)}`,
+      `Your lucky color today is ${cen}. Wear it, or carry something ${cen} with you.`,
+      `ពណ៌សំណាងថ្ងៃនេះ គឺពណ៌${ckm}។ សូមស្លៀក ឬយករបស់ពណ៌${ckm} ជាប់ខ្លួន។`],
+    timedir60: ["Best time and lucky direction", `High aerial shot over the moonlit temple: a glowing golden path of light unrolls across the pond toward the ${dir}, lotus flowers lighting up one by one along it, and a sundial of golden light on the stone turns its glowing shadow. The ${dl} runs happily along the path. The camera glides overhead and follows it. ${alive(day)} ${lockAnimal(day)}`,
+      `Your best time is ${sayTime(dd.lucky.time)}, and your lucky direction is the ${dir}.`,
+      `ពេលល្អបំផុតគឺ${sayTimeKm(dd.lucky.time)} ហើយទិសសំណាង គឺទិស${dirKm}។`],
+    num60: ["Lucky numbers", `Wide, symmetrical front shot: a huge glowing golden wheel rises out of the lotus pond in front of the temple, spins with beams of golden light, then slows to a gentle shining turn. The ${dl} bounces excitedly in front of it and glances back at the camera, delighted. Open space in the middle and lower part of the frame for number captions. Slow push-in. ${alive(day)} ${lockAnimal(day)}`,
+      `Your lucky numbers: ${n0.d1}, ${n0.d2}, and ${n0.d3}. Comment your sign below, and save this video!`,
+      `លេខសំណាង៖ ${n0.d1} ${n0.d2} និង ${n0.d3}។ សូមសរសេររាសីរបស់អ្នក ក្នុងមតិយោបល់ ហើយរក្សាទុកវីដេអូនេះ!`],
+    end60: ["Goodbye – Chanda on camera", `Two-shot of Chanda and the ${dl} together on the moonlit temple terrace, both clearly in frame. ${cap(HOST_LOOK)}, faces the camera, smiling and speaking to the viewer with natural lip movements. As she talks she opens her palm, and a small golden lotus blooms in her hand, glows brighter and bursts into thousands of golden sparkles that swirl in a slow magical spiral around her and ${LOOK[day]}, right beside her. The ${dl} looks up at the sparkles in wonder and reacts with happy, lively body language, then waves goodbye together with Chanda without speaking, its mouth closed. Lanterns rise over the glowing pond and soft lotus-shaped golden fireworks open in the sky. Crane shot slowly pulling back and rising for a warm final view, with open sky at the top for a title. ${LOCK_HOST} ${lockAnimal(day)}`,
+      `Follow MyBirthSign for your fortune every day, and share this with a friend born in the Year of the ${day}!`,
+      `សូមតាមដាន MyBirthSign រៀងរាល់ថ្ងៃ ហើយចែករំលែកទៅមិត្តដែលកើតឆ្នាំ${dayKm}!`, true],
   };
   // ---- long YouTube video: the luckiest animal, then all 12 signs (two 10-second clips each), then a short closing
   const DAYPH = { great: ["a great day", "ថ្ងៃល្អខ្លាំង"], good: ["a good day", "ថ្ងៃល្អ"], ordinary: ["an ordinary, steady day", "ថ្ងៃធម្មតា"], caution: ["a quiet day", "ថ្ងៃគួរប្រុងប្រយ័ត្ន"] };
@@ -331,7 +371,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const longScenes = [SC.moon, SC.appear, SC.meaning, overview, ...signScenes, SC.wish, SC.thanks, SC.end];
   const longChapters = [["0:00", "Introduction"], ...F.signs.map((sg, i) => [mmss((4 + i * 2) * 10), `${sg.animal} (${sg.nameKm}) – ${sg.label.en}`]), [mmss((4 + 24) * 10), "Closing"]];
   const VIDEOS = [
-    { id: "60s", name: "60-second video – Facebook & TikTok (8 scenes, 80 seconds)", secs: 80, keys: ["appear", "meaning", "magic", "colortime", "direction", "numbers", "tip", "endHost"] },
+    { id: "60s", name: "60-second video – Facebook & TikTok (8 scenes, 80 seconds)", secs: 80, keys: ["appear", "rev60", "mean60", "magic60", "color60", "timedir60", "num60", "end60"] },
     { id: "180s", name: "180-second video – YouTube", secs: 180, keys: ["moon", "appear", "meaning", "personality", "magic", "love", "work", "money", "color", "time", "direction", "numbers", "luckydays", "reminder", "wish", "thanks", "recap", "end"] },
   ].map((v) => ({ ...v, scenes: v.keys.map((k) => SC[k]) }));
   VIDEOS.push({ id: "long", name: `Long YouTube video – all 12 signs (about ${Math.round(longScenes.length * 10 / 60)} minutes)`, secs: longScenes.length * 10, scenes: longScenes, chapters: longChapters,
@@ -582,7 +622,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   };
   // the winning hook opens each video (first scene's voice), replacing slow openings
   const OPEN = {
-    "60s": (h) => [h[1] + " " + dateLineEn, h[2] + " " + dateLineKm],
+    "60s": (h) => [`${h[1]} Today is ${aDay} ${day} day!`, `${h[2]} ថ្ងៃនេះ ជាថ្ងៃឆ្នាំ${dayKm}!`],
     "180s": (h) => [h[1], h[2]],
     long: (h) => [h[1], h[2]],
     story: (h) => [`${h[1]} Once upon a time, beside an ancient temple in Cambodia, our story begins.`, `${h[2]} កាលពីព្រេងនាយ នៅក្បែរប្រាសាទបុរាណមួយ ក្នុងប្រទេសកម្ពុជា រឿងរបស់យើងចាប់ផ្ដើម។`],
@@ -591,8 +631,9 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
     const H0 = HOOKS[v.id]; if (!H0) return;
     const [en, kmL] = OPEN[v.id](H0.list[H0.win]);
     const behind = v.id === "long" ? "twelve cute golden zodiac animals sit on glowing lotus pedestals in a half circle, three of them shining brighter"
+      : v.id === "60s" ? `${LOOK[day]} plays on its glowing lotus pedestal and peeks curiously at the camera. ${alive(day)}`
       : `${LOOK[day]} glows softly on its lotus pedestal`;
-    const hostShot = `${cap(HOST_LOOK)}, stands on the moonlit temple terrace beside the lotus pond, facing the camera, smiling warmly and speaking directly to the viewer with natural lip movements and small, friendly hand gestures${v.id === "story" ? ", holding a glowing golden storybook as if about to begin a bedtime story" : ""}. Behind her, ${behind}; the animals look around curiously but do not speak. Medium shot, gentle push-in toward her face. Chanda matches her reference image${v.id === "long" ? "" : `; the ${dl} matches its reference image`}.`;
+    const hostShot = `${cap(HOST_LOOK)}, stands on the moonlit temple terrace beside the lotus pond, facing the camera, smiling warmly and speaking directly to the viewer with natural lip movements and small, friendly hand gestures${v.id === "story" ? ", holding a glowing golden storybook as if about to begin a bedtime story" : ""}. Behind her, ${behind}${v.id === "60s" ? "" : "; the animals look around curiously but do not speak"}. Medium shot, gentle push-in toward her face. ${v.id === "60s" ? `${LOCK_HOST} ${lockAnimal(day)}` : `Chanda matches her reference image${v.id === "long" ? "" : `; the ${dl} matches its reference image`}.`}`;
     v.host = true;
     v.scenes = v.scenes.slice(); v.scenes[0] = ["The hook – Chanda on camera", hostShot, en, kmL];
     v.hookMd = `### Opening hook – 5 options\n${H0.list.map(([style, e, k], i) => `${i === H0.win ? "★ " : ""}${i + 1}. ${style}\n   English: ${e}\n   Khmer: ${k}`).join("\n")}\n★ = used to open this video. Why: ${H0.why}`;
@@ -668,32 +709,32 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
       ["Only one sign", `Out of all twelve signs, only one should slow down today: the ${c}.`,
         `ក្នុងចំណោមរាសីទាំង 12 មានតែមួយគត់ ដែលគួរធ្វើអ្វីៗយឺតៗថ្ងៃនេះ គឺឆ្នាំ${ck}។`],
     ];
-    const SAME = "Same moonlit lotus pond, same stepping-stone path and temple, same lighting and same character design as the previous scene. Natural, believable movement and body language, soft realistic moonlight, gentle pace.";
-    const hostEasy = (action) => `${cap(HOST_LOOK)}, stands on the carved stone temple terrace above the moonlit lotus pond, facing the camera and speaking warmly to the viewer with natural lip movements and small, friendly hand gestures. ${action} Medium shot, gentle push-in toward Chanda. Chanda matches her reference image; the ${cl} matches its reference image.`;
+    const SAME = `Same moonlit lotus pond, same stepping-stone path and temple, same lighting and same character design as the previous scene. Natural, believable movement and body language, soft realistic moonlight, gentle pace. The ${cl} is fully animated and alive, never still like a statue: it breathes, blinks, and its ears, tail and body move naturally with its feelings; its mouth stays closed. ${lockAnimal(c)}`;
+    const hostEasy = (action) => `${cap(HOST_LOOK)}, stands on the carved stone temple terrace above the moonlit lotus pond, facing the camera and speaking warmly to the viewer with natural lip movements and small, friendly hand gestures. ${action} Medium shot, gentle push-in toward Chanda. Chanda matches her reference image; the ${cl} matches its reference image. ${LOCK_HOST}`;
     const E = [
       ["The hook – Chanda on camera", hostEasy(`She starts by raising one open hand toward the camera like a friendly "stop" sign, with a caring, slightly urgent expression, then lowers it and keeps talking warmly. Below her, at the edge of the pond where a path of flat stepping stones leads up to the temple, ${LOOK[c]} sits looking a little tired and lets out a quiet sigh with its mouth closed; it does not speak.`),
         EASY_HOOKS[0][1], EASY_HOOKS[0][2], true],
       ["A wobbly start", `Continuing from the previous scene: the ${cl} jumps up and hurries across the flat stepping stones toward the glowing temple in the distance. Halfway across, a stone tips a little, the ${cl} wobbles, catches its balance and stops, a bit surprised but not hurt. Camera follows behind it. ${SAME}`,
-        `Today, ${dateEn}, is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day, and the ${c} sits opposite it in the zodiac circle. Some days, things just don't go the way we planned.`,
-        `ថ្ងៃនេះ ${dateKm} ជាថ្ងៃឆ្នាំ${dayKm} ហើយឆ្នាំ${ck} ស្ថិតនៅទល់មុខ ក្នុងរង្វង់រាសី។ មានថ្ងៃខ្លះ អ្វីៗមិនដើរតាមផែនការរបស់យើងទេ។`],
+        `Today, ${dateEn}, is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day, opposite the ${c} in the zodiac circle. Some days don't go to plan.`,
+        `ថ្ងៃនេះ ${dateKm} ជាថ្ងៃឆ្នាំ${dayKm} ទល់មុខឆ្នាំ${ck} ក្នុងរង្វង់រាសី។ មានថ្ងៃខ្លះ អ្វីៗមិនដូចការគ្រោងទុកទេ។`],
       ["Stop and breathe", `Continuing from the previous scene: the ${cl} sits down on the stepping stone where it stopped, closes its eyes and takes a slow, deep breath, and its whole body relaxes. The ripples around the stones slowly fade until the water is still. Close-up, slow push-in. ${SAME}`,
         "And that's okay. Everyone has days like this. A quiet day is not a bad day. It is a day to breathe.",
         "ហើយវាមិនអីទេ។ មនុស្សគ្រប់គ្នា ធ្លាប់មានថ្ងៃបែបនេះ។ ថ្ងៃស្ងប់ស្ងាត់ មិនមែនជាថ្ងៃអាក្រក់ទេ គឺជាថ្ងៃសម្រាប់ដកដង្ហើមវែងៗ។"],
       ["Looking inside", `Continuing from the previous scene: still sitting on the stepping stone, the ${cl} opens its eyes and looks down at its reflection in the now-still water. It tilts its head thoughtfully, then gives its reflection a small, honest smile. Camera moves slowly down to the reflection. ${SAME}`,
-        site("careful", "en") || `Be careful today: you ${weakE}. Notice it, and give yourself a moment before you react.`,
-        site("careful", "km") || `សូមប្រយ័ត្នថ្ងៃនេះ៖ ${weakK}។ សូមកត់សម្គាល់វា ហើយផ្ដល់ពេលឲ្យខ្លួនឯងបន្តិច មុននឹងឆ្លើយតប។`],
+        site("careful", "en") || `Be careful today: you ${weakE}. Pause before you react.`,
+        site("careful", "km") || `សូមប្រយ័ត្នថ្ងៃនេះ៖ ${weakK}។ សូមឈប់បន្តិច មុននឹងឆ្លើយតប។`],
       ["A friend arrives", `Continuing from the previous scene: a small, warm glowing lotus lantern drifts slowly across the still water and stops right beside the ${cl}, and a few soft fireflies gather around them. The ${cl} looks at the light, leans in a little and relaxes, as if comforted by a friend; it stays quiet, mouth closed. It is the only animal in the scene. Slow orbit. ${SAME}`,
         `${site("love", "en") || "Be gentle with the people you love, and with yourself."} And lean on a friend you trust.`,
         `${site("love", "km") || "សូមទន់ភ្លន់ចំពោះមនុស្សដែលអ្នកស្រឡាញ់ និងចំពោះខ្លួនឯង។"} ហើយពឹងលើមិត្តដែលអ្នកទុកចិត្ត។`],
       ["One step at a time", `Continuing from the previous scene: the ${cl} stands up and walks slowly to the end of the stepping stones, the little lotus lantern floating beside it, then climbs the temple steps one at a time; each step glows softly under its feet. Steady, patient pace. Camera rises with it. ${SAME}`,
-        site("money", "en") ? `${site("money", "en")} At work, take small, careful steps, one thing at a time.` : "At work and with money, take small, careful steps. Finish one thing, then the next.",
-        site("money", "km") ? `${site("money", "km")} ក្នុងការងារ សូមបោះជំហានតូចៗ ដោយប្រុងប្រយ័ត្ន ម្ដងមួយៗ។` : "ក្នុងការងារ និងលុយកាក់ សូមបោះជំហានតូចៗ ដោយប្រុងប្រយ័ត្ន។ បញ្ចប់រឿងមួយ រួចសឹមធ្វើរឿងបន្ទាប់។"],
+        site("money", "en") ? `${site("money", "en")} At work, one thing at a time.` : "At work and with money, take small, careful steps. Finish one thing, then the next.",
+        site("money", "km") ? `${site("money", "km")} ការងារ សូមធ្វើម្ដងមួយៗ។` : "ក្នុងការងារ និងលុយកាក់ សូមបោះជំហានតូចៗ ដោយប្រុងប្រយ័ត្ន។ បញ្ចប់រឿងមួយ រួចសឹមធ្វើរឿងបន្ទាប់។"],
       ["Brighter days ahead", `Continuing from the previous scene: at the top of the steps the ${cl} reaches the temple terrace and turns to look back over the moonlit pond and the stepping stones it crossed. Lanterns rise slowly into the sky, and a warm glow lights its face as it smiles, calm and proud. Wide shot, slow pull-back. ${SAME}`,
         "Slow is still moving forward. Every quiet day makes you stronger, and brighter days are already on their way.",
         "យឺត ក៏នៅតែជាការឈានទៅមុខដែរ។ រាល់ថ្ងៃស្ងប់ស្ងាត់ ធ្វើឲ្យអ្នកកាន់តែរឹងមាំ ហើយថ្ងៃភ្លឺស្វាង កំពុងមកដល់។"],
       ["Goodbye – Chanda on camera", hostEasy(`Continuing from the previous scene, on the same terrace: a two-shot of Chanda and ${LOOK[c]}, the same ${cl} as in every scene, together and both clearly in frame, the ${cl} sitting calm and smiling right beside her. As she speaks, Chanda gently lifts the little glowing lotus lantern from the earlier scenes in her hands; it floats up between them, opens like a flower and releases a soft shower of golden light and glowing lotus petals that drift down around them, wrapping the ${cl} in a warm, gentle golden glow. The ${cl} looks up at the light, relaxes and smiles, then waves goodbye together with Chanda, without speaking, its mouth closed. Lanterns float up over the pond behind them. No other animals.`),
         "Rest well tonight. Tomorrow is a new day, and it could be yours. Follow MyBirthSign for your fortune every day!",
-        "យប់នេះ សូមសម្រាកឲ្យបានល្អ។ ថ្ងៃស្អែក ជាថ្ងៃថ្មី ហើយអាចជាថ្ងៃរបស់អ្នក។ សូមតាមដាន MyBirthSign ដើម្បីដឹងជោគជតារបស់អ្នករៀងរាល់ថ្ងៃ!", true],
+        "យប់នេះ សូមសម្រាកឲ្យស្រួល។ ថ្ងៃស្អែក ជាថ្ងៃថ្មី ហើយអាចជាថ្ងៃរបស់អ្នក។ សូមតាមដាន MyBirthSign រៀងរាល់ថ្ងៃ!", true],
     ];
     const easyHookMd = `### Opening hook – 5 options\n${EASY_HOOKS.map(([st, e, k], i) => `${i === 0 ? "★ " : ""}${i + 1}. ${st.replace(" (used)", "")}\n   English: ${e}\n   Khmer: ${k}`).join("\n")}\n★ = used to open this video. Why: it stops the scroll by speaking straight to people of this sign, and the promise "watch to the end" keeps them for the gentle advice that follows. To use another hook, replace the voice line in scene 1.`;
     VIDEOS.push({ id: "easy", metaMd: easyHookMd, name: `Take-it-easy video – the unlucky sign, ${c} (8 scenes, 80 seconds)`, secs: 80, scenes: E,
