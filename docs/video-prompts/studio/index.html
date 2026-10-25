@@ -966,15 +966,27 @@ function buildPack(iso, F, forSign, data = null, P = null) {
     const weakE = PI !== undefined && P && P.INFO[c] ? P.INFO[c].weaknesses.replace(/^(\w)/, (m) => m.toLowerCase()).replace(/\.$/, "") : "";
     const weakK = P && P.KM_INFO[c] ? P.KM_INFO[c].weaknesses.replace(/។$/, "") : "";
     // one continuous little story in one place: the moonlit lotus pond with a path of flat stepping stones up to the temple
+    // opening hooks for the take-it-easy video; the first one opens the video (the owner's "stop scrolling" line)
+    const EASY_HOOKS = [
+      ["Stop the scroll (used)", `Stop scrolling! Born in the Year of the ${c}? Your luck isn't good today. But don't worry, watch to the end.`,
+        `ឈប់! កុំអូសរំលង។ អ្នកកើតឆ្នាំ${ck} រាសីអ្នកថ្ងៃនេះមិនល្អទេ។ តែកុំបារម្ភ សូមមើលឲ្យចប់។`],
+      ["Warning", `Year of the ${c}, wait! Today is a clash day for you. Here's how to get through it calmly.`,
+        `អ្នកកើតឆ្នាំ${ck} ចាំបន្តិច! ថ្ងៃនេះជាថ្ងៃប៉ះឆុងសម្រាប់អ្នក។ មកមើលវិធីឆ្លងកាត់ថ្ងៃនេះដោយស្ងប់។`],
+      ["Question", `Does everything feel a bit off today? If you were born in the Year of the ${c}, here's why.`,
+        `ថ្ងៃនេះ អ្វីៗហាក់ដូចជាមិនសូវស្រួលមែនទេ? បើអ្នកកើតឆ្នាំ${ck} នេះជាមូលហេតុ។`],
+      ["Send it to a friend", `Know someone born in the Year of the ${c}? Send this to them before they make a big decision today.`,
+        `ស្គាល់អ្នកកើតឆ្នាំ${ck}ទេ? ផ្ញើវីដេអូនេះទៅគាត់ មុនពេលគាត់សម្រេចចិត្តរឿងធំថ្ងៃនេះ។`],
+      ["Only one sign", `Out of all twelve signs, only one should slow down today: the ${c}.`,
+        `ក្នុងចំណោមរាសីទាំង 12 មានតែមួយគត់ ដែលគួរធ្វើអ្វីៗយឺតៗថ្ងៃនេះ គឺឆ្នាំ${ck}។`],
+    ];
     const SAME = "Same moonlit lotus pond, same stepping-stone path and temple, same lighting and same character design as the previous scene. Natural, believable movement and body language, soft realistic moonlight, gentle pace.";
     const hostEasy = (action) => `${cap(HOST_LOOK)}, stands on the carved stone temple terrace above the moonlit lotus pond, facing the camera and speaking warmly to the viewer with natural lip movements and small, friendly hand gestures. ${action} Medium shot, gentle push-in toward Chanda. Chanda matches her reference image; the ${cl} matches its reference image.`;
     const E = [
-      ["The hook – Chanda on camera", hostEasy(`Below her, at the edge of the pond where a path of flat stepping stones leads up to the temple, ${LOOK[c]} sits looking a little tired and lets out a quiet sigh with its mouth closed; it does not speak.`),
-        `Is your sign the one that should take it easy today? Today, ${dateEn}, is a slower day for the Year of the ${c}.`,
-        `តើរាសីរបស់អ្នក ជារាសីដែលគួរសម្រាកថ្ងៃនេះឬទេ? ${dateKm} ជាថ្ងៃដែលអ្នកកើតឆ្នាំ${ck} គួរធ្វើអ្វីៗយឺតៗ។`, true],
+      ["The hook – Chanda on camera", hostEasy(`She starts by raising one open hand toward the camera like a friendly "stop" sign, with a caring, slightly urgent expression, then lowers it and keeps talking warmly. Below her, at the edge of the pond where a path of flat stepping stones leads up to the temple, ${LOOK[c]} sits looking a little tired and lets out a quiet sigh with its mouth closed; it does not speak.`),
+        EASY_HOOKS[0][1], EASY_HOOKS[0][2], true],
       ["A wobbly start", `Continuing from the previous scene: the ${cl} jumps up and hurries across the flat stepping stones toward the glowing temple in the distance. Halfway across, a stone tips a little, the ${cl} wobbles, catches its balance and stops, a bit surprised but not hurt. Camera follows behind it. ${SAME}`,
-        `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day, and the ${c} sits opposite it in the zodiac circle. Some days, things just don't go the way we planned.`,
-        `ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm} ហើយឆ្នាំ${ck} ស្ថិតនៅទល់មុខ ក្នុងរង្វង់រាសី។ មានថ្ងៃខ្លះ អ្វីៗមិនដើរតាមផែនការរបស់យើងទេ។`],
+        `Today, ${dateEn}, is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day, and the ${c} sits opposite it in the zodiac circle. Some days, things just don't go the way we planned.`,
+        `ថ្ងៃនេះ ${dateKm} ជាថ្ងៃឆ្នាំ${dayKm} ហើយឆ្នាំ${ck} ស្ថិតនៅទល់មុខ ក្នុងរង្វង់រាសី។ មានថ្ងៃខ្លះ អ្វីៗមិនដើរតាមផែនការរបស់យើងទេ។`],
       ["Stop and breathe", `Continuing from the previous scene: the ${cl} sits down on the stepping stone where it stopped, closes its eyes and takes a slow, deep breath, and its whole body relaxes. The ripples around the stones slowly fade until the water is still. Close-up, slow push-in. ${SAME}`,
         "And that's okay. Everyone has days like this. A quiet day is not a bad day. It is a day to breathe.",
         "ហើយវាមិនអីទេ។ មនុស្សគ្រប់គ្នា ធ្លាប់មានថ្ងៃបែបនេះ។ ថ្ងៃស្ងប់ស្ងាត់ មិនមែនជាថ្ងៃអាក្រក់ទេ គឺជាថ្ងៃសម្រាប់ដកដង្ហើមវែងៗ។"],
@@ -994,7 +1006,8 @@ function buildPack(iso, F, forSign, data = null, P = null) {
         "Rest well tonight. Tomorrow is a new day, and it could be yours. Follow MyBirthSign for your fortune every day!",
         "យប់នេះ សូមសម្រាកឲ្យបានល្អ។ ថ្ងៃស្អែក ជាថ្ងៃថ្មី ហើយអាចជាថ្ងៃរបស់អ្នក។ សូមតាមដាន MyBirthSign ដើម្បីដឹងជោគជតារបស់អ្នករៀងរាល់ថ្ងៃ!", true],
     ];
-    VIDEOS.push({ id: "easy", name: `Take-it-easy video – the unlucky sign, ${c} (8 scenes, 80 seconds)`, secs: 80, scenes: E,
+    const easyHookMd = `### Opening hook – 5 options\n${EASY_HOOKS.map(([st, e, k], i) => `${i === 0 ? "★ " : ""}${i + 1}. ${st.replace(" (used)", "")}\n   English: ${e}\n   Khmer: ${k}`).join("\n")}\n★ = used to open this video. Why: it stops the scroll by speaking straight to people of this sign, and the promise "watch to the end" keeps them for the gentle advice that follows. To use another hook, replace the voice line in scene 1.`;
+    VIDEOS.push({ id: "easy", metaMd: easyHookMd, name: `Take-it-easy video – the unlucky sign, ${c} (8 scenes, 80 seconds)`, secs: 80, scenes: E,
       intro: `An 80-second video for the ${c}, today's sign to take it easy (in the traditional day cycle the ${c} clashes with the ${day} day): 8 clips of 10 seconds. Set the clip length in Flow to 10 seconds and add the reference pictures of Chanda and the ${c} as ingredients (the ${c} is the only animal in this video, from the first scene to the last). Chanda is on camera and speaks with lip-sync in scenes 1 and 8; in the other scenes she narrates off screen. The animals never speak or move their mouths: they only act. It is one continuous little story in one place (the ${cl} hurries, wobbles, stops to breathe, a little lotus lantern keeps it company, it climbs the temple steps and looks out with hope), so make the clips in order and keep the same setting and light. No lucky numbers or colors in this video: it is about encouragement. Keep it gentle and realistic: a quiet day, not bad luck. For each scene, press "Copy + English voice" or "Copy + Khmer voice". Put the clips in order 1 to 8.${st ? " Scenes 4, 5 and 6 use the site's own daily wording for this sign." : ""}` });
     POSTS.easy = [
       ["Title – English", `${EMO[c]} ${c}, Take It Easy Today | ${D}`],
