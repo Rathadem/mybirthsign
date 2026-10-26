@@ -5,7 +5,11 @@
 (function () {
   var HOST = "https://bauval.org";
   var NATIVE = "f09efb6f84e744d5ad358f03efbf68db";
-  var BANNER = { box: ["be82b735bb4822651f6266ea177098d1", 300, 250], top_d: ["18e30a22b3ffe8fb2229cd25f31ba870", 728, 90], top_m: ["3e5e00c17d44d21efb07540becb72519", 320, 50] };
+  var BANNER = { box: ["be82b735bb4822651f6266ea177098d1", 300, 250], top_d: ["18e30a22b3ffe8fb2229cd25f31ba870", 728, 90], top_m: ["3e5e00c17d44d21efb07540becb72519", 320, 50],
+    sky600: ["89c8bc55c8616f881f45a06e7d8a4594", 160, 600], sky300: ["352da5bdc6fa784c5fc4d6576ca3265b", 160, 300] };
+  // wide screens: a tall banner in the empty space on each side of the page (left and right side bars). The page content
+  // is about 1,240 px wide, so the side bars only appear from 1,592 px, where they never cover the content.
+  var RAIL_MIN = 1592;
   var queue = [], busy = false;
   function next() {
     if (busy || !queue.length) return;
@@ -35,8 +39,21 @@
     queue.push({ el: el, k: t === "top" ? (wide ? "top_d" : "top_m") : t === "mid" ? (wide ? "top_d" : "box") : "box" });
     next();
   }
+  function rails() {
+    if (window.innerWidth < RAIL_MIN) return;
+    var k = window.innerHeight >= 740 ? "sky600" : "sky300";
+    ["left", "right"].forEach(function (side) {
+      var r = document.createElement("div");
+      r.className = "mbs-rail mbs-rail-" + side; r.setAttribute("aria-label", "Advertisement");
+      document.body.appendChild(r);
+      queue.push({ el: r, k: k });
+    });
+    next();
+  }
   function start() {
-    var slots = document.querySelectorAll(".mbs-ad[data-ad]");
+    rails();
+    var wideRails = window.innerWidth >= RAIL_MIN;
+    var slots = document.querySelectorAll(".mbs-ad[data-ad]" + (wideRails ? ":not([data-ad=mid])" : ""));
     if (!("IntersectionObserver" in window)) { for (var i = 0; i < slots.length; i++) fill(slots[i]); return; }
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); fill(e.target); } });
