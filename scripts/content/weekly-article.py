@@ -25,6 +25,8 @@ Optional: listing (default true; false = do not add a card to blog.html), note (
   dates written dd/mm/yyyy.
 """
 import html, json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from next_steps import CSS as NEXT_CSS, box as next_box
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
@@ -58,7 +60,7 @@ STYLE = (".festival-article{max-width:900px;margin:40px auto;padding:0 22px;colo
          ".festival-article .tale{border:1px solid #6f5a9e;border-radius:14px;padding:16px 18px;background:#1b1734;margin:20px 0}"
          "html[lang=km] .festival-article h1,html[lang=km] .festival-article h2,html[lang=km] .festival-article h3{font-family:'Kantumruy Pro','Noto Sans Khmer',sans-serif;line-height:1.5}"
          "html[lang=km] .festival-article h1{font-size:clamp(1.9rem,4.4vw,3rem)}html[lang=km] .festival-article .eyebrow{letter-spacing:0}"
-         "@media(max-width:620px){.festival-article .facts{grid-template-columns:1fr}}")
+         "@media(max-width:620px){.festival-article .facts{grid-template-columns:1fr}}" + NEXT_CSS)
 
 # header/nav: copied from an existing guide so menus stay identical across the site
 tpl = open(os.path.join(ROOT, "blog", "cambodia-peace-day-december-29.html"), encoding="utf-8").read()
@@ -128,6 +130,7 @@ related = " · ".join(f'<a href="{e(h)}">{e(l)}</a>' for l, h in spec["related"]
 
 main_html = f"""<p class="eyebrow">{e(spec['eyebrow'])}</p><h1>{e(title)}</h1><p class="lead">{spec['lead']}</p><p class="meta">Published <time datetime="{spec['published']}">{pub_txt}</time> · MyBirthSign</p><div class="facts">{facts}</div>{figure}{video}
 {chr(10).join(parts)}
+{next_box("en")}
 <section><h2>Frequently asked questions</h2>{faq}</section>
 <section><h2>Sources and further reading</h2><ul>{sources}</ul>
 {note}</section>
@@ -151,6 +154,7 @@ if K:
     kback = K.get("back", ["ត្រឡប់ទៅប្លុក MyBirthSign", "../blog.html"])
     main_km = f"""<p class="eyebrow">{e(K['eyebrow'])}</p><h1>{e(K['title'])}</h1><p class="lead">{K['lead']}</p><p class="meta">ចុះផ្សាយ <time datetime="{K['published']}">{kpub.day:02d}/{kpub.month:02d}/{kpub.year}</time> · MyBirthSign</p><div class="facts">{"".join(f'<div class="fact"><strong>{e(k)}</strong>{e(v)}</div>' for k, v in K["facts"])}</div>{kfig}
 {secs(K["sections"])}
+{next_box("km")}
 <section><h2>សំណួរដែលគេសួរញឹកញាប់</h2>{"".join(f"<h3>{e(q)}</h3><p>{a}</p>" for q, a in K["faq"])}</section>
 <section><h2>ប្រភព និងឯកសារអានបន្ថែម</h2><ul>{ksrc}</ul>
 {f'<p class="note">{K["note"]}</p>' if K.get("note") else ""}</section>
