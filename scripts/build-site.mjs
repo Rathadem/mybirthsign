@@ -443,8 +443,8 @@ if (SCHEDULED.length) {
   console.log(`build-site: scheduled, not live yet: ${SCHEDULED.join(", ")}`);
 }
 
-// ---------------------------------------------------------------- Adsterra ad slots (English and Chinese pages only)
-// Khmer pages stay ad-free. Three slots at most per page: a top banner under the site header, one 300x250 inside the
+// ---------------------------------------------------------------- Adsterra ad slots (English, Chinese and Khmer pages)
+// (Khmer pages were added at the owner's request on 26/10/2026.) Three slots at most per page: a top banner under the site header, one 300x250 inside the
 // content and one native banner near the end. js/ads.js fills them when they come near the screen.
 {
   const SKIP = /^(about|privacy|terms|contact|404|google[0-9a-f]+)\.html$/;
@@ -455,11 +455,11 @@ if (SCHEDULED.length) {
     for (const f of fs.readdirSync(d)) {
       const p = path.join(d, f), st = fs.statSync(p);
       const rel = path.relative(DIST, p).split(path.sep);
-      if (st.isDirectory()) { if (!(rel.length === 1 && (f === "km" || f === "studio"))) walk(p); continue; }
+      if (st.isDirectory()) { if (!(rel.length === 1 && f === "studio")) walk(p); continue; }
       if (!f.endsWith(".html") || SKIP.test(f) && rel.length <= 2) continue;
       let h = fs.readFileSync(p, "utf8");
       if (h.includes('class="mbs-ad"')) continue;
-      const isHome = rel.length <= 2 && f === "index.html" && (rel.length === 1 || rel[0] === "zh");
+      const isHome = rel.length <= 2 && f === "index.html" && (rel.length === 1 || rel[0] === "zh" || rel[0] === "km");
       const m = h.indexOf("<main");
       if (isHome && m > 0) {
         // homepage: no banner above the hero; one ad before every main section after it (fx-sec sections and the final call to action)

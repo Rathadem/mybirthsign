@@ -1,4 +1,4 @@
-/* Adsterra ads for MyBirthSign (English and Chinese pages only; Khmer pages stay ad-free).
+/* Adsterra ads for MyBirthSign (English, Chinese and Khmer pages).
    build-site.mjs puts empty slots in the page: data-ad="top" (728x90 on wide screens, 320x50 on phones),
    "box" (300x250 inside the content) and "native" (native banner near the end). Slots are filled only when
    they come near the screen, one banner at a time (Adsterra banners share one global atOptions setting). */
