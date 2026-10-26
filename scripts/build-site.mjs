@@ -443,6 +443,57 @@ if (SCHEDULED.length) {
   console.log(`build-site: scheduled, not live yet: ${SCHEDULED.join(", ")}`);
 }
 
+// ---------------------------------------------------------------- Adsterra ad slots (English and Chinese pages only)
+// Khmer pages stay ad-free. Three slots at most per page: a top banner under the site header, one 300x250 inside the
+// content and one native banner near the end. js/ads.js fills them when they come near the screen.
+{
+  const SKIP = /^(about|privacy|terms|contact|404|google[0-9a-f]+)\.html$/;
+  const CSS = '<style>.mbs-ad{display:flex;justify-content:center;align-items:center;margin:18px auto;max-width:100%;overflow:hidden;clear:both}.mbs-ad[data-ad=top]{min-height:50px}.mbs-ad[data-ad=box]{min-height:250px}@media(min-width:760px){.mbs-ad[data-ad=top]{min-height:90px}}.mbs-ad iframe{max-width:100%}</style>';
+  const slot = (k) => `<div class="mbs-ad" data-ad="${k}" aria-label="Advertisement"></div>`;
+  let pagesWithAds = 0;
+  (function walk(d) {
+    for (const f of fs.readdirSync(d)) {
+      const p = path.join(d, f), st = fs.statSync(p);
+      const rel = path.relative(DIST, p).split(path.sep);
+      if (st.isDirectory()) { if (!(rel.length === 1 && (f === "km" || f === "studio"))) walk(p); continue; }
+      if (!f.endsWith(".html") || SKIP.test(f) && rel.length <= 2) continue;
+      let h = fs.readFileSync(p, "utf8");
+      if (h.includes('class="mbs-ad"')) continue;
+      const hEnd = h.indexOf("</header>");
+      if (hEnd > 0) h = h.slice(0, hEnd + 9) + slot("top") + h.slice(hEnd + 9);
+      const m = h.indexOf("<main");
+      if (m > 0 && /^<main[^>]*class="[^"]*\blayout\b/.test(h.slice(m, m + 200))) {
+        // a grid page (Khmer calendar): the native banner goes right after the grid, nothing inside it
+        const e = h.indexOf("</main>", m);
+        h = h.slice(0, e + 7) + slot("native") + h.slice(e + 7);
+      } else if (m > 0) {
+        // the in-content box goes between top-level blocks of <main> (never inside a card or grid): the 3rd
+        // (or 2nd) section or heading at the shallowest nesting level
+        const end = h.indexOf("</main>", m), cands = [];
+        const re = /<(\/?)(div|section|article|aside|ul|ol|figure|nav|details)\b[^>]*>|<h2\b/g;
+        re.lastIndex = h.indexOf(">", m) + 1; let depth = 0, mt;
+        while ((mt = re.exec(h)) && mt.index < end) {
+          if (mt[0].startsWith("<h2")) { cands.push([depth, mt.index]); continue; }
+          if (mt[1]) { depth--; continue; }
+          if (mt[2] === "section" || mt[2] === "article") cands.push([depth, mt.index]);
+          depth++;
+        }
+        const minD = Math.min(...cands.map((c) => c[0])), top = cands.filter((c) => c[0] === minD).map((c) => c[1]);
+        const at = top.length >= 3 ? top[2] : top.length === 2 ? top[1] : -1;
+        if (at > 0) h = h.slice(0, at) + slot("box") + h.slice(at);
+        const e = h.indexOf("</main>", m);
+        if (e > 0) h = h.slice(0, e) + slot("native") + h.slice(e);
+      } else {
+        const fo = h.lastIndexOf("<footer");
+        if (fo > 0) h = h.slice(0, fo) + slot("native") + h.slice(fo);
+      }
+      h = h.replace("</head>", `${CSS}<script src="/js/ads.js" defer></script></head>`);
+      fs.writeFileSync(p, h); pagesWithAds++;
+    }
+  })(DIST);
+  console.log(`build-site: ad slots on ${pagesWithAds} English and Chinese pages`);
+}
+
 // ---------------------------------------------------------------- "Follow us" links (YouTube, Telegram) in every page footer
 {
   const FOLLOW = { en: "Follow us", km: "តាមដានយើង", zh: "关注我们" };
