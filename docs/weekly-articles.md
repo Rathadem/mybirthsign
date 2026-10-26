@@ -10,7 +10,7 @@ Each run publishes **the first row below whose status is `pending`**, then marks
 |---|---|---|---|---|---|---|
 | 1 | 2026-10-19 | kathen-robe-offering-season | Kathen: Cambodia's Robe-Offering Season After Buddhist Lent | Kathen season 27 Oct – 24 Nov 2026 | chol-vassa-buddhist-lent, cambodian-buddhist-holy-days | published 2026-10-18 |
 | 2 | 2026-10-26 | khmer-weddings-after-buddhist-lent | Why Many Khmer Weddings Happen After Buddhist Lent | Wedding season starts after Chenh Vassa; custom (not a Buddhist rule) of avoiding lay weddings during Vassa | wedding-date (tool), chol-vassa-buddhist-lent | published 2026-10-19 |
-| 3 | 2026-11-02 | independence-monument-phnom-penh | The Independence Monument: What It Is and What Happens There | Independence Day is 9 Nov | cambodia-independence-day | pending |
+| 3 | 2026-11-02 | independence-monument-phnom-penh | The Independence Monument: What It Is and What Happens There | Independence Day is 9 Nov | cambodia-independence-day | published 2026-10-26 |
 | 4 | 2026-11-09 | ak-ambok-moon-salutation | Ak Ambok and the Moon Salutation: The Quieter Side of the Water Festival | Water Festival 23–25 Nov 2026 | cambodia-water-festival-bon-om-touk, khmer-calendar | pending |
 | 5 | 2026-11-16 | bon-om-touk-boat-racing-teams | Bon Om Touk Boat Teams: How Pagodas and Provinces Prepare | Just before the races | cambodia-water-festival-bon-om-touk | pending |
 | 6 | 2026-11-23 | find-your-khmer-lunar-birthday | Your Khmer Lunar Birthday: How to Find It and Why Elders Use It | Evergreen; uses the calendar tool | khmer-calendar, khmer-lunar-calendar-birth-date | pending |
