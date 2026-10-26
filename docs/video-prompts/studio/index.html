@@ -1747,11 +1747,11 @@ function charactersMd(KM_NAMES) {
   try { CARD.lang = localStorage.getItem("mbs-card-lang") || "en"; CARD.fmt = localStorage.getItem("mbs-card-fmt") || "portrait"; } catch (e) {}
   function cardsSection(iso) {
     var body = onSite
-      ? '<p class="note">The same share cards as on the website (lucky signs of the day + all 12 animals), for ' + dmy(iso) + '. Download them and schedule your posts before the day starts. A day\'s cards appear once its fortune page is published (about a day ahead).</p>' +
+      ? '<p class="note">The day\'s share cards for ' + dmy(iso) + ': lucky signs of the day, the Great Day sign, the two Good Day signs and the sign to take it easy (the other signs are left out). Download them and schedule your posts before the day starts. A day\'s cards appear once its fortune page is published (about a day ahead).</p>' +
         '<div class="cardbar"><label>Language<select id="clang"><option value="en">English</option><option value="km">ខ្មែរ (Khmer)</option><option value="zh">中文 (Chinese)</option></select></label>' +
         '<label>View<select id="cview"><option value="grid">Small (many per row)</option><option value="big">Large (one per row)</option></select></label>' +
         '<label>Size<select id="cfmt"><option value="portrait">Feed post (Facebook, Telegram)</option><option value="square">Square</option><option value="story">Story / Reel (9:16)</option></select></label>' +
-        '<button class="primary" id="czip" disabled>Save all</button></div><p class="note">Tap a card to see it full size. On a phone, “Save” opens the share sheet: choose “Save Image” (Photos) or share straight to Facebook or Telegram.</p><div class="cardgrid" id="cardgrid"></div>'
+        '<button class="primary" id="czip" disabled>Save all</button><button id="cfolder" disabled title="Cards, video prompts and subtitles for this date in one folder">Download folder</button></div><p class="note">Tap a card to see it full size. On a phone, “Save” opens the share sheet: choose “Save Image” (Photos) or share straight to Facebook or Telegram.</p><div class="cardgrid" id="cardgrid"></div>'
       : '<p class="note"><b>The cards show only in the Studio on your website.</b> This copy inside Claude cannot read the website\'s daily fortune. Open this address in your browser:</p><p><a href="https://mybirthsign.com/studio/" target="_blank" rel="noopener" style="color:var(--gold-soft);font-weight:700;font-size:1.1rem">mybirthsign.com/studio/ →</a></p>';
     return '<details class="sec" id="seccards" open><summary><h2>Daily cards – post before the day</h2></summary><div class="secbody">' + body + "</div></details>";
   }
@@ -1804,7 +1804,7 @@ function charactersMd(KM_NAMES) {
     $("clang").value = CARD.lang; $("cfmt").value = CARD.fmt; $("cview").value = CARD.view || "grid";
     $("cardgrid").classList.toggle("big", CARD.view === "big");
     var job = ++cardJob, grid = $("cardgrid"), zip = $("czip");
-    CARD.blobs.forEach(function (x) { URL.revokeObjectURL(x.url); }); CARD.blobs = []; CARD.iso = iso; zip.disabled = true;
+    CARD.blobs.forEach(function (x) { URL.revokeObjectURL(x.url); }); CARD.blobs = []; CARD.iso = iso; zip.disabled = true; $("cfolder").disabled = true;
     grid.innerHTML = '<p class="note">Drawing the cards…</p>';
     var head = "";
     var page = (CARD.lang === "en" ? "" : "/" + CARD.lang) + "/blog/daily-fortune-" + iso + ".html";
@@ -1815,8 +1815,10 @@ function charactersMd(KM_NAMES) {
         head = '<p class="note" style="grid-column:1/-1"><b>Early cards for ' + dmy(iso) + '</b> (rating, trade tip, love, career, money, advice and lucky number, color, direction and time for this date, from the website\'s rules and standard wording). The day\'s own written fortune replaces them when its page is published, the evening before around 21:00 Cambodia time.</p>';
       }
       while ((m = re.exec(res[0]))) { try { var sp = JSON.parse(decode(m[1])); if (sp.cardType === "daily" || sp.cardType === "lucky") { sp.iso = sp.iso || iso; specs.push(sp); } } catch (e) {} }
+      var RANK = { great: 1, good: 2, caution: 3 };
+      specs = specs.filter(function (s) { return s.cardType === "lucky" || RANK[s.tier]; });   // only the lucky, good and take-it-easy signs
       if (!specs.length) throw new Error("nocards");
-      specs.sort(function (a, b) { return (a.cardType === "lucky" ? 0 : 1) - (b.cardType === "lucky" ? 0 : 1); });
+      specs.sort(function (a, b) { return (a.cardType === "lucky" ? 0 : RANK[a.tier]) - (b.cardType === "lucky" ? 0 : RANK[b.tier]); });
       if (job !== cardJob) return;
       grid.innerHTML = head;
       return specs.reduce(function (p, sp, i) {       // one at a time, so phones keep up
@@ -1824,7 +1826,8 @@ function charactersMd(KM_NAMES) {
           if (job !== cardJob) return;
           return window.MBSShareCards[sp.cardType](sp, CARD.fmt).then(toJpeg).then(function (blob) {
             if (job !== cardJob || !blob) return;
-            var name = "mybirthsign-" + iso + "-" + (sp.cardType === "lucky" ? "00-lucky-today" : String(i).padStart(2, "0") + "-" + String(sp.animal).toLowerCase()) + "-" + CARD.lang + "-" + CARD.fmt + ".jpg";
+            var kind = sp.cardType === "lucky" ? "lucky-today" : { great: "great-day", good: "good-day", caution: "take-it-easy" }[sp.tier] + "-" + String(sp.animal).toLowerCase();
+            var name = "mybirthsign-" + iso + "-" + i + "-" + kind + "-" + CARD.lang + "-" + CARD.fmt + ".jpg";
             var url = URL.createObjectURL(blob); CARD.blobs.push({ name: name, url: url, blob: blob });
             var d = document.createElement("div"); d.className = "dcard";
             var title = sp.cardType === "lucky" ? "Lucky signs today" : (sp.name || sp.animal) + " · " + (sp.label || "");
@@ -1833,7 +1836,7 @@ function charactersMd(KM_NAMES) {
             grid.appendChild(d);
           });
         });
-      }, Promise.resolve()).then(function () { if (job === cardJob) zip.disabled = !CARD.blobs.length; });
+      }, Promise.resolve()).then(function () { if (job === cardJob) { zip.disabled = !CARD.blobs.length; $("cfolder").disabled = !CARD.blobs.length; } });
     }).catch(function (e) {
       if (job !== cardJob) return;
       grid.innerHTML = '<p class="note">' + (e && e.message === "nopage" ? "The fortune page for " + dmy(iso) + " is not published yet (each day's page appears about a day ahead). Try again later, or pick an earlier date." : "Could not draw the cards for this date.") + "</p>";
@@ -1906,6 +1909,28 @@ function charactersMd(KM_NAMES) {
       var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "mybirthsign-cards-" + CARD.iso + "-" + CARD.lang + "-" + CARD.fmt + ".zip";
       document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); b.disabled = false; }, 1500);
     });
+  });
+
+  // "Download folder": one .zip holding a folder named after the date, with the cards, that day's video prompts and
+  // the subtitle files, ready to keep on the computer or phone (Files app)
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("#cfolder"); if (!b || !CARD.blobs.length) return;
+    if (!window.JSZip) { toast("Download is not available here. Use Save all."); return; }
+    var iso = CARD.iso, root = "MyBirthSign " + iso, z = new JSZip(), f = z.folder(root), p = window.__lastPack;
+    var cards = f.folder("cards " + CARD.lang + " " + CARD.fmt);
+    CARD.blobs.forEach(function (x) { cards.file(x.name.replace("mybirthsign-" + iso + "-", ""), x.blob); });
+    if (p && D.value === iso) {
+      f.file("video prompts " + iso + ".txt", plain(window.__lastMd || p.md));
+      var s = f.folder("subtitles");
+      s.file(iso + ".srt", p.srtKm); s.file(iso + ".en.srt", p.srtEn);
+      Object.keys(p.srtVid).forEach(function (id) { s.file(iso + "-" + id + ".srt", p.srtVid[id].km); s.file(iso + "-" + id + ".en.srt", p.srtVid[id].en); });
+    }
+    b.disabled = true;
+    z.generateAsync({ type: "blob" }).then(function (blob) {
+      var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = root.replace(/ /g, "-") + ".zip";
+      document.body.appendChild(a); a.click(); toast("Downloading the folder for " + dmy(iso));
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); b.disabled = false; }, 1500);
+    }, function () { b.disabled = false; toast("Could not make the folder. Try Save all."); });
   });
 
   function set(iso) {
