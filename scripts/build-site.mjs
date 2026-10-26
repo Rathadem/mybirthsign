@@ -443,7 +443,34 @@ if (SCHEDULED.length) {
   console.log(`build-site: scheduled, not live yet: ${SCHEDULED.join(", ")}`);
 }
 
+// ---------------------------------------------------------------- links to pages that only exist in English
+// A Khmer or Chinese page that links to /km/... or /zh/... of an English-only article would send readers (and Google)
+// through a redirect; point those links straight at the English page instead.
+{
+  const toEn = new Map();
+  for (const [l, np] of noOwn) { toEn.set(prefix(l) + np, np); if (!np.endsWith("/")) toEn.set(prefix(l) + np + ".html", np); else toEn.set(prefix(l) + np + "index.html", np); }
+  for (const l of ["km", "zh"]) {
+    (function walk(d) {
+      if (!fs.existsSync(d)) return;
+      for (const f of fs.readdirSync(d)) {
+        const p = path.join(d, f), st = fs.statSync(p);
+        if (st.isDirectory()) { walk(p); continue; }
+        if (!f.endsWith(".html")) continue;
+        const dirUrl = "/" + path.relative(DIST, path.dirname(p)).split(path.sep).join("/");
+        const h = fs.readFileSync(p, "utf8");
+        const n = h.replace(/href="([^"#?]+)([#?][^"]*)?"/g, (m, u, rest) => {
+          if (/^(https?:|mailto:|tel:|\/\/)/.test(u)) return m;
+          const abs = u.startsWith("/") ? u : path.posix.normalize(path.posix.join(dirUrl, u));
+          return toEn.has(abs) ? `href="${toEn.get(abs)}${rest || ""}"` : m;
+        });
+        if (n !== h) fs.writeFileSync(p, n);
+      }
+    })(path.join(DIST, l));
+  }
+}
+
 // ---------------------------------------------------------------- sitemap: every page in all three languages
+// addresses are written without ".html", the same as each page's canonical tag
 const smPath = path.join(DIST, "sitemap.xml");
 if (fs.existsSync(smPath)) {
   const sm = fs.readFileSync(smPath, "utf8");
@@ -451,7 +478,7 @@ if (fs.existsSync(smPath)) {
     /^\/blog\/daily-fortune-/.test(p) ? "" :   // noindex pages stay out of the sitemap (see step 3c)
     SCHEDULED.some((s) => p === `/blog/${s}` || p === `/blog/${s}.html`) ? "" :   // scheduled, not live yet
 
-    LANGS.filter((l) => !noOwn.some(([nl, np]) => nl === l && np === ((p || "/").replace(/\.html$/, "")))).map((l) => `  <url><loc>${urlFor(p || "/", l)}</loc>${rest}</url>`).join("\n") + "\n");
+    LANGS.filter((l) => !noOwn.some(([nl, np]) => nl === l && np === ((p || "/").replace(/\.html$/, "")))).map((l) => `  <url><loc>${urlFor((p || "/").replace(/\.html$/, ""), l)}</loc>${rest}</url>`).join("\n") + "\n");
   fs.writeFileSync(smPath, out);
 }
 
