@@ -473,8 +473,7 @@ if (SCHEDULED.length) {
         fs.writeFileSync(p, h); pagesWithAds++;
         continue;
       }
-      const hEnd = h.indexOf("</header>");
-      if (hEnd > 0) h = h.slice(0, hEnd + 9) + slot("top") + h.slice(hEnd + 9);
+      // no banner right under the menu bar: the top of every page stays clean (the owner asked for this)
       if (m > 0 && /^<main[^>]*class="[^"]*\blayout\b/.test(h.slice(m, m + 200))) {
         // a grid page (Khmer calendar): the native banner goes right after the grid, nothing inside it
         const e = h.indexOf("</main>", m);

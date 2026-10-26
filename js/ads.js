@@ -48,10 +48,17 @@
   function railTops() {
     var head = document.querySelector(".site-header"), foot = document.querySelector("footer");
     var first = head ? docTop(head) + head.offsetHeight + 36 : 96;
+    // keep the top of the page clean: the first side ads start below the hero / page title block, beside the first section
+    // (the biggest block around the main title that is still no taller than about one screen)
+    var h1 = document.querySelector("h1"), blk = h1, lim = Math.max(900, window.innerHeight * 1.1);
+    while (blk && blk.parentElement && !/^(MAIN|BODY|ARTICLE)$/.test(blk.parentElement.tagName) && blk.parentElement.offsetHeight <= lim) blk = blk.parentElement;
+    if (blk) first = Math.max(first, docTop(blk) + blk.offsetHeight + 24);
     var last = (foot ? docTop(foot) : document.documentElement.scrollHeight) - 600 - 24;
     var marks = [].map.call(document.querySelectorAll("main > section, main section > h2, main h2, body > section, article h2, .container > section"), docTop)
       .filter(function (t) { return t >= first && t <= last; }).sort(function (x, y) { return x - y; });
     var tops = [], at = first;
+    for (var m = 0; m < marks.length; m++) if (marks[m] >= first && marks[m] <= first + 400) { at = marks[m]; break; }
+    if (at > last) return tops;
     tops.push(at);
     while (tops.length < MAXPAIRS) {
       var want = at + GAP, pick = null;
