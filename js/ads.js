@@ -30,7 +30,9 @@
       el.appendChild(n); el.appendChild(c);
       return;
     }
-    queue.push({ el: el, k: t === "top" ? (window.innerWidth >= 760 ? "top_d" : "top_m") : "box" });
+    var wide = window.innerWidth >= 760;
+    // top: 728x90 on wide screens, 320x50 on phones; mid (homepage, between sections): 728x90 or 300x250; box: 300x250
+    queue.push({ el: el, k: t === "top" ? (wide ? "top_d" : "top_m") : t === "mid" ? (wide ? "top_d" : "box") : "box" });
     next();
   }
   function start() {

@@ -448,7 +448,7 @@ if (SCHEDULED.length) {
 // content and one native banner near the end. js/ads.js fills them when they come near the screen.
 {
   const SKIP = /^(about|privacy|terms|contact|404|google[0-9a-f]+)\.html$/;
-  const CSS = '<style>.mbs-ad{display:flex;justify-content:center;align-items:center;margin:18px auto;max-width:100%;overflow:hidden;clear:both}.mbs-ad[data-ad=top]{min-height:50px}.mbs-ad[data-ad=box]{min-height:250px}@media(min-width:760px){.mbs-ad[data-ad=top]{min-height:90px}}.mbs-ad iframe{max-width:100%}</style>';
+  const CSS = '<style>.mbs-ad{display:flex;justify-content:center;align-items:center;margin:18px auto;max-width:100%;overflow:hidden;clear:both}.mbs-ad[data-ad=top]{min-height:50px}.mbs-ad[data-ad=box],.mbs-ad[data-ad=mid]{min-height:250px}@media(min-width:760px){.mbs-ad[data-ad=mid]{min-height:90px}}@media(min-width:760px){.mbs-ad[data-ad=top]{min-height:90px}}.mbs-ad iframe{max-width:100%}</style>';
   const slot = (k) => `<div class="mbs-ad" data-ad="${k}" aria-label="Advertisement"></div>`;
   let pagesWithAds = 0;
   (function walk(d) {
@@ -459,9 +459,22 @@ if (SCHEDULED.length) {
       if (!f.endsWith(".html") || SKIP.test(f) && rel.length <= 2) continue;
       let h = fs.readFileSync(p, "utf8");
       if (h.includes('class="mbs-ad"')) continue;
+      const isHome = rel.length <= 2 && f === "index.html" && (rel.length === 1 || rel[0] === "zh");
+      const m = h.indexOf("<main");
+      if (isHome && m > 0) {
+        // homepage: no banner above the hero; one ad before every main section after it (fx-sec sections and the final call to action)
+        const end = h.indexOf("</main>", m), starts = [];
+        const re = /<section class="(?:fx-sec\b|hm-final\b)[^"]*"/g; re.lastIndex = m; let mt;
+        while ((mt = re.exec(h)) && mt.index < end) starts.push(mt.index);
+        for (const at of starts.reverse()) h = h.slice(0, at) + slot("mid") + h.slice(at);
+        const e = h.indexOf("</main>", m);
+        h = h.slice(0, e) + slot("native") + h.slice(e);
+        h = h.replace("</head>", `${CSS}<script src="/js/ads.js" defer></script></head>`);
+        fs.writeFileSync(p, h); pagesWithAds++;
+        continue;
+      }
       const hEnd = h.indexOf("</header>");
       if (hEnd > 0) h = h.slice(0, hEnd + 9) + slot("top") + h.slice(hEnd + 9);
-      const m = h.indexOf("<main");
       if (m > 0 && /^<main[^>]*class="[^"]*\blayout\b/.test(h.slice(m, m + 200))) {
         // a grid page (Khmer calendar): the native banner goes right after the grid, nothing inside it
         const e = h.indexOf("</main>", m);
