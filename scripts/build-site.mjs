@@ -495,13 +495,17 @@ for (const l of ["km", "zh"]) {
   R.push(`/${l}/khmer-lunar-calendar-birth-date  /${l}/blog/khmer-lunar-calendar-birth-date.html  301`);
   R.push(`/${l}/khmer-lunar-calendar-birth-date.html  /${l}/blog/khmer-lunar-calendar-birth-date.html  301`);
 }
-// /today (and /km/today, /zh/today): always today's fortune page, for the "What's next" box on articles and for ads.
+// /blog/daily-fortune and /today (and their /km and /zh versions): always today's fortune page, for the "What's next" box on articles and for ads.
 // The day comes from data/daily/latest.json, which the daily job moves forward at midnight Cambodia time (and that push
 // rebuilds the site); if that page is missing, /today goes to the blog page instead.
 try {
   const day = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "daily", "latest.json"), "utf8")).date;
   const ok = /^\d{4}-\d{2}-\d{2}$/.test(day) && fs.existsSync(path.join(DIST, "blog", `daily-fortune-${day}.html`));
-  for (const l of LANGS) R.push(`${prefix(l)}/today  ${ok ? `${prefix(l)}/blog/daily-fortune-${day}` : `${prefix(l)}/blog`}  302`);
+  for (const l of LANGS) {
+    // /blog/daily-fortune shows today's page under that short address (a rewrite, not a redirect: the address stays)
+    if (ok) for (const s of ["", ".html"]) R.push(`${prefix(l)}/blog/daily-fortune${s}  ${prefix(l)}/blog/daily-fortune-${day}.html  200`);
+    R.push(`${prefix(l)}/today  ${ok ? `${prefix(l)}/blog/daily-fortune` : `${prefix(l)}/blog`}  302`);
+  }
 } catch { for (const l of LANGS) R.push(`${prefix(l)}/today  ${prefix(l)}/blog  302`); }
 fs.writeFileSync(path.join(DIST, "_redirects"), R.join("\n") + "\n");
 console.log(`build-site: ${pages} pages x ${LANGS.length} languages, ${copied} other files -> dist/` + (noOwn.length ? `; not published (no own text, redirected to English): ${noOwn.map(([l, q]) => l + q).join(", ")}` : ""));
