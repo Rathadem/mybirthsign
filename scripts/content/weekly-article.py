@@ -73,7 +73,7 @@ og_img = f"{SITE}/{spec['og_image']}" if spec.get("og_image") else f"{SITE}/{img
 
 ld = {"@context": "https://schema.org", "@graph": [
     {"@type": "Article", "headline": title, "description": desc, "image": og_img, "datePublished": spec["published"],
-     "dateModified": spec.get("modified", spec["published"]), "author": {"@type": "Organization", "name": "MyBirthSign"},
+     "dateModified": spec.get("modified", spec["published"]), "author": {"@type": "Person", "name": "Ratha", "url": f"{SITE}/about"},
      "publisher": {"@type": "Organization", "name": "MyBirthSign"}, "mainEntityOfPage": f"{SITE}/blog/{slug}"},
     {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"<[^>]+>", "", a)}} for q, a in spec["faq"]]}]}
 
@@ -128,7 +128,7 @@ video = (f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embe
 sources = "".join(f'<li><a href="{e(u)}" target="_blank" rel="noopener">{e(t)}</a> — {e(n)}</li>' for t, u, n in spec["sources"])
 related = " · ".join(f'<a href="{e(h)}">{e(l)}</a>' for l, h in spec["related"])
 
-main_html = f"""<p class="eyebrow">{e(spec['eyebrow'])}</p><h1>{e(title)}</h1><p class="lead">{spec['lead']}</p><p class="meta">Published <time datetime="{spec['published']}">{pub_txt}</time> · MyBirthSign</p><div class="facts">{facts}</div>{figure}{video}
+main_html = f"""<p class="eyebrow">{e(spec['eyebrow'])}</p><h1>{e(title)}</h1><p class="lead">{spec['lead']}</p><p class="meta">Published <time datetime="{spec['published']}">{pub_txt}</time> · By <a href="../about">Ratha</a>, MyBirthSign</p><div class="facts">{facts}</div>{figure}{video}
 {chr(10).join(parts)}
 {next_box("en")}
 <section><h2>Frequently asked questions</h2>{faq}</section>
@@ -152,7 +152,7 @@ if K:
     assert len(K["source_notes"]) == len(spec["sources"]), "km.source_notes needs one note per source"
     ksrc = "".join(f'<li><a href="{e(u)}" target="_blank" rel="noopener">{e(t)}</a> — {e(n)}</li>' for (t, u, _), n in zip(spec["sources"], K["source_notes"]))
     kback = K.get("back", ["ត្រឡប់ទៅប្លុក MyBirthSign", "../blog.html"])
-    main_km = f"""<p class="eyebrow">{e(K['eyebrow'])}</p><h1>{e(K['title'])}</h1><p class="lead">{K['lead']}</p><p class="meta">ចុះផ្សាយ <time datetime="{K['published']}">{kpub.day:02d}/{kpub.month:02d}/{kpub.year}</time> · MyBirthSign</p><div class="facts">{"".join(f'<div class="fact"><strong>{e(k)}</strong>{e(v)}</div>' for k, v in K["facts"])}</div>{kfig}
+    main_km = f"""<p class="eyebrow">{e(K['eyebrow'])}</p><h1>{e(K['title'])}</h1><p class="lead">{K['lead']}</p><p class="meta">ចុះផ្សាយ <time datetime="{K['published']}">{kpub.day:02d}/{kpub.month:02d}/{kpub.year}</time> · ដោយ <a href="../about">Ratha</a>, MyBirthSign</p><div class="facts">{"".join(f'<div class="fact"><strong>{e(k)}</strong>{e(v)}</div>' for k, v in K["facts"])}</div>{kfig}
 {secs(K["sections"])}
 {next_box("km")}
 <section><h2>សំណួរដែលគេសួរញឹកញាប់</h2>{"".join(f"<h3>{e(q)}</h3><p>{a}</p>" for q, a in K["faq"])}</section>
