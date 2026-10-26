@@ -427,6 +427,7 @@ if (SCHEDULED.length) {
   const href = `href="[^"]*?(?:${alt})(?:\\.html)?"`;
   const card = new RegExp(`(?:<li[^>]*>\\s*)?<a class="(?:bv2-guide-card|bv2-latest-card|hm-bc)[^"]*" ${href}>[\\s\\S]*?</a>(?:\\s*</li>)?\\n?`, "g");
   const link = new RegExp(`<a ${href}[^>]*>([\\s\\S]*?)</a>`, "g");
+  const more = new RegExp(`<a class="fe-more" ${href}>[^<]*</a>`, "g");   // "Read the full … guide" links on the five elements page
   const isSched = new RegExp(`(?:^|/)(?:${alt})\\.html$`);
   (function walk(d) {
     for (const f of fs.readdirSync(d)) {
@@ -434,7 +435,7 @@ if (SCHEDULED.length) {
       if (st.isDirectory()) { walk(p); continue; }
       if (!f.endsWith(".html")) continue;
       if (isSched.test(p.split(path.sep).join("/"))) { fs.unlinkSync(p); continue; }
-      const h = fs.readFileSync(p, "utf8"), n = h.replace(card, "").replace(link, "$1");
+      const h = fs.readFileSync(p, "utf8"), n = h.replace(card, "").replace(more, "").replace(link, "$1");
       if (n !== h) fs.writeFileSync(p, n);
     }
   })(DIST);
