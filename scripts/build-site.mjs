@@ -443,6 +443,26 @@ if (SCHEDULED.length) {
   console.log(`build-site: scheduled, not live yet: ${SCHEDULED.join(", ")}`);
 }
 
+// ---------------------------------------------------------------- "Follow us" links (YouTube, Telegram) in every page footer
+{
+  const FOLLOW = { en: "Follow us", km: "តាមដានយើង", zh: "关注我们" };
+  const row = (l) => `<p class="mbs-follow" style="margin:10px 0 0;font-size:.9rem">${FOLLOW[l]}: <a href="https://www.youtube.com/@mybirthsign" target="_blank" rel="noopener">YouTube</a> · <a href="https://t.me/MyBirthSign" target="_blank" rel="noopener">Telegram</a></p>`;
+  (function walk(d) {
+    for (const f of fs.readdirSync(d)) {
+      const p = path.join(d, f), st = fs.statSync(p);
+      if (st.isDirectory()) { if (f !== "studio") walk(p); continue; }
+      if (!f.endsWith(".html")) continue;
+      const rel = path.relative(DIST, p).split(path.sep);
+      const l = rel[0] === "km" ? "km" : rel[0] === "zh" ? "zh" : "en";
+      const h = fs.readFileSync(p, "utf8");
+      if (h.includes("mbs-follow")) continue;
+      const i = h.lastIndexOf("</footer>");
+      if (i < 0) continue;
+      fs.writeFileSync(p, h.slice(0, i) + row(l) + h.slice(i));
+    }
+  })(DIST);
+}
+
 // ---------------------------------------------------------------- links to pages that only exist in English
 // A Khmer or Chinese page that links to /km/... or /zh/... of an English-only article would send readers (and Google)
 // through a redirect; point those links straight at the English page instead.
