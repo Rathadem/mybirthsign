@@ -448,7 +448,7 @@ if (SCHEDULED.length) {
 // content and one native banner near the end. js/ads.js fills them when they come near the screen.
 {
   const SKIP = /^(about|privacy|terms|contact|404|google[0-9a-f]+)\.html$/;
-  const CSS = '<style>.mbs-ad{display:flex;justify-content:center;align-items:center;margin:18px auto;max-width:100%;overflow:hidden;clear:both}.mbs-ad[data-ad=top]{min-height:50px}.mbs-ad[data-ad=box],.mbs-ad[data-ad=mid]{min-height:250px}@media(min-width:760px){.mbs-ad[data-ad=mid]{min-height:90px}}@media(min-width:760px){.mbs-ad[data-ad=top]{min-height:90px}}.mbs-ad iframe{max-width:100%}.mbs-rail{position:fixed;top:96px;z-index:40;width:160px;display:none}.mbs-rail-left{left:12px}.mbs-rail-right{right:12px}@media(min-width:1592px){.mbs-rail{display:block}.mbs-ad[data-ad=mid]{display:none}}</style>';
+  const CSS = '<style>.mbs-ad{display:flex;justify-content:center;align-items:center;margin:18px auto;max-width:100%;overflow:hidden;clear:both}.mbs-ad[data-ad=top]{min-height:50px}.mbs-ad[data-ad=box],.mbs-ad[data-ad=mid]{min-height:250px}@media(min-width:760px){.mbs-ad[data-ad=mid]{min-height:90px}}@media(min-width:760px){.mbs-ad[data-ad=top]{min-height:90px}}.mbs-ad iframe{max-width:100%}.mbs-rail{position:fixed;top:96px;z-index:40;width:160px;display:none}.mbs-rail-left{left:12px}.mbs-rail-right{right:12px}html.mbs-rails .mbs-rail{display:block}html.mbs-rails body{padding-left:184px;padding-right:184px}html.mbs-rails .site-header{margin-left:-184px;margin-right:-184px}html.mbs-rails .mbs-ad[data-ad=mid]{display:none}</style>';
   const slot = (k) => `<div class="mbs-ad" data-ad="${k}" aria-label="Advertisement"></div>`;
   let pagesWithAds = 0;
   (function walk(d) {
