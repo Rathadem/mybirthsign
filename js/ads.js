@@ -44,14 +44,19 @@
   // Side ads scroll with the page: one pair (left and right, 160x600) beside each section, at least GAP px apart,
   // never running into the footer. Positions are worked out again whenever the page height changes.
   var GAP = 760, MAXPAIRS = 14, pairs = [], sideIO = null;
+  // the block around the main page title (the hero), no taller than about one screen
+  function heroBlock() {
+    var blk = document.querySelector("h1"), lim = Math.max(900, window.innerHeight * 1.1);
+    while (blk && blk.parentElement && !/^(MAIN|BODY|ARTICLE)$/.test(blk.parentElement.tagName) && blk.parentElement.offsetHeight <= lim) blk = blk.parentElement;
+    return blk;
+  }
   function docTop(el) { return el.getBoundingClientRect().top + window.pageYOffset; }
   function railTops() {
     var head = document.querySelector(".site-header"), foot = document.querySelector("footer");
     var first = head ? docTop(head) + head.offsetHeight + 36 : 96;
     // keep the top of the page clean: the first side ads start below the hero / page title block, beside the first section
     // (the biggest block around the main title that is still no taller than about one screen)
-    var h1 = document.querySelector("h1"), blk = h1, lim = Math.max(900, window.innerHeight * 1.1);
-    while (blk && blk.parentElement && !/^(MAIN|BODY|ARTICLE)$/.test(blk.parentElement.tagName) && blk.parentElement.offsetHeight <= lim) blk = blk.parentElement;
+    var blk = heroBlock();
     if (blk) first = Math.max(first, docTop(blk) + blk.offsetHeight + 24);
     var last = (foot ? docTop(foot) : document.documentElement.scrollHeight) - 600 - 24;
     var marks = [].map.call(document.querySelectorAll("main > section, main section > h2, main h2, body > section, article h2, .container > section"), docTop)
@@ -88,7 +93,10 @@
   }
   function rails() {
     if (!railsOn()) return;
+    // a hero whose background runs the full width of the screen keeps doing so (no side ads sit next to it)
+    var hero = heroBlock(), bleed = hero && hero.getBoundingClientRect().width >= window.innerWidth - 40;
     root.classList.add("mbs-rails");
+    if (bleed) hero.classList.add("mbs-bleed");
     window.addEventListener("resize", function () { root.classList.toggle("mbs-rails", railsOn()); layoutRails(); });
     if ("IntersectionObserver" in window) sideIO = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
