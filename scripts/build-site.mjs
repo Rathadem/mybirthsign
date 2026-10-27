@@ -443,6 +443,96 @@ if (SCHEDULED.length) {
   console.log(`build-site: scheduled, not live yet: ${SCHEDULED.join(", ")}`);
 }
 
+// ---------------------------------------------------------------- "Related articles" row and day-to-day links
+// More pages per visit: every English article gets three related articles (picture cards, picked from the cards on
+// blog.html by shared topic words), placed just before the "What's next?" box (or at the end of the main content).
+// Every daily fortune page (all three languages) gets links to the previous and next day when those pages exist.
+{
+  const blogHtml = fs.readFileSync(path.join(DIST, "blog.html"), "utf8");
+  const enPart = blogHtml.slice(Math.max(0, blogHtml.indexOf('data-lang-content="en"')));
+  const seen = new Set(), CAT = [];
+  const cre = /<a\b(?=[^>]*class="(bv2-guide-card|bv2-latest-card|bv2-zodiac-card)\b)[^>]*href="blog\/([a-z0-9-]+)\.html"[^>]*>([\s\S]*?)<\/a>/g;
+  let cm;
+  while ((cm = cre.exec(enPart))) {
+    const slug = cm[2], body = cm[3];
+    if (seen.has(slug) || !fs.existsSync(path.join(DIST, "blog", slug + ".html"))) continue;
+    seen.add(slug);
+    const img = (body.match(/<img[^>]*src="([^"]+)"/) || [])[1], alt = (body.match(/<img[^>]*alt="([^"]*)"/) || [])[1] || "";
+    const title = ((body.match(/<h3>([\s\S]*?)<\/h3>/) || [])[1] || "").trim();
+    if (!img || !title) continue;
+    CAT.push({ slug, img: "/" + img.replace(/^\/+/, ""), alt, title, animal: cm[1] === "bv2-zodiac-card" });
+  }
+  const STOP = new Set("the a an and or of in for to your my is are why how what when with on at by chinese zodiac blog guide".split(" "));
+  const words = (t) => new Set(t.toLowerCase().replace(/<[^>]+>/g, " ").split(/[^a-z0-9]+/).filter((w) => w.length > 2 && !STOP.has(w)));
+  const KH = /khmer|cambodia|buddhist|kathen|vassa|holiday|independence|coronation|water-festival|wedding|peace|pchum|lunar/;
+  const group = (slug) => (KH.test(slug) ? "kh" : "zod");
+  const esc = (t) => String(t).replace(/&(?!amp;|lt;|gt;|quot;|#)/g, "&amp;").replace(/"/g, "&quot;");
+  const REL_CSS = '<style>.mbs-rel{margin:34px 0 10px}.mbs-rel h2{margin:0 0 14px!important;font-size:1.35rem}.mbs-rel-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}'
+    + '.mbs-rel a.mbs-rel-card{display:flex;flex-direction:column;border:1px solid #6f5a9e;border-radius:14px;overflow:hidden;background:#1b1734;text-decoration:none;color:#f3efff}'
+    + '.mbs-rel .mbs-rel-card img{display:block;width:100%;height:150px!important;max-height:150px;object-fit:cover;background:#15122e;margin:0;border-radius:0}.mbs-rel-card span{display:block;padding:10px 12px 12px;color:#f2d27d;font-weight:700;line-height:1.35;font-size:.98rem}'
+    + '.mbs-rel-out{max-width:900px;margin:34px auto 10px;padding:0 22px}.mbs-rel h2{color:#e9ca79;font-family:\'Playfair Display\',Georgia,serif}.mbs-rel a.mbs-rel-card:hover{border-color:#d8b962}@media(max-width:620px){.mbs-rel-row{grid-template-columns:1fr;gap:10px}.mbs-rel a.mbs-rel-card{flex-direction:row;align-items:center}.mbs-rel .mbs-rel-card img{width:104px;min-width:104px;height:72px!important;max-height:72px}.mbs-rel-card span{padding:8px 12px;font-size:.95rem}}</style>';
+  let relCount = 0;
+  for (const f of fs.readdirSync(path.join(DIST, "blog"))) {
+    const slug = f.replace(/\.html$/, "");
+    if (!f.endsWith(".html") || slug.startsWith("daily-fortune")) continue;
+    const p = path.join(DIST, "blog", f);
+    let h = fs.readFileSync(p, "utf8");
+    if (h.includes('class="mbs-rel"')) continue;
+    const h1 = ((h.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) || [])[1] || "");
+    const me = CAT.find((c) => c.slug === slug) || { title: h1, animal: false }, mine = words(slug + " " + me.title), g = group(slug);
+    const scored = CAT.filter((c) => c.slug !== slug).map((c, i) => {
+      const w = words(c.slug + " " + c.title); let sc = 0;
+      for (const x of w) if (mine.has(x)) sc += 3;
+      if (group(c.slug) === g) sc += 2;
+      if (c.animal && !me.animal) sc -= 1;           // prefer full articles over the short animal pages
+      return [sc, -i, c];
+    }).sort((a, b) => b[0] - a[0] || b[1] - a[1]).slice(0, 3).map((x) => x[2]);
+    const row = `<section class="mbs-rel" aria-label="Related articles"><h2>Related articles</h2><div class="mbs-rel-row">`
+      + scored.map((c) => `<a class="mbs-rel-card" href="/blog/${c.slug}"><img src="${c.img}" alt="${esc(c.alt)}" loading="lazy" width="640" height="360"><span>${c.title}</span></a>`).join("")
+      + `</div></section>`;
+    const ns = h.indexOf('<aside class="next-steps"'), mEnd = h.indexOf("</main>"), foot = h.lastIndexOf("<footer");
+    const at = ns > 0 ? ns : mEnd > 0 ? mEnd : foot;
+    if (at < 0) continue;
+    // outside any content column (no "What's next?" box and no <main>): give the row its own centred width
+    h = h.slice(0, at) + (ns < 0 && mEnd < 0 ? row.replace('class="mbs-rel"', 'class="mbs-rel mbs-rel-out"') : row) + h.slice(at);
+    h = h.replace("</head>", REL_CSS + "</head>");
+    fs.writeFileSync(p, h); relCount++;
+  }
+  // previous / next day on the daily fortune pages
+  const DN = {
+    en: { prev: "← Previous day", next: "Next day →", d: (x) => `${x.getUTCDate()} ${x.toLocaleString("en-GB", { month: "long", timeZone: "UTC" })} ${x.getUTCFullYear()}` },
+    km: { prev: "← ថ្ងៃមុន", next: "ថ្ងៃបន្ទាប់ →", d: (x) => `${String(x.getUTCDate()).padStart(2, "0")}/${String(x.getUTCMonth() + 1).padStart(2, "0")}/${x.getUTCFullYear()}` },
+    zh: { prev: "← 前一天", next: "后一天 →", d: (x) => `${x.getUTCFullYear()}年${x.getUTCMonth() + 1}月${x.getUTCDate()}日` },
+  };
+  const DAY_CSS = '<style>.mbs-days{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;max-width:1100px;margin:26px auto;padding:0 16px}'
+    + '.mbs-days a{display:inline-flex;flex-direction:column;gap:2px;padding:12px 18px;border:1px solid #7e673a;border-radius:14px;background:#1b1734;color:#f2d27d;text-decoration:none;font-weight:700;line-height:1.3}'
+    + '.mbs-days a small{color:#d7d1e8;font-weight:400}.mbs-days a.mbs-next{margin-left:auto;text-align:right}</style>';
+  let dayCount = 0;
+  for (const [lang, dir] of [["en", "blog"], ["km", "km/blog"], ["zh", "zh/blog"]]) {
+    const full = path.join(DIST, dir);
+    if (!fs.existsSync(full)) continue;
+    const have = new Set(fs.readdirSync(full).filter((f) => /^daily-fortune-\d{4}-\d\d-\d\d\.html$/.test(f)));
+    for (const f of have) {
+      const iso = f.slice(14, 24), day = Date.parse(iso + "T00:00:00Z");
+      const nb = (k) => { const x = new Date(day + k * 86400000); return [x, `daily-fortune-${x.toISOString().slice(0, 10)}.html`]; };
+      const [px, pf] = nb(-1), [nx, nf] = nb(1), T = DN[lang];
+      if (!have.has(pf) && !have.has(nf)) continue;
+      const p = path.join(full, f); let h = fs.readFileSync(p, "utf8");
+      if (h.includes('class="mbs-days"')) continue;
+      const nav = `<nav class="mbs-days" aria-label="Other days">`
+        + (have.has(pf) ? `<a class="mbs-prev" href="${pf.replace(/\.html$/, "")}">${T.prev}<small>${T.d(px)}</small></a>` : "")
+        + (have.has(nf) ? `<a class="mbs-next" href="${nf.replace(/\.html$/, "")}">${T.next}<small>${T.d(nx)}</small></a>` : "")
+        + `</nav>`;
+      const e = h.indexOf("</main>");
+      if (e < 0) continue;
+      h = h.slice(0, e) + nav + h.slice(e);
+      h = h.replace("</head>", DAY_CSS + "</head>");
+      fs.writeFileSync(p, h); dayCount++;
+    }
+  }
+  console.log(`build-site: related-articles row on ${relCount} English articles; day links on ${dayCount} daily fortune pages`);
+}
+
 // ---------------------------------------------------------------- Adsterra ad slots (English, Chinese and Khmer pages)
 // (Khmer pages were added at the owner's request on 26/10/2026.) Three slots at most per page: a top banner under the site header, one 300x250 inside the
 // content and one native banner near the end. js/ads.js fills them when they come near the screen.
@@ -492,9 +582,15 @@ if (SCHEDULED.length) {
         }
         const minD = Math.min(...cands.map((c) => c[0])), top = cands.filter((c) => c[0] === minD).map((c) => c[1]);
         const at = top.length >= 3 ? top[2] : top.length === 2 ? top[1] : -1;
+        // long pages (over 1,300 words in the main content): a second 300x250 about 60% of the way down
+        const words = h.slice(m, end).replace(/<(script|style)[\s\S]*?<\/\1>/g, " ").replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+        const at2 = words > 1300 && top.length >= 6 ? top[Math.floor(top.length * 0.6)] : -1;
+        if (at2 > at + 1 && at > 0) h = h.slice(0, at2) + slot("box") + h.slice(at2);
         if (at > 0) h = h.slice(0, at) + slot("box") + h.slice(at);
-        const e = h.indexOf("</main>", m);
-        if (e > 0) h = h.slice(0, e) + slot("native") + h.slice(e);
+        // the native banner: just before the "What's next?" box on articles (higher than the very end), else at the end
+        const ns = h.indexOf('<aside class="next-steps"', m), e = h.indexOf("</main>", m);
+        const ne = ns > 0 && ns < e ? ns : e;
+        if (ne > 0) h = h.slice(0, ne) + slot("native") + h.slice(ne);
       } else {
         const fo = h.lastIndexOf("<footer");
         if (fo > 0) h = h.slice(0, fo) + slot("native") + h.slice(fo);
