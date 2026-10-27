@@ -110,8 +110,7 @@
   }
   function start() {
     rails();
-    var wideRails = railsOn();
-    var slots = document.querySelectorAll(".mbs-ad[data-ad]" + (wideRails ? ":not([data-ad=mid])" : ""));
+    var slots = document.querySelectorAll(".mbs-ad[data-ad]");   // between-section 728x90 ads show on every screen size, with or without side ads
     if (!("IntersectionObserver" in window)) { for (var i = 0; i < slots.length; i++) fill(slots[i]); return; }
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); fill(e.target); } });
