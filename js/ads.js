@@ -7,10 +7,10 @@
   var NATIVE = "f09efb6f84e744d5ad358f03efbf68db";
   var BANNER = { box: ["be82b735bb4822651f6266ea177098d1", 300, 250], top_d: ["18e30a22b3ffe8fb2229cd25f31ba870", 728, 90], top_m: ["3e5e00c17d44d21efb07540becb72519", 320, 50],
     sky600: ["89c8bc55c8616f881f45a06e7d8a4594", 160, 600], sky300: ["352da5bdc6fa784c5fc4d6576ca3265b", 160, 300] };
-  // computers and laptops (1,280 px and wider): tall banners down each side of the page (left and right side bars),
+  // computers, laptops and landscape tablets (1,024 px and wider): tall banners down each side of the page (left and right side bars),
   // one pair beside each section, scrolling with the page. The class "mbs-rails" on <html> adds 184 px of space on each side of the page so
   // the side bars never cover the content; on narrower screens the side bars are hidden and the section ads show instead.
-  var RAIL_MIN = 1280, root = document.documentElement;
+  var RAIL_MIN = 1024, root = document.documentElement;
   var queue = [], busy = false;
   function next() {
     if (busy || !queue.length) return;
@@ -35,7 +35,8 @@
       el.appendChild(n); el.appendChild(c);
       return;
     }
-    var wide = window.innerWidth >= 760;
+    // 728x90 only where the slot itself is wide enough (side ads make the content column narrower on small laptops)
+    var wide = window.innerWidth >= 760 && el.getBoundingClientRect().width >= 740;
     // top: 728x90 on wide screens, 320x50 on phones; mid (homepage, between sections): 728x90 or 300x250; box: 300x250
     queue.push({ el: el, k: t === "top" ? (wide ? "top_d" : "top_m") : t === "mid" ? (wide ? "top_d" : "box") : "box" });
     next();
@@ -91,13 +92,37 @@
       for (var j = 0; j < 2; j++) { pairs[i][j].style.top = (tops[i] || 0) + "px"; pairs[i][j].style.display = i >= tops.length ? "none" : ""; }
     }
   }
+  // safety check: with the side-ad space added, does every bit of content still sit between the side ads? (some pages
+  // have wide grids that cannot shrink; on those pages, at that screen size, the side ads are simply not shown)
+  var GUTTER = 176;
+  function fits() {
+    var els = document.querySelectorAll("main *, section *, article *"), W = window.innerWidth;
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (!/^(P|H1|H2|H3|H4|A|IMG|BUTTON|LI|TD|TH|INPUT|SELECT|LABEL|SPAN)$/.test(el.tagName) || !el.offsetWidth) continue;
+      if (el.closest(".mbs-bleed, .site-header, footer, .mbs-rail, .mbs-ad")) continue;
+      var r = el.getBoundingClientRect(), L = r.left, R = r.right;
+      for (var a = el.parentElement; a && a !== document.body; a = a.parentElement) {
+        var ox = getComputedStyle(a).overflowX;
+        if (ox !== "visible") { var ab = a.getBoundingClientRect(); L = Math.max(L, ab.left); R = Math.min(R, ab.right); }
+      }
+      if (R - L < 1) continue;
+      if (L < GUTTER || R > W - GUTTER) return false;
+    }
+    return true;   // (no whole-page width test: the menu bar is still wide for a moment while it collapses into its button)
+  }
   function rails() {
     if (!railsOn()) return;
     // a hero whose background runs the full width of the screen keeps doing so (no side ads sit next to it)
     var hero = heroBlock(), bleed = hero && hero.getBoundingClientRect().width >= window.innerWidth - 40;
     root.classList.add("mbs-rails");
     if (bleed) hero.classList.add("mbs-bleed");
-    window.addEventListener("resize", function () { root.classList.toggle("mbs-rails", railsOn()); layoutRails(); });
+    if (!fits()) { root.classList.remove("mbs-rails"); if (bleed) hero.classList.remove("mbs-bleed"); return; }
+    window.addEventListener("resize", function () {
+      root.classList.toggle("mbs-rails", railsOn());
+      if (railsOn() && !fits()) root.classList.remove("mbs-rails");
+      layoutRails();
+    });
     if ("IntersectionObserver" in window) sideIO = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (!e.isIntersecting || e.target.getAttribute("data-filled")) return;
