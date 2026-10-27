@@ -443,6 +443,24 @@ const POSES = {
   ],
 };
 const POSE = Object.fromEntries(Object.entries(POSES).map(([a, l]) => [a, l[0]]));
+// The day's element, from the traditional 60-day stem-and-branch count (1 October 1949 was a Jia-zi day; the branch from
+// the same count is the site's day animal). The stem gives the element: Jia/Yi Wood, Bing/Ding Fire, Wu/Ji Earth,
+// Geng/Xin Metal, Ren/Gui Water; odd stems are Yin. Used for the element magic in the action scenes and the captions.
+const STEMS = ["Jia", "Yi", "Bing", "Ding", "Wu", "Ji", "Geng", "Xin", "Ren", "Gui"];
+const BRANCHES = ["zi", "chou", "yin", "mao", "chen", "si", "wu", "wei", "shen", "you", "xu", "hai"];
+const ELEMENTS5 = {
+  Wood: { km: "ឈើ", emo: "🌿", fx: "fresh green leaves, glowing jade vines and young bamboo shoots that sprout and spiral through the air" },
+  Fire: { km: "ភ្លើង", emo: "🔥", fx: "warm red-gold embers, small dancing flame-petals and rising sparks that never burn anything" },
+  Earth: { km: "ដី", emo: "⛰️", fx: "glowing golden dust, floating amber stones and warm sand-gold light rising from the ground" },
+  Metal: { km: "លោហៈ", emo: "✨", fx: "bright silver-white sparkles, shimmering blades of light and softly chiming silver stars" },
+  Water: { km: "ទឹក", emo: "💧", fx: "flowing ribbons of clear blue water, rippling rings of light and cool silver-blue mist" },
+};
+function dayElement(iso) {
+  const n = Math.round((Date.parse(iso + "T00:00:00Z") - Date.parse("1949-10-01T00:00:00Z")) / 86400000);
+  const st = ((n % 10) + 10) % 10, br = ((n % 12) + 12) % 12;
+  const el = ["Wood", "Fire", "Earth", "Metal", "Water"][Math.floor(st / 2)], yin = st % 2 === 1;
+  return { el, yin, yy: yin ? "Yin" : "Yang", yyKm: yin ? "យិន" : "យ៉ាង", pillar: `${STEMS[st]}-${BRANCHES[br]}`, ...ELEMENTS5[el] };
+}
 // the move for each sign on a given day: changes every day, and two signs rarely share the same move number
 const posesFor = (iso) => { const n = Math.round(Date.parse(iso + "T00:00:00Z") / 86400000);
   return Object.fromEntries(Object.keys(POSES).map((a, i) => [a, POSES[a][(n + i * 2 + Math.floor(n / 6)) % POSES[a].length]])); };
@@ -582,7 +600,8 @@ function splitLines(text, lang) {
 }
 
 function buildPack(iso, F, forSign, data = null, P = null) {
-  const POSE = posesFor(iso);   // today's action move for each sign (a new one every day)
+  const DEL = dayElement(iso);   // today's element (Wood, Fire, Earth, Metal or Water)
+  const POSE = Object.fromEntries(Object.entries(posesFor(iso)).map(([a, m]) => [a, `${m}, as today's ${DEL.el} magic swirls around them: ${DEL.fx}`]));   // today's action move for each sign (a new one every day), with the day's element
   const sign = (a) => F.signs.find((s) => s.animal === a);
   const day = F.dayAnimal, dayKm = F.dayAnimalKm, lucky = F.highlights.topLucky, careful = F.highlights.careful;
   const km = (a) => sign(a).nameKm;
@@ -1120,8 +1139,8 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
 
   // titles and captions for the luckiest-animal videos, in both languages
   const longDateKm = `ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)}`;
-  const factsEn = [`Lucky color: ${cen}`, `Best time: ${dd.lucky.time}`, `Lucky direction: ${dir}`, `Lucky numbers: ${n0.d1} · ${n0.d2} · ${n0.d3}`];
-  const factsKm = [`ពណ៌សំណាង៖ ពណ៌${ckm}`, `ពេលល្អ៖ ${dd.lucky.time}`, `ទិសសំណាង៖ ទិស${dirKm}`, `លេខសំណាង៖ ${n0.d1} · ${n0.d2} · ${n0.d3}`];
+  const factsEn = [`Day element: ${DEL.yy} ${DEL.el} ${DEL.emo}`, `Lucky color: ${cen}`, `Best time: ${dd.lucky.time}`, `Lucky direction: ${dir}`, `Lucky numbers: ${n0.d1} · ${n0.d2} · ${n0.d3}`];
+  const factsKm = [`ធាតុថ្ងៃនេះ៖ ${DEL.km} (${DEL.yyKm}) ${DEL.emo}`, `ពណ៌សំណាង៖ ពណ៌${ckm}`, `ពេលល្អ៖ ${dd.lucky.time}`, `ទិសសំណាង៖ ទិស${dirKm}`, `លេខសំណាង៖ ${n0.d1} · ${n0.d2} · ${n0.d3}`];
   const chapKm = [["0:00", "សេចក្ដីផ្ដើម"], ...F.signs.map((sg, i) => [mmss((4 + i * 2) * 10), `ឆ្នាំ${sg.nameKm} – ${sg.label.km}`]), [mmss((4 + 24) * 10), "បញ្ចប់"]];
   const POSTS = {
     "60s": [
@@ -1370,6 +1389,7 @@ ${srtVid[v.id].en}\`\`\``;
   const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃឆ្នាំ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
+Day element: ${DEL.yy} ${DEL.el} ${DEL.emo} (${DEL.pillar} day; ធាតុ${DEL.km}) · every action scene today carries ${DEL.el} magic: ${DEL.fx}.
 Format: vertical 9:16 (YouTube Shorts, Facebook Reels, TikTok), about 45 seconds: 4 Veo scenes of about 8 seconds, then a lucky-numbers scene of about 10–12 seconds.
 Two versions: make the pictures once, then record a Khmer voice-over and an English voice-over (two videos, or one video with both subtitle tracks).
 Ratings, lucky signs and lucky numbers come from the site's fixed rules and match the website's daily fortune for this date.${same ? "" : "\nVoice-over wording: standard script (this pack was made ahead; the site's own daily wording appears the day before)."}
