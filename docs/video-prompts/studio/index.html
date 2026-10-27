@@ -343,20 +343,111 @@ const LOOK = Object.fromEntries(Object.keys(LOOK_DESIGN).map((a) => [a, `${FLOW_
 // magical, powerful action for each animal (scene 1 hero moment)
 // big magical action for each sign, in the style of a Chinese fantasy (xianxia) drama: the animal and its guardian act
 // together. Each line follows "The rat ..." / "it ...", so it starts with what the animal does.
-const POSE = {
-  Rat: "darts up onto its guardian's shoulder as the guardian springs into a flying wuxia leap across the temple rooftops, twin golden daggers flashing, and lands in slow motion as a storm of glowing gold coins bursts outward like sword energy",
-  Ox: "lowers its gold-capped horns and charges as its guardian slams a great bronze staff into the ground, sending a shockwave of golden qi rippling across the pond, then both rise into the sky on swirling golden clouds",
-  Tiger: "springs forward beside its guardian, who unleashes a spinning flying kick in slow motion trailing fiery golden light, and together they land in a low crouch as a ring of golden flame-flowers bursts around them",
-  Rabbit: "leaps high into the air with its guardian, who flies on long silk ribbons in a graceful arc across the full moon, scattering a trail of glowing jade petals and silver moonlight sparks",
-  Dragon: "uncoils and soars up around the temple towers as its guardian rides the wind behind it standing on a flying sword, both spiralling through clouds of golden light while a glowing pearl lights up the sky",
-  Snake: "rises in a graceful spiral around its guardian, who draws her sword in slow motion and sweeps a crescent of silver sword energy through the air as glowing rings of light ripple across the terrace",
-  Horse: "rears up as its guardian vaults onto its back in one flying leap, then golden wings of light unfold and they gallop up into the sky across the full moon with a trail of sparks behind them",
-  Goat: "bounds from lotus to lotus beside its guardian, who glides over the water in a weightless qinggong run, every step blooming into golden light and opening flowers",
-  Monkey: "somersaults onto its guardian's back as the guardian spins a glowing golden staff in a dazzling flurry of martial-arts moves, then plants the staff and vaults high into the night sky",
-  Rooster: "spreads its blazing wings as its guardian whirls through a sweeping martial-arts fan dance, and a burst of golden feathers and fiery light rays fans out behind them",
-  Dog: "races beside its guardian, who leaps over the pond in a flying spin as a shield of golden light flares around them both, and they land back to back in a heroic pose",
-  Pig: "spins up inside a glowing golden bubble as its guardian strikes a powerful open-palm pose, sending a whirlwind of golden coins, petals and shining qi energy spiralling into the sky",
+// big magical action for each sign, in the style of a Chinese fantasy (xianxia) drama: the animal and its guardian act
+// together. Six moves per sign; buildPack picks a different one each day. Each line follows "The rat ..." / "it ...",
+// so it starts with what the animal does.
+const POSES = {
+  Rat: [
+    "darts up onto its guardian's shoulder as the guardian springs into a flying wuxia leap across the temple rooftops, twin golden daggers flashing, and lands in slow motion as a storm of glowing gold coins bursts outward like sword energy",
+    "scurries along a glowing golden rope as its guardian runs straight up a carved temple pillar in a weightless qinggong dash, flips at the top and rains down a shower of shining gold coins",
+    "vanishes in a puff of golden smoke and reappears on its guardian's hand, who spins through the air throwing glowing golden stars that burst into sparkling fireworks over the pond",
+    "dashes in a blur around its guardian, who whirls a long glowing scroll like a ribbon weapon, unrolling it into a spinning golden shield covered in shining characters",
+    "races across the stepping stones beside its guardian, who skims over the pond in three giant gliding leaps, each landing sending up a fountain of golden light",
+    "leaps into its guardian's sleeve as the guardian blinks in and out of sight across the terrace in quick flashes of gold, ending in a still heroic pose as coins rain softly down",
+  ],
+  Ox: [
+    "lowers its gold-capped horns and charges as its guardian slams a great bronze staff into the ground, sending a shockwave of golden qi rippling across the pond, then both rise into the sky on swirling golden clouds",
+    "stamps one mighty hoof as its guardian lifts a huge golden temple bell with one hand and strikes it, sending rings of golden sound-waves rolling across the sky",
+    "walks forward slowly and powerfully as its guardian pushes both palms toward the moon, and a giant glowing golden ox spirit rises from the pond behind them",
+    "plants its feet firmly as its guardian spins a heavy bronze staff overhead in slow motion, whipping up a whirlwind of golden petals and glowing dust",
+    "charges up the temple steps beside its guardian, who leaps and brings a great hammer down onto the stone, and a wave of blooming golden lotuses races across the pond",
+    "rises onto a floating golden cloud with its guardian, who stands firm as wind and lightning-gold sparks swirl around them like a storm they control",
+  ],
+  Tiger: [
+    "springs forward beside its guardian, who unleashes a spinning flying kick in slow motion trailing fiery golden light, and together they land in a low crouch as a ring of golden flame-flowers bursts around them",
+    "bounds across the temple rooftops after its guardian, who sprints along the ridge in a flying wuxia run, then both leap together through a hoop of golden fire",
+    "crouches low as its guardian draws two short golden swords and spins between the lantern posts in a blur of slow-motion slashes that leave glowing trails in the air",
+    "leaps through the air in a huge arc as its guardian launches a palm strike, and a glowing golden tiger spirit bursts from the guardian's hands across the pond",
+    "circles its guardian, who stamps the ground and sends a ring of golden flame racing outward, then the tiger springs through the flames unharmed",
+    "races up a waterfall of golden light beside its guardian, who runs vertically up the cascade and lands on the top in a fierce, proud pose",
+  ],
+  Rabbit: [
+    "leaps high into the air with its guardian, who flies on long silk ribbons in a graceful arc across the full moon, scattering a trail of glowing jade petals and silver moonlight sparks",
+    "hops onto the full moon's reflection on the pond as its guardian dances across the water with a glowing jade flute, each note blooming into silver lotus flowers",
+    "springs from cloud to cloud beside its guardian, who glides on a large paper lantern drifting up toward the moon, scattering moon-silver sparks",
+    "bounds in a circle as its guardian twirls two long silk sleeves, and the sleeves stretch into glowing ribbons that wrap the temple towers in soft light",
+    "leaps through a ring of floating jade petals as its guardian spins in mid-air with a crescent moon-blade, cutting a glowing silver arc across the sky",
+    "jumps into its guardian's arms as the guardian floats gently upward through falling cherry blossoms, petals swirling into a shining spiral around them",
+  ],
+  Dragon: [
+    "uncoils and soars up around the temple towers as its guardian rides the wind behind it standing on a flying sword, both spiralling through clouds of golden light while a glowing pearl lights up the sky",
+    "bursts up out of the reflecting pool in a tower of golden water as its guardian leaps from its head to the top of the temple spire, sword raised to the moon",
+    "coils around its guardian, who stands perfectly still and then sweeps both arms upward, raising a great swirl of glowing clouds and golden rain",
+    "dives through the clouds as its guardian rides on its back holding a glowing pearl, and lightning-gold light flashes across the night sky",
+    "chases a glowing pearl around the temple towers while its guardian leaps from tower to tower in giant weightless bounds, catching the pearl in mid-air",
+    "rises in a spiral behind its guardian, who draws a sword and slashes a huge glowing dragon-shaped arc of golden energy across the full moon",
+  ],
+  Snake: [
+    "rises in a graceful spiral around its guardian, who draws her sword in slow motion and sweeps a crescent of silver sword energy through the air as glowing rings of light ripple across the terrace",
+    "slides in silent S-curves around the terrace as its guardian spins her long silver whip-sword, which bends and flows through the air like a living ribbon of light",
+    "wraps protectively around its guardian, who rises into the air in a slow, graceful turn while glowing silver scales of light swirl around them like a shield",
+    "glides across the pond's surface as its guardian walks on the water beside it, each step leaving a ring of moonlit silver light",
+    "lifts its head high as its guardian moves through a slow, flowing sword form, her blade leaving shimmering silver trails that hang in the air like calligraphy",
+    "forms a glowing silver circle on the ground as its guardian leaps into the centre, plants her sword and a pillar of silver and gold light shoots up into the sky",
+  ],
+  Horse: [
+    "rears up as its guardian vaults onto its back in one flying leap, then golden wings of light unfold and they gallop up into the sky across the full moon with a trail of sparks behind them",
+    "gallops across the surface of the pond with its guardian on its back, hooves splashing golden light, as they leap over the temple wall in slow motion",
+    "races along the temple terrace while its guardian stands upright on its back, spinning a long spear that throws arcs of golden light",
+    "leaps through a curtain of golden lanterns with its guardian riding, the lanterns scattering and rising like fireflies around them",
+    "rears beside its guardian, who leaps onto its back mid-gallop, and together they gallop up a staircase of glowing golden clouds",
+    "runs in a wide circle around its guardian, who stands in the centre and raises a banner that unfurls into a great wave of golden light",
+  ],
+  Goat: [
+    "bounds from lotus to lotus beside its guardian, who glides over the water in a weightless qinggong run, every step blooming into golden light and opening flowers",
+    "climbs a steep cliff of glowing stones with sure-footed leaps while its guardian flies up beside it on a drifting cloud, scattering golden blossoms",
+    "lowers its curled horns playfully as its guardian spins a glowing jade staff, and every turn sends rings of soft green and gold light across the terrace",
+    "leaps from the top of the temple steps with its guardian, both floating down gently on a cloud of glowing petals",
+    "dances lightly around its guardian, who paints a glowing golden mountain in the air with a giant brush, and the painting comes to life with flowers",
+    "skips across a bridge of floating lotus leaves beside its guardian, who plays a glowing zither as golden notes drift like butterflies",
+  ],
+  Monkey: [
+    "somersaults onto its guardian's back as the guardian spins a glowing golden staff in a dazzling flurry of martial-arts moves, then plants the staff and vaults high into the night sky",
+    "leaps from lantern to lantern as its guardian makes a glowing golden staff stretch longer and longer, then rides the staff high into the sky",
+    "splits into three golden copies of itself in a playful flash while its guardian spins in a whirl of martial-arts kicks, all landing in the same heroic pose",
+    "swings around a temple pillar as its guardian leaps onto a glowing cloud and surfs it across the sky, laughing silently with joy",
+    "flips onto its guardian's head as the guardian blows on a handful of golden hairs that turn into a swirl of glowing butterflies",
+    "chases its guardian across the rooftops in a game of tag, both leaping and spinning in slow-motion acrobatics against the full moon",
+  ],
+  Rooster: [
+    "spreads its blazing wings as its guardian whirls through a sweeping martial-arts fan dance, and a burst of golden feathers and fiery light rays fans out behind them",
+    "flies up to the top of a temple spire as its guardian leaps after it in a soaring arc, and a burst of golden sunrise light breaks across the night sky",
+    "struts proudly as its guardian spins a pair of golden fans, sending feathers of light swirling into a glowing phoenix shape above them",
+    "beats its blazing wings and a gust of golden wind lifts its guardian into the air in a slow-motion spinning kick",
+    "glides down from the sky onto its guardian's arm as the guardian sweeps a glowing sword in a wide arc, leaving a trail of shining feathers",
+    "spreads its wings wide as its guardian strikes a tall heroic pose on a rooftop, and rays of golden light fan out like a rising sun behind them",
+  ],
+  Dog: [
+    "races beside its guardian, who leaps over the pond in a flying spin as a shield of golden light flares around them both, and they land back to back in a heroic pose",
+    "bounds up the temple steps beside its guardian, who vaults over the stone balustrade in a flying somersault and lands in a protective stance",
+    "runs in a glowing circle around its guardian, drawing a ring of golden light, as the guardian raises a shining shield that flares like the sun",
+    "leaps through the air to catch a glowing golden disc thrown by its guardian, who spins and catches it back in one smooth slow-motion move",
+    "races across the rooftops after its guardian, both leaping a wide gap in one giant bound against the full moon",
+    "stands guard as its guardian draws a sword and traces a glowing protective seal in the air, which spreads into a dome of golden light over the temple",
+  ],
+  Pig: [
+    "spins up inside a glowing golden bubble as its guardian strikes a powerful open-palm pose, sending a whirlwind of golden coins, petals and shining qi energy spiralling into the sky",
+    "rolls happily down a hill of golden clouds as its guardian surfs down beside it on a giant lotus leaf, scattering coins and petals",
+    "bounces on a cloud like a trampoline beside its guardian, who flips high into the air and lands softly with a shower of golden light",
+    "trots around its guardian, who swings a glowing rake in a graceful martial-arts form, each sweep drawing golden harvest light across the ground",
+    "floats up on a big glowing lantern with its guardian, who spins a staff that scatters lucky golden coins all over the moonlit pond",
+    "wiggles with joy as its guardian claps both hands and a giant golden gourd bursts open, spilling glowing coins, fruit and flowers into the sky",
+  ],
 };
+const POSE = Object.fromEntries(Object.entries(POSES).map(([a, l]) => [a, l[0]]));
+// the move for each sign on a given day: changes every day, and two signs rarely share the same move number
+const posesFor = (iso) => { const n = Math.round(Date.parse(iso + "T00:00:00Z") / 86400000);
+  return Object.fromEntries(Object.keys(POSES).map((a, i) => [a, POSES[a][(n + i * 2 + Math.floor(n / 6)) % POSES[a].length]])); };
 // how each animal moves when it acts (it never talks): used so the characters feel alive in every clip
 const ANIM = {
   Rat: "its whiskers twitch, its little nose sniffs the air, its long tail flicks and it scurries in quick, playful little hops",
@@ -493,6 +584,7 @@ function splitLines(text, lang) {
 }
 
 function buildPack(iso, F, forSign, data = null, P = null) {
+  const POSE = posesFor(iso);   // today's action move for each sign (a new one every day)
   const sign = (a) => F.signs.find((s) => s.animal === a);
   const day = F.dayAnimal, dayKm = F.dayAnimalKm, lucky = F.highlights.topLucky, careful = F.highlights.careful;
   const km = (a) => sign(a).nameKm;
