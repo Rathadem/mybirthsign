@@ -448,7 +448,8 @@ if (SCHEDULED.length) {
 // content and one native banner near the end. js/ads.js fills them when they come near the screen.
 {
   const SKIP = /^(about|privacy|terms|contact|404|google[0-9a-f]+)\.html$/;
-  const CSS = '<style>.mbs-ad{display:flex;justify-content:center;align-items:center;margin:18px auto;max-width:100%;overflow:hidden;clear:both}.mbs-ad[data-ad=top]{min-height:50px}.mbs-ad[data-ad=box],.mbs-ad[data-ad=mid]{min-height:250px}@media(min-width:760px){.mbs-ad[data-ad=mid]{min-height:90px}}@media(min-width:760px){.mbs-ad[data-ad=top]{min-height:90px}}.mbs-ad iframe{max-width:100%}.mbs-rail{position:absolute;top:0;z-index:5;width:160px;min-height:600px;display:none}.mbs-rail-left{left:12px}.mbs-rail-right{right:12px}html.mbs-rails .mbs-rail{display:block}html.mbs-rails body{padding-left:184px;padding-right:184px}html.mbs-rails .site-header,html.mbs-rails .mbs-bleed{margin-left:-184px;margin-right:-184px}html.mbs-rails .mbs-ad[data-ad=mid]{display:none}@media(max-width:1599px){html.mbs-rails .fx-grid{grid-template-columns:repeat(3,1fr)}}</style>';
+  const CSS = '<style>.mbs-ad{display:flex;justify-content:center;align-items:center;margin:18px auto;max-width:100%;overflow:hidden;clear:both}.mbs-ad[data-ad=top]{min-height:50px}.mbs-ad[data-ad=box],.mbs-ad[data-ad=mid]{min-height:250px}@media(min-width:760px){.mbs-ad[data-ad=mid]{min-height:90px}}@media(min-width:760px){.mbs-ad[data-ad=top]{min-height:90px}}.mbs-ad iframe{max-width:100%}.mbs-rail{position:absolute;top:0;z-index:5;width:160px;min-height:600px;display:none}.mbs-rail-left{left:12px}.mbs-rail-right{right:12px}html.mbs-rails .mbs-rail{display:block}html.mbs-rails body{padding-left:184px;padding-right:184px}html.mbs-rails .site-header,html.mbs-rails .mbs-bleed{margin-left:-184px;margin-right:-184px}html.mbs-rails .mbs-ad[data-ad=mid]{display:none}.mbs-ref{text-align:center;margin:26px auto;padding:0 16px;max-width:100%}.mbs-ref img{display:inline-block;max-width:100%;height:auto;border-radius:6px}@media(max-width:1599px){html.mbs-rails .fx-grid{grid-template-columns:repeat(3,1fr)}}</style>';
+  const REF = '<div class="mbs-ref"><a href="https://beta.publishers.adsterra.com/referral/3SG9CPmn3w" rel="nofollow sponsored noopener" target="_blank"><img alt="banner" src="https://landings-cdn.adsterratech.com/referralBanners/gif/700x90_adsterra_reff.gif" width="700" height="90" loading="lazy"></a></div>';
   const slot = (k) => `<div class="mbs-ad" data-ad="${k}" aria-label="Advertisement"></div>`;
   let pagesWithAds = 0;
   (function walk(d) {
@@ -466,7 +467,9 @@ if (SCHEDULED.length) {
         const end = h.indexOf("</main>", m), starts = [];
         const re = /<section class="(?:fx-sec\b|hm-final\b)[^"]*"/g; re.lastIndex = m; let mt;
         while ((mt = re.exec(h)) && mt.index < end) starts.push(mt.index);
-        for (const at of starts.reverse()) h = h.slice(0, at) + slot("mid") + h.slice(at);
+        // the owner's Adsterra referral banner: once per homepage, in the middle (before the 5th section, "Tools")
+        const refAt = starts[Math.min(4, starts.length - 1)];
+        for (const at of starts.reverse()) h = h.slice(0, at) + (at === refAt ? REF : "") + slot("mid") + h.slice(at);
         const e = h.indexOf("</main>", m);
         h = h.slice(0, e) + slot("native") + h.slice(e);
         h = h.replace("</head>", `${CSS}<script src="/js/ads.js" defer></script></head>`);
