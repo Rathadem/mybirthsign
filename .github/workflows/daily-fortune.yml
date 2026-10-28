@@ -16,6 +16,10 @@ on:
       date:
         description: "Date to generate (YYYY-MM-DD). Leave empty for today (Asia/Phnom_Penh)."
         required: false
+      cards_only:
+        description: "Only draw the Telegram cards for that date (no new fortune post, nothing else changes)."
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -56,6 +60,7 @@ jobs:
       # standard wording) and
       # yesterday's data simply stays in place.
       - name: Daily data (rules + Claude wording, validated)
+        if: ${{ github.event.inputs.cards_only != 'true' }}
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -76,6 +81,7 @@ jobs:
           fi
 
       - name: Generate the fortune post
+        if: ${{ github.event.inputs.cards_only != 'true' }}
         env:
           FORTUNE_TZ: Asia/Phnom_Penh
           DAY: ${{ steps.day.outputs.date }}
@@ -88,6 +94,7 @@ jobs:
           fi
 
       - name: Commit and push (Netlify deploys on push)
+        if: ${{ github.event.inputs.cards_only != 'true' }}
         run: |
           if [ -z "$(git status --porcelain)" ]; then
             echo "Nothing new to publish."
@@ -100,3 +107,31 @@ jobs:
           git commit -m "Daily fortune: ${{ steps.day.outputs.date }} (${{ steps.day.outputs.mode }})"
           git pull --rebase origin main
           git push origin HEAD:main
+
+      # The day's share cards for the Telegram channel (the Video Studio's 5 cards, Khmer and English), drawn from the
+      # built page with the site's own card code and kept on the "telegram-cards" branch (only the newest days, so the
+      # site's own history does not grow). netlify/functions/telegram-daily.mjs sends them after the 00:30 text post.
+      # If anything here fails, the text post still goes out as before.
+      - name: Telegram cards
+        continue-on-error: true
+        env:
+          DAY: ${{ steps.day.outputs.date }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm install --no-save --no-package-lock --silent playwright@1.56.0
+          npx playwright install --with-deps chromium > /dev/null
+          node scripts/build-site.mjs > /dev/null
+          node scripts/telegram-cards.mjs --date "$DAY" --out "$RUNNER_TEMP/tg-cards"
+          [ -f "$RUNNER_TEMP/tg-cards/$DAY/cards.json" ] || { echo "No cards drawn for $DAY."; exit 0; }
+          W="$RUNNER_TEMP/tc"; rm -rf "$W"; mkdir -p "$W"
+          if git fetch -q origin +refs/heads/telegram-cards:refs/remotes/origin/telegram-cards 2>/dev/null; then
+            git archive origin/telegram-cards | tar -x -C "$W"
+          fi
+          rm -rf "$W/$DAY"; cp -r "$RUNNER_TEMP/tg-cards/$DAY" "$W/"
+          cd "$W"
+          ls -d 20??-??-??/ 2>/dev/null | sort | head -n -3 | xargs -r rm -rf   # keep the 3 newest days
+          printf "Daily share cards for the MyBirthSign Telegram channel, made by .github/workflows/daily-fortune.yml.\nOnly the newest days are kept; this branch is rewritten every day.\n" > README.md
+          git init -q; git checkout -q -b telegram-cards; git add -A
+          git -c user.name=daily-fortune-bot -c user.email=daily-fortune-bot@users.noreply.github.com commit -qm "Telegram cards for $DAY [skip netlify]"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:telegram-cards
+          echo "::notice::Telegram cards for $DAY: $(ls "$W/$DAY" | grep -c jpg) pictures"

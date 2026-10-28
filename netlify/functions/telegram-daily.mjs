@@ -10,17 +10,22 @@
 //                       about 24 hours), so setting it is recommended.
 // The facts come from the day's published data file (/data/daily/<date>.json, made by the daily GitHub job from
 // the site's fixed rules); lucky numbers from js/lucky-digits.js, the same as on the website.
+// After the text, the day's share cards (the Video Studio's 5 cards, Khmer and English) go out as one photo album. They are
+// drawn by the daily GitHub job (scripts/telegram-cards.mjs) and kept on the "telegram-cards" branch of the site's
+// public repository; if they are missing, only the text is posted.
 // The response status shows the outcome in Netlify's request logs: 200 posted, 503 no token, 409 no channel,
 // 424 no data file, 425 old data, 401 bad token, 403 bot is not allowed to post, 400 channel not found, 502 other.
 import luckyDigits from "../../js/lucky-digits.js";
 
 const SITE = "https://mybirthsign.com";
+const CARDS = process.env.TELEGRAM_CARDS_BASE || "https://raw.githubusercontent.com/Rathadem/mybirthsign/telegram-cards";
+const TG_API = process.env.TELEGRAM_API_BASE || "https://api.telegram.org";
 const EMO = { Rat: "🐀", Ox: "🐂", Tiger: "🐯", Rabbit: "🐇", Dragon: "🐉", Snake: "🐍", Horse: "🐎", Goat: "🐐", Monkey: "🐒", Rooster: "🐓", Dog: "🐕", Pig: "🐖" };
 
 const cambodiaToday = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
 
 async function tg(token, method, body) {
-  const res = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+  const res = await fetch(`${TG_API}/bot${token}/${method}`, {
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body || {}),
   });
   return res.json().catch(() => ({ ok: false, description: `HTTP ${res.status}` }));
@@ -68,6 +73,27 @@ export function buildMessage(date, data) {
   return { text: [...km, "", "—", "", ...en].join("\n"), previewUrl: `${SITE}/images/telegram/${day.toLowerCase()}.jpg` };
 }
 
+// the day's cards as one album (2 to 10 photos), uploaded straight to Telegram; returns a short note for the log
+export async function sendCards(token, chat, date) {
+  const r = await fetch(`${CARDS}/${date}/cards.json`, { headers: { "Cache-Control": "no-cache" } }).catch(() => null);
+  if (!r || !r.ok) return `no cards for ${date} (${r ? r.status : "unreachable"})`;
+  const { cards = [] } = await r.json().catch(() => ({}));
+  const form = new FormData(), media = [];
+  form.append("chat_id", String(chat));
+  for (const c of cards.slice(0, 10)) {
+    const im = await fetch(`${CARDS}/${date}/${c.file}`).catch(() => null);
+    if (!im || !im.ok) continue;
+    const key = `card${media.length}`;
+    form.append(key, new Blob([await im.arrayBuffer()], { type: "image/jpeg" }), c.file);
+    media.push({ type: "photo", media: `attach://${key}`, ...(media.length ? {} : { caption: "🃏 កាតសំណាងប្រចាំថ្ងៃ · Today's lucky cards" }) });
+  }
+  if (media.length < 2) return `only ${media.length} card(s) for ${date}; album not sent`;
+  form.append("media", JSON.stringify(media));
+  const res = await fetch(`${TG_API}/bot${token}/sendMediaGroup`, { method: "POST", body: form });
+  const out = await res.json().catch(() => ({ ok: false, description: `HTTP ${res.status}` }));
+  return out.ok ? `sent ${media.length} cards` : `cards refused: ${out.description}`;
+}
+
 export default async () => {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   if (!token) { console.log("telegram-daily: TELEGRAM_BOT_TOKEN is not set; nothing posted."); return new Response("not configured: TELEGRAM_BOT_TOKEN missing", { status: 503 }); }
@@ -82,7 +108,9 @@ export default async () => {
   const out = await tg(token, "sendMessage", { chat_id: chat, text, parse_mode: "HTML", link_preview_options: { url: previewUrl, prefer_large_media: true, show_above_text: true } });
   if (!out.ok) { console.error(`telegram-daily: Telegram refused the post to ${chat}: ${out.description}`); return new Response(`Telegram refused (${out.error_code}): ${out.description}`, { status: out.error_code === 401 ? 401 : out.error_code === 403 ? 403 : out.error_code === 400 ? 400 : 502 }); }
   console.log(`telegram-daily: posted ${date} to ${chat} (message ${out.result.message_id}).`);
-  return new Response(`posted ${date} (message ${out.result.message_id})`, { status: 200 });
+  const cards = await sendCards(token, chat, date).catch((e) => `cards failed: ${e.message}`);
+  console.log(`telegram-daily: ${cards}`);
+  return new Response(`posted ${date} (message ${out.result.message_id}); ${cards}`, { status: 200 });
 };
 
 export const config = { schedule: "30 17 * * *" };
