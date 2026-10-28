@@ -548,7 +548,14 @@ if (SCHEDULED.length) {
       if (st.isDirectory()) { if (!(rel.length === 1 && f === "studio")) walk(p); continue; }
       if (!f.endsWith(".html") || SKIP.test(f) && rel.length <= 2) continue;
       let h = fs.readFileSync(p, "utf8");
-      if (h.includes('class="mbs-ad"')) continue;
+      if (h.includes('class="mbs-ad"')) {
+        // Pages with hand-placed ad slots still need the shared styles and loader.
+        let changed = false;
+        if (!h.includes('.mbs-ad{')) { h = h.replace("</head>", CSS + "</head>"); changed = true; }
+        if (!h.includes('/js/ads.js')) { h = h.replace("</head>", '<script src="/js/ads.js" defer></script></head>'); changed = true; }
+        if (changed) fs.writeFileSync(p, h);
+        continue;
+      }
       const isHome = rel.length <= 2 && f === "index.html" && (rel.length === 1 || rel[0] === "zh" || rel[0] === "km");
       const m = h.indexOf("<main");
       if (isHome && m > 0) {
