@@ -602,6 +602,65 @@ if (SCHEDULED.length) {
   console.log(`build-site: ad slots on ${pagesWithAds} English and Chinese pages`);
 }
 
+// ---------------------------------------------------------------- Localized daily-fortune ads
+// The daily-fortune HTML contains separate en/km/zh content wrappers. The generic ad pass above
+// can place its slot inside the first language wrapper, which is hidden when a visitor switches
+// languages. Add two in-content slots inside each language wrapper so the active language gets ads.
+{
+  const slot = '<div class="mbs-ad" data-ad="box" data-ad-origin="localized-daily" aria-label="Advertisement"></div>';
+  function findWrapperEnd(html, openEnd) {
+    const re = /<\\/?div\\b[^>]*>/gi;
+    re.lastIndex = openEnd;
+    let depth = 1, m;
+    while ((m = re.exec(html))) {
+      if (/^<\\/div/i.test(m[0])) depth--;
+      else if (!/\\/\\s*>$/.test(m[0])) depth++;
+      if (depth === 0) return m.index;
+    }
+    return -1;
+  }
+  function sectionBoundaries(block) {
+    const re = /<\\/?section\\b[^>]*>/gi, out = [];
+    let depth = 0, m;
+    while ((m = re.exec(block))) {
+      if (/^<\\/section/i.test(m[0])) {
+        depth--;
+        if (depth === 0) out.push(re.lastIndex);
+      } else if (!/\\/\\s*>$/.test(m[0])) {
+        if (depth === 0) out.push(-re.lastIndex); // top-level section start, for malformed/unclosed fallback
+        depth++;
+      }
+    }
+    return out.filter((n) => n > 0);
+  }
+  let changed = 0;
+  function walk(d) {
+    if (!fs.existsSync(d)) return;
+    for (const f of fs.readdirSync(d)) {
+      const p = path.join(d, f), st = fs.statSync(p);
+      if (st.isDirectory()) { if (f !== "studio") walk(p); continue; }
+      if (!/^daily-fortune-.*\\.html$/.test(f)) continue;
+      let html = fs.readFileSync(p, "utf8");
+      if (html.includes('data-ad-origin="localized-daily"')) continue;
+      const opens = [...html.matchAll(/<div\\b[^>]*data-lang-content=["'](en|km|zh)["'][^>]*>/gi)];
+      const inserts = [];
+      for (const m of opens) {
+        const start = m.index + m[0].length;
+        const end = findWrapperEnd(html, start);
+        if (end < 0) continue;
+        const block = html.slice(start, end);
+        const boundaries = sectionBoundaries(block);
+        // After the hero and after the fourth top-level section: natural breaks, not between paragraphs.
+        for (const n of [0, 3]) if (boundaries[n] !== undefined) inserts.push(start + boundaries[n]);
+      }
+      for (const at of inserts.sort((a, b) => b - a)) html = html.slice(0, at) + slot + html.slice(at);
+      if (inserts.length) { fs.writeFileSync(p, html); changed++; }
+    }
+  }
+  walk(path.join(DIST, "blog"));
+  console.log(`build-site: localized daily-fortune ad slots added to ${changed} pages`);
+}
+
 // ---------------------------------------------------------------- "Follow us" links (YouTube, Telegram) in every page footer
 {
   const FOLLOW = { en: "Follow us", km: "តាមដានយើង", zh: "关注我们" };
