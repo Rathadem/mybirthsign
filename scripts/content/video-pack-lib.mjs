@@ -140,11 +140,11 @@ export const POSE = Object.fromEntries(Object.entries(POSES).map(([a, l]) => [a,
 const STEMS = ["Jia", "Yi", "Bing", "Ding", "Wu", "Ji", "Geng", "Xin", "Ren", "Gui"];
 const BRANCHES = ["zi", "chou", "yin", "mao", "chen", "si", "wu", "wei", "shen", "you", "xu", "hai"];
 export const ELEMENTS5 = {
-  Wood: { km: "ឈើ", emo: "🌿", fx: "fresh green leaves, glowing jade vines and young bamboo shoots that sprout and spiral through the air" },
-  Fire: { km: "ភ្លើង", emo: "🔥", fx: "warm red-gold embers, small dancing flame-petals and rising sparks that never burn anything" },
-  Earth: { km: "ដី", emo: "⛰️", fx: "glowing golden dust, floating amber stones and warm sand-gold light rising from the ground" },
-  Metal: { km: "លោហៈ", emo: "✨", fx: "bright silver-white sparkles, shimmering blades of light and softly chiming silver stars" },
-  Water: { km: "ទឹក", emo: "💧", fx: "flowing ribbons of clear blue water, rippling rings of light and cool silver-blue mist" },
+  Wood: { km: "ឈើ", q: "growth", qKm: "ការលូតលាស់", emo: "🌿", fx: "fresh green leaves, glowing jade vines and young bamboo shoots that sprout and spiral through the air" },
+  Fire: { km: "ភ្លើង", q: "passion", qKm: "ភាពក្លៀវក្លា", emo: "🔥", fx: "warm red-gold embers, small dancing flame-petals and rising sparks that never burn anything" },
+  Earth: { km: "ដី", q: "stability", qKm: "ស្ថិរភាព", emo: "⛰️", fx: "glowing golden dust, floating amber stones and warm sand-gold light rising from the ground" },
+  Metal: { km: "លោហៈ", q: "clarity", qKm: "ភាពច្បាស់លាស់", emo: "✨", fx: "bright silver-white sparkles, shimmering blades of light and softly chiming silver stars" },
+  Water: { km: "ទឹក", q: "wisdom", qKm: "ប្រាជ្ញា", emo: "💧", fx: "flowing ribbons of clear blue water, rippling rings of light and cool silver-blue mist" },
 };
 export function dayElement(iso) {
   const n = Math.round((Date.parse(iso + "T00:00:00Z") - Date.parse("1949-10-01T00:00:00Z")) / 86400000);
@@ -290,6 +290,12 @@ function splitLines(text, lang) {
   return out.filter(Boolean);
 }
 
+const NUM_WORDS = (n) => { n = Number(n); if (n < 100) return 1; if (n < 1000) return 1 + (n % 100 ? 2 : 0); return 2 + NUM_WORDS(n % 1000) * (n % 1000 ? 1 : 0); };
+const enSpoken = (t) => t.split(/\s+/).filter(Boolean).reduce((s, w) => s + (/^\d+[,.!?:]?$/.test(w) ? NUM_WORDS(w.replace(/\D/g, "")) : 1), 0);
+// a spoken line fits a 10-second clip at Chanda's calm pace: at most 23 English words, at most 125 Khmer characters as spoken
+const fitsClip = (en, kmT) => enSpoken(en) <= 23 && [...kmFlow(kmT)].length <= 125;
+// more words in short scenes: add the first of today's extra sentences that still fits the clip (else keep the line)
+const fuller = ([en, kmT], extras) => { for (const [e, k] of extras) if (fitsClip(`${en} ${e}`, `${kmT} ${k}`)) return [`${en} ${e}`, `${kmT} ${k}`]; return [en, kmT]; };
 export function buildPack(iso, F, forSign, data = null, P = null) {
   const DEL = dayElement(iso);   // today's element (Wood, Fire, Earth, Metal or Water)
   const POSE = Object.fromEntries(Object.entries(posesFor(iso)).map(([a, m]) => [a, `${m}, as today's ${DEL.el} magic swirls around them: ${DEL.fx}`]));   // today's action move for each sign (a new one every day), with the day's element
@@ -342,6 +348,8 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
 
   // 9-scene video for the luckiest animal
   const dl = day.toLowerCase(), friends = lucky.filter((a) => a !== day), S9 = SYMBOL[day], dd = sign(day);
+  const rot = (k, list) => list.map((_, i) => list[(dayNo + k + i) % list.length]);   // today's order of the extra sentences
+  const helper = dd.lucky.helperAnimal, elLine = [`It's a ${DEL.yy} ${DEL.el} day, a day of ${DEL.q}.`, `ថ្ងៃនេះជាថ្ងៃធាតុ${DEL.km} ជាថ្ងៃនៃ${DEL.qKm}។`];
   const dateEn = LD.replace(/^\w+, /, "").replace(/ \d{4}$/, "");
   const dateKm = `ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]}`;
   const nine = [
@@ -447,35 +455,55 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
         `A swirl of golden dust gathers on the temple steps, spins faster and faster, and forms ${LOOK[day]}, which steps out of the light, shakes itself and looks around with delight. Slow push-in, then a gentle orbit.`,
         `A beam of moonlight falls on the still reflecting pool, and ${LOOK[day]} rises slowly out of the glowing water, completely dry, and steps onto a floating lotus, looking around with delight. Low camera at water level, slowly rising.`,
         `Tall carved temple doors swing open, and ${LOOK[day]} walks out through a curtain of golden light and falling lotus petals, then stops and looks straight at the camera. Steady tracking shot backward in front of it.`])} ${alive(day)} ${lockAnimal(day)}`,
-      ...V(3, 2, [
+      ...fuller(V(3, 2, [
         [`${LD.split(", ")[0]}, ${dateEn}: a ${dd.label.en} for everyone born in the Year of the ${day}!`, `${wdKm} ${dateKm} ជា${dd.label.km} សម្រាប់អ្នកកើតឆ្នាំ${dayKm}!`],
         [`It's ${LD.split(", ")[0]}, ${dateEn}, and the ${day} has a ${dd.label.en}!`, `ថ្ងៃនេះ ${wdKm} ${dateKm} ឆ្នាំ${dayKm}មាន${dd.label.km}!`],
-        [`${dateEn} belongs to the ${day}. Year of the ${day}, this ${dd.label.en} is yours!`, `${dateKm} ជាថ្ងៃរបស់ឆ្នាំ${dayKm}។ អ្នកកើតឆ្នាំ${dayKm} ${dd.label.km}នេះ ជារបស់អ្នក!`]])],
+        [`${dateEn} belongs to the ${day}. Year of the ${day}, this ${dd.label.en} is yours!`, `${dateKm} ជាថ្ងៃរបស់ឆ្នាំ${dayKm}។ អ្នកកើតឆ្នាំ${dayKm} ${dd.label.km}នេះ ជារបស់អ្នក!`]]), rot(1, [
+        elLine,
+        ["Stay with me for your lucky color, time and numbers.", "សូមមើលបន្ត ដើម្បីដឹងពណ៌ ពេលវេលា និងលេខសំណាងរបស់អ្នក។"],
+        ["Let's see what this lucky day brings you.", "តោះ មកមើលថា ថ្ងៃសំណាងនេះ នាំអ្វីមកឲ្យអ្នក។"]]).concat([
+        [`A ${DEL.yy} ${DEL.el} day!`, `ថ្ងៃធាតុ${DEL.km}!`], ["Stay with me!", "សូមមើលបន្ត!"]]))],
     mean60: [`What the ${day} means`, `Low-angle hero shot: the ${dl} looks up at the full moon, and ${S9.vis}. ${cap(S9.mood)} mood. Slow upward camera tilt. ${alive(day)} ${lockAnimal(day)}`,
-      S9.en, S9.km],
+      ...fuller([S9.en, S9.km], rot(2, [
+        [`Born in the Year of the ${day}? That strength is yours today.`, `អ្នកកើតឆ្នាំ${dayKm}? កម្លាំងនោះ ជារបស់អ្នកថ្ងៃនេះ។`],
+        ["Let that spirit guide you today.", "សូមឲ្យស្មារតីនោះ ដឹកនាំអ្នកថ្ងៃនេះ។"],
+        ["Keep that energy close all day.", "សូមរក្សាថាមពលនោះ ជាប់ជាមួយអ្នកពេញមួយថ្ងៃ។"]]).concat([
+        ["Let it guide you.", "សូមឲ្យវាដឹកនាំអ្នក។"], ["Shine today!", "ថ្ងៃនេះ សូមភ្លឺស្វាង!"]]))],
     magic60: ["The magical moment", `The ${dl} ${POSE[day]}. ${V(3, 3, ["Lotus petals and sparkles swirl up behind it, then it lands lightly on the temple steps, proud and happy. Fast, dynamic tracking shot circling around it.",
         "Rings of golden light ripple out across the pond where it moves, and it lands on the temple roof against the full moon, proud and happy. Sweeping crane shot rising with it.",
         "Time slows for a moment: sparks and petals hang in the air around it, then everything rushes on as it lands gracefully on a glowing lotus. Slow-motion shot, then normal speed."])} ${alive(day)} ${lockAnimal(day)}`,
-      ...V(4, 4, [
+      ...fuller(V(4, 4, [
         ["Your luck is strong today. Say yes to good chances, and share your happiness.", "ថ្ងៃនេះ សំណាងរបស់អ្នកល្អខ្លាំង។ សូមទទួលយកឱកាសល្អៗ ហើយចែករំលែកភាពរីករាយ។"],
         ["Doors open more easily for you today. Take the brave step you've been waiting for.", "ថ្ងៃនេះ ទ្វារឱកាសបើកងាយសម្រាប់អ្នក។ សូមបោះជំហានក្លាហាន ដែលអ្នករង់ចាំយូរមកហើយ។"],
         ["Your energy shines today. Reach out to someone, and let good things grow.", "ថ្ងៃនេះ ថាមពលរបស់អ្នកភ្លឺស្វាង។ សូមទាក់ទងនរណាម្នាក់ ហើយឲ្យរឿងល្អៗរីកលូតលាស់។"],
-        ["Today is a day to begin. Start the one thing that matters most to you.", "ថ្ងៃនេះ ជាថ្ងៃសម្រាប់ចាប់ផ្ដើម។ សូមចាប់ផ្ដើមរឿងមួយ ដែលសំខាន់បំផុតសម្រាប់អ្នក។"]])],
+        ["Today is a day to begin. Start the one thing that matters most to you.", "ថ្ងៃនេះ ជាថ្ងៃសម្រាប់ចាប់ផ្ដើម។ សូមចាប់ផ្ដើមរឿងមួយ ដែលសំខាន់បំផុតសម្រាប់អ្នក។"]]), rot(3, [
+        [`This ${DEL.el} day adds ${DEL.q} to everything you do.`, `ថ្ងៃធាតុ${DEL.km}នេះ បន្ថែម${DEL.qKm} ដល់អ្វីៗដែលអ្នកធ្វើ។`],
+        [`Your helper sign is the ${helper}: team up with one.`, `រាសីជំនួយរបស់អ្នក គឺឆ្នាំ${km(helper)}៖ សូមសហការជាមួយគេ។`],
+        ["Trust yourself, and act with a kind heart.", "សូមជឿលើខ្លួនឯង ហើយធ្វើអ្វីៗដោយចិត្តល្អ។"]]).concat([
+        [`A ${DEL.el} day for ${DEL.q}.`, `ថ្ងៃធាតុ${DEL.km} នៃ${DEL.qKm}។`], ["Trust yourself.", "សូមជឿលើខ្លួនឯង។"]]))],
     color60: ["Lucky color", `${V(3, 5, [
         `Close-up on the temple steps: the ${dl} gently nudges a ${cen} lantern with its nose, and one by one glowing ${cen} lanterns light up around it in a spiral and float upward. Rack focus from the lantern to its face.`,
         `Long silk ribbons in ${cen} unfurl through the air around the ${dl}, glowing softly at their edges, and one settles gently around it like a royal sash. Slow orbit around it.`,
         `Lotus flowers across the pond open one by one and glow ${cen}, forming a path of ${cen} light that reaches the ${dl}'s feet; it looks down, then up at the camera, delighted. Slow push-in.`])} Warm ${cen} and gold light. ${alive(day)} ${lockAnimal(day)}`,
-      ...V(3, 6, [
+      ...fuller(V(3, 6, [
         [`Your lucky color today is ${cen}. Wear it, or carry something ${cen} with you.`, `ពណ៌សំណាងថ្ងៃនេះ គឺពណ៌${ckm}។ សូមស្លៀក ឬយករបស់ពណ៌${ckm} ជាប់ខ្លួន។`],
         [`Today's lucky color is ${cen}. A ${cen} scarf, bag or bracelet keeps it close.`, `ពណ៌សំណាងថ្ងៃនេះ គឺពណ៌${ckm}។ កន្សែង កាបូប ឬខ្សែដៃពណ៌${ckm} នាំសំណាងមកជិតអ្នក។`],
-        [`Wear a touch of ${cen} today: it's your lucky color.`, `ថ្ងៃនេះ សូមពាក់អ្វីមួយពណ៌${ckm}៖ វាជាពណ៌សំណាងរបស់អ្នក។`]])],
+        [`Wear a touch of ${cen} today: it's your lucky color.`, `ថ្ងៃនេះ សូមពាក់អ្វីមួយពណ៌${ckm}៖ វាជាពណ៌សំណាងរបស់អ្នក។`]]), rot(4, [
+        ["Even something small, like a ring or a phone case, counts.", "សូម្បីតែរបស់តូចមួយ ដូចជាចិញ្ចៀន ឬស្រោមទូរស័ព្ទ ក៏បានដែរ។"],
+        ["Let it remind you to smile and stay confident.", "សូមឲ្យវារំលឹកអ្នក ឲ្យញញឹម និងមានទំនុកចិត្ត។"],
+        ["It brings calm and confidence to your day.", "វានាំភាពស្ងប់ និងទំនុកចិត្ត មកថ្ងៃរបស់អ្នក។"]]).concat([
+        ["Even a small touch counts.", "របស់តូចមួយ ក៏បានដែរ។"]]))],
     timedir60: ["Best time and lucky direction", `${V(3, 7, [
         `High aerial shot over the moonlit temple: a glowing golden path of light unrolls across the pond toward the ${dir}, lotus flowers lighting up one by one along it, and a sundial of golden light on the stone turns its glowing shadow. The ${dl} runs happily along the path. The camera glides overhead and follows it.`,
         `A giant compass of golden light appears on the temple floor; its needle spins, slows and points to the ${dir}, and the ${dl} follows it happily. Top-down shot, then the camera tilts up to follow.`,
         `Glowing footprints of light appear one by one, leading toward the ${dir} across the flat stepping stones, while the shadow of a golden sundial turns slowly; the ${dl} follows the footprints. Camera follows behind it at low height.`])} ${alive(day)} ${lockAnimal(day)}`,
-      ...V(2, 8, [
+      ...fuller(V(2, 8, [
         [`Your best time is ${sayTime(dd.lucky.time)}, and your lucky direction is the ${dir}.`, `ពេលល្អបំផុតគឺ${sayTimeKm(dd.lucky.time)} ហើយទិសសំណាង គឺទិស${dirKm}។`],
-        [`Lucky direction: the ${dir}. Best time: ${sayTime(dd.lucky.time)}.`, `ទិសសំណាង៖ ទិស${dirKm}។ ពេលល្អបំផុត៖ ${sayTimeKm(dd.lucky.time)}។`]])],
+        [`Lucky direction: the ${dir}. Best time: ${sayTime(dd.lucky.time)}.`, `ទិសសំណាង៖ ទិស${dirKm}។ ពេលល្អបំផុត៖ ${sayTimeKm(dd.lucky.time)}។`]]), rot(5, [
+        ["Plan your most important task for that time.", "សូមធ្វើការងារសំខាន់បំផុតរបស់អ្នក ក្នុងពេលនោះ។"],
+        ["Face that way when you make a wish.", "សូមបែរមុខទៅទិសនោះ ពេលអធិដ្ឋាន។"],
+        ["Use that time for calls and big decisions.", "សូមប្រើពេលនោះ សម្រាប់ការទូរស័ព្ទ និងការសម្រេចចិត្តធំៗ។"]]).concat([
+        ["Plan around it.", "សូមរៀបចំផែនការតាមនោះ។"]]))],
     // the lucky-numbers line stays the same every day; only the picture changes
     num60: ["Lucky numbers", `${V(4, 9, [
         `Wide, symmetrical front shot: a huge glowing golden wheel rises out of the lotus pond in front of the temple, spins with beams of golden light, then slows to a gentle shining turn. The ${dl} bounces excitedly in front of it and glances back at the camera, delighted.`,
@@ -911,6 +939,10 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
         "Rest well tonight. Tomorrow is a new day, and it could be yours. Follow MyBirthSign for your fortune every day!",
         "យប់នេះ សូមសម្រាកឲ្យស្រួល។ ថ្ងៃស្អែក ជាថ្ងៃថ្មី ហើយអាចជាថ្ងៃរបស់អ្នក។ សូមតាមដាន MyBirthSign រៀងរាល់ថ្ងៃ!", true],
     ];
+    // more words in the two shortest take-it-easy scenes, only when they still fit the clip
+    const CALM = [["Take a deep breath first.", "សូមដកដង្ហើមវែងៗជាមុនសិន។"], ["You are doing better than you think.", "អ្នកកំពុងធ្វើបានល្អ ជាងអ្វីដែលអ្នកគិត។"],
+      ["Small steps still count.", "ជំហានតូចៗ ក៏មានតម្លៃដែរ។"], ["Be kind to yourself.", "សូមមេត្តាខ្លួនឯង។"]];
+    for (const i of [3, 5]) [E[i][2], E[i][3]] = fuller([E[i][2], E[i][3]], rot(i, CALM));
     const easyHookMd = `### Opening hook – 5 options\n${EASY_HOOKS.map(([st, e, k], i) => `${i === EH ? "★ " : ""}${i + 1}. ${st.replace(" (used)", "")}\n   English: ${e}\n   Khmer: ${k}`).join("\n")}\n★ = used to open this video today (the hook changes from day to day). To use another hook, replace the voice line in scene 1.`;
     VIDEOS.push({ id: "easy", metaMd: easyHookMd, name: `Take-it-easy video – the unlucky sign, ${c} (8 scenes, 80 seconds)`, secs: 80, scenes: E,
       intro: `An 80-second video for the ${c}, today's sign to take it easy (in the traditional day cycle the ${c} clashes with the ${day} day): 8 clips of 10 seconds. Set the clip length in Flow to 10 seconds and add Chanda and the saved character ${FLOW_NAME(c)} as ingredients (the ${c} is the only zodiac character in this video, from the first scene to the last). Chanda is on camera and speaks with lip-sync in scenes 1 and 8; in the other scenes she narrates off screen. The animals never speak or move their mouths: they only act. It is one continuous little story in one place (the ${cl} hurries, wobbles, stops to breathe, a little lotus lantern keeps it company, it climbs the temple steps and looks out with hope), so make the clips in order and keep the same setting and light. No lucky numbers or colors in this video: it is about encouragement. Keep it gentle and realistic: a quiet day, not bad luck. For each scene, press "Copy + English voice" or "Copy + Khmer voice". Put the clips in order 1 to 8.${st ? " Scenes 4, 5 and 6 use the site's own daily wording for this sign." : ""}` });
@@ -940,7 +972,19 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
     ];
     const YH = V(5, 14, [0, 1, 2, 3, 4]);   // the hook changes from day to day
     const Y = [];
-    const add = (part, s) => { s.part = part; Y.push(s); };
+    // more words in the long video's own short scenes (scenes shared with the 60-second and take-it-easy videos keep theirs)
+    const SHARED = new Set([...Object.values(SC), ...E]);
+    const POOL = [elLine,
+      ["Small good choices add up to a lucky day.", "ជម្រើសល្អៗតូចៗ នាំមកនូវថ្ងៃដ៏សំណាង។"],
+      ["Keep a calm heart, and good things will follow.", "សូមរក្សាចិត្តស្ងប់ ហើយរឿងល្អៗនឹងមកដល់។"],
+      ["Smile, and share your luck with someone today.", "សូមញញឹម ហើយចែករំលែកសំណាងជាមួយនរណាម្នាក់ថ្ងៃនេះ។"],
+      ["Stay with me: more good news is coming.", "សូមមើលបន្ត មានដំណឹងល្អៗទៀត។"]];
+    const POOL_SHORT = [[`A ${DEL.yy} ${DEL.el} day!`, `ថ្ងៃធាតុ${DEL.km}!`], ["Keep a calm heart.", "សូមរក្សាចិត្តស្ងប់។"],
+      ["Small choices bring big luck.", "ជម្រើសតូចៗ នាំសំណាងធំ។"], ["Share your luck.", "សូមចែករំលែកសំណាង។"]];
+    const add = (part, s) => {
+      if (!SHARED.has(s) && s[2] && s[3]) [s[2], s[3]] = fuller([s[2], s[3]], rot(Y.length, Y.length > 44 ? POOL.slice(0, 4) : POOL).concat(rot(Y.length, POOL_SHORT)));
+      s.part = part; Y.push(s);
+    };
     // intro
     add("Introduction", ["The hook – Chanda on camera", `${cap(HOST_LOOK)}, stands on the moonlit temple terrace beside the lotus pond, facing the camera, smiling warmly and speaking directly to the viewer with natural lip movements and small, friendly hand gestures. Behind her, the twelve golden-armored zodiac guardians sit on glowing lotus pedestals in a half circle: the ${dl} shines brightest with a golden aura, and the ${cl} rests calmly inside a soft bubble of golden light. The animals move gently and look around curiously, mouths closed. Medium shot, gentle push-in toward her face. ${LOCK_HOST}`,
       YT_HOOKS[YH][1], YT_HOOKS[YH][2], true]);
