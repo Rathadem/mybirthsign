@@ -602,12 +602,11 @@ if (SCHEDULED.length) {
   console.log(`build-site: ad slots on ${pagesWithAds} English and Chinese pages`);
 }
 
-// ---------------------------------------------------------------- Localized daily-fortune ads
-// The daily-fortune HTML contains separate en/km/zh content wrappers. The generic ad pass above
-// can place its slot inside the first language wrapper, which is hidden when a visitor switches
-// languages. Add two in-content slots inside each language wrapper so the active language gets ads.
+// ---------------------------------------------------------------- Localized blog article ads
+// The generic pass above places ads in the default language content. Add matching placements
+// inside Khmer and Chinese language wrappers so those versions also display in-content banners.
 {
-  const slot = '<div class="mbs-ad" data-ad="box" data-ad-origin="localized-daily" aria-label="Advertisement"></div>';
+  const slot = '<div class="mbs-ad" data-ad="box" data-ad-origin="localized-blog-v2" aria-label="Advertisement"></div>';
   function findWrapperEnd(html, openEnd) {
     const re = /<\/?div\b[^>]*>/gi;
     re.lastIndex = openEnd;
@@ -627,11 +626,10 @@ if (SCHEDULED.length) {
         depth--;
         if (depth === 0) out.push(re.lastIndex);
       } else if (!/\/\s*>$/.test(m[0])) {
-        if (depth === 0) out.push(-re.lastIndex); // top-level section start, for malformed/unclosed fallback
         depth++;
       }
     }
-    return out.filter((n) => n > 0);
+    return out;
   }
   let changed = 0;
   function walk(d) {
@@ -639,28 +637,25 @@ if (SCHEDULED.length) {
     for (const f of fs.readdirSync(d)) {
       const p = path.join(d, f), st = fs.statSync(p);
       if (st.isDirectory()) { if (f !== "studio") walk(p); continue; }
-      if (!/^daily-fortune-.*\.html$/.test(f)) continue;
+      if (!f.endsWith(".html")) continue;
       let html = fs.readFileSync(p, "utf8");
-      if (html.includes('data-ad-origin="localized-daily"')) continue;
-      const opens = [...html.matchAll(/<div\b[^>]*data-lang-content=["'](en|km|zh)["'][^>]*>/gi)];
+      if (html.includes('data-ad-origin="localized-blog-v2"')) continue;
+      const opens = [...html.matchAll(/<div\b[^>]*data-lang-content=["'](km|zh)["'][^>]*>/gi)];
       const inserts = [];
       for (const m of opens) {
-        // English already receives slots from the generic pass above; add these only to Khmer and Chinese blocks.
-        if (m[1].toLowerCase() === "en") continue;
         const start = m.index + m[0].length;
         const end = findWrapperEnd(html, start);
         if (end < 0) continue;
-        const block = html.slice(start, end);
-        const boundaries = sectionBoundaries(block);
-        // After the hero and after the fourth top-level section: natural breaks, not between paragraphs.
-        for (const n of [0, 3]) if (boundaries[n] !== undefined) inserts.push(start + boundaries[n]);
+        const boundaries = sectionBoundaries(html.slice(start, end));
+        // After the hero and after several content sections; keep ads between sections, never paragraphs.
+        for (const n of [0, 4]) if (boundaries[n] !== undefined) inserts.push(start + boundaries[n]);
       }
       for (const at of inserts.sort((a, b) => b - a)) html = html.slice(0, at) + slot + html.slice(at);
       if (inserts.length) { fs.writeFileSync(p, html); changed++; }
     }
   }
   walk(path.join(DIST, "blog"));
-  console.log(`build-site: localized daily-fortune ad slots added to ${changed} pages`);
+  console.log(`build-site: localized blog ad slots added to ${changed} pages`);
 }
 
 // ---------------------------------------------------------------- "Follow us" links (YouTube, Telegram) in every page footer
