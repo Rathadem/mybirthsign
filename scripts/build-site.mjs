@@ -645,6 +645,8 @@ if (SCHEDULED.length) {
       const opens = [...html.matchAll(/<div\b[^>]*data-lang-content=["'](en|km|zh)["'][^>]*>/gi)];
       const inserts = [];
       for (const m of opens) {
+        // English already receives slots from the generic pass above; add these only to Khmer and Chinese blocks.
+        if (m[1].toLowerCase() === "en") continue;
         const start = m.index + m[0].length;
         const end = findWrapperEnd(html, start);
         if (end < 0) continue;
