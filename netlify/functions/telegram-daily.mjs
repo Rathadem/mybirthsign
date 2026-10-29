@@ -16,6 +16,32 @@
 // The response status shows the outcome in Netlify's request logs: 200 posted, 503 no token, 409 no channel,
 // 424 no data file, 425 old data, 401 bad token, 403 bot is not allowed to post, 400 channel not found, 502 other.
 import luckyDigits from "../../js/lucky-digits.js";
+import momentkh from "../../js/vendor/momentkh.min.js";
+import khmerEvents from "../../js/khmer-events.js";
+
+// Khmer calendar lines (same rules as the Khmer Calendar page): lunar date, holy day, today's holiday, the next 7 days
+const KE = khmerEvents.make(momentkh);
+const addDays = (iso, n) => new Date(Date.parse(iso + "T00:00:00Z") + n * 864e5).toISOString().slice(0, 10);
+const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+export function calendarLines(date) {
+  const today = KE.eventsOn(date), EV = KE.EV, url = (e, l) => `${SITE}${l === "km" ? "/km" : ""}/blog/${EV[e].blog}`;
+  const soon = KE.upcoming(addDays(date, 1), 2, 7).filter(([, e]) => !today.includes(e));
+  const daysTo = (d) => Math.round((Date.parse(d) - Date.parse(date)) / 864e5);
+  const dm = (d) => d.slice(8, 10) + "/" + d.slice(5, 7);
+  const km = [`🌙 ចន្ទគតិ៖ ${KE.lunarKm(date)}`];
+  const en = [`🌙 Khmer lunar date: ${KE.lunarEn(date)}`];
+  if (KE.isSil(date)) { km.push("🙏 ថ្ងៃនេះជាថ្ងៃសីល"); en.push("🙏 Buddhist holy day (Thngai Sil)"); }
+  for (const e of today) {
+    km.push(`${EV[e].i} ថ្ងៃនេះ៖ ${EV[e].km}${EV[e].blog ? ` – <a href="${url(e, "km")}">អានបន្ថែម</a>` : ""}`);
+    en.push(`${EV[e].i} Today: ${EV[e].en}${EV[e].blog ? ` – <a href="${url(e, "en")}">read more</a>` : ""}`);
+  }
+  for (const [d, e] of soon) {
+    const n = daysTo(d);
+    km.push(`📅 ជិតមកដល់៖ ${EV[e].km} – ${dm(d)} (${n === 1 ? "ថ្ងៃស្អែក" : `${n} ថ្ងៃទៀត`})`);
+    en.push(`📅 Coming up: ${EV[e].en} – ${Number(d.slice(8, 10))} ${MON[Number(d.slice(5, 7)) - 1]} (${n === 1 ? "tomorrow" : `in ${n} days`})`);
+  }
+  return { km, en };
+}
 
 const SITE = "https://mybirthsign.com";
 const CARDS = process.env.TELEGRAM_CARDS_BASE || "https://raw.githubusercontent.com/Rathadem/mybirthsign/telegram-cards";
@@ -49,9 +75,12 @@ export function buildMessage(date, data) {
   const D = date.split("-").reverse().join("/");
   const day = data.dayAnimal;
   const enUrl = `${SITE}/blog/daily-fortune-${date}`, kmUrl = `${SITE}/km/blog/daily-fortune-${date}`;
+  let cal = { km: [], en: [] };
+  try { cal = calendarLines(date); } catch (e) { console.error(`telegram-daily: calendar lines skipped: ${e.message}`); }
   const km = [
     `🌙 <b>ជោគជតារាសីប្រចាំថ្ងៃ – ${D}</b>`,
     `${EMO[day]} ថ្ងៃនេះជាថ្ងៃ${yr(day)}`,
+    ...cal.km,
     "",
     `✨ ឆ្នាំសំណាងថ្ងៃនេះ៖ ${lucky.map((a) => `${yr(a)} (${sign(a).label.km})`).join(" · ")}`,
     `🔢 លេខសំណាង៖ ${nums.map((n) => `${yr(n.a)} ${n.d2} · ${n.d3}`).join(" | ")}`,
@@ -62,6 +91,7 @@ export function buildMessage(date, data) {
   const en = [
     `<b>Daily Chinese Zodiac Fortune – ${D}</b>`,
     `${EMO[day]} Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day.`,
+    ...cal.en,
     `✨ Lucky signs: ${lucky.map((a) => `${a} (${sign(a).label.en})`).join(" · ")}`,
     `🔢 Lucky numbers: ${nums.map((n) => `${n.a} ${n.d2} · ${n.d3}`).join(" | ")}`,
     ...(careful.length ? [`🌿 Take it easy: ${careful.join(", ")}`] : []),
