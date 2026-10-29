@@ -140,7 +140,7 @@
   // Check buttons: My Horoscope (/checker; also when it runs from the homepage "Find my sign"), Check Compatibility (homepage
   // and /compatibility), Compare Signs, Check Business Compatibility and Find Best Wedding Dates. An error (missing or
   // wrong date) shows no ad. Nothing here changes how any result is worked out.
-  var SMARTLINK = "";   // Adsterra Smartlink (Direct Link) address, e.g. "https://....". Empty = no new-tab ad
+  var SMARTLINK = "https://auctionr.org/4/77e27cdb2761951e14365ec4fae36827";   // Adsterra Smartlink (added 29/10/2026). Empty "" = no new-tab ad
   var POP_WAIT = 3;
   var TOOLS = { "compat-form": ["compat-result", ""], "cmp-form": ["cmp-result", "cmp-error"], "cs-form": ["cs-result", "cs-error"],
     "biz-form": ["biz-result", "biz-form-error"], "wedding-form": ["wedding-result", "wed-error"] };
