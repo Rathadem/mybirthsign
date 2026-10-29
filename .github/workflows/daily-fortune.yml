@@ -31,6 +31,8 @@ concurrency:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    outputs:
+      date: ${{ steps.day.outputs.date }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -108,21 +110,35 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
 
-      # The day's share cards for the Telegram channel (the Video Studio's 5 cards, Khmer and English), drawn from the
-      # built page with the site's own card code and kept on the "telegram-cards" branch (only the newest days, so the
-      # site's own history does not grow). netlify/functions/telegram-daily.mjs sends them after the 00:30 text post.
-      # If anything here fails, the text post still goes out as before.
-      - name: Telegram cards
-        continue-on-error: true
+  # The day's share cards for the Telegram channel (the Video Studio's 5 cards, Khmer and English), drawn from the built
+  # page with the site's own card code and kept on the "telegram-cards" branch (only the newest days, so the site's own
+  # history does not grow). netlify/functions/telegram-daily.mjs sends them after the 00:30 text post. Runs in
+  # Microsoft's Playwright image (browser already installed). If it fails, the text post still goes out as before.
+  telegram-cards:
+    needs: generate
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.56.0-noble
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Draw and store the cards
         env:
-          DAY: ${{ steps.day.outputs.date }}
+          DAY: ${{ needs.generate.outputs.date }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
         run: |
+          set -eo pipefail
+          trap 'echo "::error::Telegram cards failed (line $LINENO): $BASH_COMMAND"' ERR
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git pull -q origin main || true
           npm install --no-save --no-package-lock --silent playwright@1.56.0
-          npx playwright install --with-deps chromium > /dev/null
           node scripts/build-site.mjs > /dev/null
           node scripts/telegram-cards.mjs --date "$DAY" --out "$RUNNER_TEMP/tg-cards"
-          [ -f "$RUNNER_TEMP/tg-cards/$DAY/cards.json" ] || { echo "No cards drawn for $DAY."; exit 0; }
+          if [ ! -f "$RUNNER_TEMP/tg-cards/$DAY/cards.json" ]; then echo "::warning::No cards drawn for $DAY"; exit 0; fi
           W="$RUNNER_TEMP/tc"; rm -rf "$W"; mkdir -p "$W"
           if git fetch -q origin +refs/heads/telegram-cards:refs/remotes/origin/telegram-cards 2>/dev/null; then
             git archive origin/telegram-cards | tar -x -C "$W"
@@ -134,4 +150,5 @@ jobs:
           git init -q; git checkout -q -b telegram-cards; git add -A
           git -c user.name=daily-fortune-bot -c user.email=daily-fortune-bot@users.noreply.github.com commit -qm "Telegram cards for $DAY [skip netlify]"
           git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:telegram-cards
-          echo "::notice::Telegram cards for $DAY: $(ls "$W/$DAY" | grep -c jpg) pictures"
+          echo "::notice::Telegram cards for $DAY: $(ls "$W/$DAY" | grep -c jpg) pictures ($(ls "$W/$DAY" | grep -c km.jpg) Khmer)"
+
