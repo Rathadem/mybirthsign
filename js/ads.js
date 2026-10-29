@@ -3,6 +3,9 @@
    "box" (300x250 inside the content) and "native" (native banner near the end). Slots are filled only when
    they come near the screen, one banner at a time (Adsterra banners share one global atOptions setting). */
 (function () {
+  // run once per page, even if the page includes this file twice (two copies made double side ads and mixed-up banner sizes)
+  if (window.MBSAdsLoaded) return;
+  window.MBSAdsLoaded = true;
   var HOST = "https://bauval.org";
   var NATIVE = "f09efb6f84e744d5ad358f03efbf68db";
   var BANNER = { box: ["be82b735bb4822651f6266ea177098d1", 300, 250], top_d: ["18e30a22b3ffe8fb2229cd25f31ba870", 728, 90], top_m: ["3e5e00c17d44d21efb07540becb72519", 320, 50],

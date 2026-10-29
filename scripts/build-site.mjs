@@ -587,6 +587,9 @@ if (SCHEDULED.length) {
           if (mt[2] === "section" || mt[2] === "article") cands.push([depth, mt.index]);
           depth++;
         }
+        // a page that already has its own 300x250 slot (the Checker's "between sections" ad) gets no second one beside it
+        const ownBox = /<div class="mbs-ad\b[^"]*"[^>]*data-ad="box"/.test(h);
+        if (ownBox) cands.length = 0;
         const minD = Math.min(...cands.map((c) => c[0])), top = cands.filter((c) => c[0] === minD).map((c) => c[1]);
         const at = top.length >= 3 ? top[2] : top.length === 2 ? top[1] : -1;
         // long pages (over 1,300 words in the main content): a second 300x250 about 60% of the way down
@@ -602,7 +605,8 @@ if (SCHEDULED.length) {
         const fo = h.lastIndexOf("<footer");
         if (fo > 0) h = h.slice(0, fo) + slot("native") + h.slice(fo);
       }
-      h = h.replace("</head>", `${CSS}<script src="/js/ads.js" defer></script></head>`);
+      // the loader only once (the Checker page already includes it)
+      h = h.replace("</head>", CSS + (h.includes('src="/js/ads.js"') ? "" : '<script src="/js/ads.js" defer></script>') + "</head>");
       fs.writeFileSync(p, h); pagesWithAds++;
     }
   })(DIST);
