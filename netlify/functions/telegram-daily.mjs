@@ -30,7 +30,11 @@ export function calendarLines(date) {
   const dm = (d) => d.slice(8, 10) + "/" + d.slice(5, 7);
   const km = [`🌙 ចន្ទគតិ៖ ${KE.lunarKm(date)}`];
   const en = [`🌙 Khmer lunar date: ${KE.lunarEn(date)}`];
-  if (KE.isSil(date)) { km.push("🙏 ថ្ងៃនេះជាថ្ងៃសីល"); en.push("🙏 Buddhist holy day (Thngai Sil)"); }
+  // holy days (Thngai Sil): 8th and 15th waxing, 8th waning and the last waning day; reminded the day before too
+  const SIL = `${SITE}/blog/cambodian-buddhist-holy-days`, SIL_KM = `${SITE}/km/blog/cambodian-buddhist-holy-days`;
+  const moon = (d) => { const k = momentkh.fromGregorian(...d.split("-").map(Number)).khmer; return k.moonPhase === 0 ? (k.day === 15 ? "🌕" : "🌓") : k.day === 8 ? "🌗" : "🌑"; };
+  if (KE.isSil(date)) { km.push(`🙏 ថ្ងៃនេះជាថ្ងៃសីល ${moon(date)} – <a href="${SIL_KM}">អានបន្ថែម</a>`); en.push(`🙏 Today is a Buddhist holy day (Thngai Sil) ${moon(date)} – <a href="${SIL}">read more</a>`); }
+  else if (KE.isSil(addDays(date, 1))) { km.push(`🙏 ថ្ងៃស្អែកជាថ្ងៃសីល ${moon(addDays(date, 1))}`); en.push(`🙏 Tomorrow is a Buddhist holy day (Thngai Sil) ${moon(addDays(date, 1))}`); }
   for (const e of today) {
     km.push(`${EV[e].i} ថ្ងៃនេះ៖ ${EV[e].km}${EV[e].blog ? ` – <a href="${url(e, "km")}">អានបន្ថែម</a>` : ""}`);
     en.push(`${EV[e].i} Today: ${EV[e].en}${EV[e].blog ? ` – <a href="${url(e, "en")}">read more</a>` : ""}`);
