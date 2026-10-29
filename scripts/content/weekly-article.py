@@ -86,6 +86,7 @@ STYLE += (".festival-article figure.photo{position:relative;border:1px solid rgb
           ".festival-article figure.photo figcaption{background:linear-gradient(180deg,#1f1a3c,#15122e);border-top:1px solid rgba(226,189,97,.4)}"
           ".festival-article figure.photo .credit{display:block;margin-top:4px;font-size:.8rem;line-height:1.5;color:#b9b0d6}"
           ".festival-article figure.photo .credit a{color:#e2bd61}"
+          ".festival-article figure.tall{max-width:440px;margin-left:auto;margin-right:auto}"
           ".festival-article .gallery{display:grid;gap:16px;margin:26px 0 34px}.festival-article .gallery figure{margin:0}"
           ".festival-article .gallery img{aspect-ratio:1/1;object-fit:cover}"
           "@media(min-width:640px){.festival-article .gallery{grid-template-columns:repeat(3,minmax(0,1fr))}.festival-article .gallery figcaption{font-size:.85rem}}"
