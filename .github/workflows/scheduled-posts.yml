@@ -1,13 +1,14 @@
 name: Scheduled blog posts
 
-# Articles in scripts/content/weekly/*.json go live on their "published" date at 08:00 Cambodia time (UTC+7).
+# Articles in scripts/content/weekly/*.json go live on their "published" date at 06:00 Cambodia time (UTC+7).
 # scripts/build-site.mjs hides an article until then; this job makes a small commit that morning so Netlify
-# builds again and the article appears. 01:00 UTC = 08:00 in Cambodia; the 03:00 UTC run is a back-up in case
-# GitHub starts the first one late or skips it. Nothing is committed on days with no new article.
+# builds again and the article appears. 23:00 UTC = 06:00 in Cambodia (already the new day there, and the job
+# reads the date on Cambodia time); the 01:00 UTC run (08:00 in Cambodia) is a back-up in case GitHub starts
+# the first one late or skips it. Nothing is committed on days with no new article.
 on:
   schedule:
+    - cron: "0 23 * * *"
     - cron: "0 1 * * *"
-    - cron: "0 3 * * *"
   workflow_dispatch:
 
 permissions:

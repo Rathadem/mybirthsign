@@ -405,8 +405,8 @@ if (fs.existsSync(studioDir)) for (const f of fs.readdirSync(studioDir)) copyFil
 
 i18nBundles();
 
-// ---------------------------------------------------------------- scheduled articles: stay hidden until 08:00 Cambodia time on their date
-// An article made with scripts/content/weekly-article.py goes live on its "published" date at 08:00 (UTC+7). Until then
+// ---------------------------------------------------------------- scheduled articles: stay hidden until 06:00 Cambodia time on their date
+// An article made with scripts/content/weekly-article.py goes live on its "published" date at 06:00 (UTC+7). Until then
 // this build leaves its page out and drops every card and link to it (blog page, homepage, other articles), the sitemap
 // and its redirects. .github/workflows/scheduled-posts.yml starts a fresh build each morning so it appears on time.
 const SCHEDULED = (() => {
@@ -416,7 +416,7 @@ const SCHEDULED = (() => {
     if (!f.endsWith(".json")) continue;
     try {
       const s = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
-      if (s.slug && /^\d{4}-\d{2}-\d{2}$/.test(s.published || "") && Date.parse(`${s.published}T08:00:00+07:00`) > now) out.push(s.slug);
+      if (s.slug && /^\d{4}-\d{2}-\d{2}$/.test(s.published || "") && Date.parse(`${s.published}T06:00:00+07:00`) > now) out.push(s.slug);
     } catch { /* not an article spec */ }
   }
   return out;
