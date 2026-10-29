@@ -534,13 +534,14 @@ if (SCHEDULED.length) {
 }
 
 // ---------------------------------------------------------------- Adsterra ad slots (English, Chinese and Khmer pages)
-// (Khmer pages were added at the owner's request on 26/10/2026.) Between sections: Native Banner ads only (the owner chose them
-// instead of the 728x90 / 300x250 banners there on 29/10/2026), at most three spots per page. One Native Banner code can show only
-// once per page, so js/ads.js fills as many spots as there are codes (top spot first) and hides the rest. Side ads stay banners.
+// (Khmer pages were added at the owner's request on 26/10/2026.) Between sections: Native Banner ads and banners in different
+// sections (the owner's choice, 29/10/2026). At most three native spots per page (first, middle, last); one Native Banner code can
+// show only once per page, so js/ads.js gives the native spots the codes it has (top spot first) and shows a banner (data-fallback)
+// in a native spot that has no code. Side ads stay banners.
 {
   const SKIP = /^(about|privacy|terms|contact|404|google[0-9a-f]+)\.html$/;
   const CSS = '<style>.mbs-ad{display:flex;justify-content:center;align-items:center;margin:18px auto;max-width:100%;overflow:hidden;clear:both}.mbs-ad[data-ad=top]{min-height:50px}.mbs-ad[data-ad=box],.mbs-ad[data-ad=mid]{min-height:250px}@media(min-width:760px){.mbs-ad[data-ad=mid]{min-height:90px}}@media(min-width:760px){.mbs-ad[data-ad=top]{min-height:90px}}.mbs-ad iframe{max-width:100%}.mbs-ad[data-ad=native]{display:block;width:100%;max-width:min(1100px,100%)}.mbs-rail{position:absolute;top:0;z-index:5;width:160px;min-height:600px;display:none}.mbs-rail-left{left:12px}.mbs-rail-right{right:12px}html.mbs-rails .mbs-rail{display:block}html.mbs-rails body{padding-left:184px;padding-right:184px}html.mbs-rails .site-header,html.mbs-rails .mbs-bleed{margin-left:-184px;margin-right:-184px}@media(max-width:1599px){html.mbs-rails .fx-grid{grid-template-columns:repeat(3,1fr)}}</style>';
-  const slot = (k) => `<div class="mbs-ad" data-ad="${k}" aria-label="Advertisement"></div>`;
+  const slot = (k, fb) => `<div class="mbs-ad" data-ad="${k}"${fb ? ` data-fallback="${fb}"` : ""} aria-label="Advertisement"></div>`;
   let pagesWithAds = 0;
   (function walk(d) {
     for (const f of fs.readdirSync(d)) {
@@ -560,14 +561,16 @@ if (SCHEDULED.length) {
       const isHome = rel.length <= 2 && f === "index.html" && (rel.length === 1 || rel[0] === "zh" || rel[0] === "km");
       const m = h.indexOf("<main");
       if (isHome && m > 0) {
-        // homepage: no ad above the hero; native ads between the main sections: before the first section after the hero,
-        // one about halfway down and one before the final call to action (fx-sec sections and hm-final)
+        // homepage: no ad above the hero; one ad before every main section after it (fx-sec sections and the final call to
+        // action) and one at the end: native ads before the first section, about halfway down and at the end, banners
+        // (728x90 / 300x250) before the other sections
         const end = h.indexOf("</main>", m), starts = [];
         const re = /<section class="(?:fx-sec\b|hm-final\b)[^"]*"/g; re.lastIndex = m; let mt;
         while ((mt = re.exec(h)) && mt.index < end) starts.push(mt.index);
-        const picks = [...new Set([starts[0], starts[Math.floor(starts.length / 2)], starts[starts.length - 1]].filter((x) => x !== undefined))];
-        for (const at of picks.sort((a, b) => b - a)) h = h.slice(0, at) + slot("native") + h.slice(at);
-        if (!picks.length) { const e = h.indexOf("</main>", m); h = h.slice(0, e) + slot("native") + h.slice(e); }
+        const picks = new Set([starts[0], starts[Math.floor(starts.length / 2)]]);
+        for (const at of starts.reverse()) h = h.slice(0, at) + (picks.has(at) ? slot("native", "mid") : slot("mid")) + h.slice(at);
+        const e = h.indexOf("</main>", m);
+        h = h.slice(0, e) + slot("native", "mid") + h.slice(e);
         h = h.replace("</head>", `${CSS}<script src="/js/ads.js" defer></script></head>`);
         fs.writeFileSync(p, h); pagesWithAds++;
         continue;
@@ -597,12 +600,14 @@ if (SCHEDULED.length) {
         // long pages (over 1,300 words in the main content): a second one about 60% of the way down
         const words = h.slice(m, end).replace(/<(script|style)[\s\S]*?<\/\1>/g, " ").replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
         const at2 = words > 1300 && top.length >= 6 ? top[Math.floor(top.length * 0.6)] : -1;
-        if (at2 > at + 1 && at > 0) h = h.slice(0, at2) + slot("native") + h.slice(at2);
-        if (at > 0) h = h.slice(0, at) + slot("native") + h.slice(at);
+        // native ad in the first spot, a 300x250 banner in the second (long pages), a native ad again near the end (a banner
+        // there while there is only one native code)
+        if (at2 > at + 1 && at > 0) h = h.slice(0, at2) + slot("box") + h.slice(at2);
+        if (at > 0) h = h.slice(0, at) + slot("native", "box") + h.slice(at);
         // and one more: just before the "What's next?" box on articles (higher than the very end), else at the end
         const ns = h.indexOf('<aside class="next-steps"', m), e = h.indexOf("</main>", m);
         const ne = ns > 0 && ns < e ? ns : e;
-        if (ne > 0) h = h.slice(0, ne) + slot("native") + h.slice(ne);
+        if (ne > 0) h = h.slice(0, ne) + slot("native", "box") + h.slice(ne);
       } else {
         const fo = h.lastIndexOf("<footer");
         if (fo > 0) h = h.slice(0, fo) + slot("native") + h.slice(fo);

@@ -1,7 +1,7 @@
 /* Adsterra ads for MyBirthSign (English, Chinese and Khmer pages).
-   build-site.mjs puts empty slots between the sections of a page: data-ad="native" (Native Banner ads, the owner's choice
-   there since 29/10/2026; older "box" 300x250 / "mid" / "top" slots still work if a page has one). Side ads (160x600) are
-   added here on wide screens. Slots are filled only when they come near the screen, banners one at a time (Adsterra
+   build-site.mjs puts empty slots between the sections of a page, native ads and banners in different sections (the owner's
+   choice, 29/10/2026): data-ad="native" (Native Banner), "box" (300x250), "mid" (homepage: 728x90 on wide screens, else
+   300x250). Side ads (160x600) are added here on wide screens. Slots are filled only when they come near the screen, banners one at a time (Adsterra
    banners share one global atOptions setting). */
 (function () {
   // run once per page, even if the page includes this file twice (two copies made double side ads and mixed-up banner sizes)
@@ -9,7 +9,8 @@
   window.MBSAdsLoaded = true;
   var HOST = "https://bauval.org";
   // Native Banner codes: [container key, script address]. One code can show only once per page (Adsterra), so a page shows as many
-  // native ads as there are codes here, in the first native spots from the top; the other native spots stay hidden.
+  // native ads as there are codes here, in the first native spots from the top; a native spot without a code shows a banner
+  // instead (its data-fallback: "box" 300x250 or "mid" 728x90 / 300x250).
   // To add a code from Adsterra Support, add one more line like the first one.
   var NATIVES = [
     ["f09efb6f84e744d5ad358f03efbf68db", HOST + "/21/f09efb6f84e744d5ad358f03efbf68db"],
@@ -153,7 +154,7 @@
   // Check buttons: My Horoscope (/checker; also when it runs from the homepage "Find my sign"), Check Compatibility (homepage
   // and /compatibility), Compare Signs, Check Business Compatibility and Find Best Wedding Dates. An error (missing or
   // wrong date) shows no ad. Nothing here changes how any result is worked out.
-  var SMARTLINK = "https://auctionr.org/4/77e27cdb2761951e14365ec4fae36827";   // Adsterra Smartlink (added 29/10/2026). Empty "" = no new-tab ad
+  var SMARTLINK = "";   // Adsterra Smartlink address for a new-tab ad; removed at the owner's request on 29/10/2026 (empty = off)
   var POP_WAIT = 3;
   var TOOLS = { "compat-form": ["compat-result", ""], "cmp-form": ["cmp-result", "cmp-error"], "cs-form": ["cs-result", "cs-error"],
     "biz-form": ["biz-result", "biz-form-error"], "wedding-form": ["wedding-result", "wed-error"] };
@@ -235,10 +236,11 @@
     popAd();
   });
   function start() {
-    // each native spot gets its own code, from the top of the page down; spots without a code are hidden
+    // each native spot gets its own code, from the top of the page down; a spot without a code becomes a banner spot
     var nat = document.querySelectorAll('.mbs-ad[data-ad="native"]');
     for (var q = 0; q < nat.length; q++) {
       if (q < NATIVES.length) nat[q].setAttribute("data-native", q);
+      else if (nat[q].getAttribute("data-fallback")) nat[q].setAttribute("data-ad", nat[q].getAttribute("data-fallback"));
       else { nat[q].style.display = "none"; nat[q].setAttribute("data-filled", "1"); }
     }
     rails();
