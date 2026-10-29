@@ -43,6 +43,7 @@
       if (!nv) { el.style.display = "none"; return; }
       var n = document.createElement("script");
       n.async = true; n.setAttribute("data-cfasync", "false"); n.src = nv[1];
+      n.onerror = function () { el.style.display = "none"; };   // ad blocked (ad blocker or a network that blocks ad addresses): no empty gap
       var c = document.createElement("div"); c.id = "container-" + nv[0];
       el.appendChild(n); el.appendChild(c);
       return;
@@ -50,7 +51,8 @@
     // 728x90 only where the slot itself is wide enough (side ads make the content column narrower on small laptops)
     var wide = window.innerWidth >= 760 && el.getBoundingClientRect().width >= 740;
     // top: 728x90 on wide screens, 320x50 on phones; mid (homepage, between sections): 728x90 or 300x250; box: 300x250
-    queue.push({ el: el, k: t === "top" ? (wide ? "top_d" : "top_m") : t === "mid" ? (wide ? "top_d" : "box") : "box" });
+    queue.push({ el: el, k: t === "top" ? (wide ? "top_d" : "top_m") : t === "mid" ? (wide ? "top_d" : "box") : "box",
+      fail: function () { el.style.display = "none"; } });   // ad blocked: no empty 250 px gap in the page
     next();
   }
   function railsOn() { return window.innerWidth >= RAIL_MIN; }
