@@ -1,0 +1,184 @@
+{
+ "slug": "birthstones-by-month",
+ "title": "Birthstones by Month: The Complete Chart and How the List Was Made",
+ "seo_title": "Birthstones by Month: Chart of Every Month's Birthstone (US, UK and Traditional)",
+ "description": "The birthstone for every month, from January's garnet to December's turquoise, zircon and tanzanite: the US and UK lists side by side, the older traditional stones, and how the modern list was decided.",
+ "eyebrow": "Birthday Guide",
+ "kicker": "Birthday Guide",
+ "lead": "Every month of the year has its own birthstone, and some months have two or three. Here is the full chart, from January's garnet to December's turquoise, zircon and tanzanite, with the UK list and the older traditional stones beside it, and the story of how the list was made.",
+ "card_text": "The birthstone for every month in one chart, the US and UK lists compared, and how the modern list was decided.",
+ "published": "2026-10-29",
+ "facts": [
+  [
+   "January",
+   "Garnet"
+  ],
+  [
+   "Months with more than one stone",
+   "6 in the US list"
+  ],
+  [
+   "Newest addition",
+   "Spinel, August (2016)"
+  ]
+ ],
+ "image": {
+  "src": "images/guides/birthstones-museum.webp",
+  "alt": "Large cut gemstones in red, purple, green and blue displayed on gold stands in a museum case",
+  "width": 1200,
+  "height": 803,
+  "caption": "Gemstones on display at the Royal Ontario Museum in Toronto.",
+  "credit": {
+   "author": "Bryce Edwards",
+   "page": "https://commons.wikimedia.org/wiki/File:Birthstones_(3572825292).jpg",
+   "licence": "CC BY 2.0",
+   "licence_url": "https://creativecommons.org/licenses/by/2.0"
+  }
+ },
+ "sections": [
+  {
+   "h2": "Birthstone chart by month",
+   "paras": [
+    "The table shows the birthstones in the current American list (in bold), the British list, and the older stones used between the 15th and 20th centuries, as set out in Wikipedia's article on birthstones. Where a month has more than one stone, any of them counts as that month's birthstone."
+   ],
+   "html": "<div class=\"table-wrap\"><table class=\"data\"><thead><tr><th scope=\"col\">Month</th><th scope=\"col\">US list (2019)</th><th scope=\"col\">UK list (2013)</th><th scope=\"col\">15th–20th century</th></tr></thead><tbody><tr><th scope=\"row\">January</th><td><strong>Garnet</strong></td><td>Garnet</td><td>Garnet</td></tr><tr><th scope=\"row\">February</th><td><strong>Amethyst</strong></td><td>Amethyst</td><td>Amethyst, hyacinth, pearl</td></tr><tr><th scope=\"row\">March</th><td><strong>Aquamarine, bloodstone</strong></td><td>Aquamarine, bloodstone</td><td>Bloodstone, jasper</td></tr><tr><th scope=\"row\">April</th><td><strong>Diamond</strong></td><td>Diamond, rock crystal</td><td>Diamond, sapphire</td></tr><tr><th scope=\"row\">May</th><td><strong>Emerald</strong></td><td>Emerald, chrysoprase</td><td>Emerald, agate</td></tr><tr><th scope=\"row\">June</th><td><strong>Pearl, moonstone, alexandrite</strong></td><td>Pearl, moonstone</td><td>Cat's eye, turquoise, agate</td></tr><tr><th scope=\"row\">July</th><td><strong>Ruby</strong></td><td>Ruby, carnelian</td><td>Turquoise, onyx</td></tr><tr><th scope=\"row\">August</th><td><strong>Peridot, spinel, sardonyx</strong></td><td>Peridot, sardonyx</td><td>Sardonyx, carnelian, moonstone, topaz</td></tr><tr><th scope=\"row\">September</th><td><strong>Sapphire</strong></td><td>Sapphire, lapis lazuli</td><td>Chrysolite</td></tr><tr><th scope=\"row\">October</th><td><strong>Opal, tourmaline</strong></td><td>Opal</td><td>Opal, aquamarine</td></tr><tr><th scope=\"row\">November</th><td><strong>Topaz, citrine</strong></td><td>Topaz, citrine</td><td>Topaz, pearl</td></tr><tr><th scope=\"row\">December</th><td><strong>Turquoise, zircon, tanzanite</strong></td><td>Tanzanite, turquoise</td><td>Bloodstone, ruby</td></tr></tbody></table></div>",
+   "after": [
+    "In the American list, six months have more than one birthstone: March, June, August, October, November and December. December has the most choice, with turquoise, zircon and tanzanite."
+   ],
+   "gallery": [
+    {
+     "src": "images/guides/birthstone-garnet.webp",
+     "alt": "Four round faceted dark red garnets on a white background",
+     "width": 800,
+     "height": 450,
+     "caption": "Garnet, the birthstone for January",
+     "credit": {
+      "author": "W.carter",
+      "page": "https://commons.wikimedia.org/wiki/File:Four_round_faceted_garnet_gemstones_2.jpg",
+      "licence": "CC BY 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by/4.0",
+      "changes": "shown cropped"
+     }
+    },
+    {
+     "src": "images/guides/birthstone-amethyst.webp",
+     "alt": "Four oval faceted purple amethysts on a white background",
+     "width": 800,
+     "height": 534,
+     "caption": "Amethyst, the birthstone for February",
+     "credit": {
+      "author": "W.carter",
+      "page": "https://commons.wikimedia.org/wiki/File:Four_faceted_amethysts_2.jpg",
+      "licence": "CC BY 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by/4.0",
+      "changes": "shown cropped"
+     }
+    },
+    {
+     "src": "images/guides/birthstone-peridot.webp",
+     "alt": "A green faceted peridot gemstone",
+     "width": 800,
+     "height": 533,
+     "caption": "Peridot, one of the birthstones for August",
+     "credit": {
+      "author": "AdamStejskal",
+      "page": "https://commons.wikimedia.org/wiki/File:Peridot_with_ludwigite_inclusion_-_faceted_gemstone_peridot_from_Pakistan.jpg",
+      "licence": "CC BY 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by/4.0",
+      "changes": "shown cropped"
+     }
+    }
+   ]
+  },
+  {
+   "h2": "Where birthstones came from",
+   "paras": [
+    "The idea goes back to the Bible's description of the breastplate of Aaron, the high priest, set with twelve stones. In the first century the historian Josephus, Wikipedia explains, believed there was a connection between those twelve stones and “the twelve months of the year, and the twelve signs of the zodiac.”",
+    "Wearing one stone for your own birth month is much newer, “only a few centuries old”, and experts disagree on where it began. The gem scholar George Frederick Kunz, in his 1913 book <em>The Curious Lore of Precious Stones</em>, placed the custom in 18th-century Poland; the Gemological Institute of America traces it to Germany in the 1560s."
+   ]
+  },
+  {
+   "h2": "How the modern list was decided",
+   "paras": [
+    "For centuries the stones varied from place to place. To standardise them, American jewellers met in Kansas City in August 1912 and adopted an official list. National Jeweler names the group as the American National Retail Jewelers Association, today's Jewelers of America."
+   ],
+   "list": [
+    "<strong>1912:</strong> the first official American list.",
+    "<strong>1937:</strong> Britain's National Association of Goldsmiths creates its own standard list.",
+    "<strong>1952:</strong> an update adds alexandrite, citrine, tourmaline and zircon, according to National Jeweler.",
+    "<strong>2002:</strong> the American Gem Trade Association adds tanzanite for December.",
+    "<strong>2016:</strong> Jewelers of America and the American Gem Trade Association add spinel for August, announced in June that year.",
+    "<strong>2021:</strong> Japanese industry associations add ten new birthstones to Japan's list, Wikipedia notes."
+   ],
+   "after": [
+    "So the answer to “what is my birthstone?” can depend on where you live: the American and British lists agree on most months but not all, as the chart above shows."
+   ]
+  },
+  {
+   "h2": "Birthstones in Asia",
+   "paras": [
+    "Asian traditions have their own links between gems and birth. Hinduism, Wikipedia notes, recognises nine gemstones connected with the nine celestial bodies of the Navagraha, known in Sanskrit as the <em>Navaratna</em>, the nine gems. They follow astrology rather than the twelve months, so they are a different system from the birthstone chart above."
+   ]
+  },
+  {
+   "h2": "Your birthstone and your Chinese zodiac sign",
+   "paras": [
+    "Your birthstone and your Chinese zodiac animal answer different questions. The birthstone follows your birth <em>month</em> in the Western calendar. The zodiac animal follows your birth <em>year</em>, counted from Chinese New Year, which falls between 21 January and 20 February.",
+    "That is why someone born in January can have garnet as a birthstone and still belong to the previous zodiac year. Find your animal, element and lucky signs with our <a href=\"../checker\">zodiac checker</a>, or read <a href=\"chinese-zodiac-born-in-january\">what your Chinese zodiac is if you were born in January</a>."
+   ]
+  }
+ ],
+ "faq": [
+  [
+   "What is the birthstone for each month?",
+   "In the current American list: January garnet; February amethyst; March aquamarine or bloodstone; April diamond; May emerald; June pearl, moonstone or alexandrite; July ruby; August peridot, spinel or sardonyx; September sapphire; October opal or tourmaline; November topaz or citrine; December turquoise, zircon or tanzanite."
+  ],
+  [
+   "Which months have more than one birthstone?",
+   "In the American list, March, June, August, October, November and December each have two or three birthstones. Any of them counts as that month's stone."
+  ],
+  [
+   "Who decides the birthstones?",
+   "Jewellers' associations. The American list was adopted by jewellers meeting in Kansas City in 1912 and has been updated since, most recently in 2016. Britain's National Association of Goldsmiths made its own list in 1937."
+  ],
+  [
+   "When was spinel added as a birthstone?",
+   "In 2016, when Jewelers of America and the American Gem Trade Association added spinel as a birthstone for August."
+  ],
+  [
+   "Is my birthstone linked to my Chinese zodiac sign?",
+   "No. The birthstone follows your birth month; the Chinese zodiac animal follows your birth year, which starts at Chinese New Year. You can check your animal with our zodiac checker."
+  ]
+ ],
+ "sources": [
+  [
+   "Wikipedia: “Birthstone”",
+   "https://en.wikipedia.org/wiki/Birthstone",
+   "the US, UK and 15th–20th-century lists, Josephus and the breastplate, Kunz and the GIA on the origin of the custom, the 1912, 1937, 1952, 2002 and 2016 changes, Japan's 2021 additions and the Navaratna."
+  ],
+  [
+   "National Jeweler: “JA, AGTA add spinel as August birthstone” (2 June 2016)",
+   "https://nationaljeweler.com/articles/5244-ja-agta-add-spinel-as-august-birthstone",
+   "the 2016 addition of spinel, the 1912 list by the American National Retail Jewelers Association (now Jewelers of America), and the 1952 and 2002 updates."
+  ]
+ ],
+ "related": [
+  [
+   "Born in January?",
+   "chinese-zodiac-born-in-january"
+  ],
+  [
+   "How to calculate your zodiac sign",
+   "how-to-calculate-zodiac-sign"
+  ],
+  [
+   "Year of the Goat, Sheep or Ram?",
+   "year-of-the-goat-sheep-or-ram-2027"
+  ],
+  [
+   "Find your zodiac sign",
+   "../checker"
+  ]
+ ],
+ "note": "Birthstone lists follow the sources above; jewellers and countries sometimes differ. Photos are from Wikimedia Commons under the free licences named under each picture."
+}
