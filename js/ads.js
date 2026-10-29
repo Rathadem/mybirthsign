@@ -1,13 +1,19 @@
 /* Adsterra ads for MyBirthSign (English, Chinese and Khmer pages).
-   build-site.mjs puts empty slots in the page: data-ad="top" (728x90 on wide screens, 320x50 on phones),
-   "box" (300x250 inside the content) and "native" (native banner near the end). Slots are filled only when
-   they come near the screen, one banner at a time (Adsterra banners share one global atOptions setting). */
+   build-site.mjs puts empty slots between the sections of a page: data-ad="native" (Native Banner ads, the owner's choice
+   there since 29/10/2026; older "box" 300x250 / "mid" / "top" slots still work if a page has one). Side ads (160x600) are
+   added here on wide screens. Slots are filled only when they come near the screen, banners one at a time (Adsterra
+   banners share one global atOptions setting). */
 (function () {
   // run once per page, even if the page includes this file twice (two copies made double side ads and mixed-up banner sizes)
   if (window.MBSAdsLoaded) return;
   window.MBSAdsLoaded = true;
   var HOST = "https://bauval.org";
-  var NATIVE = "f09efb6f84e744d5ad358f03efbf68db";
+  // Native Banner codes: [container key, script address]. One code can show only once per page (Adsterra), so a page shows as many
+  // native ads as there are codes here, in the first native spots from the top; the other native spots stay hidden.
+  // To add a code from Adsterra Support, add one more line like the first one.
+  var NATIVES = [
+    ["f09efb6f84e744d5ad358f03efbf68db", HOST + "/21/f09efb6f84e744d5ad358f03efbf68db"],
+  ];
   var BANNER = { box: ["be82b735bb4822651f6266ea177098d1", 300, 250], top_d: ["18e30a22b3ffe8fb2229cd25f31ba870", 728, 90], top_m: ["3e5e00c17d44d21efb07540becb72519", 320, 50],
     sky600: ["89c8bc55c8616f881f45a06e7d8a4594", 160, 600], sky300: ["352da5bdc6fa784c5fc4d6576ca3265b", 160, 300] };
   // computers, laptops and landscape tablets (1,024 px and wider): tall banners down each side of the page (left and right side bars),
@@ -32,9 +38,11 @@
     el.setAttribute("data-filled", "1");
     var t = el.getAttribute("data-ad");
     if (t === "native") {
+      var nv = NATIVES[+el.getAttribute("data-native")];
+      if (!nv) { el.style.display = "none"; return; }
       var n = document.createElement("script");
-      n.async = true; n.setAttribute("data-cfasync", "false"); n.src = HOST + "/21/" + NATIVE;
-      var c = document.createElement("div"); c.id = "container-" + NATIVE;
+      n.async = true; n.setAttribute("data-cfasync", "false"); n.src = nv[1];
+      var c = document.createElement("div"); c.id = "container-" + nv[0];
       el.appendChild(n); el.appendChild(c);
       return;
     }
@@ -57,7 +65,9 @@
   function docTop(el) { return el.getBoundingClientRect().top + window.pageYOffset; }
   function railTops() {
     var head = document.querySelector(".site-header"), foot = document.querySelector("footer");
-    var first = head ? docTop(head) + head.offsetHeight + 36 : 96;
+    // (the menu bar stays stuck at the top of the screen, so its height is used, not where it is now: measuring it while the
+    // visitor is scrolled down made the side ads above that point disappear whenever the page grew)
+    var first = head ? head.offsetHeight + 36 : 96;
     // keep the top of the page clean: the first side ads start below the hero / page title block, beside the first section
     // (the biggest block around the main title that is still no taller than about one screen)
     var blk = heroBlock();
@@ -225,6 +235,12 @@
     popAd();
   });
   function start() {
+    // each native spot gets its own code, from the top of the page down; spots without a code are hidden
+    var nat = document.querySelectorAll('.mbs-ad[data-ad="native"]');
+    for (var q = 0; q < nat.length; q++) {
+      if (q < NATIVES.length) nat[q].setAttribute("data-native", q);
+      else { nat[q].style.display = "none"; nat[q].setAttribute("data-filled", "1"); }
+    }
     rails();
     var slots = document.querySelectorAll(".mbs-ad[data-ad]");   // between-section 728x90 ads show on every screen size, with or without side ads
     if (!("IntersectionObserver" in window)) { for (var i = 0; i < slots.length; i++) fill(slots[i]); return; }
