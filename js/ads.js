@@ -30,7 +30,7 @@
     var conf = document.createElement("script");
     conf.text = "atOptions = {'key':'" + b[0] + "','format':'iframe','height':" + b[2] + ",'width':" + b[1] + ",'params':{}};";
     var s = document.createElement("script");
-    s.src = HOST + "/22/" + b[0]; s.onload = done; s.onerror = function () { if (job.fail) job.fail(); done(); };
+    s.src = HOST + "/22/" + b[0]; s.onload = function () { diag.ok++; diagShow(); done(); }; s.onerror = function () { diag.bad++; diagShow(); if (job.fail) job.fail(); done(); };
     job.el.appendChild(conf); job.el.appendChild(s);
     setTimeout(done, 6000);   // never let one slow ad block the others
   }
@@ -43,7 +43,8 @@
       if (!nv) { el.style.display = "none"; return; }
       var n = document.createElement("script");
       n.async = true; n.setAttribute("data-cfasync", "false"); n.src = nv[1];
-      n.onerror = function () { el.style.display = "none"; };   // ad blocked (ad blocker or a network that blocks ad addresses): no empty gap
+      n.onload = function () { diag.ok++; diagShow(); };
+      n.onerror = function () { diag.bad++; diagShow(); el.style.display = "none"; };   // ad blocked (ad blocker or a network that blocks ad addresses): no empty gap
       var c = document.createElement("div"); c.id = "container-" + nv[0];
       el.appendChild(n); el.appendChild(c);
       return;
@@ -252,6 +253,29 @@
       es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); fill(e.target); } });
     }, { rootMargin: "400px 0px" });
     for (var j = 0; j < slots.length; j++) io.observe(slots[j]);
+  }
+  // ---- ad check for the owner: add ?adcheck to any page address (e.g. mybirthsign.com/?adcheck) to see whether this phone /
+  // network can reach the ad server and how many ads loaded or were blocked. Visitors never see it.
+  var diag = { ok: 0, bad: 0, server: "checking…" }, diagBox = null;
+  function diagShow() {
+    if (!diagBox) return;
+    var c = navigator.connection || {};   // c.type ("wifi" / "cellular") is known on Android Chrome only
+    diagBox.textContent = "Ad check · ad server: " + diag.server + " · ads loaded: " + diag.ok + " · ads blocked: " + diag.bad +
+      (c.type ? " · network: " + c.type : "") + " · screen " + window.innerWidth + "px";
+  }
+  if (/[?&]adcheck\b/.test(location.search)) {
+    var diagStart = function () {
+      diagBox = document.createElement("div"); diagBox.id = "mbs-adcheck";
+      diagBox.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:2147483001;padding:10px 12px;border-radius:10px;background:#111;color:#fff;font:600 13px/1.4 system-ui,sans-serif;border:2px solid #d4af37";
+      document.body.appendChild(diagBox); diagShow();
+      var t = setTimeout(function () { diag.server = "NO ANSWER (slow or blocked)"; diagShow(); }, 8000);
+      try {
+        fetch(HOST + "/?check=" + Date.now(), { mode: "no-cors", cache: "no-store" })
+          .then(function () { clearTimeout(t); diag.server = "REACHABLE"; diagShow(); })
+          .catch(function () { clearTimeout(t); diag.server = "BLOCKED"; diagShow(); });
+      } catch (e) { diag.server = "cannot test"; diagShow(); }
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", diagStart); else diagStart();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
