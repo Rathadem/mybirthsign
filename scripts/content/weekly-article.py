@@ -85,11 +85,39 @@ STYLE += (".festival-article figure.photo{position:relative;border:1px solid rgb
           ".festival-article figure.photo::after{right:10px;border-left:0;border-bottom:0;border-radius:0 10px 0 0}"
           ".festival-article figure.photo figcaption{background:linear-gradient(180deg,#1f1a3c,#15122e);border-top:1px solid rgba(226,189,97,.4)}"
           ".festival-article figure.photo .credit{display:block;margin-top:4px;font-size:.8rem;line-height:1.5;color:#b9b0d6}"
-          ".festival-article figure.photo .credit a{color:#e2bd61}")
+          ".festival-article figure.photo .credit a{color:#e2bd61}"
+          ".festival-article figure.graphic{border:0;background:none;border-radius:22px}.festival-article figure.graphic figcaption{padding:10px 4px 0}"
+          # timeline block (class tl-box) and bar chart block (class bars-box), in the same gold frame as the photos
+          ".festival-article .tl-box,.festival-article .bars-box{margin:26px 0 34px;padding:22px 24px 12px;border:1px solid rgba(226,189,97,.75);border-radius:18px;"
+          "background:radial-gradient(120% 80% at 100% 0,rgba(226,189,97,.10),transparent 60%),#15122e;box-shadow:0 0 0 5px rgba(226,189,97,.09),0 18px 40px rgba(0,0,0,.45)}"
+          ".festival-article .box-title{margin:0;font-family:'Playfair Display',Georgia,serif;font-size:1.45rem;line-height:1.3;color:#ffe4a0}"
+          ".festival-article .box-sub{margin:2px 0 18px;color:#c9bff0;font-size:.9rem}"
+          ".festival-article .tl{list-style:none;margin:0;padding:0}"
+          ".festival-article .tl li{position:relative;display:grid;grid-template-columns:96px 1fr;column-gap:40px;padding:0 0 20px}"
+          ".festival-article .tl li::before{content:'';position:absolute;left:109px;top:7px;width:14px;height:14px;border-radius:50%;background:#f2d27d;box-shadow:0 0 0 5px rgba(242,210,125,.18)}"
+          ".festival-article .tl li::after{content:'';position:absolute;left:115px;top:26px;bottom:-4px;width:2px;background:#c9a54a}"
+          ".festival-article .tl li:last-child::after{display:none}"
+          ".festival-article .tl li.maybe::before{background:#15122e;border:2px solid #f2d27d;width:10px;height:10px}"
+          ".festival-article .tl li.before-maybe::after{background:repeating-linear-gradient(#c9a54a 0 6px,transparent 6px 12px)}"
+          ".festival-article .tl time{font-family:'Playfair Display',Georgia,serif;font-weight:700;color:#f2d27d;text-align:right;line-height:1.6}"
+          ".festival-article .tl b{display:block;color:#fff;font-size:1.05rem;line-height:1.5}"
+          ".festival-article .tl span{display:block;color:#cfc6ee;font-size:.95rem;line-height:1.6}"
+          "@media(max-width:560px){.festival-article .tl li{grid-template-columns:1fr;padding-left:32px}.festival-article .tl li::before{left:2px}"
+          ".festival-article .tl li.maybe::before{left:4px}.festival-article .tl li::after{left:8px}.festival-article .tl time{text-align:left}}"
+          ".festival-article .bar-row{display:grid;grid-template-columns:180px 1fr;gap:6px 18px;align-items:center;margin:0 0 16px}"
+          ".festival-article .bar-l{color:#fff;font-weight:700;line-height:1.35}.festival-article .bar-l small{display:block;color:#b9b0d6;font-weight:400;font-size:.85rem}"
+          ".festival-article .bar{position:relative;display:block;height:46px;border-radius:10px;background:rgba(255,255,255,.04)}"
+          ".festival-article .bar i{position:absolute;top:0;bottom:0;left:0;border-radius:10px}"
+          ".festival-article .bar i.lo{background:#9b88d6}.festival-article .bar i.hi{background:#d8b44a;border-radius:10px 0 0 10px}"
+          ".festival-article .bar i.range{background:repeating-linear-gradient(135deg,rgba(216,180,74,.55) 0 8px,rgba(216,180,74,.3) 8px 16px);border:1px solid #d8b44a;border-left:0;border-radius:0 10px 10px 0}"
+          ".festival-article .bar em{position:absolute;top:50%;transform:translateY(-50%);font-style:normal;font-weight:700;font-size:1.15rem;white-space:nowrap}"
+          ".festival-article .bar em.out{color:#fff}.festival-article .bar em.in{left:14px;color:#1a1430}"
+          ".festival-article .bars-note{margin:4px 0 8px;color:#cfc6ee;font-size:.9rem}"
+          "@media(max-width:560px){.festival-article .bar-row{grid-template-columns:1fr}}")
 
 
-def photo_cls(im):
-    return ' class="photo"' if im.get("credit") else ""
+def photo_cls(im):   # "cls": "graphic" for a drawn map or chart that has its own frame
+    return f' class="{e(im["cls"])}"' if im.get("cls") else ' class="photo"' if im.get("credit") else ""
 
 
 def credit_html(im):
@@ -108,10 +136,12 @@ for s in spec["sections"]:
         body += "<ul>" + "".join(f"<li>{li}</li>" for li in s["list"]) + "</ul>"
     for p in s.get("after", []):
         body += f"<p>{p}</p>"
-    si = s.get("img")  # optional picture after the section text (lazy-loaded)
-    if si:
-        body += (f'<figure{photo_cls(si)}><img src="../{si["src"]}" alt="{e(si["alt"])}" width="{si["width"]}" height="{si["height"]}" loading="lazy" decoding="async">'
-                 f'<figcaption>{e(si["caption"])}{credit_html(si)}</figcaption></figure>')
+    if s.get("html"):   # optional ready-made block after the text (a timeline, a small bar chart …), written as HTML
+        body += s["html"]
+    si = s.get("img")  # optional picture(s) after the section text (lazy-loaded); one picture or a list of them
+    for im in (si if isinstance(si, list) else [si] if si else []):
+        body += (f'<figure{photo_cls(im)}><img src="../{im["src"]}" alt="{e(im["alt"])}" width="{im["width"]}" height="{im["height"]}" loading="lazy" decoding="async">'
+                 f'<figcaption>{e(im["caption"])}{credit_html(im)}</figcaption></figure>')
     parts.append(f"<section><h2>{e(s['h2'])}</h2>\n{body}</section>")
 facts = "".join(f'<div class="fact"><strong>{e(k)}</strong>{e(v)}</div>' for k, v in spec["facts"])
 FX = spec.get("fx")  # optional CSS-only particle animation over the main picture: wood, fire, earth, metal or water

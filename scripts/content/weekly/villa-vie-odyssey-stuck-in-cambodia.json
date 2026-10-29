@@ -45,17 +45,12 @@
     "Residents who could not take everything with them at once could arrange to come back for their belongings through Guest Services, and a shuttle for moving belongings ran only until Tuesday evening, according to Cruise Hive. On Tuesday 27 October the company announced that it had suspended operations in Cambodia."
    ],
    "img": {
-    "src": "images/guides/villa-vie-sihanoukville-port.webp",
-    "alt": "Red container cranes and stacks of shipping containers at Sihanoukville port beside the sea, seen from a hill",
-    "width": 1280,
-    "height": 853,
-    "caption": "Sihanoukville Autonomous Port, Cambodia's main seaport, in 2014.",
-    "credit": {
-     "author": "Dmitry Makeev",
-     "page": "https://commons.wikimedia.org/wiki/File:Sihanoukville_Autonomous_Port_-_Cambodia.jpg",
-     "licence": "CC BY-SA 4.0",
-     "licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
-    }
+    "src": "images/guides/villa-vie-odyssey-map.webp",
+    "alt": "Map of Cambodia and its neighbours: an arrow from Thailand across the Gulf of Thailand to a star at Sihanoukville, where the Odyssey stopped, and a dashed arrow from there toward Vietnam, its planned next stop",
+    "width": 900,
+    "height": 820,
+    "cls": "graphic",
+    "caption": "Map: MyBirthSign, drawn from Natural Earth map data (public domain). The arrows show the direction of travel, not the exact route."
    }
   },
   {
@@ -65,7 +60,8 @@
     "The company said it had slowed the itinerary and spent more time in port to burn less fuel, but that this was not enough. “Passing the full increase on to residents is not a realistic solution,” it said.",
     "Founder Mikael Petterson gave more detail in an interview with CBS News, as reported by the cruise news site Pirates &amp; Princesses: fuel that cost about $700 a ton before late February had risen to $2,000 to $3,000 a ton, and monthly expenses had grown from about $400,000 to $2 million. “We've borrowed money, we've stretched our payrolls as far as we can,” he said.",
     "Residents describe months of strain before the stop. One resident, Holly Hennessey, told RTÉ that a fuel loan programme was offered in April and a fuel surcharge was charged in May, which she said only 37% of passengers paid. Cruise Industry News, citing people on board, reported, according to Newsweek, that residents had been asked several times for more money, including about $360,000 for fuel."
-   ]
+   ],
+   "html": "<div class=\"bars-box\"><p class=\"box-title\">Fuel cost per cabin, per month</p><p class=\"box-sub\">Villa Vie’s own figures, in US dollars</p><div class=\"bar-row\"><span class=\"bar-l\">Two-year average<small>the company’s historical figure</small></span><span class=\"bar\" role=\"img\" aria-label=\"About $1,800\"><i class=\"lo\" style=\"width:22.5%\"></i><em class=\"out\" style=\"left:calc(22.5% + 12px)\">$1,800</em></span></div><div class=\"bar-row\"><span class=\"bar-l\">Parts of Asia<small>the company’s estimate now</small></span><span class=\"bar\" role=\"img\" aria-label=\"An estimated $6,000 to $8,000\"><i class=\"hi\" style=\"width:75%\"></i><i class=\"range\" style=\"left:75%;right:0\"></i><em class=\"in\">$6,000–$8,000</em></span></div><p class=\"bars-note\">That is about 3.3 to 4.4 times the old average. Source: Villa Vie Residences statement, 27 October 2026.</p></div>"
   },
   {
    "h2": "What happens to the residents",
@@ -82,7 +78,8 @@
     "The company says it will work toward restructuring and new financing over the next 60 days, and warned that “no outcome is assured.” On 28 October, Petterson told CBS News that the company plans to file for Chapter 11 bankruptcy protection, Pirates &amp; Princesses reported; no court filing had been reported at the time of writing.",
     "Long Dimanche, deputy governor of Preah Sihanouk province, told AP the ship was expected to refuel and leave Cambodia on Saturday 31 October. Villa Vie has not confirmed a departure date or where the ship would go, and the crew remain on board in the meantime.",
     "Residents are waiting to see whether an investor steps in or whether owners form a group to keep the ship going, Hennessey told RTÉ; she described both as possibilities, not plans. Earlier, in July 2026, the company had announced a second ship, the Legacy, for 2029, Cruise Hive reported."
-   ]
+   ],
+   "html": "<div class=\"tl-box\"><p class=\"box-title\">The Odyssey’s week in Sihanoukville</p><p class=\"box-sub\">October 2026, as reported</p><ol class=\"tl\"><li><time>Fri 23 Oct</time><div><b>Arrives in Sihanoukville</b><span>From Thailand, with 203 passengers and 156 crew, Cambodian officials said.</span></div></li><li><time>Mon 26 Oct</time><div><b>Residents told to leave</b><span>Off the ship by 2 p.m. that day. The crew stay on board to look after it.</span></div></li><li><time>Tue 27 Oct</time><div><b>Operations suspended</b><span>Villa Vie blames fuel costs and starts a 60-day restructuring.</span></div></li><li class=\"before-maybe\"><time>Wed 28 Oct</time><div><b>Chapter 11 planned</b><span>Founder Mikael Petterson tells CBS News the company plans to file.</span></div></li><li class=\"maybe\"><time>Sat 31 Oct</time><div><b>Expected to refuel and leave</b><span>Said by a provincial official. Villa Vie has not confirmed it.</span></div></li></ol></div>"
   },
   {
    "h2": "About the Villa Vie Odyssey",
@@ -111,19 +108,34 @@
     "Sihanoukville, in Preah Sihanouk province on the Gulf of Thailand, is Cambodia's main seaport. It has helped a stranded cruise ship before: in early 2020, AP recalled, Cambodia let the MS Westerdam dock there after several other ports had turned it away at the start of the COVID-19 pandemic.",
     "This story is still developing. The facts above are as reported up to 29 October 2026; check the sources below for the latest news."
    ],
-   "img": {
-    "src": "images/guides/villa-vie-ochheuteal-beach.webp",
-    "alt": "Sun loungers and colourful umbrellas under trees along Ochheuteal Beach in Sihanoukville",
-    "width": 1280,
-    "height": 557,
-    "caption": "Ochheuteal Beach in Sihanoukville, in 2014.",
-    "credit": {
-     "author": "Dmitry Makeev",
-     "page": "https://commons.wikimedia.org/wiki/File:Sihanoukville._Ochheuteal_Beach.jpg",
-     "licence": "CC BY-SA 4.0",
-     "licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   "img": [
+    {
+     "src": "images/guides/villa-vie-sihanoukville-port.webp",
+     "alt": "Red container cranes and stacks of shipping containers at Sihanoukville port beside the sea, seen from a hill",
+     "width": 1280,
+     "height": 853,
+     "caption": "Sihanoukville Autonomous Port, Cambodia's main seaport, in 2014.",
+     "credit": {
+      "author": "Dmitry Makeev",
+      "page": "https://commons.wikimedia.org/wiki/File:Sihanoukville_Autonomous_Port_-_Cambodia.jpg",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
+     }
+    },
+    {
+     "src": "images/guides/villa-vie-ochheuteal-beach.webp",
+     "alt": "Sun loungers and colourful umbrellas under trees along Ochheuteal Beach in Sihanoukville",
+     "width": 1280,
+     "height": 557,
+     "caption": "Ochheuteal Beach in Sihanoukville, in 2014.",
+     "credit": {
+      "author": "Dmitry Makeev",
+      "page": "https://commons.wikimedia.org/wiki/File:Sihanoukville._Ochheuteal_Beach.jpg",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
+     }
     }
-   }
+   ]
   }
  ],
  "faq": [
