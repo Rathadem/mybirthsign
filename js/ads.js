@@ -20,7 +20,7 @@
     var conf = document.createElement("script");
     conf.text = "atOptions = {'key':'" + b[0] + "','format':'iframe','height':" + b[2] + ",'width':" + b[1] + ",'params':{}};";
     var s = document.createElement("script");
-    s.src = HOST + "/22/" + b[0]; s.onload = done; s.onerror = done;
+    s.src = HOST + "/22/" + b[0]; s.onload = done; s.onerror = function () { if (job.fail) job.fail(); done(); };
     job.el.appendChild(conf); job.el.appendChild(s);
     setTimeout(done, 6000);   // never let one slow ad block the others
   }
@@ -133,6 +133,94 @@
     window.addEventListener("load", layoutRails);
     if ("ResizeObserver" in window) { var t; new ResizeObserver(function () { clearTimeout(t); t = setTimeout(layoutRails, 150); }).observe(document.body); }
   }
+  // ---- pop ad when a visitor checks their sign or a compatibility (the owner asked for this on 29/10/2026) ----
+  // Once a day per visitor (per browser):
+  //   1. an ad box over the page with a 300x250 banner; it can be closed after POP_WAIT seconds, the result is right behind it;
+  //   2. when SMARTLINK is filled in, the same click also opens that Adsterra Smartlink in a new tab.
+  // Check buttons: My Horoscope (/checker; also when it runs from the homepage "Find my sign"), Check Compatibility (homepage
+  // and /compatibility), Compare Signs, Check Business Compatibility and Find Best Wedding Dates. An error (missing or
+  // wrong date) shows no ad. Nothing here changes how any result is worked out.
+  var SMARTLINK = "";   // Adsterra Smartlink (Direct Link) address, e.g. "https://....". Empty = no new-tab ad
+  var POP_WAIT = 3;
+  var TOOLS = { "compat-form": ["compat-result", ""], "cmp-form": ["cmp-result", "cmp-error"], "cs-form": ["cs-result", "cs-error"],
+    "biz-form": ["biz-result", "biz-form-error"], "wedding-form": ["wedding-result", "wed-error"] };
+  var LANG = (root.getAttribute("data-site-lang") || root.lang || "en").slice(0, 2);
+  var POP_TXT = { en: ["Advertisement", "Close", "Your result is ready behind this box."],
+    km: ["ការផ្សាយពាណិជ្ជកម្ម", "បិទ", "លទ្ធផលរបស់អ្នកនៅខាងក្រោយប្រអប់នេះ។"],
+    zh: ["广告", "关闭", "你的结果就在这个框的后面。"] }[LANG] || null;
+  if (!POP_TXT) POP_TXT = ["Advertisement", "Close", "Your result is ready behind this box."];
+  var popSeen = {};
+  function dayNow() { var d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); }
+  function popDue(k) {
+    if (popSeen[k]) return false;
+    try { return window.localStorage.getItem("mbs-pop-" + k) !== dayNow(); } catch (e) { return true; }   // no storage: once per page view
+  }
+  function popDone(k) { popSeen[k] = 1; try { window.localStorage.setItem("mbs-pop-" + k, dayNow()); } catch (e) { /* once per page view */ } }
+  function popTab() {
+    // a new tab can only open straight from the visitor's click; otherwise the browser blocks it (then it is tried at the next check)
+    if (!SMARTLINK || !popDue("tab")) return;
+    if (navigator.userActivation && !navigator.userActivation.isActive) return;
+    var w = null;
+    try { w = window.open(SMARTLINK, "_blank"); } catch (e) { w = null; }
+    if (w) { try { w.opener = null; } catch (e) { /* fine */ } popDone("tab"); }
+  }
+  function popBox() {
+    if (!popDue("box") || document.querySelector(".mbs-pop")) return;
+    popDone("box");
+    if (!document.getElementById("mbs-pop-css")) {
+      var st = document.createElement("style"); st.id = "mbs-pop-css";
+      st.textContent = ".mbs-pop{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(6,4,18,.74);opacity:0;transition:opacity .2s}" +
+        ".mbs-pop.on{opacity:1}.mbs-pop-card{width:324px;max-width:100%;box-sizing:border-box;padding:10px 12px 12px;border:1px solid rgba(212,175,55,.55);border-radius:14px;background:#1a1430;color:#f1ecff;box-shadow:0 18px 50px rgba(0,0,0,.55);font-size:14px;line-height:1.4}" +
+        ".mbs-pop-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.mbs-pop-lab{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#b4a9d6}" +
+        ".mbs-pop-x{min-width:88px;min-height:36px;padding:6px 14px;border:1px solid #d4af37;border-radius:999px;background:#d4af37;color:#1a1430;font-family:inherit;font-size:14px;font-weight:600;line-height:1;cursor:pointer}" +
+        ".mbs-pop-x:disabled{background:transparent;color:#d4af37;cursor:default;opacity:.85}.mbs-pop-ad{display:flex;justify-content:center;align-items:center;min-height:250px;overflow:hidden;border-radius:8px;background:rgba(255,255,255,.04)}" +
+        ".mbs-pop-ad iframe{max-width:100%}.mbs-pop-note{margin:8px 0 0;text-align:center;font-size:13px;color:#b4a9d6}" +
+        (LANG === "km" ? ".mbs-pop-lab{letter-spacing:0;text-transform:none;font-size:12px}" : "");   // Khmer: never letter-spaced
+      document.head.appendChild(st);
+    }
+    var box = document.createElement("div");
+    box.className = "mbs-pop"; box.setAttribute("role", "dialog"); box.setAttribute("aria-modal", "true"); box.setAttribute("aria-label", POP_TXT[0]);
+    box.innerHTML = '<div class="mbs-pop-card"><div class="mbs-pop-top"><span class="mbs-pop-lab"></span><button type="button" class="mbs-pop-x" disabled></button></div>' +
+      '<div class="mbs-pop-ad"></div><p class="mbs-pop-note"></p></div>';
+    box.querySelector(".mbs-pop-lab").textContent = POP_TXT[0];
+    box.querySelector(".mbs-pop-note").textContent = POP_TXT[2];
+    var x = box.querySelector(".mbs-pop-x"), left = POP_WAIT, was = document.activeElement;
+    var label = function () { x.textContent = left > 0 ? POP_TXT[1] + " (" + left + ")" : POP_TXT[1] + " ✕"; };
+    var close = function () {
+      if (x.disabled) return;
+      document.removeEventListener("keydown", onKey);
+      box.remove();
+      try { if (was && was.focus) was.focus({ preventScroll: true }); } catch (e) { /* fine */ }
+    };
+    var onKey = function (e) { if (e.key === "Escape") close(); };
+    label();
+    var tick = setInterval(function () { left--; label(); if (left <= 0) { clearInterval(tick); x.disabled = false; try { x.focus({ preventScroll: true }); } catch (e) { /* fine */ } } }, 1000);
+    x.addEventListener("click", close);
+    box.addEventListener("click", function (e) { if (e.target === box) close(); });
+    document.addEventListener("keydown", onKey);
+    document.body.appendChild(box);
+    requestAnimationFrame(function () { box.classList.add("on"); });
+    // first in line, before any other banner; if the ad is blocked (an ad blocker), the empty box closes at once
+    queue.unshift({ el: box.querySelector(".mbs-pop-ad"), k: "box", fail: function () { clearInterval(tick); x.disabled = false; close(); } });
+    next();
+  }
+  function popAd() {
+    try { popTab(); } catch (e) { /* the result stays as it is */ }
+    setTimeout(function () { try { popBox(); } catch (e) { /* the result stays as it is */ } }, 600);   // the result shows first
+  }
+  // My Horoscope: js/app.js sends "mbs:checker-result" after it shows the result
+  document.addEventListener("mbs:checker-result", popAd);
+  // the other check buttons: this runs after the page's own submit handler, so the result (or an error) is already on the page
+  document.addEventListener("submit", function (e) {
+    var f = e.target, id = f && f.id;
+    if (id === "hm-find-form") { if (!e.defaultPrevented) { try { popTab(); } catch (err) { /* fine */ } } return; }   // homepage "Find my sign": the ad box shows on /checker
+    var t = id && TOOLS.hasOwnProperty(id) ? TOOLS[id] : null;
+    if (!t) return;
+    var res = document.getElementById(t[0]), er = t[1] ? document.getElementById(t[1]) : null;
+    if (er && !er.hidden && er.textContent.trim()) return;   // the tool showed an error: no ad
+    if (!res || !res.innerHTML.trim()) return;               // no result on the page
+    popAd();
+  });
   function start() {
     rails();
     var slots = document.querySelectorAll(".mbs-ad[data-ad]");   // between-section 728x90 ads show on every screen size, with or without side ads
