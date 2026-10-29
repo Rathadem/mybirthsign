@@ -538,10 +538,16 @@ if (SCHEDULED.length) {
 // sections (the owner's choice, 29/10/2026). At most three native spots per page (first, middle, last); one Native Banner code can
 // show only once per page, so js/ads.js gives the native spots the codes it has (top spot first) and shows a banner (data-fallback)
 // in a native spot that has no code. Side ads stay banners.
+// Khmer pages (/km/): no ad network at all since 29/10/2026 (the owner's choice); the same spots are marked data-ad="local" and
+// js/ads.js fills them with ads from local businesses listed in js/local-ads.js (hidden while there are none).
 {
   const SKIP = /^(about|privacy|terms|contact|404|google[0-9a-f]+)\.html$/;
-  const CSS = '<style>.mbs-ad{display:flex;justify-content:center;align-items:center;margin:18px auto;max-width:100%;overflow:hidden;clear:both}.mbs-ad[data-ad=top]{min-height:50px}.mbs-ad[data-ad=box],.mbs-ad[data-ad=mid]{min-height:250px}@media(min-width:760px){.mbs-ad[data-ad=mid]{min-height:90px}}@media(min-width:760px){.mbs-ad[data-ad=top]{min-height:90px}}.mbs-ad iframe{max-width:100%}.mbs-ad[data-ad=native]{display:block;width:100%;max-width:min(1100px,100%)}.mbs-rail{position:absolute;top:0;z-index:5;width:160px;min-height:600px;display:none}.mbs-rail-left{left:12px}.mbs-rail-right{right:12px}html.mbs-rails .mbs-rail{display:block}html.mbs-rails body{padding-left:184px;padding-right:184px}html.mbs-rails .site-header,html.mbs-rails .mbs-bleed{margin-left:-184px;margin-right:-184px}@media(max-width:1599px){html.mbs-rails .fx-grid{grid-template-columns:repeat(3,1fr)}}</style>';
-  const slot = (k, fb) => `<div class="mbs-ad" data-ad="${k}"${fb ? ` data-fallback="${fb}"` : ""} aria-label="Advertisement"></div>`;
+  const CSS = '<style>.mbs-ad{display:flex;justify-content:center;align-items:center;margin:18px auto;max-width:100%;overflow:hidden;clear:both}.mbs-ad[data-ad=top]{min-height:50px}.mbs-ad[data-ad=box],.mbs-ad[data-ad=mid]{min-height:250px}@media(min-width:760px){.mbs-ad[data-ad=mid]{min-height:90px}}@media(min-width:760px){.mbs-ad[data-ad=top]{min-height:90px}}.mbs-ad iframe{max-width:100%}.mbs-ad[data-ad=native]{display:block;width:100%;max-width:min(1100px,100%)}.mbs-ad[data-ad=local]{display:none;width:100%;max-width:min(728px,100%);margin:22px auto}.mbs-ad[data-ad=local].on{display:block}.mbs-rail{position:absolute;top:0;z-index:5;width:160px;min-height:600px;display:none}.mbs-rail-left{left:12px}.mbs-rail-right{right:12px}html.mbs-rails .mbs-rail{display:block}html.mbs-rails body{padding-left:184px;padding-right:184px}html.mbs-rails .site-header,html.mbs-rails .mbs-bleed{margin-left:-184px;margin-right:-184px}@media(max-width:1599px){html.mbs-rails .fx-grid{grid-template-columns:repeat(3,1fr)}}</style>';
+  let kmPage = false;
+  const slot = (k, fb) => kmPage ? '<div class="mbs-ad" data-ad="local" aria-label="Advertisement"></div>'
+    : `<div class="mbs-ad" data-ad="${k}"${fb ? ` data-fallback="${fb}"` : ""} aria-label="Advertisement"></div>`;
+  // Khmer pages: hand-placed spots (the Checker's) become local ad spots too
+  const fin = (h) => kmPage ? h.replace(/(<div class="mbs-ad\b[^"]*") data-ad="(?:native|box|mid|top)"(?: data-fallback="\w+")?/g, '$1 data-ad="local"') : h;
   let pagesWithAds = 0;
   (function walk(d) {
     for (const f of fs.readdirSync(d)) {
@@ -549,13 +555,14 @@ if (SCHEDULED.length) {
       const rel = path.relative(DIST, p).split(path.sep);
       if (st.isDirectory()) { if (!(rel.length === 1 && f === "studio")) walk(p); continue; }
       if (!f.endsWith(".html") || SKIP.test(f) && rel.length <= 2) continue;
+      kmPage = rel[0] === "km";
       let h = fs.readFileSync(p, "utf8");
       if (h.includes('class="mbs-ad"')) {
         // Pages with hand-placed ad slots still need the shared styles and loader.
         let changed = false;
         if (!h.includes('.mbs-ad{')) { h = h.replace("</head>", CSS + "</head>"); changed = true; }
         if (!h.includes('/js/ads.js')) { h = h.replace("</head>", '<script src="/js/ads.js" defer></script></head>'); changed = true; }
-        if (changed) fs.writeFileSync(p, h);
+        if (changed) fs.writeFileSync(p, fin(h));
         continue;
       }
       const isHome = rel.length <= 2 && f === "index.html" && (rel.length === 1 || rel[0] === "zh" || rel[0] === "km");
@@ -572,7 +579,7 @@ if (SCHEDULED.length) {
         const e = h.indexOf("</main>", m);
         h = h.slice(0, e) + slot("native", "mid") + h.slice(e);
         h = h.replace("</head>", `${CSS}<script src="/js/ads.js" defer></script></head>`);
-        fs.writeFileSync(p, h); pagesWithAds++;
+        fs.writeFileSync(p, fin(h)); pagesWithAds++;
         continue;
       }
       // no banner right under the menu bar: the top of every page stays clean (the owner asked for this)
@@ -614,7 +621,7 @@ if (SCHEDULED.length) {
       }
       // the loader only once (the Checker page already includes it)
       h = h.replace("</head>", CSS + (h.includes('src="/js/ads.js"') ? "" : '<script src="/js/ads.js" defer></script>') + "</head>");
-      fs.writeFileSync(p, h); pagesWithAds++;
+      fs.writeFileSync(p, fin(h)); pagesWithAds++;
     }
   })(DIST);
   console.log(`build-site: ad slots on ${pagesWithAds} English and Chinese pages`);

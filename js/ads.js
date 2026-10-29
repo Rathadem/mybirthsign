@@ -21,6 +21,8 @@
   // one pair beside each section, scrolling with the page. The class "mbs-rails" on <html> adds 184 px of space on each side of the page so
   // the side bars never cover the content; on narrower screens the side bars are hidden and the section ads show instead.
   var RAIL_MIN = 1024, root = document.documentElement;
+  // Khmer pages: no ad network at all (the owner's choice, 29/10/2026); only ads from local businesses (js/local-ads.js)
+  var LOCAL = (root.getAttribute("data-site-lang") || root.lang || "").slice(0, 2) === "km";
   var queue = [], busy = false;
   function next() {
     if (busy || !queue.length) return;
@@ -222,6 +224,7 @@
     next();
   }
   function popAd() {
+    if (LOCAL) return;
     try { popTab(); } catch (e) { /* the result stays as it is */ }
     setTimeout(function () { try { popBox(); } catch (e) { /* the result stays as it is */ } }, 600);   // the result shows first
   }
@@ -277,5 +280,67 @@
     };
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", diagStart); else diagStart();
   }
+  // ---- local ads (Khmer pages) ----
+  var HOUSE = { id: "advertise-here", link: "/km/contact", title: "ផ្សព្វផ្សាយអាជីវកម្មរបស់អ្នកនៅទីនេះ",
+    text: "ហាង ភោជនីយដ្ឋាន ឬសេវាកម្មក្នុងស្រុក អាចដាក់ការផ្សាយពាណិជ្ជកម្មនៅលើទំព័រភាសាខ្មែររបស់ ផ្កាយកំណើត។", button: "ទាក់ទងយើង" };
+  function khToday() { return new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 10); }   // Cambodia date (UTC+7)
+  function dmy(v) { var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(String(v).trim()); return m ? m[3] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2) : null; }
+  function pageKey() {   // "index", "checker", "blog", "blog/<article>", …
+    var k = location.pathname.replace(/^\/km(\/|$)/, "/").replace(/\.html$/, "").replace(/\/$/, "/index").replace(/^\//, "");
+    return k || "index";
+  }
+  function localActive(ad, today, key) {
+    if (!ad || !ad.id || !ad.link || !(ad.image || ad.title || ad.text)) return false;
+    if (ad.start) { var a = dmy(ad.start); if (!a || today < a) return false; }   // a date written wrongly: the ad waits (never runs forever)
+    if (ad.end) { var b = dmy(ad.end); if (!b || today > b) return false; }
+    if (ad.pages && ad.pages.length) return ad.pages.indexOf(key) > -1 || (/^blog\//.test(key) && ad.pages.indexOf("blog") > -1);
+    return true;
+  }
+  function localCard(ad, house) {
+    var a = document.createElement("a"), add = function (tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt) e.textContent = txt; a.appendChild(e); return e; };
+    a.className = "mbs-local"; a.href = ad.link;
+    if (/^https?:/i.test(ad.link)) { a.target = "_blank"; a.rel = house ? "noopener" : "sponsored noopener"; }
+    add("span", "mbs-local-lab", "ពាណិជ្ជកម្ម" + (ad.advertiser ? " · " + ad.advertiser : ""));
+    if (ad.image) {
+      var im = add("img", "", ""); im.src = ad.image; im.alt = ad.alt || ad.title || ad.advertiser || ""; im.loading = "lazy"; im.decoding = "async";
+      im.onerror = function () { im.remove(); };
+    }
+    if (ad.title || ad.text || ad.button) {
+      var body = add("span", "mbs-local-body", ""), put = function (tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; e.textContent = txt; body.appendChild(e); };
+      if (ad.title) put("b", "", ad.title);
+      if (ad.text) put("span", "", ad.text);
+      if (ad.button) put("span", "mbs-local-btn", ad.button);
+    }
+    return a;
+  }
+  function localFill(slots, conf) {
+    var today = khToday(), key = pageKey(), list = (conf.ads || []).filter(function (ad) { return localActive(ad, today, key); });
+    for (var i = list.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = list[i]; list[i] = list[j]; list[j] = t; }   // new order every visit
+    if (!list.length && conf.showAdvertiseHere !== false && !/^contact/.test(key)) list = [HOUSE];
+    if (!list.length) return;
+    if (!document.getElementById("mbs-local-css")) {
+      var st = document.createElement("style"); st.id = "mbs-local-css";
+      st.textContent = ".mbs-local{display:block;text-decoration:none;color:#f1ecff;background:#1a1430;border:1px solid rgba(212,175,55,.45);border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.35)}" +
+        ".mbs-local:hover,.mbs-local:focus-visible{border-color:#d4af37}.mbs-local-lab{display:block;padding:6px 14px;font-size:12px;line-height:1.6;color:#b4a9d6}" +
+        ".mbs-local img{display:block;width:100%;height:auto}.mbs-local-body{display:flex;flex-direction:column;gap:6px;padding:12px 16px 16px}" +
+        ".mbs-local-body b{font-size:17px;line-height:1.6;color:#f3d77a}.mbs-local-body span{font-size:15px;line-height:1.75}" +
+        ".mbs-local-body .mbs-local-btn{align-self:flex-start;margin-top:4px;padding:8px 18px;border-radius:999px;background:#d4af37;color:#1a1430;font-weight:700;line-height:1.4}";
+      document.head.appendChild(st);
+    }
+    for (var n = 0; n < slots.length && n < list.length; n++) {
+      slots[n].appendChild(localCard(list[n], list[n] === HOUSE));
+      slots[n].classList.add("on");
+    }
+  }
+  function localStart() {
+    var slots = [].slice.call(document.querySelectorAll(".mbs-ad[data-ad]"));
+    if (!slots.length) return;
+    slots.forEach(function (el) { el.setAttribute("data-ad", "local"); });
+    var s = document.createElement("script");
+    s.src = "/js/local-ads.js";
+    s.onload = function () { try { localFill(slots, window.MBS_LOCAL_ADS || {}); } catch (e) { /* no local ads: the spots stay hidden */ } };
+    document.head.appendChild(s);
+  }
+  if (LOCAL) { if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", localStart); else localStart(); return; }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
