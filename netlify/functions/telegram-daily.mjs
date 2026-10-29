@@ -1,7 +1,7 @@
 // netlify/functions/telegram-daily.mjs
 //
 // Scheduled: posts the day's zodiac fortune to the MyBirthSign Telegram channel (Khmer first, then English),
-// every day at 17:30 UTC = 00:30 in Cambodia, after the new day's fortune page is live.
+// every day at 23:00 UTC = 06:00 in Cambodia (the owner's chosen time), well after the new day's fortune page and cards are live.
 //
 // Netlify environment variables (Site configuration > Environment variables, marked secret; never in code):
 //   TELEGRAM_BOT_TOKEN  the bot token from @BotFather
@@ -134,6 +134,8 @@ export default async () => {
   const chat = process.env.TELEGRAM_CHAT_ID || (await findChannel(token));
   if (!chat) { console.error("telegram-daily: no channel found. Set TELEGRAM_CHAT_ID to the channel @username."); return new Response("no channel: set TELEGRAM_CHAT_ID", { status: 409 }); }
   const date = cambodiaToday();
+  // the post time moved from 00:30 to 06:00 on 30/10/2026; that day was already posted at 00:30, so it is not sent twice
+  if (date === "2026-10-30") { console.log("telegram-daily: 2026-10-30 was already posted at 00:30 (before the move to 06:00); skipped."); return new Response("already posted 2026-10-30", { status: 200 }); }
   const res = await fetch(`${SITE}/data/daily/${date}.json`, { headers: { "Cache-Control": "no-cache" } });
   if (!res.ok) { console.error(`telegram-daily: no data file for ${date} (HTTP ${res.status}); nothing posted.`); return new Response(`no data file for ${date} (HTTP ${res.status})`, { status: 424 }); }
   const data = await res.json();
@@ -147,4 +149,4 @@ export default async () => {
   return new Response(`posted ${date} (message ${out.result.message_id}); ${cards}`, { status: 200 });
 };
 
-export const config = { schedule: "30 17 * * *" };
+export const config = { schedule: "0 23 * * *" };   // 06:00 in Cambodia (UTC+7, no daylight saving)

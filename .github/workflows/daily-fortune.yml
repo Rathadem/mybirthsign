@@ -112,7 +112,7 @@ jobs:
 
   # The day's share cards for the Telegram channel (the Video Studio's 5 cards, Khmer and English), drawn from the built
   # page with the site's own card code and kept on the "telegram-cards" branch (only the newest days, so the site's own
-  # history does not grow). netlify/functions/telegram-daily.mjs sends them after the 00:30 text post. Runs in
+  # history does not grow). netlify/functions/telegram-daily.mjs sends them after the 06:00 text post. Runs in
   # Microsoft's Playwright image (browser already installed). If it fails, the text post still goes out as before.
   telegram-cards:
     needs: generate
