@@ -1,0 +1,32 @@
+name: Commons pictures for articles
+
+# Fetches candidate pictures with free licences (CC0, public domain, CC BY, CC BY-SA) from Wikimedia Commons for a blog
+# article, with their author and licence details, and pushes them to the branch "commons-images" (never to main, and
+# Netlify does not build it). Runs when scripts/content/commons-request.json changes, or by hand.
+on:
+  push:
+    branches: [main]
+    paths: ["scripts/content/commons-request.json"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Fetch pictures and licences
+        run: python3 scripts/content/commons-fetch.py scripts/content/commons-request.json out
+      - name: Push to the commons-images branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd out
+          git init -q; git checkout -q -b commons-images; git add -A
+          git -c user.name=commons-images-bot -c user.email=commons-images-bot@users.noreply.github.com commit -qm "Commons pictures $(date -u +%F) [skip netlify]"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:commons-images
+          echo "::notice::$(python3 -c 'import json;print(len(json.load(open("pictures.json"))["pictures"]))') pictures pushed to commons-images"
