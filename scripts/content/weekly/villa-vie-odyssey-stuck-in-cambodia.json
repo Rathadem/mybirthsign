@@ -23,11 +23,18 @@
   ]
  ],
  "image": {
-  "src": "images/guides/villa-vie-odyssey-cambodia.webp",
-  "alt": "A cruise ship with lit windows moored beside a port under a full moon at night",
-  "width": 900,
-  "height": 373,
-  "caption": "Illustration of a cruise ship at a night-time port; it is not a photograph of the Villa Vie Odyssey."
+  "src": "images/guides/villa-vie-odyssey-ship.webp",
+  "alt": "The white cruise ship Villa Vie Odyssey at anchor in front of green hills, with the name Odyssey on its bow",
+  "width": 1200,
+  "height": 560,
+  "caption": "The Villa Vie Odyssey in September 2025, about a year into its world voyage.",
+  "credit": {
+   "author": "JerickVillaruel",
+   "page": "https://commons.wikimedia.org/wiki/File:MS_Villa_Vie_Odyssey_16.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "changes": "cropped"
+  }
  },
  "sections": [
   {
@@ -36,7 +43,20 @@
     "The Odyssey reached Sihanoukville from Thailand on Friday 23 October 2026. Cambodian provincial officials told reporters it arrived with <strong>203 passengers and 156 crew</strong>, and that it was due to continue to Vietnam, according to RTÉ and the Associated Press.",
     "On Monday 26 October, Villa Vie Residences chief executive Kathy Villalba posted a notice to residents on the ship's internal message board, Cruise Hive reported. It said the ship would go into a layup that afternoon, with the crew staying on board to look after the vessel, and that all residents had to be off the ship by 2 p.m. “Unfortunately, we were unable to secure the fuel necessary to continue operations,” the notice said.",
     "Residents who could not take everything with them at once could arrange to come back for their belongings through Guest Services, and a shuttle for moving belongings ran only until Tuesday evening, according to Cruise Hive. On Tuesday 27 October the company announced that it had suspended operations in Cambodia."
-   ]
+   ],
+   "img": {
+    "src": "images/guides/villa-vie-sihanoukville-port.webp",
+    "alt": "Red container cranes and stacks of shipping containers at Sihanoukville port beside the sea, seen from a hill",
+    "width": 1280,
+    "height": 853,
+    "caption": "Sihanoukville Autonomous Port, Cambodia's main seaport, in 2014.",
+    "credit": {
+     "author": "Dmitry Makeev",
+     "page": "https://commons.wikimedia.org/wiki/File:Sihanoukville_Autonomous_Port_-_Cambodia.jpg",
+     "licence": "CC BY-SA 4.0",
+     "licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+   }
   },
   {
    "h2": "Why the ship stopped: fuel costs",
@@ -70,14 +90,40 @@
     "The Odyssey was built in Spain in 1993. From 2001 until the COVID-19 pandemic it sailed as the <strong>Braemar</strong> for the British line Fred. Olsen Cruise Lines, and it was then laid up for about four years before Villa Vie took it over, The Maritime Executive reported. The ship measures 24,344 gross tons.",
     "Villa Vie's idea was a “residential” cruise: people buy a cabin and live on board while the ship sails around the world without end. Its first voyage was planned to last about three and a half years and visit more than 425 destinations. The ship made headlines in 2024 when months of delays during its refit kept it in Belfast, Northern Ireland, before it finally set off in the autumn of that year.",
     "By the time it stopped in Cambodia, the ship had been at sea for about two years. It can hold about 650 residents, but Cassingham told RTÉ it never filled up and peaked at about 350."
-   ]
+   ],
+   "img": {
+    "src": "images/guides/villa-vie-braemar-2019.webp",
+    "alt": "A cruise ship with a dark blue hull and a red funnel sailing through a fjord in front of mountains",
+    "width": 1280,
+    "height": 851,
+    "caption": "The same ship in August 2019, when it sailed as Fred. Olsen's Braemar, in Korsfjorden, Norway.",
+    "credit": {
+     "author": "Cavernia",
+     "page": "https://commons.wikimedia.org/wiki/File:9000699_Braemar_1993.jpg",
+     "licence": "CC BY-SA 4.0",
+     "licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+   }
   },
   {
    "h2": "Sihanoukville and stranded ships",
    "paras": [
     "Sihanoukville, in Preah Sihanouk province on the Gulf of Thailand, is Cambodia's main seaport. It has helped a stranded cruise ship before: in early 2020, AP recalled, Cambodia let the MS Westerdam dock there after several other ports had turned it away at the start of the COVID-19 pandemic.",
     "This story is still developing. The facts above are as reported up to 29 October 2026; check the sources below for the latest news."
-   ]
+   ],
+   "img": {
+    "src": "images/guides/villa-vie-ochheuteal-beach.webp",
+    "alt": "Sun loungers and colourful umbrellas under trees along Ochheuteal Beach in Sihanoukville",
+    "width": 1280,
+    "height": 557,
+    "caption": "Ochheuteal Beach in Sihanoukville, in 2014.",
+    "credit": {
+     "author": "Dmitry Makeev",
+     "page": "https://commons.wikimedia.org/wiki/File:Sihanoukville._Ochheuteal_Beach.jpg",
+     "licence": "CC BY-SA 4.0",
+     "licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+   }
   }
  ],
  "faq": [
@@ -152,5 +198,5 @@
    "../khmer-calendar"
   ]
  ],
- "note": "This is a news summary of what other outlets have reported; MyBirthSign has no connection to Villa Vie Residences. Every figure and quote above comes from the sources listed, and some reports disagree, as noted in the text."
+ "note": "This is a news summary of what other outlets have reported; MyBirthSign has no connection to Villa Vie Residences. Every figure and quote above comes from the sources listed, and some reports disagree, as noted in the text. Photos are from Wikimedia Commons under the free licences named under each picture."
 }

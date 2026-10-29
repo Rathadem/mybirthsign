@@ -77,6 +77,30 @@ ld = {"@context": "https://schema.org", "@graph": [
      "publisher": {"@type": "Organization", "name": "MyBirthSign"}, "mainEntityOfPage": f"{SITE}/blog/{slug}"},
     {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"<[^>]+>", "", a)}} for q, a in spec["faq"]]}]}
 
+# Photos with a free licence (e.g. from Wikimedia Commons) carry "credit": {author, page, licence, licence_url, via, changes}.
+# They get a gold photo frame and the author / licence / source line the licence asks for under the picture.
+STYLE += (".festival-article figure.photo{position:relative;border:1px solid rgba(226,189,97,.75);box-shadow:0 0 0 5px rgba(226,189,97,.09),0 0 34px rgba(226,189,97,.16),0 22px 44px rgba(0,0,0,.5)}"
+          ".festival-article figure.photo::before,.festival-article figure.photo::after{content:'';position:absolute;top:10px;width:30px;height:30px;border:2px solid #e9ca79;pointer-events:none;z-index:1;opacity:.9}"
+          ".festival-article figure.photo::before{left:10px;border-right:0;border-bottom:0;border-radius:10px 0 0 0}"
+          ".festival-article figure.photo::after{right:10px;border-left:0;border-bottom:0;border-radius:0 10px 0 0}"
+          ".festival-article figure.photo figcaption{background:linear-gradient(180deg,#1f1a3c,#15122e);border-top:1px solid rgba(226,189,97,.4)}"
+          ".festival-article figure.photo .credit{display:block;margin-top:4px;font-size:.8rem;line-height:1.5;color:#b9b0d6}"
+          ".festival-article figure.photo .credit a{color:#e2bd61}")
+
+
+def photo_cls(im):
+    return ' class="photo"' if im.get("credit") else ""
+
+
+def credit_html(im):
+    c = im.get("credit")
+    if not c:
+        return ""
+    a = lambda href, txt, rel="noopener": f'<a href="{e(href)}" target="_blank" rel="{rel}">{e(txt)}</a>' if href else e(txt)
+    return (f'<span class="credit">Photo: {a(c.get("page"), c["author"])} · {a(c.get("licence_url"), c["licence"], "noopener license")}'
+            f', via {e(c.get("via", "Wikimedia Commons"))}{"; " + e(c["changes"]) if c.get("changes") else ""}</span>')
+
+
 parts = []
 for s in spec["sections"]:
     body = "".join(f"<p>{p}</p>" for p in s.get("paras", []))
@@ -86,8 +110,8 @@ for s in spec["sections"]:
         body += f"<p>{p}</p>"
     si = s.get("img")  # optional picture after the section text (lazy-loaded)
     if si:
-        body += (f'<figure><img src="../{si["src"]}" alt="{e(si["alt"])}" width="{si["width"]}" height="{si["height"]}" loading="lazy" decoding="async">'
-                 f'<figcaption>{e(si["caption"])}</figcaption></figure>')
+        body += (f'<figure{photo_cls(si)}><img src="../{si["src"]}" alt="{e(si["alt"])}" width="{si["width"]}" height="{si["height"]}" loading="lazy" decoding="async">'
+                 f'<figcaption>{e(si["caption"])}{credit_html(si)}</figcaption></figure>')
     parts.append(f"<section><h2>{e(s['h2'])}</h2>\n{body}</section>")
 facts = "".join(f'<div class="fact"><strong>{e(k)}</strong>{e(v)}</div>' for k, v in spec["facts"])
 FX = spec.get("fx")  # optional CSS-only particle animation over the main picture: wood, fire, earth, metal or water
@@ -113,9 +137,9 @@ if FX:
               "@keyframes fxTwinkle{0%,100%{opacity:0;transform:scale(.3) rotate(0)}50%{opacity:1;transform:scale(1.25) rotate(45deg)}}"
               "@keyframes fxRipple{0%{opacity:0;transform:scale(.3)}25%{opacity:.85}100%{opacity:0;transform:scale(2.2)}}"
               "@media(prefers-reduced-motion:reduce){.fx-layer{display:none}}")
-fig_cls = ' class="fx"' if FX else ""
+fig_cls = ' class="fx"' if FX else (photo_cls(img) if img else "")
 figure = (f'<figure{fig_cls}><img src="../{img["src"]}" alt="{e(img["alt"])}" width="{img["width"]}" height="{img["height"]}" fetchpriority="high" decoding="async">'
-          + (f'<span class="fx-layer fx-{FX}" aria-hidden="true">{dots}</span>' if FX else "") + f'<figcaption>{e(img["caption"])}</figcaption></figure>') if img else ""
+          + (f'<span class="fx-layer fx-{FX}" aria-hidden="true">{dots}</span>' if FX else "") + f'<figcaption>{e(img["caption"])}{credit_html(img)}</figcaption></figure>') if img else ""
 faq = "".join(f"<h3>{e(q)}</h3><p>{a}</p>" for q, a in spec["faq"])
 DEFAULT_NOTE = "Dates for lunar observances follow the Khmer lunar calendar and can differ by a day locally. Check with your pagoda or official announcements for exact times."
 note_txt = spec.get("note", DEFAULT_NOTE)
