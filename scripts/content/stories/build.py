@@ -88,6 +88,49 @@ LINKS = [["Find your zodiac animal", "../checker"], ["All 12 zodiac animals", ".
          ["Year of the Dragon guide", "zodiac-year-dragon"], ["Khmer animal years", "khmer-animal-year-sak"], ["Zodiac compatibility guide", "zodiac-compatibility-guide"],
          ["How to calculate your zodiac sign", "how-to-calculate-zodiac-sign"], ["Today's zodiac fortune", "../blog.html"]]
 links = "".join(f'<li><a href="{h}">{e(l)} →</a></li>' for l, h in LINKS)
+
+# Khmer version of the landing page (published at /km/blog/zodiac-stories-legends): the cards take each story's Khmer
+# title, card text and picture text from scripts/content/km/<slug>.json (the Khmer versions of the articles)
+KM_DIR = os.path.join(ROOT, "scripts", "content", "km")
+KM = {a["slug"]: json.load(open(os.path.join(KM_DIR, a["slug"] + ".json"), encoding="utf-8")) for a in ARTICLES
+      if os.path.exists(os.path.join(KM_DIR, a["slug"] + ".json"))}
+KM_ANIMAL = {"Rat": "ជូត", "Ox": "ឆ្លូវ", "Tiger": "ខាល", "Rabbit": "ថោះ", "Dragon": "រោង", "Snake": "ម្សាញ់", "Horse": "មមី",
+             "Goat": "មមែ", "Monkey": "វក", "Rooster": "រកា", "Dog": "ច", "Pig": "កុរ"}
+TITLE_KM = "រឿងនិទាន និងរឿងព្រេងរាសីចិន"
+NOTE_KM = ("ការប្រណាំងដ៏ធំ (Great Race) និងរឿងផ្សេងៗទៀតនៅទីនេះ ជារឿងនិទានប្រជាប្រិយ ដែលគេនិទានតៗគ្នាច្រើនបែបខុសៗគ្នា មិនមែនជាព្រឹត្តិការណ៍ប្រវត្តិសាស្ត្រទេ។ "
+           "បុគ្គលិកលក្ខណៈរបស់សត្វរាសីនីមួយៗ ជាជំនឿតាមប្រពៃណី ដែលយើងចែករំលែកសម្រាប់ការស្វែងយល់វប្បធម៌ និងការកម្សាន្ត។")
+LINKS_KM = [["រករាសីរបស់អ្នក", "../checker"], ["សត្វរាសីទាំង 12", "../animals.html"], ["មគ្គុទ្ទេសក៍ឆ្នាំជូត", "zodiac-year-rat"],
+            ["មគ្គុទ្ទេសក៍ឆ្នាំរោង", "zodiac-year-dragon"], ["ឆ្នាំសត្វខ្មែរ (ស័ក)", "khmer-animal-year-sak"], ["មគ្គុទ្ទេសក៍គូស្រករតាមរាសី", "zodiac-compatibility-guide"],
+            ["របៀបគណនារាសីចិនរបស់អ្នក", "how-to-calculate-zodiac-sign"], ["ជោគជតារាសីប្រចាំថ្ងៃ", "../blog.html"]]
+assert [h for _, h in LINKS_KM] == [h for _, h in LINKS], "LINKS_KM must have the same links as LINKS"
+
+def card_km(a, featured=False):
+    k = KM[a["slug"]]
+    img = a["image"]["src"].replace(".webp", "-card.webp")
+    tags = "".join(f'<span class="sl-tag">{e(KM_ANIMAL.get(t, t))}</span>' for t in a["animals"])
+    cls = "sl-card sl-featured" if featured else "sl-card"
+    return (f'<a class="{cls}" href="{a["slug"]}"><img src="../{img}" alt="{e(k["image"]["alt"])}" width="880" height="520" loading="{"eager" if featured else "lazy"}" decoding="async">'
+            f'<div class="sl-body"><p class="sl-meta">{tags}<span>អានប្រហែល {read_min[a["slug"]]} នាទី</span></p>'
+            f'<h{2 if featured else 3}>{e(k["title"])}</h{2 if featured else 3}><p>{e(k["card_text"])}</p><span class="sl-read">អានរឿងនេះ →</span></div></a>')
+
+HAS_KM = len(KM) == len(ARTICLES)
+if HAS_KM:
+    STYLE += ("html[lang=km] .sl-hero h1,html[lang=km] .sl-body h2,html[lang=km] .sl-body h3,html[lang=km] .sl h2.sl-h{font-family:'Kantumruy Pro','Noto Sans Khmer',sans-serif;line-height:1.45}"
+              "html[lang=km] .sl-hero h1{font-size:clamp(1.9rem,4.6vw,3rem)}html[lang=km] .sl-hero .eyebrow{letter-spacing:0}")
+links_km = "".join(f'<li><a href="{h}">{e(l)} →</a></li>' for l, h in LINKS_KM)
+main_km = f"""<div data-lang-content="km" lang="km">
+<section class="sl-hero"><p class="eyebrow">ប្លុក MyBirthSign</p><h1>{e(TITLE_KM)}</h1>
+<p>ហេតុអ្វីបានជាជូតនៅលំដាប់ទីមួយ? ហេតុអ្វីបានជានាគដែលចេះហោះ មកដល់ត្រឹមលំដាប់ទីប្រាំ? ទាំងនេះជារឿងដែលគេនិទានតៗគ្នាអំពីសត្វទាំងដប់ពីរនៃរាសីចិន ព្រមទាំងអ្វីដែលប្រវត្តិសាស្ត្របានកត់ត្រាទុកពិតប្រាកដ អំពីប្រភពដើមនៃសត្វទាំងនេះ។</p>
+<div class="sl-key"><span>រឿងនិទានប្រជាប្រិយ ត្រូវបានបញ្ជាក់ថាជារឿងនិទាន</span><span>ផ្នែកប្រវត្តិសាស្ត្រ មានប្រភពឯកសារយោង</span><span>អានដោយឥតគិតថ្លៃ</span></div></section>
+{card_km(feat, True)}
+<div class="sl-grid">
+{chr(10).join(card_km(a) for a in ARTICLES[1:])}
+</div>
+<h2 class="sl-h">ស្វែងយល់បន្ថែម</h2>
+<ul class="sl-links">{links_km}</ul>
+<p class="note">{e(NOTE_KM)}</p>
+<a class="back" href="../blog.html">← ត្រឡប់ទៅប្លុក MyBirthSign</a>
+</div>""" if HAS_KM else ""
 page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Zodiac Stories &amp; Legends: Chinese Zodiac Folk Tales | MyBirthSign</title><meta name="description" content="{e(DESC)}">
@@ -98,7 +141,7 @@ page = f"""<!doctype html>
 <style>{STYLE}</style></head>
 <body class="fx-page">
 {header}
-<main class="sl">
+<main class="sl">{'<div data-lang-content="en">' if HAS_KM else ''}
 <section class="sl-hero"><p class="eyebrow">MyBirthSign Blog</p><h1>{e(TITLE)}</h1>
 <p>Why does the Rat come first? Why did the flying Dragon finish fifth? These are the stories people tell about the twelve animals of the Chinese zodiac, alongside what history actually records about where the animals came from.</p>
 <div class="sl-key"><span>Folk tales are labelled as folk tales</span><span>History comes with sources</span><span>Free to read</span></div></section>
@@ -110,6 +153,7 @@ page = f"""<!doctype html>
 <ul class="sl-links">{links}</ul>
 <p class="note">{e(NOTE)}</p>
 <a class="back" href="../blog.html">← Back to the MyBirthSign Blog</a>
+{'</div>' if HAS_KM else ''}{main_km}
 </main>
 <footer class="site-footer"><div class="container"><a href="../about.html">About</a> · <a href="../privacy.html">Privacy Policy</a> · <a href="../terms.html">Terms of Use</a> · <a href="../contact.html">Contact</a><p>© 2026 MyBirthSign. Traditional zodiac stories for culture and entertainment.</p></div></footer><script src="../js/i18n.js"></script>
 <script src="../js/app.js"></script></body></html>
@@ -126,6 +170,14 @@ lcard = (f'    <a class="bv2-latest-card" href="blog/{LANDING}.html"><img src="{
          f'<span class="bv2-latest-read">Read the stories →</span></div></a>\n')
 g = re.sub(rf'[ \t]*<a class="bv2-latest-card" href="blog/{LANDING}\.html">.*?</a>\n', "", m.group(2), flags=re.S)
 b = b[:m.start(2)] + lcard + g + b[m.end(2):]
+if HAS_KM:   # the same card in the Khmer "Latest Articles"
+    mk = re.search(r'(<section class="bv2-section bv2-latest-section" id="latest-articles-km">.*?<div class="bv2-latest-grid">\n)(.*?)(  </div>\n</section>)', b, re.S)
+    assert mk, "Khmer latest-articles grid not found"
+    kcard = (f'    <a class="bv2-latest-card" href="blog/{LANDING}.html"><img src="{feat["image"]["src"].replace(".webp", "-card.webp")}" alt="{e(KM[feat["slug"]]["image"]["alt"])}" loading="lazy" width="440" height="260">'
+             f'<div class="bv2-latest-body"><p class="bv2-latest-kicker">{e(TITLE_KM)}</p><h3>{e(TITLE_KM)}</h3><p>ការប្រណាំងដ៏ធំ ល្បិចរបស់កណ្ដុរ ចិត្តល្អរបស់នាគ និងរឿងផ្សេងៗទៀត៖ រឿងចំនួន 8 នៅពីក្រោយសត្វទាំងដប់ពីរ។</p>'
+             f'<span class="bv2-latest-read">អានរឿង →</span></div></a>\n')
+    gk = re.sub(rf'[ \t]*<a class="bv2-latest-card" href="blog/{LANDING}\.html">.*?</a>\n', "", mk.group(2), flags=re.S)
+    b = b[:mk.start(2)] + kcard + gk + b[mk.end(2):]
 open(bp, "w", encoding="utf-8").write(b)
 sp = os.path.join(ROOT, "sitemap.xml")
 sm = open(sp, encoding="utf-8").read()

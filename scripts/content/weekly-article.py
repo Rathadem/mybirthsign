@@ -23,6 +23,9 @@ Optional: listing (default true; false = do not add a card to blog.html), note (
   kicker, card_text}. The page then carries an English and a Khmer language block; the site build publishes the
   Khmer one at /km/blog/<slug> (no ads there) and lists it in blog.html's Khmer "Latest Articles". Western digits,
   dates written dd/mm/yyyy.
+  When the spec has no "km" field, the Khmer version is read from scripts/content/km/<slug>.json (same fields), so
+  generators that rewrite the English spec (stories, horoscope 2027, year pages) never wipe the translation.
+  Check a Khmer file against its English spec with: python3 scripts/content/km-check.py <slug>
 """
 import html, json, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -209,6 +212,8 @@ main_html = f"""<p class="eyebrow">{e(spec['eyebrow'])}</p><h1>{e(title)}</h1><p
 {note}</section>
 <p><strong>Explore more:</strong> {related}</p><a class="back" href="{back_href}">← {back_label}</a>"""
 K = spec.get("km")
+if K is None and os.path.exists(os.path.join(HERE, "km", f"{slug}.json")):
+    K = json.load(open(os.path.join(HERE, "km", f"{slug}.json"), encoding="utf-8"))
 if K:
     def secs(sl):
         out = []
@@ -228,8 +233,10 @@ if K:
             out.append(f"<section><h2>{e(s['h2'])}</h2>\n{body}</section>")
         return chr(10).join(out)
     kimg = K.get("image")
-    kfig = (f'<figure{photo_cls(kimg)}><img src="../{kimg["src"]}" alt="{e(kimg["alt"])}" width="{kimg["width"]}" height="{kimg["height"]}" decoding="async">'
-            f'<figcaption>{e(kimg["caption"])}{credit_html(kimg, True)}</figcaption></figure>') if kimg else ""
+    kcls = ' class="fx"' if FX else photo_cls(kimg) if kimg else ""
+    kfig = (f'<figure{kcls}><img src="../{kimg["src"]}" alt="{e(kimg["alt"])}" width="{kimg["width"]}" height="{kimg["height"]}" decoding="async">'
+            + (f'<span class="fx-layer fx-{FX}" aria-hidden="true">{dots}</span>' if FX else "")
+            + f'<figcaption>{e(kimg["caption"])}{credit_html(kimg, True)}</figcaption></figure>{video}') if kimg else video
     kpub = date.fromisoformat(K["published"])
     assert len(K["source_notes"]) == len(spec["sources"]), "km.source_notes needs one note per source"
     ksrc = "".join(f'<li><a href="{e(u)}" target="_blank" rel="noopener">{e(t)}</a> — {e(n)}</li>' for (t, u, _), n in zip(spec["sources"], K["source_notes"]))
