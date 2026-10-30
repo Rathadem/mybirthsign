@@ -57,7 +57,10 @@ document.addEventListener("DOMContentLoaded", function () {
     while (sum > 9) {
       sum = sum.toString().split("").reduce((a, b) => a + parseInt(b, 10), 0);
     }
-    todayNumberEls.forEach((el) => { el.textContent = sum; });
+    // shown as a 3-digit number whose digits add up to that one-digit number (js/lucky-digits.js, todayNumber3)
+    const iso = pp[0] + "-" + String(pp[1]).padStart(2, "0") + "-" + String(pp[2]).padStart(2, "0");
+    const three = window.MBSLuckyDigits && window.MBSLuckyDigits.todayNumber3 ? window.MBSLuckyDigits.todayNumber3(iso) : null;
+    todayNumberEls.forEach((el) => { el.textContent = three || sum; });
   }
 
   const heroBtn = document.getElementById("hero-reveal-btn");

@@ -8,7 +8,8 @@
  * For fun only: these are not predictions and not betting advice (the pages say so next to the numbers).
  *
  * Browser: fills every [data-lucky-digits][data-animal] (optional data-date="YYYY-MM-DD", default today in
- * Cambodia; optional data-lang). window.MBSLuckyDigits = { forSign, fill }.  Node: module.exports = { forSign }.
+ * Cambodia; optional data-lang). window.MBSLuckyDigits = { forSign, fill, todayNumber3 }.  Node: module.exports = { forSign, todayNumber3 }.
+ * todayNumber3(iso): the homepage's 3-digit "Today's Number" (see below).
  */
 (function (root) {
   "use strict";
@@ -35,7 +36,22 @@
     return out;
   }
 
-  if (typeof module === "object" && module.exports) { module.exports = { forSign: forSign, LUCKY: LUCKY }; return; }
+  // "Today's Number" on the homepage: one 3-digit number for everyone on a date (Cambodia), the same all day.
+  // Its digits added together (again and again, down to one digit) give the date's own number, the one-digit
+  // "today's number" the checker's "today's luck" uses (month + day + year digits added up), so the two always agree.
+  function dateRoot(iso) {
+    var p = iso.split("-").map(Number), n = String(p[1]) + String(p[2]) + String(p[0]);
+    while (n.length > 1) n = String(n.split("").reduce(function (a, c) { return a + +c; }, 0));
+    return +n;
+  }
+  function todayNumber3(iso) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || "")) return null;
+    var root = dateRoot(iso), opts = [];
+    for (var n = 100; n <= 999; n++) if (1 + (n - 1) % 9 === root) opts.push(n);   // the 100 three-digit numbers with that root
+    return String(opts[seedOf("today|" + iso) % opts.length]);
+  }
+
+  if (typeof module === "object" && module.exports) { module.exports = { forSign: forSign, LUCKY: LUCKY, todayNumber3: todayNumber3, dateRoot: dateRoot }; return; }
 
   var KD = "0123456789";
   function kmNum(s) { return String(s).replace(/\d/g, function (d) { return KD[d]; }); }
@@ -68,7 +84,7 @@
       el.setAttribute("data-lucky-day", iso);
     });
   }
-  root.MBSLuckyDigits = { forSign: forSign, fill: fill, html: html };
+  root.MBSLuckyDigits = { forSign: forSign, fill: fill, html: html, todayNumber3: todayNumber3 };
   function boot() { fill(document); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
   // the numbers follow the Cambodia date: refresh when the tab comes back on a new day

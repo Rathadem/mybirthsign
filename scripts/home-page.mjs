@@ -14,6 +14,7 @@ import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
@@ -63,8 +64,9 @@ const tierOf = (a, d) => a === d ? "great" : TRIANGLES.some((t) => t.includes(a)
 const phnom = () => { const p = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()).split("-").map(Number); return p; };
 const [TY, TM, TD] = phnom();
 const TODAY_ANIMAL = dayAnimal(TY, TM, TD);
-const digitRoot = (y, m, d) => { let n = String(m) + String(d) + String(y); while (n.length > 1) n = String([...n].reduce((a, c) => a + +c, 0)); return n; };   // same rule as js/app.js
-const TODAY_NUMBER = digitRoot(TY, TM, TD);
+// "Today's Number": the 3-digit number of the day from js/lucky-digits.js (its digits add up to the date's own one-digit
+// number, the same rule as js/app.js), so the page shows the right number before any script runs
+const TODAY_NUMBER = createRequire(import.meta.url)("../js/lucky-digits.js").todayNumber3(`${TY}-${String(TM).padStart(2, "0")}-${String(TD).padStart(2, "0")}`);
 
 const sk = (d) => `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
 const ICON = {
