@@ -87,6 +87,7 @@ STYLE += (".festival-article figure.photo{position:relative;border:1px solid rgb
           ".festival-article figure.photo .credit{display:block;margin-top:4px;font-size:.8rem;line-height:1.5;color:#b9b0d6}"
           ".festival-article figure.photo .credit a{color:#e2bd61}"
           ".festival-article figure.tall{max-width:440px;margin-left:auto;margin-right:auto}"
+          ".festival-article a[data-until-live]{display:block;margin-top:6px;font-weight:700}"
           ".festival-article .gallery{display:grid;gap:16px;margin:26px 0 34px}.festival-article .gallery figure{margin:0}"
           ".festival-article .gallery img{aspect-ratio:1/1;object-fit:cover}"
           "@media(min-width:640px){.festival-article .gallery{grid-template-columns:repeat(3,minmax(0,1fr))}.festival-article .gallery figcaption{font-size:.85rem}}"
@@ -95,7 +96,7 @@ STYLE += (".festival-article figure.photo{position:relative;border:1px solid rgb
           ".festival-article table.data th,.festival-article table.data td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid rgba(255,255,255,.08)}"
           ".festival-article table.data thead th{background:#221b40;color:#f2d27d;font-weight:700}"
           ".festival-article table.data tbody th{color:#fff;white-space:nowrap}.festival-article table.data td{color:#e4dcfa}"
-          ".festival-article table.data tbody tr:nth-child(2n){background:rgba(255,255,255,.025)}"
+          ".festival-article table.data tbody tr:nth-child(2n){background:rgba(255,255,255,.025)}.festival-article table.data.narrow{min-width:0}"
           ".festival-article figure.graphic{border:0;background:none;border-radius:22px}.festival-article figure.graphic figcaption{padding:10px 4px 0}"
           # timeline block (class tl-box) and bar chart block (class bars-box), in the same gold frame as the photos
           ".festival-article .tl-box,.festival-article .bars-box{margin:26px 0 34px;padding:22px 24px 12px;border:1px solid rgba(226,189,97,.75);border-radius:18px;"
@@ -130,11 +131,15 @@ def photo_cls(im):   # "cls": "graphic" for a drawn map or chart that has its ow
     return f' class="{e(im["cls"])}"' if im.get("cls") else ' class="photo"' if im.get("credit") else ""
 
 
-def credit_html(im):
+def credit_html(im, km=False):
     c = im.get("credit")
     if not c:
         return ""
     a = lambda href, txt, rel="noopener": f'<a href="{e(href)}" target="_blank" rel="{rel}">{e(txt)}</a>' if href else e(txt)
+    if km:   # the same credit in Khmer (author, licence and source names stay as published)
+        ch = {"shown cropped": "បង្ហាញដោយកាត់តម្រឹម", "cropped": "បានកាត់តម្រឹម"}.get(c.get("changes", ""), c.get("changes", ""))
+        return (f'<span class="credit">រូបថត៖ {a(c.get("page"), c["author"])} · {a(c.get("licence_url"), c["licence"], "noopener license")}'
+                f' · ពី {e(c.get("via", "Wikimedia Commons"))}{" · " + e(ch) if ch else ""}</span>')
     return (f'<span class="credit">Photo: {a(c.get("page"), c["author"])} · {a(c.get("licence_url"), c["licence"], "noopener license")}'
             f', via {e(c.get("via", "Wikimedia Commons"))}{"; " + e(c["changes"]) if c.get("changes") else ""}</span>')
 
@@ -144,10 +149,10 @@ for s in spec["sections"]:
     body = "".join(f"<p>{p}</p>" for p in s.get("paras", []))
     if s.get("list"):
         body += "<ul>" + "".join(f"<li>{li}</li>" for li in s["list"]) + "</ul>"
-    for p in s.get("after", []):
-        body += f"<p>{p}</p>"
     if s.get("html"):   # optional ready-made block after the text (a timeline, a small bar chart, a table …), written as HTML
         body += s["html"]
+    for p in s.get("after", []):   # paragraphs after the list / block
+        body += f"<p>{p}</p>"
     if s.get("gallery"):   # optional row of photos side by side (3 across on wider screens), each with its own caption and credit
         body += '<div class="gallery">' + "".join(
             f'<figure{photo_cls(im)}><img src="../{im["src"]}" alt="{e(im["alt"])}" width="{im["width"]}" height="{im["height"]}" loading="lazy" decoding="async">'
@@ -210,12 +215,21 @@ if K:
         for s in sl:
             body = "".join(f"<p>{p}</p>" for p in s.get("paras", []))
             if s.get("list"): body += "<ul>" + "".join(f"<li>{li}</li>" for li in s["list"]) + "</ul>"
+            if s.get("html"): body += s["html"]
             for p in s.get("after", []): body += f"<p>{p}</p>"
+            if s.get("gallery"):
+                body += '<div class="gallery">' + "".join(
+                    f'<figure{photo_cls(im)}><img src="../{im["src"]}" alt="{e(im["alt"])}" width="{im["width"]}" height="{im["height"]}" loading="lazy" decoding="async">'
+                    f'<figcaption>{e(im["caption"])}{credit_html(im, True)}</figcaption></figure>' for im in s["gallery"]) + "</div>"
+            si = s.get("img")
+            for im in (si if isinstance(si, list) else [si] if si else []):
+                body += (f'<figure{photo_cls(im)}><img src="../{im["src"]}" alt="{e(im["alt"])}" width="{im["width"]}" height="{im["height"]}" loading="lazy" decoding="async">'
+                         f'<figcaption>{e(im["caption"])}{credit_html(im, True)}</figcaption></figure>')
             out.append(f"<section><h2>{e(s['h2'])}</h2>\n{body}</section>")
         return chr(10).join(out)
     kimg = K.get("image")
-    kfig = (f'<figure><img src="../{kimg["src"]}" alt="{e(kimg["alt"])}" width="{kimg["width"]}" height="{kimg["height"]}" decoding="async">'
-            f'<figcaption>{e(kimg["caption"])}</figcaption></figure>') if kimg else ""
+    kfig = (f'<figure{photo_cls(kimg)}><img src="../{kimg["src"]}" alt="{e(kimg["alt"])}" width="{kimg["width"]}" height="{kimg["height"]}" decoding="async">'
+            f'<figcaption>{e(kimg["caption"])}{credit_html(kimg, True)}</figcaption></figure>') if kimg else ""
     kpub = date.fromisoformat(K["published"])
     assert len(K["source_notes"]) == len(spec["sources"]), "km.source_notes needs one note per source"
     ksrc = "".join(f'<li><a href="{e(u)}" target="_blank" rel="noopener">{e(t)}</a> — {e(n)}</li>' for (t, u, _), n in zip(spec["sources"], K["source_notes"]))

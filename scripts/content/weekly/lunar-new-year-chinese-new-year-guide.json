@@ -56,7 +56,7 @@
    "paras": [
     "These dates come from the lunar calendar table our zodiac checker uses. Governments publish their official public holidays for each year separately."
    ],
-   "html": "<div class=\"table-wrap\"><table class=\"data\"><thead><tr><th scope=\"col\">Year</th><th scope=\"col\">Chinese New Year</th><th scope=\"col\">Zodiac animal</th></tr></thead><tbody><tr><th scope=\"row\">2027</th><td><strong>Saturday 6 February 2027</strong></td><td>Fire Goat</td></tr><tr><th scope=\"row\">2028</th><td><strong>Wednesday 26 January 2028</strong></td><td>Earth Monkey</td></tr><tr><th scope=\"row\">2029</th><td><strong>Tuesday 13 February 2029</strong></td><td>Earth Rooster</td></tr><tr><th scope=\"row\">2030</th><td><strong>Sunday 3 February 2030</strong></td><td>Metal Dog</td></tr><tr><th scope=\"row\">2031</th><td><strong>Thursday 23 January 2031</strong></td><td>Metal Pig</td></tr><tr><th scope=\"row\">2032</th><td><strong>Wednesday 11 February 2032</strong></td><td>Water Rat</td></tr><tr><th scope=\"row\">2033</th><td><strong>Monday 31 January 2033</strong></td><td>Water Ox</td></tr><tr><th scope=\"row\">2034</th><td><strong>Sunday 19 February 2034</strong></td><td>Wood Tiger</td></tr><tr><th scope=\"row\">2035</th><td><strong>Thursday 8 February 2035</strong></td><td>Wood Rabbit</td></tr><tr><th scope=\"row\">2036</th><td><strong>Monday 28 January 2036</strong></td><td>Fire Dragon</td></tr></tbody></table></div>",
+   "html": "<div class=\"table-wrap\"><table class=\"data narrow\"><thead><tr><th scope=\"col\">Year</th><th scope=\"col\">Chinese New Year</th><th scope=\"col\">Zodiac animal</th></tr></thead><tbody><tr><th scope=\"row\">2027</th><td><strong>Saturday 6 February 2027</strong></td><td>Fire Goat</td></tr><tr><th scope=\"row\">2028</th><td><strong>Wednesday 26 January 2028</strong></td><td>Earth Monkey</td></tr><tr><th scope=\"row\">2029</th><td><strong>Tuesday 13 February 2029</strong></td><td>Earth Rooster</td></tr><tr><th scope=\"row\">2030</th><td><strong>Sunday 3 February 2030</strong></td><td>Metal Dog</td></tr><tr><th scope=\"row\">2031</th><td><strong>Thursday 23 January 2031</strong></td><td>Metal Pig</td></tr><tr><th scope=\"row\">2032</th><td><strong>Wednesday 11 February 2032</strong></td><td>Water Rat</td></tr><tr><th scope=\"row\">2033</th><td><strong>Monday 31 January 2033</strong></td><td>Water Ox</td></tr><tr><th scope=\"row\">2034</th><td><strong>Sunday 19 February 2034</strong></td><td>Wood Tiger</td></tr><tr><th scope=\"row\">2035</th><td><strong>Thursday 8 February 2035</strong></td><td>Wood Rabbit</td></tr><tr><th scope=\"row\">2036</th><td><strong>Monday 28 January 2036</strong></td><td>Fire Dragon</td></tr></tbody></table></div>",
    "after": [
     "For 2027 in detail, see <a href=\"chinese-new-year-2027-year-of-the-goat\">Chinese New Year 2027: the Year of the Goat</a> and <a href=\"year-of-the-goat-sheep-or-ram-2027\">why the Goat is also called the Sheep or Ram</a>."
    ]
@@ -226,5 +226,212 @@
    "chinese-zodiac-born-in-january"
   ]
  ],
- "note": "Dates follow the Lunar New Year table used by our zodiac checker; official holidays are announced by each government. Photos are from Wikimedia Commons under the free licences named under each picture."
+ "note": "Dates follow the Lunar New Year table used by our zodiac checker; official holidays are announced by each government. Photos are from Wikimedia Commons under the free licences named under each picture.",
+ "km": {
+  "title": "ចូលឆ្នាំចិន (Lunar New Year)៖ អត្ថន័យ ប្រពៃណី និងកាលបរិច្ឆេទ ដល់ឆ្នាំ 2036",
+  "eyebrow": "មគ្គុទ្ទេសក៍ពិធីបុណ្យ",
+  "kicker": "មគ្គុទ្ទេសក៍ពិធីបុណ្យ",
+  "card_text": "អត្ថន័យនៃបុណ្យចូលឆ្នាំចិន ប្រពៃណីសំខាន់ៗ របៀបដែលកម្ពុជាប្រារព្ធ និងកាលបរិច្ឆេទ ព្រមទាំងសត្វរាសី ដល់ឆ្នាំ 2036។",
+  "lead": "បុណ្យចូលឆ្នាំចិន ដែលភាសាអង់គ្លេសហៅថា Lunar New Year ឬ Spring Festival ត្រូវបានប្រារព្ធដោយគ្រួសារចិននៅទូទាំងពិភពលោក ហើយក៏ត្រូវបានប្រារព្ធយ៉ាងទូលំទូលាយនៅកម្ពុជាផងដែរ។ ខាងក្រោមនេះជាអត្ថន័យរបស់វា របៀបកំណត់ថ្ងៃ ប្រពៃណីសំខាន់ៗ និងកាលបរិច្ឆេទ ព្រមទាំងសត្វរាសីនីមួយៗ ពីឆ្នាំ 2027 ដល់ 2036។",
+  "published": "2026-10-29",
+  "facts": [
+   [
+    "ចូលឆ្នាំចិនបន្ទាប់",
+    "ថ្ងៃសៅរ៍ 06/02/2027"
+   ],
+   [
+    "សត្វរាសីឆ្នាំ 2027",
+    "មមែ ធាតុភ្លើង"
+   ],
+   [
+    "រយៈពេលបុណ្យ",
+    "15 ថ្ងៃ ដល់បុណ្យគោម"
+   ]
+  ],
+  "image": {
+   "src": "images/guides/lny-red-lanterns.webp",
+   "alt": "គោមក្រហមរាងមូលជាច្រើន ព្យួរតាមដើមឈើ នៅតាមដងផ្លូវ",
+   "width": 1200,
+   "height": 797,
+   "caption": "គោមក្រហមតាមដងផ្លូវមួយ ក្នុងក្រុងកូតាគីណាបាលូ ប្រទេសម៉ាឡេស៊ី សម្រាប់បុណ្យចូលឆ្នាំចិន ឆ្នាំ 2009។",
+   "credit": {
+    "author": "Dcubillas",
+    "page": "https://commons.wikimedia.org/wiki/File:Red_Lanterns_for_Chinese_New_Year_KK.jpg",
+    "licence": "CC BY-SA 3.0",
+    "licence_url": "https://creativecommons.org/licenses/by-sa/3.0"
+   }
+  },
+  "sections": [
+   {
+    "h2": "ចូលឆ្នាំចិន ឬ Lunar New Year?",
+    "paras": [
+     "ឈ្មោះទាំងពីរ សំដៅលើពិធីបុណ្យតែមួយ។ យោងតាម Wikipedia នៅប្រទេសចិន គេហៅបុណ្យនេះជាទូទៅថា <strong>បុណ្យនិទាឃរដូវ</strong> (Spring Festival) ហើយជាភាសាអង់គ្លេស គេក៏ហៅវាថា <strong>Lunar New Year</strong> ផងដែរ។ តាមពិត ប្រតិទិនចិនបុរាណជាប្រតិទិនចន្ទសុរិយគតិ គឺផ្អែកលើទាំងព្រះចន្ទ និងព្រះអាទិត្យ មិនមែនផ្អែកលើព្រះចន្ទតែមួយមុខនោះទេ។",
+     "ពាក្យ Lunar New Year ក៏ត្រូវបានប្រើសម្រាប់ចូលឆ្នាំ ក្នុងប្រតិទិនអាស៊ីផ្សេងទៀតដែរ។ តាម Wikipedia បុណ្យ <em>Tết</em> របស់វៀតណាម និង <em>Seollal</em> របស់កូរ៉េ ជាទូទៅធ្លាក់ចំថ្ងៃតែមួយនឹងចូលឆ្នាំចិន ចំណែក <em>Losar</em> របស់ទីបេ និង <em>Tsagaan Sar</em> របស់ម៉ុងហ្គោលី អាចធ្លាក់ចំថ្ងៃតែមួយ ឬប្រហែលមួយខែក្រោយ។",
+     "កម្ពុជាខុសពីនេះ។ ចូលឆ្នាំខ្មែរ ដូចជាចូលឆ្នាំរបស់ឡាវ ថៃ មីយ៉ាន់ម៉ា និងស្រីលង្កាដែរ ផ្អែកលើប្រតិទិនព្រះពុទ្ធសាសនា ហើយធ្លាក់នៅកណ្ដាលខែមេសា ដែលជាពេលដែលសត្វរាសីខ្មែរប្ដូរផងដែរ។ <a href=\"khmer-new-year-animal-year\">មគ្គុទ្ទេសក៍ចូលឆ្នាំខ្មែរ</a>របស់យើង ពន្យល់ពីរបៀបដែលប្រតិទិនទាំងពីរត្រូវគ្នា។"
+    ]
+   },
+   {
+    "h2": "របៀបកំណត់ថ្ងៃចូលឆ្នាំ",
+    "paras": [
+     "ចូលឆ្នាំចិន មិនមានថ្ងៃថេរក្នុងប្រតិទិនអន្តរជាតិទេ។ យោងតាម Wikipedia វាចាប់ផ្ដើមនៅថ្ងៃព្រះចន្ទថ្មី (new moon) ដែលធ្លាក់នៅចន្លោះ <strong>ថ្ងៃទី 21 ខែមករា ដល់ថ្ងៃទី 20 ខែកុម្ភៈ</strong> ហេតុនេះហើយបានជាថ្ងៃចូលឆ្នាំផ្លាស់ប្ដូររៀងរាល់ឆ្នាំ។",
+     "ថ្ងៃចូលឆ្នាំចិន ក៏ជាថ្ងៃចាប់ផ្ដើមសត្វរាសីថ្មីក្នុងរាសីចិនដែរ។ អ្នកដែលកើតក្នុងខែមករា ឬដើមខែកុម្ភៈ មុនថ្ងៃនោះ នៅតែជាសត្វរាសីនៃឆ្នាំមុន។ សូមប្រើ <a href=\"../checker\">កម្មវិធីពិនិត្យរាសី</a> ដើម្បីដឹងឱ្យច្បាស់។"
+    ]
+   },
+   {
+    "h2": "ថ្ងៃចូលឆ្នាំចិន និងសត្វរាសី ពីឆ្នាំ 2027 ដល់ 2036",
+    "paras": [
+     "កាលបរិច្ឆេទខាងក្រោម យកចេញពីតារាងប្រតិទិនចន្ទគតិ ដែលកម្មវិធីពិនិត្យរាសីរបស់យើងប្រើ។ រដ្ឋាភិបាលនីមួយៗ ប្រកាសថ្ងៃឈប់សម្រាកផ្លូវការរបស់ខ្លួនដាច់ដោយឡែករៀងរាល់ឆ្នាំ។"
+    ],
+    "html": "<div class=\"table-wrap\"><table class=\"data narrow\"><thead><tr><th scope=\"col\">ឆ្នាំ</th><th scope=\"col\">ថ្ងៃចូលឆ្នាំចិន</th><th scope=\"col\">សត្វរាសី</th></tr></thead><tbody><tr><th scope=\"row\">2027</th><td><strong>ថ្ងៃសៅរ៍ 06/02/2027</strong></td><td>មមែ ធាតុភ្លើង</td></tr><tr><th scope=\"row\">2028</th><td><strong>ថ្ងៃពុធ 26/01/2028</strong></td><td>វក ធាតុដី</td></tr><tr><th scope=\"row\">2029</th><td><strong>ថ្ងៃអង្គារ 13/02/2029</strong></td><td>រកា ធាតុដី</td></tr><tr><th scope=\"row\">2030</th><td><strong>ថ្ងៃអាទិត្យ 03/02/2030</strong></td><td>ច ធាតុលោហធាតុ</td></tr><tr><th scope=\"row\">2031</th><td><strong>ថ្ងៃព្រហស្បតិ៍ 23/01/2031</strong></td><td>កុរ ធាតុលោហធាតុ</td></tr><tr><th scope=\"row\">2032</th><td><strong>ថ្ងៃពុធ 11/02/2032</strong></td><td>ជូត ធាតុទឹក</td></tr><tr><th scope=\"row\">2033</th><td><strong>ថ្ងៃច័ន្ទ 31/01/2033</strong></td><td>ឆ្លូវ ធាតុទឹក</td></tr><tr><th scope=\"row\">2034</th><td><strong>ថ្ងៃអាទិត្យ 19/02/2034</strong></td><td>ខាល ធាតុឈើ</td></tr><tr><th scope=\"row\">2035</th><td><strong>ថ្ងៃព្រហស្បតិ៍ 08/02/2035</strong></td><td>ថោះ ធាតុឈើ</td></tr><tr><th scope=\"row\">2036</th><td><strong>ថ្ងៃច័ន្ទ 28/01/2036</strong></td><td>រោង ធាតុភ្លើង</td></tr></tbody></table></div>",
+    "after": [
+     "សម្រាប់ឆ្នាំ 2027 លម្អិត សូមអាន <a href=\"chinese-new-year-2027-year-of-the-goat\">ចូលឆ្នាំចិន 2027៖ ឆ្នាំមមែ</a> (ជាភាសាអង់គ្លេស)។"
+    ]
+   },
+   {
+    "h2": "ប្រពៃណីសំខាន់ៗ",
+    "paras": [
+     "ទំនៀមទម្លាប់អាចខុសគ្នាពីគ្រួសារមួយទៅគ្រួសារមួយ និងពីប្រទេសមួយទៅប្រទេសមួយ ប៉ុន្តែ Wikipedia ពិពណ៌នាអំពីប្រពៃណីទាំងនេះ ថាជាប្រពៃណីដែលពេញនិយមជាងគេ៖"
+    ],
+    "list": [
+     "<strong>បោសសម្អាតផ្ទះ</strong> មុនចូលឆ្នាំ ដើម្បីបោសចោលសំណាងអាក្រក់។",
+     "<strong>ការតុបតែងពណ៌ក្រហម៖</strong> ក្រដាសក្រហមកាត់ជាលំនាំ និងឃ្លាពរជ័យជាគូ បិទលើបង្អួច និងទ្វារ។",
+     "<strong>អាហារជុំគ្រួសារ</strong> នៅយប់ចូលឆ្នាំ ដែលសមាជិកគ្រួសារមកជួបជុំគ្នាហូបបាយ។",
+     "<strong>អាំងប៉ាវ</strong> ឬស្រោមសំបុត្រក្រហមដាក់ប្រាក់ (ភាសាចិនកុកងឺហៅថា <em>hongbao</em>) ដែលគេចែកជូនគ្នាពេលបុណ្យ។",
+     "<strong>ផាវ</strong> ដែលតាមប្រពៃណី គេបាញ់ដើម្បីបណ្ដេញវិញ្ញាណអាក្រក់។",
+     "<strong>បុណ្យរយៈពេល 15 ថ្ងៃ</strong> ចាប់ពីយប់ចូលឆ្នាំ ដល់បុណ្យគោម (Lantern Festival) នៅថ្ងៃទី 15 នៃឆ្នាំថ្មី។"
+    ],
+    "after": [
+     "នៅពីក្រោយពណ៌ក្រហម និងសំឡេងអ៊ូអរ គឺជារឿងព្រេងមួយ។ តាមរឿងព្រេង <strong>សត្វនៀន</strong> (Nian) ជាសត្វសាហាវមួយ ដែលតែងមកស៊ីអ្នកភូមិ ជាពិសេសក្មេងៗ នៅពាក់កណ្ដាលអធ្រាត្រ រហូតដល់អ្នកភូមិដឹងថា វាខ្លាចពណ៌ក្រហម និងសំឡេងខ្លាំងៗ។",
+     "យោងតាម Wikipedia នៅឆ្នាំ 2024 បុណ្យចូលឆ្នាំចិន ត្រូវបានបញ្ចូលក្នុងបញ្ជីបេតិកភណ្ឌវប្បធម៌អរូបីនៃមនុស្សជាតិ របស់អង្គការយូណេស្កូ។"
+    ],
+    "gallery": [
+     {
+      "src": "images/guides/lny-lion-dance.webp",
+      "alt": "សំលៀកបំពាក់របាំតោពណ៌លឿង និងក្រហម កំពុងសម្ដែងលើផ្លូវក្នុងទីក្រុង",
+      "width": 800,
+      "height": 902,
+      "caption": "របាំតោ នៅសង្កាត់ចិន ក្រុងញូវយ៉ក ឆ្នាំ 2008",
+      "credit": {
+       "author": "Bob Jagendorf",
+       "page": "https://commons.wikimedia.org/wiki/File:Chinese_New_Year_Lion_Dance.jpg",
+       "licence": "CC BY 2.0",
+       "licence_url": "https://creativecommons.org/licenses/by/2.0",
+       "changes": "shown cropped"
+      }
+     },
+     {
+      "src": "images/guides/lny-red-envelopes.webp",
+      "alt": "ស្រោមសំបុត្រពណ៌ក្រហម និងមាសជាច្រើន មានលំនាំតុបតែង",
+      "width": 800,
+      "height": 600,
+      "caption": "អាំងប៉ាវ ស្រោមសំបុត្រក្រហមសម្រាប់ដាក់ប្រាក់សំណាង",
+      "credit": {
+       "author": "Craig",
+       "page": "https://commons.wikimedia.org/wiki/File:Ang_pow.jpg",
+       "licence": "Public domain",
+       "licence_url": "",
+       "changes": "shown cropped"
+      }
+     },
+     {
+      "src": "images/guides/lny-reunion-dinner.webp",
+      "alt": "តុពោរពេញដោយម្ហូប រួមទាំងស្ល និងល្ពៅញាត់សាច់ សម្រាប់អាហារគ្រួសារ",
+      "width": 800,
+      "height": 845,
+      "caption": "អាហារជុំគ្រួសារ នៅប្រទេសសិង្ហបុរី ឆ្នាំ 2023",
+      "credit": {
+       "author": "Yenajong",
+       "page": "https://commons.wikimedia.org/wiki/File:Reunion_dinner_210123.jpg",
+       "licence": "CC BY-SA 4.0",
+       "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+       "changes": "shown cropped"
+      }
+     }
+    ]
+   },
+   {
+    "h2": "ចូលឆ្នាំចិននៅកម្ពុជា",
+    "paras": [
+     "ចូលឆ្នាំចិន មិនមែនជាថ្ងៃឈប់សម្រាកសាធារណៈនៅកម្ពុជាទេ ប៉ុន្តែត្រូវបានប្រារព្ធយ៉ាងទូលំទូលាយ ហើយសាលារៀន ក្រុមហ៊ុនឯកជន និងស្ថាប័នមួយចំនួន បិទទ្វារសម្រាប់បុណ្យនេះ នេះបើតាមរបាយការណ៍របស់ទីភ្នាក់ងារព័ត៌មានស៊ិនហួ ឆ្នាំ 2023។ លោក Sambo Manara អនុប្រធានសាកលវិទ្យាល័យមួយ ដែលរបាយការណ៍នោះដកស្រង់សម្ដី បានប៉ាន់ប្រមាណថា ប្រហែល 80 ភាគរយនៃប្រជាជនកម្ពុជានៅទីក្រុង និង 40 ភាគរយនៅជនបទ ប្រារព្ធបុណ្យនេះ។",
+     "គ្រួសារដែលមានដើមកំណើតចិន បោសសម្អាត និងតុបតែងផ្ទះ ដោយក្រដាសក្រហមកាត់ជាលំនាំ ផ្កា គោមក្រហម និងឃ្លាពរជ័យជាគូ ព្រមទាំងគោរពបូជាដូនតា និងជួបជុំគ្រួសារ នេះបើតាមរបាយការណ៍ដដែល។ សាស្ត្រាចារ្យប្រវត្តិវិទ្យា លោក Diep Sophal កត់សម្គាល់ថា តាមពិតកម្ពុជាប្រារព្ធចូលឆ្នាំបី៖ ចូលឆ្នាំសកល ចូលឆ្នាំចិន និងចូលឆ្នាំខ្មែរ។",
+     "នៅខែកុម្ភៈ ឆ្នាំ 2026 មុនថ្ងៃចូលឆ្នាំមមី សម្ដេចមហាបវរធិបតី ហ៊ុន ម៉ាណែត នាយករដ្ឋមន្ត្រី បានផ្ញើសារជូនពរដល់ប្រជាជនចិន និងប្រជាជនកម្ពុជាដែលមានដើមកំណើតចិន ហើយសិល្បករប្រជាប្រិយបានសម្ដែងរបាំតោនៅព្រះបរមរាជវាំង ក្នុងរាជធានីភ្នំពេញ នេះបើតាមកាសែត The Star។"
+    ],
+    "img": {
+     "src": "images/guides/lny-phnom-penh-2014.webp",
+     "alt": "ផ្ទាំងរូបភាពក្រហមសម្រាប់ចូលឆ្នាំចិន ពីលើប្រតិទិនប្រចាំថ្ងៃ ដែលបង្ហាញថ្ងៃទី 31 មករា 2014",
+     "width": 700,
+     "height": 1055,
+     "cls": "photo tall",
+     "caption": "ផ្ទាំងរូបភាពចូលឆ្នាំ និងប្រតិទិនប្រចាំថ្ងៃ នៅភ្នំពេញ ថ្ងៃទី 31/01/2014 ដែលជាថ្ងៃដំបូងនៃឆ្នាំមមី។",
+     "credit": {
+      "author": "Pierre André Leclercq",
+      "page": "https://commons.wikimedia.org/wiki/File:Lunar_New_Year%27s_31-01-2014_(cheval_(%E9%A6%AC)_Phnom-Penh_Cambodia.jpg",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
+     }
+    }
+   },
+   {
+    "h2": "ប្រទេសដែលចាត់ទុកជាថ្ងៃឈប់សម្រាក",
+    "paras": [
+     "ក្រៅពីប្រទេសចិន ដែលបុណ្យនេះជាការចាប់ផ្ដើមនៃសប្ដាហ៍ឈប់សម្រាកវែង ចូលឆ្នាំចិនជាថ្ងៃឈប់សម្រាកផ្លូវការនៅកន្លែងជាច្រើន យោងតាមទិដ្ឋភាពទូទៅរបស់ Wikipedia៖"
+    ],
+    "list": [
+     "<strong>ហុងកុង និងម៉ាកាវ៖</strong> 3 ថ្ងៃ។",
+     "<strong>តៃវ៉ាន់៖</strong> ច្រើនថ្ងៃ ព្រមទាំងថ្ងៃឈប់បន្ថែម។",
+     "<strong>អាស៊ីអាគ្នេយ៍៖</strong> ម៉ាឡេស៊ី សិង្ហបុរី ប្រ៊ុយណេ ឥណ្ឌូនេស៊ី ហ្វីលីពីន និងមីយ៉ាន់ម៉ា។ នៅប្រទេសថៃ ជាថ្ងៃឈប់សម្រាកតែនៅខេត្តមួយចំនួនភាគខាងត្បូងប៉ុណ្ណោះ។",
+     "<strong>កូរ៉េ និងវៀតណាម៖</strong> ថ្ងៃដដែលនេះជាថ្ងៃឈប់សម្រាក ក្រោមឈ្មោះ Seollal និង Tết។",
+     "<strong>កន្លែងផ្សេងទៀត៖</strong> មួយថ្ងៃ នៅរដ្ឋញូវយ៉ក និងរដ្ឋកាលីហ្វ័រញ៉ា សហរដ្ឋអាមេរិក និងនៅប្រទេសសូរីណាម។"
+    ]
+   }
+  ],
+  "faq": [
+   [
+    "ចូលឆ្នាំចិនឆ្នាំ 2027 ធ្លាក់ចំថ្ងៃណា?",
+    "ថ្ងៃសៅរ៍ 06/02/2027។ ជាថ្ងៃចាប់ផ្ដើមឆ្នាំមមែ ធាតុភ្លើង។"
+   ],
+   [
+    "Lunar New Year និងចូលឆ្នាំចិន ដូចគ្នាឬទេ?",
+    "ដូចគ្នា សម្រាប់បុណ្យរបស់ចិន៖ Lunar New Year ជាឈ្មោះអង់គ្លេសទូទៅរបស់វា ហើយនៅប្រទេសចិន គេហៅថាបុណ្យនិទាឃរដូវ។ ពាក្យ Lunar New Year ក៏ត្រូវបានប្រើសម្រាប់ចូលឆ្នាំដែលពាក់ព័ន្ធ ដូចជា Tết របស់វៀតណាម និង Seollal របស់កូរ៉េ ដែលជាធម្មតាធ្លាក់ចំថ្ងៃតែមួយ។"
+   ],
+   [
+    "ហេតុអ្វីថ្ងៃចូលឆ្នាំចិនផ្លាស់ប្ដូររៀងរាល់ឆ្នាំ?",
+    "ព្រោះវាអនុវត្តតាមព្រះចន្ទ៖ វាចាប់ផ្ដើមនៅថ្ងៃព្រះចន្ទថ្មី ដែលធ្លាក់នៅចន្លោះថ្ងៃទី 21 មករា ដល់ថ្ងៃទី 20 កុម្ភៈ ដូច្នេះថ្ងៃក្នុងប្រតិទិនអន្តរជាតិផ្លាស់ប្ដូររៀងរាល់ឆ្នាំ។"
+   ],
+   [
+    "ចូលឆ្នាំចិនប្រារព្ធរយៈពេលប៉ុន្មានថ្ងៃ?",
+    "15 ថ្ងៃ ចាប់ពីយប់ចូលឆ្នាំ ដល់បុណ្យគោមនៅថ្ងៃទី 15 នៃឆ្នាំថ្មី។"
+   ],
+   [
+    "តើចូលឆ្នាំចិនជាថ្ងៃឈប់សម្រាកសាធារណៈនៅកម្ពុជាឬទេ?",
+    "ទេ ប៉ុន្តែត្រូវបានប្រារព្ធយ៉ាងទូលំទូលាយ ជាពិសេសដោយគ្រួសារដែលមានដើមកំណើតចិន ហើយសាលារៀន ក្រុមហ៊ុន និងស្ថាប័នមួយចំនួនបិទទ្វារ។ ចូលឆ្នាំខ្មែរ គឺនៅកណ្ដាលខែមេសា។"
+   ]
+  ],
+  "source_notes": [
+   "ឈ្មោះបុណ្យនិទាឃរដូវ និង Lunar New Year ច្បាប់កំណត់ថ្ងៃ បុណ្យ 15 ថ្ងៃដល់បុណ្យគោម ប្រពៃណីនានា រឿងព្រេងសត្វនៀន បញ្ជីយូណេស្កូឆ្នាំ 2024 និងថ្ងៃឈប់សម្រាក។",
+   "បុណ្យ Tết, Seollal, Losar និង Tsagaan Sar ព្រមទាំងចូលឆ្នាំកណ្ដាលខែមេសា របស់កម្ពុជា និងប្រទេសជិតខាង។",
+   "ចូលឆ្នាំចិននៅកម្ពុជា ការប៉ាន់ប្រមាណរបស់លោក Sambo Manara និងចូលឆ្នាំទាំងបី ដែលលោក Diep Sophal កត់សម្គាល់។",
+   "សារជូនពររបស់សម្ដេចមហាបវរធិបតី ហ៊ុន ម៉ាណែត និងរបាំតោនៅព្រះបរមរាជវាំង។",
+   "ថ្ងៃទី 06/02/2027 ជាថ្ងៃដំបូងនៃឆ្នាំចន្ទគតិ។"
+  ],
+  "related": [
+   [
+    "ចូលឆ្នាំខ្មែរ និងឆ្នាំសត្វ",
+    "khmer-new-year-animal-year"
+   ],
+   [
+    "ថ្ងៃឈប់សម្រាកសាធារណៈ",
+    "cambodian-public-holidays"
+   ],
+   [
+    "ឆ្នាំមមែ",
+    "zodiac-year-goat"
+   ],
+   [
+    "ពិនិត្យរាសីរបស់អ្នក",
+    "../checker"
+   ]
+  ],
+  "note": "កាលបរិច្ឆេទ អនុវត្តតាមតារាងចូលឆ្នាំចន្ទគតិ ដែលកម្មវិធីពិនិត្យរាសីរបស់យើងប្រើ។ ថ្ងៃឈប់សម្រាកផ្លូវការ ត្រូវបានប្រកាសដោយរដ្ឋាភិបាលនីមួយៗ។ រូបថតមកពី Wikimedia Commons ក្រោមអាជ្ញាប័ណ្ណសេរី ដែលបានបញ្ជាក់នៅក្រោមរូបនីមួយៗ។"
+ }
 }
