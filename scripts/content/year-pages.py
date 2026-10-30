@@ -74,7 +74,7 @@ REL27 = {"own": "2027 is a Goat year, so Goat people are in their own year (ben 
 SOURCES = [
     ["Hong Kong Observatory: “Heavenly Stems and Earthly Branches”", "https://www.hko.gov.hk/en/gts/time/stemsandbranches.htm", "the 60-part Gan-Zhi cycle used to name years, months, days and hours."],
     ["Wikipedia: “Sexagenary cycle”", "https://en.wikipedia.org/wiki/Sexagenary_cycle", "the ten stems and twelve branches, 1984 as the start of the present cycle, and the year changing at Lunar New Year."],
-    ["Farmers' Almanac: “When Is Lunar New Year 2027?”", "https://www.farmersalmanac.com/when-chinese-new-year", "Lunar New Year falls on the second new moon after the winter solstice, between 21 January and 21 February."],
+    ["Farmers' Almanac: “When Is Lunar New Year 2027?”", "https://www.farmersalmanac.com/when-chinese-new-year", "Lunar New Year usually falls on the second new moon after the winter solstice."],
     ["New World Encyclopedia: “Wu xing”", "https://www.newworldencyclopedia.org/entry/Wu_xing", "the five elements and the generating and overcoming cycles."],
     ["Britannica: Chinese zodiac", "https://www.britannica.com/topic/Chinese-zodiac", "the zodiac as a classification of years in a repeating twelve-year cycle."],
 ]
@@ -217,7 +217,7 @@ KREL27 = {"own": "ចំពោះមមែ ឆ្នាំ 2027 ជាឆ្ន�
 KSOURCE_NOTES = [   # one per entry of SOURCES, same order (the source titles stay in English)
     "វដ្ត Gan-Zhi ដែលមាន 60 ផ្នែក ប្រើសម្រាប់ដាក់ឈ្មោះឆ្នាំ ខែ ថ្ងៃ និងម៉ោង។",
     "ដើមមេឃទាំងដប់ និងមែកផែនដីទាំងដប់ពីរ ឆ្នាំ 1984 ជាឆ្នាំចាប់ផ្ដើមនៃវដ្តបច្ចុប្បន្ន និងការប្ដូរឆ្នាំនៅថ្ងៃចូលឆ្នាំចិន។",
-    "ចូលឆ្នាំចិនធ្លាក់ចំថ្ងៃព្រះចន្ទថ្មីលើកទីពីរ ក្រោយថ្ងៃយប់វែងបំផុតនៃរដូវរងា (winter solstice) គឺនៅចន្លោះថ្ងៃទី 21 ខែមករា ដល់ថ្ងៃទី 21 ខែកុម្ភៈ។",
+    "ចូលឆ្នាំចិនធ្លាក់ចំថ្ងៃព្រះចន្ទថ្មីលើកទីពីរ ក្រោយថ្ងៃយប់វែងបំផុតនៃរដូវរងា (winter solstice)។",
     "ធាតុទាំងប្រាំ ព្រមទាំងវដ្តបង្កើត និងវដ្តទប់ស្កាត់។",
     "រាសីចិន ជាការចាត់ថ្នាក់ឆ្នាំ តាមវដ្តដប់ពីរឆ្នាំដែលវិលជុំជានិច្ច។",
 ]
