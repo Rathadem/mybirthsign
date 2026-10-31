@@ -4,8 +4,9 @@
 //   buildPack(iso, facts, forSign, data) -> { md, srtKm, srtEn, line }
 //     facts   = computeFacts(iso) from scripts/daily-data-lib.mjs
 //     forSign = forSign from js/lucky-digits.js
-//     data    = the day's data/daily/<iso>.json if it exists (its summary is used), otherwise null
-//     P       = { INFO, KM_INFO } from daily-data-lib (traits, weaknesses, lucky days for the long video)
+//     data    = the day's data/daily/<iso>.json if it exists (its summary and each sign's written fortune are used), otherwise null
+//     P       = { INFO, KM_INFO } from daily-data-lib (traits, weaknesses, lucky days for the long video), plus
+//               COPY = EARLY_COPY from early-card-copy.mjs (the standard horoscope lines used when data is null)
 export const EMO = { Rat: "🐀", Ox: "🐂", Tiger: "🐯", Rabbit: "🐇", Dragon: "🐉", Snake: "🐍", Horse: "🐎", Goat: "🐐", Monkey: "🐒", Rooster: "🐓", Dog: "🐕", Pig: "🐖" };
 // look of each animal: photorealistic celestial guardian in engraved ceremonial gold (live-action fantasy-epic quality)
 // Animal-only design descriptions: used only by CHAR (the old character design prompts)
@@ -617,6 +618,64 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
       "នេះគឺជាជោគជតារាសីចិន សម្រាប់ថ្ងៃនេះ។ អ្នកអាចមើលរាសីទាំង 12 និងលេខសំណាង នៅលើគេហទំព័រ mybirthsign.com។ សូមតាមដានយើង សម្រាប់ជោគជតាថ្ងៃស្អែក។ សូមឲ្យអ្នកមានសំណាងល្អ!"],
   ];
   const mmss = (t) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`;
+  // the day in a few words, and general advice for each rating (the long videos, and the general line of the horoscope below)
+  const DAYPH = { great: ["a great day", "ថ្ងៃល្អខ្លាំង"], good: ["a good day", "ថ្ងៃល្អ"], ordinary: ["an ordinary, steady day", "ថ្ងៃធម្មតា"], caution: ["a quiet day", "ថ្ងៃគួរប្រុងប្រយ័ត្ន"] };
+  const ADVICE = {
+    great: [["This is your day. Say yes to good chances, and lead with confidence.", "ថ្ងៃនេះ គឺជាថ្ងៃរបស់អ្នក។ សូមទទួលយកឱកាសល្អៗ និងធ្វើអ្វីៗដោយទំនុកចិត្ត។"]],
+    good: [["Good luck is with you. Work together with friends, and good results come more easily.", "សំណាងល្អកំពុងនៅជាមួយអ្នក។ សូមធ្វើការជាមួយមិត្តភក្តិ ហើយលទ្ធផលល្អ នឹងមកដល់កាន់តែងាយ។"],
+      ["A good day to meet people and start something nice. Keep smiling.", "ថ្ងៃនេះ ល្អសម្រាប់ជួបមនុស្ស និងចាប់ផ្ដើមរឿងល្អៗ។ សូមរក្សាស្នាមញញឹម។"]],
+    ordinary: [["A steady, normal day. Keep a calm pace, and finish what you start.", "ជាថ្ងៃធម្មតា និងនឹងនរ។ សូមធ្វើការដោយស្ងប់ៗ ហើយបញ្ចប់អ្វីដែលអ្នកបានចាប់ផ្ដើម។"],
+      ["Keep things simple today. Small, steady steps are better than big jumps.", "ថ្ងៃនេះ សូមធ្វើអ្វីៗឲ្យសាមញ្ញ។ ជំហានតូចៗ និងនឹងនរ ល្អជាងការលោតធំៗ។"],
+      ["A quiet day for planning. Tidy up, think ahead, and rest well tonight.", "ជាថ្ងៃស្ងប់ស្ងាត់ សម្រាប់រៀបចំផែនការ។ សូមរៀបចំរបស់របរ គិតទុកមុន និងសម្រាកឲ្យបានល្អនៅយប់នេះ។"]],
+    caution: [["Take it easy today. Slow down, rest well, and don't rush big decisions.", "ថ្ងៃនេះ គួរសម្រាកឲ្យស្រួលខ្លួន។ ធ្វើអ្វីៗយឺតៗ សម្រាកឲ្យបានគ្រប់គ្រាន់ និងកុំប្រញាប់សម្រេចចិត្តរឿងធំៗ។"]],
+  };
+  // ---- today's horoscope for every sign (the owner's request, 31/10/2026: "give the horoscope and prediction"): general
+  // luck, love, work, money, what to be careful about, and advice. It is the website's own written fortune for this date
+  // when that exists (data/daily/<date>.json, written a day ahead); otherwise the website's standard lines for the sign's
+  // rating (P.COPY = scripts/content/early-card-copy.mjs, chosen exactly as the Studio's early share cards choose them),
+  // with the general line from ADVICE above. The videos speak first sentences, so every line fits its 10-second clip.
+  const firstSent = (t, lang) => { const m = String(t || "").trim().match(lang === "km" ? /^[^។!?]+[។!?]?/ : /^[^.!?]+[.!?]?/); return m ? m[0].trim() : ""; };
+  const HORO = Object.fromEntries(F.signs.map((sg, i) => {
+    const a = sg.animal, t = sg.tier, rank = F.signs.filter((x) => x.tier === t).indexOf(sg), C = P && P.COPY;
+    const st = same && data ? ((data.signs || []).find((x) => x.animal === a) || {}).text : null;
+    const ad = ADVICE[t][(dayNo + i) % ADVICE[t].length], H = { site: !!(st && st.en && st.km) };
+    ["en", "km"].forEach((lang, li) => {
+      const r = { general: ad[li], love: C ? C[lang].love[t][(dayNo + i) % 2] : "", career: C ? C[lang].career[t][(dayNo + i + 1) % 2] : "",
+        money: C ? C[lang].money[t][(dayNo + rank) % 2] : "", careful: "", advice: C ? C[lang].advice[t][(dayNo + rank + 1) % 2] : "" };
+      const w = H.site ? st[lang] : {}, fix = (x) => (lang === "km" && x ? addYear(String(x).trim()) : String(x || "").trim());
+      H[lang] = { general: fix(w.fortune || r.general), love: fix(w.love || r.love), career: fix(w.career || r.career), money: fix(w.money || r.money), careful: fix(w.careful || r.careful), advice: fix(w.advice || r.advice) };
+      H[lang + "Std"] = r;   // the standard lines: a shorter fallback when the site's sentence is too long for a clip
+    });
+    return [a, H];
+  }));
+  const HLBL = { general: ["", ""], love: ["Love:", "ស្នេហា៖"], career: ["Work:", "ការងារ៖"], money: ["Money:", "លុយកាក់៖"], careful: ["Be careful:", "ប្រយ័ត្ន៖"], advice: ["Advice:", "ដំបូន្មាន៖"] };
+  const fitsLang = [(t) => enSpoken(t) <= 23, (t) => [...kmFlow(t)].length <= 125];
+  // one part of a sign's horoscope as a spoken line (English, Khmer): the whole text if it fits the clip, else its first
+  // sentence, else the standard line; English and Khmer always take the same choice, so both voices say the same thing
+  const horoSay = (a, k, pre = HLBL[k]) => {
+    const H = HORO[a], c = (lang, li) => [H[lang][k], firstSent(H[lang][k], lang), H[lang + "Std"][k], firstSent(H[lang + "Std"][k], lang)]
+      .map((x) => (x ? (pre[li] ? `${pre[li]} ${x}` : x) : ""));
+    const e = c("en", 0), m = c("km", 1), j = e.findIndex((x, i) => x && m[i] && fitsLang[0](x) && fitsLang[1](m[i]));
+    return j >= 0 ? [e[j], m[j]] : [e.filter(Boolean).at(-1) || "", m.filter(Boolean).at(-1) || ""];
+  };
+  // several parts in one clip: the first sentence of every part that still fits in both languages, in this order, then
+  // the ending (a part that is too long today is left out; the text section below always has all of them)
+  const horoPack = (a, keys, end = ["", ""]) => {
+    const H = HORO[a], parts = [[], []];
+    const one = (k, lang, li, std = "") => { const x = firstSent(H[lang + std][k], lang); return x ? (HLBL[k][li] ? `${HLBL[k][li]} ${x}` : x) : ""; };
+    const join = (li, extra) => [...parts[li], extra, end[li]].filter(Boolean).join(" ");
+    for (const k of keys) {
+      const e = one(k, "en", 0), m = one(k, "km", 1);
+      if (e && m && fitsLang[0](join(0, e)) && fitsLang[1](join(1, m))) { parts[0].push(e); parts[1].push(m); }
+    }
+    if (!parts[0].length) {   // nothing fits today: the first part that fits as a standard line, else the shortest one
+      const over = ([e, m]) => Math.max(enSpoken(join(0, e)) / 23, [...kmFlow(join(1, m))].length / 125);
+      const c = keys.flatMap((k) => ["", "Std"].map((std) => [one(k, "en", 0, std), one(k, "km", 1, std)])).filter(([e, m]) => e && m);
+      const best = c.find(([e, m]) => fitsLang[0](join(0, e)) && fitsLang[1](join(1, m))) || c.sort((x, y) => over(x) - over(y))[0] || ["", ""];
+      parts[0].push(best[0]); parts[1].push(best[1]);
+    }
+    return [join(0, ""), join(1, "")];
+  };
   // ---- luckiest-animal videos: the "60s" video (8 scenes, 80 seconds; Facebook, TikTok) and 180 seconds (YouTube), 10-second scenes
   const PI = P && P.INFO[day], PK = P && P.KM_INFO[day];
   const traitsEn = PI ? PI.traits.replace(/^(\w)/, (m) => m.toLowerCase()) : "";
@@ -629,14 +688,11 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
       `People born in the Year of the ${day} are ${traitsEn}`, PK ? `អ្នកកើតឆ្នាំ${dayKm} ជាមនុស្ស${PK.traits.replace(/ឱនភាព/g, "ឱ្យតម្លៃលើភាព")}` : ""],
     magic: [nine[3][0], nine[3][1], ...vo90[3]],
     love: ["Love and family", `${DV(29, LOVE_OBJ(dl))} It smiles warmly. Gentle, loving mood. Slow push-in.`,
-      "For love and family today, be warm and kind. A kind word, a smile, or a small gift can bring you closer to the people you love.",
-      "សម្រាប់ស្នេហា និងគ្រួសារ ថ្ងៃនេះ សូមមានចិត្តកក់ក្ដៅ និងសប្បុរស។ ពាក្យសម្ដីល្អ ស្នាមញញឹម ឬអំណោយតូចមួយ អាចនាំឲ្យអ្នកកាន់តែជិតស្និទ្ធ នឹងមនុស្សដែលអ្នកស្រឡាញ់។"],
+      ...horoSay(day, "love", ["Love and family today:", "ស្នេហា និងគ្រួសារថ្ងៃនេះ៖"])],
     work: ["Work and study", `${DV(30, WORK_OBJ(dl))} Determined, hopeful mood. Smooth camera move following it.`,
-      "For work and study, take one clear step at a time. Finish what matters most first, and ask for help when you need it.",
-      "សម្រាប់ការងារ និងការសិក្សា សូមធ្វើម្ដងមួយជំហាន ឲ្យបានច្បាស់លាស់។ សូមធ្វើរឿងសំខាន់បំផុតមុនគេ ហើយកុំខ្មាសក្នុងការសុំជំនួយ ពេលអ្នកត្រូវការ។"],
+      ...horoSay(day, "career", ["Work today:", "ការងារថ្ងៃនេះ៖"])],
     money: ["Money", `${DV(32, MONEY_OBJ(dl))} Warm, calm light. Slow push-in.`,
-      "For money, keep things simple and careful today. Plan before you spend, and save a little for tomorrow.",
-      "សម្រាប់លុយកាក់ ថ្ងៃនេះ សូមចាយវាយឲ្យសាមញ្ញ និងប្រុងប្រយ័ត្ន។ សូមគិតគូរមុននឹងចាយ ហើយសន្សំទុកបន្តិច សម្រាប់ថ្ងៃស្អែក។"],
+      ...horoSay(day, "money", ["Money today:", "លុយកាក់ថ្ងៃនេះ៖"])],
     colortime: [nine[4][0], nine[4][1], ...vo90[4]],
     color: ["Lucky color", `${col180.scene} Warm ${cen} and gold light. Slow orbit.`,
       `Your lucky color today is ${cen}. Wear something ${cen}, or carry a small ${cen} item with you, to keep good luck close.`,
@@ -685,11 +741,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
         ["Keep that energy close all day.", "សូមរក្សាថាមពលនោះ ជាប់ជាមួយអ្នកពេញមួយថ្ងៃ។"]]).concat([
         ["Let it guide you.", "សូមឲ្យវាដឹកនាំអ្នក។"], ["Shine today!", "ថ្ងៃនេះ សូមភ្លឺស្វាង!"]]))],
     magic60: ["The magical moment", `The ${dl} ${POSE[day]}. ${DV(26, LAND)} ${alive(day)} ${lockAnimal(day)}`,
-      ...fuller(V(4, 4, [
-        ["Your luck is strong today. Say yes to good chances, and share your happiness.", "ថ្ងៃនេះ សំណាងរបស់អ្នកល្អខ្លាំង។ សូមទទួលយកឱកាសល្អៗ ហើយចែករំលែកភាពរីករាយ។"],
-        ["Doors open more easily for you today. Take the brave step you've been waiting for.", "ថ្ងៃនេះ ទ្វារឱកាសបើកងាយសម្រាប់អ្នក។ សូមបោះជំហានក្លាហាន ដែលអ្នករង់ចាំយូរមកហើយ។"],
-        ["Your energy shines today. Reach out to someone, and let good things grow.", "ថ្ងៃនេះ ថាមពលរបស់អ្នកភ្លឺស្វាង។ សូមទាក់ទងនរណាម្នាក់ ហើយឲ្យរឿងល្អៗរីកលូតលាស់។"],
-        ["Today is a day to begin. Start the one thing that matters most to you.", "ថ្ងៃនេះ ជាថ្ងៃសម្រាប់ចាប់ផ្ដើម។ សូមចាប់ផ្ដើមរឿងមួយ ដែលសំខាន់បំផុតសម្រាប់អ្នក។"]]), rot(3, [
+      ...fuller(horoPack(day, ["general", "love", "career", "money"]), rot(3, [
         [`This ${DEL.el} day adds ${DEL.q} to everything you do.`, `ថ្ងៃធាតុ${DEL.km}នេះ បន្ថែម${DEL.qKm} ដល់អ្វីៗដែលអ្នកធ្វើ។`],
         [`Your helper sign is the ${helper}: team up with one.`, `រាសីជំនួយរបស់អ្នក គឺឆ្នាំ${km(helper)}៖ សូមសហការជាមួយគេ។`],
         ["Trust yourself, and act with a kind heart.", "សូមជឿលើខ្លួនឯង ហើយធ្វើអ្វីៗដោយចិត្តល្អ។"]]).concat([
@@ -726,29 +778,17 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
         ["Come back tomorrow for a brand-new fortune. Follow MyBirthSign, and have a lucky day!", "ថ្ងៃស្អែក សូមត្រឡប់មកមើលជោគជតាថ្មី។ តាមដាន MyBirthSign ហើយសូមឲ្យមានសំណាងល្អ!"]]), true],
   };
   // ---- long YouTube video: the luckiest animal, then all 12 signs (two 10-second clips each), then a short closing
-  const DAYPH = { great: ["a great day", "ថ្ងៃល្អខ្លាំង"], good: ["a good day", "ថ្ងៃល្អ"], ordinary: ["an ordinary, steady day", "ថ្ងៃធម្មតា"], caution: ["a quiet day", "ថ្ងៃគួរប្រុងប្រយ័ត្ន"] };
-  const ADVICE = {
-    great: [["This is your day. Say yes to good chances, and lead with confidence.", "ថ្ងៃនេះ គឺជាថ្ងៃរបស់អ្នក។ សូមទទួលយកឱកាសល្អៗ និងធ្វើអ្វីៗដោយទំនុកចិត្ត។"]],
-    good: [["Good luck is with you. Work together with friends, and good results come more easily.", "សំណាងល្អកំពុងនៅជាមួយអ្នក។ សូមធ្វើការជាមួយមិត្តភក្តិ ហើយលទ្ធផលល្អ នឹងមកដល់កាន់តែងាយ។"],
-      ["A good day to meet people and start something nice. Keep smiling.", "ថ្ងៃនេះ ល្អសម្រាប់ជួបមនុស្ស និងចាប់ផ្ដើមរឿងល្អៗ។ សូមរក្សាស្នាមញញឹម។"]],
-    ordinary: [["A steady, normal day. Keep a calm pace, and finish what you start.", "ជាថ្ងៃធម្មតា និងនឹងនរ។ សូមធ្វើការដោយស្ងប់ៗ ហើយបញ្ចប់អ្វីដែលអ្នកបានចាប់ផ្ដើម។"],
-      ["Keep things simple today. Small, steady steps are better than big jumps.", "ថ្ងៃនេះ សូមធ្វើអ្វីៗឲ្យសាមញ្ញ។ ជំហានតូចៗ និងនឹងនរ ល្អជាងការលោតធំៗ។"],
-      ["A quiet day for planning. Tidy up, think ahead, and rest well tonight.", "ជាថ្ងៃស្ងប់ស្ងាត់ សម្រាប់រៀបចំផែនការ។ សូមរៀបចំរបស់របរ គិតទុកមុន និងសម្រាកឲ្យបានល្អនៅយប់នេះ។"]],
-    caution: [["Take it easy today. Slow down, rest well, and don't rush big decisions.", "ថ្ងៃនេះ គួរសម្រាកឲ្យស្រួលខ្លួន។ ធ្វើអ្វីៗយឺតៗ សម្រាកឲ្យបានគ្រប់គ្រាន់ និងកុំប្រញាប់សម្រេចចិត្តរឿងធំៗ។"]],
-  };
   const LOOKTIER = { great: "bursting with a bright golden aura", good: "glowing with a warm golden light", ordinary: "calm and content, softly lit by the moon", caution: "resting peacefully inside a soft protective bubble of golden light" };
-  const tierCount = { great: 0, good: 0, ordinary: 0, caution: 0 };
   const signScenes = F.signs.flatMap((sg, si) => {
     const a = sg.animal, al = a.toLowerCase(), t = sg.tier, L = sg.lucky, nn = nums.find((x) => x.a === a);
-    const adv = ADVICE[t][tierCount[t]++ % ADVICE[t].length];
     const act = t === "great" || t === "good" ? POSE[a] : t === "ordinary" ? DV(40, CALM_ACT, si) : DV(41, REST_ACT, si);
     return [
       [`${a} – ${sg.label.en}`, `${cap(LOOK[a])} ${DV(42, PLACE, si)}, ${LOOKTIER[t]}. ${cap(DV(43, COLOR_OBJ(al, L.color.en), si).around)}. Slow push-in; it is the saved Flow character ${FLOW_NAME(a)}.`,
         `Year of the ${a}. Today is ${DAYPH[t][0]} for you. Your lucky color is ${L.color.en}, and your best time is ${sayTime(L.time)}.`,
         `ឆ្នាំ${sg.nameKm}។ ថ្ងៃនេះ ជា${DAYPH[t][1]} សម្រាប់អ្នក។ ពណ៌សំណាងរបស់អ្នក គឺពណ៌${L.color.km} ហើយពេលល្អបំផុត គឺ${sayTimeKm(L.time)}។`],
-      [`${a} – advice`, `The ${al} ${act}. ${t === "caution" ? "Peaceful and safe, not sad." : "Magical and joyful."} Camera follows it smoothly.`,
-        `${adv[0]} Your lucky direction is the ${L.direction.en.toLowerCase()}.${nn ? ` Lucky numbers: ${nn.d2} and ${nn.d3}.` : ""}`,
-        `${adv[1]} ទិសសំណាង គឺទិស${L.direction.km}។${nn ? ` លេខសំណាង៖ លេខ ${nn.d2} និងលេខ ${nn.d3}។` : ""}`],
+      [`${a} – horoscope`, `The ${al} ${act}. ${t === "caution" ? "Peaceful and safe, not sad." : "Magical and joyful."} Camera follows it smoothly.`,
+        ...horoPack(a, ["love", "career", "money"], [`Lucky direction: ${L.direction.en.toLowerCase()}.${nn ? ` Lucky numbers: ${nn.d2} and ${nn.d3}.` : ""}`,
+          `ទិសសំណាង៖ ទិស${L.direction.km}។${nn ? ` លេខសំណាង៖ ${nn.d2} និង ${nn.d3}។` : ""}`])],
     ];
   });
   const overview = ["Today's lucky signs", `The twelve golden-armored zodiac guardians ${DV(54, GROUP12, 1)}. Three of them shine brighter than the others with a golden aura. Slow, wide circling camera.`,
@@ -1234,16 +1274,13 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
     add(G, [`The ${day}'s character`, wide(day, `Close-up of the ${dl} on its glowing lotus, its face showing a ${S9.mood} expression. Soft golden light circles it and ${DV(28, HALO, 1)}. Gentle slow orbit.`),
       `People born in the Year of the ${day} are often described as ${clueEn}.`,
       `អ្នកកើតឆ្នាំ${dayKm} ជារឿយៗ ត្រូវបានគេស្គាល់ថា ${clueKm}។`]);
-    add(G, SC.magic60);
+    add(G, [SC.magic60[0], SC.magic60[1], ...horoPack(day, ["general"])]);
     add(G, ["Love and family", wide(day, `${DV(29, LOVE_OBJ(dl), 1)} It smiles warmly. Slow push-in.`),
-      "For love today, be warm and kind. A kind word or a small gift brings you closer.",
-      "សម្រាប់ស្នេហា ថ្ងៃនេះ សូមមានចិត្តកក់ក្ដៅ។ ពាក្យល្អ ឬអំណោយតូចមួយ នាំឲ្យកាន់តែជិតស្និទ្ធ។"]);
+      ...horoSay(day, "love", ["Love and family today:", "ស្នេហា និងគ្រួសារថ្ងៃនេះ៖"])]);
     add(G, ["Work and study", wide(day, `${DV(30, WORK_OBJ(dl), 1)} Smooth camera move following it.`),
-      "For work and study, take one clear step at a time, and finish what matters most first.",
-      "សម្រាប់ការងារ និងការសិក្សា សូមធ្វើម្ដងមួយជំហាន ហើយបញ្ចប់រឿងសំខាន់មុនគេ។"]);
+      ...horoSay(day, "career", ["Work today:", "ការងារថ្ងៃនេះ៖"])]);
     add(G, ["Money", wide(day, `${DV(32, MONEY_OBJ(dl), 1)} Warm, calm light. Slow push-in.`),
-      "For money, keep it simple. Plan before you spend, and save a little for tomorrow.",
-      "សម្រាប់លុយកាក់ សូមចាយឲ្យសាមញ្ញ។ គិតមុននឹងចាយ ហើយសន្សំទុកបន្តិច សម្រាប់ថ្ងៃស្អែក។"]);
+      ...horoSay(day, "money", ["Money today:", "លុយកាក់ថ្ងៃនេះ៖"])]);
     [SC.color60, SC.timedir60, SC.num60].forEach((s) => add(G, s));
     add(G, ["Lucky days of the week", wide(day, `${DV(33, SEVEN_OBJ(dl), 1)} Slow pan along the row.`),
       PI ? `The ${day}'s lucky days of the week are ${PI.luckyDays.join(" and ")}. Keep them for plans that matter.` : "",
@@ -1252,15 +1289,13 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
       `A gentle reminder: ${day} people ${weakEn}. Stay balanced today.`,
       PK ? `រំលឹកបន្តិច៖ អ្នកកើតឆ្នាំ${dayKm} ${PK.weaknesses.replace(/។$/, "")}។ សូមរក្សាតុល្យភាព។` : ""]);
     // the two Good Day signs
-    const GOODTIP = [["Team up with a friend today. Shared plans go well.", "ថ្ងៃនេះ សូមសហការជាមួយមិត្ត។ ផែនការរួមគ្នា នឹងដំណើរការល្អ។"],
-      ["A good day to meet people and start something nice. Keep smiling.", "ថ្ងៃនេះ ល្អសម្រាប់ជួបមនុស្ស និងចាប់ផ្ដើមរឿងល្អៗ។ សូមរក្សាស្នាមញញឹម។"]];
     fr.forEach((f, i) => {
       const fs = sign(f), fl = f.toLowerCase(), FL = fs.lucky, nf = nums.find((x) => x.a === f), Gp = `Good Day: ${f}`;
       add(Gp, [`${f} – ${fs.label.en}`, wide(f, `${cap(LOOK[f])} ${DV(42, PLACE, 5 + 3 * i)}, glowing with a warm golden light, and greets the night with a happy stretch. Slow push-in.`),
         `Next, the Year of the ${f}: a Good Day! The ${f} shares a lucky triangle with the ${day}.`,
         `បន្ទាប់ ឆ្នាំ${km(f)}៖ ថ្ងៃល្អ! ឆ្នាំ${km(f)} ស្ថិតក្នុងត្រីកោណសំណាង ជាមួយឆ្នាំ${dayKm}។`]);
       add(Gp, [`${f} – the magical moment`, wide(f, `The ${fl} ${POSE[f]}. ${DV(26, LAND, 2 + 3 * i)}`),
-        GOODTIP[i % 2][0], GOODTIP[i % 2][1]]);
+        ...horoPack(f, ["general", "love", "career", "money"])]);
       add(Gp, [`${f} – lucky color and time`, wide(f, `${DV(21, COLOR_OBJ(fl, FL.color.en), 2 + 3 * i).scene} Nearby, ${DV(22, TIME_OBJ(fl), 2 + 3 * i).short}. Warm ${FL.color.en} and gold light. Slow orbit.`),
         `Your lucky color is ${FL.color.en}, and your best time is ${sayTime(FL.time)}.`,
         `ពណ៌សំណាងគឺពណ៌${FL.color.km} ហើយពេលល្អបំផុតគឺ${sayTimeKm(FL.time)}។`]);
@@ -1276,13 +1311,12 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
     E.slice(1, 7).forEach((s, i) => add(T, i === 0 ? [`${c} – take it easy`, s[1].replace("Continuing from the previous scene: ", `${cap(LOOK[c])} sits at the edge of the moonlit pond, where a path of flat stepping stones leads up to the temple. `), s[2], s[3]] : s));
     // the other eight signs
     ords.forEach((sg, i) => {
-      const a = sg.animal, al = a.toLowerCase(), L = sg.lucky, adv = ADVICE.ordinary[i % ADVICE.ordinary.length], Op = "All the other signs";
+      const a = sg.animal, al = a.toLowerCase(), L = sg.lucky, Op = "All the other signs";
       add(Op, [`${a} – ${sg.label.en}`, wide(a, `${cap(LOOK[a])} ${DV(42, PLACE, 3 + 5 * i)}, calm and content, softly lit by the moon. ${cap(DV(43, COLOR_OBJ(al, L.color.en), 3 + 5 * i).around)}. Slow push-in.`),
         `Year of the ${a}: a steady day. Lucky color: ${L.color.en}. Best time: ${sayTime(L.time)}.`,
         `ឆ្នាំ${sg.nameKm}៖ ថ្ងៃធម្មតា។ ពណ៌សំណាង៖ ពណ៌${L.color.km}។ ពេលល្អ៖ ${sayTimeKm(L.time)}។`]);
-      add(Op, [`${a} – advice`, wide(a, `The ${al} ${DV(40, CALM_ACT, 3 + 5 * i)}, then moves on along the edge of the lotus pond. Peaceful, cheerful mood. Camera follows it smoothly.`),
-        `${adv[0]} Lucky direction: ${L.direction.en.toLowerCase()}.`,
-        `${adv[1]} ទិសសំណាង៖ ទិស${L.direction.km}។`]);
+      add(Op, [`${a} – horoscope`, wide(a, `The ${al} ${DV(40, CALM_ACT, 3 + 5 * i)}, then moves on along the edge of the lotus pond. Peaceful, cheerful mood. Camera follows it smoothly.`),
+        ...horoPack(a, ["love", "career", "money"], [`Lucky direction: ${L.direction.en.toLowerCase()}.`, `ទិសសំណាង៖ ទិស${L.direction.km}។`])]);
     });
     // recap and goodbye
     add("Recap and goodbye", ["Quick recap", `The twelve golden-armored zodiac guardians gather on the temple terrace in a half circle; the ${dl} glows brightest in the middle, two friends glow warmly beside it, and the ${cl} rests calmly in its soft bubble of light. They all move and look around happily. Slow pull-back.`,
@@ -1352,6 +1386,31 @@ ${srtVid[v.id].km}\`\`\`
 ### Subtitles – English (${iso}-${v.id}.en.srt)
 \`\`\`
 ${srtVid[v.id].en}\`\`\``;
+  // today's horoscope for all 12 signs, ready to copy into posts (the videos speak the same predictions)
+  const anySite = Object.values(HORO).some((h) => h.site), anyCareful = Object.values(HORO).some((h) => h.en.careful);
+  const horoBlock = (lang) => F.signs.map((sg) => {
+    const a = sg.animal, H = HORO[a][lang], L = sg.lucky, nn = nums.find((x) => x.a === a), n3 = nn ? `${nn.d1} · ${nn.d2} · ${nn.d3}` : "";
+    return (lang === "en"
+      ? [`${EMO[a]} ${a} – ${sg.label.en}`, `General: ${H.general}`, `Love: ${H.love}`, `Work: ${H.career}`, `Money: ${H.money}`, H.careful && `Be careful: ${H.careful}`, `Advice: ${H.advice}`,
+        `Lucky color: ${L.color.en} · Direction: ${L.direction.en} · Best time: ${L.time}${n3 ? ` · Lucky numbers: ${n3}` : ""}`]
+      : [`${EMO[a]} ឆ្នាំ${sg.nameKm} – ${sg.label.km}`, `ទូទៅ៖ ${H.general}`, `ស្នេហា៖ ${H.love}`, `ការងារ៖ ${H.career}`, `លុយកាក់៖ ${H.money}`, H.careful && `ប្រយ័ត្ន៖ ${H.careful}`, `ដំបូន្មាន៖ ${H.advice}`,
+        `ពណ៌សំណាង៖ ពណ៌${L.color.km} · ទិស${L.direction.km} · ពេលល្អ ${L.time}${n3 ? ` · លេខសំណាង៖ ${n3}` : ""}`]).filter(Boolean).join("\n");
+  }).join("\n\n");
+  const horoMd = `## Today's horoscope – all 12 signs
+Each sign's prediction for ${D}: general luck, love, work, money${anyCareful ? ", what to be careful about" : ""} and advice, in English and Khmer, ready to copy into your Facebook, TikTok, Telegram and YouTube posts. The videos speak the same predictions: the 60-second video (the ${day}'s luck and love), the 180-second video (love, work and money), the long videos (every sign) and the full-fortune video. Lucky numbers are given only for today's lucky signs, as in the videos.
+${anySite ? "Wording: the website's own written fortune for this date." : "Wording: the website's standard lines for each sign's rating (this date's written fortune is published on the website the day before; open the Studio at mybirthsign.com/studio/ then to use it)."}
+
+### English
+${horoBlock("en")}
+
+${DISC_EN}
+
+### Khmer
+${horoBlock("km")}
+
+${disclaimer}
+
+`;
   const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃឆ្នាំ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
@@ -1360,7 +1419,7 @@ Format: vertical 9:16 (YouTube Shorts, Facebook Reels, TikTok), about 45 seconds
 Two versions: make the pictures once, then record a Khmer voice-over and an English voice-over (two videos, or one video with both subtitle tracks).
 Ratings, lucky signs and lucky numbers come from the site's fixed rules and match the website's daily fortune for this date.${same ? "" : "\nVoice-over wording: standard script (this pack was made ahead; the site's own daily wording appears the day before)."}
 
-## Luckiest animal today – ${day} (${km(day)}) · ${sign(day).label.en}
+${horoMd}## Luckiest animal today – ${day} (${km(day)}) · ${sign(day).label.en}
 One hero post for the day's luckiest animal: a picture, a short video and a caption. Lucky color ${sign(day).lucky.color.en} (${sign(day).lucky.color.km}) · best time ${sign(day).lucky.time} · lucky numbers ${[nums[0].d1, nums[0].d2, nums[0].d3, nums[0].d4, nums[0].d5].join(" · ")} (for fun only).
 
 ### Picture prompt (square 1:1)

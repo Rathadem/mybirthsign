@@ -1,67 +1,71 @@
 1
-00:00:00,000 --> 00:00:01,640
+00:00:00,000 --> 00:00:01,362
 Is your sign one
 
 2
-00:00:01,690 --> 00:00:04,387
+00:00:01,412 --> 00:00:03,656
 of today's three luckiest?
 
 3
-00:00:04,437 --> 00:00:07,978
+00:00:03,706 --> 00:00:06,656
 Here's your Chinese zodiac fortune
 
 4
-00:00:08,028 --> 00:00:11,147
+00:00:06,706 --> 00:00:09,303
 for Saturday, 31 October 2026.
 
 5
-00:00:11,197 --> 00:00:13,365
-Today is a Tiger day.
+00:00:09,353 --> 00:00:12,391
+Today is a Tiger day, traditionally
 
 6
-00:00:13,415 --> 00:00:15,478
-Tiger, Horse and Dog
+00:00:12,441 --> 00:00:15,215
+full of brave and lively energy.
 
 7
-00:00:15,528 --> 00:00:18,542
-are the luckiest signs today.
+00:00:15,265 --> 00:00:18,744
+Tiger, Horse and Dog are the lucky signs
 
 8
-00:00:18,592 --> 00:00:21,288
-Monkey should take it easy
+00:00:18,794 --> 00:00:22,362
+so they may find things flowing smoothly.
 
 9
-00:00:21,338 --> 00:00:25,725
-slow down and avoid rushing big decisions.
+00:00:22,412 --> 00:00:25,274
+Monkey is advised to take it easy
 
 10
-00:00:25,775 --> 00:00:28,260
-For lucky numbers today:
+00:00:25,324 --> 00:00:28,891
+slow down, and enjoy a calm, gentle pace.
 
 11
-00:00:28,310 --> 00:00:30,161
-Tiger, 35 and 431.
+00:00:28,941 --> 00:00:31,009
+For lucky numbers today:
 
 12
-00:00:30,211 --> 00:00:32,063
-Horse, 70 and 770.
+00:00:31,059 --> 00:00:32,597
+Tiger, 35 and 431.
 
 13
-00:00:32,113 --> 00:00:33,753
-Dog, 99 and 439.
+00:00:32,647 --> 00:00:34,185
+Horse, 70 and 770.
 
 14
-00:00:33,803 --> 00:00:37,027
-Comment your lucky number below
+00:00:34,235 --> 00:00:35,597
+Dog, 99 and 439.
 
 15
-00:00:37,077 --> 00:00:38,823
-and say it again!
+00:00:35,647 --> 00:00:38,332
+Comment your lucky number below
 
 16
-00:00:38,873 --> 00:00:42,943
-See all 12 signs and full lucky numbers
+00:00:38,382 --> 00:00:39,832
+and say it again!
 
 17
-00:00:42,993 --> 00:00:44,950
+00:00:39,882 --> 00:00:43,274
+See all 12 signs and full lucky numbers
+
+18
+00:00:43,324 --> 00:00:44,950
 at mybirthsign.com.

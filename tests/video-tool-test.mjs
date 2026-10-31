@@ -6,6 +6,7 @@ import path from "node:path";
 import { createRequire } from "node:module";
 import { computeFacts, ROOT, INFO, KM_INFO } from "../scripts/daily-data-lib.mjs";
 import { buildPack } from "../scripts/content/video-pack-lib.mjs";
+import { EARLY_COPY } from "../scripts/content/early-card-copy.mjs";
 
 const require = createRequire(import.meta.url);
 const { forSign } = require("../js/lucky-digits.js");
@@ -24,7 +25,7 @@ const dates = Array.from({ length: 400 }, (_, i) => new Date(start + i * 8640000
 const got = await page.evaluate((ds) => ds.map((d) => window.__pack(d)), dates);
 let bad = 0;
 dates.forEach((d, i) => {
-  const want = buildPack(d, computeFacts(d), forSign, null, { INFO, KM_INFO });
+  const want = buildPack(d, computeFacts(d), forSign, null, { INFO, KM_INFO, COPY: EARLY_COPY });
   for (const k of ["md", "srtKm", "srtEn", "srtVid"]) if (JSON.stringify(got[i][k]) !== JSON.stringify(want[k])) { bad++; if (bad < 5) console.error(`DIFF ${d} ${k}`); }
 });
 const sections = await page.locator("details.sec").count();

@@ -79,20 +79,20 @@ Your lucky color is gold, and your best
 time is from 7 to 9 in the morning.
 
 21
-00:00:50,000 --> 00:00:52,029
-A steady, normal day.
+00:00:50,000 --> 00:00:53,252
+Love: A calm day for relationships.
 
 22
-00:00:52,079 --> 00:00:53,613
-Keep a calm pace
+00:00:53,302 --> 00:00:55,516
+Money: Everyday spending
 
 23
-00:00:53,663 --> 00:00:56,188
-and finish what you start.
+00:00:55,566 --> 00:00:57,403
+is best kept simple.
 
 24
-00:00:56,238 --> 00:00:59,950
-Your lucky direction is the southeast.
+00:00:57,453 --> 00:00:59,950
+Lucky direction: southeast.
 
 25
 00:01:00,000 --> 00:01:01,086
@@ -111,417 +111,369 @@ Your lucky color is green, and your best
 time is from 9 to 11 in the morning.
 
 29
-00:01:10,000 --> 00:01:12,265
-Keep things simple today.
+00:01:10,000 --> 00:01:12,763
+Love: Share a simple moment
 
 30
-00:01:12,315 --> 00:01:14,024
-Small, steady steps
+00:01:12,813 --> 00:01:17,138
+with someone close, like a walk or a meal.
 
 31
-00:01:14,074 --> 00:01:16,431
-are better than big jumps.
+00:01:17,188 --> 00:01:19,950
+Lucky direction: southeast.
 
 32
-00:01:16,481 --> 00:01:19,950
-Your lucky direction is the southeast.
-
-33
 00:01:20,000 --> 00:01:21,150
 Year of the Tiger.
 
-34
+33
 00:01:21,200 --> 00:01:23,883
 Today is an ordinary, steady day for you.
 
-35
+34
 00:01:23,933 --> 00:01:26,483
 Your lucky color is blue, and your best
 
-36
+35
 00:01:26,533 --> 00:01:28,483
 time is from 11 in the morning
 
-37
+36
 00:01:28,533 --> 00:01:29,950
 to 1 in the afternoon.
 
+37
+00:01:30,000 --> 00:01:33,381
+Love: A calm day for relationships.
+
 38
-00:01:30,000 --> 00:01:32,425
-A quiet day for planning.
+00:01:33,431 --> 00:01:35,734
+Money: Everyday spending
 
 39
-00:01:32,475 --> 00:01:34,405
-Tidy up, think ahead
+00:01:35,784 --> 00:01:37,695
+is best kept simple.
 
 40
-00:01:34,455 --> 00:01:36,584
-and rest well tonight.
+00:01:37,745 --> 00:01:39,950
+Lucky direction: south.
 
 41
-00:01:36,634 --> 00:01:39,950
-Your lucky direction is the south.
-
-42
 00:01:40,000 --> 00:01:41,495
 Year of the Rabbit.
 
-43
+42
 00:01:41,545 --> 00:01:43,852
 Today is a great day for you.
 
-44
+43
 00:01:43,902 --> 00:01:46,942
 Your lucky color is red, and your best
 
-45
+44
 00:01:46,992 --> 00:01:49,950
 time is from 1 to 3 in the afternoon.
 
+45
+00:01:50,000 --> 00:01:52,793
+Work: Customers and coworkers
+
 46
-00:01:50,000 --> 00:01:51,268
-This is your day.
+00:01:52,843 --> 00:01:54,754
+respond well to you.
 
 47
-00:01:51,318 --> 00:01:53,051
-Say yes to good chances
+00:01:54,804 --> 00:01:57,401
+Lucky direction: southwest.
 
 48
-00:01:53,101 --> 00:01:54,989
-and lead with confidence.
-
-49
-00:01:55,039 --> 00:01:57,934
-Your lucky direction is the southwest.
-
-50
-00:01:57,984 --> 00:01:59,950
+00:01:57,451 --> 00:01:59,950
 Lucky numbers: 30 and 416.
 
-51
+49
 00:02:00,000 --> 00:02:01,288
 Year of the Dragon.
 
-52
+50
 00:02:01,338 --> 00:02:04,175
 Today is an ordinary, steady day for you.
 
-53
+51
 00:02:04,225 --> 00:02:05,865
 Your lucky color is gray
 
-54
+52
 00:02:05,915 --> 00:02:08,542
 and your best time is from 11 at night
 
-55
+53
 00:02:08,592 --> 00:02:09,950
 to 1 in the morning.
 
+54
+00:02:10,000 --> 00:02:15,984
+Love: A calm day for relationships.
+
+55
+00:02:16,034 --> 00:02:19,950
+Lucky direction: north.
+
 56
-00:02:10,000 --> 00:02:12,115
-A steady, normal day.
-
-57
-00:02:12,165 --> 00:02:13,764
-Keep a calm pace
-
-58
-00:02:13,814 --> 00:02:16,445
-and finish what you start.
-
-59
-00:02:16,495 --> 00:02:19,950
-Your lucky direction is the north.
-
-60
 00:02:20,000 --> 00:02:21,236
 Year of the Snake.
 
-61
+57
 00:02:21,286 --> 00:02:24,164
 Today is an ordinary, steady day for you.
 
-62
+58
 00:02:24,214 --> 00:02:27,021
 Your lucky color is black, and your best
 
-63
+59
 00:02:27,071 --> 00:02:29,950
 time is from 1 to 3 in the early morning.
 
-64
-00:02:30,000 --> 00:02:32,265
-Keep things simple today.
+60
+00:02:30,000 --> 00:02:32,763
+Love: Share a simple moment
 
-65
-00:02:32,315 --> 00:02:34,024
-Small, steady steps
+61
+00:02:32,813 --> 00:02:37,138
+with someone close, like a walk or a meal.
 
-66
-00:02:34,074 --> 00:02:36,431
-are better than big jumps.
+62
+00:02:37,188 --> 00:02:39,950
+Lucky direction: northeast.
 
-67
-00:02:36,481 --> 00:02:39,950
-Your lucky direction is the northeast.
-
-68
+63
 00:02:40,000 --> 00:02:41,236
 Year of the Horse.
 
-69
+64
 00:02:41,286 --> 00:02:44,164
 Today is an ordinary, steady day for you.
 
-70
+65
 00:02:44,214 --> 00:02:47,021
 Your lucky color is green, and your best
 
-71
+66
 00:02:47,071 --> 00:02:49,950
 time is from 3 to 5 in the early morning.
 
-72
-00:02:50,000 --> 00:02:52,331
-A quiet day for planning.
+67
+00:02:50,000 --> 00:02:55,595
+Love: A calm day for relationships.
 
-73
-00:02:52,381 --> 00:02:54,236
-Tidy up, think ahead
+68
+00:02:55,645 --> 00:02:59,950
+Lucky direction: northeast.
 
-74
-00:02:54,286 --> 00:02:56,331
-and rest well tonight.
-
-75
-00:02:56,381 --> 00:02:59,950
-Your lucky direction is the northeast.
-
-76
+69
 00:03:00,000 --> 00:03:01,355
 Year of the Goat.
 
-77
+70
 00:03:01,405 --> 00:03:03,669
 Today is a good day for you.
 
-78
+71
 00:03:03,719 --> 00:03:07,057
 Your lucky color is purple, and your best
 
-79
+72
 00:03:07,107 --> 00:03:09,950
 time is from 5 to 7 in the morning.
 
-80
-00:03:10,000 --> 00:03:11,510
-Good luck is with you.
+73
+00:03:10,000 --> 00:03:13,250
+Love: Spend a little quality time
 
-81
-00:03:11,560 --> 00:03:13,354
-Work together with friends
+74
+00:03:13,300 --> 00:03:15,150
+with someone close.
 
-82
-00:03:13,404 --> 00:03:15,766
-and good results come more easily.
+75
+00:03:15,200 --> 00:03:17,350
+Lucky direction: east.
 
-83
-00:03:15,816 --> 00:03:18,106
-Your lucky direction is the east.
-
-84
-00:03:18,156 --> 00:03:19,950
+76
+00:03:17,400 --> 00:03:19,950
 Lucky numbers: 29 and 237.
 
-85
+77
 00:03:20,000 --> 00:03:21,279
 Year of the Monkey.
 
-86
+78
 00:03:21,329 --> 00:03:24,146
 Today is an ordinary, steady day for you.
 
-87
+79
 00:03:24,196 --> 00:03:25,894
 Your lucky color is white
 
-88
+80
 00:03:25,944 --> 00:03:28,551
 and your best time is from 11 at night
 
-89
+81
 00:03:28,601 --> 00:03:29,950
 to 1 in the morning.
 
-90
-00:03:30,000 --> 00:03:32,115
-A steady, normal day.
+82
+00:03:30,000 --> 00:03:33,381
+Love: A calm day for relationships.
 
-91
-00:03:32,165 --> 00:03:33,764
-Keep a calm pace
+83
+00:03:33,431 --> 00:03:35,734
+Money: Everyday spending
 
-92
-00:03:33,814 --> 00:03:36,445
-and finish what you start.
+84
+00:03:35,784 --> 00:03:37,695
+is best kept simple.
 
-93
-00:03:36,495 --> 00:03:39,950
-Your lucky direction is the north.
+85
+00:03:37,745 --> 00:03:39,950
+Lucky direction: north.
 
-94
+86
 00:03:40,000 --> 00:03:41,488
 Year of the Rooster.
 
-95
+87
 00:03:41,538 --> 00:03:43,719
 Today is a quiet day for you.
 
-96
+88
 00:03:43,769 --> 00:03:46,796
 Your lucky color is brown, and your best
 
-97
+89
 00:03:46,846 --> 00:03:49,950
 time is from 1 to 3 in the early morning.
 
-98
-00:03:50,000 --> 00:03:51,742
-Take it easy today.
+90
+00:03:50,000 --> 00:03:53,828
+Love: Give people a little space today
 
-99
-00:03:51,792 --> 00:03:53,629
-Slow down, rest well
+91
+00:03:53,878 --> 00:03:57,195
+and be patient with yourself too.
 
-100
-00:03:53,679 --> 00:03:56,365
-and don't rush big decisions.
+92
+00:03:57,245 --> 00:03:59,950
+Lucky direction: northeast.
 
-101
-00:03:56,415 --> 00:03:59,950
-Your lucky direction is the northeast.
-
-102
+93
 00:04:00,000 --> 00:04:01,101
 Year of the Dog.
 
-103
+94
 00:04:01,151 --> 00:04:04,051
 Today is an ordinary, steady day for you.
 
-104
+95
 00:04:04,101 --> 00:04:07,000
 Your lucky color is purple, and your best
 
-105
+96
 00:04:07,050 --> 00:04:09,950
 time is from 3 to 5 in the early morning.
 
-106
-00:04:10,000 --> 00:04:12,265
-Keep things simple today.
+97
+00:04:10,000 --> 00:04:15,595
+Love: A calm day for relationships.
 
-107
-00:04:12,315 --> 00:04:14,024
-Small, steady steps
+98
+00:04:15,645 --> 00:04:19,950
+Lucky direction: northeast.
 
-108
-00:04:14,074 --> 00:04:16,431
-are better than big jumps.
-
-109
-00:04:16,481 --> 00:04:19,950
-Your lucky direction is the northeast.
-
-110
+99
 00:04:20,000 --> 00:04:21,283
 Year of the Pig.
 
-111
+100
 00:04:21,333 --> 00:04:23,617
 Today is a good day for you.
 
-112
+101
 00:04:23,667 --> 00:04:27,033
 Your lucky color is yellow, and your best
 
-113
+102
 00:04:27,083 --> 00:04:29,950
 time is from 5 to 7 in the morning.
 
-114
-00:04:30,000 --> 00:04:31,999
-A good day to meet people
+103
+00:04:30,000 --> 00:04:33,250
+Love: Spend a little quality time
 
-115
-00:04:32,049 --> 00:04:34,048
-and start something nice.
+104
+00:04:33,300 --> 00:04:35,150
+with someone close.
 
-116
-00:04:34,098 --> 00:04:35,114
-Keep smiling.
+105
+00:04:35,200 --> 00:04:37,350
+Lucky direction: east.
 
-117
-00:04:35,164 --> 00:04:37,819
-Your lucky direction is the east.
-
-118
-00:04:37,869 --> 00:04:39,950
+106
+00:04:37,400 --> 00:04:39,950
 Lucky numbers: 88 and 595.
 
-119
+107
 00:04:40,000 --> 00:04:42,080
 Make a small wish today
 
-120
+108
 00:04:42,130 --> 00:04:45,135
 and take one kind step toward it.
 
-121
+109
 00:04:45,185 --> 00:04:47,172
 A peaceful heart helps
 
-122
+110
 00:04:47,222 --> 00:04:49,950
 good luck find its way to you.
 
-123
+111
 00:04:50,000 --> 00:04:51,470
 Before the day ends
 
-124
+112
 00:04:51,520 --> 00:04:54,430
 take a quiet moment to say thank you.
 
-125
+113
 00:04:54,480 --> 00:04:56,750
 Thank the people who help you
 
-126
+114
 00:04:56,800 --> 00:04:59,950
 and thank yourself for trying your best.
 
-127
+115
 00:05:00,000 --> 00:05:01,617
 That's your Chinese zodiac
 
-128
+116
 00:05:01,667 --> 00:05:02,771
 fortune for today.
 
-129
+117
 00:05:02,821 --> 00:05:04,053
 See all twelve signs
 
-130
+118
 00:05:04,103 --> 00:05:06,745
 and your lucky numbers at mybirthsign.com.
 
-131
+119
 00:05:06,795 --> 00:05:08,860
 Follow us for tomorrow's fortune.
 
-132
+120
 00:05:08,910 --> 00:05:09,950
 Have a lucky day!

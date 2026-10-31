@@ -202,10 +202,26 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     return out;
   }
 
-  var ORDER_OPEN = /^Luckiest|^Take-it-easy|^60-second|^180-second|^Long YouTube|^Story video|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
-  function render(iso) {
+  var ORDER_OPEN = /^Today's horoscope|^Luckiest|^Take-it-easy|^60-second|^180-second|^Long YouTube|^Story video|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
+  // the standard horoscope lines (the same as the early share cards) for dates whose written fortune is not out yet
+  var PACK_DATA = { INFO: INFO, KM_INFO: KM_INFO, COPY: EARLY.COPY };
+  // on mybirthsign.com the Studio also reads the website's own written fortune for the date (data/daily/<date>.json,
+  // published the day before), so the horoscope and voice-overs use it; the claude.ai copy cannot reach the site
+  var DAY_DATA = {};
+  function dayData(iso) {
+    if (!onSite || iso in DAY_DATA) return Promise.resolve(DAY_DATA[iso] || null);
+    var wait = new Promise(function (ok) { setTimeout(function () { ok(undefined); }, 4000); });
+    var get = fetch("/data/daily/" + iso + ".json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).then(null, function () { return null; });
+    return Promise.race([get, wait]).then(function (d) {
+      if (d === undefined) return null;                 // too slow: standard lines this time, try again next time
+      DAY_DATA[iso] = d && d.date === iso && d.signs ? d : null;
+      return DAY_DATA[iso];
+    });
+  }
+  function render(iso, data) {
     var F = computeFacts(iso);
-    var p = buildPack(iso, F, window.MBSLuckyDigits.forSign, null, { INFO: INFO, KM_INFO: KM_INFO });
+    var p = buildPack(iso, F, window.MBSLuckyDigits.forSign, data || null, PACK_DATA);
+    var siteWords = !!(data && /· site wording$/.test(p.line));
     var md = p.md.replace(/Two files are saved next to this one: `[^`]+` \(Khmer\) and `[^`]+` \(English\)\.\n/, "Press “Download subtitles (.zip)” at the top to save all subtitle files for this date (" + iso + ".srt Khmer and " + iso + ".en.srt English for this video, plus the -60s, -180s, -long and -story versions). Or copy a block below into a plain text file ending in .srt.\n");
     window.__lastMd = md; window.__lastPack = p;
     var voices = voiceLines(md);
@@ -231,7 +247,10 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       "<small>Lucky signs " + lucky.join(", ") + (careful.length ? " · take it easy: " + careful.join(", ") : "") + "</small></p>" +
       '<div class="signs">' + cards + "</div>" +
       '<nav class="week" aria-label="Nearby days">' + week + "</nav>" +
-      '<p class="note">Voice-overs here use the standard script. The command-line version in the repo swaps in the site\'s own written summary once that day\'s fortune is published (a day ahead). Lucky numbers are for fun only, not betting advice.</p>';
+      '<p class="note">' + (siteWords
+        ? "Today's horoscope and the voice-overs use the website's own written fortune for this date."
+        : "This date's written fortune is not on the website yet (it is published the day before" + (onSite ? "" : ", and only the Studio at mybirthsign.com/studio/ can read it") + "), so the horoscope uses the website's standard lines for each sign's rating and the voice-overs use the standard script.") +
+      " Lucky numbers are for fun only, not betting advice.</p>";
 
     var secs = parse(md), html = "";
     secs.forEach(function (s, si) {
@@ -586,14 +605,15 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 
   function set(iso) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return;
-    D.value = iso; render(iso);
+    D.value = iso;
+    dayData(iso).then(function (d) { if (D.value === iso) render(iso, d); });
     try { localStorage.setItem("mbs-video-date", iso); } catch (e) {}
   }
   D.addEventListener("change", function () { set(D.value); });
   $("prev").addEventListener("click", function () { set(addDays(D.value, -1)); });
   $("next").addEventListener("click", function () { set(addDays(D.value, 1)); });
   $("today").addEventListener("click", function () { set(ppToday()); });
-  window.__pack = function (iso) { var p = buildPack(iso, computeFacts(iso), window.MBSLuckyDigits.forSign, null, { INFO: INFO, KM_INFO: KM_INFO }); return p; };
+  window.__pack = function (iso) { var p = buildPack(iso, computeFacts(iso), window.MBSLuckyDigits.forSign, null, PACK_DATA); return p; };
   set(addDays(ppToday(), 1));   // open on tomorrow: videos are made a day ahead
 })();
 </script>

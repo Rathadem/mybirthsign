@@ -15,6 +15,7 @@ import path from "node:path";
 import { createRequire } from "node:module";
 import { computeFacts, ROOT, KM_NAMES, INFO, KM_INFO } from "../daily-data-lib.mjs";
 import { buildPack, charactersMd } from "./video-pack-lib.mjs";
+import { EARLY_COPY } from "./early-card-copy.mjs";   // standard horoscope lines for dates whose written fortune is not out yet
 
 const LUCKY = createRequire(import.meta.url)("../../js/lucky-digits.js");
 const [start, nDays = "1"] = process.argv.slice(2);
@@ -27,7 +28,7 @@ for (let i = 0; i < Number(nDays); i++) {
   const iso = new Date(t0.getTime() + i * 86400000).toISOString().slice(0, 10);
   let data = null;
   try { data = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "daily", `${iso}.json`), "utf8")); } catch (e) { /* made ahead */ }
-  const p = buildPack(iso, computeFacts(iso), LUCKY.forSign, data, { INFO, KM_INFO });
+  const p = buildPack(iso, computeFacts(iso), LUCKY.forSign, data, { INFO, KM_INFO, COPY: EARLY_COPY });
   fs.writeFileSync(path.join(dir, `${iso}.md`), p.md);
   fs.writeFileSync(path.join(dir, `${iso}.srt`), p.srtKm);
   fs.writeFileSync(path.join(dir, `${iso}.en.srt`), p.srtEn);
