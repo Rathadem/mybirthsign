@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-30",
+  "cards": [
+    {
+      "file": "1-km.jpg",
+      "lang": "km",
+      "title": "Lucky signs today"
+    },
+    {
+      "file": "2-km.jpg",
+      "lang": "km",
+      "title": "ឆ្លូវ · ថ្ងៃល្អខ្លាំង"
+    },
+    {
+      "file": "3-km.jpg",
+      "lang": "km",
+      "title": "ម្សាញ់ · ថ្ងៃល្អ"
+    },
+    {
+      "file": "4-km.jpg",
+      "lang": "km",
+      "title": "រកា · ថ្ងៃល្អ"
+    },
+    {
+      "file": "5-km.jpg",
+      "lang": "km",
+      "title": "មមែ · ថ្ងៃគួរប្រុងប្រយ័ត្ន"
+    },
+    {
+      "file": "1-en.jpg",
+      "lang": "en",
+      "title": "Lucky signs today"
+    },
+    {
+      "file": "2-en.jpg",
+      "lang": "en",
+      "title": "Ox · Great Day"
+    },
+    {
+      "file": "3-en.jpg",
+      "lang": "en",
+      "title": "Snake · Good Day"
+    },
+    {
+      "file": "4-en.jpg",
+      "lang": "en",
+      "title": "Rooster · Good Day"
+    },
+    {
+      "file": "5-en.jpg",
+      "lang": "en",
+      "title": "Goat · Take It Easy"
+    }
+  ]
+}
