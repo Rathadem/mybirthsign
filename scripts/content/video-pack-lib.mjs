@@ -418,42 +418,6 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
     { scene: `A bright shooting star streaks low across the sky toward the ${d}, leaving a glowing trail, and the ${a} turns to face that way.`, one: "a shooting star" },
     { scene: `Tall temple gates on the ${d} side swing open, spilling warm golden light across the stones, and the ${a} walks toward them.`, one: "a glowing temple gate" },
   ];
-  const LOVE_OBJ = (a) => [
-    `The ${a} sits by the lotus pond as warm pink lanterns rise around it, and a soft glowing heart of golden light forms in the air in front of it.`,
-    `Two pink lotus flowers drift together on the pond in front of the ${a}, and where their glowing petals touch, a soft ring of light spreads across the water.`,
-    `A glowing red thread of light winds gently through the air, loops softly around the ${a} and stretches away toward the warm lights of a village beyond the temple.`,
-    `A pair of glowing butterflies dance around each other in front of the ${a}, then land side by side on a lotus leaf.`,
-    `Pink petals fall softly from a blossoming tree beside the temple and gather on the water in front of the ${a} in the shape of a heart.`,
-    `Two sky lanterns rise side by side from the pond, glowing warm pink, and the ${a} watches them float up together toward the moon.`,
-    `A pair of mandarin ducks glide side by side across the moonlit pond past the ${a}, leaving two gentle ripples that join into one.`,
-    `A garland of white jasmine flowers glows softly in the moonlight and loops itself around the ${a}, giving off tiny golden sparkles.`,
-    `Small lanterns light up in a cozy circle around the ${a} on the temple terrace, close together like a family gathered for dinner.`,
-    `A tree of pink blossoms on the temple terrace bursts into bloom above the ${a}, and its glowing petals swirl gently around it.`,
-  ];
-  const WORK_OBJ = (a) => [
-    `The ${a} climbs the glowing temple steps one by one, and each step lights up in gold under it; at the top it looks out proudly over the moonlit temple.`,
-    `A long scroll of golden light unrolls in the air in front of the ${a}, covered in glowing patterns that light up one after another as it follows them closely.`,
-    `Smooth glowing stones stack themselves one on top of another into a neat little tower beside the ${a}, which watches each one settle into place.`,
-    `A bridge of golden light builds itself plank by plank over a misty stream as the ${a} moves forward, one plank at a time.`,
-    `A young bamboo shoot beside the ${a} grows taller and taller in time-lapse, glowing green and gold, and the ${a} looks up to its very top.`,
-    `The ${a} follows a winding path of light up a small hill beside the temple, each bend lighting up as it reaches it.`,
-    `A small glowing seed lands in front of the ${a} and grows into a young tree full of golden leaves, branch by branch.`,
-    `An old wooden abacus floats in front of the ${a}, and its beads of light slide neatly into place one by one.`,
-    `Small oil lamps along the temple wall light up one after another as the ${a} walks past them, until the whole wall glows warmly.`,
-    `A ladder of golden light rises from the pond toward the sky, and the ${a} climbs it rung by rung, calm and steady.`,
-  ];
-  const MONEY_OBJ = (a) => [
-    `A lotus-shaped basket of softly glowing golden coins sits beside the ${a}, and one shining coin floats from the basket into a small golden jar.`,
-    `A small wooden treasure chest beside the ${a} opens slowly, showing neat rows of glowing gold ingots, then closes its lid carefully again.`,
-    `Golden rice sheaves fall gently into a woven basket beside the ${a} until it is full, and a few glowing grains sparkle in the moonlight.`,
-    `A small money tree on the temple terrace grows round golden leaves shaped like coins, and one leaf drifts down and lands in front of the ${a}.`,
-    `A bowl of clear water beside the ${a} holds a single golden koi that circles slowly, scattering soft golden light.`,
-    `A silk pouch tied with a red string sits beside the ${a}; glowing coins drop into it one by one, then the string ties itself shut.`,
-    `A shell at the edge of the pond opens to show a shining pearl, and the ${a} looks at it, calm and thoughtful.`,
-    `A small golden jar stands on the temple step, and glowing coins fall into it one at a time like drops of light, as the ${a} watches.`,
-    `Ripe golden mangoes glow in a woven basket beside the ${a}, and a warm light rises gently from them.`,
-    `A thin stream of tiny golden coins flows like a little river across the stone floor and pools neatly in a round dish beside the ${a}.`,
-  ];
   // seven things in a row, two brighter: the lucky days of the week
   const SEVEN_OBJ = (a) => [
     `Seven glowing lanterns float in a row above the lotus pond, and two of them shine brighter than the others. The ${a} looks up at the two bright lanterns and smiles.`,
@@ -556,94 +520,116 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
     `As she talks she claps her hands softly once, and dozens of small lanterns light up around her and ${who} and float slowly upward.`,
     `As she talks she lets a handful of glowing jasmine petals fall from her palm, and they swirl in a slow golden spiral around her and ${who}.`,
   ];
-  // where a sign appears in the all-signs videos, and how an ordinary or a quiet sign spends its scene
+  // where a sign appears in the all-signs videos
   const PLACE = ["appears on a glowing lotus pedestal in front of the Angkor-style temple under the full moon", "steps out onto the moonlit temple causeway between carved naga balustrades",
     "rises onto a floating lotus leaf in the middle of the moonlit pond", "appears at the top of the temple steps, the full moon behind it",
     "walks out from between two carved stone lions at the temple gate", "appears in a circle of moonlight on the carved temple terrace",
     "lands softly on a round stone platform at the edge of the pond", "appears under the arch of a temple gallery, framed by carved pillars and the full moon"];
-  const CALM_ACT = ["looks around happily as lanterns drift slowly past", "watches fireflies drift across the pond and follows one with its eyes",
-    "walks slowly along the stone causeway as soft petals fall around it", "sits by the water and watches small fish make silver ripples",
-    "follows a floating lotus flower with its eyes as it drifts past", "stretches and enjoys the cool night breeze on the temple terrace",
-    "pauses to smell a blooming jasmine flower beside the steps", "rests on a carved stone step as soft mist drifts past"];
+  // how a quiet sign rests (the main video's take-it-easy scene)
   const REST_ACT = ["curls up calmly as glowing butterflies circle it", "rests inside a soft bubble of golden light as tiny sparkles fall like snow",
     "naps peacefully under a big lotus leaf held up like an umbrella", "rests quietly as a few fireflies keep watch around it",
     "breathes slowly beside a small, steady candle flame", "lies down on a soft bed of petals as the moonlight wraps it in a gentle glow",
     "rests beside the still water, eyes half closed, as mist drifts softly past", "curls up under a carved stone arch as soft golden light glows around it"];
-  // ---- human moments (the owner's request, 31/10/2026: "add the human attachment and emotions"): in the scenes that speak
-  // a prediction, the golden magic opens a vision of everyday Cambodian life that matches it, with real feelings on real
-  // faces, and the animal watches and reacts. The people never talk (only Chanda's voice is heard). A different moment
-  // every day, and a different one for each sign in the same video.
-  const PORTAL = [
-    "Then the golden light opens like a window into everyday life:",
-    "Then a large shimmering bubble of golden light floats up beside it, and inside it a real moment from everyday life plays out:",
-    "Then the still water of the lotus pond turns into a glowing mirror that shows a warm moment from everyday life:",
-    "Then golden mist parts like a curtain beside it, revealing a warm scene from everyday Cambodian life:",
-    "Then a round, moon-shaped window of soft light opens in the air beside it, showing a moment from everyday life:",
-    "Then its golden glow spreads into a soft, dreamy vision of everyday life:",
-    "Then the lantern light gathers into a glowing frame in the air that shows a moment from everyday life:",
-  ];
-  const PEOPLE = {
-    love: ["a young Cambodian couple share a quiet laugh on a riverside bench at sunset, his hand gently finding hers",
-      "three generations of a Cambodian family share dinner on a mat at home, and a grandmother laughs as she serves rice to her grandchild",
-      "a mother kneels to hug her little daughter at the school gate, and both of them beam with happiness",
-      "an elderly couple walk slowly side by side through their village at dusk, smiling at each other with deep affection",
-      "two old friends spot each other at a busy night market and hug warmly, laughing with joy",
-      "a young father lifts his giggling son onto his shoulders under the string lights of a festival",
-      "a sister ties a red string bracelet around her brother's wrist, and they share a tender, grateful smile",
-      "a husband brings his tired wife a cup of iced coffee at her market stall, and her face breaks into a grateful smile",
-      "a grandmother and her granddaughter fold lotus flowers together at home, and the girl leans her head happily on her shoulder",
-      "a young woman far from home listens to her parents on the phone, her eyes shining with happy tears as she smiles",
-      "a young couple ride a motorbike along the riverside at dusk, and she rests her head on his shoulder with a happy smile",
-      "a grandson helps his grandmother up the wooden steps of her house, and she pats his cheek with a proud, loving smile",
-      "a family gathers around a birthday cake at home, clapping as a little girl blows out her candles with a huge smile"],
-    work: ["a young woman at her small fruit stall hands a bag of mangoes to a smiling customer, glowing with pride",
-      "a tuk-tuk driver helps an elderly passenger step down with a kind smile, and she pats his arm in thanks",
-      "a university student in her graduation gown hugs her proud parents, all three of them smiling through happy tears",
-      "a small café owner pours iced coffee for her regular customers, laughing with them as she works",
-      "a rice farmer straightens up in his bright green field at sunrise and smiles with quiet pride at the healthy rice",
-      "a young tailor holds up a finished dress, and her customer's face lights up with delight",
-      "two coworkers in a small workshop give each other a happy high-five after finishing a big order",
-      "a teacher kneels beside a young pupil who has just solved a hard problem, and they both smile proudly"],
-    money: ["a mother drops a few coins into a tin savings box at home while her small son claps happily beside her",
-      "a young couple count their savings together at the kitchen table and look at each other with relieved, hopeful smiles",
-      "a market seller counts the day's earnings at her stall and lets out a happy, relieved breath",
-      "a young man pays back a friend with a grateful smile, and they shake hands warmly",
-      "a family walks home from the market carrying bags of fresh vegetables, smiling happily at each other",
-      "a young woman compares prices at a market stall, then smiles, pleased with a good bargain",
-      "a shop owner hands a customer her change with a warm smile, and the customer smiles back gratefully",
-      "a grandfather shows his grandson how to keep a small savings jar, and the boy drops in his first coin with a big grin"],
-    general: ["a young woman opens her front door to the morning light, takes a deep breath and smiles with hope",
-      "friends laugh together over street food at a small roadside stall, sharing a happy moment",
-      "a grandmother waters the flowers on her balcony, smiling peacefully at the new day",
-      "a little boy runs to hug his father, who has just come home from work",
-      "a young man rides his motorbike along the riverside at sunset, smiling into the warm breeze",
-      "neighbours share a plate of fresh fruit on the porch of a wooden house, laughing together",
-      "a girl in a school uniform waves goodbye to her mother and skips happily toward the school gate",
-      "an old man and his grandson fly a kite together in a breezy field, both laughing as it climbs higher"],
-    gentle: ["a young man pauses before an important meeting, closes his eyes for a calm breath, and his worried face relaxes into a small smile",
-      "a tired mother sits down with a quiet cup of tea at home, and her little daughter brings her a pillow, making her smile",
-      "a friend gently puts an arm around another's shoulders on a quiet bench, and the worried one finally smiles",
-      "a woman sets aside a pile of papers, steps outside into the evening air and smiles as she feels calmer",
-      "a grandfather holds his grandson's hand as they walk slowly home, unhurried and content",
-      "a young woman finishes her last task of the day, closes her laptop, sighs with relief and smiles to herself",
-      "a shop owner closes her stall early, stretches, and smiles peacefully at the pink evening sky"],
+  // ---- meaning scenes (the owner's request, 31/10/2026: keep everything magical, no real-life people; show the meaning
+  // of what Chanda says, with protection and emotion): in every scene that speaks a prediction, the zodiac guardian and
+  // its animal act out what the words mean, the guardian protecting and caring, the animal trusting. The scene is chosen
+  // from the words themselves (saving, sharing, planning, resting…), so it changes with each day's prediction.
+  // In each list: [category, words that call for it, scenes]. g = "the Tiger guardian", a = "tiger".
+  const MEANING = {
+    love: [
+      ["listen", /\b(listen\w*|patien\w*|space|calm\w*|gentle|quiet\w*|pause|rest)\b/i, [
+        (g, a) => `${cap(g)} sits quietly beside the ${a} at the edge of the lotus pond and rests a protective hand on its back; together they listen to the soft night, and a calm ring of golden light settles around them.`,
+        (g, a) => `The ${a} rests its head in the lap of ${g}, who strokes it slowly and patiently while soft lotus light glows on the water around them.`,
+        (g, a) => `${cap(g)} kneels and waits patiently with an open hand; after a moment the ${a} comes close and leans against the guardian, and a soft golden glow wraps around them both.`]],
+      ["family", /\b(famil\w*|home|meal|together|loved ones?|parents|children|household|relatives)\b/i, [
+        (g, a) => `${cap(g)} draws a wide circle of golden light on the temple floor; the ${a} and a little family of glowing lanterns gather inside it, safe and warm, while the guardian stands watch with a gentle smile.`,
+        (g, a) => `${cap(g)} wraps its cape around the ${a} like a warm blanket, and small golden lanterns gather close around them like a family sitting together at home.`,
+        (g, a) => `Little glowing lanterns float down and settle around the ${a} one by one like family coming home, and ${g} spreads its arms wide around them all, protecting the warm circle of light.`]],
+      ["kind", /\b(kind\w*|warm\w*|gift|smile|affection\w*|car(e|ing)|gestures?|generous\w*|attractive)\b/i, [
+        (g, a) => `The ${a} gently offers a glowing lotus petal to ${g}, who receives it with a warm, moved smile and presses it over its heart, where it shines brighter.`,
+        (g, a) => `${cap(g)} catches a falling lotus petal and places it softly on the ${a}'s head like a gift; the ${a} closes its eyes happily as warm light spreads around them.`,
+        (g, a) => `${cap(g)} cups a tiny glowing flame in both hands and shares it with the ${a}; the warm light grows brighter between them and lights up both of their faces.`]],
+      ["open", /\b(open\w*|shar\w*|say|speak\w*|tell|honest\w*|express\w*|reach\w*|call|words?|chats?|conversations?|plans?)\b/i, [
+        (g, a) => `${cap(g)} kneels and holds out a glowing pink lotus to the ${a}; when the ${a} gently touches it, a warm thread of golden light flows from heart to heart between them, and the guardian smiles tenderly.`,
+        (g, a) => `The ${a} hesitates, then moves closer to ${g}, who opens its arms; a soft golden glow blooms around them both as the ${a} leans its head against the guardian's armored shoulder.`,
+        (g, a) => `${cap(g)} opens a small carved box, and a glowing butterfly of light flies out to the ${a}; it circles them both, carrying warm light from one heart to the other.`]],
+    ],
+    work: [
+      ["lead", /\b(lead\w*|bold\w*|launch\w*|pitch\w*|present\w*|confiden\w*|deals?|meetings?|ideas?|decisive\w*|noticed|momentum)\b/i, [
+        (g, a) => `${cap(g)} raises a golden banner of light and nods; the ${a} moves forward to lead the way with confidence, and the guardian follows close behind, guarding its back.`,
+        (g, a) => `A heavy carved temple door stands closed; the ${a} pushes, ${g} adds its strength, and together they swing it open onto a path of golden light.`,
+        (g, a) => `${cap(g)} lifts a glowing torch and hands it to the ${a}; the ${a} carries the light up the temple steps while the guardian walks beside it, proud and protective.`]],
+      ["plan", /\b(plan\w*|details?|check\w*|review\w*|careful\w*|routine|lists?|orders?|tidy|stock|finish\w*|records?|steady|step)\b/i, [
+        (g, a) => `${cap(g)} unrolls a glowing map of golden light on the temple floor; the ${a} studies it closely, and the guardian points out the safe path, one step at a time, with calm patience.`,
+        (g, a) => `${cap(g)} lights small golden lamps one by one along the temple steps, and the ${a} moves up them carefully, step by step, while the guardian watches over it protectively.`,
+        (g, a) => `${cap(g)} and the ${a} cross the pond on flat stepping stones; before each step the guardian lights the next stone with a soft golden glow, so the ${a} always moves safely.`]],
+      ["team", /\b(team\w*|together|coworkers?|partners?|help\w*|customers?|serv\w*|trust\w*|suppliers?|friends?)\b/i, [
+        (g, a) => `${cap(g)} and the ${a} carry a glowing lotus lantern together across the stepping stones, step by step in rhythm, shielding its flame from the night breeze.`,
+        (g, a) => `The ${a} helps carry a glowing basket of lotus flowers while ${g} steadies it, and they share a proud, warm look when they reach the temple steps.`,
+        (g, a) => `${cap(g)} and the ${a} build a small bridge of golden light across the pond together, piece by piece, then cross it side by side.`]],
+    ],
+    money: [
+      ["save", /\b(sav\w*|aside|portion|reserve|put away|keep a|part of)\b/i, [
+        (g, a) => `${cap(g)} kneels and places a glowing golden seed in front of the ${a}; the ${a} nudges it gently into the soft earth by the lotus pond, it grows into a small tree of shining coins, and the guardian raises a dome of golden light to protect it. The ${a} looks up at the guardian with trust.`,
+        (g, a) => `${cap(g)} gives the ${a} a small lotus-shaped bowl; golden coins drift down like petals, the ${a} keeps a few safely in the bowl, and the guardian covers it with a shimmering shield of light.`,
+        (g, a) => `The ${a} drops a single shining coin into a stone jar by the temple steps; ${g} smiles with pride and seals the jar with a glowing golden lotus that stands guard over it.`]],
+      ["careful", /\b(spend\w*|careful\w*|postpone\w*|avoid\w*|compar\w*|prices?|basics|impulse|lend\w*|credit|budget\w*|purchas\w*|whim|simple|balance)\b/i, [
+        (g, a) => `Glittering coins float past, tempting the ${a}; ${g} gently raises a hand, the ${a} pauses and smiles, and the coins settle safely into a glowing chest that the guardian closes and guards.`,
+        (g, a) => `${cap(g)} holds up a golden scale of light; the ${a} watches the two sides slowly come into balance, and the guardian nods with a proud, protective smile.`,
+        (g, a) => `A swirl of shining coins rushes toward the ${a}; ${g} catches them gently in its cape, lets only a few fall into the ${a}'s lotus bowl, and keeps the rest safe.`]],
+      ["income", /\b(income|sales?|earn\w*|lively|deals?|collect\w*|owed|takings|profit\w*|favou?rable|promot\w*)\b/i, [
+        (g, a) => `A gentle river of golden coins flows across the pond toward the ${a}; ${g} guides it to keep a share in a lotus-shaped bowl and shields the bowl with glowing light.`,
+        (g, a) => `Golden lotus flowers open across the pond one by one, each holding a shining coin, and ${g} gathers them carefully for the ${a}, smiling with quiet pride.`,
+        (g, a) => `Coins of light rain softly over the temple terrace; the ${a} jumps happily among them, and ${g} opens a golden shield above it so that every coin lands safely.`]],
+    ],
+    general: [
+      ["bold", /\b(your day|your own day|confiden\w*|courage\w*|bold\w*|shine|lead\w*|great|favou?r\w*|momentum|bright)\b/i, [
+        (g, a) => `${cap(g)} lifts the ${a} high on a beam of golden light toward the full moon, and the ${a} shines brightly while the guardian looks up at it with pride.`,
+        (g, a) => `${cap(g)} kneels and places a glowing crown of golden light on the ${a}'s head; the ${a} stands tall and proud, and the guardian bows with a warm, protective smile.`,
+        (g, a) => `${cap(g)} and the ${a} rise together into the sky on a spiral of golden light, the guardian's hand on the ${a}'s back, and the full moon glows brighter to welcome them.`]],
+      ["calm", /\b(calm\w*|stead\w*|even|ordinary|quiet\w*|routine|gentle|unhurried|normal|simple|pace|planning|reflect\w*|thoughtful)\b/i, [
+        (g, a) => `${cap(g)} and the ${a} walk side by side along the moonlit causeway at an easy pace, the guardian's hand resting protectively on the ${a}'s back, calm and content.`,
+        (g, a) => `${cap(g)} sits beside the ${a} on the temple steps, both breathing slowly as the full moon glows, and a soft, steady light wraps around them like a promise of safety.`,
+        (g, a) => `The ${a} rests on a lotus leaf floating on the still pond, and ${g} stands beside it on the water like a calm protector, while slow ripples of golden light spread out around them.`]],
+      ["bless", /./, [
+        (g, a) => `Golden light gathers around the ${a} like a warm blessing; ${g} raises a hand above it, and a soft shower of glowing lotus petals falls over them both.`,
+        (g, a) => `${cap(g)} places a hand on the ${a}'s head in blessing, and warm golden light spreads from that touch through the ${a} and out across the moonlit pond.`,
+        (g, a) => `${cap(g)} bows to the full moon, and a beam of silver-gold light falls on the ${a}; the guardian smiles as the ${a} glows with new strength.`]],
+    ],
+    gentle: [
+      ["rest", /./, [
+        (g, a) => `Soft silver rain begins to fall. ${cap(g)} holds a shield of golden light like an umbrella over the resting ${a}, and gently strokes its head until it smiles and closes its eyes.`,
+        (g, a) => `A cold night wind blows across the pond; ${g} wraps its cape around the ${a} and holds it close, and the wind softens into a gentle breeze of golden sparkles.`,
+        (g, a) => `Dark clouds pass over the moon; ${g} raises a glowing shield, and every shadow that comes near melts into harmless golden mist while the ${a} rests safely behind it.`,
+        (g, a) => `The ${a} sits down, tired; ${g} kneels beside it, offers cool water from a lotus leaf and waits patiently with a reassuring smile until the ${a} feels better.`]],
+    ],
   };
-  const REACT = (a) => [`The ${a} watches the vision with a soft, happy expression, then looks toward the camera with kind eyes.`,
-    `The ${a} leans closer to the vision, its eyes shining with warmth, as if it feels the same joy.`,
-    `The ${a} watches with a gentle, proud look, like a guardian quietly blessing the people it protects.`,
-    `The ${a} tilts its head and watches the vision tenderly, then gives a small, contented nod.`,
-    `The golden light of the vision reflects in the ${a}'s eyes as it watches with a warm, caring expression.`,
-    `The ${a} watches the moment with quiet happiness, then turns to the camera as if to say this could be you.`];
-  const PEOPLE_REAL = "The people are Cambodian and photorealistic, with natural skin texture and genuine, believable emotion on their faces; they smile and laugh silently and never talk, so the only voice is Chanda's.";
-  // the vision for an animal (a = its lower-case name) and a topic (love, work, money, general; gentle for a quiet day).
-  // Each topic counts its own visions, so the same day never shows the same moment twice until its list runs out.
-  const humanN = {};
-  const human = (a, topic, plus = 0, gentle = false) => {
-    const key = gentle ? "gentle" : PEOPLE[topic] ? topic : "general", n = (humanN[key] = (humanN[key] || 0) + 1) - 1;
-    return `${DV(60, PORTAL, n + plus)} ${cap(DV(61, PEOPLE[key], n))}. ${PEOPLE_REAL} ${DV(62, REACT(a), n + plus)}`;
+  const FEEL_PROTECT = [(a) => `Tender, protective mood: the guardian's face shows deep care, and the ${a}'s eyes shine with trust.`,
+    (a) => `A warm, emotional moment: the guardian watches over the ${a} like family, gentle and strong.`,
+    (a) => `Heartfelt mood: love and protection on the guardian's face, trust and happiness in the ${a}'s eyes.`];
+  const FEEL_GENTLE = "Safe and comforting, never sad: the guardian's calm face says everything will be all right.";
+  // the part of a spoken line that belongs to a topic (e.g. the words after "Money:"), or the general opening words
+  const partOf = (en, topic) => {
+    const lbl = { love: "Love", work: "Work", money: "Money" }[topic];
+    const m = lbl ? new RegExp(`\\b${lbl}\\b[^:.]{0,20}:\\s*(.*?)(?=\\s(?:Love|Work|Money)\\b[^:.]{0,20}:|\\sLucky direction|\\sYour lucky direction|$)`).exec(en) : null;
+    return m ? m[1] : en.split(/\s(?:Love|Work|Money)\b[^:.]{0,20}:/)[0];
+  };
+  // the meaning scene for a sign (A = "Tiger") and a topic, read from the words it speaks; gentle = a quiet-day sign.
+  // Each category counts its own scenes, so one video does not repeat a scene until its list runs out.
+  // The category is the one whose words appear most often (saving counts double; the first one on a tie, the last one if
+  // none appear).
+  const meaningN = {};
+  const meaning = (A, topic, en, gentle = false) => {
+    const a = A.toLowerCase(), g = `the ${A} guardian`, words = partOf(en, topic);
+    const list = MEANING[gentle ? "gentle" : MEANING[topic] ? topic : "general"];
+    const hits = list.map(([c, re]) => (words.match(new RegExp(re.source, "gi")) || []).length * (c === "save" ? 2 : 1)), top = Math.max(...hits);   // saving is the advice when a line mentions it
+    const [cat, , scenes] = top > 0 ? list[hits.indexOf(top)] : list[list.length - 1];
+    const key = `${gentle ? "gentle" : topic}-${cat}`, n = (meaningN[key] = (meaningN[key] || 0) + 1) - 1;
+    const f = (meaningN.feel = (meaningN.feel || 0) + 1) - 1;
+    return `${DV(64, scenes, n)(g, a)} ${gentle ? FEEL_GENTLE : DV(65, FEEL_PROTECT, f)(a)}`;
   };
   // the topic of a spoken horoscope line: one of the parts it speaks (chosen by k, so neighbouring signs differ)
-  const topicOf = (en, k = 0) => { const t = [...en.matchAll(/\b(Love|Work|Money)\b[^:.]{0,16}:/g)].map((m) => m[1].toLowerCase()); return t.length ? t[k % t.length] : "general"; };
+  const topicOf = (en, k = 0) => { const t = [...en.matchAll(/\b(Love|Work|Money)\b[^:.]{0,20}:/g)].map((m) => m[1].toLowerCase()); return t.length ? t[k % t.length] : "general"; };
   const GROUP12 = ["sit on glowing lotus pedestals in a wide circle around the moonlit pond in front of the temple",
     "stand along the moonlit temple steps in two rows", "stand on floating lotus leaves spread around the moonlit pond",
     "sit along the stone causeway between the carved naga balustrades", "stand in a wide arc on the moonlit temple terrace",
@@ -756,6 +742,8 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const traitsEn = PI ? PI.traits.replace(/^(\w)/, (m) => m.toLowerCase()) : "";
   const weakEn = PI ? PI.weaknesses.replace(/^(\w)/, (m) => m.toLowerCase()).replace(/\.$/, "") : "";
   const magicHoro = horoPack(day, ["general", "love", "career", "money"]);   // the 60-second video's prediction line
+  // the day animal's love, work and money lines (180-second and full-fortune videos)
+  const sayDay = { love: horoSay(day, "love", ["Love and family today:", "ស្នេហា និងគ្រួសារថ្ងៃនេះ៖"]), work: horoSay(day, "career", ["Work today:", "ការងារថ្ងៃនេះ៖"]), money: horoSay(day, "money", ["Money today:", "លុយកាក់ថ្ងៃនេះ៖"]) };
   const SC = {
     moon: [nine[0][0], nine[0][1], ...vo90[0]],
     appear: [nine[1][0], nine[1][1], ...vo90[1]],
@@ -763,12 +751,9 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
     personality: [`The ${day}'s character`, `Close-up of the ${dl} on its glowing lotus, its face showing a ${S9.mood} expression. Soft golden light circles it, and ${DV(28, HALO)}. Gentle slow orbit around the ${dl}.`,
       `People born in the Year of the ${day} are ${traitsEn}`, PK ? `អ្នកកើតឆ្នាំ${dayKm} ជាមនុស្ស${PK.traits.replace(/ឱនភាព/g, "ឱ្យតម្លៃលើភាព")}` : ""],
     magic: [nine[3][0], nine[3][1], ...vo90[3]],
-    love: ["Love and family", `${DV(29, LOVE_OBJ(dl))} ${human(dl, "love", 1)} Gentle, loving mood. Slow push-in.`,
-      ...horoSay(day, "love", ["Love and family today:", "ស្នេហា និងគ្រួសារថ្ងៃនេះ៖"])],
-    work: ["Work and study", `${DV(30, WORK_OBJ(dl))} ${human(dl, "work", 1)} Determined, hopeful mood. Smooth camera move following it.`,
-      ...horoSay(day, "career", ["Work today:", "ការងារថ្ងៃនេះ៖"])],
-    money: ["Money", `${DV(32, MONEY_OBJ(dl))} ${human(dl, "money", 1)} Warm, calm light. Slow push-in.`,
-      ...horoSay(day, "money", ["Money today:", "លុយកាក់ថ្ងៃនេះ៖"])],
+    love: ["Love and family", `${meaning(day, "love", sayDay.love[0])} Slow push-in.`, ...sayDay.love],
+    work: ["Work and study", `${meaning(day, "work", sayDay.work[0])} Smooth camera move following them.`, ...sayDay.work],
+    money: ["Money", `${meaning(day, "money", sayDay.money[0])} Warm, calm light. Slow push-in.`, ...sayDay.money],
     colortime: [nine[4][0], nine[4][1], ...vo90[4]],
     color: ["Lucky color", `${col180.scene} Warm ${cen} and gold light. Slow orbit.`,
       `Your lucky color today is ${cen}. Wear something ${cen}, or carry a small ${cen} item with you, to keep good luck close.`,
@@ -816,7 +801,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
         ["Let that spirit guide you today.", "សូមឲ្យស្មារតីនោះ ដឹកនាំអ្នកថ្ងៃនេះ។"],
         ["Keep that energy close all day.", "សូមរក្សាថាមពលនោះ ជាប់ជាមួយអ្នកពេញមួយថ្ងៃ។"]]).concat([
         ["Let it guide you.", "សូមឲ្យវាដឹកនាំអ្នក។"], ["Shine today!", "ថ្ងៃនេះ សូមភ្លឺស្វាង!"]]))],
-    magic60: ["The magical moment", `The ${dl} ${POSE[day]}. ${human(dl, topicOf(magicHoro[0]))} ${alive(day)} ${lockAnimal(day)}`,
+    magic60: ["The magical moment", `The ${dl} ${POSE[day]}. ${meaning(day, topicOf(magicHoro[0]), magicHoro[0])} ${alive(day)} ${lockAnimal(day)}`,
       ...fuller(magicHoro, rot(3, [
         [`This ${DEL.el} day adds ${DEL.q} to everything you do.`, `ថ្ងៃធាតុ${DEL.km}នេះ បន្ថែម${DEL.qKm} ដល់អ្វីៗដែលអ្នកធ្វើ។`],
         [`Your helper sign is the ${helper}: team up with one.`, `រាសីជំនួយរបស់អ្នក គឺឆ្នាំ${km(helper)}៖ សូមសហការជាមួយគេ។`],
@@ -857,14 +842,13 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const LOOKTIER = { great: "bursting with a bright golden aura", good: "glowing with a warm golden light", ordinary: "calm and content, softly lit by the moon", caution: "resting peacefully inside a soft protective bubble of golden light" };
   const signScenes = F.signs.flatMap((sg, si) => {
     const a = sg.animal, al = a.toLowerCase(), t = sg.tier, L = sg.lucky, nn = nums.find((x) => x.a === a);
-    const act = t === "great" || t === "good" ? POSE[a] : t === "ordinary" ? DV(40, CALM_ACT, si) : DV(41, REST_ACT, si);
     const hp = horoPack(a, ["love", "career", "money"], [`Lucky direction: ${L.direction.en.toLowerCase()}.${nn ? ` Lucky numbers: ${nn.d2} and ${nn.d3}.` : ""}`,
       `ទិសសំណាង៖ ទិស${L.direction.km}។${nn ? ` លេខសំណាង៖ ${nn.d2} និង ${nn.d3}។` : ""}`]);
     return [
       [`${a} – ${sg.label.en}`, `${cap(LOOK[a])} ${DV(42, PLACE, si)}, ${LOOKTIER[t]}. ${cap(DV(43, COLOR_OBJ(al, L.color.en), si).around)}. Slow push-in; it is the saved Flow character ${FLOW_NAME(a)}.`,
         `Year of the ${a}. Today is ${DAYPH[t][0]} for you. Your lucky color is ${L.color.en}, and your best time is ${sayTime(L.time)}.`,
         `ឆ្នាំ${sg.nameKm}។ ថ្ងៃនេះ ជា${DAYPH[t][1]} សម្រាប់អ្នក។ ពណ៌សំណាងរបស់អ្នក គឺពណ៌${L.color.km} ហើយពេលល្អបំផុត គឺ${sayTimeKm(L.time)}។`],
-      [`${a} – horoscope`, `The ${al} ${act}. ${human(al, topicOf(hp[0], si), si, t === "caution")} ${t === "caution" ? "Peaceful and safe, not sad." : "Warm and joyful."} Camera follows it smoothly.`, ...hp],
+      [`${a} – horoscope`, `${meaning(a, topicOf(hp[0], si), hp[0], t === "caution")} Camera follows them smoothly.`, ...hp],
     ];
   });
   const overview = ["Today's lucky signs", `The twelve golden-armored zodiac guardians ${DV(54, GROUP12, 1)}. Three of them shine brighter than the others with a golden aura. Slow, wide circling camera.`,
@@ -1351,12 +1335,9 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
       `People born in the Year of the ${day} are often described as ${clueEn}.`,
       `អ្នកកើតឆ្នាំ${dayKm} ជារឿយៗ ត្រូវបានគេស្គាល់ថា ${clueKm}។`]);
     add(G, [SC.magic60[0], `The ${dl} ${POSE[day]}. ${DV(26, LAND)} ${alive(day)} ${lockAnimal(day)}`, ...horoPack(day, ["general"])]);
-    add(G, ["Love and family", wide(day, `${DV(29, LOVE_OBJ(dl), 1)} ${human(dl, "love", 2)} Slow push-in.`),
-      ...horoSay(day, "love", ["Love and family today:", "ស្នេហា និងគ្រួសារថ្ងៃនេះ៖"])]);
-    add(G, ["Work and study", wide(day, `${DV(30, WORK_OBJ(dl), 1)} ${human(dl, "work", 2)} Smooth camera move following it.`),
-      ...horoSay(day, "career", ["Work today:", "ការងារថ្ងៃនេះ៖"])]);
-    add(G, ["Money", wide(day, `${DV(32, MONEY_OBJ(dl), 1)} ${human(dl, "money", 2)} Warm, calm light. Slow push-in.`),
-      ...horoSay(day, "money", ["Money today:", "លុយកាក់ថ្ងៃនេះ៖"])]);
+    add(G, ["Love and family", wide(day, `${meaning(day, "love", sayDay.love[0])} Slow push-in.`), ...sayDay.love]);
+    add(G, ["Work and study", wide(day, `${meaning(day, "work", sayDay.work[0])} Smooth camera move following them.`), ...sayDay.work]);
+    add(G, ["Money", wide(day, `${meaning(day, "money", sayDay.money[0])} Warm, calm light. Slow push-in.`), ...sayDay.money]);
     [SC.color60, SC.timedir60, SC.num60].forEach((s) => add(G, s));
     add(G, ["Lucky days of the week", wide(day, `${DV(33, SEVEN_OBJ(dl), 1)} Slow pan along the row.`),
       PI ? `The ${day}'s lucky days of the week are ${PI.luckyDays.join(" and ")}. Keep them for plans that matter.` : "",
@@ -1371,7 +1352,7 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
         `Next, the Year of the ${f}: a Good Day! The ${f} shares a lucky triangle with the ${day}.`,
         `បន្ទាប់ ឆ្នាំ${km(f)}៖ ថ្ងៃល្អ! ឆ្នាំ${km(f)} ស្ថិតក្នុងត្រីកោណសំណាង ជាមួយឆ្នាំ${dayKm}។`]);
       const gh = horoPack(f, ["general", "love", "career", "money"]);
-      add(Gp, [`${f} – the magical moment`, wide(f, `The ${fl} ${POSE[f]}. ${human(fl, topicOf(gh[0], i), 2 + 3 * i)}`), ...gh]);
+      add(Gp, [`${f} – the magical moment`, wide(f, `The ${fl} ${POSE[f]}. ${meaning(f, topicOf(gh[0], i), gh[0])}`), ...gh]);
       add(Gp, [`${f} – lucky color and time`, wide(f, `${DV(21, COLOR_OBJ(fl, FL.color.en), 2 + 3 * i).scene} Nearby, ${DV(22, TIME_OBJ(fl), 2 + 3 * i).short}. Warm ${FL.color.en} and gold light. Slow orbit.`),
         `Your lucky color is ${FL.color.en}, and your best time is ${sayTime(FL.time)}.`,
         `ពណ៌សំណាងគឺពណ៌${FL.color.km} ហើយពេលល្អបំផុតគឺ${sayTimeKm(FL.time)}។`]);
@@ -1392,7 +1373,7 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
         `Year of the ${a}: a steady day. Lucky color: ${L.color.en}. Best time: ${sayTime(L.time)}.`,
         `ឆ្នាំ${sg.nameKm}៖ ថ្ងៃធម្មតា។ ពណ៌សំណាង៖ ពណ៌${L.color.km}។ ពេលល្អ៖ ${sayTimeKm(L.time)}។`]);
       const oh = horoPack(a, ["love", "career", "money"], [`Lucky direction: ${L.direction.en.toLowerCase()}.`, `ទិសសំណាង៖ ទិស${L.direction.km}។`]);
-      add(Op, [`${a} – horoscope`, wide(a, `The ${al} ${DV(40, CALM_ACT, 3 + 5 * i)}. ${human(al, topicOf(oh[0], i), 3 + 5 * i)} Peaceful, cheerful mood. Camera follows it smoothly.`), ...oh]);
+      add(Op, [`${a} – horoscope`, wide(a, `${meaning(a, topicOf(oh[0], i), oh[0])} Camera follows them smoothly.`), ...oh]);
     });
     // recap and goodbye
     add("Recap and goodbye", ["Quick recap", `The twelve golden-armored zodiac guardians gather on the temple terrace in a half circle; the ${dl} glows brightest in the middle, two friends glow warmly beside it, and the ${cl} rests calmly in its soft bubble of light. They all move and look around happily. Slow pull-back.`,
@@ -1517,7 +1498,7 @@ Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(
 Day element: ${DEL.yy} ${DEL.el} ${DEL.emo} (${DEL.pillar} day; ធាតុ${DEL.km}) · every action scene today carries ${DEL.el} magic: ${DEL.fx}.
 Format: vertical 9:16 (YouTube Shorts, Facebook Reels, TikTok), about 45 seconds: 4 Veo scenes of about 8 seconds, then a lucky-numbers scene of about 10–12 seconds.
 Two versions: make the pictures once, then record a Khmer voice-over and an English voice-over (two videos, or one video with both subtitle tracks).
-Human moments: in the love, work, money and horoscope scenes the golden magic opens a short vision of everyday Cambodian life with real feelings on real faces (the people never talk), and every scene with Chanda on camera says which feeling she shows.
+Meaning scenes: in the love, work, money and horoscope scenes the zodiac guardian and its animal act out what Chanda is saying, the guardian protecting and caring and the animal trusting (no real-life people), and every scene with Chanda on camera says which feeling she shows.
 Ratings, lucky signs and lucky numbers come from the site's fixed rules and match the website's daily fortune for this date.${same ? "" : "\nVoice-over wording: standard script (this pack was made ahead; the site's own daily wording appears the day before)."}
 
 ${horoMd}## Luckiest animal today – ${day} (${km(day)}) · ${sign(day).label.en}
