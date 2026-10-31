@@ -569,6 +569,81 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
     "naps peacefully under a big lotus leaf held up like an umbrella", "rests quietly as a few fireflies keep watch around it",
     "breathes slowly beside a small, steady candle flame", "lies down on a soft bed of petals as the moonlight wraps it in a gentle glow",
     "rests beside the still water, eyes half closed, as mist drifts softly past", "curls up under a carved stone arch as soft golden light glows around it"];
+  // ---- human moments (the owner's request, 31/10/2026: "add the human attachment and emotions"): in the scenes that speak
+  // a prediction, the golden magic opens a vision of everyday Cambodian life that matches it, with real feelings on real
+  // faces, and the animal watches and reacts. The people never talk (only Chanda's voice is heard). A different moment
+  // every day, and a different one for each sign in the same video.
+  const PORTAL = [
+    "Then the golden light opens like a window into everyday life:",
+    "Then a large shimmering bubble of golden light floats up beside it, and inside it a real moment from everyday life plays out:",
+    "Then the still water of the lotus pond turns into a glowing mirror that shows a warm moment from everyday life:",
+    "Then golden mist parts like a curtain beside it, revealing a warm scene from everyday Cambodian life:",
+    "Then a round, moon-shaped window of soft light opens in the air beside it, showing a moment from everyday life:",
+    "Then its golden glow spreads into a soft, dreamy vision of everyday life:",
+    "Then the lantern light gathers into a glowing frame in the air that shows a moment from everyday life:",
+  ];
+  const PEOPLE = {
+    love: ["a young Cambodian couple share a quiet laugh on a riverside bench at sunset, his hand gently finding hers",
+      "three generations of a Cambodian family share dinner on a mat at home, and a grandmother laughs as she serves rice to her grandchild",
+      "a mother kneels to hug her little daughter at the school gate, and both of them beam with happiness",
+      "an elderly couple walk slowly side by side through their village at dusk, smiling at each other with deep affection",
+      "two old friends spot each other at a busy night market and hug warmly, laughing with joy",
+      "a young father lifts his giggling son onto his shoulders under the string lights of a festival",
+      "a sister ties a red string bracelet around her brother's wrist, and they share a tender, grateful smile",
+      "a husband brings his tired wife a cup of iced coffee at her market stall, and her face breaks into a grateful smile",
+      "a grandmother and her granddaughter fold lotus flowers together at home, and the girl leans her head happily on her shoulder",
+      "a young woman far from home listens to her parents on the phone, her eyes shining with happy tears as she smiles",
+      "a young couple ride a motorbike along the riverside at dusk, and she rests her head on his shoulder with a happy smile",
+      "a grandson helps his grandmother up the wooden steps of her house, and she pats his cheek with a proud, loving smile",
+      "a family gathers around a birthday cake at home, clapping as a little girl blows out her candles with a huge smile"],
+    work: ["a young woman at her small fruit stall hands a bag of mangoes to a smiling customer, glowing with pride",
+      "a tuk-tuk driver helps an elderly passenger step down with a kind smile, and she pats his arm in thanks",
+      "a university student in her graduation gown hugs her proud parents, all three of them smiling through happy tears",
+      "a small café owner pours iced coffee for her regular customers, laughing with them as she works",
+      "a rice farmer straightens up in his bright green field at sunrise and smiles with quiet pride at the healthy rice",
+      "a young tailor holds up a finished dress, and her customer's face lights up with delight",
+      "two coworkers in a small workshop give each other a happy high-five after finishing a big order",
+      "a teacher kneels beside a young pupil who has just solved a hard problem, and they both smile proudly"],
+    money: ["a mother drops a few coins into a tin savings box at home while her small son claps happily beside her",
+      "a young couple count their savings together at the kitchen table and look at each other with relieved, hopeful smiles",
+      "a market seller counts the day's earnings at her stall and lets out a happy, relieved breath",
+      "a young man pays back a friend with a grateful smile, and they shake hands warmly",
+      "a family walks home from the market carrying bags of fresh vegetables, smiling happily at each other",
+      "a young woman compares prices at a market stall, then smiles, pleased with a good bargain",
+      "a shop owner hands a customer her change with a warm smile, and the customer smiles back gratefully",
+      "a grandfather shows his grandson how to keep a small savings jar, and the boy drops in his first coin with a big grin"],
+    general: ["a young woman opens her front door to the morning light, takes a deep breath and smiles with hope",
+      "friends laugh together over street food at a small roadside stall, sharing a happy moment",
+      "a grandmother waters the flowers on her balcony, smiling peacefully at the new day",
+      "a little boy runs to hug his father, who has just come home from work",
+      "a young man rides his motorbike along the riverside at sunset, smiling into the warm breeze",
+      "neighbours share a plate of fresh fruit on the porch of a wooden house, laughing together",
+      "a girl in a school uniform waves goodbye to her mother and skips happily toward the school gate",
+      "an old man and his grandson fly a kite together in a breezy field, both laughing as it climbs higher"],
+    gentle: ["a young man pauses before an important meeting, closes his eyes for a calm breath, and his worried face relaxes into a small smile",
+      "a tired mother sits down with a quiet cup of tea at home, and her little daughter brings her a pillow, making her smile",
+      "a friend gently puts an arm around another's shoulders on a quiet bench, and the worried one finally smiles",
+      "a woman sets aside a pile of papers, steps outside into the evening air and smiles as she feels calmer",
+      "a grandfather holds his grandson's hand as they walk slowly home, unhurried and content",
+      "a young woman finishes her last task of the day, closes her laptop, sighs with relief and smiles to herself",
+      "a shop owner closes her stall early, stretches, and smiles peacefully at the pink evening sky"],
+  };
+  const REACT = (a) => [`The ${a} watches the vision with a soft, happy expression, then looks toward the camera with kind eyes.`,
+    `The ${a} leans closer to the vision, its eyes shining with warmth, as if it feels the same joy.`,
+    `The ${a} watches with a gentle, proud look, like a guardian quietly blessing the people it protects.`,
+    `The ${a} tilts its head and watches the vision tenderly, then gives a small, contented nod.`,
+    `The golden light of the vision reflects in the ${a}'s eyes as it watches with a warm, caring expression.`,
+    `The ${a} watches the moment with quiet happiness, then turns to the camera as if to say this could be you.`];
+  const PEOPLE_REAL = "The people are Cambodian and photorealistic, with natural skin texture and genuine, believable emotion on their faces; they smile and laugh silently and never talk, so the only voice is Chanda's.";
+  // the vision for an animal (a = its lower-case name) and a topic (love, work, money, general; gentle for a quiet day).
+  // Each topic counts its own visions, so the same day never shows the same moment twice until its list runs out.
+  const humanN = {};
+  const human = (a, topic, plus = 0, gentle = false) => {
+    const key = gentle ? "gentle" : PEOPLE[topic] ? topic : "general", n = (humanN[key] = (humanN[key] || 0) + 1) - 1;
+    return `${DV(60, PORTAL, n + plus)} ${cap(DV(61, PEOPLE[key], n))}. ${PEOPLE_REAL} ${DV(62, REACT(a), n + plus)}`;
+  };
+  // the topic of a spoken horoscope line: one of the parts it speaks (chosen by k, so neighbouring signs differ)
+  const topicOf = (en, k = 0) => { const t = [...en.matchAll(/\b(Love|Work|Money)\b[^:.]{0,16}:/g)].map((m) => m[1].toLowerCase()); return t.length ? t[k % t.length] : "general"; };
   const GROUP12 = ["sit on glowing lotus pedestals in a wide circle around the moonlit pond in front of the temple",
     "stand along the moonlit temple steps in two rows", "stand on floating lotus leaves spread around the moonlit pond",
     "sit along the stone causeway between the carved naga balustrades", "stand in a wide arc on the moonlit temple terrace",
@@ -680,6 +755,7 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const PI = P && P.INFO[day], PK = P && P.KM_INFO[day];
   const traitsEn = PI ? PI.traits.replace(/^(\w)/, (m) => m.toLowerCase()) : "";
   const weakEn = PI ? PI.weaknesses.replace(/^(\w)/, (m) => m.toLowerCase()).replace(/\.$/, "") : "";
+  const magicHoro = horoPack(day, ["general", "love", "career", "money"]);   // the 60-second video's prediction line
   const SC = {
     moon: [nine[0][0], nine[0][1], ...vo90[0]],
     appear: [nine[1][0], nine[1][1], ...vo90[1]],
@@ -687,11 +763,11 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
     personality: [`The ${day}'s character`, `Close-up of the ${dl} on its glowing lotus, its face showing a ${S9.mood} expression. Soft golden light circles it, and ${DV(28, HALO)}. Gentle slow orbit around the ${dl}.`,
       `People born in the Year of the ${day} are ${traitsEn}`, PK ? `អ្នកកើតឆ្នាំ${dayKm} ជាមនុស្ស${PK.traits.replace(/ឱនភាព/g, "ឱ្យតម្លៃលើភាព")}` : ""],
     magic: [nine[3][0], nine[3][1], ...vo90[3]],
-    love: ["Love and family", `${DV(29, LOVE_OBJ(dl))} It smiles warmly. Gentle, loving mood. Slow push-in.`,
+    love: ["Love and family", `${DV(29, LOVE_OBJ(dl))} ${human(dl, "love", 1)} Gentle, loving mood. Slow push-in.`,
       ...horoSay(day, "love", ["Love and family today:", "ស្នេហា និងគ្រួសារថ្ងៃនេះ៖"])],
-    work: ["Work and study", `${DV(30, WORK_OBJ(dl))} Determined, hopeful mood. Smooth camera move following it.`,
+    work: ["Work and study", `${DV(30, WORK_OBJ(dl))} ${human(dl, "work", 1)} Determined, hopeful mood. Smooth camera move following it.`,
       ...horoSay(day, "career", ["Work today:", "ការងារថ្ងៃនេះ៖"])],
-    money: ["Money", `${DV(32, MONEY_OBJ(dl))} Warm, calm light. Slow push-in.`,
+    money: ["Money", `${DV(32, MONEY_OBJ(dl))} ${human(dl, "money", 1)} Warm, calm light. Slow push-in.`,
       ...horoSay(day, "money", ["Money today:", "លុយកាក់ថ្ងៃនេះ៖"])],
     colortime: [nine[4][0], nine[4][1], ...vo90[4]],
     color: ["Lucky color", `${col180.scene} Warm ${cen} and gold light. Slow orbit.`,
@@ -740,8 +816,8 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
         ["Let that spirit guide you today.", "សូមឲ្យស្មារតីនោះ ដឹកនាំអ្នកថ្ងៃនេះ។"],
         ["Keep that energy close all day.", "សូមរក្សាថាមពលនោះ ជាប់ជាមួយអ្នកពេញមួយថ្ងៃ។"]]).concat([
         ["Let it guide you.", "សូមឲ្យវាដឹកនាំអ្នក។"], ["Shine today!", "ថ្ងៃនេះ សូមភ្លឺស្វាង!"]]))],
-    magic60: ["The magical moment", `The ${dl} ${POSE[day]}. ${DV(26, LAND)} ${alive(day)} ${lockAnimal(day)}`,
-      ...fuller(horoPack(day, ["general", "love", "career", "money"]), rot(3, [
+    magic60: ["The magical moment", `The ${dl} ${POSE[day]}. ${human(dl, topicOf(magicHoro[0]))} ${alive(day)} ${lockAnimal(day)}`,
+      ...fuller(magicHoro, rot(3, [
         [`This ${DEL.el} day adds ${DEL.q} to everything you do.`, `ថ្ងៃធាតុ${DEL.km}នេះ បន្ថែម${DEL.qKm} ដល់អ្វីៗដែលអ្នកធ្វើ។`],
         [`Your helper sign is the ${helper}: team up with one.`, `រាសីជំនួយរបស់អ្នក គឺឆ្នាំ${km(helper)}៖ សូមសហការជាមួយគេ។`],
         ["Trust yourself, and act with a kind heart.", "សូមជឿលើខ្លួនឯង ហើយធ្វើអ្វីៗដោយចិត្តល្អ។"]]).concat([
@@ -782,13 +858,13 @@ export function buildPack(iso, F, forSign, data = null, P = null) {
   const signScenes = F.signs.flatMap((sg, si) => {
     const a = sg.animal, al = a.toLowerCase(), t = sg.tier, L = sg.lucky, nn = nums.find((x) => x.a === a);
     const act = t === "great" || t === "good" ? POSE[a] : t === "ordinary" ? DV(40, CALM_ACT, si) : DV(41, REST_ACT, si);
+    const hp = horoPack(a, ["love", "career", "money"], [`Lucky direction: ${L.direction.en.toLowerCase()}.${nn ? ` Lucky numbers: ${nn.d2} and ${nn.d3}.` : ""}`,
+      `ទិសសំណាង៖ ទិស${L.direction.km}។${nn ? ` លេខសំណាង៖ ${nn.d2} និង ${nn.d3}។` : ""}`]);
     return [
       [`${a} – ${sg.label.en}`, `${cap(LOOK[a])} ${DV(42, PLACE, si)}, ${LOOKTIER[t]}. ${cap(DV(43, COLOR_OBJ(al, L.color.en), si).around)}. Slow push-in; it is the saved Flow character ${FLOW_NAME(a)}.`,
         `Year of the ${a}. Today is ${DAYPH[t][0]} for you. Your lucky color is ${L.color.en}, and your best time is ${sayTime(L.time)}.`,
         `ឆ្នាំ${sg.nameKm}។ ថ្ងៃនេះ ជា${DAYPH[t][1]} សម្រាប់អ្នក។ ពណ៌សំណាងរបស់អ្នក គឺពណ៌${L.color.km} ហើយពេលល្អបំផុត គឺ${sayTimeKm(L.time)}។`],
-      [`${a} – horoscope`, `The ${al} ${act}. ${t === "caution" ? "Peaceful and safe, not sad." : "Magical and joyful."} Camera follows it smoothly.`,
-        ...horoPack(a, ["love", "career", "money"], [`Lucky direction: ${L.direction.en.toLowerCase()}.${nn ? ` Lucky numbers: ${nn.d2} and ${nn.d3}.` : ""}`,
-          `ទិសសំណាង៖ ទិស${L.direction.km}។${nn ? ` លេខសំណាង៖ ${nn.d2} និង ${nn.d3}។` : ""}`])],
+      [`${a} – horoscope`, `The ${al} ${act}. ${human(al, topicOf(hp[0], si), si, t === "caution")} ${t === "caution" ? "Peaceful and safe, not sad." : "Warm and joyful."} Camera follows it smoothly.`, ...hp],
     ];
   });
   const overview = ["Today's lucky signs", `The twelve golden-armored zodiac guardians ${DV(54, GROUP12, 1)}. Three of them shine brighter than the others with a golden aura. Slow, wide circling camera.`,
@@ -1274,12 +1350,12 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
     add(G, [`The ${day}'s character`, wide(day, `Close-up of the ${dl} on its glowing lotus, its face showing a ${S9.mood} expression. Soft golden light circles it and ${DV(28, HALO, 1)}. Gentle slow orbit.`),
       `People born in the Year of the ${day} are often described as ${clueEn}.`,
       `អ្នកកើតឆ្នាំ${dayKm} ជារឿយៗ ត្រូវបានគេស្គាល់ថា ${clueKm}។`]);
-    add(G, [SC.magic60[0], SC.magic60[1], ...horoPack(day, ["general"])]);
-    add(G, ["Love and family", wide(day, `${DV(29, LOVE_OBJ(dl), 1)} It smiles warmly. Slow push-in.`),
+    add(G, [SC.magic60[0], `The ${dl} ${POSE[day]}. ${DV(26, LAND)} ${alive(day)} ${lockAnimal(day)}`, ...horoPack(day, ["general"])]);
+    add(G, ["Love and family", wide(day, `${DV(29, LOVE_OBJ(dl), 1)} ${human(dl, "love", 2)} Slow push-in.`),
       ...horoSay(day, "love", ["Love and family today:", "ស្នេហា និងគ្រួសារថ្ងៃនេះ៖"])]);
-    add(G, ["Work and study", wide(day, `${DV(30, WORK_OBJ(dl), 1)} Smooth camera move following it.`),
+    add(G, ["Work and study", wide(day, `${DV(30, WORK_OBJ(dl), 1)} ${human(dl, "work", 2)} Smooth camera move following it.`),
       ...horoSay(day, "career", ["Work today:", "ការងារថ្ងៃនេះ៖"])]);
-    add(G, ["Money", wide(day, `${DV(32, MONEY_OBJ(dl), 1)} Warm, calm light. Slow push-in.`),
+    add(G, ["Money", wide(day, `${DV(32, MONEY_OBJ(dl), 1)} ${human(dl, "money", 2)} Warm, calm light. Slow push-in.`),
       ...horoSay(day, "money", ["Money today:", "លុយកាក់ថ្ងៃនេះ៖"])]);
     [SC.color60, SC.timedir60, SC.num60].forEach((s) => add(G, s));
     add(G, ["Lucky days of the week", wide(day, `${DV(33, SEVEN_OBJ(dl), 1)} Slow pan along the row.`),
@@ -1294,8 +1370,8 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
       add(Gp, [`${f} – ${fs.label.en}`, wide(f, `${cap(LOOK[f])} ${DV(42, PLACE, 5 + 3 * i)}, glowing with a warm golden light, and greets the night with a happy stretch. Slow push-in.`),
         `Next, the Year of the ${f}: a Good Day! The ${f} shares a lucky triangle with the ${day}.`,
         `បន្ទាប់ ឆ្នាំ${km(f)}៖ ថ្ងៃល្អ! ឆ្នាំ${km(f)} ស្ថិតក្នុងត្រីកោណសំណាង ជាមួយឆ្នាំ${dayKm}។`]);
-      add(Gp, [`${f} – the magical moment`, wide(f, `The ${fl} ${POSE[f]}. ${DV(26, LAND, 2 + 3 * i)}`),
-        ...horoPack(f, ["general", "love", "career", "money"])]);
+      const gh = horoPack(f, ["general", "love", "career", "money"]);
+      add(Gp, [`${f} – the magical moment`, wide(f, `The ${fl} ${POSE[f]}. ${human(fl, topicOf(gh[0], i), 2 + 3 * i)}`), ...gh]);
       add(Gp, [`${f} – lucky color and time`, wide(f, `${DV(21, COLOR_OBJ(fl, FL.color.en), 2 + 3 * i).scene} Nearby, ${DV(22, TIME_OBJ(fl), 2 + 3 * i).short}. Warm ${FL.color.en} and gold light. Slow orbit.`),
         `Your lucky color is ${FL.color.en}, and your best time is ${sayTime(FL.time)}.`,
         `ពណ៌សំណាងគឺពណ៌${FL.color.km} ហើយពេលល្អបំផុតគឺ${sayTimeKm(FL.time)}។`]);
@@ -1315,8 +1391,8 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
       add(Op, [`${a} – ${sg.label.en}`, wide(a, `${cap(LOOK[a])} ${DV(42, PLACE, 3 + 5 * i)}, calm and content, softly lit by the moon. ${cap(DV(43, COLOR_OBJ(al, L.color.en), 3 + 5 * i).around)}. Slow push-in.`),
         `Year of the ${a}: a steady day. Lucky color: ${L.color.en}. Best time: ${sayTime(L.time)}.`,
         `ឆ្នាំ${sg.nameKm}៖ ថ្ងៃធម្មតា។ ពណ៌សំណាង៖ ពណ៌${L.color.km}។ ពេលល្អ៖ ${sayTimeKm(L.time)}។`]);
-      add(Op, [`${a} – horoscope`, wide(a, `The ${al} ${DV(40, CALM_ACT, 3 + 5 * i)}, then moves on along the edge of the lotus pond. Peaceful, cheerful mood. Camera follows it smoothly.`),
-        ...horoPack(a, ["love", "career", "money"], [`Lucky direction: ${L.direction.en.toLowerCase()}.`, `ទិសសំណាង៖ ទិស${L.direction.km}។`])]);
+      const oh = horoPack(a, ["love", "career", "money"], [`Lucky direction: ${L.direction.en.toLowerCase()}.`, `ទិសសំណាង៖ ទិស${L.direction.km}។`]);
+      add(Op, [`${a} – horoscope`, wide(a, `The ${al} ${DV(40, CALM_ACT, 3 + 5 * i)}. ${human(al, topicOf(oh[0], i), 3 + 5 * i)} Peaceful, cheerful mood. Camera follows it smoothly.`), ...oh]);
     });
     // recap and goodbye
     add("Recap and goodbye", ["Quick recap", `The twelve golden-armored zodiac guardians gather on the temple terrace in a half circle; the ${dl} glows brightest in the middle, two friends glow warmly beside it, and the ${cl} rests calmly in its soft bubble of light. They all move and look around happily. Slow pull-back.`,
@@ -1365,10 +1441,34 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
     ];
     return `Sky: ${SKY[(i + dayNo) % SKY.length]}; it stays in the background and never covers a face.`;   // a different sky for each scene, and a new order every day
   };
+  // Chanda's feelings whenever she is on camera (the owner's request, 31/10/2026: human attachment and emotion):
+  // excited to share at the start, sincere in the middle, warm and grateful at the goodbye, and gentle and caring all
+  // through the take-it-easy video. A different expression every day.
+  const FEEL = {
+    hello: ["Her face is full of genuine excitement, as if sharing wonderful news with a close friend: her eyes light up, her eyebrows lift and a bright, natural smile spreads across her face as she leans slightly toward the camera.",
+      "She looks truly delighted to see the viewer: a warm, happy smile, sparkling eyes and a small tilt of her head, like greeting a dear friend after a long time.",
+      "She speaks with heartfelt enthusiasm: a joyful smile, bright eyes and lively, natural hand gestures, as if she can't wait to tell the viewer something special.",
+      "Her expression moves from curious to thrilled: she raises one hand to her chest in happy surprise, then smiles broadly at the camera.",
+      "She greets the viewer with a soft laugh and shining eyes, warm and close, as if she has been waiting all day to share this moment."],
+    middle: ["She speaks with sincere, friendly warmth, like giving advice to a close friend: relaxed shoulders, a kind smile and an encouraging nod.",
+      "She looks playful and warm: a little laugh, bright eyes and an inviting gesture toward the viewer.",
+      "Her eyes are kind and attentive, and she smiles encouragingly, nodding as she speaks as if she truly believes in the viewer.",
+      "She speaks from the heart: a gentle smile, one hand resting lightly over her heart, her eyes warm and sincere."],
+    bye: ["Her eyes are soft and grateful; she places one hand gently over her heart, smiles with real warmth and gives a small, sincere bow before she waves.",
+      "She smiles like someone saying goodbye to a dear friend: a tender, slightly emotional look, a soft laugh and a warm, lingering wave.",
+      "Her face glows with gratitude and affection; she nods kindly at the viewer, presses her palms together in a gentle Khmer sampeah greeting, then waves.",
+      "She looks at the camera with caring, hopeful eyes, as if wishing the viewer well from her heart, then smiles brightly and waves."],
+    care: ["Her expression is gentle and caring, like an older sister comforting a friend: soft eyes, a reassuring nod and a calm, kind smile.",
+      "She speaks softly with real empathy: a slightly concerned tilt of her head at first, then a warm, encouraging smile that says everything will be all right.",
+      "Her face shows quiet compassion: she holds one hand open toward the viewer as if offering comfort, and smiles reassuringly.",
+      "She looks at the viewer with patient, understanding eyes and a soft, comforting smile, calm and close like a trusted friend."],
+  };
+  const NATURAL = "Natural, believable acting with real micro-expressions, never exaggerated or theatrical.";
+  const hostFeel = (v, i) => `${DV(63, v.id === "easy" ? FEEL.care : i === 0 ? FEEL.hello : i === v.scenes.length - 1 ? FEEL.bye : FEEL.middle, i)} ${NATURAL}`;
   const videoMd = (v) => `## ${v.name}
 ${v.intro || `${v.secs === 80 ? "An" : "A"} ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add Chanda and the saved character ${FLOW_NAME(day)} as ingredients. ${v.scenes.some((x) => x[4]) ? `Chanda is on camera and speaks with lip-sync in scenes ${[1, ...v.scenes.map((x, i) => x[4] ? i + 1 : 0).filter(Boolean)].join(", ")}; in the other scenes she narrates off screen` : "Chanda opens the video on camera with the hook and narrates the rest off screen"}. The animals never speak or move their mouths: they only act. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
 ${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.metaMd ? `\n${v.metaMd}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
-${v.scenes.map(([t, prompt, en, kmL, onCam], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}${skyFor(v, i) ? ` ${skyFor(v, i)}` : ""}\nEnglish voice: ${audio("en", (i === 0 && v.host) || !!onCam, en)}\nKhmer voice: ${audio("km", (i === 0 && v.host) || !!onCam, kmFlow(kmL))}`).join("\n\n")}
+${v.scenes.map(([t, prompt, en, kmL, onCam], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}${(i === 0 && v.host) || onCam ? ` ${hostFeel(v, i)}` : ""}${skyFor(v, i) ? ` ${skyFor(v, i)}` : ""}\nEnglish voice: ${audio("en", (i === 0 && v.host) || !!onCam, en)}\nKhmer voice: ${audio("km", (i === 0 && v.host) || !!onCam, kmFlow(kmL))}`).join("\n\n")}
 
 ## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : v.id === "easy" ? "take-it-easy video" : v.id === "yt8" ? "full fortune video" : `${v.secs}-second video`}
 The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
@@ -1417,6 +1517,7 @@ Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(
 Day element: ${DEL.yy} ${DEL.el} ${DEL.emo} (${DEL.pillar} day; ធាតុ${DEL.km}) · every action scene today carries ${DEL.el} magic: ${DEL.fx}.
 Format: vertical 9:16 (YouTube Shorts, Facebook Reels, TikTok), about 45 seconds: 4 Veo scenes of about 8 seconds, then a lucky-numbers scene of about 10–12 seconds.
 Two versions: make the pictures once, then record a Khmer voice-over and an English voice-over (two videos, or one video with both subtitle tracks).
+Human moments: in the love, work, money and horoscope scenes the golden magic opens a short vision of everyday Cambodian life with real feelings on real faces (the people never talk), and every scene with Chanda on camera says which feeling she shows.
 Ratings, lucky signs and lucky numbers come from the site's fixed rules and match the website's daily fortune for this date.${same ? "" : "\nVoice-over wording: standard script (this pack was made ahead; the site's own daily wording appears the day before)."}
 
 ${horoMd}## Luckiest animal today – ${day} (${km(day)}) · ${sign(day).label.en}
@@ -1498,7 +1599,7 @@ ${careful.length ? `3. Vertical 9:16. Photorealistic golden fantasy-epic style, 
 Vertical 9:16 (can be cropped to 16:9). Photorealistic golden fantasy-epic close-up of ${LOOK[day]} facing the viewer in warm golden evening light, an ancient Khmer temple and a glowing full moon softly blurred behind, ${lucky.filter((a) => a !== day).length ? `${looks(lucky.filter((a) => a !== day))} smaller in the background, ` : ""}glowing golden aura, vivid, powerful and eye-catching. No text, no letters, no logos. (Add the title and date in your editor.)
 
 ## Scene 1 – ${day} day (Chanda on camera)
-${cap(HOST_LOOK)}, stands in front of the Angkor-style temple at night, facing the camera and speaking to the viewer with natural lip movements, then turns and gestures toward the pond. Chanda is the saved Flow character @Chanda. Then: magical and powerful. ${cap(LOOK[day])} stands on its glowing lotus pedestal on the pond in front of the Angkor-style temple under a huge full moon. Its eyes light up, a golden aura bursts around it, and it ${POSE[day]}. The lotus pond ripples with golden light, and ${DV(52, ["lanterns rise into the sky",
+${cap(HOST_LOOK)}, stands in front of the Angkor-style temple at night, facing the camera and speaking to the viewer with natural lip movements, then turns and gestures toward the pond. ${DV(63, FEEL.hello)} ${NATURAL} Chanda is the saved Flow character @Chanda. Then: magical and powerful. ${cap(LOOK[day])} stands on its glowing lotus pedestal on the pond in front of the Angkor-style temple under a huge full moon. Its eyes light up, a golden aura bursts around it, and it ${POSE[day]}. The lotus pond ripples with golden light, and ${DV(52, ["lanterns rise into the sky",
   "fireflies swirl up from the reeds", "golden petals whirl up around it", "a shower of tiny stars falls over the water", "rings of light spread across the pond",
   "sky lanterns drift up behind the temple", "mist swirls away in glowing rings"])}. Dynamic camera: start close on its face, then sweep up and follow it through the air. Cute, majestic and full of energy, matching the reference image.
 
