@@ -19,6 +19,7 @@ import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 import { findBlocks } from "./lang-blocks.mjs";
+import { articlesPage } from "./articles-page.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = path.join(ROOT, "dist");
@@ -372,6 +373,21 @@ fs.mkdirSync(DIST, { recursive: true });
 let pages = 0, copied = 0;
 const noOwn = [];   // [lang, path] versions that are not published
 const pageList = [];
+function publish(rel, html) {   // one repo page -> its English / Khmer / Chinese versions in dist/
+  const p = pagePath(rel, html);
+  const blk = findBlocks(html);   // only pages written in language blocks with none for a language can lack it (pages translated by data-i18n keep all three)
+  // blog articles written only in English (no language blocks at all, e.g. the holiday guides and weekly articles) are English-only
+  const enOnlyArticle = rel.startsWith("blog" + path.sep) && !blk.length && /<html lang="en"/.test(html);
+  const langs = LANGS.filter((l) => l === "en" || (!enOnlyArticle && (!blk.some((x) => x.lang === "en") || blk.some((x) => x.lang === l) || hasOwnText(variant(html, l, p), l))));
+  for (const lang of LANGS) {
+    if (!langs.includes(lang)) { noOwn.push([lang, p]); continue; }
+    const dest = path.join(DIST, lang === "en" ? "" : lang, rel);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.writeFileSync(dest, speed(variant(html, lang, p, langs), lang));
+  }
+  pageList.push(p);
+  pages++;
+}
 (function walk(dir) {
   for (const name of fs.readdirSync(path.join(ROOT, dir))) {
     const rel = dir ? `${dir}/${name}` : name;
@@ -381,22 +397,11 @@ const pageList = [];
     if (fs.statSync(abs).isDirectory()) { walk(rel); continue; }
     const isPage = name.endsWith(".html") && !rel.startsWith("future/") && !/^google[0-9a-f]+\.html$/.test(name);
     if (!isPage) { copyFile(abs, path.join(DIST, rel)); copied++; continue; }
-    const html = fs.readFileSync(abs, "utf8");
-    const p = pagePath(rel, html);
-    const blk = findBlocks(html);   // only pages written in language blocks with none for a language can lack it (pages translated by data-i18n keep all three)
-    // blog articles written only in English (no language blocks at all, e.g. the holiday guides and weekly articles) are English-only
-    const enOnlyArticle = rel.startsWith("blog" + path.sep) && !blk.length && /<html lang="en"/.test(html);
-    const langs = LANGS.filter((l) => l === "en" || (!enOnlyArticle && (!blk.some((x) => x.lang === "en") || blk.some((x) => x.lang === l) || hasOwnText(variant(html, l, p), l))));
-    for (const lang of LANGS) {
-      if (!langs.includes(lang)) { noOwn.push([lang, p]); continue; }
-      const dest = path.join(DIST, lang === "en" ? "" : lang, rel);
-      fs.mkdirSync(path.dirname(dest), { recursive: true });
-      fs.writeFileSync(dest, speed(variant(html, lang, p, langs), lang));
-    }
-    pageList.push(p);
-    pages++;
+    publish(rel, fs.readFileSync(abs, "utf8"));
   }
 })("");
+// the All Articles page (/articles): made from the cards on blog.html at build time (scripts/articles-page.mjs)
+publish("articles.html", articlesPage(ROOT));
 
 // ---------------------------------------------------------------- private Video Studio at /studio/ (not linked, noindex, not in the sitemap)
 // made by scripts/content/build-video-tool.mjs; copied as it is (no language versions, no ads)

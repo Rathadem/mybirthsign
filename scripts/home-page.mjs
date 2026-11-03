@@ -265,7 +265,7 @@ ${(BLOG_CARDS[lang].length ? BLOG_CARDS[lang] : u.guides.map(([img, , t, d, h]) 
       </ul>
       <button type="button" class="hm-sl-btn hm-sl-next" data-hm-sl="1" aria-label="${esc(u.next)}" aria-controls="hm-slides-${lang}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
     </div>
-    <p class="hm-center"><a class="fx-btn fx-btn-sm" href="/blog">${esc(u.blogAll)}</a></p>
+    <p class="hm-center"><a class="fx-btn fx-btn-sm" href="/articles">${esc(u.blogAll)}</a></p>
   </section>`;
 }
 

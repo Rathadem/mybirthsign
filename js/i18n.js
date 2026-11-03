@@ -1618,7 +1618,7 @@ function markCurrentNav() {
     return p || "/";
   };
   let here = norm(location.pathname);
-  if (here.indexOf("/blog/") === 0) here = "/blog";
+  if (here.indexOf("/blog/") === 0 || here === "/articles") here = "/blog";   // the All Articles page counts as the blog
   nav.querySelectorAll("a[href]").forEach(function (a) {
     if (a.hasAttribute("data-lang-switch")) return;
     if (norm(a.pathname) !== here) return;
