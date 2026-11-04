@@ -21,8 +21,10 @@
   // one pair beside each section, scrolling with the page. The class "mbs-rails" on <html> adds 184 px of space on each side of the page so
   // the side bars never cover the content; on narrower screens the side bars are hidden and the section ads show instead.
   var RAIL_MIN = 1024, root = document.documentElement;
-  // Khmer pages: no ad network at all (the owner's choice, 29/10/2026); only ads from local businesses (js/local-ads.js)
-  var LOCAL = (root.getAttribute("data-site-lang") || root.lang || "").slice(0, 2) === "km";
+  // Khmer pages: Adsterra, the same as the other languages (the owner's choice, 04/11/2026; from 29/10 they showed local ads only).
+  // Ads from local businesses listed in js/local-ads.js take the first ad spots of a Khmer page while they run. (No Google AdSense
+  // on Khmer pages: Khmer is not an AdSense language; build-site.mjs leaves its code out.)
+  var KM = (root.getAttribute("data-site-lang") || root.lang || "").slice(0, 2) === "km";
   var queue = [], busy = false;
   function next() {
     if (busy || !queue.length) return;
@@ -224,7 +226,6 @@
     next();
   }
   function popAd() {
-    if (LOCAL) return;
     try { popTab(); } catch (e) { /* the result stays as it is */ }
     setTimeout(function () { try { popBox(); } catch (e) { /* the result stays as it is */ } }, 600);   // the result shows first
   }
@@ -328,19 +329,23 @@
       document.head.appendChild(st);
     }
     for (var n = 0; n < slots.length && n < list.length; n++) {
+      slots[n].setAttribute("data-ad", "local"); slots[n].setAttribute("data-filled", "1");   // Adsterra leaves this spot alone
       slots[n].appendChild(localCard(list[n], list[n] === HOUSE));
       slots[n].classList.add("on");
     }
   }
+  // Khmer pages: running local ads go into the first spots, then Adsterra fills the rest (as on the other pages)
   function localStart() {
-    var slots = [].slice.call(document.querySelectorAll(".mbs-ad[data-ad]"));
-    if (!slots.length) return;
-    slots.forEach(function (el) { el.setAttribute("data-ad", "local"); });
+    var slots = [].slice.call(document.querySelectorAll(".mbs-ad[data-ad]")), began = false;
+    var then = function () { if (began) return; began = true; start(); };
+    if (!slots.length) return then();
     var s = document.createElement("script");
     s.src = "/js/local-ads.js";
-    s.onload = function () { try { localFill(slots, window.MBS_LOCAL_ADS || {}); } catch (e) { /* no local ads: the spots stay hidden */ } };
+    s.onload = function () { if (!began) { try { localFill(slots, window.MBS_LOCAL_ADS || {}); } catch (e) { /* no local ads */ } } then(); };
+    s.onerror = then;
+    setTimeout(then, 3000);   // a slow local-ads file never holds up the other ads
     document.head.appendChild(s);
   }
-  if (LOCAL) { if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", localStart); else localStart(); return; }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+  var begin = KM ? localStart : start;
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", begin); else begin();
 })();

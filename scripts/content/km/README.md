@@ -2,7 +2,7 @@
 
 One file per article: `scripts/content/km/<slug>.json`, the Khmer version of the English spec
 `scripts/content/weekly/<slug>.json` (or `scripts/content/years/<slug>.json`). `weekly-article.py` reads it when the
-English spec has no `km` field and publishes it at `/km/blog/<slug>` (local ads only, no ad network).
+English spec has no `km` field and publishes it at `/km/blog/<slug>` (Adsterra and local business ads, no Google AdSense).
 Generators that rewrite the English specs (stories, horoscope 2027, year pages) never touch these files.
 
 Check a file before it is published (must end with `OK`; read every WARN):

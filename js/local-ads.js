@@ -1,6 +1,7 @@
 /* Local ads for the Khmer pages (mybirthsign.com/km/...).
-   The Khmer pages show no ad network (no Adsterra). They show ads from local businesses that you place yourself, in the
-   same spots between sections. js/ads.js reads this list on every Khmer page.
+   The Khmer pages show Adsterra ads, the same as the English and Chinese pages. Ads from local businesses that you place
+   yourself go into the first ad spots of a page while they run (instead of Adsterra there). js/ads.js reads this list on
+   every Khmer page.
 
    HOW TO ADD AN AD
    1. Put the advertiser's picture in the folder images/local-ads/ (JPG, PNG or WebP).
@@ -22,11 +23,11 @@
      pages       optional: only on some pages, e.g. ["index", "checker", "compatibility", "blog"]
                  ("blog" = every blog page). Leave out for every Khmer page.
 
-   Each Khmer page shows each running ad once, in a new random order on every visit, one ad per spot; spots without an ad
-   stay hidden. With no ad running, the first spot of each Khmer page shows an "Advertise your business here" box that links
-   to the contact page (set showAdvertiseHere to false to show nothing instead). */
+   Each Khmer page shows each running ad once, in a new random order on every visit, one ad per spot, from the top; the
+   other spots show Adsterra ads. showAdvertiseHere: true puts an "Advertise your business here" box (linking to the contact
+   page) in the first spot whenever no local ad is running, instead of an Adsterra ad there; false (now) shows Adsterra. */
 window.MBS_LOCAL_ADS = {
-  showAdvertiseHere: true,
+  showAdvertiseHere: false,
   ads: [
     // {
     //   id: "example-shop-nov",
