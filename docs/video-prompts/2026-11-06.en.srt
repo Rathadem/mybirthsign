@@ -1,67 +1,79 @@
 1
-00:00:00,000 --> 00:00:01,632
+00:00:00,000 --> 00:00:01,254
 Is your sign one
 
 2
-00:00:01,682 --> 00:00:04,366
+00:00:01,304 --> 00:00:03,374
 of today's three luckiest?
 
 3
-00:00:04,416 --> 00:00:07,941
+00:00:03,424 --> 00:00:06,146
 Here's your Chinese zodiac fortune
 
 4
-00:00:07,991 --> 00:00:10,885
+00:00:06,196 --> 00:00:08,428
 for Friday, 6 November 2026.
 
 5
-00:00:10,935 --> 00:00:13,198
-Today is a Monkey day.
+00:00:08,478 --> 00:00:11,363
+Today is a Monkey day, traditionally
 
 6
-00:00:13,248 --> 00:00:15,511
-Monkey, Rat and Dragon
+00:00:11,413 --> 00:00:14,135
+full of cleverness and good humor.
 
 7
-00:00:15,561 --> 00:00:18,560
-are the luckiest signs today.
+00:00:14,185 --> 00:00:16,010
+Monkey, Rat, and Dragon
 
 8
-00:00:18,610 --> 00:00:21,188
-Tiger should take it easy
+00:00:16,060 --> 00:00:17,803
+are the luckiest signs
 
 9
-00:00:21,238 --> 00:00:25,604
-slow down and avoid rushing big decisions.
+00:00:17,853 --> 00:00:21,064
+so they may find things moving smoothly.
 
 10
-00:00:25,654 --> 00:00:28,128
-For lucky numbers today:
+00:00:21,114 --> 00:00:23,917
+Tiger is encouraged to take it easy
 
 11
-00:00:28,178 --> 00:00:30,125
-Monkey, 90 and 449.
+00:00:23,967 --> 00:00:26,934
+slow down, rest well, and let the day
 
 12
-00:00:30,175 --> 00:00:31,807
-Rat, 29 and 234.
+00:00:26,984 --> 00:00:29,950
+pass gently without pushing too hard.
 
 13
-00:00:31,857 --> 00:00:33,805
-Dragon, 67 and 719.
+00:00:30,000 --> 00:00:31,907
+For lucky numbers today:
 
 14
-00:00:33,855 --> 00:00:37,064
-Comment your lucky number below
+00:00:31,957 --> 00:00:33,455
+Monkey, 90 and 449.
 
 15
-00:00:37,114 --> 00:00:38,852
-and say it again!
+00:00:33,505 --> 00:00:34,760
+Rat, 29 and 234.
 
 16
-00:00:38,902 --> 00:00:42,952
-See all 12 signs and full lucky numbers
+00:00:34,810 --> 00:00:36,309
+Dragon, 67 and 719.
 
 17
-00:00:43,002 --> 00:00:44,950
+00:00:36,359 --> 00:00:38,836
+Comment your lucky number below
+
+18
+00:00:38,886 --> 00:00:40,222
+and say it again!
+
+19
+00:00:40,272 --> 00:00:43,401
+See all 12 signs and full lucky numbers
+
+20
+00:00:43,451 --> 00:00:44,950
 at mybirthsign.com.

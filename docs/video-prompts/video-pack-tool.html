@@ -680,6 +680,11 @@ function buildPack(iso, F, forSign, data = null, P = null) {
   const disclaimer = "ការអានរាសីចិនតាមប្រពៃណី សម្រាប់ការកម្សាន្ត និងការឆ្លុះបញ្ចាំងខ្លួនប៉ុណ្ណោះ មិនមែនជាការព្យាករណ៍វិទ្យាសាស្ត្រទេ។";
   const tags = `#ជោគជតារាសី #រាសីប្រចាំថ្ងៃ #ឆ្នាំ${dayKm} #ផ្កាយកំណើត`;
   const tagsEn = `#ChineseZodiac #DailyHoroscope #YearOfThe${day} #LuckyNumbers`;
+  // Facebook captions (owner's choice, 05/11/2026): no lists of lucky numbers, no "betting" wording and no lucky-number
+  // hashtag. Facebook stopped recommending the daily posts to people under 18 (31/10–04/11/2026), and number lists like
+  // "3 · 28 · 769 · 3770 · 38911" can look like lottery picks to its automatic checks. The numbers stay on the website,
+  // the cards, the videos and Telegram; the captions link to the website for them.
+  const tagsEnFb = tagsEn.replace(" #LuckyNumbers", "");
   const DISC_EN = "Traditional Chinese zodiac reading for entertainment and self-reflection only, not a scientific prediction.";
 
   // 9-scene video for the luckiest animal
@@ -1497,13 +1502,14 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
   const longDateKm = `ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)}`;
   const factsEn = [`Day element: ${DEL.yy} ${DEL.el} ${DEL.emo}`, `Lucky color: ${cen}`, `Best time: ${dd.lucky.time}`, `Lucky direction: ${dir}`, `Lucky numbers: ${n0.d1} · ${n0.d2} · ${n0.d3}`];
   const factsKm = [`ធាតុថ្ងៃនេះ៖ ${DEL.km} (${DEL.yyKm}) ${DEL.emo}`, `ពណ៌សំណាង៖ ពណ៌${ckm}`, `ពេលល្អ៖ ${dd.lucky.time}`, `ទិសសំណាង៖ ទិស${dirKm}`, `លេខសំណាង៖ ${n0.d1} · ${n0.d2} · ${n0.d3}`];
+  const noNums = (x) => !/^Lucky numbers|^លេខសំណាង/.test(x);   // Facebook captions: no number lists (see tagsEnFb)
   const chapKm = [["0:00", "សេចក្ដីផ្ដើម"], ...F.signs.map((sg, i) => [mmss((4 + i * 2) * 10), `ឆ្នាំ${sg.nameKm} – ${sg.label.km}`]), [mmss((4 + 24) * 10), "បញ្ចប់"]];
   const POSTS = {
     "60s": [
       ["Title – English", `${EMO[day]} ${day} Day – Today's Luckiest Sign! | ${D}`],
       ["Title – Khmer", `${EMO[day]} ថ្ងៃឆ្នាំ${dayKm} – ឆ្នាំដែលសំណាងបំផុតថ្ងៃនេះ! | ${D}`],
-      ["Caption – English (Facebook, TikTok)", `${S9.en} ${EMO[day]}🌕\n\nToday, ${D}, is a ${dd.label.en} for the ${day}.\n${factsEn.map((x) => `✨ ${x}`).join("\n")}\n\nBorn in the Year of the ${day}? Comment ${EMO[day]} below! 👇\nAll 12 signs: https://mybirthsign.com (TikTok: link in bio)\nLucky numbers are for fun only.\n\n${tagsEn} #fyp #Reels`],
-      ["Caption – Khmer (Facebook, TikTok)", `${S9.km} ${EMO[day]}🌕\n\nថ្ងៃនេះ ${D} ជា${dd.label.km} សម្រាប់ឆ្នាំ${dayKm}។\n${factsKm.map((x) => `✨ ${x}`).join("\n")}\n\nអ្នកកើតឆ្នាំ${dayKm}មែនទេ? Comment ${EMO[day]} ប្រាប់ផង! 👇\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/ (TikTok៖ Link នៅក្នុង bio)\nលេខសំណាងសម្រាប់ការកម្សាន្តប៉ុណ្ណោះ។\n\n${tags} #fyp #Reels`],
+      ["Caption – English (Facebook, TikTok)", `${S9.en} ${EMO[day]}🌕\n\nToday, ${D}, is a ${dd.label.en} for the ${day}.\n${factsEn.filter(noNums).map((x) => `✨ ${x}`).join("\n")}\n\nBorn in the Year of the ${day}? Comment ${EMO[day]} below! 👇\nLucky numbers and all 12 signs: https://mybirthsign.com (TikTok: link in bio)\n${DISC_EN}\n\n${tagsEnFb} #fyp #Reels`],
+      ["Caption – Khmer (Facebook, TikTok)", `${S9.km} ${EMO[day]}🌕\n\nថ្ងៃនេះ ${D} ជា${dd.label.km} សម្រាប់ឆ្នាំ${dayKm}។\n${factsKm.filter(noNums).map((x) => `✨ ${x}`).join("\n")}\n\nអ្នកកើតឆ្នាំ${dayKm}មែនទេ? Comment ${EMO[day]} ប្រាប់ផង! 👇\nមើលលេខសំណាង និងរាសីទាំង 12៖ https://mybirthsign.com/km/ (TikTok៖ Link នៅក្នុង bio)\n${disclaimer}\n\n${tags} #fyp #Reels`],
     ],
     "180s": [
       ["Title – English", `${day} Day Fortune – ${D} | Lucky Color, Time & Numbers for the Year of the ${day} ${EMO[day]}`],
@@ -2005,33 +2011,29 @@ ${DISC_EN}
 ${tagsEn} #Shorts
 
 ## Facebook post caption
+No lucky-number lists and no betting words in this caption: Facebook can read them as lottery content and stop showing the Page to people under 18. Today's lucky numbers are on the website.
+
 ### Khmer
 🌙 ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃឆ្នាំ${dayKm} ${EMO[day]}
 
 ✨ ឆ្នាំសំណាងថ្ងៃនេះ៖ ${lucky.map((a) => `ឆ្នាំ${km(a)} (${sign(a).label.km})`).join(" · ")}
 ${careful.length ? `🌿 គួរប្រុងប្រយ័ត្ន៖ ${careful.map((a) => `ឆ្នាំ${km(a)}`).join(" ")} – គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់ក្នុងការសម្រេចចិត្ត។\n` : ""}
-🔢 លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង៖
-${nums.map((n) => numLine(n, `ឆ្នាំ${km(n.a)}`)).join("\n")}
+👉 មើលរាសីទាំង 12 ពណ៌សំណាង ទិសសំណាង និងលេខសំណាង៖ https://mybirthsign.com/km/
 
-👉 មើលរាសីទាំង 12 និងលេខសំណាងពេញលេញ៖ https://mybirthsign.com/km/
+${disclaimer}
 
-${disclaimerNums}
-
-${tags} #លេខសំណាង
+${tags}
 
 ### English
 🌙 Daily Chinese Zodiac Fortune – ${D} | ${day} Day ${EMO[day]}
 
 ✨ Lucky signs today: ${lucky.map((a) => `${a} (${sign(a).label.en})`).join(" · ")}
 ${careful.length ? `🌿 Take it easy: ${list(careful)} – slow down, rest and don't rush big decisions.\n` : ""}
-🔢 Today's lucky numbers for the lucky signs:
-${nums.map((n) => numLine(n, n.a)).join("\n")}
+👉 All 12 signs, with lucky colors, directions and numbers: https://mybirthsign.com
 
-👉 All 12 signs and full lucky numbers: https://mybirthsign.com
+${DISC_EN}
 
-Lucky numbers are for fun only, not a prediction or betting advice.
-
-${tagsEn}
+${tagsEnFb}
 
 ## TikTok caption
 ### Khmer
