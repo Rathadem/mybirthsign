@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-06",
+  "cards": [
+    {
+      "file": "1-km.jpg",
+      "lang": "km",
+      "title": "Lucky signs today"
+    },
+    {
+      "file": "2-km.jpg",
+      "lang": "km",
+      "title": "វក · ថ្ងៃល្អខ្លាំង"
+    },
+    {
+      "file": "3-km.jpg",
+      "lang": "km",
+      "title": "ជូត · ថ្ងៃល្អ"
+    },
+    {
+      "file": "4-km.jpg",
+      "lang": "km",
+      "title": "រោង · ថ្ងៃល្អ"
+    },
+    {
+      "file": "5-km.jpg",
+      "lang": "km",
+      "title": "ខាល · ថ្ងៃគួរប្រុងប្រយ័ត្ន"
+    },
+    {
+      "file": "1-en.jpg",
+      "lang": "en",
+      "title": "Lucky signs today"
+    },
+    {
+      "file": "2-en.jpg",
+      "lang": "en",
+      "title": "Monkey · Great Day"
+    },
+    {
+      "file": "3-en.jpg",
+      "lang": "en",
+      "title": "Rat · Good Day"
+    },
+    {
+      "file": "4-en.jpg",
+      "lang": "en",
+      "title": "Dragon · Good Day"
+    },
+    {
+      "file": "5-en.jpg",
+      "lang": "en",
+      "title": "Tiger · Take It Easy"
+    }
+  ]
+}
