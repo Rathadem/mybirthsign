@@ -1686,7 +1686,7 @@ ${DISC_EN}
 ${tagsEn} #Shorts
 
 ## Facebook post caption
-No lucky-number lists and no betting words in this caption: Facebook can read them as lottery content and stop showing the Page to people under 18. Today's lucky numbers are on the website.
+Facebook-safe caption: the lucky numbers are on the website, not in the post, so Facebook keeps recommending the Page to everyone.
 
 ### Khmer
 🌙 ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃឆ្នាំ${dayKm} ${EMO[day]}
