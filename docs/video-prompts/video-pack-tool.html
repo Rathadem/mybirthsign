@@ -1823,6 +1823,43 @@ ${horoBlock("km")}
 ${disclaimer}
 
 `;
+  // the 45-second video's spoken lines, one per scene [scene, English, Khmer] (also used by the 30-second Omni video)
+  const FLOW_LINES = [
+    ["1", `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! Here is your Chinese zodiac fortune for ${LD.replace(/^\w+, /, "")}.`, `ជោគជតារាសីប្រចាំថ្ងៃនេះ ថ្ងៃទី ${Number(iso.slice(8))} ខែ${["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"][Number(iso.slice(5,7))-1]}។ ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}!`],
+    ["2", `${list(lucky)} are the luckiest signs today!`, `${kmList(lucky.map((a) => `ឆ្នាំ${km(a)}`))} មានសំណាងល្អជាងគេនៅថ្ងៃនេះ!`],
+    ["3", careful.length ? `${list(careful)}, take it easy today. Slow down and rest.` : "Take a calm breath and enjoy the day.", careful.length ? `${kmList(careful.map((a) => `ឆ្នាំ${km(a)}`))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ។` : "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
+    ["5", `For lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Comment your lucky number and say it again!`, `សម្រាប់លេខសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2}`).join(" ")}! សូមសរសេរលេខសំណាងរបស់អ្នក ហើយនិយាយម្ដងទៀត!`],
+    ["4", "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
+  ];
+  // 30-second video for Gemini Omni 1.2 Flash (owner's request, 08/11/2026): Omni makes clips of up to 15 seconds with the
+  // voice, music and sound, so the 45-second video becomes 2 clips of 15 seconds. Scene 1 = the 45-second video's scenes
+  // 1–3 (Chanda's hook on camera, the lucky signs, the sign that should take it easy); Scene 2 = its scenes 5 and 4 (lucky
+  // numbers, ending). The spoken words are the 45-second video's own, so both versions say the same thing.
+  const FL = Object.fromEntries(FLOW_LINES.map(([n, en, kmL]) => [n, { en, km: kmL }]));
+  const omniVoice = (lang, parts) => `Audio: Chanda's voice, ${lang === "km" ? VOICE_KM.replace(/,$/, "") : VOICE_EN}. ${parts.map(([from, to, onCam, line]) =>
+    `From ${from} to ${to} seconds ${onCam ? "Chanda is on camera and speaks to the viewer with natural lip movements that match her words." : "Chanda is heard as a voice-over only: she is not on screen, and no one on screen speaks or moves their mouth."} She says${lang === "km" ? " in Khmer" : ""}: "${lang === "km" ? kmFlow(line) : line}"`).join(" ")} ${MUSIC}`;
+  const OMNI_SHOT = "One continuous 15-second shot: the camera moves smoothly from one moment to the next, with no hard cuts. No on-screen text. The animals and guardians never speak or move their mouths: they only act.";
+  const omniMd = `## 30-second video – Omni 1.2 (2 scenes × 15 seconds)
+For Gemini Omni 1.2 Flash (in Google Flow or the Gemini app), which makes clips of up to 15 seconds with the voice, music and sound: 2 clips of 15 seconds, 30 seconds in total. Set the clip length to 15 seconds and the format to vertical 9:16, and make both clips in the same project with the same settings. Add @Chanda and the characters each scene names as ingredients (reference images). For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style, the scene second by second and the voice together. Use one language for the whole video. Put the clips in order 1, 2, and add the on-screen captions from "On-screen captions" (1–3 over Scene 1, then 5 and 4 over Scene 2). The words come from the 45-second video (shortened a little to fit: Scene 1 leaves out the year, and Scene 2 leaves out "say it again").
+
+### Scene 1 – Today's fortune (0:00–0:15)
+0–6 seconds: ${cap(HOST_LOOK)}, stands in front of the Angkor-style temple at night, facing the camera and speaking to the viewer with natural lip movements, then turns and gestures toward the pond. ${DV(63, FEEL.hello)} ${NATURAL} Chanda is the saved Flow character @Chanda.
+6–11 seconds: the camera glides over the lotus pond as ${looks(lucky)} fly in from three directions on trails of golden light and land together on glowing lotus pedestals in front of the temple. ${DV(53, ["As they land, a ring of golden energy explodes outward, lotus flowers bloom across the pond and a shower of sparkles and gold coins falls from the sky.",
+  "As they land, the whole pond lights up gold beneath them and hundreds of lanterns rise into the sky.", "As they land, a swirl of golden petals spins up around them and opens like a giant lotus.",
+  "As they land, thousands of fireflies burst up from the reeds and circle them like stars.", "As they land, bells ring out from the temple towers and rings of golden light ripple across the sky.",
+  "As they land, a rain of tiny golden stars falls gently over the pond.", "As they land, long ribbons of golden light unfurl from the temple towers and wave above them."])} They look at each other and cheer.
+11–15 seconds: ${careful.length ? `the camera drifts along the pond to ${LOOK[careful[0]]}, resting on a lotus pedestal: it ${DV(41, REST_ACT, 7)}, and the full moon shines calmly on the still water. The mood is peaceful, safe and magical, not sad. Slow push-in.` : "the camera drifts along the pond to a still patch of water with pink lotus flowers swaying gently and the full moon reflected on it. Peaceful, magical mood. Slow push-in."}
+${OMNI_SHOT} The characters match the saved Flow characters exactly.
+English voice: ${omniVoice("en", [[0, 6, true, FL[1].en.replace(/ \d{4}\.$/, ".")], [6, 15, false, `${FL[2].en} ${FL[3].en}`]])}
+Khmer voice: ${omniVoice("km", [[0, 6, true, FL[1].km], [6, 15, false, `${FL[2].km} ${FL[3].km}`]])}
+
+### Scene 2 – Lucky numbers and goodbye (0:15–0:30)
+0–9 seconds: magical and powerful. A huge glowing golden zodiac wheel rises out of the lotus pond in front of the temple, with the twelve golden-armored zodiac guardians around its rim. It spins faster and faster, shooting beams of golden light and sparkles, then slows to a gentle, shining turn under the full moon. The camera slowly pushes in, keeping open space in the middle and lower part of the frame for the number captions.
+9–15 seconds: ${DV(31, FINALE_SKY, 4)}, and the huge full moon glows over the pond. The camera rises up and pulls back for a wide, epic view, leaving open sky at the top of the frame for a title.
+${OMNI_SHOT}
+English voice: ${omniVoice("en", [[0, 9, false, FL[5].en.replace(" and say it again!", "!")], [9, 15, false, FL[4].en]])}
+Khmer voice: ${omniVoice("km", [[0, 9, false, FL[5].km.replace(" ហើយនិយាយម្ដងទៀត!", "!")], [9, 15, false, FL[4].km]])}
+`;
   const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃឆ្នាំ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
@@ -1955,13 +1992,7 @@ Put the clips in this order in your editor: 1, 2, 3, 5 (lucky numbers), 4 (endin
 Voice style (keep it the same every day so the channel has one recognisable voice): ${VOICE_EN}
 Khmer note: if Flow does not pronounce Khmer well, use the English version in Flow and record the Khmer voice-over below yourself or with a Khmer text-to-speech app.
 
-${[
-  ["1", `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! Here is your Chinese zodiac fortune for ${LD.replace(/^\w+, /, "")}.`, `ជោគជតារាសីប្រចាំថ្ងៃនេះ ថ្ងៃទី ${Number(iso.slice(8))} ខែ${["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"][Number(iso.slice(5,7))-1]}។ ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}!`],
-  ["2", `${list(lucky)} are the luckiest signs today!`, `${kmList(lucky.map((a) => `ឆ្នាំ${km(a)}`))} មានសំណាងល្អជាងគេនៅថ្ងៃនេះ!`],
-  ["3", careful.length ? `${list(careful)}, take it easy today. Slow down and rest.` : "Take a calm breath and enjoy the day.", careful.length ? `${kmList(careful.map((a) => `ឆ្នាំ${km(a)}`))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ។` : "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
-  ["5", `For lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Comment your lucky number and say it again!`, `សម្រាប់លេខសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2}`).join(" ")}! សូមសរសេរលេខសំណាងរបស់អ្នក ហើយនិយាយម្ដងទៀត!`],
-  ["4", "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
-].map(([n, en, kmL]) => `- **Scene ${n}**\n  - English: ${audio("en", n === "1", en)}\n  - Khmer: ${audio("km", n === "1", kmFlow(kmL))}`).join("\n")}
+${FLOW_LINES.map(([n, en, kmL]) => `- **Scene ${n}**\n  - English: ${audio("en", n === "1", en)}\n  - Khmer: ${audio("km", n === "1", kmFlow(kmL))}`).join("\n")}
 
 ## Voice-over – Khmer (about 45 seconds)
 ${voiceKm.map(kmSpeak).join("\n")}
@@ -1971,6 +2002,7 @@ ${voiceEn.join("\n")}
 
 (Record the voices yourself or use text-to-speech; AI video tools may not pronounce Khmer well.)
 
+${omniMd}
 ## YouTube
 ### Title – Khmer
 ជោគជតារាសីប្រចាំថ្ងៃនេះ – ${D} | ថ្ងៃឆ្នាំ${dayKm}
@@ -2121,7 +2153,7 @@ function charactersMd(KM_NAMES) {
     return out;
   }
 
-  var ORDER_OPEN = /^Today's horoscope|^Luckiest|^Take-it-easy|^60-second|^180-second|^Long YouTube|^Story video|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
+  var ORDER_OPEN = /^Today's horoscope|^30-second|^Luckiest|^Take-it-easy|^60-second|^180-second|^Long YouTube|^Story video|^Scene|^Reference|^Voice in Google Flow|^On-screen/;
   // the standard horoscope lines (the same as the early share cards) for dates whose written fortune is not out yet
   var PACK_DATA = { INFO: INFO, KM_INFO: KM_INFO, COPY: EARLY.COPY };
   // on mybirthsign.com the Studio also reads the website's own written fortune for the date (data/daily/<date>.json,
