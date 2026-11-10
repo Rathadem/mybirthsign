@@ -37,7 +37,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const k = el.getAttribute("data-cmp");
     if (T[k] !== undefined) el.innerHTML = T[k];
   });
-  if (lang !== "en" && T.title) document.title = T.title + " | MyBirthSign";
+  // the built Khmer / Chinese page already has its own title (scripts/page-meta.json may set a longer one): keep it
+  if (lang !== "en" && T.title && !/[ក-៿一-鿿]/.test(document.title)) document.title = T.title + " | MyBirthSign";
   const lab1 = document.getElementById("cmp-l1"), lab2 = document.getElementById("cmp-l2");
   if (lab1) lab1.textContent = T.p1 + " — " + T.dob;
   if (lab2) lab2.textContent = T.p2 + " — " + T.dob;

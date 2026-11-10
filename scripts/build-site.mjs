@@ -64,7 +64,9 @@ const escAttr = (s) => esc(s).replace(/"/g, "&quot;");
 const prefix = (lang) => (lang === "en" ? "" : "/" + lang);
 function pagePath(rel, html) {
   const m = /<link rel="canonical" href="https:\/\/mybirthsign\.com([^"]*)"/.exec(html);
-  if (m) return m[1] || "/";
+  // one address per page, without ".html", the same as the sitemap: some repo pages still write ".html" in their
+  // canonical tag, and Google then counts the page under two addresses (Search Console showed both)
+  if (m) return (m[1] || "/").replace(/\.html$/, "");
   return "/" + rel.replace(/index\.html$/, "").replace(/\.html$/, "");
 }
 const urlFor = (p, lang) => SITE + prefix(lang) + (p === "/" && lang !== "en" ? "/" : p);
@@ -180,14 +182,18 @@ function pageMetaAuto(out, lang, p) {
   let desc = "";
   const after = h1m ? body.slice(h1m.index) : body;
   for (const m of after.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)) {
+    if (/^<p\b[^>]*\bclass="[^"]*\bfe-meta\b/.test(m[0])) continue;   // the "Updated … · by Ratha" line is not a description
     const t = plain(m[1]);
     if (t.length >= 40 && re.test(t)) { desc = t; break; }
   }
   let title = h1 && re.test(h1) ? h1 : "";
   if (title && /^\/blog\/zodiac-year-/.test(p)) {   // animal guides: "<animal year>: personality, years & compatibility", lead from the overview
-    title += lang === "zh" ? "：性格、年份与配对" : "៖ បុគ្គលិកលក្ខណៈ ឆ្នាំកំណើត និងគូស្រករ";
+    // Chinese: the title answers the common search "马年是哪几年 / 属马的年份" (Search Console queries 马年, 馬年年份, 鸡生肖年份)
+    const zhA = lang === "zh" ? title.replace(/年$/, "") : "";
+    title = lang === "zh" ? `${title}是哪几年？属${zhA}年份表、性格与配对` : title + "៖ បុគ្គលិកលក្ខណៈ ឆ្នាំកំណើត និងគូស្រករ";
     const ov = new RegExp(`id="overview(-${lang})?"`).exec(out);
     if (ov) { let acc = ""; for (const m of out.slice(ov.index).matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)) { const t = plain(m[1]); if (!re.test(t)) continue; acc += (acc ? (lang === "zh" ? "" : " ") : "") + t; if (acc.length >= 60) break; } if (acc) desc = acc; }
+    if (zhA) desc = `属${zhA}的是哪些年份？查看${h1}年份表（每年的起止日期和五行）、属${zhA}人的性格、幸运象征、事业、爱情和生肖配对。`;
   }
   return { title, desc: desc ? clip(desc, 160) : "" };
 }
@@ -263,6 +269,7 @@ function variant(html, lang, p, langs = LANGS) {
   // 3. canonical / og:url / hreflang alternates
   out = out.replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="${urlFor(p, lang)}">`);
   out = out.replace(/<meta property="og:url" content="[^"]*">/, `<meta property="og:url" content="${urlFor(p, lang)}">`);
+  if (p !== "/" && !p.endsWith("/")) out = out.split(`"${SITE}${p}.html"`).join(`"${SITE}${p}"`);   // the page's own address in its structured data, without ".html" too
   out = out.replace(/\s*<link rel="alternate" hreflang="[^"]*" href="[^"]*">/g, "");
   const alts = langs.map((l) => `<link rel="alternate" hreflang="${HREFLANG[l]}" href="${urlFor(p, l)}">`).join("\n") +
     `\n<link rel="alternate" hreflang="x-default" href="${urlFor(p, "en")}">`;
