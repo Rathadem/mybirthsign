@@ -170,6 +170,11 @@ try {
   const d3 = await call("GET", { op: "day", date: "2026-11-15" });
   ok(Object.keys(d3.body.episodes.Horse).length === 1, "only one Horse episode was stored");
 
+  // ---- previews (deploy previews, branch deploys) use their own store
+  const prevCall = async (q) => { const r = await handler(new Request("http://localhost/api/studio?" + new URLSearchParams(q), { headers: { "x-studio-key": KEY } }), { deploy: { context: "deploy-preview" } }); return r.json(); };
+  ok((await prevCall({ op: "status" })).preview === true && (await call("GET", { op: "status" })).body.preview === false, "a preview says it is a preview");
+  ok((await prevCall({ op: "day", date: D1 })).day === null && (await prevCall({ op: "archive" })).days.length === 0, "a preview does not see or change the live Studio's editions");
+
   // ---- bad input
   ok((await call("POST", { op: "plan", date: "2026-13-40", animal: "Dragon" })).status === 400, "bad date refused");
   ok((await call("POST", { op: "plan", date: D1, animal: "Cat" })).status === 400, "unknown sign refused");

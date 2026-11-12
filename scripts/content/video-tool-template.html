@@ -566,7 +566,8 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   // ------------------------------------------------------------------ daily cards: the website's own share cards for this date
   // Works on https://mybirthsign.com/studio/ (it reads the published daily fortune page of that date and draws the same
   // cards with the site's js/share-cards.js). The claude.ai copy cannot reach the site, so it shows a link instead.
-  var onSite = /(^|\.)mybirthsign\.com$/.test(location.hostname) || location.hostname === "localhost";
+  // (also the site's own Netlify preview addresses, for testing changes before they go live)
+  var onSite = /(^|\.)mybirthsign\.com$/.test(location.hostname) || /(^|--)stellar-pixie-7e0955\.netlify\.app$/.test(location.hostname) || location.hostname === "localhost";
   var CARD = { lang: "en", fmt: "portrait", blobs: [], iso: "" };
   try { CARD.lang = localStorage.getItem("mbs-card-lang") || "en"; CARD.fmt = localStorage.getItem("mbs-card-fmt") || "portrait"; } catch (e) {}
   function cardsSection(iso) {
@@ -867,6 +868,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   function renderDash() {
     var t = (S.day && S.day.theme) || themeFor(S.date), isToday = S.date === S.today;
     $("ed-d").value = S.date;
+    document.querySelector("#ed-dash .ed-kicker").textContent = "Daily edition" + (S.svc && S.svc.preview ? " · Preview (test data, kept apart from the live Studio)" : "");
     $("ed-date").textContent = longDate(S.date) + (isToday ? " · Today" : S.date === addDays(S.today, 1) ? " · Tomorrow" : "");
     var kind = { festival: "Festival", cny: "Chinese New Year", fullmoon: "Full moon", weekday: WD[new Date(S.date + "T00:00:00Z").getUTCDay()] + " theme" }[t.kind] || "Theme";
     $("ed-theme").innerHTML = '<span class="chip gold">' + esc(kind) + "</span><b>" + esc(t.en) + '</b><span class="km" lang="km">' + esc(t.km) + "</span>" + (S.day ? "" : '<span class="note">(preview: saved when the edition is made)</span>');
@@ -1244,7 +1246,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   function checkService() {
     if (!onSite) { $("ed-svc").textContent = "This copy of the Studio cannot reach the website: daily editions are made at mybirthsign.com/studio/."; return Promise.resolve(); }
     if (!S.key) { $("ed-svc").textContent = "No passcode saved on this device yet."; return Promise.resolve(); }
-    return api("GET", { op: "status" }).then(function (r) { S.svc = r; $("ed-svc").textContent = "Connected to the Studio service. AI writing: " + (r.ai ? "on (" + r.model + ")" : "off (ANTHROPIC_API_KEY is missing in Netlify)") + "."; }, function (er) { S.svc = null; $("ed-svc").innerHTML = explain(er); });
+    return api("GET", { op: "status" }).then(function (r) { S.svc = r; $("ed-svc").textContent = "Connected to the Studio service. AI writing: " + (r.ai ? "on (" + r.model + ")" : "off (ANTHROPIC_API_KEY is missing in Netlify)") + "." + (r.preview ? " This is a PREVIEW: what you make here is kept apart from the live Studio." : ""); }, function (er) { S.svc = null; $("ed-svc").innerHTML = explain(er); });
   }
   $("ed-savekey").addEventListener("click", function () {
     var oldTz = S.tz;
