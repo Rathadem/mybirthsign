@@ -172,8 +172,8 @@ export const ANIM = {
   Pig: "its curly tail wiggles, its ears flop as it trots in a happy, bouncy way and it wiggles with delight",
 };
 export const alive = (a) => `The ${a.toLowerCase()} of ${FLOW_NAME(a)} moves like a real, living animal, never still like a statue: ${ANIM[a]}. It breathes, blinks and reacts with expressive body language, and its mouth stays closed. The ${a} guardian moves beside it with the graceful, powerful poise of a martial-arts hero from a Chinese fantasy drama, robes and cape flowing, and never speaks.`;
-const lockAnimal = (a) => `Use the saved Flow character ${FLOW_NAME(a)} exactly as it is: the same guardian (face, hair, armor and colors) and the same ${a.toLowerCase()}, identical in every scene.`;
-const LOCK_HOST = "Use the saved Flow character @Chanda exactly as she is: same face, hairstyle, outfit and jewelry in every scene.";
+export const lockAnimal = (a) => `Use the saved Flow character ${FLOW_NAME(a)} exactly as it is: the same guardian (face, hair, armor and colors) and the same ${a.toLowerCase()}, identical in every scene.`;
+export const LOCK_HOST = "Use the saved Flow character @Chanda exactly as she is: same face, hairstyle, outfit and jewelry in every scene.";
 export const STYLE = "Vertical 9:16. Photorealistic live-action fantasy film, the look of a high-budget fantasy epic that blends Khmer royal heritage with the grandeur of a Chinese historical fantasy drama. Real human faces with natural skin texture, the zodiac characters saved in Flow, each named after its animal (@Rat, @Ox, @Tiger, @Rabbit, @Dragon, @Snake, @Horse, @Goat, @Monkey, @Rooster, @Dog, @Pig): a guardian warrior in ornate armor themed on the animal, with a lifelike animal beside them (realistic anatomy, real fur, feathers or scales), always exactly as in the saved character picture, noble and powerful (never cute toys or cartoons). Setting: a majestic Khmer temple inspired by Angkor Wat with towering carved stone, an enormous luminous full moon, deep indigo starry sky, drifting mist, a still reflecting pool with floating pink lotus flowers and ornate golden lanterns. A living, magical sky in every shot: thin silver clouds drift slowly across the moon, stars twinkle, a soft halo pulses around the moon and sky lanterns rise gently in the distance. Action and magic in the style of a Chinese fantasy (xianxia) drama: graceful wire-fu flying leaps, slow-motion martial-arts moves, flowing robes and capes, glowing sword energy and swirling qi light, always without blood, injury or fighting between characters. Golden magic: shimmering gold particles, flowing ribbons of liquid-gold light and floating gold dust that never hide a face. Physically real lighting: cool silver-blue moonlight, warm golden rim light, soft lantern glow, volumetric light rays; colors deep navy, imperial gold, ruby red and lotus pink. Cinematic depth of field, smooth slow camera movement, high-end visual effects, 4K detail. The zodiac guardians and their animals never talk and never move their mouths; only Chanda, the presenter, speaks. No text, no letters, no subtitles, no watermark, no logos, no cartoon or plastic look, no low-quality CGI.";
 export const STYLE_WIDE = STYLE.replace("Vertical 9:16.", "Horizontal 16:9 (standard YouTube video).");
 // ONE fixed voice for Chanda, word for word the same in every clip of every video, so Flow keeps the same voice
@@ -231,7 +231,7 @@ export const HERO_PLACES = [HERO_PLACE0,
 export const HERO = (a, place = HERO_PLACE0) => `Create a photorealistic hero image of ${LOOK[a]}, the ${a} of the Chinese zodiac, as a majestic celestial guardian from a high-budget fantasy epic. The ${a.toLowerCase()} symbolizes ${SYMBOL[a].traits}: a ${SYMBOL[a].mood} expression and posture that show this, mouth calm and closed. Realistic anatomy and textures, engraved gold ornaments with physically real metallic reflections. ${place}; moonbeams fall on the ${a.toLowerCase()}, golden particles and flowing ribbons of liquid-gold light swirl around it. Cool silver-blue moonlight, warm golden rim light, volumetric mist, cinematic depth of field, ultra-detailed. Square 1:1, full body visible, three-quarter view, centered, with space around it. No text, no letters, no watermark, no logo, no cartoon or plastic look, no cropped body parts.`;
 // spoken times for the voice-overs (traditional two-hour periods)
 const MKM = ["មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"];
-const TIME_SAY = {
+export const TIME_SAY = {
   "23:00–01:00": ["from 11 at night to 1 in the morning", "ម៉ោង 11 យប់ ដល់ម៉ោង 1 ទៀបភ្លឺ"],
   "01:00–03:00": ["from 1 to 3 in the early morning", "ម៉ោង 1 ដល់ម៉ោង 3 ទៀបភ្លឺ"],
   "03:00–05:00": ["from 3 to 5 in the early morning", "ម៉ោង 3 ដល់ម៉ោង 5 ទៀបភ្លឺ"],
@@ -302,7 +302,7 @@ function splitLines(text, lang) {
 }
 
 const NUM_WORDS = (n) => { n = Number(n); if (n < 100) return 1; if (n < 1000) return 1 + (n % 100 ? 2 : 0); return 2 + NUM_WORDS(n % 1000) * (n % 1000 ? 1 : 0); };
-const enSpoken = (t) => t.split(/\s+/).filter(Boolean).reduce((s, w) => s + (/^\d+[,.!?:]?$/.test(w) ? NUM_WORDS(w.replace(/\D/g, "")) : 1), 0);
+export const enSpoken = (t) => t.split(/\s+/).filter(Boolean).reduce((s, w) => s + (/^\d+[,.!?:]?$/.test(w) ? NUM_WORDS(w.replace(/\D/g, "")) : 1), 0);
 // a spoken line fits a 10-second clip at Chanda's calm pace: at most 23 English words, at most 125 Khmer characters as spoken
 const fitsClip = (en, kmT) => enSpoken(en) <= 23 && [...kmFlow(kmT)].length <= 125;
 // more words in short scenes: add the first of today's extra sentences that still fits the clip (else keep the line)

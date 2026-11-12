@@ -111,14 +111,167 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 .viewer .vbot { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .viewer .vbot a { display: inline-block; background: var(--gold); color: #1a1430; font-weight: 700; text-decoration: none; border-radius: 10px; padding: 8px 16px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ---- daily editions (dashboard, editor, archive) ---- */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+.tabs [role=tab] { background: transparent; border-color: transparent; color: var(--muted); font-size: .95rem; padding: 8px 14px; border-radius: 999px; }
+.tabs [role=tab][aria-selected=true] { background: var(--card-2); border-color: var(--gold); color: var(--gold-soft); }
+.tabs [role=tab]:hover { color: var(--text); }
+.view { display: grid; gap: 18px; min-width: 0; }
+.kbach { height: 10px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='10' viewBox='0 0 28 10'%3E%3Cpath d='M0 5h9M19 5h9' stroke='%23d4af37' stroke-opacity='.45'/%3E%3Cpath d='M14 1l3 4-3 4-3-4z' fill='%23d4af37' fill-opacity='.7'/%3E%3Ccircle cx='14' cy='5' r='1' fill='%230f0b1f'/%3E%3C/svg%3E") repeat-x center / 28px 10px; }
+.ed-dash { background: linear-gradient(160deg, #221a3d 0%, #1a1430 55%, #15102a 100%); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: grid; gap: 14px; }
+.ed-head { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-start; justify-content: space-between; }
+.ed-head > div { min-width: 0; }
+.ed-kicker { margin: 0; font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--violet); }
+.ed-date { margin: 2px 0 0; font: 700 clamp(1.35rem, 3.2vw, 1.8rem)/1.2 var(--display); color: var(--gold-soft); text-wrap: balance; }
+.ed-theme { margin: 6px 0 0; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.ed-theme b { font-weight: 600; }
+.ed-theme .km { font-family: "Moul", "Noto Sans Khmer", serif; color: var(--gold-soft); font-size: .92rem; line-height: 1.9; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 600 .74rem/1.5 var(--body); letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; color: var(--muted); background: rgba(255, 255, 255, .03); white-space: nowrap; }
+.chip.gold { border-color: rgba(212, 175, 55, .6); color: var(--gold-soft); }
+.chip.ok { border-color: rgba(127, 212, 163, .55); color: var(--good); }
+.chip.warn { border-color: rgba(240, 163, 127, .6); color: var(--care); }
+.ed-nav { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ed-row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
+.ed-row select, .ed-set select, .ed-set input, .arch-bar select { font: .9rem var(--body); background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; min-width: 0; }
+.progress { flex: 1 1 160px; min-width: 120px; height: 8px; border-radius: 99px; background: var(--card); overflow: hidden; border: 1px solid var(--line); }
+.progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold-soft)); transition: width .3s; }
+.ed-msg { margin: 0; padding: 10px 12px; border-radius: 10px; background: rgba(240, 163, 127, .1); border: 1px solid rgba(240, 163, 127, .4); color: #ffd9c7; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.ed-msg.info { background: rgba(155, 127, 212, .1); border-color: rgba(155, 127, 212, .4); color: var(--text); }
+.ed-msg p { margin: 0; flex: 1 1 260px; }
+.ed-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 168px), 1fr)); gap: 10px; }
+.acard { text-align: left; display: grid; gap: 6px; align-content: start; padding: 12px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--line); min-width: 0; font-weight: 400; }
+.acard:hover { border-color: var(--gold); }
+.acard[aria-current=true] { border-color: var(--gold); background: var(--card-2); }
+.acard.t-great, .acard.t-good { border-top-color: var(--good); }
+.acard.t-caution { border-top-color: var(--care); }
+.acard .an { display: flex; flex-wrap: wrap; gap: 2px 8px; align-items: baseline; font-weight: 600; min-width: 0; }
+.acard .an span { font-size: 1.3rem; line-height: 1; }
+.acard .km { color: var(--gold-soft); font-family: "Noto Sans Khmer", sans-serif; }
+.acard .tt { font-size: .86rem; color: var(--text); line-height: 1.4; overflow-wrap: anywhere; }
+.acard .tt.none { color: var(--muted); font-style: italic; }
+.acard .meta { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font-size: .76rem; color: var(--muted); }
+.sw { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .35); display: inline-block; vertical-align: -1px; }
+.ed-grid.compact { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(118px, 1fr); overflow-x: auto; padding-bottom: 4px; }
+.ed-grid.compact .acard .tt, .ed-grid.compact .acard .meta { display: none; }
+.ep { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 16px; min-width: 0; }
+.ep-top { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: flex-start; }
+.ep-top > div { min-width: 0; flex: 1 1 320px; }
+.ep-acts { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ep h3.sec-h { margin: 0; font: 600 1.05rem/1.3 var(--display); color: var(--gold-soft); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.fld { display: grid; gap: 4px; min-width: 0; }
+.fld > span { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--violet); display: flex; gap: 8px; justify-content: space-between; flex-wrap: wrap; }
+.fld > span em { font-style: normal; letter-spacing: 0; text-transform: none; color: var(--muted); }
+.fld > span em.over { color: var(--care); font-weight: 600; }
+.fld input, .fld textarea { width: 100%; box-sizing: border-box; font: .93rem/1.55 var(--body); background: var(--card-2); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; min-width: 0; }
+.fld textarea { resize: vertical; min-height: 64px; }
+.fld textarea.code { font: .8rem/1.5 var(--mono); min-height: 110px; }
+.fld input:focus, .fld textarea:focus { outline: none; border-color: var(--gold); }
+.fld [lang=km] { font-family: "Noto Sans Khmer", sans-serif; font-size: 1rem; line-height: 1.9; }
+.two { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.scene { border: 1px solid var(--line); border-radius: 14px; background: #17112c; padding: 12px; display: grid; gap: 10px; min-width: 0; }
+.scene.err { border-color: rgba(240, 163, 127, .6); }
+.scene-h { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.scene-h b { font: 600 1rem/1.3 var(--display); color: var(--gold-soft); }
+.scene-h .t { font: .8rem var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.scene-h label { display: inline-flex; gap: 6px; align-items: center; font-size: .82rem; color: var(--muted); cursor: pointer; }
+.warns { margin: 0; padding-left: 1.1em; color: var(--care); font-size: .84rem; }
+.refs { display: flex; flex-wrap: wrap; gap: 8px; }
+.ref { display: flex; gap: 8px; align-items: center; border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px 3px 3px; font-size: .82rem; background: var(--card-2); min-width: 0; }
+.ref img, .ref .ph { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; flex: none; border: 1px solid rgba(212, 175, 55, .5); }
+.ref .ph { display: grid; place-items: center; background: var(--card); font-size: .95rem; }
+.ref small { color: var(--muted); }
+.dirty-bar { position: sticky; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 6; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; background: #2a2047; border: 1px solid var(--gold); border-radius: 14px; padding: 10px 12px; box-shadow: 0 8px 30px rgba(0, 0, 0, .45); }
+.hist { display: grid; gap: 6px; }
+.hist div { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .86rem; color: var(--muted); }
+.ed-set { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); align-items: end; }
+.ed-set label { display: grid; gap: 4px; font-size: .78rem; color: var(--muted); }
+.ed-set .chk { display: flex; gap: 8px; align-items: center; font-size: .88rem; color: var(--text); }
+.arch-bar { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.arch-day { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 8px; min-width: 0; }
+.arch-day h3 { margin: 0; font: 600 1rem/1.3 var(--display); color: var(--gold-soft); display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.arch-ep { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.arch-ep .e { font-size: 1.2rem; }
+.arch-ep .x { min-width: 0; overflow-wrap: anywhere; font-size: .9rem; }
+.arch-ep .x small { display: block; color: var(--muted); }
+.arch-ep .b { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.arch-ep .b button { font-size: .8rem; padding: 6px 10px; }
+@media (max-width: 560px) { .arch-ep { grid-template-columns: auto minmax(0, 1fr); } .arch-ep .b { grid-column: 1 / -1; justify-content: flex-start; } }
 </style>
 
 <div class="wrap">
   <header>
     <h1>MyBirthSign Video Studio</h1>
-    <p class="sub">Pick a date and get that day's full video pack: picture prompts, Google Flow scenes with voice, captions, voice-overs, YouTube, Facebook and TikTok text, and subtitles. Every rating and lucky number follows the website's own rules for that date.</p>
+    <p class="sub">A fresh daily edition for all 12 signs (new stories, scenes and blessings, saved for good), plus each day's full video pack: picture prompts, Google Flow scenes with voice, captions, posts and subtitles. Every rating and lucky number follows the website's own rules for that date.</p>
   </header>
 
+  <nav class="tabs" role="tablist" aria-label="Studio">
+    <button role="tab" id="tab-ed" aria-selected="false" aria-controls="view-ed" data-view="ed">Daily edition</button>
+    <button role="tab" id="tab-pack" aria-selected="true" aria-controls="view-pack" data-view="pack">Video pack</button>
+    <button role="tab" id="tab-arch" aria-selected="false" aria-controls="view-arch" data-view="arch">Archive</button>
+    <span class="spacer"></span>
+    <button id="ed-setbtn" aria-expanded="false" aria-controls="ed-settings">⚙ Settings</button>
+  </nav>
+
+  <section class="ed-dash" id="ed-settings" hidden aria-label="Studio settings">
+    <div class="ed-set">
+      <label>Studio passcode (saved on this device only)<input type="password" id="ed-key" autocomplete="current-password" placeholder="The STUDIO_KEY you set in Netlify"></label>
+      <label>Time zone for “today”<select id="ed-tz"></select></label>
+      <label>Video length<select id="ed-len"><option value="30">30 seconds (3 scenes)</option><option value="60">60 seconds (6 scenes)</option><option value="90">90 seconds (9 scenes)</option></select></label>
+      <label>Voice for the copy buttons<select id="ed-voice"><option value="km">Khmer (Chanda in Khmer)</option><option value="en">English</option></select></label>
+      <span class="chk"><input type="checkbox" id="ed-auto"><label for="ed-auto">Start today's edition automatically when I open the Studio (only if it has not been made yet)</label></span>
+      <div class="ed-row"><button class="primary" id="ed-savekey">Save settings</button><button id="ed-forget">Forget passcode here</button></div>
+    </div>
+    <p class="note" id="ed-svc"></p>
+  </section>
+
+  <section class="view" id="view-ed" role="tabpanel" aria-labelledby="tab-ed" hidden>
+    <div class="ed-dash" id="ed-dash" aria-live="polite">
+      <div class="ed-head">
+        <div>
+          <p class="ed-kicker">Daily edition</p>
+          <h2 class="ed-date" id="ed-date">…</h2>
+          <p class="ed-theme" id="ed-theme"></p>
+        </div>
+        <div class="ed-nav">
+          <button id="ed-prev" aria-label="Previous day">◀</button>
+          <input type="date" id="ed-d" aria-label="Edition date">
+          <button id="ed-next" aria-label="Next day">▶</button>
+          <button id="ed-today">Today</button>
+          <button id="ed-tomorrow">Tomorrow</button>
+        </div>
+      </div>
+      <div class="kbach" aria-hidden="true"></div>
+      <div class="ed-row">
+        <span class="chip" id="ed-status">…</span>
+        <div class="progress" aria-hidden="true"><i id="ed-bar"></i></div>
+        <span class="note" id="ed-count"></span>
+      </div>
+      <div class="ed-row">
+        <button class="primary" id="ed-make">Make this edition</button>
+        <button id="ed-stop" hidden>Stop</button>
+        <button id="ed-remake" hidden>Remake the whole edition…</button>
+        <button id="ed-toarch">Previous editions</button>
+      </div>
+      <div id="ed-msg" hidden></div>
+    </div>
+    <div class="ed-grid" id="ed-grid" aria-label="The 12 signs"></div>
+    <div id="ed-editor" hidden></div>
+  </section>
+
+  <section class="view" id="view-arch" role="tabpanel" aria-labelledby="tab-arch" hidden>
+    <div class="arch-bar">
+      <label class="note" for="arch-animal">Sign</label>
+      <select id="arch-animal"><option value="">All 12 signs</option></select>
+      <span class="spacer"></span>
+      <span class="note" id="arch-count"></span>
+    </div>
+    <div id="arch-msg" hidden></div>
+    <div id="arch-list" class="view"></div>
+    <div class="ed-row"><button id="arch-more" hidden>Show older editions</button></div>
+  </section>
+
+  <div id="view-pack" class="view" role="tabpanel" aria-labelledby="tab-pack">
   <div class="layout">
   <nav class="menu" id="menu" aria-label="Sections"></nav>
   <div class="main">
@@ -143,6 +296,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   </ol>
 
   <div id="pack"></div>
+  </div>
   </div>
   </div>
 </div>
@@ -2103,6 +2257,470 @@ function charactersMd(KM_NAMES) {
   return `# 12 Zodiac Characters — the look you chose (see characters/*.jpg for the approved examples)\n\n# 12 Zodiac Characters — master prompts (photorealistic fantasy-epic style)\n\n**Your characters are saved in Google Flow, named after their animals: @Rat, @Ox, @Tiger, @Rabbit, @Dragon, @Snake, @Horse, @Goat, @Monkey, @Rooster, @Dog and @Pig** (each a guardian warrior with their animal), plus @Chanda the presenter. Every video prompt points to them with @, so keep the names in Flow exactly as written. The prompts below are only needed if you ever want to make a character again.\n\n## ${HOST[0]} (${HOST[1]}) – the presenter\n${HOST_CHAR}\n\n${ORDER.map((a) => `## ${a} (${KM_NAMES[a]})\n${CHAR(a)}\n`).join("\n")}`;
 }
 
+/*! momentkh 3.0.3 (Khmer lunisolar calendar) — https://github.com/ThyrithSor/momentkh
+ * MIT License, Copyright (c) 2018 ThyrithSor. Minified for MyBirthSign; only change: sets a single window.momentkh global. */
+!function(e,a){"function"==typeof define&&define.amd?define([],a):"object"==typeof module&&module.exports?module.exports=a():e.momentkh=a()}("undefined"!=typeof self?self:this,function(){var e,a,n,t,r,o={},i=o;
+/**
+ * MomentKH - Standalone Khmer Calendar Library (TypeScript)
+ *
+ * A simplified, standalone library for Khmer calendar conversion
+ * No dependencies required
+ *
+ * Based on:
+ * - khmer_calendar.cpp implementation
+ * - Original momentkh library
+ *
+ * @version 2.0.0
+ * @license MIT
+ */
+Object.defineProperty(i,"__esModule",{value:!0}),i.constants=i.DayOfWeek=i.Sak=i.AnimalYear=i.MonthIndex=i.MoonPhase=void 0,i.fromGregorian=z,i.fromKhmer=Q,i.getNewYear=U,i.format=X,i.fromDate=Z,i.toDate=ee,function(e){e[e.Waxing=0]="Waxing",e[e.Waning=1]="Waning"}(e||(i.MoonPhase=e={})),function(e){e[e.Migasir=0]="Migasir",e[e.Boss=1]="Boss",e[e.Meak=2]="Meak",e[e.Phalkun=3]="Phalkun",e[e.Cheit=4]="Cheit",e[e.Pisakh=5]="Pisakh",e[e.Jesth=6]="Jesth",e[e.Asadh=7]="Asadh",e[e.Srap=8]="Srap",e[e.Phatrabot=9]="Phatrabot",e[e.Assoch=10]="Assoch",e[e.Kadeuk=11]="Kadeuk",e[e.Pathamasadh=12]="Pathamasadh",e[e.Tutiyasadh=13]="Tutiyasadh"}(a||(i.MonthIndex=a={})),function(e){e[e.Chhut=0]="Chhut",e[e.Chlov=1]="Chlov",e[e.Khal=2]="Khal",e[e.Thos=3]="Thos",e[e.Rong=4]="Rong",e[e.Masagn=5]="Masagn",e[e.Momee=6]="Momee",e[e.Momae=7]="Momae",e[e.Vok=8]="Vok",e[e.Roka=9]="Roka",e[e.Cho=10]="Cho",e[e.Kor=11]="Kor"}(n||(i.AnimalYear=n={})),function(e){e[e.SamridhiSak=0]="SamridhiSak",e[e.AekSak=1]="AekSak",e[e.ToSak=2]="ToSak",e[e.TreiSak=3]="TreiSak",e[e.ChattvaSak=4]="ChattvaSak",e[e.PanchaSak=5]="PanchaSak",e[e.ChhaSak=6]="ChhaSak",e[e.SappaSak=7]="SappaSak",e[e.AtthaSak=8]="AtthaSak",e[e.NappaSak=9]="NappaSak"}(t||(i.Sak=t={})),function(e){e[e.Sunday=0]="Sunday",e[e.Monday=1]="Monday",e[e.Tuesday=2]="Tuesday",e[e.Wednesday=3]="Wednesday",e[e.Thursday=4]="Thursday",e[e.Friday=5]="Friday",e[e.Saturday=6]="Saturday"}(r||(i.DayOfWeek=r={}));const h=["មិគសិរ","បុស្ស","មាឃ","ផល្គុន","ចេត្រ","ពិសាខ","ជេស្ឋ","អាសាឍ","ស្រាពណ៍","ភទ្របទ","អស្សុជ","កត្ដិក","បឋមាសាឍ","ទុតិយាសាឍ"],s=["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"],m=["មក","កម","មន","មស","ឧស","មថ","កដ","សហ","កញ","តល","វក","ធន"],u=["មិ","បុ","មា","ផល","ចេ","ពិ","ជេ","អា","ស្រ","ភ","អ","ក","បឋ","ទុតិ"],f=["ជូត","ឆ្លូវ","ខាល","ថោះ","រោង","ម្សាញ់","មមី","មមែ","វក","រកា","ច","កុរ"],d=["🐀","🐂","🐅","🐇","🐉","🐍","🐎","🐐","🐒","🐓","🐕","🐖"],c=["សំរឹទ្ធិស័ក","ឯកស័ក","ទោស័ក","ត្រីស័ក","ចត្វាស័ក","បញ្ចស័ក","ឆស័ក","សប្តស័ក","អដ្ឋស័ក","នព្វស័ក"],l=["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","ព្រហស្បតិ៍","សុក្រ","សៅរ៍"],y=["អា","ច","អ","ព","ព្រ","សុ","ស"],b=["កើត","រោច"],k=["ក","រ"],g=["᧡","᧢","᧣","᧤","᧥","᧦","᧧","᧨","᧩","᧪","᧫","᧬","᧭","᧮","᧯","᧱","᧲","᧳","᧴","᧵","᧶","᧷","᧸","᧹","᧺","᧻","᧼","᧽","᧾","᧿"],w={0:"០",1:"១",2:"២",3:"៣",4:"៤",5:"៥",6:"៦",7:"៧",8:"៨",9:"៩"},M={1879:"12-04-1879 11:36",1897:"13-04-1897 02:00",2011:"14-04-2011 13:12",2012:"14-04-2012 19:11",2013:"14-04-2013 02:12",2014:"14-04-2014 08:07",2015:"14-04-2015 14:02",2024:"13-04-2024 22:17"};function N(e){return String(e).replace(/\d/g,e=>w[e])}function P(e,a){return 2===a&&function(e){return e%4==0&&e%100!=0||e%400==0}(e)?29:[31,28,31,30,31,30,31,31,30,31,30,31][a-1]}function Y(e,a,n){const t=Math.floor((14-a)/12),r=e+4800-t,o=a+12*t-3;return n+Math.floor((153*o+2)/5)+365*r+Math.floor(r/4)-Math.floor(r/100)+Math.floor(r/400)-32045}function p(e){const a=e+32044,n=Math.floor((4*a+3)/146097),t=a-Math.floor(146097*n/4),r=Math.floor((4*t+3)/1461),o=t-Math.floor(1461*r/4),i=Math.floor((5*o+2)/153),h=o-Math.floor((153*i+2)/5)+1,s=i+3-12*Math.floor(i/10);return{year:100*n+r-4800+Math.floor(i/10),month:s,day:h}}function I(e){return Math.floor((292207*e+499)/800)+4}function D(e){return(11*I(e)+25)%692}function S(e){const a=I(e);return(Math.floor((11*a+25)/692)+a+29)%30}function v(e){const a=D(e),n=function(e){return function(e){return 800-function(e){return(292207*e+499)%800}(e)}(e)<=207}(e);return 0===a&&137===D(e-1)||(n?a<127:(137!==a||0!==D(e+1))&&a<138)}function x(e){const a=S(e),n=S(e+1);return(25!==a||5!==n)&&(24===a&&6===n||a>=25||a<6)}function $(e){if(x(e))return 1;if(v(e))return 2;if(x(e-1)){let a=e-1;for(;;){if(v(a))return 2;if(a-=1,!x(a))return 0}}return 0}function W(e,n){const t=$(n),r=e;return r===a.Jesth&&2===t?30:r===a.Pathamasadh||r===a.Tutiyasadh?1===t?30:0:r%2==0?29:30}function E(e){const a=$(e);return 1===a?384:2===a?355:354}function T(e,n){const t=$(n),r=e;return r===a.Jesth&&1===t?a.Pathamasadh:r===a.Kadeuk?a.Migasir:r===a.Pathamasadh?a.Tutiyasadh:r===a.Tutiyasadh?a.Srap:r+1}function O(e,n){const t=$(n),r=e;return r===a.Migasir?a.Kadeuk:r===a.Srap&&1===t?a.Tutiyasadh:r===a.Tutiyasadh?a.Pathamasadh:r===a.Pathamasadh?a.Jesth:r-1}function A(e){const a=292207*e+373;return Math.floor(a/800)+1}function j(e){return(11*A(e)+650)%692}function C(e){return 800-(292207*e+373)%800}function K(e){const a=A(e),n=11*a+650;return(a+Math.floor(n/692))%30}function J(e){const a=function(e){return C(e)<=207}(e-1)?[363,364,365,366]:[362,363,364,365],n=a.map(a=>function(e,a){const n=800*a+C(e-1),t=n%24350,r=t%811,o=1800*Math.floor(n/24350)+60*Math.floor(t/811)+(Math.floor(r/14)-3);let i=o-4800;o<4800&&(i+=21600);const h=Math.floor(i/1800);let s=-1;[0,1,2].includes(h)?s=h:[3,4,5].includes(h)?s=10800-i:[6,7,8].includes(h)?s=i-10800:[9,10,11].includes(h)&&(s=21600-i);const m=Math.floor(s/1800),u=Math.floor(s%1800/60),f=s%60;let d,c;u>=15?(d=2*m+1,c=60*(u-15)+f):(d=2*m,c=60*u+f);const l=d<=5?[{multiplicity:35,chhaya:0},{multiplicity:32,chhaya:35},{multiplicity:27,chhaya:67},{multiplicity:22,chhaya:94},{multiplicity:13,chhaya:116},{multiplicity:5,chhaya:129}][d]:{multiplicity:0,chhaya:134},y=Math.floor(c*l.multiplicity/900)+l.chhaya,b=h<=5?o-y:o+y;return{sunInaugurationAsLibda:b,reasey:Math.floor(b/1800),angsar:Math.floor(b%1800/60),libda:b%60}}(e,a));let t={hour:0,minute:0};for(const e of n)if(0===e.angsar){const a=1440-24*e.libda;t={hour:Math.floor(a/60)%24,minute:a%60};break}return{timeOfNewYear:t,numberOfVanabatDays:0===n[0].angsar?2:1,newYearsDaySotins:n}}class _{constructor(e,a,n,t){this.day=e,this.moonPhase=a,this.monthIndex=n,this.beYear=t}getDayNumber(){return this.moonPhase===e.Waxing?this.day-1:this.day-1+15}static fromDayNumber(a){return a<15?{day:a+1,moonPhase:e.Waxing}:{day:a-15+1,moonPhase:e.Waning}}addDays(n){if(0===n)return this;if(n<0)return this.subtractDays(-n);let t=new _(this.day,this.moonPhase,this.monthIndex,this.beYear),r=n;for(;r>0;){const n=W(t.monthIndex,t.beYear),o=t.getDayNumber(),i=n-1-o;if(r<=i){const n=o+r,i=_.fromDayNumber(n);let h=t.beYear;t.monthIndex===a.Pisakh&&t.moonPhase===e.Waxing&&i.moonPhase===e.Waning&&h++,t=new _(i.day,i.moonPhase,t.monthIndex,h),r=0}else{r-=i+1;const n=T(t.monthIndex,t.beYear),o=t.monthIndex===a.Cheit?t.beYear+1:t.beYear;t=new _(1,e.Waxing,n,o)}}return t}subtractDays(n){if(0===n)return this;let t=new _(this.day,this.moonPhase,this.monthIndex,this.beYear),r=n;for(;r>0;){const n=t.getDayNumber();if(r<=n){const o=n-r,i=_.fromDayNumber(o);let h=t.beYear;t.monthIndex===a.Pisakh&&t.moonPhase===e.Waning&&i.moonPhase===e.Waxing&&h--,t=new _(i.day,i.moonPhase,t.monthIndex,h),r=0}else{r-=n+1;const e=O(t.monthIndex,t.beYear),o=t.monthIndex===a.Pisakh?t.beYear-1:t.beYear,i=W(e,o),h=_.fromDayNumber(i-1);t=new _(h.day,h.moonPhase,e,o)}}return t}toString(){return`${this.day}${b[this.moonPhase]} ខែ${h[this.monthIndex]} ព.ស.${this.beYear}`}}function L(e,a){return a<=4?e+543:e+544}const R={},F={};function B(e,n=!1){if(R[e])return R[e];for(let n=4;n<=6;n++){const t=new Date(e,n,0).getDate();for(let r=1;r<=t;r++){const t=G(e,n,r,12,0,0,!0);if(t.khmer.monthIndex===a.Pisakh&&15===t._khmerDateObj.getDayNumber()){const a=new Date(e,n-1,r,0,0,0,0).getTime();return R[e]=a,a}}}const t=new Date(e,3,15,0,0,0,0).getTime();return R[e]=t,t}function G(e,a,n,t=0,r=0,o=0,i=!1){let s=Y(1900,1,1);let m=1,u=0,d=Y(e,a,n)-s;if(d>0)for(;;){const e=p(s),a=E(L(e.year+1,e.month));if(!(d>a))break;d-=a,s+=a}else if(d<0)for(;d<0;){const e=p(s),a=E(L(e.year,e.month));d+=a,s-=a}for(;d>0;){const e=p(s),a=L(e.year,e.month),n=W(m,a);if(!(d>n))break;d-=n,s+=n,m=T(m,a)}u=d;const y=L(e,a),k=W(m,y);u>=k&&(u%=k,m=T(m,y));const g=_.fromDayNumber(u);let w;if(i)w=a<=4?e+543:e+544;else{w=new Date(e,a-1,n,t,r,o).getTime()>=B(e)?e+544:e+543}let M=function(e){return e-1182}(w),N=((w+4)%12+12)%12;if(!i){const i=V(e),h=new Date(e,a-1,n,t,r,o).getTime(),s=B(e);h>=i.newYearMoment.getTime()&&h<=s&&(N=(N+1)%12),h>=i.lerngSakMoment.getTime()&&h<=s&&M++}const P=(M%10+10)%10,I=function(e,a,n){return(Y(e,a,n)+1)%7}(e,a,n),D=new _(g.day,g.moonPhase,m,w);return{gregorian:{year:e,month:a,day:n,hour:t,minute:r,second:o,dayOfWeek:I},khmer:{day:g.day,moonPhase:g.moonPhase,moonPhaseName:b[g.moonPhase],monthIndex:m,monthName:h[m],beYear:w,jsYear:M,animalYear:N,animalYearName:f[N],sak:P,sakName:c[P],dayOfWeek:I,dayOfWeekName:l[I]},_khmerDateObj:D}}function H(n,t,r,o){!function(e,a,n,t){if("number"!=typeof e||isNaN(e))throw new Error(`Invalid day: ${e}. Day must be a valid number.`);if("number"!=typeof a||isNaN(a))throw new Error(`Invalid moonPhase: ${a}. moonPhase must be a valid number.`);if("number"!=typeof n||isNaN(n))throw new Error(`Invalid monthIndex: ${n}. monthIndex must be a valid number.`);if("number"!=typeof t||isNaN(t))throw new Error(`Invalid beYear: ${t}. beYear must be a valid number.`);if(e<1||e>15)throw new Error(`Invalid day: ${e}. Lunar day must be between 1 and 15.`);if(0!==a&&1!==a)throw new Error(`Invalid moonPhase: ${a}. moonPhase must be 0 (Waxing/កើត) or 1 (Waning/រោច).`);if(n<0||n>13)throw new Error(`Invalid monthIndex: ${n}. monthIndex must be between 0 and 13.`);if(t<2e3||t>3e3)throw new Error(`Invalid beYear: ${t}. beYear must be between 2000 and 3000.`)}(n,t,r,o);const i=t,h=r,s=o-544,m=s+2;let u=[];for(let t=s-2;t<=m;t++)for(let r=1;r<=12;r++){const s=P(t,r);for(let m=1;m<=s;m++){const s=h===a.Pisakh&&(15===n&&i===e.Waxing||1===n&&i===e.Waning)?[0,6,12,18,23]:[0];for(const e of s){const a=G(t,r,m,e,0,0,!1);if(a.khmer.beYear===o&&a.khmer.monthIndex===h&&a.khmer.day===n&&a.khmer.moonPhase===i){u.push({year:t,month:r,day:m});break}}}}if(0===u.length)throw new Error(`Could not find Gregorian date for Khmer date: ${n} ${i===e.Waxing?"កើត":"រោច"} month ${h} BE ${o}`);if(u.length>1){const e=Math.min(...u.map(e=>Math.abs(e.year-s))),a=u.filter(a=>Math.abs(a.year-s)===e);if(1===a.length)return a[0];const t=a.filter(e=>{const a=G(e.year,e.month,e.day,12,0,0,!1);return a.khmer.beYear===o&&a.khmer.monthIndex===h&&a.khmer.day===n&&a.khmer.moonPhase===i});return t.length>0?t[0]:a[0]}return u[0]}function V(e){if(F[e])return F[e];const a=e-638;let n=J(a),t=K(a);const r=function(e){const a=K(e),n=K(e+1);return 24===a&&6===n||(25!==a||5!==n)&&(a>24||a<6)}(a-1),o=function(e){const a=j(e),n=j(e+1),t=j(e-1),r=C(e)<=207;return 0===a&&137===t||(r?a<127:(137!==a||0!==n)&&(!r&&a<138||137===t&&0===a))}(a-1);r&&o&&(t=(t+1)%30);const i=t>=6?t-1:t,h=t>=6?4:5,s=0===n.newYearsDaySotins[0].angsar?4:3,m={year:e,month:4,day:17},u=G(e,4,17,12,0,0,!0)._khmerDateObj,f=29*(u.monthIndex-4)+u.getDayNumber()-(29*(h-4)+i)+s-1;let d=Y(m.year,m.month,m.day)-f;if(M[e]){const[a,t]=M[e].split(" "),[r,o,i]=a.split("-").map(Number),[h,s]=t.split(":").map(Number);n.timeOfNewYear={hour:h,minute:s},d=Y(i,o,r)}const c=p(d),l=new Date(c.year,c.month-1,c.day,n.timeOfNewYear.hour,n.timeOfNewYear.minute),y=p(d+s-1),b={newYearMoment:l,lerngSakMoment:new Date(y.year,y.month-1,y.day,0,0,0),newYearInfo:{year:c.year,month:c.month,day:c.day,hour:n.timeOfNewYear.hour,minute:n.timeOfNewYear.minute}};return F[e]=b,b}function q(e,a,n,t=0,r=0,o=0){return function(e,a,n,t=0,r=0,o=0){if("number"!=typeof e||isNaN(e))throw new Error(`Invalid year: ${e}. Year must be a valid number.`);if("number"!=typeof a||isNaN(a))throw new Error(`Invalid month: ${a}. Month must be a valid number.`);if("number"!=typeof n||isNaN(n))throw new Error(`Invalid day: ${n}. Day must be a valid number.`);if("number"!=typeof t||isNaN(t))throw new Error(`Invalid hour: ${t}. Hour must be a valid number.`);if("number"!=typeof r||isNaN(r))throw new Error(`Invalid minute: ${r}. Minute must be a valid number.`);if("number"!=typeof o||isNaN(o))throw new Error(`Invalid second: ${o}. Second must be a valid number.`);if(a<1||a>12)throw new Error(`Invalid month: ${a}. Month must be between 1 and 12.`);const i=P(e,a);if(n<1||n>i)throw new Error(`Invalid day: ${n}. ${["January","February","March","April","May","June","July","August","September","October","November","December"][a-1]} ${e} has ${i} days.`);if(t<0||t>23)throw new Error(`Invalid hour: ${t}. Hour must be between 0 and 23.`);if(r<0||r>59)throw new Error(`Invalid minute: ${r}. Minute must be between 0 and 59.`);if(o<0||o>59)throw new Error(`Invalid second: ${o}. Second must be between 0 and 59.`)}(e,a,n,t,r,o),G(e,a,n,t,r,o,!1)}function z(e,a,n,t=0,r=0,o=0){return q(e,a,n,t,r,o)}function Q(e,a,n,t){return H(e,a,n,t)}function U(e){return function(e){return V(e).newYearInfo}(e)}function X(e,a){return function(e,a){if(!a){const{khmer:a}=e,n=`${a.day}${a.moonPhaseName}`;return N(`ថ្ងៃ${a.dayOfWeekName} ${n} ខែ${a.monthName} ឆ្នាំ${a.animalYearName} ${a.sakName} ពុទ្ធសករាជ ${a.beYear}`)}const n={W:()=>e.khmer.dayOfWeekName,w:()=>y[e.gregorian.dayOfWeek],d:()=>N(e.khmer.day),D:()=>N((e.khmer.day<10?"0":"")+e.khmer.day),dr:()=>e.khmer.day,Dr:()=>(e.khmer.day<10?"0":"")+e.khmer.day,ds:()=>N(e.gregorian.day),Ds:()=>N((e.gregorian.day<10?"0":"")+e.gregorian.day),dsr:()=>e.gregorian.day,Dsr:()=>(e.gregorian.day<10?"0":"")+e.gregorian.day,n:()=>k[e.khmer.moonPhase],N:()=>e.khmer.moonPhaseName,o:()=>g[e._khmerDateObj.getDayNumber()],m:()=>e.khmer.monthName,M:()=>s[e.gregorian.month-1],a:()=>e.khmer.animalYearName,as:()=>d[e.khmer.animalYear],e:()=>e.khmer.sakName,b:()=>N(e.khmer.beYear),br:()=>e.khmer.beYear,c:()=>N(e.gregorian.year),cr:()=>e.gregorian.year,j:()=>N(e.khmer.jsYear),jr:()=>e.khmer.jsYear,Ms:()=>m[e.gregorian.month-1],ms:()=>u[e.khmer.monthIndex]},t=Object.keys(n).sort((e,a)=>a.length-e.length),r=new RegExp(`\\[([^\\]]+)\\]|(${t.join("|")})`,"g");return a.replace(r,(e,a,t)=>{if(a)return a;const r=n[t]();return String(r)})}(e,a)}function Z(e){return function(e){if(!(e instanceof Date))throw new Error("Invalid input: Expected a Date object.");if(isNaN(e.getTime()))throw new Error("Invalid Date object: Date is not a valid date.")}(e),q(e.getFullYear(),e.getMonth()+1,e.getDate(),e.getHours(),e.getMinutes(),e.getSeconds())}function ee(e,a,n,t){const r=H(e,a,n,t);return new Date(r.year,r.month-1,r.day)}return i.constants={LunarMonths:{"មិគសិរ":0,"បុស្ស":1,"មាឃ":2,"ផល្គុន":3,"ចេត្រ":4,"ពិសាខ":5,"ជេស្ឋ":6,"អាសាឍ":7,"ស្រាពណ៍":8,"ភទ្របទ":9,"អស្សុជ":10,"កត្ដិក":11,"បឋមាសាឍ":12,"ទុតិយាសាឍ":13},LunarMonthNames:h,SolarMonthNames:s,SolarMonthAbbreviationNames:m,LunarMonthAbbreviationNames:u,AnimalYearNames:f,AnimalYearEmojis:d,SakNames:c,WeekdayNames:l,MoonPhaseNames:b},i.default={fromGregorian:z,fromKhmer:Q,getNewYear:U,format:X,fromDate:Z,toDate:ee,constants:i.constants,MoonPhase:e,MonthIndex:a,AnimalYear:n,Sak:t,DayOfWeek:r},o});
+/* MyBirthSign fix (2nd change to the original): momentkh 3.0.3 shows the NEXT year's animal, Sak and JS (Chulasakarach)
+   year for exactly one day, 1 រោច ពិសាខ (the day after Visak Bochea), then switches back the next day. Those values do not
+   change on that day (the animal changes at Moha Songkran, the Sak and JS at Loeng Sak), so for that day they are taken from
+   the day before. The BE year, which does change that day, is left as the library gives it. Checked in tests/khmer-lunar-test.mjs. */
+(function (g) {
+  var M = g && g.momentkh; if (!M || M._mbsPisakFix) return;
+  var from = M.fromGregorian;
+  M.fromGregorian = function (y, m, d) {
+    var r = from.apply(M, arguments), k = r && r.khmer;
+    if (k && k.monthIndex === 5 && k.moonPhase === 1 && k.day === 1) {
+      var p = new Date(Date.UTC(y, m - 1, d) - 864e5), q = from.call(M, p.getUTCFullYear(), p.getUTCMonth() + 1, p.getUTCDate()).khmer;
+      ["animalYear", "animalYearName", "sak", "sakName", "jsYear"].forEach(function (x) { k[x] = q[x]; });
+    }
+    return r;
+  };
+  M._mbsPisakFix = true;
+})([typeof window !== "undefined" && window, typeof self !== "undefined" && self, typeof globalThis !== "undefined" && globalThis].filter(function (o) { return o && o.momentkh; })[0]);
+
+/* Khmer calendar events for one date: holidays, Buddhist days, holy days (Thngai Sil) and the Khmer lunar date.
+   The same rules as the Khmer Calendar page (js/khmer-calendar.js); tests/khmer-events-test.mjs checks that both give
+   the same "Coming up" list. Used by the Telegram daily post (netlify/functions/telegram-daily.mjs).
+   Needs momentkh (js/vendor/momentkh.min.js), passed in as KM. Dates are "YYYY-MM-DD" (Cambodia days).
+   Fixed-date national days are listed on their usual dates; the official public-holiday list is set each year by
+   sub-decree (only 2026 is checked on the page), so callers should not call them official holidays. */
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory();
+  else root.MBSKhmerEvents = factory();
+})(typeof self !== "undefined" ? self : this, function () {
+  var DAY = 864e5;
+  var EV = {
+    newyear: { i: "🎉", k: "holiday", en: "Khmer New Year", km: "ពិធីបុណ្យចូលឆ្នាំថ្មី ប្រពៃណីជាតិ", blog: "khmer-new-year-animal-year" },
+    meak: { i: "🪷", k: "buddhist", en: "Meak Bochea", km: "ពិធីបុណ្យមាឃបូជា", blog: "cambodian-buddhist-holy-days" },
+    visak: { i: "🪷", k: "buddhist", en: "Visak Bochea", km: "ពិធីបុណ្យវិសាខបូជា", blog: "cambodian-buddhist-holy-days" },
+    ploughing: { i: "🌾", k: "holiday", en: "Royal Ploughing Ceremony", km: "ព្រះរាជពិធីច្រត់ព្រះនង្គ័ល" },
+    asalha: { i: "🪷", k: "buddhist", en: "Asalha Puja", km: "ពិធីបុណ្យអាសាឡ្ហបូជា", blog: "cambodian-buddhist-holy-days" },
+    cholvassa: { i: "🕯️", k: "buddhist", en: "Chol Vassa (Lent begins)", km: "ចូលព្រះវស្សា", blog: "chol-vassa-buddhist-lent" },
+    kanben: { i: "🍚", k: "minor", en: "Kan Ben", km: "កាន់បិណ្ឌ" },
+    pchumben: { i: "🏯", k: "holiday", en: "Pchum Ben", km: "ពិធីបុណ្យភ្ជុំបិណ្ឌ" },
+    chenhvassa: { i: "🕯️", k: "buddhist", en: "Chenh Vassa (Lent ends)", km: "ចេញព្រះវស្សា", blog: "kathen-robe-offering-season" },
+    water: { i: "🚣", k: "holiday", en: "Water Festival", km: "ព្រះរាជពិធីបុណ្យអុំទូក", blog: "cambodia-water-festival-bon-om-touk" },
+    newyearday: { i: "🎆", k: "national", en: "International New Year's Day", km: "ទិវាចូលឆ្នាំសកល" },
+    queenmother: { i: "👑", k: "national", en: "Queen Mother's Birthday", km: "ព្រះរាជពិធីបុណ្យចម្រើនព្រះជន្ម សម្តេចព្រះមហាក្សត្រី" },
+    peace: { i: "🕊️", k: "national", en: "Peace Day", km: "ទិវាសន្តិភាព", blog: "cambodia-peace-day-december-29" },
+    victory: { i: "🕊️", k: "national", en: "Victory over Genocide Day", km: "ទិវាជ័យជម្នះលើរបបប្រល័យពូជសាសន៍" },
+    women: { i: "💐", k: "national", en: "International Women's Day", km: "ទិវានារីអន្តរជាតិ" },
+    labour: { i: "🛠️", k: "national", en: "International Labour Day", km: "ទិវាពលកម្មអន្តរជាតិ" },
+    kingbday: { i: "👑", k: "national", en: "King's Birthday", km: "ព្រះរាជពិធីបុណ្យចម្រើនព្រះជន្ម ព្រះមហាក្សត្រ" },
+    constitution: { i: "📜", k: "national", en: "Constitution Day", km: "ទិវាប្រកាសរដ្ឋធម្មនុញ្ញ" },
+    kingfather: { i: "🕯️", k: "national", en: "King Father Commemoration Day", km: "ទិវាប្រារព្ធពិធីគោរពព្រះវិញ្ញាណក្ខន្ធ ព្រះបរមរតនកោដ្ឋ" },
+    coronation: { i: "👑", k: "national", en: "Coronation Day", km: "ព្រះរាជពិធីគ្រងព្រះបរមរាជសម្បត្តិ", blog: "coronation-day-king-norodom-sihamoni" },
+    independence: { i: "🇰🇭", k: "national", en: "Independence Day", km: "ពិធីបុណ្យឯករាជ្យជាតិ", blog: "cambodia-independence-day" },
+  };
+  var ORDER = { holiday: 0, national: 1, buddhist: 2, minor: 3 };
+  var FIXED = [[1, 1, "newyearday", 0], [1, 7, "victory", 1980], [3, 8, "women", 0], [5, 1, "labour", 0], [5, 14, "kingbday", 2005], [6, 18, "queenmother", 2005], [9, 24, "constitution", 1993], [10, 15, "kingfather", 2013], [10, 29, "coronation", 2005], [11, 9, "independence", 1953], [12, 29, "peace", 2024]];
+  var MEN = ["Migasir", "Boss", "Meak", "Phalkun", "Chet", "Pisak", "Jesth", "Asadh", "Srap", "Phatrabot", "Assoch", "Kadeuk", "1st Asadh", "2nd Asadh"];
+  var AEN = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
+  var SAK_EN = ["Samrithisak", "Ekasak", "Tosak", "Treisak", "Chattvasak", "Panchasak", "Chhasak", "Saptasak", "Atthasak", "Noppasak"];
+
+  function make(KM) {
+    var memo = {}, yearCache = {};
+    var keyOf = function (t) { return new Date(t).toISOString().slice(0, 10); };
+    var tOf = function (iso) { var p = iso.split("-").map(Number); return Date.UTC(p[0], p[1] - 1, p[2]); };
+    function kh(t) { if (!memo[t]) { var d = new Date(t); memo[t] = KM.fromGregorian(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate()); } return memo[t]; }
+    function isLastWaning(t) { var k = kh(t).khmer, n = kh(t + DAY).khmer; return k.moonPhase === 1 && n.moonPhase === 0; }
+    function isSilT(t) { var k = kh(t).khmer; return (k.moonPhase === 0 && (k.day === 8 || k.day === 15)) || (k.moonPhase === 1 && k.day === 8) || isLastWaning(t); }
+    function eventsOf(y) {
+      if (yearCache[y]) return yearCache[y];
+      var E = {}, add = function (t, id) { var k = keyOf(t); (E[k] = E[k] || []).push(id); };
+      FIXED.forEach(function (f) { if (y >= f[3]) add(Date.UTC(y, f[0] - 1, f[1]), f[2]); });
+      var ny = KM.getNewYear(y);
+      if (ny) { var t0 = Date.UTC(y, ny.month - 1, ny.day), s0 = kh(t0).khmer.sak; for (var i = 0; i < 5; i++) { add(t0 + i * DAY, "newyear"); if (kh(t0 + i * DAY).khmer.sak !== s0) break; } }
+      for (var t = Date.UTC(y, 0, 1); t < Date.UTC(y + 1, 0, 1); t += DAY) {
+        var k = kh(t).khmer, wax = k.moonPhase === 0, m = k.monthIndex, d = k.day;
+        if (wax && d === 15 && m === 2) add(t, "meak");
+        if (wax && d === 15 && m === 5) add(t, "visak");
+        if (!wax && d === 4 && m === 5) add(t, "ploughing");
+        if (wax && d === 15 && (m === 7 || m === 13)) add(t, "asalha");
+        if (!wax && d === 1 && (m === 7 || m === 13)) add(t, "cholvassa");
+        if (!wax && m === 9) { if (isLastWaning(t)) { add(t - DAY, "pchumben"); add(t, "pchumben"); add(t + DAY, "pchumben"); } else if (!isLastWaning(t + DAY)) add(t, "kanben"); }
+        if (wax && d === 15 && m === 10) add(t, "chenhvassa");
+        if (m === 11 && ((wax && (d === 14 || d === 15)) || (!wax && d === 1))) add(t, "water");
+      }
+      Object.keys(E).forEach(function (k) { E[k] = E[k].filter(function (v, i, a) { return a.indexOf(v) === i; }).sort(function (a, b) { return ORDER[EV[a].k] - ORDER[EV[b].k]; }); });
+      return (yearCache[y] = E);
+    }
+    function eventsOnT(t) { return eventsOf(new Date(t).getUTCFullYear())[keyOf(t)] || []; }
+    var west = function (s) { return String(s).replace(/[០-៩]/g, function (c) { return String(c.charCodeAt(0) - 0x17E0); }); };
+    var ord = function (n) { var s = ["th", "st", "nd", "rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); };
+    return {
+      EV: EV,
+      eventsOn: function (iso) { return eventsOnT(tOf(iso)); },
+      isSil: function (iso) { return isSilT(tOf(iso)); },
+      // the next holidays and Buddhist days from a date (each event once per year, "minor" ones left out), like the
+      // page's "Coming up" list: [[iso, id], ...]
+      upcoming: function (iso, n, maxDays) {
+        var up = [], seen = {}, s = tOf(iso);
+        for (var i = 0; i < (maxDays || 400) && up.length < n; i++, s += DAY) eventsOnT(s).forEach(function (e) {
+          var key = e + new Date(s).getUTCFullYear();
+          if (EV[e].k !== "minor" && !seen[key] && up.length < n) { seen[key] = 1; up.push([keyOf(s), e]); }
+        });
+        return up;
+      },
+      lunarKm: function (iso) { return west(KM.format(kh(tOf(iso)))); },
+      lunarEn: function (iso) { var k = kh(tOf(iso)).khmer; return ord(k.day) + " " + (k.moonPhase ? "waning" : "waxing") + " day of " + MEN[k.monthIndex] + ", Year of the " + AEN[k.animalYear] + " (" + SAK_EN[k.sak] + "), B.E. " + k.beYear; },
+    };
+  }
+  return { make: make, EV: EV };
+});
+
+var CNY_DATES = {"1900":"01-31","1901":"02-19","1902":"02-08","1903":"01-29","1904":"02-16","1905":"02-04","1906":"01-25","1907":"02-13","1908":"02-02","1909":"01-22","1910":"02-10","1911":"01-30","1912":"02-18","1913":"02-06","1914":"01-26","1915":"02-14","1916":"02-03","1917":"01-23","1918":"02-11","1919":"02-01","1920":"02-20","1921":"02-08","1922":"01-28","1923":"02-16","1924":"02-05","1925":"01-24","1926":"02-13","1927":"02-02","1928":"01-23","1929":"02-10","1930":"01-30","1931":"02-17","1932":"02-06","1933":"01-26","1934":"02-14","1935":"02-04","1936":"01-24","1937":"02-11","1938":"01-31","1939":"02-19","1940":"02-08","1941":"01-27","1942":"02-15","1943":"02-05","1944":"01-25","1945":"02-13","1946":"02-02","1947":"01-22","1948":"02-10","1949":"01-29","1950":"02-17","1951":"02-06","1952":"01-27","1953":"02-14","1954":"02-03","1955":"01-24","1956":"02-12","1957":"01-31","1958":"02-18","1959":"02-08","1960":"01-28","1961":"02-15","1962":"02-05","1963":"01-25","1964":"02-13","1965":"02-02","1966":"01-21","1967":"02-09","1968":"01-30","1969":"02-17","1970":"02-06","1971":"01-27","1972":"02-15","1973":"02-03","1974":"01-23","1975":"02-11","1976":"01-31","1977":"02-18","1978":"02-07","1979":"01-28","1980":"02-16","1981":"02-05","1982":"01-25","1983":"02-13","1984":"02-02","1985":"02-20","1986":"02-09","1987":"01-29","1988":"02-17","1989":"02-06","1990":"01-27","1991":"02-15","1992":"02-04","1993":"01-23","1994":"02-10","1995":"01-31","1996":"02-19","1997":"02-07","1998":"01-28","1999":"02-16","2000":"02-05","2001":"01-24","2002":"02-12","2003":"02-01","2004":"01-22","2005":"02-09","2006":"01-29","2007":"02-18","2008":"02-07","2009":"01-26","2010":"02-14","2011":"02-03","2012":"01-23","2013":"02-10","2014":"01-31","2015":"02-19","2016":"02-08","2017":"01-28","2018":"02-16","2019":"02-05","2020":"01-25","2021":"02-12","2022":"02-01","2023":"01-22","2024":"02-10","2025":"01-29","2026":"02-17","2027":"02-06","2028":"01-26","2029":"02-13","2030":"02-03","2031":"01-23","2032":"02-11","2033":"01-31","2034":"02-19","2035":"02-08","2036":"01-28","2037":"02-15","2038":"02-04","2039":"01-24","2040":"02-12","2041":"02-01","2042":"01-22","2043":"02-10","2044":"01-30","2045":"02-17","2046":"02-06","2047":"01-26","2048":"02-14","2049":"02-02","2050":"01-23","2051":"02-11","2052":"02-01","2053":"02-19","2054":"02-08","2055":"01-28","2056":"02-15","2057":"02-04","2058":"01-24","2059":"02-12","2060":"02-02"};
+var STUDIO_PICS = ["chanda","goat","pig","rabbit","rooster"];
+var EDITION = (function () {
+// Daily editions of the Video Studio (https://mybirthsign.com/studio/): one fresh, AI-written video plan per zodiac
+// animal per calendar day, saved so it never changes on refresh. Shared by
+//   - the Studio page (embedded by scripts/content/build-video-tool.mjs, wrapped as the EDITION object), and
+//   - the Netlify function netlify/functions/studio-edition.mjs (imports it).
+// No Node imports apart from video-pack-lib.mjs (also browser code), so the same text runs on both sides.
+//
+// What is decided here, by code, never by the AI:
+//   - the day's theme (weekday rotation, Khmer festivals, full moons, Chinese New Year),
+//   - the scene structure for 30 / 60 / 90 seconds (hook, Chanda's introduction, the guardian's action and magical
+//     moment, the blessing, the closing),
+//   - the character lines that keep @Chanda and the 12 saved Flow guardians exactly as they are,
+//   - Chanda's fixed voice, the voice-length limits and the safety words.
+// What the AI writes (fresh each day, checked against recent editions): the story, the Khmer and English lines, the
+// settings, actions, camera moves and sound.
+
+
+const ED_ANIMALS = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
+// traditional zodiac year names, the same as js/i18n.js KM_ANIMAL_NAMES
+const ED_KM = { Rat: "ជូត", Ox: "ឆ្លូវ", Tiger: "ខាល", Rabbit: "ថោះ", Dragon: "រោង", Snake: "ម្សាញ់", Horse: "មមី", Goat: "មមែ", Monkey: "វក", Rooster: "រកា", Dog: "ច", Pig: "កុរ" };
+const ED_LENGTHS = [30, 60, 90];
+const ED_DEFAULT_LENGTH = 60;
+const ED_TZ = "Asia/Phnom_Penh";   // the website's own day; the Studio lets the owner pick another
+
+// ------------------------------------------------------------------ themes
+// Seven weekday themes, each with four variations: the same weekday shows a different variation each week, so one exact
+// theme comes back only every four weeks. Festivals, Chinese New Year and full moons replace the weekday theme.
+const W = (id, en, km, angle, light, music) => ({ id, en, km, angle, light, music });
+const ED_WEEKDAY = [
+  // Sunday (getUTCDay() === 0)
+  [W("renewal", "Renewal, Peace and Positive Energy", "ការចាប់ផ្ដើមថ្មី សន្តិភាព និងថាមពលវិជ្ជមាន", "a fresh start, calm and hope for the week ahead", "misty blue dawn turning gold", "slow, airy and hopeful"),
+   W("rest", "Rest, Calm and a Fresh Start", "ការសម្រាក ភាពស្ងប់ និងការចាប់ផ្ដើមថ្មី", "slowing down, resting well and starting again with a clear heart", "soft silver morning mist over still water", "gentle, slow and soothing"),
+   W("letgo", "Letting Go and Moving Forward", "ការលែងគិតរឿងចាស់ និងបោះជំហានទៅមុខ", "leaving old worries behind and stepping forward lightly", "clearing rain clouds and the first warm sunbeams", "light, rising and freeing"),
+   W("balance", "Balance and Inner Light", "តុល្យភាព និងពន្លឺក្នុងចិត្ត", "balance between work, family and rest, and a calm inner light", "quiet twilight with lotus lamps on the water", "calm, warm and balanced")],
+  // Monday
+  [W("wealth", "Golden Wealth and Prosperity", "ទ្រព្យមាស និងភាពរុងរឿង", "prosperity, good trade and wise use of money", "rich golden-hour sunset light", "bright, warm and festive"),
+   W("saving", "Steady Income and Wise Saving", "ប្រាក់ចំណូលនឹងនរ និងការសន្សំដោយប្រាជ្ញា", "steady income, patient saving and careful spending", "calm amber evening light and lanterns", "steady, warm and confident"),
+   W("trade", "Good Customers and Busy Trade", "អតិថិជនល្អ និងការលក់ដូរល្អ", "a busy, honest shop, kind customers and good deals", "warm market lanterns at dusk", "lively, cheerful and bright"),
+   W("harvest", "Hard Work That Turns to Gold", "ការខិតខំដែលក្លាយជាមាស", "patient effort that grows into a golden harvest", "golden sunrise over rice fields", "rhythmic, hopeful and proud")],
+  // Tuesday
+  [W("courage", "Courage and Protection", "ភាពក្លាហាន និងការការពារ", "courage, protection and standing strong", "dramatic dusk with glowing protective light", "bold drums, heroic and warm"),
+   W("challenge", "Strength to Face New Challenges", "កម្លាំងចិត្តប្រឈមនឹងបញ្ហាថ្មី", "meeting a new challenge with a strong, calm heart", "wind and passing storm clouds lit gold", "rising, brave and determined"),
+   W("shield", "A Shield for Home and Family", "ខែលការពារផ្ទះ និងគ្រួសារ", "keeping home and family safe and warm", "deep blue night with a warm golden glow", "protective, warm and steady"),
+   W("calmbrave", "Brave Hearts, Calm Minds", "ចិត្តក្លាហាន គំនិតស្ងប់", "being brave without anger, calm under pressure", "moonlit mist and soft silver light", "calm, deep and confident")],
+  // Wednesday
+  [W("love", "Love and Relationships", "ស្នេហា និងទំនាក់ទំនង", "love, care and close relationships", "soft pink and violet twilight", "tender, romantic and light"),
+   W("harmony", "Kind Words and Sweet Harmony", "ពាក្យពេចន៍ទន់ភ្លន់ និងភាពចុះសម្រុង", "kind words that bring harmony at home and work", "warm rose light with floating lanterns", "sweet, gentle and harmonious"),
+   W("friendship", "Friendship and Loyal Hearts", "មិត្តភាព និងចិត្តស្មោះ", "loyal friends, teamwork and trust", "bright starry night with fireflies", "friendly, warm and playful"),
+   W("reconcile", "Mending Misunderstandings", "ការផ្សះផ្សាការយល់ច្រឡំ", "patience, listening and mending small misunderstandings", "gentle rain ending in a moonlit sky", "soft, healing and hopeful")],
+  // Thursday
+  [W("wisdom", "Wisdom and Success", "ប្រាជ្ញា និងភាពជោគជ័យ", "wise choices that lead to success", "clear starry night with a bright moon", "elegant, thoughtful and inspiring"),
+   W("study", "Learning and Clear Thinking", "ការសិក្សា និងគំនិតភ្លឺថ្លា", "learning, study and a clear, focused mind", "calm lamplight and a quiet blue night", "focused, light and bright"),
+   W("plans", "Smart Plans and New Opportunities", "ផែនការឆ្លាតវៃ និងឱកាសថ្មី", "planning well and noticing new opportunities", "dawn breaking behind the temple towers", "optimistic, building and bright"),
+   W("mentors", "Good Teachers and Helpful Mentors", "គ្រូល្អ និងអ្នកណែនាំល្អ", "respect for teachers and help from wise people", "warm candle-gold light in carved galleries", "respectful, warm and graceful")],
+  // Friday
+  [W("happiness", "Happiness and Good Fortune", "សុភមង្គល និងសំណាងល្អ", "joy, gratitude and small strokes of good luck", "festive lantern night with golden sparkles", "joyful, bright and celebratory"),
+   W("joy", "Joy, Laughter and Lucky Surprises", "សេចក្ដីរីករាយ សំណើច និងការភ្ញាក់ផ្អើលដ៏សំណាង", "laughter and pleasant surprises", "colorful sky lanterns and fireworks", "playful, sparkling and upbeat"),
+   W("celebrate", "Celebrations with Friends", "ការអបអរជាមួយមិត្តភក្ដិ", "sharing happy moments with friends", "warm lights over the lotus lake", "festive, friendly and lively"),
+   W("littleblessings", "Little Blessings in Everyday Life", "ពរជ័យតូចៗក្នុងជីវិតប្រចាំថ្ងៃ", "noticing the small good things each day", "soft golden afternoon light", "light, sweet and warm")],
+  // Saturday
+  [W("family", "Wealth, Family and Blessings", "ទ្រព្យ គ្រួសារ និងពរជ័យ", "a blessed home, family harmony and shared prosperity", "warm sunrise over the temple", "warm, rich and uplifting"),
+   W("home", "A Warm and Happy Home", "ផ្ទះកក់ក្ដៅ និងរីករាយ", "a peaceful, cheerful home", "cozy lantern glow at dusk", "cozy, gentle and happy"),
+   W("gratitude", "Gratitude to Parents and Elders", "ការដឹងគុណឪពុកម្ដាយ និងចាស់ទុំ", "thanking parents and elders, respect and care", "soft golden evening light", "tender, respectful and warm"),
+   W("sharing", "Sharing Good Fortune with Loved Ones", "ចែករំលែកសំណាងល្អជាមួយមនុស្សជាទីស្រឡាញ់", "generosity and sharing good fortune", "bright moonrise with lotus lamps", "generous, warm and bright")],
+];
+// special days (ids from js/khmer-events.js). Only cultural and Buddhist celebrations: political and national days keep
+// the weekday theme. Buddhist days get a calm, respectful theme.
+const ED_SPECIAL = {
+  newyear: W("khmer-new-year", "Khmer New Year Blessings", "ពរជ័យបុណ្យចូលឆ្នាំខ្មែរ", "Khmer New Year: welcoming the new year, family, respect for elders and fresh blessings", "bright festive sunshine and evening lanterns", "festive, joyful and traditional"),
+  water: W("water-festival", "Water Festival Joy", "សេចក្ដីរីករាយបុណ្យអុំទូក", "the Water Festival: boats on the river, moonlight, gratitude to the water and the moon", "full moon over the river with floating lights", "festive, rhythmic and celebratory"),
+  pchumben: W("pchum-ben", "Pchum Ben: Gratitude to Ancestors", "ភ្ជុំបិណ្ឌ៖ ការដឹងគុណដូនតា", "Pchum Ben: remembering and thanking ancestors with a calm, grateful heart", "soft dawn light and quiet candle glow", "calm, respectful and gentle"),
+  kanben: W("kan-ben", "Kan Ben: A Season of Gratitude", "កាន់បិណ្ឌ៖ រដូវនៃការដឹងគុណ", "the Kan Ben days: gratitude, family and kindness", "quiet dawn with candle glow", "calm, respectful and gentle"),
+  visak: W("visak-bochea", "Visak Bochea: Peace and Kindness", "វិសាខបូជា៖ សន្តិភាព និងចិត្តមេត្តា", "Visak Bochea: peace, kindness and a calm mind (respectful, no magic near sacred images)", "full moon and soft candle light", "calm, peaceful and gentle"),
+  meak: W("meak-bochea", "Meak Bochea: Peace and Good Deeds", "មាឃបូជា៖ សន្តិភាព និងអំពើល្អ", "Meak Bochea: peace, good deeds and harmony (respectful, no magic near sacred images)", "full moon and soft candle light", "calm, peaceful and gentle"),
+  asalha: W("asalha-puja", "Asalha Puja: Wisdom and Calm", "អាសាឡ្ហបូជា៖ ប្រាជ្ញា និងភាពស្ងប់", "Asalha Puja: wisdom, calm and good intentions (respectful)", "full moon and soft candle light", "calm, peaceful and gentle"),
+  cholvassa: W("chol-vassa", "Chol Vassa: Patience and Good Intentions", "ចូលព្រះវស្សា៖ ការអត់ធ្មត់ និងបំណងល្អ", "the start of the rainy retreat season: patience and good intentions (respectful)", "gentle rain and warm candle light", "calm, gentle and warm"),
+  chenhvassa: W("chenh-vassa", "Chenh Vassa: Light After the Rain", "ចេញព្រះវស្សា៖ ពន្លឺក្រោយរដូវភ្លៀង", "the end of the rainy retreat season: brightness, generosity and new beginnings (respectful)", "clear sky after rain and warm lamps", "bright, warm and hopeful"),
+  ploughing: W("royal-ploughing", "A Good Harvest Ahead", "សង្ឃឹមលើការប្រមូលផលល្អ", "the season of ploughing and planting: hope for a good harvest", "golden morning over green rice fields", "rhythmic, hopeful and earthy"),
+  newyearday: W("new-year-day", "A Bright New Year", "ឆ្នាំថ្មីភ្លឺស្វាង", "the first day of the international new year: fresh goals and hope", "night fireworks over the temple", "festive, sparkling and hopeful"),
+};
+const ED_CNY = W("chinese-new-year", "Chinese New Year Good Fortune", "សំណាងល្អបុណ្យចូលឆ្នាំចិន", "Chinese New Year: welcoming the new zodiac year with red and gold, family and good wishes", "red lanterns and golden fireworks at night", "festive, joyful, drums and bells");
+const ED_CNY_EVE = W("chinese-new-year-eve", "Chinese New Year's Eve", "ថ្ងៃមុនចូលឆ្នាំចិន", "the eve of Chinese New Year: tidy homes, family reunion and readiness for luck", "red lanterns at dusk", "warm, festive and expectant");
+const ED_FULLMOON = W("full-moon", "Full Moon Blessings", "ពរជ័យថ្ងៃពេញបូណ៌មី", "the full moon (a holy day): calm, gratitude and bright wishes", "an enormous bright full moon over still water", "calm, glowing and magical");
+const SPECIAL_ORDER = ["newyear", "water", "pchumben", "visak", "meak", "asalha", "chenhvassa", "cholvassa", "kanben", "ploughing", "newyearday"];
+
+const epochDay = (iso) => Math.round(Date.parse(iso + "T00:00:00Z") / 86400000);
+const addDays = (iso, n) => new Date(Date.parse(iso + "T00:00:00Z") + n * 86400000).toISOString().slice(0, 10);
+// ctx (all optional): { events: [ids from MBSKhmerEvents.eventsOn(iso)], fullMoon: bool, cny: { "2027": "02-06", ... } }
+function dailyTheme(iso, ctx = {}) {
+  const wd = new Date(iso + "T00:00:00Z").getUTCDay();
+  const week = Math.floor((epochDay(iso) + 4) / 7);   // the week number (weeks start on Sunday)
+  const base = ED_WEEKDAY[wd][((week % 4) + 4) % 4];
+  const ev = (ctx.events || []).filter((e) => ED_SPECIAL[e]).sort((a, b) => SPECIAL_ORDER.indexOf(a) - SPECIAL_ORDER.indexOf(b));
+  const y = iso.slice(0, 4), cny = ctx.cny && ctx.cny[y] ? `${y}-${ctx.cny[y]}` : null;
+  let t = base, kind = "weekday", note = "";
+  if (ev.length) { t = ED_SPECIAL[ev[0]]; kind = "festival"; note = "Special day: " + t.en; }
+  else if (cny && iso === cny) { t = ED_CNY; kind = "cny"; note = "Chinese New Year"; }
+  else if (cny && iso === addDays(cny, -1)) { t = ED_CNY_EVE; kind = "cny"; note = "Chinese New Year's Eve"; }
+  else if (ctx.fullMoon) { t = ED_FULLMOON; kind = "fullmoon"; note = "Full moon"; }
+  return { ...t, kind, weekday: base.id, note, events: ev };
+}
+
+// ------------------------------------------------------------------ guardians
+// Each guardian keeps its saved look (Flow character @<Animal>); these are only story ingredients and one example of a
+// signature magical moment (from the owner's brief, 12/11/2026), to inspire new actions, never to be copied.
+const ED_GUARDIAN = {
+  Rat: { motifs: "glowing hidden treasure, clever discoveries, secret paths, coins of light, lantern light", example: "discovers a glowing treasure and sends sparkling golden light toward the viewer" },
+  Ox: { motifs: "steady golden footsteps, rice fields, a bronze temple bell, earth energy, the harvest", example: "walks forward with powerful golden energy, symbolizing stability and prosperity" },
+  Tiger: { motifs: "magical mist, a glowing protective aura, the jungle at the temple's edge, fire-gold flowers", example: "appears through magical mist with glowing protective energy" },
+  Rabbit: { motifs: "pink lotus petals, gentle healing light, the moon, jade, silver moonlight", example: "releases beautiful pink lotus petals and gentle healing light" },
+  Dragon: { motifs: "the full moon, a glowing pearl, clouds and rain, golden energy, flight", example: "flies around the full moon, gathers golden energy and releases a golden blessing toward the viewer" },
+  Snake: { motifs: "elegant ribbons of golden energy, temple towers, circles of silver light, calligraphy of light", example: "creates elegant ribbons of golden energy around the temple" },
+  Horse: { motifs: "a golden landscape, the open road, wind, sparks under hooves, freedom", example: "gallops through a magical golden landscape" },
+  Goat: { motifs: "a peaceful garden, glowing flowers, a mountain meadow, soft music, kindness", example: "creates a peaceful garden filled with glowing flowers" },
+  Monkey: { motifs: "graceful magical leaps, sparkling golden light, a golden staff, playful tricks", example: "performs a graceful magical leap and releases sparkling golden light" },
+  Rooster: { motifs: "the sunrise, radiant golden light, feathers of light, a morning bell, a bright new day", example: "welcomes the sunrise with radiant golden light" },
+  Dog: { motifs: "a protective golden shield, the gate of a home, a loyal watch, warm hearth light", example: "creates a protective golden shield" },
+  Pig: { motifs: "a magical treasure of golden coins, a generous feast, a happy home, abundance", example: "reveals a magical treasure filled with golden coins" },
+};
+
+// ------------------------------------------------------------------ scene structure
+// Every clip is 10 seconds (the length Flow and Omni handle best, and the length the voice limits are set for).
+// on = Chanda on camera with lip-sync; refs = the saved characters added as ingredients.
+const R = (role, label, on, task) => ({ role, label, on, task });
+const PLANS = {
+  30: [R("hook", "Opening hook and Chanda's welcome", true, "Chanda on camera opens with a striking hook and names today's sign and theme; the guardian and the animal appear behind her."),
+       R("moment", "The guardian's magical moment", false, "The guardian and the animal perform today's signature magical action, from first spark to full magic."),
+       R("closing", "Blessing and goodbye", true, "The magic turns into a blessing for the viewer; Chanda on camera gives the blessing (lucky items if allowed) and a short warm goodbye.")],
+  60: [R("hook", "Opening hook", false, "A striking, mysterious first image of the guardian and the animal that makes viewers stay; Chanda's voice asks a question or teases the magic."),
+       R("intro", "Chanda's introduction", true, "Chanda on camera greets the viewer warmly in Khmer style, names the sign and today's theme in one short line."),
+       R("action", "The guardian's special action", false, "The guardian and the animal begin today's special action: the story's first step."),
+       R("moment", "The magical moment", false, "The climax: the signature magical moment, big and beautiful."),
+       R("blessing", "The blessing", false, "The magic flows toward the viewer as a blessing; Chanda's voice gives the blessing and, if allowed, today's lucky color, time and number."),
+       R("closing", "Closing message", true, "Chanda on camera with the guardian and the animal: a short positive closing message and goodbye.")],
+  90: [R("hook", "Opening hook", false, "A striking, mysterious first image of the guardian and the animal; Chanda's voice teases the story."),
+       R("intro", "Chanda's introduction", true, "Chanda on camera greets the viewer, names the sign and today's theme."),
+       R("story", "The story begins", false, "The small story of the day begins: a problem, a wish or a discovery."),
+       R("action", "The guardian's special action", false, "The guardian and the animal act to help: the special action begins."),
+       R("moment", "The magical moment", false, "The climax: the signature magical moment."),
+       R("meaning", "What it means today", false, "A calm image that shows the meaning of the story for the viewer's day."),
+       R("blessing", "The blessing", false, "The magic flows toward the viewer as a blessing."),
+       R("lucky", "Today's lucky signs", false, "Chanda's voice gives today's lucky color, time and number (if allowed) while the magic shows them."),
+       R("closing", "Closing message", true, "Chanda on camera with the guardian and the animal: a positive closing message and goodbye.")],
+};
+function scenePlan(length = ED_DEFAULT_LENGTH) {
+  const L = PLANS[length] ? length : ED_DEFAULT_LENGTH;
+  return PLANS[L].map((r, i) => ({ n: i + 1, role: r.role, label: r.label, onCam: r.on, task: r.task, start: i * 10, end: i * 10 + 10, dur: 10 }));
+}
+
+// ------------------------------------------------------------------ variety: seeded sparks and places
+function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+const SPARKS = ["a lantern that will not light until someone smiles", "a lotus that opens at the wrong hour", "a message carried by fireflies", "a bridge made of moonlight", "an old temple bell that wants to ring again", "a seed that grows into a tree in one night", "a paper boat with a wish written inside", "a kite caught on a temple tower", "a river that sings when the wind blows", "a star that falls into the lotus pond", "a door of light in an ancient wall", "a map drawn by the moon on the water", "a shy little bird that cannot fly yet", "a jar of golden rice that never empties", "a sleepy cloud that blocks the moon", "footprints of light leading to a secret garden", "a broken flute that plays again", "a rain of petals from a clear sky", "a mirror pool that shows tomorrow's sunrise", "a wind chime that calls lost friends home", "a tiny lantern boat lost on a big lake", "a golden key found in the roots of a banyan tree", "a candle that grows brighter with each kind word", "a rainbow that appears at night", "a gate that opens only for patient hearts", "a mango tree full of glowing fruit", "a drum whose beat makes flowers bloom", "a basket of wishes left at the temple steps", "a stone lion that blinks awake", "a silk scarf carried away by the wind", "a pathway of stepping stones that light up one by one", "a wish written in the sand by the river", "an old coin that shines when held by an honest hand", "a nest of baby birds in a temple carving", "a ripple on the water that keeps growing", "a sky lantern carrying a family's wish", "a sunrise that comes early to greet someone", "a garden that blooms at the sound of laughter", "a scroll that writes itself in golden light", "a lost bell from a boat race", "a moonbeam that turns into a staircase", "a gentle storm that waters a dry field", "a firefly that leads the way through mist", "a bowl of water that holds the whole moon", "an apsara carving that seems to dance", "a lotus bud holding a single drop of gold", "a market stall that glows with good luck", "a rope bridge across a jungle waterfall", "a ring of lanterns that lifts into the sky", "a pearl hidden inside a lotus"];
+const ED_PLACES = ["the stone causeway with carved naga balustrades", "among the giant roots of an ancient banyan tree with fireflies", "a wooden pier on a wide lotus lake", "a garden of white jasmine and frangipani", "a high tower terrace with carved apsara reliefs", "a courtyard with stone lions and rows of oil lamps", "golden rice fields near the temple", "a river with floating lotus lamps", "a jungle waterfall near the temple", "a lantern-lit market street beside the temple", "the temple's long carved gallery", "a moat with sky lanterns rising", "a hilltop above the temple at sunrise", "a reflecting pool with pink lotus flowers", "a misty bamboo grove", "a sandstone library building in the temple grounds", "the top of the temple's main staircase", "a lily-covered pond in the rain", "a field of fireflies at the jungle edge", "a riverside boat landing with decorated boats"];
+// n distinct items picked by a seed, avoiding any in `avoid`
+function pickSeeded(list, seed, n, avoid = []) {
+  const out = []; let s = seed || 1;
+  for (let i = 0; out.length < n && i < list.length * 3; i++) {
+    s = Math.imul(s ^ (s >>> 15), 2246822507) >>> 0; s = (s ^ (s >>> 13)) >>> 0;
+    const x = list[s % list.length];
+    if (!out.includes(x) && !avoid.some((a) => a && similar(a, x) > 0.5)) out.push(x);
+  }
+  return out;
+}
+
+// ------------------------------------------------------------------ similarity (to keep every day new)
+const STOP = new Set(("a an the and or of to in on at for with from by as is are be its it this that his her their they them into over under up down out today day your you our we " +
+  "golden gold light glowing magical magic guardian chanda viewer clip scene temple moment " + ED_ANIMALS.join(" ").toLowerCase()).split(" "));
+const stem = (w) => w.length > 4 ? w.replace(/(ing|ed|es|s)$/, "") : w;
+const words = (t) => String(t || "").toLowerCase().replace(/[^a-z0-9ក-៿ ]+/g, " ").split(/\s+/).filter((w) => w && !STOP.has(w)).map(stem);
+function grams(w, k) { const s = new Set(); if (k === 1 || w.length < k) { w.forEach((x) => s.add(x)); return s; } for (let i = 0; i + k <= w.length; i++) s.add(w.slice(i, i + k).join(" ")); return s; }
+const overlap = (A, B) => { if (!A.size || !B.size) return 0; let n = 0; A.forEach((x) => { if (B.has(x)) n++; }); return n / Math.min(A.size, B.size); };
+// 0 = nothing in common, 1 = the same idea: half shared words, half shared word pairs (catches reworded repeats)
+function similar(a, b) {
+  const wa = words(a), wb = words(b);
+  return Math.round((overlap(grams(wa, 1), grams(wb, 1)) * 0.5 + overlap(grams(wa, 2), grams(wb, 2)) * 0.5) * 100) / 100;
+}
+// the parts of a plan that make it "the same story"
+const planPrint = (p) => [p.title && p.title.en, p.logline, p.guardianMoment, p.beats && p.beats.join(" ")].filter(Boolean).join(" · ");
+const scenePrint = (s) => [s.setting, s.action].filter(Boolean).join(" · ");
+const ED_SIMILAR = 0.34;   // above this overlap a new idea counts as a repeat
+
+// ------------------------------------------------------------------ checks
+const ED_LIMIT = { enWords: 23, kmChars: 125 };   // a 10-second clip at Chanda's calm pace (same as the daily pack)
+const BANNED_EN = /\b(lottery|lotto|gambl\w*|betting|bet on|jackpot|casino|guarantee\w*|will definitely|100 ?%|get rich|curse\w*|death|die|disaster|cure\w*|diagnos\w*)\b/i;
+const BANNED_KM = /ឆ្នោត|ល្បែង|ភ្នាល់|កាស៊ីណូ|ធានា ?១០០|ស្លាប់|គ្រោះមហន្តរាយ|បណ្ដាសា/;
+// the AI must not redesign the saved characters
+const LOOK_WORDS = /\b(wearing|dressed in|new (outfit|costume|armou?r|look)|(his|her|its|their) (armou?r|robe|robes|hair|hairstyle|face|costume|outfit|dress|helmet) (is|are|turns|changes|becomes)|changes? (color|colour|shape)|transforms? into a (human|person|different))\b/i;
+function checkScene(sc, o = {}) {
+  const w = [];
+  const en = String(sc.en || ""), km = String(sc.km || "");
+  if (!km.trim()) w.push("Khmer line is empty");
+  if (!en.trim()) w.push("English line is empty");
+  if (enSpoken(en) > ED_LIMIT.enWords) w.push(`English line is ${enSpoken(en)} words; at most ${ED_LIMIT.enWords} fit 10 seconds`);
+  const kc = [...kmFlow(km)].length;
+  if (kc > ED_LIMIT.kmChars) w.push(`Khmer line is ${kc} characters when spoken; at most ${ED_LIMIT.kmChars} fit 10 seconds`);
+  const all = [sc.en, sc.setting, sc.action, sc.image, sc.sound].join(" ");
+  if (BANNED_EN.test(all) || BANNED_KM.test(km)) w.push("uses a word the Studio avoids (luck promises, gambling, death or medical words)");
+  if (LOOK_WORDS.test([sc.setting, sc.action, sc.image].join(" "))) w.push("may describe or change a character's look (the saved Flow characters must stay as they are)");
+  if (o.noNumbers && /\d/.test(en + km)) w.push("gives numbers on a take-it-easy day (that sign gets no lucky numbers)");
+  return w;
+}
+
+// ------------------------------------------------------------------ prompt text the user copies
+// the series style for daily editions: the same characters, realism and safety rules as the daily pack (STYLE), but the
+// place and the light are set by each scene, so every day can look different
+const SETTING_RE = /Setting: [^.]*\.( A living, magical sky in every shot: [^.]*\.)?/;
+const ED_STYLE = SETTING_RE.test(STYLE)
+  ? STYLE.replace(SETTING_RE, "Setting: the magical world of a majestic Khmer temple inspired by Angkor Wat and the land around it (lotus ponds, causeways, rivers, jungle, rice fields and gardens); each scene says where it is, the time of day and the light, and the sky is always alive (drifting clouds, twinkling stars or moving light).")
+  : STYLE;
+const ED_VOICE = { km: VOICE_KM.replace(/,$/, ""), en: VOICE_EN };
+const refLine = (animal, host) => `${host ? "Chanda is the saved Flow character @Chanda; " : ""}the ${animal.toLowerCase()} and its guardian are the saved Flow character ${FLOW_NAME(animal)}.`;
+function refsFor(animal, onCam, host) {
+  const r = [{ name: FLOW_NAME(animal), what: `the ${animal} guardian with their ${animal.toLowerCase()}`, pic: `characters/${animal.toLowerCase()}.jpg` }];
+  if (onCam || host) r.unshift({ name: "@Chanda", what: "the presenter", pic: "characters/chanda.jpg" });
+  return r;
+}
+// the full image and video prompts, built from the AI's scene parts and the fixed character lines
+function assemble(animal, sc) {
+  const host = !!sc.onCam;
+  const who = host ? `${HOST_LOOK.split(",")[0]} (the presenter) and ${LOOK[animal]}` : LOOK[animal];
+  const locks = `${host ? LOCK_HOST + " " : ""}${lockAnimal(animal)}`;
+  const image = `Create a photorealistic still frame, vertical 9:16, from a high-budget fantasy epic that blends Khmer royal heritage with a Chinese historical fantasy drama. In frame: ${who}. ${cap(sc.image || sc.action || "")} ${cap(sc.setting || "")} Use the saved character pictures as references and keep the faces, armor, costumes, colors and the animal exactly as they are; never redesign them. ${refLine(animal, host)} Physically real light, cinematic depth of field, ultra-detailed. No text, no letters, no watermark, no logo, no cartoon or plastic look.`.replace(/\s+/g, " ").replace(/\.\./g, ".");
+  const video = `${cap(sc.setting || "")} ${cap(sc.action || "")} Camera: ${sc.camera || "a smooth, slow cinematic move"}. ${host ? "Chanda faces the camera and speaks to the viewer with natural lip movements and small, friendly hand gestures; the guardian and the animal stay beside her and act without speaking. " : ""}${alive(animal)} ${locks} Sound: ${sc.sound || "gentle magical music"}.`.replace(/\s+/g, " ").replace(/\.\./g, ".");
+  return { image, video };
+}
+function cap(s) { s = String(s || "").trim(); if (!s) return ""; s = s[0].toUpperCase() + s.slice(1); return /[.!?]$/.test(s) ? s : s + "."; }
+// what "Copy + Khmer voice" / "Copy + English voice" puts on the clipboard for Google Flow / Omni
+function flowText(animal, sc, lang, wide = false) {
+  const style = wide ? ED_STYLE.replace("Vertical 9:16.", "Horizontal 16:9 (standard YouTube video).") : ED_STYLE;
+  const line = lang === "km" ? kmFlow(sc.km || "") : String(sc.en || "").trim();
+  const audio = `Audio: Chanda's voice, ${ED_VOICE[lang === "km" ? "km" : "en"]}. ${sc.onCam ? "Chanda is on camera and speaks to the viewer with natural lip movements that match her words." : "Chanda is heard as a voice-over only: she is not on screen, and no one on screen speaks or moves their mouth."} She says${lang === "km" ? " in Khmer" : ""}: "${line}" Music and sound: ${sc.sound || "gentle magical music"}. No other voices: the guardian and the animal never speak.`;
+  return `${style}\n\n${sc.video || assemble(animal, sc).video}\n\n${audio}`;
+}
+
+// ------------------------------------------------------------------ the AI's instructions
+function systemPrompt() {
+  return `You are the head writer of the MyBirthSign Zodiac Studio (mybirthsign.com), which makes a short, magical video every day for each of the 12 Chinese zodiac signs for Cambodian viewers on Facebook, TikTok and YouTube.
+THE CAST (fixed, saved in Google Flow; never describe or change how they look)
+- Chanda (ចន្ទា), a young Cambodian woman, the presenter. She is the only one who speaks.
+- Twelve zodiac guardians, saved as @Rat, @Ox, @Tiger, @Rabbit, @Dragon, @Snake, @Horse, @Goat, @Monkey, @Rooster, @Dog and @Pig: each one is a guardian warrior together with their animal. They act and do magic but never speak or move their mouths.
+- Never describe faces, hair, armor, clothes, colors or size of Chanda, a guardian or an animal, and never give them new costumes: call them "Chanda", "the guardian" and "the <animal>" only.
+STYLE
+- Photorealistic fantasy epic that blends Khmer royal heritage with a Chinese fantasy drama; a temple inspired by Angkor Wat and the land around it; golden magic, lotus flowers, lanterns, mist; graceful wire-fu moves.
+- Respectful of Khmer culture and Buddhism: temples are only settings; never put the Buddha, monks or sacred statues into magic tricks; no fighting between characters, no blood, injury or horror.
+- Traditional entertainment, warm and encouraging. Never promise outcomes. Never use: guaranteed, will definitely, 100%, destined, cure, lottery, gambling, betting, jackpot, get rich, curse, death, disaster. No medical, legal or money advice.
+LANGUAGE
+- Khmer: natural, warm, modern spoken Khmer, as a native speaker from Phnom Penh would say it on video to friends; simple everyday words, correct spelling, no English words. Write it first, as Khmer, not as a translation. Use the Khmer zodiac year names (ជូត ឆ្លូវ ខាល ថោះ រោង ម្សាញ់ មមី មមែ វក រកា ច កុរ). Numbers in Western digits (7, not ៧).
+- English: a natural English version with the same meaning (not word for word).
+FRESH EVERY DAY
+- Each episode must have its own new story, new places, new light and new magic. Never reuse the recent ideas you are given, and never copy the example moment: invent a new one in the same spirit.
+OUTPUT: only one JSON object, nothing before or after it, no markdown.`;
+}
+const dmy = (iso) => iso.split("-").reverse().join("/");
+const WD = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+function luckyLine(f) {
+  if (!f) return "";
+  if (f.tier === "caution") return `Today the ${f.animal || "sign"} should take it easy: a gentle, calm, protective episode. NO lucky numbers, no promises; comfort and encourage.`;
+  const t = f.time && TIME_SAY[f.time];
+  return `Today's rating: ${f.label && f.label.en || f.tier}. Lucky color: ${f.color && f.color.en} (${f.color && f.color.km}). Lucky time: ${f.time}${t ? ` (say "${t[0]}" / "${t[1]}")` : ""}. Lucky direction: ${f.direction && f.direction.en} (${f.direction && f.direction.km}). Lucky numbers: ${(f.digits || []).join(", ")}. Harmony sign today: ${f.helper || ""}.`;
+}
+function planPrompt(x) {
+  const { iso, animal, theme, facts, length, avoid = [], today = [], seed = 1, retryNote = "" } = x;
+  const G = ED_GUARDIAN[animal], plan = scenePlan(length);
+  const sparks = pickSeeded(SPARKS, seed, 3, avoid), places = pickSeeded(ED_PLACES, seed ^ 0x9e3779b9, 4, avoid);
+  return `Write today's episode plan.
+Date: ${WD[new Date(iso + "T00:00:00Z").getUTCDay()]} ${dmy(iso)}. Sign: ${animal} (Khmer ${ED_KM[animal]}).
+Theme of the day: ${theme.en} (${theme.km}): ${theme.angle}.${theme.note ? " " + theme.note + "." : ""} Light and mood ideas: ${theme.light}; music mood: ${theme.music}.
+The ${animal}: ${SYMBOL[animal].en}${facts && facts.traits ? " Traits: " + facts.traits : ""}
+${luckyLine(facts)}
+Story ingredients for the ${animal} guardian (use freely): ${G.motifs}. Example of a signature moment (do NOT copy it, invent a new one in the same spirit): the ${animal.toLowerCase()} ${G.example}.
+Today's random sparks (use one if it helps the story): ${sparks.join("; ")}. Places to consider: ${places.join("; ")}.
+Video: ${length} seconds, ${plan.length} clips of 10 seconds:
+${plan.map((s) => `${s.n}. ${s.label}${s.onCam ? " (Chanda on camera)" : " (Chanda's voice only)"}: ${s.task}`).join("\n")}
+${avoid.length ? `Recent ideas for the ${animal} (do not repeat them, their places or their magic):\n${avoid.slice(0, 12).map((a) => "- " + a).join("\n")}\n` : ""}${today.length ? `Other signs today already use (choose something different):\n${today.slice(0, 11).map((a) => "- " + a).join("\n")}\n` : ""}${retryNote ? retryNote + "\n" : ""}Return JSON:
+{"title_en":"short episode title","title_km":"the title in Khmer","logline":"the story in one English sentence","hook":"the opening hook idea (one sentence)","guardian_moment":"the new signature magical moment, specific and visual (one or two sentences)","blessing_en":"the blessing to the viewer (one sentence)","blessing_km":"the blessing in natural Khmer","closing_en":"the closing message (one sentence)","closing_km":"the closing message in natural Khmer","music":"music and sound atmosphere for the whole episode (instruments and mood, no artist or song names)","beats":[${plan.map((s) => `"clip ${s.n}: what happens"`).join(",")}]}
+Exactly ${plan.length} beats.`;
+}
+function scenePrompt(x) {
+  const { iso, animal, theme, facts, ep, index, avoid = [], note = "" } = x;
+  const sc = ep.scenes[index], prev = ep.scenes[index - 1], next = ep.scenes[index + 1];
+  const noNum = facts && facts.tier === "caution";
+  const luckyAsk = /blessing|lucky|closing/.test(sc.role) && !noNum
+    ? (sc.role === "blessing" || sc.role === "lucky" || ep.scenes.length === 3 ? "Weave in today's lucky color and lucky time naturally (and one lucky number only if it fits the time limit)." : "")
+    : noNum ? "No numbers at all (take-it-easy day)." : "";
+  return `Write clip ${sc.n} of ${ep.scenes.length} of today's ${animal} episode.
+Date: ${dmy(iso)}. Theme: ${theme.en} (${theme.km}).
+Episode: "${ep.title.en}" — ${ep.logline}
+Signature moment: ${ep.guardianMoment}
+Blessing: ${ep.blessing.en} / Closing: ${ep.closing.en}
+Music for the episode: ${ep.music}
+${luckyLine(facts)}
+This clip (${sc.start}–${sc.end} s, 10 seconds): ${sc.label}. ${sc.onCam ? "Chanda is ON CAMERA and speaks to the viewer (lip-sync); the guardian and the animal are beside her and only act." : "Chanda is NOT on screen: her voice is a voice-over; the guardian and the animal act and never speak."}
+What happens: ${ep.beats[index] || sc.task}
+${prev && prev.setting ? `Previous clip ended: ${prev.setting} ${prev.action}\n` : ""}${next ? `Next clip: ${ep.beats[index + 1] || next.task}\n` : ""}${luckyAsk}
+Voice limits (Chanda speaks calmly, and the clip is only 10 seconds): the Khmer line is one or two short sentences of at most 15 Khmer words; the English line at most 20 words.
+${avoid.length ? `Recent ${animal} scenes (use a different place, light and action):\n${avoid.slice(0, 10).map((a) => "- " + a).join("\n")}\n` : ""}${note ? note + "\n" : ""}Return JSON:
+{"km":"what Chanda says, in natural spoken Khmer","en":"the same in natural English","setting":"where we are, time of day, light, weather and magical effects (no character looks)","action":"what the guardian and the animal${sc.onCam ? " and Chanda" : ""} do, moment by moment, without describing how they look","camera":"one smooth camera movement","sound":"music and sound effects for this clip","image":"the key still frame of this clip in one sentence"}`;
+}
+// pull the JSON object out of the AI's reply
+function parseJSON(text) {
+  const m = String(text || "").match(/\{[\s\S]*\}/);
+  return JSON.parse(m ? m[0] : text);
+}
+const S = (v, n = 1200) => String(v == null ? "" : v).replace(/\s+/g, " ").trim().slice(0, n);
+// a plan from the AI, checked and shaped into an episode (scenes still empty)
+function planToEpisode(raw, x) {
+  const plan = scenePlan(x.length);
+  const beats = Array.isArray(raw.beats) ? raw.beats.map((b) => S(b, 400).replace(/^clip \d+:\s*/i, "")) : [];
+  if (beats.length < plan.length) throw new Error(`the plan has ${beats.length} beats, ${plan.length} needed`);
+  for (const k of ["title_en", "title_km", "logline", "guardian_moment", "blessing_en", "blessing_km", "closing_en", "closing_km"]) if (!S(raw[k])) throw new Error("the plan is missing " + k);
+  return {
+    v: 1, date: x.iso, animal: x.animal, vid: x.vid || "main", length: plan.length * 10,
+    theme: { id: x.theme.id, en: x.theme.en, km: x.theme.km, kind: x.theme.kind, note: x.theme.note || "" },
+    facts: x.facts || null,
+    title: { en: S(raw.title_en, 120), km: S(raw.title_km, 160) }, logline: S(raw.logline, 400), hook: S(raw.hook, 400),
+    guardianMoment: S(raw.guardian_moment, 600), blessing: { en: S(raw.blessing_en, 300), km: S(raw.blessing_km, 400) },
+    closing: { en: S(raw.closing_en, 300), km: S(raw.closing_km, 400) }, music: S(raw.music, 400),
+    beats: beats.slice(0, plan.length),
+    scenes: plan.map((s) => ({ ...s, refs: refsFor(x.animal, s.onCam), status: "empty", km: "", en: "", setting: "", action: "", camera: "", sound: "", image: "", video: "", imagePrompt: "", warnings: [] })),
+  };
+}
+// one scene from the AI, checked and assembled
+function fillScene(ep, index, raw) {
+  const sc = { ...ep.scenes[index] };
+  for (const k of ["km", "en", "setting", "action", "camera", "sound", "image"]) sc[k] = S(raw[k], k === "action" || k === "setting" ? 900 : 500);
+  if (!sc.km || !sc.en || !sc.action) throw new Error("the scene is missing its Khmer line, English line or action");
+  const a = assemble(ep.animal, sc);
+  sc.imagePrompt = a.image; sc.video = a.video;
+  sc.warnings = checkScene(sc, { noNumbers: ep.facts && ep.facts.tier === "caution" });
+  sc.status = "ready";
+  return sc;
+}
+const episodeStatus = (ep) => !ep ? "none" : ep.scenes.every((s) => s.status === "ready") ? "ready" : ep.scenes.some((s) => s.status === "ready") ? "partial" : "planned";
+
+return { ED_ANIMALS, ED_KM, ED_LENGTHS, ED_DEFAULT_LENGTH, ED_TZ, ED_WEEKDAY, ED_SPECIAL, ED_CNY, ED_CNY_EVE, ED_FULLMOON, dailyTheme, ED_GUARDIAN, scenePlan, hash, ED_PLACES, pickSeeded, similar, planPrint, scenePrint, ED_SIMILAR, ED_LIMIT, checkScene, ED_STYLE, ED_VOICE, refsFor, assemble, flowText, systemPrompt, luckyLine, planPrompt, scenePrompt, parseJSON, planToEpisode, fillScene, episodeStatus };
+})();
 </script>
 <script>
 (function () {
@@ -2567,7 +3185,517 @@ function charactersMd(KM_NAMES) {
   $("next").addEventListener("click", function () { set(addDays(D.value, 1)); });
   $("today").addEventListener("click", function () { set(ppToday()); });
   window.__pack = function (iso) { var p = buildPack(iso, computeFacts(iso), window.MBSLuckyDigits.forSign, null, PACK_DATA); return p; };
+  window.__studioUI = { copy: copy, toast: toast, esc: esc, onSite: onSite };   // shared with the daily editions script below
   set(addDays(ppToday(), 1));   // open on tomorrow: videos are made a day ahead
+})();
+</script>
+<script>
+// ------------------------------------------------------------------ daily editions
+// One fresh edition per calendar day (the owner's time zone), written by the AI through the Studio service
+// (netlify/functions/studio-edition.mjs, /api/studio) and saved there: a refresh never changes it, older days stay in
+// the archive. The text rules (themes, scene structure, character lines, voice limits) are EDITION, built from
+// scripts/content/studio-edition-lib.mjs. The claude.ai copy of the Studio cannot reach the website, so there this
+// tab only shows the day's theme and a link.
+(function () {
+  "use strict";
+  var U = window.__studioUI || {}, $ = function (id) { return document.getElementById(id); };
+  var esc = U.esc, copy = U.copy, toast = U.toast, onSite = !!U.onSite;
+  var A = EDITION.ED_ANIMALS, API = "/api/studio";
+  var escA = function (s) { return esc(s).replace(/"/g, "&quot;"); };
+  var LS = {
+    get: function (k, d) { try { var v = localStorage.getItem("mbs-ed-" + k); return v === null ? d : v; } catch (e) { return d; } },
+    set: function (k, v) { try { if (v === null) localStorage.removeItem("mbs-ed-" + k); else localStorage.setItem("mbs-ed-" + k, v); } catch (e) {} },
+  };
+  var S = { key: LS.get("key", ""), tz: LS.get("tz", EDITION.ED_TZ), len: Number(LS.get("len", EDITION.ED_DEFAULT_LENGTH)), voice: LS.get("voice", "km"), auto: LS.get("auto", "1") === "1",
+    date: "", today: "", day: null, eps: {}, etags: {}, errs: {}, run: null, open: null, draft: null, dirty: false, svc: null, loaded: false, arch: [], archMore: false };
+  var KE = (window.MBSKhmerEvents && window.momentkh) ? MBSKhmerEvents.make(momentkh) : null;
+
+  // ---- dates
+  function todayIn(tz) { try { return new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()); } catch (e) { return new Date().toISOString().slice(0, 10); } }
+  function addDays(iso, n) { return new Date(Date.parse(iso + "T00:00:00Z") + n * 864e5).toISOString().slice(0, 10); }
+  function dmy(iso) { return iso.split("-").reverse().join("/"); }
+  var WD = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  function longDate(iso) { return WD[new Date(iso + "T00:00:00Z").getUTCDay()] + " " + dmy(iso); }
+  function mmss(s) { return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); }
+
+  // ---- the day's theme and each sign's lucky items (the website's own rules)
+  function themeFor(iso) {
+    var ctx = { cny: typeof CNY_DATES !== "undefined" ? CNY_DATES : {} };
+    if (KE) {
+      try {
+        ctx.events = KE.eventsOn(iso);
+        var k = momentkh.fromGregorian.apply(null, iso.split("-").map(Number)).khmer; ctx.fullMoon = k.moonPhase === 0 && k.day === 15;
+      } catch (e) {}
+    }
+    return EDITION.dailyTheme(iso, ctx);
+  }
+  var factsCache = {};
+  function factsFor(iso, a) {
+    var F = factsCache[iso] || (factsCache[iso] = computeFacts(iso));
+    var s = F.signs.filter(function (x) { return x.animal === a; })[0], n = window.MBSLuckyDigits.forSign(a, iso);
+    return { tier: s.tier, label: s.label, color: s.lucky.color, direction: s.lucky.direction, time: s.lucky.time, number: s.lucky.number,
+      digits: [n.d1, n.d2, n.d3, n.d4, n.d5].map(Number), helper: s.lucky.helperAnimal, traits: (INFO[a] && INFO[a].traits) || "" };
+  }
+
+  // ---- the Studio service
+  function api(method, params) {
+    var url = API, opt = { method: method, headers: { "x-studio-key": S.key, "content-type": "application/json" } };
+    if (method === "GET") url += "?" + new URLSearchParams(params).toString(); else opt.body = JSON.stringify(params);
+    return fetch(url, opt).then(function (r) {
+      return r.text().then(function (t) {
+        var j = null; try { j = JSON.parse(t); } catch (e) {}
+        if (!r.ok || !j) {
+          var er = new Error(j && j.error ? j.error : "The Studio service is not reachable (" + r.status + "). Daily editions work on mybirthsign.com/studio/ once the site is deployed.");
+          er.status = r.status; er.code = j && j.code; er.body = j; throw er;
+        }
+        return j;
+      });
+    }, function () { var er = new Error("No connection to the Studio service. Check the internet connection and try again."); er.code = "offline"; throw er; });
+  }
+  function keep(r) {   // store an episode the service sent back
+    var ep = r.episode; if (!ep || ep.date !== S.date) return ep;
+    (S.eps[ep.animal] = S.eps[ep.animal] || {})[ep.vid] = ep;
+    (S.etags[ep.animal] = S.etags[ep.animal] || {})[ep.vid] = r.etag;
+    return ep;
+  }
+  var main = function (a) { return S.eps[a] && S.eps[a].main; };
+  var ready = function (a) { return EDITION.episodeStatus(main(a)) === "ready"; };
+
+  // ---- messages
+  function msg(box, text, kind, actions) {
+    var el = $(box); if (!text) { el.hidden = true; el.innerHTML = ""; return; }
+    el.hidden = false; el.className = "ed-msg" + (kind === "info" ? " info" : "");
+    el.innerHTML = "<p>" + text + "</p>" + (actions || []).map(function (x, i) { return '<button data-msgact="' + i + '"' + (x.primary ? ' class="primary"' : "") + ">" + esc(x.label) + "</button>"; }).join("");
+    el.__acts = actions || [];
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-msgact]"); if (!b) return;
+    var box = b.closest("#ed-msg, #arch-msg"), act = box && box.__acts && box.__acts[+b.dataset.msgact];
+    if (act) act.run();
+  });
+  function explain(er) {
+    if (er.code === "bad-key") { openSettings(true); return "Wrong Studio passcode. Type the passcode you saved as STUDIO_KEY in Netlify (Settings above)."; }
+    if (er.code === "no-studio-key") return "Daily editions are not switched on yet. In Netlify, add an environment variable named STUDIO_KEY (a passcode you choose), redeploy, then type the same passcode in Settings.";
+    if (er.code === "no-ai-key") return "The AI key (ANTHROPIC_API_KEY) is not set in Netlify, so new editions cannot be written. Saved editions still open.";
+    return esc(er.message || "Something went wrong.");
+  }
+
+  // ---- dashboard
+  function renderDash() {
+    var t = (S.day && S.day.theme) || themeFor(S.date), isToday = S.date === S.today;
+    $("ed-d").value = S.date;
+    $("ed-date").textContent = longDate(S.date) + (isToday ? " · Today" : S.date === addDays(S.today, 1) ? " · Tomorrow" : "");
+    var kind = { festival: "Festival", cny: "Chinese New Year", fullmoon: "Full moon", weekday: WD[new Date(S.date + "T00:00:00Z").getUTCDay()] + " theme" }[t.kind] || "Theme";
+    $("ed-theme").innerHTML = '<span class="chip gold">' + esc(kind) + "</span><b>" + esc(t.en) + '</b><span class="km" lang="km">' + esc(t.km) + "</span>" + (S.day ? "" : '<span class="note">(preview: saved when the edition is made)</span>');
+    var made = A.filter(function (a) { return main(a); }), done = A.filter(ready), sc = 0, tot = 0;
+    A.forEach(function (a) { var ep = main(a); var n = ep ? ep.scenes.length : S.len / 10; tot += n; if (ep) sc += ep.scenes.filter(function (s) { return s.status === "ready"; }).length; });
+    var st = $("ed-status");
+    if (!onSite) { st.textContent = "Preview"; st.className = "chip"; }
+    else if (!S.key) { st.textContent = "Passcode needed"; st.className = "chip warn"; }
+    else if (S.run) { st.textContent = "Writing… " + done.length + " of 12 signs ready"; st.className = "chip gold"; }
+    else if (!S.loaded) { st.textContent = "Loading…"; st.className = "chip"; }
+    else if (done.length === 12) { st.textContent = "Ready · all 12 signs saved"; st.className = "chip ok"; }
+    else if (made.length) { st.textContent = done.length + " of 12 signs ready"; st.className = "chip warn"; }
+    else { st.textContent = "Not made yet"; st.className = "chip"; }
+    $("ed-bar").style.width = (tot ? Math.round(sc / tot * 100) : 0) + "%";
+    $("ed-count").textContent = S.loaded && (made.length || S.run) ? sc + " of " + tot + " scenes" : "";
+    var can = onSite && !!S.key && S.loaded && !S.run;
+    $("ed-make").hidden = !can || done.length === 12;
+    $("ed-make").textContent = made.length ? "Finish this edition (" + (12 - done.length) + " signs left)" : "Make the edition for " + dmy(S.date);
+    $("ed-stop").hidden = !S.run;
+    $("ed-remake").hidden = !can || !made.length;
+    ["ed-prev", "ed-next", "ed-today", "ed-tomorrow", "ed-d"].forEach(function (id) { $(id).disabled = !!S.run; });
+  }
+  function renderGrid() {
+    var F = factsCache[S.date] || (factsCache[S.date] = computeFacts(S.date));
+    $("ed-grid").innerHTML = A.map(function (a) {
+      var s = F.signs.filter(function (x) { return x.animal === a; })[0], ep = main(a), stt = EDITION.episodeStatus(ep), copies = S.eps[a] ? Object.keys(S.eps[a]).length - (ep ? 1 : 0) : 0;
+      var state = S.errs[a] ? '<span class="chip warn">Error</span>' : stt === "ready" ? '<span class="chip ok">Ready</span>' : ep ? '<span class="chip warn">' + ep.scenes.filter(function (x) { return x.status === "ready"; }).length + "/" + ep.scenes.length + "</span>" : (S.run && S.run.active && S.run.list.indexOf(a) >= 0 ? '<span class="chip gold">Waiting</span>' : '<span class="chip">Not made</span>');
+      return '<button class="acard t-' + s.tier + '" data-open="' + a + '"' + (S.open && S.open.animal === a ? ' aria-current="true"' : "") + ">" +
+        '<span class="an"><span aria-hidden="true">' + EMO[a] + "</span><span>" + a + '</span><span class="km" lang="km">' + esc(KM_NAMES[a]) + "</span></span>" +
+        '<span class="tt' + (ep ? "" : " none") + '">' + (ep ? esc(ep.title.en) : esc(s.label.en)) + "</span>" +
+        '<span class="meta">' + state + '<span class="sw" style="background:' + escA(s.lucky.color.hex || "#888") + '"></span>' + esc(s.lucky.color.en) + " · " + esc(s.lucky.time) + (copies > 0 ? " · +" + copies + " cop" + (copies > 1 ? "ies" : "y") : "") + "</span>" +
+        (S.errs[a] ? '<span class="meta" style="color:var(--care)">' + esc(S.errs[a]) + "</span>" : "") + "</button>";
+    }).join("");
+    $("ed-grid").classList.toggle("compact", !!S.open);
+  }
+  function render() { renderDash(); renderGrid(); }
+
+  function loadDay(iso) {
+    S.date = iso; S.day = null; S.eps = {}; S.etags = {}; S.errs = {}; S.loaded = false;
+    closeEditor(true); msg("ed-msg", ""); render();
+    if (!onSite) { S.loaded = true; render(); msg("ed-msg", 'Daily editions are made and saved on the website’s own Studio, <b>mybirthsign.com/studio/</b> (this copy cannot reach the website). The theme above is the plan for this date.', "info"); return Promise.resolve(); }
+    if (!S.key) { S.loaded = true; render(); msg("ed-msg", "Type the Studio passcode in Settings to open and make daily editions.", "info", [{ label: "Open settings", primary: true, run: function () { openSettings(true); } }]); return Promise.resolve(); }
+    return api("GET", { op: "day", date: iso }).then(function (r) {
+      if (S.date !== iso) return;
+      S.day = r.day; S.eps = r.episodes || {}; S.etags = r.etags || {}; S.loaded = true; render();
+    }, function (er) {
+      if (S.date !== iso) return;
+      S.loaded = true; render();
+      msg("ed-msg", explain(er), "", [{ label: "Try again", primary: true, run: function () { loadDay(iso); } }]);
+    });
+  }
+
+  // ---- making an edition: a plan per sign, then its scenes one by one (3 signs at a time)
+  function makeOne(date, a, force, tries) {
+    tries = tries || 0;
+    var ep = main(a);
+    var start = (!ep || force)
+      ? api("POST", { op: "plan", date: date, animal: a, length: (ep && force) ? ep.length : S.len, theme: themeFor(date), facts: factsFor(date, a), tz: S.tz, force: !!force }).then(keep)
+      : Promise.resolve(ep);
+    function step(ep) {
+      var i = ep.scenes.map(function (s) { return s.status === "ready"; }).indexOf(false);
+      if (i < 0 || !S.run || S.run.stop) return ep;
+      return api("POST", { op: "scene", date: date, animal: a, index: i }).then(function (r) { keep(r); render(); refreshOpen(a); return step(r.episode); });
+    }
+    return start.then(function (ep) { render(); refreshOpen(a); return step(ep); }).then(null, function (er) {
+      // another window is writing this sign: wait, take what it saved and carry on
+      if (er.code !== "busy" || tries >= 4) throw er;
+      return new Promise(function (ok) { setTimeout(ok, 5000); })
+        .then(function () { return api("GET", { op: "episode", date: date, animal: a }).then(keep, function () { return null; }); })
+        .then(function () { render(); return makeOne(date, a, false, tries + 1); });
+    });
+  }
+  function make(opts) {
+    opts = opts || {};
+    if (S.run || !onSite || !S.key) return;
+    var date = S.date, list = (opts.only || A).filter(function (a) { return opts.force || !ready(a); });
+    if (!list.length) return;
+    list.forEach(function (a) { delete S.errs[a]; });
+    S.run = { date: date, stop: false, active: 0, list: list.slice() };
+    msg("ed-msg", "Writing " + (list.length === 1 ? "the " + list[0] + " episode" : list.length + " signs") + " for " + dmy(date) + ". Each scene is saved as soon as it is written, so you can close this page and finish later.", "info");
+    render();
+    var q = list.slice();
+    return new Promise(function (resolve) {
+      function next() {
+        if (!S.run) return;
+        if (S.run.stop || !q.length) { if (!S.run.active) finish(); return; }
+        var a = q.shift(); S.run.active++; render();
+        makeOne(date, a, opts.force).then(null, function (er) { S.errs[a] = er.code === "bad-key" || er.code === "no-studio-key" || er.code === "no-ai-key" ? "stopped" : (er.message || "error"); if (/key/.test(er.code || "")) { S.run.stop = true; S.run.fatal = er; } })
+          .then(function () { S.run.active--; render(); next(); });
+      }
+      function finish() {
+        var bad = Object.keys(S.errs), stopped = S.run.stop && !S.run.fatal, fatal = S.run.fatal;
+        S.run = null; render();
+        if (S.date === date) api("GET", { op: "day", date: date }).then(function (r) { if (S.date !== date || S.run) return; S.day = r.day; S.eps = r.episodes || S.eps; S.etags = r.etags || S.etags; render(); }, function () {});   // the saved theme and summaries
+        if (fatal) msg("ed-msg", explain(fatal), "", [{ label: "Try again", primary: true, run: function () { make(opts); } }]);
+        else if (bad.length) msg("ed-msg", bad.length + " sign" + (bad.length > 1 ? "s" : "") + " could not be finished (" + esc(bad.join(", ")) + "): " + esc(S.errs[bad[0]]) + " Everything already written is saved.", "", [{ label: "Try again", primary: true, run: function () { make({}); } }]);
+        else if (stopped) msg("ed-msg", "Stopped. Everything written so far is saved; press Finish to carry on.", "info");
+        else { msg("ed-msg", ""); toast("Edition for " + dmy(date) + " saved"); }
+        resolve();
+      }
+      for (var i = 0; i < 3; i++) next();
+    });
+  }
+  $("ed-make").addEventListener("click", function () { make({}); });
+  $("ed-stop").addEventListener("click", function () { if (S.run) { S.run.stop = true; msg("ed-msg", "Stopping after the scenes being written now…", "info"); } });
+  $("ed-remake").addEventListener("click", function () {
+    msg("ed-msg", "Remake all 12 signs for " + dmy(S.date) + "? Every episode is written again from the start (each old version stays in its History, so nothing is lost).", "", [
+      { label: "Remake all 12", primary: true, run: function () { msg("ed-msg", ""); make({ force: true }); } }, { label: "Cancel", run: function () { msg("ed-msg", ""); } }]);
+  });
+
+  // ---- editor
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function cur() { return S.open && S.eps[S.open.animal] && S.eps[S.open.animal][S.open.vid]; }
+  function openEp(a, vid) {
+    if (S.dirty && !(S.open && S.open.animal === a && S.open.vid === vid)) { toast("Save or discard your changes first"); $("ed-dirty") && $("ed-dirty").scrollIntoView({ block: "center" }); return; }
+    var ep = S.eps[a] && S.eps[a][vid || "main"];
+    S.open = { animal: a, vid: vid || "main", hist: null, busy: false };
+    S.draft = ep ? clone(ep) : null; S.dirty = false;
+    renderGrid(); renderEditor();
+    $("ed-editor").scrollIntoView({ block: "start", behavior: "smooth" });
+  }
+  function closeEditor(force) {
+    if (S.dirty && !force) { toast("Save or discard your changes first"); return; }
+    S.open = null; S.draft = null; S.dirty = false; $("ed-editor").hidden = true; $("ed-editor").innerHTML = ""; renderGrid();
+  }
+  function refreshOpen(a) { if (S.open && S.open.animal === a && !S.dirty) { var ep = cur(); S.draft = ep ? clone(ep) : null; renderEditor(); } }
+  function fld(label, path, val, o) {
+    o = o || {};
+    var tag = o.area ? "textarea" : "input", lang = o.km ? ' lang="km"' : "";
+    return '<label class="fld"><span>' + esc(label) + (o.count ? "<em data-count=\"" + escA(path) + '"></em>' : "") + "</span>" +
+      (o.area ? "<textarea" + lang + ' rows="' + (o.rows || 3) + '" data-f="' + escA(path) + '"' + (o.code ? ' class="code"' : "") + ">" + esc(val || "") + "</textarea>"
+        : "<input" + lang + ' data-f="' + escA(path) + '" value="' + escA(val || "") + '">') + "</label>";
+  }
+  function picFor(r) {
+    var name = r.pic.replace(/^characters\/|\.jpg$/g, "");
+    var has = typeof STUDIO_PICS !== "undefined" && STUDIO_PICS.indexOf(name) >= 0 && onSite;
+    return has ? '<img src="' + escA(r.pic) + '" alt="" loading="lazy">' : '<span class="ph" aria-hidden="true">' + (name === "chanda" ? "👩🏻" : EMO[name[0].toUpperCase() + name.slice(1)] || "★") + "</span>";
+  }
+  function refsHtml(refs) { return '<div class="refs">' + refs.map(function (r) { return '<span class="ref">' + picFor(r) + "<span><b>" + esc(r.name) + "</b> <small>" + esc(r.what) + "</small></span></span>"; }).join("") + "</div>"; }
+  function sceneHtml(ep, s, i) {
+    var w = s.status === "ready" ? EDITION.checkScene(s, { noNumbers: ep.facts && ep.facts.tier === "caution" }) : [];
+    return '<div class="scene' + (s.status !== "ready" ? " err" : "") + '" id="ed-sc' + i + '">' +
+      '<div class="scene-h"><b>Scene ' + s.n + " · " + esc(s.label) + '</b><span class="t">' + mmss(s.start) + "–" + mmss(s.end) + " · " + s.dur + " s</span>" +
+      '<label><input type="checkbox" data-f="scenes.' + i + '.onCam"' + (s.onCam ? " checked" : "") + "> Chanda on camera (lip-sync)</label>" +
+      (s.status === "ready" ? "" : '<span class="chip warn">not written yet</span>') + "</div>" +
+      (w.length ? '<ul class="warns">' + w.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "") +
+      '<div class="two">' + fld("Khmer voice-over (Chanda)", "scenes." + i + ".km", s.km, { area: true, km: true, count: true, rows: 3 }) + fld("English translation", "scenes." + i + ".en", s.en, { area: true, count: true, rows: 3 }) + "</div>" +
+      fld("Guardian and character actions", "scenes." + i + ".action", s.action, { area: true, rows: 3 }) +
+      '<div class="two">' + fld("Setting, light and magic", "scenes." + i + ".setting", s.setting, { area: true, rows: 2 }) + '<div class="two">' + fld("Camera movement", "scenes." + i + ".camera", s.camera) + fld("Music and sound effects", "scenes." + i + ".sound", s.sound) + "</div></div>" +
+      fld("Image prompt", "scenes." + i + ".imagePrompt", s.imagePrompt, { area: true, code: true, rows: 5 }) +
+      fld("Video prompt (Flow / Omni)", "scenes." + i + ".video", s.video, { area: true, code: true, rows: 6 }) +
+      refsHtml(s.refs || EDITION.refsFor(ep.animal, s.onCam)) +
+      '<div class="row">' +
+        '<button class="primary" data-act="flow" data-i="' + i + '" data-lang="' + escA(S.voice) + '">Copy + ' + (S.voice === "km" ? "Khmer" : "English") + " voice</button>" +
+        '<button data-act="flow" data-i="' + i + '" data-lang="' + (S.voice === "km" ? "en" : "km") + '">Copy + ' + (S.voice === "km" ? "English" : "Khmer") + " voice</button>" +
+        '<button data-act="img" data-i="' + i + '">Copy image prompt</button>' +
+        '<button data-act="rebuild" data-i="' + i + '" title="Write the image and video prompts again from the actions, setting, camera and sound above">Rebuild prompts from the parts</button>' +
+        '<button data-act="scene" data-i="' + i + '">' + (s.status === "ready" ? "Remake this scene" : "Write this scene") + "</button>" +
+        '<input data-note="' + i + '" placeholder="What should change? (optional)" aria-label="What should change in scene ' + s.n + '" style="flex:1 1 180px;min-width:0;font:.85rem var(--body);background:var(--card-2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:6px 10px">' +
+      "</div></div>";
+  }
+  function script(ep, k) { return ep.scenes.map(function (s) { return s.n + ". (" + mmss(s.start) + "–" + mmss(s.end) + (s.onCam ? ", on camera" : "") + ") " + (s[k] || "…"); }).join("\n"); }
+  function renderEditor() {
+    var box = $("ed-editor"); if (!S.open) { box.hidden = true; return; }
+    box.hidden = false;
+    var a = S.open.animal, ep = S.draft, vids = S.eps[a] ? Object.keys(S.eps[a]) : [];
+    if (!ep) {
+      box.innerHTML = '<div class="ep"><div class="ep-top"><div><p class="ed-kicker">' + EMO[a] + " " + a + " · " + esc(KM_NAMES[a]) + " · " + dmy(S.date) + '</p><h3 class="sec-h">Not made yet</h3><p class="note">This sign has no episode for this date yet.</p></div><div class="ep-acts">' +
+        (onSite && S.key && !S.run ? '<button class="primary" data-act="makeone">Make the ' + a + " episode</button>" : "") + '<button data-act="close">Back to all 12</button></div></div></div>';
+      return;
+    }
+    var f = ep.facts || {}, ver = ep.vid === "main" ? "The day's episode" : "Copy" + (ep.copiedFrom ? " of " + dmy(ep.copiedFrom.date) : "");
+    box.innerHTML = '<div class="ep">' +
+      '<div class="ep-top"><div><p class="ed-kicker">' + EMO[a] + " " + a + " · " + esc(KM_NAMES[a]) + " · " + dmy(ep.date) + " · " + ep.length + " seconds · " + esc(ver) + "</p>" +
+        '<div class="ed-row" style="margin-top:6px">' + (vids.length > 1 ? '<select data-act="ver" aria-label="Version">' + vids.map(function (v) { return '<option value="' + escA(v) + '"' + (v === ep.vid ? " selected" : "") + ">" + (v === "main" ? "The day's episode" : "Copy " + v.slice(5, 11)) + "</option>"; }).join("") + "</select>" : "") +
+        '<span class="chip">' + esc((f.label && f.label.en) || "") + "</span>" + (f.color ? '<span class="chip">' + esc(f.color.en) + " · " + esc(f.time || "") + "</span>" : "") + (ep.similar ? '<span class="chip warn">close to ' + esc(ep.similar.title || "") + "</span>" : "") + (ep.edited ? '<span class="chip">edited</span>' : "") + "</div></div>" +
+        '<div class="ep-acts"><button data-act="close">Back to all 12</button><button data-act="hist">History</button>' + (ep.vid !== "main" ? '<button data-act="rmcopy">Remove this copy</button>' : "") + "</div></div>" +
+      '<h3 class="sec-h">Story</h3>' +
+      '<div class="two">' + fld("Title (English)", "title.en", ep.title.en) + fld("Title (Khmer)", "title.km", ep.title.km, { km: true }) + "</div>" +
+      fld("The story in one line", "logline", ep.logline, { area: true, rows: 2 }) +
+      '<div class="two">' + fld("Opening hook", "hook", ep.hook, { area: true, rows: 2 }) + fld("The guardian's magical moment", "guardianMoment", ep.guardianMoment, { area: true, rows: 2 }) + "</div>" +
+      '<div class="two">' + fld("Blessing (Khmer)", "blessing.km", ep.blessing.km, { area: true, km: true, rows: 2 }) + fld("Blessing (English)", "blessing.en", ep.blessing.en, { area: true, rows: 2 }) + "</div>" +
+      '<div class="two">' + fld("Closing message (Khmer)", "closing.km", ep.closing.km, { area: true, km: true, rows: 2 }) + fld("Closing message (English)", "closing.en", ep.closing.en, { area: true, rows: 2 }) + "</div>" +
+      '<h3 class="sec-h">Scenes <span class="chip">' + ep.scenes.length + " × 10 seconds</span></h3>" +
+      ep.scenes.map(function (s, i) { return sceneHtml(ep, s, i); }).join("") +
+      '<h3 class="sec-h">Voice and music</h3>' +
+      '<div class="two"><div class="block"><h3>Chanda’s voice in Khmer (the same in every episode)</h3><pre class="txt">' + esc(EDITION.ED_VOICE.km) + '</pre></div><div class="block"><h3>Chanda’s voice in English (the same in every episode)</h3><pre class="txt">' + esc(EDITION.ED_VOICE.en) + "</pre></div></div>" +
+      '<p class="note">Only Chanda speaks; the guardians and animals never talk. The copy buttons add this voice line, so Flow keeps one voice. Change the copy language in Settings.</p>' +
+      fld("Music and sound atmosphere for the episode", "music", ep.music, { area: true, rows: 2 }) +
+      '<h3 class="sec-h">Full scripts</h3>' +
+      '<div class="two"><div class="block"><h3>Khmer script</h3><pre class="txt" lang="km" id="ed-skm">' + esc(script(ep, "km")) + '</pre><div class="row"><button data-act="copykm">Copy Khmer script</button></div></div>' +
+      '<div class="block"><h3>English script</h3><pre class="txt" id="ed-sen">' + esc(script(ep, "en")) + '</pre><div class="row"><button data-act="copyen">Copy English script</button></div></div></div>' +
+      '<h3 class="sec-h">More</h3>' +
+      '<div class="ed-row"><label class="note" for="ed-dupto">Duplicate as a new editable version on</label><input type="date" id="ed-dupto" value="' + escA(S.today) + '" style="font:.9rem var(--body);background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:7px 9px"><button data-act="dup">Duplicate</button>' +
+        (onSite && S.key ? '<span class="spacer"></span><button data-act="remake">Remake this whole episode…</button>' : "") + "</div>" +
+      '<div id="ed-hist" class="hist" hidden></div>' +
+      '<div id="ed-epmsg" hidden></div>' +
+      (S.dirty ? dirtyBar() : "") + "</div>";
+    counters();
+  }
+  function dirtyBar() { return '<div class="dirty-bar" id="ed-dirty"><span>Unsaved changes</span><span class="ed-row"><button data-act="discard">Discard</button><button class="primary" data-act="save">Save changes</button></span></div>'; }
+  function showDirty() {
+    var ep = $("ed-editor").querySelector(".ep"); if (!ep) return;
+    if (S.dirty && !$("ed-dirty")) ep.insertAdjacentHTML("beforeend", dirtyBar());
+    if (!S.dirty && $("ed-dirty")) $("ed-dirty").remove();
+  }
+  function getPath(o, p) { return p.split(".").reduce(function (x, k) { return x == null ? x : x[k]; }, o); }
+  function setPath(o, p, v) { var k = p.split("."), last = k.pop(), t = k.reduce(function (x, y) { return x[y]; }, o); t[last] = v; }
+  function counters() {
+    $("ed-editor").querySelectorAll("[data-count]").forEach(function (em) {
+      var p = em.dataset.count, v = getPath(S.draft, p) || "";
+      if (/\.km$/.test(p)) { var n = [...kmFlow(v)].length; em.textContent = n + " / " + EDITION.ED_LIMIT.kmChars + " spoken characters"; em.classList.toggle("over", n > EDITION.ED_LIMIT.kmChars); }
+      else { var w = enSpoken(v); em.textContent = w + " / " + EDITION.ED_LIMIT.enWords + " words"; em.classList.toggle("over", w > EDITION.ED_LIMIT.enWords); }
+    });
+  }
+  $("ed-editor").addEventListener("input", function (e) {
+    var el = e.target; if (!el.dataset || !el.dataset.f || !S.draft) return;
+    var p = el.dataset.f, v = el.type === "checkbox" ? el.checked : el.value;
+    setPath(S.draft, p, v);
+    var m = /^scenes\.(\d+)\.onCam$/.exec(p);
+    if (m) { S.draft.scenes[+m[1]].refs = EDITION.refsFor(S.draft.animal, v); }
+    S.dirty = true; showDirty(); counters();
+    if (m) { var i = +m[1]; $("ed-sc" + i).outerHTML = sceneHtml(S.draft, S.draft.scenes[i], i); counters(); }
+    var sk = $("ed-skm"), se = $("ed-sen"); if (sk) sk.textContent = script(S.draft, "km"); if (se) se.textContent = script(S.draft, "en");
+  });
+  function epMsg(text, kind, actions) { msg("ed-epmsg", text, kind, actions); var el = $("ed-epmsg"); if (el && text) { el.querySelectorAll("[data-msgact]").forEach(function (b) { b.addEventListener("click", function () { var x = el.__acts[+b.dataset.msgact]; if (x) x.run(); }); b.removeAttribute("data-msgact"); }); el.scrollIntoView({ block: "nearest" }); } }
+  function save() {
+    var o = S.open, ep = S.draft; if (!o || !ep) return;
+    var b = $("ed-editor").querySelector('[data-act="save"]'); if (b) b.disabled = true;
+    return api("POST", { op: "save", date: ep.date, animal: o.animal, vid: o.vid, episode: ep, etag: S.etags[o.animal] && S.etags[o.animal][o.vid] }).then(function (r) {
+      keep(r); S.draft = clone(r.episode); S.dirty = false; renderEditor(); renderGrid(); toast("Saved");
+    }, function (er) {
+      if (b) b.disabled = false;
+      if (er.code === "conflict" && er.body && er.body.episode) {
+        epMsg("This episode was changed somewhere else (another window or a remake) since you opened it. Your edits are still on screen.", "", [
+          { label: "Save mine anyway", primary: true, run: function () { S.etags[o.animal][o.vid] = er.body.etag; epMsg(""); save(); } },
+          { label: "Load the saved version", run: function () { S.eps[o.animal][o.vid] = er.body.episode; S.etags[o.animal][o.vid] = er.body.etag; S.draft = clone(er.body.episode); S.dirty = false; renderEditor(); } }]);
+      } else epMsg(explain(er), "", [{ label: "Try again", primary: true, run: function () { epMsg(""); save(); } }]);
+    });
+  }
+  $("ed-editor").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-act]"); if (!b || b.tagName === "SELECT") return;
+    var act = b.dataset.act, o = S.open, ep = S.draft, i = +b.dataset.i;
+    if (act === "close") closeEditor();
+    else if (act === "save") save();
+    else if (act === "discard") { var c0 = cur(); S.draft = c0 ? clone(c0) : null; S.dirty = false; renderEditor(); }
+    else if (act === "flow") copy(EDITION.flowText(o.animal, ep.scenes[i], b.dataset.lang), b);
+    else if (act === "img") copy(ep.scenes[i].imagePrompt || EDITION.assemble(o.animal, ep.scenes[i]).image, b);
+    else if (act === "copykm") copy(script(ep, "km"), b);
+    else if (act === "copyen") copy(script(ep, "en"), b);
+    else if (act === "rebuild") { var x = EDITION.assemble(o.animal, ep.scenes[i]); ep.scenes[i].imagePrompt = x.image; ep.scenes[i].video = x.video; S.dirty = true; $("ed-sc" + i).outerHTML = sceneHtml(ep, ep.scenes[i], i); showDirty(); counters(); toast("Prompts rebuilt"); }
+    else if (act === "scene") {
+      if (S.dirty) { epMsg("Save or discard your changes first, then remake the scene.", "info"); return; }
+      if (S.run) { toast("Wait until the edition is finished"); return; }
+      var note = ($("ed-editor").querySelector('[data-note="' + i + '"]') || {}).value || "";
+      b.disabled = true; b.textContent = "Writing…";
+      api("POST", { op: "scene", date: ep.date, animal: o.animal, vid: o.vid, index: i, note: note }).then(function (r) { keep(r); S.draft = clone(r.episode); renderEditor(); renderGrid(); renderDash(); toast("Scene " + (i + 1) + " rewritten (the old one is in History)"); var el = $("ed-sc" + i); if (el) el.scrollIntoView({ block: "center" }); },
+        function (er) { b.disabled = false; b.textContent = "Remake this scene"; epMsg(explain(er) + " The saved scene is unchanged.", "", [{ label: "Try again", primary: true, run: function () { epMsg(""); b.click(); } }]); });
+    }
+    else if (act === "makeone") { make({ only: [o.animal] }); }
+    else if (act === "remake") {
+      if (S.dirty) { epMsg("Save or discard your changes first.", "info"); return; }
+      epMsg("Write the whole " + o.animal + " episode again from the start? The current one stays in History.", "", [
+        { label: "Remake it", primary: true, run: function () { epMsg(""); if (o.vid !== "main") { toast("Remake works on the day's episode; copies are edited by hand"); return; } make({ only: [o.animal], force: true }); } },
+        { label: "Cancel", run: function () { epMsg(""); } }]);
+    }
+    else if (act === "dup") {
+      var to = ($("ed-dupto") || {}).value || S.today;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(to)) { toast("Pick a date"); return; }
+      b.disabled = true;
+      api("POST", { op: "duplicate", date: ep.date, animal: o.animal, vid: o.vid, toDate: to, theme: themeFor(to), facts: factsFor(to, o.animal), tz: S.tz }).then(function (r) {
+        b.disabled = false;
+        if (to === S.date) { keep(r); if (!S.dirty) openEp(o.animal, r.episode.vid); toast("Copy made: you are now editing the copy"); }
+        else epMsg("Copy saved on " + longDate(to) + ".", "info", [{ label: "Open it", primary: true, run: function () { if (S.dirty) { toast("Save or discard your changes first"); return; } goTo(to, o.animal, r.episode.vid); } }]);
+      }, function (er) { b.disabled = false; epMsg(explain(er)); });
+    }
+    else if (act === "rmcopy") {
+      epMsg("Remove this copy? (It stays in History.)", "", [{ label: "Remove", primary: true, run: function () {
+        api("POST", { op: "removeCopy", date: ep.date, animal: o.animal, vid: o.vid }).then(function () { delete S.eps[o.animal][o.vid]; S.dirty = false; openEp(o.animal, "main"); toast("Copy removed"); }, function (er) { epMsg(explain(er)); });
+      } }, { label: "Cancel", run: function () { epMsg(""); } }]);
+    }
+    else if (act === "hist") {
+      var h = $("ed-hist"); h.hidden = false; h.innerHTML = '<p class="note">Loading the history…</p>';
+      api("GET", { op: "history", date: ep.date, animal: o.animal, vid: o.vid }).then(function (r) {
+        var names = { remade: "before the episode was remade", edit: "before your edit", removed: "before it was removed", "before-restore": "before a restore" };
+        h.innerHTML = '<h3 class="sec-h">History</h3>' + (r.items.length ? r.items.map(function (x) {
+          var when = x.at ? new Date(x.at).toLocaleString("en-GB", { timeZone: S.tz, day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "";
+          return "<div><span>" + esc(when) + " · " + esc(names[x.action] || (/^scene\d+$/.test(x.action) ? "before scene " + x.action.slice(5) + " was remade" : x.action)) + '</span><button data-act="restore" data-key="' + escA(x.key) + '">Restore this version</button></div>';
+        }).join("") : '<p class="note">No earlier versions yet.</p>');
+      }, function (er) { h.innerHTML = '<p class="note">' + explain(er) + "</p>"; });
+    }
+    else if (act === "restore") {
+      if (S.dirty) { epMsg("Save or discard your changes first.", "info"); return; }
+      api("POST", { op: "restore", date: ep.date, animal: o.animal, vid: o.vid, key: b.dataset.key }).then(function (r) { keep(r); S.draft = clone(r.episode); renderEditor(); renderGrid(); toast("Earlier version restored (the one before is in History)"); }, function (er) { epMsg(explain(er)); });
+    }
+  });
+  $("ed-editor").addEventListener("change", function (e) { var s = e.target.closest('select[data-act="ver"]'); if (s) openEp(S.open.animal, s.value); });
+  $("ed-grid").addEventListener("click", function (e) { var b = e.target.closest("[data-open]"); if (b) openEp(b.dataset.open, "main"); });
+  window.addEventListener("beforeunload", function (e) { if (S.dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+  // ---- date navigation
+  function goTo(iso, a, vid) {
+    if (S.run) { toast("Wait until the edition is finished, or press Stop"); return; }
+    if (S.dirty) { toast("Save or discard your changes first"); return; }
+    setView("ed");
+    var p = iso === S.date && S.loaded ? Promise.resolve() : loadDay(iso);
+    p.then(function () { if (a) openEp(a, vid || "main"); });
+  }
+  $("ed-d").addEventListener("change", function () { if (/^\d{4}-\d{2}-\d{2}$/.test(this.value)) goTo(this.value); });
+  $("ed-prev").addEventListener("click", function () { goTo(addDays(S.date, -1)); });
+  $("ed-next").addEventListener("click", function () { goTo(addDays(S.date, 1)); });
+  $("ed-today").addEventListener("click", function () { goTo(S.today); });
+  $("ed-tomorrow").addEventListener("click", function () { goTo(addDays(S.today, 1)); });
+  $("ed-toarch").addEventListener("click", function () { setView("arch"); });
+
+  // ---- archive
+  function renderArch() {
+    var f = $("arch-animal").value, n = 0;
+    $("arch-list").innerHTML = S.arch.map(function (d) {
+      var rows = A.filter(function (a) { return (!f || a === f) && d.episodes && d.episodes[a]; }).map(function (a) {
+        return Object.keys(d.episodes[a]).sort().map(function (v) {
+          var x = d.episodes[a][v]; n++;
+          var st = x.status === "ready" ? '<span class="chip ok">Ready</span>' : '<span class="chip warn">' + x.ready + "/" + x.total + "</span>";
+          return '<div class="arch-ep"><span class="e" aria-hidden="true">' + EMO[a] + '</span><span class="x"><b>' + a + "</b> · " + esc((x.title && x.title.en) || "") +
+            "<small>" + (v === "main" ? "The day's episode" : "Copy" + (x.copiedFrom ? " of " + dmy(x.copiedFrom.date) : "")) + " · " + (x.length || 60) + " s" + (x.edited ? " · edited" : "") + " · " + st + "</small></span>" +
+            '<span class="b"><button data-arch-open="' + escA(d.date + "|" + a + "|" + v) + '">Open</button><button data-arch-dup="' + escA(d.date + "|" + a + "|" + v) + '">Duplicate to today</button></span></div>';
+        }).join("");
+      }).join("");
+      if (!rows) return "";
+      return '<div class="arch-day"><h3>' + esc(longDate(d.date)) + ' <span class="chip">' + esc((d.theme && d.theme.en) || "") + "</span></h3>" + rows + "</div>";
+    }).join("") || '<p class="note">' + (S.archLoaded ? (f ? "No saved " + f + " episodes yet." : "No saved editions yet.") : "Loading…") + "</p>";
+    $("arch-count").textContent = S.archLoaded ? n + " episode" + (n === 1 ? "" : "s") + " shown" : "";
+    $("arch-more").hidden = !S.archMore;
+  }
+  function loadArch(more) {
+    if (!onSite) { msg("arch-msg", "The archive of daily editions is on the website’s own Studio, mybirthsign.com/studio/.", "info"); return; }
+    if (!S.key) { msg("arch-msg", "Type the Studio passcode in Settings to see the archive.", "info", [{ label: "Open settings", primary: true, run: function () { openSettings(true); } }]); return; }
+    var before = more && S.arch.length ? S.arch[S.arch.length - 1].date : "";
+    msg("arch-msg", "");
+    api("GET", before ? { op: "archive", before: before, limit: 31 } : { op: "archive", limit: 31 }).then(function (r) {
+      S.arch = more ? S.arch.concat(r.days) : r.days; S.archMore = r.more; S.archLoaded = true; renderArch();
+    }, function (er) { S.archLoaded = true; renderArch(); msg("arch-msg", explain(er), "", [{ label: "Try again", primary: true, run: function () { loadArch(more); } }]); });
+  }
+  $("arch-animal").innerHTML = '<option value="">All 12 signs</option>' + A.map(function (a) { return '<option value="' + a + '">' + EMO[a] + " " + a + " · " + esc(KM_NAMES[a]) + "</option>"; }).join("");
+  $("arch-animal").addEventListener("change", renderArch);
+  $("arch-more").addEventListener("click", function () { loadArch(true); });
+  $("arch-list").addEventListener("click", function (e) {
+    var o = e.target.closest("[data-arch-open]"), d = e.target.closest("[data-arch-dup]");
+    if (o) { var p = o.dataset.archOpen.split("|"); goTo(p[0], p[1], p[2]); }
+    if (d) {
+      var q = d.dataset.archDup.split("|"); d.disabled = true;
+      api("POST", { op: "duplicate", date: q[0], animal: q[1], vid: q[2], toDate: S.today, theme: themeFor(S.today), facts: factsFor(S.today, q[1]), tz: S.tz }).then(function (r) {
+        d.disabled = false; toast("Copied to today (" + dmy(S.today) + ")");
+        if (S.date === S.today) keep(r);
+        loadArch(false);
+        msg("arch-msg", "Copy of the " + esc(q[1]) + " episode saved on " + esc(longDate(S.today)) + ".", "info", [{ label: "Open the copy", primary: true, run: function () { goTo(S.today, q[1], r.episode.vid); } }]);
+      }, function (er) { d.disabled = false; msg("arch-msg", explain(er)); });
+    }
+  });
+
+  // ---- tabs and settings
+  function setView(v) {
+    ["ed", "pack", "arch"].forEach(function (x) { $("view-" + x).hidden = x !== v; $("tab-" + x).setAttribute("aria-selected", x === v ? "true" : "false"); });
+    LS.set("view", v);
+    if (v === "arch") loadArch(false);
+  }
+  document.querySelector(".tabs").addEventListener("click", function (e) { var t = e.target.closest("[data-view]"); if (t) setView(t.dataset.view); });
+  function openSettings(open) { $("ed-settings").hidden = !open; $("ed-setbtn").setAttribute("aria-expanded", open ? "true" : "false"); if (open && !S.key) $("ed-key").focus(); }
+  $("ed-setbtn").addEventListener("click", function () { openSettings($("ed-settings").hidden); });
+  var tzs = ["Asia/Phnom_Penh", "America/New_York", "America/Chicago", "America/Los_Angeles", "Europe/London", "Europe/Paris", "Australia/Sydney", "Asia/Bangkok", "Asia/Ho_Chi_Minh", "Asia/Shanghai", "UTC"];
+  try { var mine = Intl.DateTimeFormat().resolvedOptions().timeZone; if (mine && tzs.indexOf(mine) < 0) tzs.splice(1, 0, mine); } catch (e) {}
+  if (tzs.indexOf(S.tz) < 0) tzs.push(S.tz);
+  $("ed-tz").innerHTML = tzs.map(function (z) { return '<option value="' + escA(z) + '">' + esc(z.replace(/_/g, " ")) + (z === "Asia/Phnom_Penh" ? " (the website’s day)" : "") + "</option>"; }).join("");
+  function fillSettings() { $("ed-key").value = S.key; $("ed-tz").value = S.tz; $("ed-len").value = String(S.len); $("ed-voice").value = S.voice; $("ed-auto").checked = S.auto; }
+  function checkService() {
+    if (!onSite) { $("ed-svc").textContent = "This copy of the Studio cannot reach the website: daily editions are made at mybirthsign.com/studio/."; return Promise.resolve(); }
+    if (!S.key) { $("ed-svc").textContent = "No passcode saved on this device yet."; return Promise.resolve(); }
+    return api("GET", { op: "status" }).then(function (r) { S.svc = r; $("ed-svc").textContent = "Connected to the Studio service. AI writing: " + (r.ai ? "on (" + r.model + ")" : "off (ANTHROPIC_API_KEY is missing in Netlify)") + "."; }, function (er) { S.svc = null; $("ed-svc").innerHTML = explain(er); });
+  }
+  $("ed-savekey").addEventListener("click", function () {
+    var oldTz = S.tz;
+    S.key = $("ed-key").value.trim(); S.tz = $("ed-tz").value; S.len = Number($("ed-len").value) || 60; S.voice = $("ed-voice").value; S.auto = $("ed-auto").checked;
+    LS.set("key", S.key || null); LS.set("tz", S.tz); LS.set("len", String(S.len)); LS.set("voice", S.voice); LS.set("auto", S.auto ? "1" : "0");
+    toast("Settings saved on this device");
+    checkService().then(function () {
+      if (S.key && (!S.svc || !S.svc.ok)) return;
+      openSettings(false);
+      var t = todayIn(S.tz), go = S.tz !== oldTz ? t : S.date; S.today = t;
+      if (!S.run && !S.dirty) loadDay(go).then(autoStart); else renderEditor();
+    });
+  });
+  $("ed-forget").addEventListener("click", function () { S.key = ""; LS.set("key", null); fillSettings(); toast("Passcode removed from this device"); checkService(); if (!S.run && !S.dirty) loadDay(S.date); });
+
+  // ---- a new day: the dashboard moves to it (and starts it, if that setting is on)
+  function autoStart() {
+    if (S.auto && onSite && S.key && S.loaded && S.date === S.today && !S.run && !A.some(main) && S.svc && S.svc.ai) make({});
+  }
+  function tick() {
+    var t = todayIn(S.tz); if (t === S.today) return;
+    var was = S.today; S.today = t;
+    if (S.date === was && !S.run && !S.dirty) loadDay(t).then(autoStart); else renderDash();
+  }
+  setInterval(tick, 60000);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) tick(); });
+
+  // ---- start
+  fillSettings();
+  S.today = todayIn(S.tz); S.date = S.today;
+  setView(onSite ? LS.get("view", "ed") : "pack");
+  if (onSite && !S.key) openSettings(true);
+  checkService().then(function () { return loadDay(S.date); }).then(autoStart);
+  window.__edition = { state: S, themeFor: themeFor, factsFor: factsFor };   // for tests
 })();
 </script>
 
