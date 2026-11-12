@@ -1,0 +1,8 @@
+{
+  "name": "mybirthsign",
+  "private": true,
+  "description": "Only for the Netlify functions: the Video Studio's daily editions are saved with Netlify Blobs (netlify/functions/studio-edition.mjs). The site itself needs no packages.",
+  "dependencies": {
+    "@netlify/blobs": "11.1.7"
+  }
+}
