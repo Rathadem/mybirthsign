@@ -129,7 +129,8 @@ async function remember(st, ep) {
 }
 
 // ------------------------------------------------------------------ the AI
-// one AI call. The answer comes back through a tool (a fixed form), so it is always valid JSON. Only network trouble,
+// one AI call. The AI is asked to answer through a tool (a fixed form, returned as ready-made JSON); a plain-text JSON
+// answer is still accepted. Only network trouble,
 // 429 and 5xx are retried here, and only while there is time left: Netlify stops a request after about 30 seconds.
 async function ask(user, maxTokens, tool, t0) {
   const key = process.env.ANTHROPIC_API_KEY;
@@ -140,7 +141,7 @@ async function ask(user, maxTokens, tool, t0) {
     let r;
     try {
       r = await fetch(AI_URL(), { method: "POST", signal: ctrl.signal, headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
-        body: JSON.stringify({ model: MODEL(), max_tokens: maxTokens, system: E.systemPrompt(), messages: [{ role: "user", content: user }], tools: [tool], tool_choice: { type: "tool", name: tool.name } }) });
+        body: JSON.stringify({ model: MODEL(), max_tokens: maxTokens, system: E.systemPrompt(), messages: [{ role: "user", content: user }], tools: [tool] }) });   // offered, not forced: forcing a tool is not supported by every model
     } catch (e) {
       clearTimeout(t);
       if (attempt === 1 && e.name !== "AbortError" && Date.now() - t0 < 12000) { await sleep(1200); continue; }
