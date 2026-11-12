@@ -63,9 +63,10 @@ export async function startAI() {
       if (ai.delay) await new Promise((ok) => setTimeout(ok, ai.delay));
       if (ai.fail > 0) { ai.fail--; res.writeHead(500); return res.end('{"error":"overloaded"}'); }
       if (ai.bad > 0) { ai.bad--; res.writeHead(200, { "content-type": "application/json" }); return res.end(JSON.stringify({ content: [{ type: "text", text: "Sorry, I cannot do that." }] })); }
+      // like the real model: forcing a tool is refused (400); an offered tool is used, and its input is already JSON
+      if (j.tool_choice && j.tool_choice.type !== "auto") { res.writeHead(400, { "content-type": "application/json" }); return res.end('{"type":"error","error":{"type":"invalid_request_error","message":"tool_choice: type tool and any are not supported for this model."}}'); }
       res.writeHead(200, { "content-type": "application/json" });
-      // like the real API: with a forced tool, the answer is a tool_use block whose input is already JSON
-      const tool = j.tool_choice && j.tool_choice.type === "tool" && (j.tools || []).find((t) => t.name === j.tool_choice.name);
+      const tool = (j.tools || [])[0];
       if (ai.cut > 0) { ai.cut--; return res.end(JSON.stringify({ content: tool ? [{ type: "tool_use", id: "t1", name: tool.name, input: {} }] : [{ type: "text", text: '{"title_en":"Cut' }], stop_reason: "max_tokens" })); }
       ai.tools.push(tool ? tool.name : "none");
       res.end(JSON.stringify(tool
