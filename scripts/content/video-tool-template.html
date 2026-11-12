@@ -829,7 +829,9 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       return r.text().then(function (t) {
         var j = null; try { j = JSON.parse(t); } catch (e) {}
         if (!r.ok || !j) {
-          var er = new Error(j && j.error ? j.error : "The Studio service is not reachable (" + r.status + "). Daily editions work on mybirthsign.com/studio/ once the site is deployed.");
+          var er = new Error(j && j.error ? j.error : (r.status === 502 || r.status === 503 || r.status === 504)
+            ? "The Studio service took too long to answer (" + r.status + "). Nothing was changed; try again."
+            : "The Studio service is not reachable (" + r.status + "). Daily editions work on mybirthsign.com/studio/ once the site is deployed.");
           er.status = r.status; er.code = j && j.code; er.body = j; throw er;
         }
         return j;
@@ -921,17 +923,27 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     });
   }
 
-  // ---- making an edition: a plan per sign, then its scenes one by one (3 signs at a time)
+  // ---- making an edition: a plan per sign, then its scenes one by one (2 signs at a time)
+  // a request that failed for a passing reason (the AI was slow, busy or gave an unreadable answer) is tried again
+  // automatically: twice, after a short wait (longer when the AI service is busy)
+  function post(params, n) {
+    n = n || 0;
+    return api("POST", params).then(null, function (er) {
+      var passing = er.status === 502 || er.status === 503 || er.status === 504 || /^ai-(error|busy|bad-json|too-long|incomplete|unreachable)$/.test(er.code || "");
+      if (!passing || er.code === "no-ai-key" || n >= 2 || !S.run || S.run.stop) throw er;
+      return new Promise(function (ok) { setTimeout(ok, er.code === "ai-busy" ? 20000 : 3000); }).then(function () { return post(params, n + 1); });
+    });
+  }
   function makeOne(date, a, force, tries) {
     tries = tries || 0;
     var ep = main(a);
     var start = (!ep || force)
-      ? api("POST", { op: "plan", date: date, animal: a, length: (ep && force) ? ep.length : S.len, theme: themeFor(date), facts: factsFor(date, a), tz: S.tz, force: !!force }).then(keep)
+      ? post({ op: "plan", date: date, animal: a, length: (ep && force) ? ep.length : S.len, theme: themeFor(date), facts: factsFor(date, a), tz: S.tz, force: !!force }).then(keep)
       : Promise.resolve(ep);
     function step(ep) {
       var i = ep.scenes.map(function (s) { return s.status === "ready"; }).indexOf(false);
       if (i < 0 || !S.run || S.run.stop) return ep;
-      return api("POST", { op: "scene", date: date, animal: a, index: i }).then(function (r) { keep(r); render(); refreshOpen(a); return step(r.episode); });
+      return post({ op: "scene", date: date, animal: a, index: i }).then(function (r) { keep(r); render(); refreshOpen(a); return step(r.episode); });
     }
     return start.then(function (ep) { render(); refreshOpen(a); return step(ep); }).then(null, function (er) {
       // another window is writing this sign: wait, take what it saved and carry on
@@ -969,7 +981,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
         else { msg("ed-msg", ""); toast("Edition for " + dmy(date) + " saved"); }
         resolve();
       }
-      for (var i = 0; i < 3; i++) next();
+      for (var i = 0; i < 2; i++) next();   // two signs at a time: kind to the AI service's rate limits
     });
   }
   $("ed-make").addEventListener("click", function () { make({}); });

@@ -129,31 +129,38 @@ async function remember(st, ep) {
 }
 
 // ------------------------------------------------------------------ the AI
-async function ask(user, maxTokens) {
+// one AI call. The answer comes back through a tool (a fixed form), so it is always valid JSON. Only network trouble,
+// 429 and 5xx are retried here, and only while there is time left: Netlify stops a request after about 30 seconds.
+async function ask(user, maxTokens, tool, t0) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new HttpError(503, "The AI key (ANTHROPIC_API_KEY) is not set in Netlify, so nothing new can be written. Saved editions still open.", { code: "no-ai-key" });
   for (let attempt = 1; attempt <= 2; attempt++) {
-    const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), AI_TIMEOUT());
+    const left = 26000 - (Date.now() - t0);
+    const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), Math.max(3000, Math.min(AI_TIMEOUT(), left)));
     let r;
     try {
       r = await fetch(AI_URL(), { method: "POST", signal: ctrl.signal, headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
-        body: JSON.stringify({ model: MODEL(), max_tokens: maxTokens, system: E.systemPrompt(), messages: [{ role: "user", content: user }] }) });
+        body: JSON.stringify({ model: MODEL(), max_tokens: maxTokens, system: E.systemPrompt(), messages: [{ role: "user", content: user }], tools: [tool], tool_choice: { type: "tool", name: tool.name } }) });
     } catch (e) {
       clearTimeout(t);
-      if (attempt === 1 && e.name !== "AbortError") { await sleep(1200); continue; }
+      if (attempt === 1 && e.name !== "AbortError" && Date.now() - t0 < 12000) { await sleep(1200); continue; }
       throw new HttpError(504, e.name === "AbortError" ? "The AI took too long to answer. Nothing was changed; try again." : "Could not reach the AI service. Nothing was changed; try again.", { code: "ai-unreachable" });
     }
     clearTimeout(t);
     if (!r.ok) {
       const body = (await r.text()).slice(0, 300);
       console.error("studio-edition: AI error", r.status, body);
-      if (attempt === 1 && (r.status === 429 || r.status >= 500)) { await sleep(1500); continue; }
-      throw new HttpError(502, `The AI service answered with an error (${r.status}). Nothing was changed; try again.`, { code: "ai-error", aiStatus: r.status });
+      if (attempt === 1 && (r.status === 429 || r.status >= 500) && Date.now() - t0 < 12000) { await sleep(1500); continue; }
+      throw new HttpError(502, r.status === 429 ? "The AI service is busy (too many requests at once). Nothing was changed; try again in a minute." : `The AI service answered with an error (${r.status}). Nothing was changed; try again.`, { code: r.status === 429 ? "ai-busy" : "ai-error", aiStatus: r.status });
     }
     const data = await r.json();
-    const text = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("");
+    const used = (data.content || []).find((x) => x.type === "tool_use" && x.input && typeof x.input === "object");
+    if (used && data.stop_reason !== "max_tokens") return used.input;
+    const text = (data.content || []).filter((x) => x.type === "text").map((x) => x.text).join("");
+    console.error("studio-edition: unreadable AI answer", JSON.stringify({ stop: data.stop_reason, usage: data.usage, kinds: (data.content || []).map((x) => x.type), text: text.slice(0, 300) }));
+    if (data.stop_reason === "max_tokens") throw new HttpError(502, "The AI's answer was too long and was cut off. Nothing was changed; try again.", { code: "ai-too-long" });
     try { return E.parseJSON(text); }
-    catch (e) { if (attempt === 1) continue; throw new HttpError(502, "The AI's answer could not be read. Nothing was changed; try again.", { code: "ai-bad-json" }); }
+    catch (e) { throw new HttpError(502, "The AI's answer could not be read. Nothing was changed; try again.", { code: "ai-bad-json" }); }
   }
 }
 
@@ -178,9 +185,9 @@ async function opPlan(st, b, t0) {
     const seed = E.hash(`${date}|${animal}|${vid}|${theme.id}|${b.force ? Date.now() : 0}`);
     let ep, best = null, retryNote = "";
     for (let attempt = 1; attempt <= 2; attempt++) {
-      const raw = await ask(E.planPrompt({ iso: date, animal, theme, facts, length, avoid, today: others, seed: seed + attempt, retryNote }), 1400);
+      const raw = await ask(E.planPrompt({ iso: date, animal, theme, facts, length, avoid, today: others, seed: seed + attempt, retryNote }), 2500, E.planTool(length), t0);
       try { ep = E.planToEpisode(raw, { iso: date, animal, vid, theme, facts, length }); }
-      catch (e) { if (attempt === 2) throw new HttpError(502, "The AI's plan was incomplete (" + e.message + "). Nothing was changed; try again.", { code: "ai-incomplete" }); retryNote = "Your last answer was incomplete: " + e.message + "."; continue; }
+      catch (e) { if (attempt === 2 || Date.now() - t0 > 12000) throw new HttpError(502, "The AI's plan was incomplete (" + e.message + "). Nothing was changed; try again.", { code: "ai-incomplete" }); retryNote = "Your last answer was incomplete: " + e.message + "."; continue; }
       // compare with recent editions of this sign (story and blessing) before accepting it
       const pp = E.planPrint(ep);
       let worst = { score: 0 };
@@ -191,7 +198,7 @@ async function opPlan(st, b, t0) {
       ep.similar = worst.score >= E.ED_SIMILAR ? worst : null;
       if (!ep.similar) break;
       best = ep;
-      if (Date.now() - t0 > 25000) break;
+      if (Date.now() - t0 > 12000) break;   // no time for a second try: keep it, marked "close to …", so it can be remade
       retryNote = `Your last idea was too close to ${worst.to === date ? "another sign's episode today" : "the " + worst.to.split("-").reverse().join("/") + " episode"} "${worst.title}". Write a completely different story, place and magical moment.`;
     }
     ep = ep || best;
@@ -222,13 +229,13 @@ async function opScene(st, b, t0) {
     const own = ep.scenes.filter((s, i) => i !== index && s.status === "ready").map(E.scenePrint);
     let note = b.note ? "The owner asks: " + str(b.note, 300) : "", sc = null;
     for (let attempt = 1; attempt <= 2; attempt++) {
-      const raw = await ask(E.scenePrompt({ iso: date, animal, theme, facts: ep.facts, ep, index, avoid: avoidScenes.slice(0, 10), note }), 900);
+      const raw = await ask(E.scenePrompt({ iso: date, animal, theme, facts: ep.facts, ep, index, avoid: avoidScenes.slice(0, 10), note }), 1500, E.SCENE_TOOL, t0);
       try { sc = E.fillScene(ep, index, raw); }
-      catch (e) { if (attempt === 2) throw new HttpError(502, "The AI's scene was incomplete. Nothing was changed; try again.", { code: "ai-incomplete" }); note = "Your last answer was incomplete: " + e.message + "."; continue; }
+      catch (e) { if (attempt === 2 || Date.now() - t0 > 12000) throw new HttpError(502, "The AI's scene was incomplete. Nothing was changed; try again.", { code: "ai-incomplete" }); note = "Your last answer was incomplete: " + e.message + "."; continue; }
       const print = E.scenePrint(sc);
       const rep = avoidScenes.concat(own).map((x) => E.similar(print, x)).reduce((m, x) => Math.max(m, x), 0);
       const tooLong = sc.warnings.some((w) => /fit 10 seconds/.test(w));
-      if ((rep < 0.5 && !tooLong) || attempt === 2 || Date.now() - t0 > 30000) { if (rep >= 0.5) sc.warnings.push("close to a recent scene of this sign"); break; }
+      if ((rep < 0.5 && !tooLong) || attempt === 2 || Date.now() - t0 > 12000) { if (rep >= 0.5) sc.warnings.push("close to a recent scene of this sign"); break; }
       note = (tooLong ? "Your lines were too long for 10 seconds: make the Khmer line shorter than 100 characters and the English shorter than 20 words. " : "") + (rep >= 0.5 ? "Use a different place, light and action from recent scenes." : "");
     }
     sc.updatedAt = now();

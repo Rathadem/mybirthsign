@@ -17,7 +17,7 @@ const PL = ["a quiet bamboo grove at dawn", "a moonlit causeway lined with naga 
 const ACT = ["lifts a ribbon of light that curls into a lotus", "follows a trail of glowing footprints", "opens a carved box that releases butterflies of light", "spins slowly as petals rise in a spiral", "raises a shining shield of warm light", "draws a circle of light on the water", "leaps across stepping stones that light up", "calls a gentle rain of golden sparks", "guides a lost lantern back to the sky", "plants a seed that blooms into a glowing tree", "rings a small bell that sends rings of light", "unrolls a scroll of shining characters"];
 
 // ------------------------------------------------------------------ the stand-in AI
-export const ai = { calls: 0, fail: 0, bad: 0, repeat: null, delay: 0, log: [] };
+export const ai = { calls: 0, fail: 0, bad: 0, cut: 0, repeat: null, delay: 0, log: [], tools: [] };
 function answer(p) {
   const date = (/Date: (?:\w+ )?(\d\d\/\d\d\/\d{4})/.exec(p) || [])[1] || "";
   if (p.startsWith("Write today's episode plan")) {
@@ -64,7 +64,13 @@ export async function startAI() {
       if (ai.fail > 0) { ai.fail--; res.writeHead(500); return res.end('{"error":"overloaded"}'); }
       if (ai.bad > 0) { ai.bad--; res.writeHead(200, { "content-type": "application/json" }); return res.end(JSON.stringify({ content: [{ type: "text", text: "Sorry, I cannot do that." }] })); }
       res.writeHead(200, { "content-type": "application/json" });
-      res.end(JSON.stringify({ content: [{ type: "text", text: JSON.stringify(answer(prompt)) }], usage: { input_tokens: 1, output_tokens: 1 } }));
+      // like the real API: with a forced tool, the answer is a tool_use block whose input is already JSON
+      const tool = j.tool_choice && j.tool_choice.type === "tool" && (j.tools || []).find((t) => t.name === j.tool_choice.name);
+      if (ai.cut > 0) { ai.cut--; return res.end(JSON.stringify({ content: tool ? [{ type: "tool_use", id: "t1", name: tool.name, input: {} }] : [{ type: "text", text: '{"title_en":"Cut' }], stop_reason: "max_tokens" })); }
+      ai.tools.push(tool ? tool.name : "none");
+      res.end(JSON.stringify(tool
+        ? { content: [{ type: "tool_use", id: "t" + ai.calls, name: tool.name, input: answer(prompt) }], stop_reason: "tool_use", usage: { input_tokens: 1, output_tokens: 1 } }
+        : { content: [{ type: "text", text: JSON.stringify(answer(prompt)) }], stop_reason: "end_turn", usage: { input_tokens: 1, output_tokens: 1 } }));
     });
   });
   await new Promise((ok) => aiServer.listen(0, ok));

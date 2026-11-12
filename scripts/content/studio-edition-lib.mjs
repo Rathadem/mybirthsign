@@ -247,7 +247,7 @@ LANGUAGE
 - English: a natural English version with the same meaning (not word for word).
 FRESH EVERY DAY
 - Each episode must have its own new story, new places, new light and new magic. Never reuse the recent ideas you are given, and never copy the example moment: invent a new one in the same spirit.
-OUTPUT: only one JSON object, nothing before or after it, no markdown.`;
+OUTPUT: answer only by filling in the tool you are given (no other text). Keep every field short and concrete.`;
 }
 const dmy = (iso) => iso.split("-").reverse().join("/");
 const WD = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -270,9 +270,7 @@ Story ingredients for the ${animal} guardian (use freely): ${G.motifs}. Example 
 Today's random sparks (use one if it helps the story): ${sparks.join("; ")}. Places to consider: ${places.join("; ")}.
 Video: ${length} seconds, ${plan.length} clips of 10 seconds:
 ${plan.map((s) => `${s.n}. ${s.label}${s.onCam ? " (Chanda on camera)" : " (Chanda's voice only)"}: ${s.task}`).join("\n")}
-${avoid.length ? `Recent ideas for the ${animal} (do not repeat them, their places or their magic):\n${avoid.slice(0, 12).map((a) => "- " + a).join("\n")}\n` : ""}${today.length ? `Other signs today already use (choose something different):\n${today.slice(0, 11).map((a) => "- " + a).join("\n")}\n` : ""}${retryNote ? retryNote + "\n" : ""}Return JSON:
-{"title_en":"short episode title","title_km":"the title in Khmer","logline":"the story in one English sentence","hook":"the opening hook idea (one sentence)","guardian_moment":"the new signature magical moment, specific and visual (one or two sentences)","blessing_en":"the blessing to the viewer (one sentence)","blessing_km":"the blessing in natural Khmer","closing_en":"the closing message (one sentence)","closing_km":"the closing message in natural Khmer","music":"music and sound atmosphere for the whole episode (instruments and mood, no artist or song names)","beats":[${plan.map((s) => `"clip ${s.n}: what happens"`).join(",")}]}
-Exactly ${plan.length} beats.`;
+${avoid.length ? `Recent ideas for the ${animal} (do not repeat them, their places or their magic):\n${avoid.slice(0, 12).map((a) => "- " + a).join("\n")}\n` : ""}${today.length ? `Other signs today already use (choose something different):\n${today.slice(0, 11).map((a) => "- " + a).join("\n")}\n` : ""}${retryNote ? retryNote + "\n" : ""}Answer with the tool write_episode_plan: a short title (English and Khmer), the story in one sentence, the hook, the new signature magical moment (one or two sentences), the blessing and the closing message (each one sentence, in English and in natural Khmer), the music, and exactly ${plan.length} beats (one short sentence each, what happens in each clip).`;
 }
 export function scenePrompt(x) {
   const { iso, animal, theme, facts, ep, index, avoid = [], note = "" } = x;
@@ -292,10 +290,29 @@ This clip (${sc.start}–${sc.end} s, 10 seconds): ${sc.label}. ${sc.onCam ? "Ch
 What happens: ${ep.beats[index] || sc.task}
 ${prev && prev.setting ? `Previous clip ended: ${prev.setting} ${prev.action}\n` : ""}${next ? `Next clip: ${ep.beats[index + 1] || next.task}\n` : ""}${luckyAsk}
 Voice limits (Chanda speaks calmly, and the clip is only 10 seconds): the Khmer line is one or two short sentences of at most 15 Khmer words; the English line at most 20 words.
-${avoid.length ? `Recent ${animal} scenes (use a different place, light and action):\n${avoid.slice(0, 10).map((a) => "- " + a).join("\n")}\n` : ""}${note ? note + "\n" : ""}Return JSON:
-{"km":"what Chanda says, in natural spoken Khmer","en":"the same in natural English","setting":"where we are, time of day, light, weather and magical effects (no character looks)","action":"what the guardian and the animal${sc.onCam ? " and Chanda" : ""} do, moment by moment, without describing how they look","camera":"one smooth camera movement","sound":"music and sound effects for this clip","image":"the key still frame of this clip in one sentence"}`;
+${avoid.length ? `Recent ${animal} scenes (use a different place, light and action):\n${avoid.slice(0, 10).map((a) => "- " + a).join("\n")}\n` : ""}${note ? note + "\n" : ""}Answer with the tool write_scene. Keep it short: setting at most 35 words, action at most 45 words, image at most 25 words, never describing how the characters look.`;
 }
-// pull the JSON object out of the AI's reply
+// the answer forms the AI fills in (tool use: the API returns them as ready-made JSON, so they can always be read)
+const STR = (d) => ({ type: "string", description: d });
+export function planTool(length = ED_DEFAULT_LENGTH) {
+  const n = scenePlan(length).length;
+  return { name: "write_episode_plan", description: "Save the plan of today's episode.", input_schema: { type: "object", properties: {
+    title_en: STR("short episode title in English"), title_km: STR("the title in natural Khmer"), logline: STR("the story in one English sentence"),
+    hook: STR("the opening hook idea, one sentence"), guardian_moment: STR("the new signature magical moment, specific and visual, one or two sentences"),
+    blessing_en: STR("the blessing to the viewer, one sentence"), blessing_km: STR("the blessing in natural spoken Khmer"),
+    closing_en: STR("the closing message, one sentence"), closing_km: STR("the closing message in natural spoken Khmer"),
+    music: STR("music and sound atmosphere for the episode (instruments and mood, no artist or song names)"),
+    beats: { type: "array", minItems: n, maxItems: n, items: STR("what happens in this clip, one short sentence"), description: `exactly ${n} beats, one per clip` },
+  }, required: ["title_en", "title_km", "logline", "hook", "guardian_moment", "blessing_en", "blessing_km", "closing_en", "closing_km", "music", "beats"] } };
+}
+export const SCENE_TOOL = { name: "write_scene", description: "Save one 10-second clip.", input_schema: { type: "object", properties: {
+  km: STR("what Chanda says, in natural spoken Khmer (at most 15 Khmer words)"), en: STR("the same in natural English (at most 20 words)"),
+  setting: STR("where we are, time of day, light, weather and magical effects; no character looks (at most 35 words)"),
+  action: STR("what the guardian and the animal (and Chanda, if on camera) do, moment by moment, without describing how they look (at most 45 words)"),
+  camera: STR("one smooth camera movement"), sound: STR("music and sound effects for this clip"), image: STR("the key still frame of this clip in one sentence (at most 25 words)"),
+}, required: ["km", "en", "setting", "action", "camera", "sound", "image"] } };
+
+// pull the JSON object out of the AI's reply (used only if the answer came back as text)
 export function parseJSON(text) {
   const m = String(text || "").match(/\{[\s\S]*\}/);
   return JSON.parse(m ? m[0] : text);

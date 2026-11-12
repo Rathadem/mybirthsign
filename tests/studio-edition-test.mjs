@@ -148,7 +148,7 @@ try {
   ai.fail = 2;
   const e1 = await call("POST", { op: "scene", date: D1, animal: "Ox", index: 1 });
   ok(e1.status === 502 && /Nothing was changed/.test(e1.body.error), "AI error: clear message");
-  ai.bad = 2;
+  ai.bad = 1;
   const e2 = await call("POST", { op: "plan", date: D1, animal: "Ox", force: true, theme: themeFor(D1), facts: factsFor(D1, "Ox") });
   ok(e2.status === 502, "unreadable AI answer: clear message");
   const ak = process.env.ANTHROPIC_API_KEY; delete process.env.ANTHROPIC_API_KEY;
@@ -157,6 +157,10 @@ try {
   process.env.ANTHROPIC_API_KEY = ak;
   ok(JSON.stringify((await call("GET", { op: "day", date: D1 })).body.episodes) === snap, "after the errors the saved edition is exactly the same");
   ok((await call("POST", { op: "scene", date: D1, animal: "Ox", index: 1 })).status === 200, "Try again works");
+  ai.cut = 1;
+  const e5 = await call("POST", { op: "scene", date: D1, animal: "Ox", index: 1 });
+  ok(e5.status === 502 && e5.body.code === "ai-too-long", "an AI answer cut off by its length: clear message, nothing saved");
+  ok(ai.tools.length > 20 && ai.tools.every((t) => t === "write_episode_plan" || t === "write_scene"), "every AI call asks for a fixed answer form (tool)");
   ai.fail = 2;
   const e4 = await call("POST", { op: "plan", date: "2026-12-01", animal: "Rat", theme: themeFor("2026-12-01"), facts: factsFor("2026-12-01", "Rat") });
   ok(e4.status === 502 && (await call("GET", { op: "day", date: "2026-12-01" })).body.day === null, "a failed first plan of a new day saves nothing");
