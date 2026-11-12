@@ -414,6 +414,9 @@ publish("articles.html", articlesPage(ROOT));
 // made by scripts/content/build-video-tool.mjs; copied as it is (no language versions, no ads)
 const studioDir = path.join(ROOT, "docs", "video-prompts", "studio");
 if (fs.existsSync(studioDir)) for (const f of fs.readdirSync(studioDir)) copyFile(path.join(studioDir, f), path.join(DIST, "studio", f));
+// the approved character pictures (Chanda and the guardians that have one), shown as references in the daily editions
+const charDir = path.join(ROOT, "docs", "video-prompts", "characters");
+if (fs.existsSync(charDir)) for (const f of fs.readdirSync(charDir)) if (/\.jpg$/.test(f)) copyFile(path.join(charDir, f), path.join(DIST, "studio", "characters", f));
 
 i18nBundles();
 
