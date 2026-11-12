@@ -68,7 +68,8 @@ function authorized(req) {
 }
 
 // ------------------------------------------------------------------ storage helpers
-const store = () => getStore({ name: STORE, consistency: "strong" });
+// previews (deploy previews, branch deploys) keep their own store, so testing never adds to the live Studio's archive
+const store = (live) => getStore({ name: live ? STORE : STORE + "-preview", consistency: "strong" });
 const kDay = (d) => `day/${d}`, kEp = (d, a, v) => `ep/${d}/${a}/${v}`, kLock = (d, a, v) => `lock/${d}/${a}/${v}`, kRecent = (a) => `recent/${a}`;
 async function readJSON(st, key) {
   const r = await st.getWithMetadata(key, { type: "json" });
@@ -347,14 +348,15 @@ async function getHistory(st, q) {
   return { items: blobs.map((x) => { const m = /\/([a-z0-9]+)-([a-z0-9-]+)$/.exec(x.key); return { key: x.key, at: m ? new Date(parseInt(m[1], 36)).toISOString() : "", action: m ? m[2] : "" }; }).sort((a, b) => (a.at < b.at ? 1 : -1)).slice(0, 50) };
 }
 
-export default async (req) => {
+export default async (req, context) => {
   const t0 = Date.now();
   try {
     authorized(req);
-    const st = store(), url = new URL(req.url), q = url.searchParams;
+    const dc = context && context.deploy && context.deploy.context, live = !dc || dc === "production";
+    const st = store(live), url = new URL(req.url), q = url.searchParams;
     if (req.method === "GET") {
       const op = q.get("op");
-      if (op === "status") return json(200, { ok: true, ai: !!process.env.ANTHROPIC_API_KEY, model: MODEL() });
+      if (op === "status") return json(200, { ok: true, ai: !!process.env.ANTHROPIC_API_KEY, model: MODEL(), preview: !live });
       if (op === "day") return json(200, await getDay(st, q.get("date")));
       if (op === "archive") return json(200, await getArchive(st, q));
       if (op === "history") return json(200, await getHistory(st, q));
