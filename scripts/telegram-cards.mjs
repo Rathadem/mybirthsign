@@ -12,6 +12,7 @@ import fs from "node:fs";
 import path from "node:path";
 import http from "node:http";
 import { createRequire } from "node:module";
+import { facebookFeed } from "./facebook-feed.mjs";
 
 const require = createRequire(import.meta.url);
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
@@ -98,6 +99,12 @@ for (const [lang, specs] of langs) {
   });
 }
 fs.writeFileSync(path.join(dir, "cards.json"), JSON.stringify({ date, cards: list }, null, 2) + "\n");
+// the day's Khmer Facebook posts for PublishHub (scripts/facebook-feed.mjs): only when the Khmer cards were drawn
+const kmSpecs = (langs.find(([l]) => l === "km") || [])[1];
+if (kmSpecs && list.some((c) => c.lang === "km")) {
+  const feed = facebookFeed(date, kmSpecs, kmSpecs.map((s, i) => `${i + 1}-km.jpg`));
+  fs.writeFileSync(path.join(dir, "facebook-km.json"), JSON.stringify(feed, null, 2) + "\n");
+}
 await browser.close();
 server.close();
 console.log(`telegram-cards: ${list.length} cards for ${date} in ${dir}`);
