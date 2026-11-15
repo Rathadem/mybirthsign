@@ -132,6 +132,10 @@ async function remember(st, ep) {
 // one AI call. The AI is asked to answer through a tool (a fixed form, returned as ready-made JSON); a plain-text JSON
 // answer is still accepted. Only network trouble,
 // 429 and 5xx are retried here, and only while there is time left: Netlify stops a request after about 30 seconds.
+// The model may "think" before answering; that used up the answer's token budget and cut the answer off ("could not be
+// read", 14/11/2026). The answers are short forms, so thinking is switched off (also faster). If the API refuses the
+// setting, it is left out from then on and the answer gets more room instead.
+let thinkingOff = true;
 async function ask(user, maxTokens, tool, t0) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new HttpError(503, "The AI key (ANTHROPIC_API_KEY) is not set in Netlify, so nothing new can be written. Saved editions still open.", { code: "no-ai-key" });
@@ -139,9 +143,11 @@ async function ask(user, maxTokens, tool, t0) {
     const left = 26000 - (Date.now() - t0);
     const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), Math.max(3000, Math.min(AI_TIMEOUT(), left)));
     let r;
+    const req = { model: MODEL(), max_tokens: thinkingOff ? maxTokens : maxTokens + 3000, system: E.systemPrompt(), messages: [{ role: "user", content: user }], tools: [tool] };   // offered, not forced: forcing a tool is not supported by every model
+    if (thinkingOff) req.thinking = { type: "disabled" };
     try {
       r = await fetch(AI_URL(), { method: "POST", signal: ctrl.signal, headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
-        body: JSON.stringify({ model: MODEL(), max_tokens: maxTokens, system: E.systemPrompt(), messages: [{ role: "user", content: user }], tools: [tool] }) });   // offered, not forced: forcing a tool is not supported by every model
+        body: JSON.stringify(req) });
     } catch (e) {
       clearTimeout(t);
       if (attempt === 1 && e.name !== "AbortError" && Date.now() - t0 < 12000) { await sleep(1200); continue; }
@@ -151,6 +157,7 @@ async function ask(user, maxTokens, tool, t0) {
     if (!r.ok) {
       const body = (await r.text()).slice(0, 300);
       console.error("studio-edition: AI error", r.status, body);
+      if (r.status === 400 && thinkingOff && /thinking/i.test(body) && Date.now() - t0 < 12000) { thinkingOff = false; attempt--; continue; }
       if (attempt === 1 && (r.status === 429 || r.status >= 500) && Date.now() - t0 < 12000) { await sleep(1500); continue; }
       throw new HttpError(502, r.status === 429 ? "The AI service is busy (too many requests at once). Nothing was changed; try again in a minute." : `The AI service answered with an error (${r.status}). Nothing was changed; try again.`, { code: r.status === 429 ? "ai-busy" : "ai-error", aiStatus: r.status });
     }

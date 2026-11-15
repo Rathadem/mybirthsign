@@ -190,6 +190,15 @@ try {
   ok(p30.status === 200 && p30.body.episode.scenes.length === 3 && p30.body.episode.length === 30, "a 30-second episode has 3 scenes");
   const p90 = await makeEpisode("2026-11-16", "Monkey", { length: 90 });
   ok(p90.status === 200 && p90.body.episode.scenes.length === 9, "a 90-second episode has 9 scenes");
+
+  // ---- the AI's thinking (14/11/2026: it used up the answer's room, "could not be read"): switched off on every call;
+  // if the API ever refuses the setting, it is left out and the answer gets more room, and the episode is still made
+  ok(ai.thinking.length > 20 && ai.thinking.every((x) => x.type === "disabled"), "every AI call switches thinking off");
+  ai.refuseThinking = true; const thBefore = ai.thinking.length;
+  const pRef = await makeEpisode("2026-11-17", "Goat");
+  ok(pRef.status === 200 && pRef.body.episode.scenes.length === 6, "when thinking cannot be switched off, the episode is still made");
+  ok(ai.thinking.slice(thBefore).every((x) => x.type === "default" && x.max >= 3000), "…without the setting and with more room for the answer");
+  ai.refuseThinking = false;
 } catch (e) { fails++; console.log("FAIL (crash)", e.stack); }
 finally { await teardown(); }
 console.log(fails ? `${fails} check(s) failed, ${passes} passed` : `studio editions OK: ${passes} checks passed (${ai.calls} stand-in AI calls)`);

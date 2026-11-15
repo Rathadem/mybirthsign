@@ -139,7 +139,7 @@ try {
   ok(/Wrong Studio passcode/.test(await p3.textContent("#ed-msg")) && await p3.isVisible("#ed-settings"), "a wrong passcode is explained and Settings open");
   await c3.close();
   ok(!errors.length, "no page errors" + (errors.length ? ": " + errors.slice(0, 3).join(" | ") : ""));
-} catch (e) { fails++; console.log("FAIL (crash)", e.stack); }
+} catch (e) { fails++; console.log("FAIL (crash)", e.stack, errors.length ? "\npage errors: " + errors.slice(0, 5).join(" | ") : ""); }
 finally { await browser.close(); srv.close(); await teardown(); }
 console.log(fails ? `${fails} check(s) failed, ${passes} passed` : `studio page OK: ${passes} checks passed`);
 process.exit(fails ? 1 : 0);

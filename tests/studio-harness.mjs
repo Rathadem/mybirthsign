@@ -17,7 +17,7 @@ const PL = ["a quiet bamboo grove at dawn", "a moonlit causeway lined with naga 
 const ACT = ["lifts a ribbon of light that curls into a lotus", "follows a trail of glowing footprints", "opens a carved box that releases butterflies of light", "spins slowly as petals rise in a spiral", "raises a shining shield of warm light", "draws a circle of light on the water", "leaps across stepping stones that light up", "calls a gentle rain of golden sparks", "guides a lost lantern back to the sky", "plants a seed that blooms into a glowing tree", "rings a small bell that sends rings of light", "unrolls a scroll of shining characters"];
 
 // ------------------------------------------------------------------ the stand-in AI
-export const ai = { calls: 0, fail: 0, bad: 0, cut: 0, repeat: null, delay: 0, log: [], tools: [] };
+export const ai = { calls: 0, fail: 0, bad: 0, cut: 0, repeat: null, delay: 0, log: [], tools: [], thinking: [], refuseThinking: false };
 function answer(p) {
   const date = (/Date: (?:\w+ )?(\d\d\/\d\d\/\d{4})/.exec(p) || [])[1] || "";
   if (p.startsWith("Write today's episode plan")) {
@@ -65,8 +65,14 @@ export async function startAI() {
       if (ai.bad > 0) { ai.bad--; res.writeHead(200, { "content-type": "application/json" }); return res.end(JSON.stringify({ content: [{ type: "text", text: "Sorry, I cannot do that." }] })); }
       // like the real model: forcing a tool is refused (400); an offered tool is used, and its input is already JSON
       if (j.tool_choice && j.tool_choice.type !== "auto") { res.writeHead(400, { "content-type": "application/json" }); return res.end('{"type":"error","error":{"type":"invalid_request_error","message":"tool_choice: type tool and any are not supported for this model."}}'); }
+      // like the real API when a model does not take the setting: refused with a 400 that names it
+      if (ai.refuseThinking && j.thinking) { res.writeHead(400, { "content-type": "application/json" }); return res.end('{"type":"error","error":{"type":"invalid_request_error","message":"thinking: this setting is not supported for this model."}}'); }
+      ai.thinking.push({ type: j.thinking ? j.thinking.type : "default", max: j.max_tokens });
       res.writeHead(200, { "content-type": "application/json" });
       const tool = (j.tools || [])[0];
+      // like the real model (14/11/2026): unless thinking is switched off it thinks first (about 1,100 tokens), and a
+      // small token budget then runs out before the answer form is finished
+      if ((!j.thinking || j.thinking.type !== "disabled") && j.max_tokens < 3000) return res.end(JSON.stringify({ content: [{ type: "thinking", thinking: "…" }, ...(tool ? [{ type: "tool_use", id: "t1", name: tool.name, input: {} }] : [])], stop_reason: "max_tokens", usage: { output_tokens: j.max_tokens } }));
       if (ai.cut > 0) { ai.cut--; return res.end(JSON.stringify({ content: tool ? [{ type: "tool_use", id: "t1", name: tool.name, input: {} }] : [{ type: "text", text: '{"title_en":"Cut' }], stop_reason: "max_tokens" })); }
       ai.tools.push(tool ? tool.name : "none");
       res.end(JSON.stringify(tool
