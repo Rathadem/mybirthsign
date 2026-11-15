@@ -154,6 +154,9 @@ try {
   const ak = process.env.ANTHROPIC_API_KEY; delete process.env.ANTHROPIC_API_KEY;
   const e3 = await call("POST", { op: "scene", date: D1, animal: "Ox", index: 1 });
   ok(e3.status === 503 && e3.body.code === "no-ai-key", "no AI key: clear message");
+  process.env.STUDIO_AI_KEY = ak;   // the Studio's own key works without ANTHROPIC_API_KEY (the checker's key)
+  ok((await call("GET", { op: "status" })).body.ai === true, "the Studio's own key (STUDIO_AI_KEY) switches AI writing on by itself");
+  delete process.env.STUDIO_AI_KEY;
   process.env.ANTHROPIC_API_KEY = ak;
   ok(JSON.stringify((await call("GET", { op: "day", date: D1 })).body.episodes) === snap, "after the errors the saved edition is exactly the same");
   ok((await call("POST", { op: "scene", date: D1, animal: "Ox", index: 1 })).status === 200, "Try again works");

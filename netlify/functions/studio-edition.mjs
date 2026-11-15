@@ -7,7 +7,8 @@
 // Setup (Netlify > Site configuration > Environment variables, scope "Functions"):
 //   STUDIO_KEY          a passcode of your choice; the Studio asks for it once per device. Without it every call
 //                       answers 503 "not set up" and nothing is stored.
-//   ANTHROPIC_API_KEY   already used by the checker's AI reading (netlify/functions/zodiac-reading.js).
+//   STUDIO_AI_KEY       the Anthropic API key for the Studio (functions scope). If it is not set, ANTHROPIC_API_KEY
+//                       (the checker's AI reading, netlify/functions/zodiac-reading.js) is used instead.
 //   STUDIO_MODEL        optional, default claude-sonnet-5-5 (the model of the daily fortune writer).
 // Storage: Netlify Blobs store "studio-editions" (no database to create). Keys:
 //   day/<date>                         the day: theme, time zone, and a summary of every episode
@@ -26,6 +27,9 @@ export const config = { path: "/api/studio" };
 
 const STORE = "studio-editions";
 const MODEL = () => process.env.STUDIO_MODEL || "claude-sonnet-5-5";
+// the Studio's own key, so switching the Studio on does not also switch on (and bill) the checker's AI reading;
+// ANTHROPIC_API_KEY is still read when STUDIO_AI_KEY is not set (the preview links were set up with it)
+const AI_KEY = () => process.env.STUDIO_AI_KEY || process.env.ANTHROPIC_API_KEY;
 const AI_URL = () => process.env.STUDIO_AI_URL || "https://api.anthropic.com/v1/messages";
 const AI_TIMEOUT = () => Number(process.env.STUDIO_AI_TIMEOUT_MS) || 45000;
 const RECENT_MAX = 45, LOCK_MS = 120000;
@@ -137,8 +141,8 @@ async function remember(st, ep) {
 // setting, it is left out from then on and the answer gets more room instead.
 let thinkingOff = true;
 async function ask(user, maxTokens, tool, t0) {
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) throw new HttpError(503, "The AI key (ANTHROPIC_API_KEY) is not set in Netlify, so nothing new can be written. Saved editions still open.", { code: "no-ai-key" });
+  const key = AI_KEY();
+  if (!key) throw new HttpError(503, "The AI key (STUDIO_AI_KEY) is not set in Netlify, so nothing new can be written. Saved editions still open.", { code: "no-ai-key" });
   for (let attempt = 1; attempt <= 2; attempt++) {
     const left = 26000 - (Date.now() - t0);
     const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), Math.max(3000, Math.min(AI_TIMEOUT(), left)));
@@ -371,7 +375,7 @@ export default async (req, context) => {
     const st = store(live), url = new URL(req.url), q = url.searchParams;
     if (req.method === "GET") {
       const op = q.get("op");
-      if (op === "status") return json(200, { ok: true, ai: !!process.env.ANTHROPIC_API_KEY, model: MODEL(), preview: !live });
+      if (op === "status") return json(200, { ok: true, ai: !!AI_KEY(), model: MODEL(), preview: !live });
       if (op === "day") return json(200, await getDay(st, q.get("date")));
       if (op === "archive") return json(200, await getArchive(st, q));
       if (op === "history") return json(200, await getHistory(st, q));

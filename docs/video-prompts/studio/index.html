@@ -3296,7 +3296,7 @@ return { ED_ANIMALS, ED_KM, ED_LENGTHS, ED_DEFAULT_LENGTH, ED_TZ, ED_WEEKDAY, ED
   function explain(er) {
     if (er.code === "bad-key") { openSettings(true); return "Wrong Studio passcode. Type the passcode you saved as STUDIO_KEY in Netlify (Settings above)."; }
     if (er.code === "no-studio-key") return "Daily editions are not switched on yet. In Netlify, add an environment variable named STUDIO_KEY (a passcode you choose), redeploy, then type the same passcode in Settings.";
-    if (er.code === "no-ai-key") return "The AI key (ANTHROPIC_API_KEY) is not set in Netlify, so new editions cannot be written. Saved editions still open.";
+    if (er.code === "no-ai-key") return "The AI key (STUDIO_AI_KEY) is not set in Netlify, so new editions cannot be written. Saved editions still open.";
     return esc(er.message || "Something went wrong.");
   }
 
@@ -3692,7 +3692,7 @@ return { ED_ANIMALS, ED_KM, ED_LENGTHS, ED_DEFAULT_LENGTH, ED_TZ, ED_WEEKDAY, ED
   function checkService() {
     if (!onSite) { $("ed-svc").textContent = "This copy of the Studio cannot reach the website: daily editions are made at mybirthsign.com/studio/."; return Promise.resolve(); }
     if (!S.key) { $("ed-svc").textContent = "No passcode saved on this device yet."; return Promise.resolve(); }
-    return api("GET", { op: "status" }).then(function (r) { S.svc = r; $("ed-svc").textContent = "Connected to the Studio service. AI writing: " + (r.ai ? "on (" + r.model + ")" : "off (ANTHROPIC_API_KEY is missing in Netlify)") + "." + (r.preview ? " This is a PREVIEW: what you make here is kept apart from the live Studio." : ""); }, function (er) { S.svc = null; $("ed-svc").innerHTML = explain(er); });
+    return api("GET", { op: "status" }).then(function (r) { S.svc = r; $("ed-svc").textContent = "Connected to the Studio service. AI writing: " + (r.ai ? "on (" + r.model + ")" : "off (STUDIO_AI_KEY is missing in Netlify)") + "." + (r.preview ? " This is a PREVIEW: what you make here is kept apart from the live Studio." : ""); }, function (er) { S.svc = null; $("ed-svc").innerHTML = explain(er); });
   }
   $("ed-savekey").addEventListener("click", function () {
     var oldTz = S.tz;
