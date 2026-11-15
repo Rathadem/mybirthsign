@@ -240,10 +240,21 @@ async function opScene(st, b, t0) {
     const avoidScenes = recent.flatMap((x) => x.scenes || []).slice(0, 40);
     const own = ep.scenes.filter((s, i) => i !== index && s.status === "ready").map(E.scenePrint);
     let note = b.note ? "The owner asks: " + str(b.note, 300) : "", sc = null;
+    // "Update voice-over": the owner's new line for this scene (Khmer or English) is kept word for word, and the AI
+    // rewrites the other line and the scene's pictures (setting, action, camera, sound, prompts) to match it
+    let voice = null;
+    if (b.voice != null) {
+      const text = str(b.voice, 400).replace(/\s+/g, " ").trim();
+      need(text, "Write the new voice-over first.");
+      voice = { lang: /[\u1780-\u17FF]/.test(text) ? "km" : "en", text };
+    }
     for (let attempt = 1; attempt <= 2; attempt++) {
-      const raw = await ask(E.scenePrompt({ iso: date, animal, theme, facts: ep.facts, ep, index, avoid: avoidScenes.slice(0, 10), note }), 1500, E.SCENE_TOOL, t0);
+      const raw = await ask(E.scenePrompt({ iso: date, animal, theme, facts: ep.facts, ep, index, avoid: avoidScenes.slice(0, 10), note, voice }), 1500, E.SCENE_TOOL, t0);
+      if (voice && raw && typeof raw === "object") raw[voice.lang] = voice.text;
       try { sc = E.fillScene(ep, index, raw); }
       catch (e) { if (attempt === 2 || Date.now() - t0 > 12000) throw new HttpError(502, "The AI's scene was incomplete. Nothing was changed; try again.", { code: "ai-incomplete" }); note = "Your last answer was incomplete: " + e.message + "."; continue; }
+      if (voice) { sc.ownerVoice = voice.lang; break; }   // the owner's words decide the scene: no retries for variety
+      delete sc.ownerVoice;
       const print = E.scenePrint(sc);
       const rep = avoidScenes.concat(own).map((x) => E.similar(print, x)).reduce((m, x) => Math.max(m, x), 0);
       const tooLong = sc.warnings.some((w) => /fit 10 seconds/.test(w));

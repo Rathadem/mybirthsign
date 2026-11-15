@@ -168,6 +168,13 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
 .fld textarea.code { font: .8rem/1.5 var(--mono); min-height: 110px; }
 .fld input:focus, .fld textarea:focus { outline: none; border-color: var(--gold); }
 .fld [lang=km] { font-family: "Noto Sans Khmer", sans-serif; font-size: 1rem; line-height: 1.9; }
+.vo { border: 1px solid var(--gold-soft); border-radius: 14px; background: #1d1536; padding: 14px; display: grid; gap: 12px; min-width: 0; }
+.vo > *, .vo .fld { min-width: 0; }
+.vo select { font: .95rem var(--body); background: var(--card-2); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; width: 100%; max-width: 100%; box-sizing: border-box; text-overflow: ellipsis; }
+.vo .vo-km { font-size: 1.05rem; line-height: 1.8; margin: 0; overflow-wrap: anywhere; }
+.vo .block p { margin: 0; }
+.vo-res { background: var(--card-2); border-left: 3px solid var(--gold-soft); border-radius: 8px; padding: 10px 12px; line-height: 1.6; overflow-wrap: anywhere; }
+.vo-res button { margin-left: 6px; }
 .two { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
 .scene { border: 1px solid var(--line); border-radius: 14px; background: #17112c; padding: 12px; display: grid; gap: 10px; min-width: 0; }
 .scene.err { border-color: rgba(240, 163, 127, .6); }
@@ -2661,10 +2668,17 @@ ${plan.map((s) => `${s.n}. ${s.label}${s.onCam ? " (Chanda on camera)" : " (Chan
 ${avoid.length ? `Recent ideas for the ${animal} (do not repeat them, their places or their magic):\n${avoid.slice(0, 12).map((a) => "- " + a).join("\n")}\n` : ""}${today.length ? `Other signs today already use (choose something different):\n${today.slice(0, 11).map((a) => "- " + a).join("\n")}\n` : ""}${retryNote ? retryNote + "\n" : ""}Answer with the tool write_episode_plan: a short title (English and Khmer), the story in one sentence, the hook, the new signature magical moment (one or two sentences), the blessing and the closing message (each one sentence, in English and in natural Khmer), the music, and exactly ${plan.length} beats (one short sentence each, what happens in each clip).`;
 }
 function scenePrompt(x) {
-  const { iso, animal, theme, facts, ep, index, avoid = [], note = "" } = x;
+  const { iso, animal, theme, facts, ep, index, avoid = [], note = "", voice = null } = x;
   const sc = ep.scenes[index], prev = ep.scenes[index - 1], next = ep.scenes[index + 1];
   const noNum = facts && facts.tier === "caution";
-  const luckyAsk = /blessing|lucky|closing/.test(sc.role) && !noNum
+  // the owner's own voice-over line (Studio "Update voice-over", 15/11/2026): kept word for word, and the pictures
+  // follow it
+  const a = animal.toLowerCase();
+  const own = voice && voice.text ? `The owner has written Chanda's ${voice.lang === "km" ? "Khmer" : "English"} line for this clip. Use it exactly as written, word for word: "${voice.text}"
+${voice.lang === "km" ? "Write the English line as a natural translation of it." : "Write the Khmer line as the same words in natural spoken Khmer."}
+Then write the setting, action, camera, sound and image so that the pictures show what these words say: the guardian and the ${a} act them out (for example, if Chanda says to open the door to receive gold and good luck, the ${a} sends gold and coins of luck flying toward the people born in the year of the ${animal}). The owner's words come first; the episode's story only sets the mood.
+` : "";
+  const luckyAsk = own ? "" : /blessing|lucky|closing/.test(sc.role) && !noNum
     ? (sc.role === "blessing" || sc.role === "lucky" || ep.scenes.length === 3 ? "Weave in today's lucky color and lucky time naturally (and one lucky number only if it fits the time limit)." : "")
     : noNum ? "No numbers at all (take-it-easy day)." : "";
   return `Write clip ${sc.n} of ${ep.scenes.length} of today's ${animal} episode.
@@ -2677,7 +2691,7 @@ ${luckyLine(facts)}
 This clip (${sc.start}–${sc.end} s, 10 seconds): ${sc.label}. ${sc.onCam ? "Chanda is ON CAMERA and speaks to the viewer (lip-sync); the guardian and the animal are beside her and only act." : "Chanda is NOT on screen: her voice is a voice-over; the guardian and the animal act and never speak."}
 What happens: ${ep.beats[index] || sc.task}
 ${prev && prev.setting ? `Previous clip ended: ${prev.setting} ${prev.action}\n` : ""}${next ? `Next clip: ${ep.beats[index + 1] || next.task}\n` : ""}${luckyAsk}
-Voice limits (Chanda speaks calmly, and the clip is only 10 seconds): the Khmer line is one or two short sentences of at most 15 Khmer words; the English line at most 20 words.
+${own}Voice limits (Chanda speaks calmly, and the clip is only 10 seconds): ${own ? "the owner's line stays exactly as written; the other line is about as long as it." : "the Khmer line is one or two short sentences of at most 15 Khmer words; the English line at most 20 words."}
 ${avoid.length ? `Recent ${animal} scenes (use a different place, light and action):\n${avoid.slice(0, 10).map((a) => "- " + a).join("\n")}\n` : ""}${note ? note + "\n" : ""}Answer with the tool write_scene. Keep it short: setting at most 35 words, action at most 45 words, image at most 25 words, never describing how the characters look.`;
 }
 // the answer forms the AI fills in (tool use: the API returns them as ready-made JSON, so they can always be read)
@@ -3459,7 +3473,7 @@ return { ED_ANIMALS, ED_KM, ED_LENGTHS, ED_DEFAULT_LENGTH, ED_TZ, ED_WEEKDAY, ED
     return '<div class="scene' + (s.status !== "ready" ? " err" : "") + '" id="ed-sc' + i + '">' +
       '<div class="scene-h"><b>Scene ' + s.n + " · " + esc(s.label) + '</b><span class="t">' + mmss(s.start) + "–" + mmss(s.end) + " · " + s.dur + " s</span>" +
       '<label><input type="checkbox" data-f="scenes.' + i + '.onCam"' + (s.onCam ? " checked" : "") + "> Chanda on camera (lip-sync)</label>" +
-      (s.status === "ready" ? "" : '<span class="chip warn">not written yet</span>') + "</div>" +
+      (s.status === "ready" ? "" : '<span class="chip warn">not written yet</span>') + (s.ownerVoice ? '<span class="chip">your voice-over</span>' : "") + "</div>" +
       (w.length ? '<ul class="warns">' + w.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "") +
       '<div class="two">' + fld("Khmer voice-over (Chanda)", "scenes." + i + ".km", s.km, { area: true, km: true, count: true, rows: 3 }) + fld("English translation", "scenes." + i + ".en", s.en, { area: true, count: true, rows: 3 }) + "</div>" +
       fld("Guardian and character actions", "scenes." + i + ".action", s.action, { area: true, rows: 3 }) +
@@ -3476,6 +3490,27 @@ return { ED_ANIMALS, ED_KM, ED_LENGTHS, ED_DEFAULT_LENGTH, ED_TZ, ED_WEEKDAY, ED
         '<input data-note="' + i + '" placeholder="What should change? (optional)" aria-label="What should change in scene ' + s.n + '" style="flex:1 1 180px;min-width:0;font:.85rem var(--body);background:var(--card-2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:6px 10px">' +
       "</div></div>";
   }
+  // "Update voice-over script" (15/11/2026): pick a scene, see its voice-over now, write new words; the AI keeps the
+  // words exactly and rewrites the scene's actions, setting, camera, sound and prompts to show what Chanda says
+  function voHtml(ep) {
+    var v = S.open.vo, i = Math.min(v.i || 0, ep.scenes.length - 1), s = ep.scenes[i];
+    return '<div class="vo" id="ed-vo">' +
+      '<h3 class="sec-h">🎙 Update the voice-over script <span class="chip">' + ep.length + "-second video · Facebook / TikTok</span></h3>" +
+      '<p class="note">Choose a scene and write Chanda’s new words. The words are kept exactly as you write them, and the scene’s actions, setting, camera, sound and prompts are rewritten to show what she says. The old scene stays in History.</p>' +
+      '<label class="fld"><span>Scene to update</span><select id="vo-scene">' + ep.scenes.map(function (x, k) { return '<option value="' + k + '"' + (k === i ? " selected" : "") + ">Scene " + x.n + " · " + mmss(x.start) + "–" + mmss(x.end) + " · " + esc(x.label) + "</option>"; }).join("") + "</select></label>" +
+      '<div class="two">' +
+        '<div class="block"><h3>Original voice-over · scene ' + s.n + '</h3><p class="vo-km" lang="km" id="vo-old">' + esc(s.km || "(not written yet)") + '</p><p class="note">' + esc(s.en || "") + '</p><p class="note"><b>Action now:</b> ' + esc(s.action || "…") + "</p></div>" +
+        '<label class="fld"><span>New voice-over (Khmer or English)<em id="vo-count"></em></span><textarea lang="km" rows="6" id="vo-new" placeholder="e.g. ត្រៀមបើកទ្វារផ្ទះ ដើម្បីទទួលមាសប្រាក់ និងសំណាង">' + esc(v.text || "") + "</textarea></label>" +
+      "</div>" +
+      '<div class="row"><button class="primary" data-act="vo-go">Update voice-over and scene</button><button data-act="vo-close">Close</button></div>' +
+      (v.res ? '<div class="vo-res" role="status">' + v.res + "</div>" : "") +
+    "</div>";
+  }
+  function voCount() {
+    var t = $("vo-new"), em = $("vo-count"); if (!t || !em) return;
+    var x = t.value, km = /[\u1780-\u17FF]/.test(x), n = km ? [...kmFlow(x)].length : enSpoken(x), max = km ? EDITION.ED_LIMIT.kmChars : EDITION.ED_LIMIT.enWords;
+    em.textContent = x.trim() ? n + " / " + max + (km ? " spoken characters" : " words") : ""; em.classList.toggle("over", n > max);
+  }
   function script(ep, k) { return ep.scenes.map(function (s) { return s.n + ". (" + mmss(s.start) + "–" + mmss(s.end) + (s.onCam ? ", on camera" : "") + ") " + (s[k] || "…"); }).join("\n"); }
   function renderEditor() {
     var box = $("ed-editor"); if (!S.open) { box.hidden = true; return; }
@@ -3491,7 +3526,8 @@ return { ED_ANIMALS, ED_KM, ED_LENGTHS, ED_DEFAULT_LENGTH, ED_TZ, ED_WEEKDAY, ED
       '<div class="ep-top"><div><p class="ed-kicker">' + EMO[a] + " " + a + " · " + esc(KM_NAMES[a]) + " · " + dmy(ep.date) + " · " + ep.length + " seconds · " + esc(ver) + "</p>" +
         '<div class="ed-row" style="margin-top:6px">' + (vids.length > 1 ? '<select data-act="ver" aria-label="Version">' + vids.map(function (v) { return '<option value="' + escA(v) + '"' + (v === ep.vid ? " selected" : "") + ">" + (v === "main" ? "The day's episode" : "Copy " + v.slice(5, 11)) + "</option>"; }).join("") + "</select>" : "") +
         '<span class="chip">' + esc((f.label && f.label.en) || "") + "</span>" + (f.color ? '<span class="chip">' + esc(f.color.en) + " · " + esc(f.time || "") + "</span>" : "") + (ep.similar ? '<span class="chip warn">close to ' + esc(ep.similar.title || "") + "</span>" : "") + (ep.edited ? '<span class="chip">edited</span>' : "") + "</div></div>" +
-        '<div class="ep-acts"><button data-act="close">Back to all 12</button><button data-act="hist">History</button>' + (ep.vid !== "main" ? '<button data-act="rmcopy">Remove this copy</button>' : "") + "</div></div>" +
+        '<div class="ep-acts">' + (onSite && S.key ? '<button class="' + (S.open.vo ? "" : "primary") + '" data-act="vo" aria-expanded="' + (S.open.vo ? "true" : "false") + '" aria-controls="ed-vo">🎙 Update voice-over script</button>' : "") + '<button data-act="close">Back to all 12</button><button data-act="hist">History</button>' + (ep.vid !== "main" ? '<button data-act="rmcopy">Remove this copy</button>' : "") + "</div></div>" +
+      (S.open.vo ? voHtml(ep) : "") +
       '<h3 class="sec-h">Story</h3>' +
       '<div class="two">' + fld("Title (English)", "title.en", ep.title.en) + fld("Title (Khmer)", "title.km", ep.title.km, { km: true }) + "</div>" +
       fld("The story in one line", "logline", ep.logline, { area: true, rows: 2 }) +
@@ -3513,7 +3549,7 @@ return { ED_ANIMALS, ED_KM, ED_LENGTHS, ED_DEFAULT_LENGTH, ED_TZ, ED_WEEKDAY, ED
       '<div id="ed-hist" class="hist" hidden></div>' +
       '<div id="ed-epmsg" hidden></div>' +
       (S.dirty ? dirtyBar() : "") + "</div>";
-    counters();
+    counters(); voCount();
   }
   function dirtyBar() { return '<div class="dirty-bar" id="ed-dirty"><span>Unsaved changes</span><span class="ed-row"><button data-act="discard">Discard</button><button class="primary" data-act="save">Save changes</button></span></div>'; }
   function showDirty() {
@@ -3574,6 +3610,25 @@ return { ED_ANIMALS, ED_KM, ED_LENGTHS, ED_DEFAULT_LENGTH, ED_TZ, ED_WEEKDAY, ED
       api("POST", { op: "scene", date: ep.date, animal: o.animal, vid: o.vid, index: i, note: note }).then(function (r) { keep(r); S.draft = clone(r.episode); renderEditor(); renderGrid(); renderDash(); toast("Scene " + (i + 1) + " rewritten (the old one is in History)"); var el = $("ed-sc" + i); if (el) el.scrollIntoView({ block: "center" }); },
         function (er) { b.disabled = false; b.textContent = "Remake this scene"; epMsg(explain(er) + " The saved scene is unchanged.", "", [{ label: "Try again", primary: true, run: function () { epMsg(""); b.click(); } }]); });
     }
+    else if (act === "vo") {
+      S.open.vo = S.open.vo ? null : { i: 0, text: "", res: null }; renderEditor();
+      var vp = $("ed-vo"); if (vp) { vp.scrollIntoView({ block: "start", behavior: "smooth" }); }
+    }
+    else if (act === "vo-close") { S.open.vo = null; renderEditor(); }
+    else if (act === "vo-see") { var se = $("ed-sc" + i); if (se) se.scrollIntoView({ block: "start", behavior: "smooth" }); }
+    else if (act === "vo-go") {
+      if (S.dirty) { epMsg("Save or discard your changes first, then update the voice-over.", "info"); return; }
+      if (S.run) { toast("Wait until the edition is finished"); return; }
+      var v = S.open.vo, vi = v.i || 0, text = (($("vo-new") || {}).value || "").trim();
+      if (!text) { toast("Write the new voice-over first"); $("vo-new").focus(); return; }
+      v.text = text; b.disabled = true; b.textContent = "Rewriting scene " + (vi + 1) + "…";
+      api("POST", { op: "scene", date: ep.date, animal: o.animal, vid: o.vid, index: vi, voice: text }).then(function (r) {
+        keep(r); S.draft = clone(r.episode); var ns = r.episode.scenes[vi];
+        if (S.open && S.open.vo) { S.open.vo.text = ""; S.open.vo.res = "✓ Scene " + ns.n + " now uses your words, and its actions were rewritten to match.<br><b>New action:</b> " + esc(ns.action) + ' <button data-act="vo-see" data-i="' + vi + '">See scene ' + ns.n + "</button>"; }
+        renderEditor(); renderGrid(); renderDash(); toast("Scene " + ns.n + " updated (the old one is in History)");
+        var vp = $("ed-vo"); if (vp) vp.scrollIntoView({ block: "nearest" });
+      }, function (er) { b.disabled = false; b.textContent = "Update voice-over and scene"; epMsg(explain(er) + " The saved scene is unchanged.", "", [{ label: "Try again", primary: true, run: function () { epMsg(""); var g = $("ed-editor").querySelector('[data-act="vo-go"]'); if (g) g.click(); } }]); });
+    }
     else if (act === "makeone") { make({ only: [o.animal] }); }
     else if (act === "remake") {
       if (S.dirty) { epMsg("Save or discard your changes first.", "info"); return; }
@@ -3611,7 +3666,11 @@ return { ED_ANIMALS, ED_KM, ED_LENGTHS, ED_DEFAULT_LENGTH, ED_TZ, ED_WEEKDAY, ED
       api("POST", { op: "restore", date: ep.date, animal: o.animal, vid: o.vid, key: b.dataset.key }).then(function (r) { keep(r); S.draft = clone(r.episode); renderEditor(); renderGrid(); toast("Earlier version restored (the one before is in History)"); }, function (er) { epMsg(explain(er)); });
     }
   });
-  $("ed-editor").addEventListener("change", function (e) { var s = e.target.closest('select[data-act="ver"]'); if (s) openEp(S.open.animal, s.value); });
+  $("ed-editor").addEventListener("change", function (e) {
+    var s = e.target.closest('select[data-act="ver"]'); if (s) openEp(S.open.animal, s.value);
+    if (e.target.id === "vo-scene" && S.open && S.open.vo && S.draft) { S.open.vo.i = +e.target.value; S.open.vo.res = null; S.open.vo.text = ($("vo-new") || {}).value || ""; $("ed-vo").outerHTML = voHtml(S.draft); voCount(); $("vo-scene").focus(); }
+  });
+  $("ed-editor").addEventListener("input", function (e) { if (e.target.id === "vo-new" && S.open && S.open.vo) { S.open.vo.text = e.target.value; voCount(); } });
   $("ed-grid").addEventListener("click", function (e) { var b = e.target.closest("[data-open]"); if (b) openEp(b.dataset.open, "main"); });
   window.addEventListener("beforeunload", function (e) { if (S.dirty) { e.preventDefault(); e.returnValue = ""; } });
 

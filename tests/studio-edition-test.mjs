@@ -194,6 +194,25 @@ try {
   const p90 = await makeEpisode("2026-11-16", "Monkey", { length: 90 });
   ok(p90.status === 200 && p90.body.episode.scenes.length === 9, "a 90-second episode has 9 scenes");
 
+  // ---- "Update voice-over" (15/11/2026): the owner's words are kept exactly; the scene's pictures follow them
+  const vKm = "ត្រៀមបើកទ្វារផ្ទះ ដើម្បីទទួលមាសប្រាក់ និងសំណាង";
+  const vBefore = (await call("GET", { op: "day", date: D1 })).body.episodes.Rooster.main;
+  const v1 = await call("POST", { op: "scene", date: D1, animal: "Rooster", index: 2, voice: "  " + vKm + "\n" });
+  const vs = v1.body.episode && v1.body.episode.scenes[2];
+  ok(v1.status === 200 && vs.km === vKm && vs.ownerVoice === "km", "the owner's Khmer voice-over is kept word for word");
+  ok(typeof vs.en === "string" && vs.en.length > 5 && !/[ក-៿]/.test(vs.en), "an English line is written for it");
+  ok(vs.action.includes(vKm) && vs.video.includes(vKm) && vs.status === "ready", "the scene's action and video prompt are rewritten to show the new words");
+  ok(ai.lastScenePrompt.includes('word for word: "' + vKm + '"') && !/lucky color/.test(ai.lastScenePrompt.split("Voice limits")[0].split("What happens")[1] || ""), "the AI is told to keep the words and act them out");
+  ok(v1.body.episode.scenes.every((x, k) => k === 2 || JSON.stringify(x) === JSON.stringify(vBefore.scenes[k])), "the other scenes are untouched");
+  const vh = await call("GET", { op: "history", date: D1, animal: "Rooster" });
+  ok(vh.body.items.some((x) => x.action === "scene3"), "the old scene 3 is in History");
+  const vEn = "Open your door today: gold and good luck are coming in.";
+  const v2 = await call("POST", { op: "scene", date: D1, animal: "Rooster", index: 3, voice: vEn });
+  ok(v2.status === 200 && v2.body.episode.scenes[3].en === vEn && /[ក-៿]/.test(v2.body.episode.scenes[3].km) && v2.body.episode.scenes[3].ownerVoice === "en", "an English voice-over is kept too, with a Khmer line written for it");
+  ok((await call("POST", { op: "scene", date: D1, animal: "Rooster", index: 3, voice: "   " })).status === 400, "an empty voice-over is refused");
+  const v3 = await call("POST", { op: "scene", date: D1, animal: "Rooster", index: 2 });
+  ok(v3.status === 200 && !v3.body.episode.scenes[2].ownerVoice && v3.body.episode.scenes[2].km !== vKm, "remaking the scene without words writes new ones (no longer marked as the owner's)");
+
   // ---- the AI's thinking (14/11/2026: it used up the answer's room, "could not be read"): switched off on every call;
   // if the API ever refuses the setting, it is left out and the answer gets more room, and the episode is still made
   ok(ai.thinking.length > 20 && ai.thinking.every((x) => x.type === "disabled"), "every AI call switches thinking off");

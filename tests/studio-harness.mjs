@@ -45,6 +45,11 @@ function answer(p) {
   if (p.startsWith("Write clip")) {
     const [, idx, tot] = /Write clip (\d+) of (\d+)/.exec(p), animal = /today's (\w+) episode/.exec(p)[1];
     const k = h(date + animal + idx + (/too long|different place/.test(p) ? "x" : ""));
+    ai.lastScenePrompt = p;
+    const own = (/word for word: "([^"\n]+)"/.exec(p) || [])[1];   // "Update voice-over": the pictures follow the owner's words
+    if (own) return { km: "ឆ្នាំនេះល្អណាស់ (the AI's own line, must not be used)", en: "The AI's own English line, must not be used when the owner wrote English.",
+      setting: `the ${animal.toLowerCase()}'s doorway at dawn, gold light`, action: `the guardian and the ${animal.toLowerCase()} act out the owner's words: ${own}`,
+      camera: "slow push-in", sound: "soft chimes", image: `the ${animal.toLowerCase()} acting out the words` };
     return {
       km: `ឆ្នាំ${KM[animal]}អើយ! ថ្ងៃនេះពន្លឺមាសនាំសំណាងល្អមក ផ្នែកទី ${idx}។`, en: /The owner asks/.test(p) ? `Dear ${animal}, a softer golden light shines on you now, part ${idx}.` : `Dear ${animal}, golden light brings good luck today, part ${idx} of ${tot}.`,
       setting: `${PL[k % PL.length]} on ${date}, warm light and drifting mist`, action: `the guardian and the ${animal.toLowerCase()} ${ACT[(k >>> 4) % ACT.length]}`,

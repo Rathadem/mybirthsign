@@ -92,6 +92,28 @@ try {
   await p.click('#ed-editor [data-act="hist"]'); await p.waitForSelector("#ed-hist div");
   ok(/before scene 3 was remade/.test(await p.textContent("#ed-hist")), "the History lists the old scene");
 
+  // ---- "Update voice-over script" (15/11/2026): pick a scene, see its words now, write new ones; the scene follows them
+  ok(await p.isVisible('#ed-editor .ep-acts [data-act="vo"]'), "the episode's top bar has Update voice-over script");
+  await p.click('#ed-editor [data-act="vo"]'); await p.waitForSelector("#ed-vo");
+  ok((await p.$$("#vo-scene option")).length === 6 && /60-second video/.test(await p.textContent("#ed-vo")), "the panel lists the 6 scenes of the 60-second video");
+  await p.selectOption("#vo-scene", "3");
+  ok((await p.textContent("#vo-old")) === (await p.inputValue('[data-f="scenes.3.km"]')), "choosing scene 4 shows its voice-over now in the first column");
+  const vNew = "ត្រៀមបើកទ្វារផ្ទះ ដើម្បីទទួលមាសប្រាក់ និងសំណាង";
+  const enBefore = await p.$$eval("#ed-editor textarea[data-f^='scenes.'][data-f$='.en']", (els) => els.map((e) => e.value));
+  await p.fill("#vo-new", vNew);
+  ok(/spoken characters/.test(await p.textContent("#vo-count")), "the new words are counted against the 10-second limit");
+  await shot(p, "3b-voice-over-panel");
+  await p.click('#ed-vo [data-act="vo-go"]');
+  await p.waitForSelector("#ed-vo .vo-res", { timeout: 30000 });
+  ok((await p.inputValue('[data-f="scenes.3.km"]')) === vNew, "scene 4 now has the new voice-over, word for word");
+  ok((await p.inputValue('[data-f="scenes.3.action"]')).includes(vNew) && /New action/.test(await p.textContent("#ed-vo .vo-res")), "its actions were rewritten to show the words, and the panel shows the new action");
+  const enAfter = await p.$$eval("#ed-editor textarea[data-f^='scenes.'][data-f$='.en']", (els) => els.map((e) => e.value));
+  ok(enAfter.every((v, i) => i === 3 || v === enBefore[i]), "no other scene changed");
+  ok(/your voice-over/.test(await p.textContent("#ed-sc3 .scene-h")) && !(await p.isVisible("#ed-dirty")), "the scene is marked as your voice-over and saved (nothing left unsaved)");
+  await shot(p, "3c-voice-over-done");
+  await p.click('#ed-vo [data-act="vo-close"]');
+  ok(!(await p.$("#ed-vo")), "Close hides the panel");
+
   // ---- archive, filter, duplicate
   await p.click("#tab-arch"); await p.waitForSelector(".arch-day");
   ok(/Friday 13\/11\/2026/.test(await p.textContent("#arch-list")) && (await p.$$(".arch-ep")).length === 12, "the archive lists today's 12 episodes");
@@ -127,6 +149,10 @@ try {
   ok(await noSideScroll(p), "phone: editor has no sideways scrolling");
   await p.evaluate(() => document.getElementById("ed-sc0").scrollIntoView());
   await shot(p, "6-phone-editor");
+  await p.click('#ed-editor [data-act="vo"]'); await p.waitForSelector("#ed-vo");
+  ok(await noSideScroll(p), "phone: the voice-over panel has no sideways scrolling");
+  await p.evaluate(() => document.getElementById("ed-vo").scrollIntoView());
+  await shot(p, "6b-phone-voice-over");
   await p.click("#tab-arch"); await p.waitForSelector(".arch-day");
   ok(await noSideScroll(p), "phone: archive has no sideways scrolling");
   await shot(p, "7-phone-archive");

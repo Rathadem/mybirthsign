@@ -273,10 +273,17 @@ ${plan.map((s) => `${s.n}. ${s.label}${s.onCam ? " (Chanda on camera)" : " (Chan
 ${avoid.length ? `Recent ideas for the ${animal} (do not repeat them, their places or their magic):\n${avoid.slice(0, 12).map((a) => "- " + a).join("\n")}\n` : ""}${today.length ? `Other signs today already use (choose something different):\n${today.slice(0, 11).map((a) => "- " + a).join("\n")}\n` : ""}${retryNote ? retryNote + "\n" : ""}Answer with the tool write_episode_plan: a short title (English and Khmer), the story in one sentence, the hook, the new signature magical moment (one or two sentences), the blessing and the closing message (each one sentence, in English and in natural Khmer), the music, and exactly ${plan.length} beats (one short sentence each, what happens in each clip).`;
 }
 export function scenePrompt(x) {
-  const { iso, animal, theme, facts, ep, index, avoid = [], note = "" } = x;
+  const { iso, animal, theme, facts, ep, index, avoid = [], note = "", voice = null } = x;
   const sc = ep.scenes[index], prev = ep.scenes[index - 1], next = ep.scenes[index + 1];
   const noNum = facts && facts.tier === "caution";
-  const luckyAsk = /blessing|lucky|closing/.test(sc.role) && !noNum
+  // the owner's own voice-over line (Studio "Update voice-over", 15/11/2026): kept word for word, and the pictures
+  // follow it
+  const a = animal.toLowerCase();
+  const own = voice && voice.text ? `The owner has written Chanda's ${voice.lang === "km" ? "Khmer" : "English"} line for this clip. Use it exactly as written, word for word: "${voice.text}"
+${voice.lang === "km" ? "Write the English line as a natural translation of it." : "Write the Khmer line as the same words in natural spoken Khmer."}
+Then write the setting, action, camera, sound and image so that the pictures show what these words say: the guardian and the ${a} act them out (for example, if Chanda says to open the door to receive gold and good luck, the ${a} sends gold and coins of luck flying toward the people born in the year of the ${animal}). The owner's words come first; the episode's story only sets the mood.
+` : "";
+  const luckyAsk = own ? "" : /blessing|lucky|closing/.test(sc.role) && !noNum
     ? (sc.role === "blessing" || sc.role === "lucky" || ep.scenes.length === 3 ? "Weave in today's lucky color and lucky time naturally (and one lucky number only if it fits the time limit)." : "")
     : noNum ? "No numbers at all (take-it-easy day)." : "";
   return `Write clip ${sc.n} of ${ep.scenes.length} of today's ${animal} episode.
@@ -289,7 +296,7 @@ ${luckyLine(facts)}
 This clip (${sc.start}–${sc.end} s, 10 seconds): ${sc.label}. ${sc.onCam ? "Chanda is ON CAMERA and speaks to the viewer (lip-sync); the guardian and the animal are beside her and only act." : "Chanda is NOT on screen: her voice is a voice-over; the guardian and the animal act and never speak."}
 What happens: ${ep.beats[index] || sc.task}
 ${prev && prev.setting ? `Previous clip ended: ${prev.setting} ${prev.action}\n` : ""}${next ? `Next clip: ${ep.beats[index + 1] || next.task}\n` : ""}${luckyAsk}
-Voice limits (Chanda speaks calmly, and the clip is only 10 seconds): the Khmer line is one or two short sentences of at most 15 Khmer words; the English line at most 20 words.
+${own}Voice limits (Chanda speaks calmly, and the clip is only 10 seconds): ${own ? "the owner's line stays exactly as written; the other line is about as long as it." : "the Khmer line is one or two short sentences of at most 15 Khmer words; the English line at most 20 words."}
 ${avoid.length ? `Recent ${animal} scenes (use a different place, light and action):\n${avoid.slice(0, 10).map((a) => "- " + a).join("\n")}\n` : ""}${note ? note + "\n" : ""}Answer with the tool write_scene. Keep it short: setting at most 35 words, action at most 45 words, image at most 25 words, never describing how the characters look.`;
 }
 // the answer forms the AI fills in (tool use: the API returns them as ready-made JSON, so they can always be read)
