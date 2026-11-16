@@ -13,7 +13,7 @@ Each run publishes **the first row below whose status is `pending`**, then marks
 | 3 | 2026-11-02 | independence-monument-phnom-penh | The Independence Monument: What It Is and What Happens There | Independence Day is 9 Nov | cambodia-independence-day | published 2026-10-26 |
 | 4 | 2026-11-09 | ak-ambok-moon-salutation | Ak Ambok and the Moon Salutation: The Quieter Side of the Water Festival | Water Festival 23–25 Nov 2026 | cambodia-water-festival-bon-om-touk, khmer-calendar | published 2026-11-02 |
 | 5 | 2026-11-16 | bon-om-touk-boat-racing-teams | Bon Om Touk Boat Teams: How Pagodas and Provinces Prepare | Just before the races | cambodia-water-festival-bon-om-touk | published 2026-11-09 |
-| 6 | 2026-11-23 | find-your-khmer-lunar-birthday | Your Khmer Lunar Birthday: How to Find It and Why Elders Use It | Evergreen; uses the calendar tool | khmer-calendar, khmer-lunar-calendar-birth-date | pending |
+| 6 | 2026-11-23 | find-your-khmer-lunar-birthday | Your Khmer Lunar Birthday: How to Find It and Why Elders Use It | Evergreen; uses the calendar tool | khmer-calendar, khmer-lunar-calendar-birth-date | published 2026-11-16 |
 | 7 | 2026-11-30 | year-of-the-fire-goat-2027 | 2027 Is the Year of the Fire Goat: What That Means | Lunar New Year 2027 = 6 Feb 2027 (site CNY table); Fire Goat from the site's element formula | zodiac-year-goat, five-elements-explained, checker | pending |
 | 8 | 2026-12-07 | fire-element-in-each-sign | Fire Goat, Fire Horse, Fire Snake: The Fire Element in Each Sign | Follows #7 | five-elements-explained, animal guides | pending |
 | 9 | 2026-12-14 | chinese-cambodian-lunar-new-year | How Chinese-Cambodian Families Celebrate Lunar New Year | Lead-up to 6 Feb 2027 | animal guides | pending |

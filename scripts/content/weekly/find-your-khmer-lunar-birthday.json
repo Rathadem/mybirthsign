@@ -1,0 +1,142 @@
+{
+  "slug": "find-your-khmer-lunar-birthday",
+  "title": "Your Khmer Lunar Birthday: How to Find It and Why Elders Use It",
+  "seo_title": "Khmer Lunar Birthday: How to Find Yours and Why Elders Use It",
+  "description": "How to turn your Gregorian birthday into a Khmer lunar date, why that date moves each year, and how Cambodian families have used birth dates for naming, marriage and ceremonies.",
+  "eyebrow": "Khmer Culture & Calendar",
+  "lead": "In Cambodia a birth can be described not only by a Gregorian date but by a weekday, a moon day and an animal year on the Khmer lunar calendar, and that is the form monks and fortune-tellers have traditionally worked from. This guide shows how to find your own Khmer lunar birthday in a few minutes, why it falls on a different day every year, and why that older way of counting still matters in many families.",
+  "kicker": "Khmer Culture & Calendar",
+  "card_text": "How to find your Khmer lunar birth date, why it moves every year, and why elders still use it for naming, marriage and ceremonies.",
+  "published": "2026-11-16",
+  "facts": [
+    [
+      "Example",
+      "3 Oct 1988 = 8 Roach, Phatrabot"
+    ],
+    [
+      "Lunar year",
+      "354, 355 or 384 days"
+    ],
+    [
+      "Find yours",
+      "Checker or Khmer Calendar"
+    ]
+  ],
+  "image": {
+    "src": "images/guides/khmer-leap-months-card.webp",
+    "alt": "A row of moon phases, from full moon to dark moon and back, across a starry purple night sky, with lotus flowers and a hanging lantern on the left and a full moon inside a ring of zodiac animals above pagoda-style roofs on the right",
+    "width": 900,
+    "height": 373,
+    "caption": "Illustration of the waxing and waning moon that the Khmer lunar calendar follows; it is not a photograph."
+  },
+  "sections": [
+    {
+      "h2": "What a Khmer lunar birth date looks like",
+      "paras": [
+        "A Gregorian birthday is one number in one month. A Khmer lunar birthday has more parts. A full date can name the weekday, the day of the moon, the lunar month, the animal year, the Sak (a ten-year cycle) and the Buddhist Era year.",
+        "Take 3 October 1988. On the Khmer calendar that day was a Monday, 8 Roach in the month of Phatrabot, in the Year of the Dragon, Samrithisak, Buddhist Era 2532. \"Roach\" means the waning half of the month, so 8 Roach is the eighth day after the full moon. The waxing half is called Kaet and runs from 1 Kaet to the full moon on 15 Kaet. Our <a href=\"khmer-lunar-calendar-birth-date\">guide to the Khmer lunar calendar</a> explains the months and the Kaet and Roach count in more detail.",
+        "Because a lunar date carries the weekday and the animal year with it, it is a fuller description of the moment of birth than a single Gregorian number. That fuller description is what traditional ceremonies and fortune-telling practices work from, as later sections show."
+      ]
+    },
+    {
+      "h2": "How to find yours, step by step",
+      "paras": [
+        "<strong>1. Start from the right Gregorian date.</strong> Use the date on your birth record, in the place where you were born. If you were born in the United States or France, do not convert the date to Cambodian time; the local calendar day is the one that counts.",
+        "<strong>2. Convert it.</strong> Enter that date in the <a href=\"../checker\">MyBirthSign Checker</a>. Next to your zodiac result it shows your Khmer lunar date, whether it was a Kaet or Roach day, the Buddhist Era year, and the Khmer animal year and Sak. You can also open the <a href=\"../khmer-calendar.html\">Khmer Calendar</a>, use \"Jump to date\" and tap the day. Both use the same traditional calendar rules, through the open-source momentkh library.",
+        "<strong>3. Check the edges of the year.</strong> The Khmer animal year changes at Khmer New Year in mid-April, not on 1 January and not at Chinese New Year. If you were born between January and mid-April, your Khmer animal year may be different from your Chinese zodiac animal. If you were born on the first day of Khmer New Year, the animal year changes at a set hour that day, so your birth time decides it.",
+        "<strong>4. Write the whole date down.</strong> Note the weekday as well as the moon day, month and year. Elders and ritual specialists often ask for the weekday, and it is easy to lose if you only keep the moon day."
+      ]
+    },
+    {
+      "h2": "Why your lunar birthday moves every year",
+      "paras": [
+        "A Khmer lunar year has 354 days in a normal year, 355 when an extra day is added, and 384 when an extra month is added. A Gregorian year has 365 or 366. So the same lunar day lands on a different Gregorian date every year: usually about 11 days earlier than the year before, until an extra month pushes it later again.",
+        "Using the site's calendar library, these are the Gregorian dates of 8 Roach, Phatrabot, the lunar day of the 1988 example above: 25 September 2024 (a Wednesday), 15 September 2025 (a Monday), 4 October 2026 (a Sunday), 23 September 2027 (a Thursday) and 11 September 2028 (a Monday). The jump to October in 2026 comes from the extra month in that lunar year, explained in our <a href=\"khmer-leap-months\">guide to Khmer leap months</a>.",
+        "The weekday changes as well. If your family marks your lunar birthday, the Khmer Calendar is the easiest way to see where it falls this year."
+      ]
+    },
+    {
+      "h2": "Why elders still use it",
+      "paras": [
+        "<strong>Official dates are not always the real ones.</strong> In April 1995 the <em>Phnom Penh Post</em> reporter Moeun Chhean Nariddh described how, in the 1980s, many teenagers and adults changed their recorded ages, often to stay in school or avoid being called up. Many \"picked easy to remember dates\", such as Khmer New Year's Day. He gave his own example: born on 22 April 1969, he later used a \"new\" birthdate of 1 January 1973, and said identity cards, passports and degrees carried dates that were not people's real ones. For families like these, the date remembered at home can be the more reliable record.",
+        "<strong>Names.</strong> A 1999 guide to Cambodian naming written by Paularita Seng for EthnoMed, a health-information site run by Harborview Medical Center in Seattle, says parents may name a child after the day, month or season of birth. When a monk chooses the name, it says, he considers \"the date, time, season, year\" and other details of the birth, and a child born at an unlucky time may be given a name meant to bring merit and fortune.",
+        "<strong>Marriage.</strong> Birth dates also come up when families plan weddings. A <em>Phnom Penh Post</em> feature on wedding customs quoted the fortune-teller Huoy Samnang saying, \"I calculate fate based on the age, date of birth, and five astrological elements of the bride and groom.\" An accountant in the same article said her parents \"took my date of birth\" to a holy man before her wedding and were told the couple's birth dates were compatible. Another <em>Post</em> article, on a teacher who trains ritual specialists in fortune-telling, explains that \"the year, month, date and day of the week that a person was born must be combined\", and that students learn \"what day a wedding should take place\". Our <a href=\"../wedding-date.html\">Wedding Date tool</a> shows the lunar day for each suggested date.",
+        "These are traditions and beliefs, not facts about anyone's future, and many young Cambodians follow them loosely or not at all. A 2024 article in the journal <em>Diogenes</em> by Poonnatree Jiaviriyaboonya notes that Khmer divination and astrology has been revitalized after the Khmer Rouge period damaged that knowledge. The calendar itself, though, is simply a way of counting days, and it is still the one that sets Buddhist holy days and festivals such as Pchum Ben and the Water Festival."
+      ]
+    },
+    {
+      "h2": "A simple way to keep both birthdays",
+      "paras": [
+        "If you want to honour the older way without giving up the new one, a simple habit works: keep your full Khmer lunar birth date, including the weekday, next to your Gregorian birthday in a family record, and check each year where the lunar date falls. If a grandparent remembers a birth only by its lunar date and animal year, the Khmer Calendar can be browsed month by month to find the matching Gregorian day. It is also worth asking older relatives what they remember about the day you were born, since that is part of the record that no calendar can supply."
+      ]
+    }
+  ],
+  "faq": [
+    [
+      "What is a Khmer lunar birthday?",
+      "It is your birth date written on Cambodia's traditional lunisolar calendar: the weekday, the moon day (Kaet for waxing, Roach for waning), the lunar month, the animal year, the Sak and the Buddhist Era year."
+    ],
+    [
+      "How do I find my Khmer lunar birth date?",
+      "Enter the Gregorian date from your birth record in the MyBirthSign Checker or the Khmer Calendar. Use the local date where you were born, not Cambodian time."
+    ],
+    [
+      "Why does my lunar birthday fall on a different date each year?",
+      "A lunar year has 354, 355 or 384 days, while a Gregorian year has 365 or 366. The lunar day usually comes about 11 days earlier each year until an extra month moves it later again."
+    ],
+    [
+      "Can my Khmer animal year differ from my Chinese zodiac animal?",
+      "Yes, for births between January and mid-April. The Chinese zodiac year starts at Chinese New Year, while the Khmer animal year changes at Khmer New Year in mid-April."
+    ]
+  ],
+  "sources": [
+    [
+      "Phnom Penh Post: “My birthday(s), my problems” by Moeun Chhean Nariddh (21 April 1995)",
+      "https://www.phnompenhpost.com/national/my-birthdays-my-problems",
+      "changed birthdates in the 1980s and documents that carry dates that are not people's real birthdays."
+    ],
+    [
+      "EthnoMed: “Naming in Cambodian Culture” by Paularita Seng (1999)",
+      "https://ethnomed.org/resource/naming-in-cambodian-culture/",
+      "naming a child by the day, month or season of birth, and monks considering the date and time of birth."
+    ],
+    [
+      "Phnom Penh Post: wedding feature on numerology, astrology and feng shui",
+      "https://phnompenhpost.com/post-plus/written-stars-numerology-astrology-and-feng-shui-weddings",
+      "a fortune-teller and a family using the couple's birth dates before a wedding."
+    ],
+    [
+      "Phnom Penh Post: “Grandfather Floating Stone” fortune-telling feature",
+      "https://phnompenhpost.com/post-weekend/fortune-telling",
+      "a teacher of ritual specialists explaining that year, month, date and weekday of birth are combined, including for wedding days."
+    ],
+    [
+      "Diogenes: “The influences of Thai divination on Cambodian fortune-telling practice” by Poonnatree Jiaviriyaboonya (2024)",
+      "https://www.cambridge.org/core/journals/diogenes/article/influences-of-thai-divination-on-cambodian-fortunetelling-practice/BE787C048BF52C17B31B3F096D16598A",
+      "scholarly article on the revival of Khmer divination and astrology after the Khmer Rouge period."
+    ],
+    [
+      "MyBirthSign: Khmer Calendar (momentkh library)",
+      "https://mybirthsign.com/khmer-calendar.html",
+      "the lunar dates in this article, including the 2024–2028 dates of 8 Roach, Phatrabot, and the 354/355/384-day year lengths."
+    ]
+  ],
+  "related": [
+    [
+      "Khmer Lunar Calendar and Your Birth Date",
+      "khmer-lunar-calendar-birth-date"
+    ],
+    [
+      "Khmer Leap Months",
+      "khmer-leap-months"
+    ],
+    [
+      "Khmer Calendar",
+      "../khmer-calendar.html"
+    ],
+    [
+      "Zodiac Checker",
+      "../checker"
+    ]
+  ]
+}
