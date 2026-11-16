@@ -2271,8 +2271,18 @@ function charactersMd(KM_NAMES) {
           (b.code && /\(([^)]+\.srt)\)/.test(b.title) ? '<button class="primary" data-srtfile="' + /\(([^)]+\.srt)\)/.exec(b.title)[1] + '" data-pre="' + id + '">Download ' + /\(([^)]+\.srt)\)/.exec(b.title)[1] + '</button>' : "") +
           (scene && voices[scene[1]] ? '<button data-flow="' + scene[1] + '|en" data-pre="' + id + '">Copy + English voice</button><button data-flow="' + scene[1] + '|km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
           (/\nEnglish voice: /.test(b.text) ? '<button data-nine="en" data-pre="' + id + '">Copy + English voice</button><button data-nine="km" data-pre="' + id + '">Copy + Khmer voice</button>' : "") +
+          ((scene && voices[scene[1]]) || /\nEnglish voice: /.test(b.text) ? '<button data-mute="1" data-pre="' + id + '" title="The scene with background music and sound effects only: no voice, nobody speaks (add the voice-over later)">Copy – music &amp; sound only</button>' : "") +
           "</div></div>";
       });
+      var vv = (p.vids || []).filter(function (x) { return x.name === s.title; })[0];
+      if (vv) {
+        var sid = "srt_" + vv.id, ed = vv.scenes.filter(function (x) { return x.edited; }).length;
+        html += '<div class="block"><h3>Subtitles (.srt) – this video</h3>' +
+          '<p class="note">Made from this video’s voice-over lines, so they change by themselves when you update a scene’s voice-over' + (ed ? " (" + ed + " scene" + (ed > 1 ? "s" : "") + " with your words now)" : "") + '. Each scene’s words are spread over its 10 seconds.</p>' +
+          '<details><summary class="note">Show the subtitles</summary><pre class="txt code" id="' + sid + '_km">' + esc(p.srtVid[vv.id].km) + '</pre><pre class="txt code" id="' + sid + '_en">' + esc(p.srtVid[vv.id].en) + "</pre></details>" +
+          '<div class="row"><button class="primary" data-srtfile="' + iso + "-" + vv.id + '.srt" data-pre="' + sid + '_km">Download Khmer .srt</button><button class="primary" data-srtfile="' + iso + "-" + vv.id + '.en.srt" data-pre="' + sid + '_en">Download English .srt</button>' +
+          '<button data-copy="' + sid + '_km">Copy Khmer .srt</button><button data-copy="' + sid + '_en">Copy English .srt</button></div></div>';
+      }
       html += "</div></details>";
     });
     html += cardsSection(iso);
@@ -2291,6 +2301,7 @@ function charactersMd(KM_NAMES) {
     texts.chars = ORDER.map(function (a) { return a + " (" + KM_NAMES[a] + ")\n" + CHAR(a); }).join("\n\n");
     ORDER.forEach(function (a, i) { texts["c" + i] = CHAR(a); });
     texts.chost = HOST_CHAR;
+    (p.vids || []).forEach(function (vv) { texts["srt_" + vv.id + "_km"] = p.srtVid[vv.id].km; texts["srt_" + vv.id + "_en"] = p.srtVid[vv.id].en; });
     $("pack").__texts = texts; $("pack").__voices = voices;
   }
 
@@ -2373,8 +2384,27 @@ function charactersMd(KM_NAMES) {
       var vl = lines.filter(function (l) { return l.indexOf(b.dataset.nine === "en" ? "English voice: " : "Khmer voice: ") === 0; })[0] || "";
       var secT = (b.closest("details.sec") && b.closest("details.sec").querySelector("h2").textContent) || "";
       copy((/^Long YouTube|^Story video/.test(secT) ? STYLE_WIDE : STYLE) + "\n\n" + scene9 + "\n\n" + vl.replace(/^(English|Khmer) voice: /, ""), b, document.getElementById(b.dataset.pre));
+    } else if (b.dataset.mute) {
+      var fullM = T[b.dataset.pre] || "", secM = (b.closest("details.sec") && b.closest("details.sec").querySelector("h2").textContent) || "";
+      var sceneM = fullM.split("\n").filter(function (l) { return !/^(English|Khmer) voice: /.test(l); }).join("\n");
+      copy(mute((/^Long YouTube|^Story video/.test(secM) ? STYLE_WIDE : STYLE) + "\n\n" + sceneM) + "\n\n" + NO_VOICE, b, document.getElementById(b.dataset.pre));
     } else if (b.dataset.go) set(b.dataset.go);
   });
+  // "Copy – music & sound only" (owner's request, 16/11/2026): the scene without any voice, for adding the voice-over
+  // later; where Chanda is on camera she smiles at the viewer instead of speaking, so no lip-sync is left to match
+  var NO_VOICE = "Audio: NO voice in this clip: no speech, no narration, no voice-over, no singing; nobody on screen speaks or moves their lips (the voice-over is added later). Only background music and sound effects: gentle magical background music with soft chimes and a light Asian flute, and light sound effects that match the action, such as a soft chime when the magic appears and a gentle whoosh with the camera move. Keep the music calm and steady.";
+  function mute(t) {
+    return t.replace(/speaking (?:directly )?to the viewer with natural lip movements/g, "greeting the viewer with a warm, closed-lip smile")
+      .replace(/speaks to the viewer with natural lip movements(?: that match her words)?/g, "smiles at the viewer without speaking")
+      .replace(/\bAs she (?:talks|speaks)\b/g, "As she smiles").replace(/\bas she (?:talks|speaks)\b/g, "as she smiles")
+      .replace(/\bShe speaks\b/g, "She looks at the viewer")
+      .replace(/only Chanda, the presenter, speaks/g, "in this clip nobody speaks at all");
+  }
+  function saveFile(name, text) {   // on the website: a real file download
+    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "application/x-subrip;charset=utf-8" })); a.download = name;
+    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    toast("Downloading " + name);
+  }
   // subtitle files: .srt is not a format the viewer can save directly, so the four files go in one .zip
   var dl = null;
   if (window.claude && window.claude.use) window.claude.use("downloads").then(function (x) {
@@ -2403,6 +2433,7 @@ function charactersMd(KM_NAMES) {
     var b = e.target.closest("button[data-srtfile]"); if (!b) return;
     e.preventDefault();
     var name = b.dataset.srtfile, text = ($("pack").__texts || {})[b.dataset.pre] || "";
+    if (!dl && onSite) { saveFile(name, text); return; }
     if (!dl) { copy(text, b, document.getElementById(b.dataset.pre)); toast("Copied. Paste it into a plain text file named " + name); return; }
     var z = new JSZip(); z.file(name, text);
     z.generateAsync({ type: "blob" }).then(function (blob) {
@@ -2691,7 +2722,8 @@ function charactersMd(KM_NAMES) {
       voApi("POST", { op: "rewrite", date: iso, video: gv.id, videoName: gv.name, wide: gv.wide, index: gi, animal: sc.animal, title: sc.title, onCam: sc.onCam, picture: sc.picture, en: sc.en, km: sc.km, voice: text }).then(function (r) {
         VO.busy = false; VO.edits[iso] = r.edits || {}; VO.text = "";
         var e2 = (r.edits[gv.id] || {})[gi] || {};
-        VO.res = "✓ Scene " + (gi + 1) + " now uses your words, and its picture was rewritten to show them.<br><b>New picture:</b> " + esc(e2.picture || "") + '<br><b>' + (e2.lang === "km" ? "English" : "Khmer") + ":</b> " + esc(e2.lang === "km" ? e2.en : e2.km) + ' <button data-vo="see" data-name="' + esc(gv.name).replace(/"/g, "&quot;") + '" data-i="' + gi + '">See scene ' + (gi + 1) + "</button>";
+        VO.res = "✓ Scene " + (gi + 1) + " now uses your words, and its picture was rewritten to show them.<br><b>New picture:</b> " + esc(e2.picture || "") + '<br><b>' + (e2.lang === "km" ? "English" : "Khmer") + ":</b> " + esc(e2.lang === "km" ? e2.en : e2.km) + ' <button data-vo="see" data-name="' + esc(gv.name).replace(/"/g, "&quot;") + '" data-i="' + gi + '">See scene ' + (gi + 1) + "</button>" +
+          '<br>Subtitles updated: <button data-srtfile="' + iso + "-" + gv.id + '.srt" data-pre="srt_' + gv.id + '_km">Download Khmer .srt</button> <button data-srtfile="' + iso + "-" + gv.id + '.en.srt" data-pre="srt_' + gv.id + '_en">Download English .srt</button>';
         if (D.value === iso) render(iso, window.__lastData); else voRender();
         toast("Scene " + (gi + 1) + " updated");
       }, function (er) { VO.busy = false; VO.res = esc(er.message) + " Your words are still in the box."; voRender(); });

@@ -64,6 +64,7 @@ try {
   const md2 = await p.evaluate(() => window.__lastMd);
   const longSec = md2.split(/\n(?=## )/).find((x) => x.startsWith("## " + longV.name)), b7 = longSec.split("\n### ").find((b) => b.startsWith("Scene 7 "));
   ok(/ · your voice-over\n/.test(b7) && b7.includes(`She says: "${enNew}"`) && b7.includes("acts out the owner's words") && (await p.evaluate(() => window.__lastPack.srtVid.long.en)).includes("open your door today"), "the long video's scene 7, its subtitles and voice lines have the new words");
+  ok((await p.$$('#vo .res [data-srtfile="2026-11-16-long.srt"]')).length === 1 && (await p.$$('#vo .res [data-srtfile="2026-11-16-long.en.srt"]')).length === 1, "the panel's result offers that video's updated subtitles");
   ok(/ · your voice-over/.test(await scene4(p)), "the 60-second video keeps its own change");
   ok(/1 changed/.test(await p.textContent('#vo-vid option[value="long"]')), "the video list shows how many scenes were changed");
   await p.click('#vo [data-vo="reset"]'); await p.waitForSelector("#vo .res");
@@ -74,6 +75,22 @@ try {
   const nineBtn = await p.evaluateHandle(() => { const d = [...document.querySelectorAll("details.sec")].find((x) => /^60-second video/.test(x.querySelector("h2").textContent)); const b = [...d.querySelectorAll(".block")].find((x) => (x.querySelector("h3") || {}).textContent?.startsWith("Scene 4 ")); return b.querySelector('[data-nine="km"]'); });
   await nineBtn.asElement().click();
   ok((await p.evaluate(() => navigator.clipboard.readText())).includes(kmFlowLike(km)), "Copy + Khmer voice copies the new words");
+  // the 60s video's own subtitles block follows the change, and Download saves a real .srt file on the website
+  const srtKm = await p.evaluate(() => window.__lastPack.srtVid["60s"].km);
+  ok((await p.textContent("#srt_60s_km")) === srtKm && srtKm.includes("ត្រៀមបើកទ្វារផ្ទះ") && /1 scene with your words now/.test(await p.evaluate(() => document.getElementById("srt_60s_km").closest(".block").textContent)), "the 60s video has its own subtitles block, already with the new words");
+  const [dlKm] = await Promise.all([p.waitForEvent("download"), p.click('[data-srtfile="2026-11-16-60s.srt"][data-pre="srt_60s_km"]')]);
+  const fsm = await import("node:fs"); const got = fsm.readFileSync(await dlKm.path(), "utf8");
+  ok(dlKm.suggestedFilename() === "2026-11-16-60s.srt" && got === srtKm, "Download Khmer .srt saves 2026-11-16-60s.srt with the new words");
+  const [dlEn] = await Promise.all([p.waitForEvent("download"), p.click('[data-srtfile="2026-11-16-60s.en.srt"][data-pre="srt_60s_en"]')]);
+  ok(dlEn.suggestedFilename() === "2026-11-16-60s.en.srt", "Download English .srt saves the English file");
+  // Copy – music & sound only: the scene without any voice (scene 1: Chanda on camera smiles instead of speaking)
+  const muteBtns = await p.evaluate(() => { const d = [...document.querySelectorAll("details.sec")].find((x) => /^60-second video/.test(x.querySelector("h2").textContent)); return d.querySelectorAll("[data-mute]").length; });
+  ok(muteBtns === 8, "every scene of the 60s video has Copy – music & sound only");
+  const mute1 = await p.evaluateHandle(() => { const d = [...document.querySelectorAll("details.sec")].find((x) => /^60-second video/.test(x.querySelector("h2").textContent)); return d.querySelector("[data-mute]"); });
+  await mute1.asElement().click();
+  const mt = await p.evaluate(() => navigator.clipboard.readText());
+  ok(/NO voice in this clip/.test(mt) && /gentle magical background music/.test(mt) && !/She says/.test(mt) && !/English voice:|Khmer voice:/.test(mt), "it copies the scene with music and sound effects only, no voice lines");
+  ok(!/natural lip movements/.test(mt) && /closed-lip smile/.test(mt) && /in this clip nobody speaks at all/.test(mt) && /^Vertical 9:16/.test(mt) && /Use the saved Flow character @Chanda/.test(mt), "Chanda on camera smiles instead of speaking; the style and saved characters stay");
   // saved: another device / a reload sees it
   await ctx.close(); ({ ctx, p } = await open());
   await p.waitForFunction(() => window.__lastPack.v60.scenes[3].edited, null, { timeout: 10000 }).catch(() => {});
