@@ -75,7 +75,7 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
   try {
     const D = "2026-11-16", km = "ត្រៀមបើកទ្វារផ្ទះ ដើម្បីទទួលមាសប្រាក់ និងសំណាង";
     const base = { op: "rewrite", date: D, index: 3, animal: "Horse", title: "The magical moment", onCam: false, picture: "@Horse rears up under the moon. Slow orbit.", en: "This is your day.", km: "ថ្ងៃនេះ គឺជាថ្ងៃរបស់អ្នក។" };
-    ok((await call("GET", { date: D }, "")).status === 401 && (await call("GET", { date: D }, "nope")).status === 401, "no or wrong passcode: refused");
+    ok((await call("GET", { date: D }, "")).status === 200 && (await call("GET", { date: D }, "anything")).status === 200, "no passcode is needed (owner's request, 16/11/2026)");
     const g0 = await call("GET", { date: D });
     ok(g0.status === 200 && JSON.stringify(g0.body.edits) === "{}", "a date with no changes has no edits");
     const r1 = await call("POST", { ...base, voice: "  " + km + "\n" });
@@ -120,6 +120,13 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
     ai.refuseThinking = true; const n0 = ai.thinking.length;
     const rt = await call("POST", { ...base, index: 6, voice: km });
     ok(rt.status === 200 && ai.thinking.slice(n0).every((t) => t === "default"), "when thinking cannot be switched off, the change still works");
+    ai.refuseThinking = false;
+    // the daily limit on AI rewrites (no passcode, so a stranger cannot run up the AI bill)
+    process.env.STUDIO_VOICE_DAILY_MAX = "3";
+    const calls0 = ai.calls, lim = await call("POST", { ...base, index: 7, voice: km });
+    ok(lim.status === 429 && /limit of 3 AI rewrites/.test(lim.body.error) && ai.calls === calls0, "over the daily limit: refused before the AI is asked");
+    ok((await call("POST", { op: "reset", date: D, index: 3 })).status === 200 && (await call("GET", { date: D })).status === 200, "reading and Back to the original still work over the limit");
+    delete process.env.STUDIO_VOICE_DAILY_MAX;
   } catch (e) { fails++; console.log("FAIL (crash)", e.stack); }
   finally { await teardown(); }
   console.log(fails ? `${fails} check(s) failed, ${passes} passed` : `studio voice service OK: ${passes} checks passed (${ai.calls} stand-in AI calls)`);

@@ -5,7 +5,9 @@
 // voice-over section and both subtitle files (scripts/content/video-pack-lib.mjs, buildPack(..., edits)).
 //
 // Netlify environment variables (functions scope):
-//   STUDIO_KEY      the Studio passcode (asked once per device). Without it nothing is read or written.
+//   (no passcode since 16/11/2026, as the owner asked: the Studio page is hidden — not linked, not in the sitemap,
+//   noindex — and a daily limit on AI rewrites keeps the cost safe if someone finds it)
+//   STUDIO_VOICE_DAILY_MAX  optional, AI rewrites allowed per day (UTC), default 150.
 //   STUDIO_AI_KEY   the Anthropic API key for the Studio (falls back to ANTHROPIC_API_KEY).
 //   STUDIO_MODEL    optional, default claude-sonnet-5-5.
 // Storage: Netlify Blobs store "studio-voice" (previews and branch deploys use "studio-voice-preview"), one JSON per
@@ -15,7 +17,6 @@
 // POST /api/studio-voice { op: "rewrite", date, video, index, animal, title, videoName, wide, onCam, picture, en, km, voice }
 //                                                              -> { date, edits }
 // POST /api/studio-voice { op: "reset", date, video, index }   -> { date, edits }   (the scene goes back to the original)
-import crypto from "node:crypto";
 import { getStore } from "@netlify/blobs";
 
 export const config = { path: "/api/studio-voice" };
@@ -35,12 +36,13 @@ const need = (c, msg) => { if (!c) throw new HttpError(400, msg, "bad-input"); }
 const isDate = (d) => typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d) && !isNaN(Date.parse(d + "T00:00:00Z")) && new Date(d + "T00:00:00Z").toISOString().slice(0, 10) === d;
 const KHMER = /[ក-៿]/;
 
-function authorized(req) {
-  const want = process.env.STUDIO_KEY;
-  if (!want) throw new HttpError(503, "The Studio passcode (STUDIO_KEY) is not set in Netlify.", "no-studio-key");
-  const got = req.headers.get("x-studio-key") || "";
-  const h = (s) => crypto.createHash("sha256").update(String(s)).digest();
-  if (!crypto.timingSafeEqual(h(got), h(want))) throw new HttpError(401, "Wrong or missing Studio passcode.", "bad-key");
+// at most this many AI rewrites a day (UTC), counted in the store, so a stranger cannot run up the AI bill
+const DAILY_MAX = () => Number(process.env.STUDIO_VOICE_DAILY_MAX) || 150;
+async function countRewrite(st) {
+  const key = "count/" + new Date().toISOString().slice(0, 10);
+  const n = Number((await st.get(key, { type: "json" })) || 0);
+  if (n >= DAILY_MAX()) throw new HttpError(429, `Today's limit of ${DAILY_MAX()} AI rewrites is reached. Nothing was changed; try again tomorrow.`, "daily-limit");
+  await st.setJSON(key, n + 1);
 }
 
 // ------------------------------------------------------------------ the AI
@@ -106,7 +108,6 @@ async function load(st, date) { return (await st.get(date, { type: "json" })) ||
 export default async (req, context) => {
   const t0 = Date.now();
   try {
-    authorized(req);
     const st = storeFor(context);
     if (req.method === "GET") {
       const date = new URL(req.url).searchParams.get("date");
@@ -133,6 +134,7 @@ export default async (req, context) => {
     const lang = KHMER.test(voice) ? "km" : "en", other = lang === "km" ? "en" : "km";
     const x = { animal, title: str(b.title, 120) || `Scene ${index + 1}`, n: index + 1, onCam: !!b.onCam, picture: str(b.picture, 3000), voice, lang, now: str(lang === "km" ? b.km : b.en, 500),
       videoName: str(b.videoName, 160) || "60-second video – Facebook & TikTok", wide: !!b.wide };
+    await countRewrite(st);
     const raw = await ask(rewritePrompt(x), TOOL(other), t0);
     const line = str(raw.line, 500), picture = str(raw.picture, 900);
     if (!line || !picture || (other === "km" && !KHMER.test(line))) throw new HttpError(502, "The AI's answer was incomplete. Nothing was changed; try again.", "ai-incomplete");

@@ -629,21 +629,20 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   // scene, see its voice-over now, write new words; the AI keeps the words exactly and writes a new picture for the
   // scene that shows them (netlify/functions/studio-voice.mjs). Saved for the date, so every device sees it; the scene,
   // its copy-with-voice buttons, the voice-over section and the 60s subtitle files all use the new words.
-  var VO = { open: false, vid: "60s", i: 0, text: "", res: "", busy: false, edits: {}, key: "" };
+  var VO = { open: false, vid: "60s", i: 0, text: "", res: "", busy: false, edits: {} };   // no passcode (owner's request, 16/11/2026)
   function mmss(t) { return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0"); }
-  try { VO.key = localStorage.getItem("mbs-studio-key") || ""; } catch (e) {}
   if (onSite) $("vobtn").hidden = false;
   function voApi(method, body, q) {
-    return fetch("/api/studio-voice" + (q ? "?" + q : ""), { method: method, headers: { "content-type": "application/json", "x-studio-key": VO.key }, body: body ? JSON.stringify(body) : undefined, cache: "no-store" })
+    return fetch("/api/studio-voice" + (q ? "?" + q : ""), { method: method, headers: { "content-type": "application/json" }, body: body ? JSON.stringify(body) : undefined, cache: "no-store" })
       .then(function (r) { return r.json().then(function (j) { if (!r.ok) { var er = new Error(j.error || "Error " + r.status); er.code = j.code; throw er; } return j; }, function () { throw new Error("The Studio service did not answer (" + r.status + "). Try again."); }); });
   }
   function voLoad(iso) {   // the saved changes for a date; the pack is drawn again only if they changed
-    if (!onSite || !VO.key) return;
+    if (!onSite) return;
     voApi("GET", null, "date=" + iso).then(function (r) {
       var was = JSON.stringify(VO.edits[iso] || {}), now = JSON.stringify(r.edits || {});
       VO.edits[iso] = r.edits || {};
       if (was !== now && D.value === iso) render(iso, window.__lastData);
-    }, function (er) { if (er.code === "bad-key") { VO.key = ""; if (VO.open) voRender(); } });
+    }, function () {});
   }
   function voCount() {
     var t = $("vo-new"), em = $("vo-count"); if (!t || !em) return;
@@ -657,12 +656,6 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     var p = window.__lastPack, vids = (p && p.vids) || [], iso = D.value;
     var v = vids.filter(function (x) { return x.id === VO.vid; })[0] || vids[0];
     var head = '<h2>🎙 Update the voice-over script <span class="chip">' + dmy(iso) + "</span></h2>";
-    if (!VO.key) {
-      box.innerHTML = head + '<p class="note">Enter the Studio passcode once on this device (the STUDIO_KEY set in Netlify).</p>' +
-        '<label class="f"><span>Studio passcode</span><input type="password" id="vo-key" autocomplete="current-password"></label>' +
-        '<div class="acts"><button class="primary" data-vo="key">Save passcode</button><button data-vo="close">Close</button></div>' + (VO.res ? '<div class="res err" role="status">' + VO.res + "</div>" : "");
-      return;
-    }
     if (!v) { box.innerHTML = head + '<p class="note">This date has no videos with scenes.</p><div class="acts"><button data-vo="close">Close</button></div>'; return; }
     VO.vid = v.id;
     var i = Math.min(VO.i, v.scenes.length - 1), sc = v.scenes[i];
@@ -698,12 +691,6 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
     var act = b.dataset.vo, iso = D.value, v = ((window.__lastPack && window.__lastPack.vids) || []).filter(function (x) { return x.id === VO.vid; })[0];
     if (act === "close") { VO.open = false; voRender(); }
     else if (act === "see") voScene(b.dataset.name, +b.dataset.i);
-    else if (act === "key") {
-      var k = (($("vo-key") || {}).value || "").trim(); if (!k) return;
-      VO.key = k; VO.res = "";
-      voApi("GET", null, "date=" + iso).then(function (r) { try { localStorage.setItem("mbs-studio-key", k); } catch (er) {} VO.edits[iso] = r.edits || {}; render(iso, window.__lastData); voRender(); },
-        function (er) { VO.key = ""; VO.res = esc(er.code === "bad-key" ? "That passcode is not right." : er.message); voRender(); });
-    }
     else if (act === "reset") {
       var ri = VO.i; b.disabled = true;
       voApi("POST", { op: "reset", date: iso, video: VO.vid, index: ri }).then(function (r) { VO.edits[iso] = r.edits || {}; VO.res = "✓ Scene " + (ri + 1) + " is back to the original words and picture."; render(iso, window.__lastData); voRender(); toast("Scene " + (ri + 1) + " back to the original"); },
@@ -721,7 +708,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
         VO.res = "✓ Scene " + (gi + 1) + " now uses your words, and its picture was rewritten to show them.<br><b>New picture:</b> " + esc(e2.picture || "") + '<br><b>' + (e2.lang === "km" ? "English" : "Khmer") + ":</b> " + esc(e2.lang === "km" ? e2.en : e2.km) + ' <button data-vo="see" data-name="' + esc(gv.name).replace(/"/g, "&quot;") + '" data-i="' + gi + '">See scene ' + (gi + 1) + "</button>";
         if (D.value === iso) render(iso, window.__lastData); else voRender();
         toast("Scene " + (gi + 1) + " updated");
-      }, function (er) { VO.busy = false; if (er.code === "bad-key") VO.key = ""; VO.res = esc(er.message) + " Your words are still in the box."; voRender(); });
+      }, function (er) { VO.busy = false; VO.res = esc(er.message) + " Your words are still in the box."; voRender(); });
     }
   });
 

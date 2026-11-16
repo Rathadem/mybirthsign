@@ -84,13 +84,10 @@ try {
   await p.click('#vo [data-vo="reset"]'); await p.waitForSelector("#vo .res");
   ok((await sec60(p)) === before, "Back to the original restores scene 4 exactly");
   await ctx.close();
-  // passcode on a new device
+  // a new device: no passcode asked
   ({ ctx, p } = await open({ key: null }));
-  await p.click("#vobtn"); await p.waitForSelector("#vo-key");
-  await p.fill("#vo-key", "wrong"); await p.click('#vo [data-vo="key"]'); await p.waitForSelector("#vo .res");
-  ok(/not right/.test(await p.textContent("#vo .res")), "a wrong passcode is refused");
-  await p.fill("#vo-key", KEY); await p.click('#vo [data-vo="key"]'); await p.waitForSelector("#vo-scene");
-  ok(await p.evaluate(() => localStorage.getItem("mbs-studio-key")) === KEY, "the right passcode opens the panel and is remembered on this device");
+  await p.click("#vobtn"); await p.waitForSelector("#vo-scene", { timeout: 10000 }).catch(() => {});
+  ok(await p.isVisible("#vo-scene") && !(await p.$("#vo-key")), "a new device goes straight to the panel (no passcode)");
   await ctx.close();
   // phone
   ({ ctx, p } = await open({ viewport: { width: 390, height: 844 } }));
