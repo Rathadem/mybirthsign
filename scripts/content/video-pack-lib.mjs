@@ -1,7 +1,7 @@
 // Text of the daily video prompt pack, shared by the command-line generator (video-pack.mjs) and the
 // browser tool (docs/video-prompts/video-pack-tool.html, built by build-video-tool.mjs).
 // No Node imports here, so the same code runs in a browser.
-//   buildPack(iso, facts, forSign, data) -> { md, srtKm, srtEn, line }
+//   buildPack(iso, facts, forSign, data, P, edits) -> { md, srtKm, srtEn, srtVid, v60, line }
 //     facts   = computeFacts(iso) from scripts/daily-data-lib.mjs
 //     forSign = forSign from js/lucky-digits.js
 //     data    = the day's data/daily/<iso>.json if it exists (its summary and each sign's written fortune are used), otherwise null
@@ -307,7 +307,7 @@ const enSpoken = (t) => t.split(/\s+/).filter(Boolean).reduce((s, w) => s + (/^\
 const fitsClip = (en, kmT) => enSpoken(en) <= 23 && [...kmFlow(kmT)].length <= 125;
 // more words in short scenes: add the first of today's extra sentences that still fits the clip (else keep the line)
 const fuller = ([en, kmT], extras) => { for (const [e, k] of extras) if (fitsClip(`${en} ${e}`, `${kmT} ${k}`)) return [`${en} ${e}`, `${kmT} ${k}`]; return [en, kmT]; };
-export function buildPack(iso, F, forSign, data = null, P = null) {
+export function buildPack(iso, F, forSign, data = null, P = null, edits = null) {
   const DEL = dayElement(iso);   // today's element (Wood, Fire, Earth, Metal or Water)
   const POSE = Object.fromEntries(Object.entries(posesFor(iso)).map(([a, m]) => [a, `${m}, as today's ${DEL.el} magic swirls around them: ${DEL.fx}`]));   // today's action move for each sign (a new one every day), with the day's element
   const sign = (a) => F.signs.find((s) => s.animal === a);
@@ -1409,6 +1409,30 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
     ];
   }
   VIDEOS.forEach((v) => { v.posts = POSTS[v.id]; });
+  // the owner's own voice-over for a scene (Studio "Update voice-over", 16/11/2026): their words, and the picture the AI
+  // wrote to show them, replace that scene's lines and picture. The saved-character lines and the animal's movement are
+  // added as in every scene; Chanda's feelings and the sky are added below as usual. The scene list feeds the scene
+  // prompts, the voice-over section and both subtitle files, so they all change together. Only the 60-second video.
+  const v60scenes = (VIDEOS.find((v) => v.id === "60s") || { scenes: [] }).scenes;   // before the edits: the original lines
+  const onCamOf = (v, i, s) => (i === 0 && v.host) || !!s[4];
+  VIDEOS.forEach((v) => {
+    const e = edits && v.id === "60s" ? edits[v.id] : null; if (!e) return;
+    v.edited = [];
+    v.scenes = v.scenes.map((s, i) => {
+      const x = e[i]; if (!x || !x.km || !x.en || !x.picture) return s;
+      v.edited.push(i);
+      const pic = `${String(x.picture).trim()} ${alive(day)} ${lockAnimal(day)}${onCamOf(v, i, s) ? ` ${LOCK_HOST}` : ""}`;
+      return s.length > 4 ? [s[0], pic, String(x.en).trim(), String(x.km).trim(), s[4]] : [s[0], pic, String(x.en).trim(), String(x.km).trim()];
+    });
+  });
+  // what the Studio's voice-over panel needs: each scene of the 60-second video now and as first written, and its
+  // picture without the fixed lines (the part the AI rewrites)
+  const core = (p) => p.replace(alive(day), "").replace(lockAnimal(day), "").replace(LOCK_HOST, "").replace(cap(HOST_LOOK), "@Chanda").replace(/\s+/g, " ").trim();
+  const v60 = (() => {
+    const v = VIDEOS.find((x) => x.id === "60s"); if (!v) return null;
+    return { name: v.name, scenes: v.scenes.map((s, i) => ({ n: i + 1, title: s[0], start: i * 10, end: i * 10 + 10, onCam: onCamOf(v, i, s), en: s[2], km: s[3],
+      picture: core(s[1]), edited: !!(v.edited && v.edited.includes(i)), original: { en: v60scenes[i][2], km: v60scenes[i][3], picture: core(v60scenes[i][1]) } })) };
+  })();
   const srtVid = {};
   VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
   // ---- a different "heaven moment" in the sky for each scene, always behind the characters (not for the story video,
@@ -1455,7 +1479,7 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
   const videoMd = (v) => `## ${v.name}
 ${v.intro || `${v.secs === 80 ? "An" : "A"} ${v.secs}-second video about the ${day}, today's luckiest animal: ${v.scenes.length} clips of 10 seconds. Set the clip length in Flow to 10 seconds and add Chanda and the saved character ${FLOW_NAME(day)} as ingredients. ${v.scenes.some((x) => x[4]) ? `Chanda is on camera and speaks with lip-sync in scenes ${[1, ...v.scenes.map((x, i) => x[4] ? i + 1 : 0).filter(Boolean)].join(", ")}; in the other scenes she narrates off screen` : "Chanda opens the video on camera with the hook and narrates the rest off screen"}. The animals never speak or move their mouths: they only act. For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style line, the scene and the voice together. Put the clips in order 1 to ${v.scenes.length}.`}
 ${v.chapters ? `\n### YouTube chapters (paste into the description)\n${v.chapters.map(([t, n]) => `${t} ${n}`).join("\n")}\n` : ""}${v.metaMd ? `\n${v.metaMd}\n` : ""}${v.posts ? `\n${v.posts.map(([h, t]) => `### ${h}\n${t}`).join("\n\n")}\n` : ""}
-${v.scenes.map(([t, prompt, en, kmL, onCam], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})\n${prompt}${(i === 0 && v.host) || onCam ? ` ${hostFeel(v, i)}` : ""}${skyFor(v, i) ? ` ${skyFor(v, i)}` : ""}\nEnglish voice: ${audio("en", (i === 0 && v.host) || !!onCam, en)}\nKhmer voice: ${audio("km", (i === 0 && v.host) || !!onCam, kmFlow(kmL))}`).join("\n\n")}
+${v.scenes.map(([t, prompt, en, kmL, onCam], i) => `### Scene ${i + 1} – ${t} (${mmss(i * 10)}–${mmss(i * 10 + 10)})${v.edited && v.edited.includes(i) ? " · your voice-over" : ""}\n${prompt}${(i === 0 && v.host) || onCam ? ` ${hostFeel(v, i)}` : ""}${skyFor(v, i) ? ` ${skyFor(v, i)}` : ""}\nEnglish voice: ${audio("en", (i === 0 && v.host) || !!onCam, en)}\nKhmer voice: ${audio("km", (i === 0 && v.host) || !!onCam, kmFlow(kmL))}`).join("\n\n")}
 
 ## Voice-over – ${v.id === "long" ? "long YouTube video" : v.id === "story" ? "story video" : v.id === "easy" ? "take-it-easy video" : v.id === "yt8" ? "full fortune video" : `${v.secs}-second video`}
 The same lines as the voice in each scene above, all together, for recording the voice yourself or with text-to-speech (then copy the scenes with plain "Copy", so Flow does not add a voice too).
@@ -1767,7 +1791,7 @@ ${srtKm}\`\`\`
 \`\`\`
 ${srtEn}\`\`\`
 `;
-  return { md, srtKm, srtEn, srtVid, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
+  return { md, srtKm, srtEn, srtVid, v60, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
 }
 
 // the full set of 12 character prompts (profile pictures / collection artwork / video references)
