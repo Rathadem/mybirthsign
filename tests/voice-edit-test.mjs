@@ -41,7 +41,23 @@ for (const d of ["2026-11-16", "2026-11-20", "2027-02-06"]) {
   const sc1 = sections(p2.md)[k60].split("\n### ").find((b) => b.startsWith("Scene 1 "));
   ok(sc1.includes("Use the saved Flow character @Chanda exactly as she is") && sc1.includes("Chanda is on camera and speaks"), `${d}: an on-camera scene keeps Chanda's saved character and lip-sync`);
   // incomplete edits are ignored
-  ok(buildPack(d, F, forSign, null, P, { "60s": { 2: { km } }, "180s": { 1: { km, en, picture: pic } } }).md === p0.md, `${d}: incomplete edits, and edits for other videos, change nothing`);
+  ok(buildPack(d, F, forSign, null, P, { "60s": { 2: { km } }, "nope": { 1: { km, en, picture: pic } } }).md === p0.md, `${d}: incomplete edits, and unknown videos, change nothing`);
+  // every video with a scene list (the same evening: "to all")
+  ok(p0.vids.map((v) => v.id).join() === "60s,180s,long,story,easy,yt8", `${d}: the panel lists all six videos`);
+  const order = p0.md.split(/\n(?=## )/).map((x) => x.split("\n")[0]);
+  for (const v of p0.vids) {
+    const i = Math.min(5, v.scenes.length - 2), sc = v.scenes[i];
+    const pv = buildPack(d, F, forSign, null, P, { [v.id]: { [i]: { km, en, picture: `@${sc.animal} acts out the new words for ${v.id}.` } } });
+    const S0 = sections(p0.md), S1 = sections(pv.md), vt = "## " + v.name, vo = order[order.indexOf(vt) + 1];
+    ok(/^## Voice-over/.test(vo), `${d} ${v.id}: its voice-over section follows it`);
+    const blk = (S, n) => S[vt].split("\n### ").find((b) => b.startsWith(`Scene ${n} `)) || "";
+    const b0 = blk(S0, i + 1), b1 = blk(S1, i + 1);
+    const fixed0 = (b0.split("\n")[1].match(/[^.!?]*saved Flow character[^.!?]*\./g) || []).map((x) => x.trim());
+    ok(/ · your voice-over\n/.test(b1) && b1.includes(`@${sc.animal} acts out the new words for ${v.id}.`) && fixed0.every((f) => b1.includes(f)), `${d} ${v.id}: scene ${i + 1} has the new picture and keeps its saved-character lines (${fixed0.length})`);
+    ok(b1.includes(`She says: "${en}"`) && S1[vo].includes(km) && pv.srtVid[v.id].km.includes("ត្រៀមបើកទ្វារផ្ទះ"), `${d} ${v.id}: the voice lines, the voice-over section and the subtitles have the new words`);
+    ok(Object.keys(S0).filter((t) => t !== vt && t !== vo).every((t) => S0[t] === S1[t]) && Object.keys(p0.srtVid).filter((x) => x !== v.id).every((x) => JSON.stringify(p0.srtVid[x]) === JSON.stringify(pv.srtVid[x])), `${d} ${v.id}: nothing else in the pack changed`);
+    ok(pv.vids.find((x) => x.id === v.id).scenes[i].edited && pv.vids.find((x) => x.id === v.id).scenes[i].original.km === sc.km, `${d} ${v.id}: the panel sees the change and the original words`);
+  }
 }
 console.log(fails ? `${fails} check(s) failed, ${passes} passed` : `voice-over edits OK: ${passes} checks passed`);
 process.exit(fails ? 1 : 0);

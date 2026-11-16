@@ -24,7 +24,7 @@ function startAI() {
       if (ai.bad > 0) { ai.bad--; return res.end(JSON.stringify({ content: [{ type: "text", text: "Sorry, I cannot." }], stop_reason: "end_turn" })); }
       // like the real model, unless thinking is off it thinks first and a small budget runs out before the answer
       if ((!j.thinking || j.thinking.type !== "disabled") && j.max_tokens < 3000) return res.end(JSON.stringify({ content: [{ type: "thinking", thinking: "…" }], stop_reason: "max_tokens" }));
-      const words = (/word for word: "([^"\n]+)"/.exec(p) || [])[1] || "", animal = (/about the (\w+), today's luckiest/.exec(p) || [])[1];
+      const words = (/word for word: "([^"\n]+)"/.exec(p) || [])[1] || "", animal = (/this clip is about the (\w+)\./.exec(p) || [])[1];
       const toKm = /natural spoken Khmer/.test(p);
       res.end(JSON.stringify({ content: [{ type: "tool_use", id: "t1", name: "write_clip", input: {
         line: toKm ? "ត្រៀមខ្លួនទទួលសំណាងល្អ (the AI's Khmer)" : "Get ready to open your door and welcome gold, money and good luck.",
@@ -94,7 +94,14 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
     ok(r2.status === 200 && e2.en === "Get ready to open your door and welcome gold and good luck!" && /[ក-៿]/.test(e2.km) && e2.lang === "en" && r2.body.edits["60s"][3].km === km, "English words are kept too, with a Khmer line written for them; scene 4 stays");
     ok(/Chanda is ON CAMERA/.test(ai.prompts[ai.prompts.length - 1]) && /@Chanda keeps facing the camera/.test(ai.prompts[ai.prompts.length - 1]), "an on-camera scene keeps Chanda speaking to the camera");
     // back to the original
-    const r3 = await call("POST", { op: "reset", date: D, index: 0 });
+    // other videos (the same evening: every video with a scene list)
+    const rl = await call("POST", { ...base, video: "long", index: 6, animal: "Rat", title: "Rat – Good Day", videoName: "Long YouTube video – all 12 signs (about 5 minutes)", wide: true, picture: "@Rat sits on a glowing lotus. Slow push-in.", voice: km });
+    const pl = ai.prompts[ai.prompts.length - 1];
+    ok(rl.status === 200 && rl.body.edits.long[6].km === km && rl.body.edits["60s"][3].km === km, "a scene of the long video is saved under that video, next to the 60s change");
+    ok(/today's video "Long YouTube video – all 12 signs/.test(pl) && /horizontal 16:9/.test(pl) && /this clip is about the Rat\./.test(pl) && /@Rat sits on a glowing lotus/.test(pl), "the AI is told which video, its shape and the scene's animal");
+    ok(/vertical 9:16/.test(p1) && /60-second video – Facebook & TikTok/.test(p1), "the 60s video is vertical (and is the default)");
+    ok((await call("POST", { ...base, video: "nope", voice: km })).status === 400, "an unknown video is refused");
+    const r3 = await call("POST", { op: "reset", date: D, video: "60s", index: 0 });
     ok(r3.status === 200 && !r3.body.edits["60s"][0] && r3.body.edits["60s"][3], "Back to the original removes only that scene's change");
     // bad input and AI trouble: nothing changes
     const before = JSON.stringify((await call("GET", { date: D })).body);

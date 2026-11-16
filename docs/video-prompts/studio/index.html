@@ -348,7 +348,7 @@ function computeFacts(iso) {
 // Text of the daily video prompt pack, shared by the command-line generator (video-pack.mjs) and the
 // browser tool (docs/video-prompts/video-pack-tool.html, built by build-video-tool.mjs).
 // No Node imports here, so the same code runs in a browser.
-//   buildPack(iso, facts, forSign, data, P, edits) -> { md, srtKm, srtEn, srtVid, v60, line }
+//   buildPack(iso, facts, forSign, data, P, edits) -> { md, srtKm, srtEn, srtVid, v60, vids, line }
 //     facts   = computeFacts(iso) from scripts/daily-data-lib.mjs
 //     forSign = forSign from js/lucky-digits.js
 //     data    = the day's data/daily/<iso>.json if it exists (its summary and each sign's written fortune are used), otherwise null
@@ -1756,30 +1756,39 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
     ];
   }
   VIDEOS.forEach((v) => { v.posts = POSTS[v.id]; });
-  // the owner's own voice-over for a scene (Studio "Update voice-over", 16/11/2026): their words, and the picture the AI
-  // wrote to show them, replace that scene's lines and picture. The saved-character lines and the animal's movement are
-  // added as in every scene; Chanda's feelings and the sky are added below as usual. The scene list feeds the scene
-  // prompts, the voice-over section and both subtitle files, so they all change together. Only the 60-second video.
-  const v60scenes = (VIDEOS.find((v) => v.id === "60s") || { scenes: [] }).scenes;   // before the edits: the original lines
+  // the owner's own voice-over for a scene (Studio "Update voice-over", 16/11/2026; every video with a scene list since
+  // the same evening): their words, and the picture the AI wrote to show them, replace that scene's lines and picture.
+  // The scene's fixed sentences (the saved Flow characters, how the animals move, the style line) are kept exactly and
+  // added after the new picture; Chanda's feelings and the sky are added below as usual. The scene list feeds the scene
+  // prompts, the voice-over section and both subtitle files of that video, so they all change together.
+  const FIXED_EXACT = [...Object.keys(LOOK_DESIGN).flatMap((a) => [alive(a), lockAnimal(a)]), LOCK_HOST];
+  const splitFixed = (p) => {
+    const fixed = []; let core = p;
+    for (const f of FIXED_EXACT) if (core.includes(f)) { fixed.push(f); core = core.replace(f, " "); }
+    core = core.replace(/(?:^|(?<=[.!?]\s))[^.!?]*(?:saved Flow character|Photorealistic golden fantasy-epic style)[^.!?]*\./g, (m) => { fixed.push(m.trim()); return " "; });
+    return { core: core.replace(cap(HOST_LOOK), "@Chanda").replace(/\s+/g, " ").trim(), fixed };
+  };
   const onCamOf = (v, i, s) => (i === 0 && v.host) || !!s[4];
+  const firstScenes = Object.fromEntries(VIDEOS.map((v) => [v.id, v.scenes]));   // before the edits: the original lines
   VIDEOS.forEach((v) => {
-    const e = edits && v.id === "60s" ? edits[v.id] : null; if (!e) return;
+    const e = edits && edits[v.id]; if (!e) return;
     v.edited = [];
     v.scenes = v.scenes.map((s, i) => {
       const x = e[i]; if (!x || !x.km || !x.en || !x.picture) return s;
       v.edited.push(i);
-      const pic = `${String(x.picture).trim()} ${alive(day)} ${lockAnimal(day)}${onCamOf(v, i, s) ? ` ${LOCK_HOST}` : ""}`;
+      const pic = [String(x.picture).trim(), ...splitFixed(s[1]).fixed].join(" ");
       return s.length > 4 ? [s[0], pic, String(x.en).trim(), String(x.km).trim(), s[4]] : [s[0], pic, String(x.en).trim(), String(x.km).trim()];
     });
   });
-  // what the Studio's voice-over panel needs: each scene of the 60-second video now and as first written, and its
-  // picture without the fixed lines (the part the AI rewrites)
-  const core = (p) => p.replace(alive(day), "").replace(lockAnimal(day), "").replace(LOCK_HOST, "").replace(cap(HOST_LOOK), "@Chanda").replace(/\s+/g, " ").trim();
-  const v60 = (() => {
-    const v = VIDEOS.find((x) => x.id === "60s"); if (!v) return null;
-    return { name: v.name, scenes: v.scenes.map((s, i) => ({ n: i + 1, title: s[0], start: i * 10, end: i * 10 + 10, onCam: onCamOf(v, i, s), en: s[2], km: s[3],
-      picture: core(s[1]), edited: !!(v.edited && v.edited.includes(i)), original: { en: v60scenes[i][2], km: v60scenes[i][3], picture: core(v60scenes[i][1]) } })) };
-  })();
+  // what the Studio's voice-over panel needs: every video with a scene list, each scene now and as first written, and
+  // its picture without the fixed sentences (the part the AI rewrites)
+  const animalOf = (t) => (Object.keys(LOOK_DESIGN).find((a) => t.includes("@" + a)) || day);
+  const vids = VIDEOS.map((v) => ({ id: v.id, name: v.name, wide: /^Long YouTube|^Story video/.test(v.name), scenes: v.scenes.map((s, i) => {
+    const now = splitFixed(s[1]).core, o = firstScenes[v.id][i];
+    return { n: i + 1, title: s[0], start: i * 10, end: i * 10 + 10, onCam: onCamOf(v, i, s), en: s[2], km: s[3], picture: now, animal: animalOf(now),
+      edited: !!(v.edited && v.edited.includes(i)), original: { en: o[2], km: o[3], picture: splitFixed(o[1]).core } };
+  }) }));
+  const v60 = vids.find((v) => v.id === "60s") || null;
   const srtVid = {};
   VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
   // ---- a different "heaven moment" in the sky for each scene, always behind the characters (not for the story video,
@@ -2138,7 +2147,7 @@ ${srtKm}\`\`\`
 \`\`\`
 ${srtEn}\`\`\`
 `;
-  return { md, srtKm, srtEn, srtVid, v60, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
+  return { md, srtKm, srtEn, srtVid, v60, vids, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
 }
 
 // the full set of 12 character prompts (profile pictures / collection artwork / video references)
@@ -2606,7 +2615,7 @@ function charactersMd(KM_NAMES) {
   // scene, see its voice-over now, write new words; the AI keeps the words exactly and writes a new picture for the
   // scene that shows them (netlify/functions/studio-voice.mjs). Saved for the date, so every device sees it; the scene,
   // its copy-with-voice buttons, the voice-over section and the 60s subtitle files all use the new words.
-  var VO = { open: false, i: 0, text: "", res: "", busy: false, edits: {}, key: "" };
+  var VO = { open: false, vid: "60s", i: 0, text: "", res: "", busy: false, edits: {}, key: "" };
   function mmss(t) { return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0"); }
   try { VO.key = localStorage.getItem("mbs-studio-key") || ""; } catch (e) {}
   if (onSite) $("vobtn").hidden = false;
@@ -2631,19 +2640,24 @@ function charactersMd(KM_NAMES) {
   function voRender() {
     var box = $("vo"); box.hidden = !VO.open; $("vobtn").setAttribute("aria-expanded", VO.open ? "true" : "false");
     if (!VO.open) { box.innerHTML = ""; return; }
-    var p = window.__lastPack, v = p && p.v60, iso = D.value;
-    var head = '<h2>🎙 Update the voice-over script <span class="chip">60-second video · Facebook &amp; TikTok · ' + dmy(iso) + "</span></h2>";
+    var p = window.__lastPack, vids = (p && p.vids) || [], iso = D.value;
+    var v = vids.filter(function (x) { return x.id === VO.vid; })[0] || vids[0];
+    var head = '<h2>🎙 Update the voice-over script <span class="chip">' + dmy(iso) + "</span></h2>";
     if (!VO.key) {
       box.innerHTML = head + '<p class="note">Enter the Studio passcode once on this device (the STUDIO_KEY set in Netlify).</p>' +
         '<label class="f"><span>Studio passcode</span><input type="password" id="vo-key" autocomplete="current-password"></label>' +
         '<div class="acts"><button class="primary" data-vo="key">Save passcode</button><button data-vo="close">Close</button></div>' + (VO.res ? '<div class="res err" role="status">' + VO.res + "</div>" : "");
       return;
     }
-    if (!v) { box.innerHTML = head + '<p class="note">This date has no 60-second video.</p><div class="acts"><button data-vo="close">Close</button></div>'; return; }
+    if (!v) { box.innerHTML = head + '<p class="note">This date has no videos with scenes.</p><div class="acts"><button data-vo="close">Close</button></div>'; return; }
+    VO.vid = v.id;
     var i = Math.min(VO.i, v.scenes.length - 1), sc = v.scenes[i];
+    var nEd = function (x) { return x.scenes.filter(function (y) { return y.edited; }).length; };
     box.innerHTML = head +
-      '<p class="note">Choose a scene and write Chanda’s new words (Khmer or English). Your words are kept exactly as you write them; the AI writes the same words in the other language and a new picture for the scene that shows what she says. The scene’s copy buttons, the voice-over section and the subtitle files change with it. Saved for ' + dmy(iso) + "; you can always go back to the original.</p>" +
-      '<label class="f"><span>Scene to update</span><select id="vo-scene">' + v.scenes.map(function (x, k) { return '<option value="' + k + '"' + (k === i ? " selected" : "") + ">Scene " + x.n + " · " + mmss(x.start) + "–" + mmss(x.end) + " · " + esc(x.title) + (x.edited ? " · your voice-over" : "") + "</option>"; }).join("") + "</select></label>" +
+      '<p class="note">Choose a video and a scene, and write Chanda’s new words (Khmer or English). Your words are kept exactly as you write them; the AI writes the same words in the other language and a new picture for the scene that shows what she says. The scene’s copy buttons and that video’s voice-over section and subtitle files change with it. Saved for ' + dmy(iso) + "; you can always go back to the original.</p>" +
+      '<div class="cols">' +
+        '<label class="f"><span>Video</span><select id="vo-vid">' + vids.map(function (x) { return '<option value="' + x.id + '"' + (x.id === v.id ? " selected" : "") + ">" + esc(shortName(x.name)) + " · " + x.scenes.length + " scenes" + (nEd(x) ? " · " + nEd(x) + " changed" : "") + "</option>"; }).join("") + "</select></label>" +
+      '<label class="f"><span>Scene to update</span><select id="vo-scene">' + v.scenes.map(function (x, k) { return '<option value="' + k + '"' + (k === i ? " selected" : "") + ">Scene " + x.n + " · " + mmss(x.start) + "–" + mmss(x.end) + " · " + esc(x.title) + (x.edited ? " · your voice-over" : "") + "</option>"; }).join("") + "</select></label></div>" +
       '<div class="cols">' +
         '<div class="now"><h3>' + (sc.edited ? "Your voice-over now" : "Original voice-over") + " · scene " + sc.n + (sc.onCam ? " · Chanda on camera" : "") + '</h3><p class="km" lang="km" id="vo-old">' + esc(sc.km) + '</p><p class="note">' + esc(sc.en) + '</p><p class="note"><b>Picture now:</b> ' + esc(sc.picture) + "</p>" +
           (sc.edited ? '<p class="note"><b>Original words:</b> <span lang="km">' + esc(sc.original.km) + '</span></p><div class="acts"><button data-vo="reset">Back to the original</button></div>' : "") + "</div>" +
@@ -2653,20 +2667,23 @@ function charactersMd(KM_NAMES) {
       (VO.res ? '<div class="res' + (/^✓/.test(VO.res) ? "" : " err") + '" role="status">' + VO.res + "</div>" : "");
     voCount();
   }
-  function voScene(i) {   // open the 60-second video and show scene i
-    var sec = [].filter.call(document.querySelectorAll("details.sec"), function (d) { return /^60-second video/.test(d.querySelector("h2").textContent); })[0];
+  function voScene(name, i) {   // open that video's section and show scene i
+    var sec = [].filter.call(document.querySelectorAll("details.sec"), function (d) { return d.querySelector("h2").textContent === name; })[0];
     if (!sec) return; sec.open = true;
     var h = [].filter.call(sec.querySelectorAll(".block h3"), function (x) { return x.textContent.indexOf("Scene " + (i + 1) + " ") === 0; })[0];
     (h || sec).scrollIntoView({ block: "start", behavior: "smooth" });
   }
   $("vobtn").addEventListener("click", function () { VO.open = !VO.open; VO.res = ""; voRender(); if (VO.open) { $("vo").scrollIntoView({ block: "nearest" }); voLoad(D.value); } });
-  $("vo").addEventListener("change", function (e) { if (e.target.id === "vo-scene") { VO.i = +e.target.value; VO.res = ""; VO.text = ($("vo-new") || {}).value || ""; voRender(); } });
+  $("vo").addEventListener("change", function (e) {
+    if (e.target.id === "vo-scene") { VO.i = +e.target.value; VO.res = ""; VO.text = ($("vo-new") || {}).value || ""; voRender(); }
+    if (e.target.id === "vo-vid") { VO.vid = e.target.value; VO.i = 0; VO.res = ""; VO.text = ($("vo-new") || {}).value || ""; voRender(); }
+  });
   $("vo").addEventListener("input", function (e) { if (e.target.id === "vo-new") { VO.text = e.target.value; voCount(); } });
   $("vo").addEventListener("click", function (e) {
     var b = e.target.closest("[data-vo]"); if (!b) return;
-    var act = b.dataset.vo, iso = D.value, v = window.__lastPack && window.__lastPack.v60;
+    var act = b.dataset.vo, iso = D.value, v = ((window.__lastPack && window.__lastPack.vids) || []).filter(function (x) { return x.id === VO.vid; })[0];
     if (act === "close") { VO.open = false; voRender(); }
-    else if (act === "see") voScene(+b.dataset.i);
+    else if (act === "see") voScene(b.dataset.name, +b.dataset.i);
     else if (act === "key") {
       var k = (($("vo-key") || {}).value || "").trim(); if (!k) return;
       VO.key = k; VO.res = "";
@@ -2675,7 +2692,7 @@ function charactersMd(KM_NAMES) {
     }
     else if (act === "reset") {
       var ri = VO.i; b.disabled = true;
-      voApi("POST", { op: "reset", date: iso, index: ri }).then(function (r) { VO.edits[iso] = r.edits || {}; VO.res = "✓ Scene " + (ri + 1) + " is back to the original words and picture."; render(iso, window.__lastData); voRender(); toast("Scene " + (ri + 1) + " back to the original"); },
+      voApi("POST", { op: "reset", date: iso, video: VO.vid, index: ri }).then(function (r) { VO.edits[iso] = r.edits || {}; VO.res = "✓ Scene " + (ri + 1) + " is back to the original words and picture."; render(iso, window.__lastData); voRender(); toast("Scene " + (ri + 1) + " back to the original"); },
         function (er) { b.disabled = false; VO.res = esc(er.message); voRender(); });
     }
     else if (act === "go") {
@@ -2683,10 +2700,11 @@ function charactersMd(KM_NAMES) {
       if (!text) { toast("Write the new voice-over first"); $("vo-new").focus(); return; }
       if (!sc || VO.busy) return;
       VO.text = text; VO.busy = true; VO.res = ""; voRender();
-      voApi("POST", { op: "rewrite", date: iso, index: gi, animal: computeFacts(iso).dayAnimal, title: sc.title, onCam: sc.onCam, picture: sc.picture, en: sc.en, km: sc.km, voice: text }).then(function (r) {
+      var gv = v;
+      voApi("POST", { op: "rewrite", date: iso, video: gv.id, videoName: gv.name, wide: gv.wide, index: gi, animal: sc.animal, title: sc.title, onCam: sc.onCam, picture: sc.picture, en: sc.en, km: sc.km, voice: text }).then(function (r) {
         VO.busy = false; VO.edits[iso] = r.edits || {}; VO.text = "";
-        var e2 = (r.edits["60s"] || {})[gi] || {};
-        VO.res = "✓ Scene " + (gi + 1) + " now uses your words, and its picture was rewritten to show them.<br><b>New picture:</b> " + esc(e2.picture || "") + '<br><b>' + (e2.lang === "km" ? "English" : "Khmer") + ":</b> " + esc(e2.lang === "km" ? e2.en : e2.km) + ' <button data-vo="see" data-i="' + gi + '">See scene ' + (gi + 1) + "</button>";
+        var e2 = (r.edits[gv.id] || {})[gi] || {};
+        VO.res = "✓ Scene " + (gi + 1) + " now uses your words, and its picture was rewritten to show them.<br><b>New picture:</b> " + esc(e2.picture || "") + '<br><b>' + (e2.lang === "km" ? "English" : "Khmer") + ":</b> " + esc(e2.lang === "km" ? e2.en : e2.km) + ' <button data-vo="see" data-name="' + esc(gv.name).replace(/"/g, "&quot;") + '" data-i="' + gi + '">See scene ' + (gi + 1) + "</button>";
         if (D.value === iso) render(iso, window.__lastData); else voRender();
         toast("Scene " + (gi + 1) + " updated");
       }, function (er) { VO.busy = false; if (er.code === "bad-key") VO.key = ""; VO.res = esc(er.message) + " Your words are still in the box."; voRender(); });

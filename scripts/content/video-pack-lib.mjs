@@ -1,7 +1,7 @@
 // Text of the daily video prompt pack, shared by the command-line generator (video-pack.mjs) and the
 // browser tool (docs/video-prompts/video-pack-tool.html, built by build-video-tool.mjs).
 // No Node imports here, so the same code runs in a browser.
-//   buildPack(iso, facts, forSign, data, P, edits) -> { md, srtKm, srtEn, srtVid, v60, line }
+//   buildPack(iso, facts, forSign, data, P, edits) -> { md, srtKm, srtEn, srtVid, v60, vids, line }
 //     facts   = computeFacts(iso) from scripts/daily-data-lib.mjs
 //     forSign = forSign from js/lucky-digits.js
 //     data    = the day's data/daily/<iso>.json if it exists (its summary and each sign's written fortune are used), otherwise null
@@ -1409,30 +1409,39 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
     ];
   }
   VIDEOS.forEach((v) => { v.posts = POSTS[v.id]; });
-  // the owner's own voice-over for a scene (Studio "Update voice-over", 16/11/2026): their words, and the picture the AI
-  // wrote to show them, replace that scene's lines and picture. The saved-character lines and the animal's movement are
-  // added as in every scene; Chanda's feelings and the sky are added below as usual. The scene list feeds the scene
-  // prompts, the voice-over section and both subtitle files, so they all change together. Only the 60-second video.
-  const v60scenes = (VIDEOS.find((v) => v.id === "60s") || { scenes: [] }).scenes;   // before the edits: the original lines
+  // the owner's own voice-over for a scene (Studio "Update voice-over", 16/11/2026; every video with a scene list since
+  // the same evening): their words, and the picture the AI wrote to show them, replace that scene's lines and picture.
+  // The scene's fixed sentences (the saved Flow characters, how the animals move, the style line) are kept exactly and
+  // added after the new picture; Chanda's feelings and the sky are added below as usual. The scene list feeds the scene
+  // prompts, the voice-over section and both subtitle files of that video, so they all change together.
+  const FIXED_EXACT = [...Object.keys(LOOK_DESIGN).flatMap((a) => [alive(a), lockAnimal(a)]), LOCK_HOST];
+  const splitFixed = (p) => {
+    const fixed = []; let core = p;
+    for (const f of FIXED_EXACT) if (core.includes(f)) { fixed.push(f); core = core.replace(f, " "); }
+    core = core.replace(/(?:^|(?<=[.!?]\s))[^.!?]*(?:saved Flow character|Photorealistic golden fantasy-epic style)[^.!?]*\./g, (m) => { fixed.push(m.trim()); return " "; });
+    return { core: core.replace(cap(HOST_LOOK), "@Chanda").replace(/\s+/g, " ").trim(), fixed };
+  };
   const onCamOf = (v, i, s) => (i === 0 && v.host) || !!s[4];
+  const firstScenes = Object.fromEntries(VIDEOS.map((v) => [v.id, v.scenes]));   // before the edits: the original lines
   VIDEOS.forEach((v) => {
-    const e = edits && v.id === "60s" ? edits[v.id] : null; if (!e) return;
+    const e = edits && edits[v.id]; if (!e) return;
     v.edited = [];
     v.scenes = v.scenes.map((s, i) => {
       const x = e[i]; if (!x || !x.km || !x.en || !x.picture) return s;
       v.edited.push(i);
-      const pic = `${String(x.picture).trim()} ${alive(day)} ${lockAnimal(day)}${onCamOf(v, i, s) ? ` ${LOCK_HOST}` : ""}`;
+      const pic = [String(x.picture).trim(), ...splitFixed(s[1]).fixed].join(" ");
       return s.length > 4 ? [s[0], pic, String(x.en).trim(), String(x.km).trim(), s[4]] : [s[0], pic, String(x.en).trim(), String(x.km).trim()];
     });
   });
-  // what the Studio's voice-over panel needs: each scene of the 60-second video now and as first written, and its
-  // picture without the fixed lines (the part the AI rewrites)
-  const core = (p) => p.replace(alive(day), "").replace(lockAnimal(day), "").replace(LOCK_HOST, "").replace(cap(HOST_LOOK), "@Chanda").replace(/\s+/g, " ").trim();
-  const v60 = (() => {
-    const v = VIDEOS.find((x) => x.id === "60s"); if (!v) return null;
-    return { name: v.name, scenes: v.scenes.map((s, i) => ({ n: i + 1, title: s[0], start: i * 10, end: i * 10 + 10, onCam: onCamOf(v, i, s), en: s[2], km: s[3],
-      picture: core(s[1]), edited: !!(v.edited && v.edited.includes(i)), original: { en: v60scenes[i][2], km: v60scenes[i][3], picture: core(v60scenes[i][1]) } })) };
-  })();
+  // what the Studio's voice-over panel needs: every video with a scene list, each scene now and as first written, and
+  // its picture without the fixed sentences (the part the AI rewrites)
+  const animalOf = (t) => (Object.keys(LOOK_DESIGN).find((a) => t.includes("@" + a)) || day);
+  const vids = VIDEOS.map((v) => ({ id: v.id, name: v.name, wide: /^Long YouTube|^Story video/.test(v.name), scenes: v.scenes.map((s, i) => {
+    const now = splitFixed(s[1]).core, o = firstScenes[v.id][i];
+    return { n: i + 1, title: s[0], start: i * 10, end: i * 10 + 10, onCam: onCamOf(v, i, s), en: s[2], km: s[3], picture: now, animal: animalOf(now),
+      edited: !!(v.edited && v.edited.includes(i)), original: { en: o[2], km: o[3], picture: splitFixed(o[1]).core } };
+  }) }));
+  const v60 = vids.find((v) => v.id === "60s") || null;
   const srtVid = {};
   VIDEOS.forEach((v) => { srtVid[v.id] = { km: srtFor(v.scenes, "km"), en: srtFor(v.scenes, "en") }; });
   // ---- a different "heaven moment" in the sky for each scene, always behind the characters (not for the story video,
@@ -1791,7 +1800,7 @@ ${srtKm}\`\`\`
 \`\`\`
 ${srtEn}\`\`\`
 `;
-  return { md, srtKm, srtEn, srtVid, v60, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
+  return { md, srtKm, srtEn, srtVid, v60, vids, line: `${iso}: ${day} day · lucky ${lucky.join(", ")} · careful ${careful.join(", ") || "none"}${same ? " · site wording" : ""}` };
 }
 
 // the full set of 12 character prompts (profile pictures / collection artwork / video references)

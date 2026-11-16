@@ -1,5 +1,5 @@
-// The Video Studio's "Update voice-over" for the 60-second video (Facebook & TikTok), asked for by the owner on
-// 16/11/2026: the owner writes Chanda's new words for one scene, the AI writes the same words in the other language
+// The Video Studio's "Update voice-over", asked for by the owner on 16/11/2026 for the 60-second video (Facebook &
+// TikTok) and the same evening for every video with a scene list: the owner writes Chanda's new words for one scene, the AI writes the same words in the other language
 // and a new picture for the scene that shows what the words say, and the change is saved for that date so it shows on
 // every device. The Studio page (mybirthsign.com/studio/) puts the saved words and picture into that scene, its
 // voice-over section and both subtitle files (scripts/content/video-pack-lib.mjs, buildPack(..., edits)).
@@ -9,11 +9,12 @@
 //   STUDIO_AI_KEY   the Anthropic API key for the Studio (falls back to ANTHROPIC_API_KEY).
 //   STUDIO_MODEL    optional, default claude-sonnet-5-5.
 // Storage: Netlify Blobs store "studio-voice" (previews and branch deploys use "studio-voice-preview"), one JSON per
-// date: { date, edits: { "60s": { "<scene index>": { km, en, picture, lang, at } } } }.
+// date: { date, edits: { "<video id>": { "<scene index>": { km, en, picture, lang, at } } } }.
 //
 // GET  /api/studio-voice?date=YYYY-MM-DD                       -> { date, edits }
-// POST /api/studio-voice { op: "rewrite", date, index, animal, title, onCam, picture, en, km, voice } -> { date, edits }
-// POST /api/studio-voice { op: "reset", date, index }          -> { date, edits }   (the scene goes back to the original)
+// POST /api/studio-voice { op: "rewrite", date, video, index, animal, title, videoName, wide, onCam, picture, en, km, voice }
+//                                                              -> { date, edits }
+// POST /api/studio-voice { op: "reset", date, video, index }   -> { date, edits }   (the scene goes back to the original)
 import crypto from "node:crypto";
 import { getStore } from "@netlify/blobs";
 
@@ -23,7 +24,9 @@ const AI_KEY = () => process.env.STUDIO_AI_KEY || process.env.ANTHROPIC_API_KEY;
 const AI_URL = () => process.env.STUDIO_AI_URL || "https://api.anthropic.com/v1/messages";
 const MODEL = () => process.env.STUDIO_MODEL || "claude-sonnet-5-5";
 const ANIMALS = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"];
-const SCENES = 8;   // the 60-second video has 8 clips of 10 seconds
+// the pack's videos with a scene list (scripts/content/video-pack-lib.mjs, VIDEOS); every clip is 10 seconds
+// (with room to spare for the long ones, whose length changes a little from day to day)
+const SCENES = { "60s": 8, "180s": 18, easy: 8, long: 60, story: 60, yt8: 90 }, VIDEOS = Object.keys(SCENES);
 
 class HttpError extends Error { constructor(status, msg, code) { super(msg); this.status = status; this.code = code; } }
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
@@ -47,15 +50,15 @@ const TOOL = (other) => ({ name: "write_clip", description: "Save the clip's oth
 }, required: ["line", "picture"] } });
 
 export function rewritePrompt(x) {
-  const { animal, title, n, onCam, picture, voice, lang, now } = x, a = animal.toLowerCase(), other = lang === "km" ? "en" : "km";
-  return `You are helping the owner of MyBirthSign change one 10-second clip of today's 60-second Facebook and TikTok video (vertical 9:16, made in Google Flow). The video is about the ${animal}, today's luckiest Chinese zodiac animal, in a moonlit Khmer temple world, presented by Chanda. Only Chanda speaks; the zodiac guardian and the ${a} never speak.
-Clip ${n} of ${SCENES}: ${title}. ${onCam ? `Chanda is ON CAMERA in this clip: she faces the camera and speaks to the viewer with natural lip movements; @${animal} (the ${animal} guardian and the ${a}) is with her and only acts.` : `Chanda is NOT on screen in this clip (her voice is a voice-over); @${animal} (the ${animal} guardian and the ${a}) acts and never speaks.`}
+  const { animal, title, n, onCam, picture, voice, lang, now, videoName, wide } = x, a = animal.toLowerCase(), other = lang === "km" ? "en" : "km";
+  return `You are helping the owner of MyBirthSign change one 10-second clip of today's video "${videoName}" (${wide ? "horizontal 16:9" : "vertical 9:16"}, made in Google Flow). The series is about the Chinese zodiac animals as guardians in a Khmer temple world, presented by Chanda; this clip is about the ${animal}. Only Chanda speaks; the zodiac guardians and their animals never speak.
+Clip ${n}: ${title}. ${onCam ? `Chanda is ON CAMERA in this clip: she faces the camera and speaks to the viewer with natural lip movements; @${animal} (the ${animal} guardian and the ${a}) is with her and only acts.` : `Chanda is NOT on screen in this clip (her voice is a voice-over); @${animal} (the ${animal} guardian and the ${a}) acts and never speaks.`}
 The clip's picture now: ${picture}
 Chanda's words now: ${now}
 The owner has written Chanda's new ${lang === "km" ? "Khmer" : "English"} words for this clip. Keep them exactly as written, word for word: "${voice}"
 1. Write the same words in ${other === "km" ? "natural spoken Khmer (Khmer script), as Chanda would say them" : "natural English, as a faithful translation"}.
 2. Write the clip's new picture so that it shows what the new words say: @${animal} acts them out, moment by moment, with the setting, light and magic, and one smooth camera move. For example, if Chanda says to get ready to open the door and receive gold, money and good luck, @${animal} opens a tall temple door and gold coins and money fly around it in a glowing swirl, bringing luck to everyone born in the Year of the ${animal}.
-Rules for the picture: call the characters only @${animal}${onCam ? " and @Chanda" : ""}; never describe how they look (the saved Flow characters keep their looks); stay in the moonlit Khmer temple world of the series; no written text, letters or numbers in the picture; no blood, fighting or anything frightening; ${onCam ? "@Chanda keeps facing the camera and speaking with natural lip movements; " : "no one on screen speaks or moves their mouth; "}at most 70 words.
+Rules for the picture: call the characters only by their saved Flow names (@${animal}${onCam ? ", @Chanda" : ""} or another zodiac guardian such as @Rat); never describe how they look (the saved Flow characters keep their looks); stay in the same world, time of day and mood as the picture now; no written text, letters or numbers in the picture; no blood, fighting or anything frightening; ${onCam ? "@Chanda keeps facing the camera and speaking with natural lip movements; " : "no one on screen speaks or moves their mouth; "}at most 70 words.
 Answer with the tool write_clip.`;
 }
 
@@ -112,12 +115,13 @@ export default async (req, context) => {
     }
     need(req.method === "POST", "Use GET or POST.");
     let b; try { b = await req.json(); } catch (e) { throw new HttpError(400, "The request could not be read.", "bad-input"); }
-    const date = b.date, index = Number(b.index);
+    const date = b.date, index = Number(b.index), video = b.video || "60s";
     need(isDate(date), "The date is not valid.");
-    need(Number.isInteger(index) && index >= 0 && index < SCENES, "The scene number is not valid.");
+    need(VIDEOS.includes(video), "The video is not valid.");
+    need(Number.isInteger(index) && index >= 0 && index < SCENES[video], "The scene number is not valid.");
     if (b.op === "reset") {
       const doc = await load(st, date);
-      if (doc.edits["60s"]) { delete doc.edits["60s"][index]; if (!Object.keys(doc.edits["60s"]).length) delete doc.edits["60s"]; }
+      if (doc.edits[video]) { delete doc.edits[video][index]; if (!Object.keys(doc.edits[video]).length) delete doc.edits[video]; }
       await st.setJSON(date, doc);
       return json(200, doc);
     }
@@ -127,13 +131,14 @@ export default async (req, context) => {
     const voice = str(b.voice, 400);
     need(voice, "Write the new voice-over first.");
     const lang = KHMER.test(voice) ? "km" : "en", other = lang === "km" ? "en" : "km";
-    const x = { animal, title: str(b.title, 120) || `Scene ${index + 1}`, n: index + 1, onCam: !!b.onCam, picture: str(b.picture, 3000), voice, lang, now: str(lang === "km" ? b.km : b.en, 500) };
+    const x = { animal, title: str(b.title, 120) || `Scene ${index + 1}`, n: index + 1, onCam: !!b.onCam, picture: str(b.picture, 3000), voice, lang, now: str(lang === "km" ? b.km : b.en, 500),
+      videoName: str(b.videoName, 160) || "60-second video – Facebook & TikTok", wide: !!b.wide };
     const raw = await ask(rewritePrompt(x), TOOL(other), t0);
     const line = str(raw.line, 500), picture = str(raw.picture, 900);
     if (!line || !picture || (other === "km" && !KHMER.test(line))) throw new HttpError(502, "The AI's answer was incomplete. Nothing was changed; try again.", "ai-incomplete");
     const edit = { km: lang === "km" ? voice : line, en: lang === "en" ? voice : line, picture, lang, at: new Date().toISOString() };
     const doc = await load(st, date);
-    doc.edits["60s"] = { ...(doc.edits["60s"] || {}), [index]: edit };
+    doc.edits[video] = { ...(doc.edits[video] || {}), [index]: edit };
     await st.setJSON(date, doc);
     return json(200, doc);
   } catch (e) {

@@ -30,7 +30,8 @@ try {
   const orig = await p.evaluate(() => window.__lastPack.v60.scenes.map((s) => ({ km: s.km, en: s.en })));
   const before = await sec60(p), allBefore = await p.evaluate(() => window.__lastMd);
   await p.click("#vobtn"); await p.waitForSelector("#vo-scene");
-  ok((await p.$$("#vo-scene option")).length === 8 && /60-second video · Facebook & TikTok · 16\/11\/2026/.test(await p.textContent("#vo h2")), "the panel lists the 8 scenes of the 60-second video for 16/11/2026");
+  ok((await p.$$("#vo-vid option")).length === 6 && (await p.inputValue("#vo-vid")) === "60s" && /16\/11\/2026/.test(await p.textContent("#vo h2")), "the panel offers all 6 videos for 16/11/2026, starting with the 60-second video");
+  ok((await p.$$("#vo-scene option")).length === 8, "the 60-second video has 8 scenes to choose from");
   await p.selectOption("#vo-scene", "3");
   ok((await p.textContent("#vo-old")) === orig[3].km && /Original voice-over · scene 4/.test(await p.textContent("#vo .now h3")), "choosing scene 4 shows its original Khmer voice-over in the first column");
   const km = "ត្រៀមបើកទ្វារផ្ទះ ដើម្បីទទួលមាសប្រាក់ និងសំណាង";
@@ -51,6 +52,23 @@ try {
   await p.click('#vo [data-vo="see"]'); await p.waitForTimeout(400);
   ok(await p.evaluate(() => [...document.querySelectorAll("details.sec")].find((x) => /^60-second video/.test(x.querySelector("h2").textContent)).open), "See scene 4 opens the 60-second video");
   await shot(p, "vo-2-done");
+  // another video: the long YouTube video (all 12 signs), English words
+  await p.click("#vobtn"); await p.click("#vobtn"); await p.waitForSelector("#vo-vid");
+  await p.selectOption("#vo-vid", "long");
+  const longV = await p.evaluate(() => window.__lastPack.vids.find((v) => v.id === "long"));
+  ok((await p.$$("#vo-scene option")).length === longV.scenes.length && (await p.inputValue("#vo-scene")) === "0", "choosing the long video lists its own scenes");
+  await p.selectOption("#vo-scene", "6");
+  ok((await p.textContent("#vo-old")) === longV.scenes[6].km, "its scene 7 shows its own voice-over");
+  const enNew = "Rat friends, open your door today: good luck is on its way.";
+  await p.fill("#vo-new", enNew); await p.click('#vo [data-vo="go"]'); await p.waitForSelector("#vo .res", { timeout: 30000 });
+  const md2 = await p.evaluate(() => window.__lastMd);
+  const longSec = md2.split(/\n(?=## )/).find((x) => x.startsWith("## " + longV.name)), b7 = longSec.split("\n### ").find((b) => b.startsWith("Scene 7 "));
+  ok(/ · your voice-over\n/.test(b7) && b7.includes(`She says: "${enNew}"`) && b7.includes("acts out the owner's words") && (await p.evaluate(() => window.__lastPack.srtVid.long.en)).includes("open your door today"), "the long video's scene 7, its subtitles and voice lines have the new words");
+  ok(/ · your voice-over/.test(await scene4(p)), "the 60-second video keeps its own change");
+  ok(/1 changed/.test(await p.textContent('#vo-vid option[value="long"]')), "the video list shows how many scenes were changed");
+  await p.click('#vo [data-vo="reset"]'); await p.waitForSelector("#vo .res");
+  ok(!(await p.evaluate(() => window.__lastPack.vids.find((v) => v.id === "long").scenes[6].edited)), "Back to the original works for the long video too");
+  await p.selectOption("#vo-vid", "60s");
   // copy + Khmer voice for scene 4 uses the new words
   await ctx.grantPermissions(["clipboard-read", "clipboard-write"]);
   const nineBtn = await p.evaluateHandle(() => { const d = [...document.querySelectorAll("details.sec")].find((x) => /^60-second video/.test(x.querySelector("h2").textContent)); const b = [...d.querySelectorAll(".block")].find((x) => (x.querySelector("h3") || {}).textContent?.startsWith("Scene 4 ")); return b.querySelector('[data-nine="km"]'); });
