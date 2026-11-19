@@ -55,6 +55,18 @@ button.done { border-color: var(--good); color: var(--good); }
 .vo .acts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .vo .res { background: var(--card-2); border-left: 3px solid var(--good); border-radius: 8px; padding: 10px 12px; line-height: 1.6; overflow-wrap: anywhere; }
 .vo .err { border-left-color: var(--care); }
+.vo .story { background: var(--card-2); border-radius: 10px; padding: 10px 12px; display: grid; gap: 8px; min-width: 0; }
+.vo .story h3 { margin: 0; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--violet); }
+.vo .story h3 span { text-transform: none; letter-spacing: 0; color: var(--muted); margin-left: 8px; font-weight: 400; }
+.vo .story ol { list-style: none; margin: 0; padding: 0 4px 0 0; max-height: 360px; overflow-y: auto; display: grid; gap: 6px; }
+.vo .story button { display: grid; gap: 3px; width: 100%; text-align: left; background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font: inherit; cursor: pointer; min-width: 0; }
+.vo .story button:hover { border-color: var(--violet); }
+.vo .story li.cur button { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
+.vo .story .sn { font-size: .78rem; color: var(--muted); }
+.vo .story .sn em { font-style: normal; color: var(--gold-soft); margin-left: 6px; }
+.vo .story .sn em.mine { color: var(--good); }
+.vo .story .km { line-height: 1.7; overflow-wrap: anywhere; }
+.vo .story .en { font-size: .86rem; color: var(--muted); overflow-wrap: anywhere; }
 #vobtn[aria-expanded="true"] { border-color: var(--gold); color: var(--gold-soft); }
 .glance { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 14px; }
 .glance .day { font: 700 1.4rem/1.2 var(--display); color: var(--gold-soft); margin: 0; }
@@ -2682,6 +2694,14 @@ function charactersMd(KM_NAMES) {
       '<div class="cols">' +
         '<label class="f"><span>Video</span><select id="vo-vid">' + vids.map(function (x) { return '<option value="' + x.id + '"' + (x.id === v.id ? " selected" : "") + ">" + esc(shortName(x.name)) + " · " + x.scenes.length + " scenes" + (nEd(x) ? " · " + nEd(x) + " changed" : "") + "</option>"; }).join("") + "</select></label>" +
       '<label class="f"><span>Scene to update</span><select id="vo-scene">' + v.scenes.map(function (x, k) { return '<option value="' + k + '"' + (k === i ? " selected" : "") + ">Scene " + x.n + " · " + mmss(x.start) + "–" + mmss(x.end) + " · " + esc(x.title) + (x.edited ? " · your voice-over" : "") + "</option>"; }).join("") + "</select></label></div>" +
+      // the whole video, so the new words can follow on from the scene before and lead into the next (16/11/2026)
+      '<div class="story"><h3>The whole video · ' + v.scenes.length + ' scenes <span>tap a scene to update it</span></h3><ol id="vo-story">' +
+        v.scenes.map(function (x, k) {
+          var tag = k === i ? "you are here" : k === i - 1 ? "before" : k === i + 1 ? "next" : "";
+          return '<li' + (k === i ? ' class="cur"' : "") + '><button type="button" data-vo="pick" data-i="' + k + '"' + (k === i ? ' aria-current="true"' : "") + ">" +
+            '<span class="sn">Scene ' + x.n + " · " + mmss(x.start) + "–" + mmss(x.end) + " · " + esc(x.title) + (tag ? " <em>" + tag + "</em>" : "") + (x.edited ? ' <em class="mine">your voice-over</em>' : "") + "</span>" +
+            '<span class="km" lang="km">' + esc(x.km) + '</span><span class="en">' + esc(x.en) + "</span></button></li>";
+        }).join("") + "</ol></div>" +
       '<div class="cols">' +
         '<div class="now"><h3>' + (sc.edited ? "Your voice-over now" : "Original voice-over") + " · scene " + sc.n + (sc.onCam ? " · Chanda on camera" : "") + '</h3><p class="km" lang="km" id="vo-old">' + esc(sc.km) + '</p><p class="note">' + esc(sc.en) + '</p><p class="note"><b>Picture now:</b> ' + esc(sc.picture) + "</p>" +
           (sc.edited ? '<p class="note"><b>Original words:</b> <span lang="km">' + esc(sc.original.km) + '</span></p><div class="acts"><button data-vo="reset">Back to the original</button></div>' : "") + "</div>" +
@@ -2690,6 +2710,8 @@ function charactersMd(KM_NAMES) {
       '<div class="acts"><button class="primary" data-vo="go"' + (VO.busy ? " disabled" : "") + ">" + (VO.busy ? "Writing the new scene…" : "Update voice-over and scene") + '</button><button data-vo="close">Close</button></div>' +
       (VO.res ? '<div class="res' + (/^✓/.test(VO.res) ? "" : " err") + '" role="status">' + VO.res + "</div>" : "");
     voCount();
+    var ol = $("vo-story"), cur = ol && ol.querySelector("li.cur");   // keep the chosen scene in view in the list
+    if (cur) ol.scrollTop = Math.max(0, (cur.previousElementSibling || cur).offsetTop - ol.offsetTop);   // the scene before shows in full
   }
   function voScene(name, i) {   // open that video's section and show scene i
     var sec = [].filter.call(document.querySelectorAll("details.sec"), function (d) { return d.querySelector("h2").textContent === name; })[0];
@@ -2708,6 +2730,7 @@ function charactersMd(KM_NAMES) {
     var act = b.dataset.vo, iso = D.value, v = ((window.__lastPack && window.__lastPack.vids) || []).filter(function (x) { return x.id === VO.vid; })[0];
     if (act === "close") { VO.open = false; voRender(); }
     else if (act === "see") voScene(b.dataset.name, +b.dataset.i);
+    else if (act === "pick") { VO.i = +b.dataset.i; VO.res = ""; VO.text = ($("vo-new") || {}).value || ""; voRender(); var sel = $("vo-scene"); if (sel) sel.focus(); }
     else if (act === "reset") {
       var ri = VO.i; b.disabled = true;
       voApi("POST", { op: "reset", date: iso, video: VO.vid, index: ri }).then(function (r) { VO.edits[iso] = r.edits || {}; VO.res = "✓ Scene " + (ri + 1) + " is back to the original words and picture."; render(iso, window.__lastData); voRender(); toast("Scene " + (ri + 1) + " back to the original"); },
@@ -2719,7 +2742,8 @@ function charactersMd(KM_NAMES) {
       if (!sc || VO.busy) return;
       VO.text = text; VO.busy = true; VO.res = ""; voRender();
       var gv = v;
-      voApi("POST", { op: "rewrite", date: iso, video: gv.id, videoName: gv.name, wide: gv.wide, index: gi, animal: sc.animal, title: sc.title, onCam: sc.onCam, picture: sc.picture, en: sc.en, km: sc.km, voice: text }).then(function (r) {
+      var nb = function (x) { return x ? { n: x.n, title: x.title, km: x.km, en: x.en, picture: x.picture } : null; };   // the scenes around it, so the new one connects
+      voApi("POST", { op: "rewrite", date: iso, video: gv.id, videoName: gv.name, wide: gv.wide, index: gi, animal: sc.animal, title: sc.title, onCam: sc.onCam, picture: sc.picture, en: sc.en, km: sc.km, voice: text, before: nb(gv.scenes[gi - 1]), after: nb(gv.scenes[gi + 1]) }).then(function (r) {
         VO.busy = false; VO.edits[iso] = r.edits || {}; VO.text = "";
         var e2 = (r.edits[gv.id] || {})[gi] || {};
         VO.res = "✓ Scene " + (gi + 1) + " now uses your words, and its picture was rewritten to show them.<br><b>New picture:</b> " + esc(e2.picture || "") + '<br><b>' + (e2.lang === "km" ? "English" : "Khmer") + ":</b> " + esc(e2.lang === "km" ? e2.en : e2.km) + ' <button data-vo="see" data-name="' + esc(gv.name).replace(/"/g, "&quot;") + '" data-i="' + gi + '">See scene ' + (gi + 1) + "</button>" +

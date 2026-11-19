@@ -85,6 +85,11 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
     const p1 = ai.prompts[ai.prompts.length - 1];
     ok(p1.includes(`word for word: "${km}"`) && /natural English, as a faithful translation/.test(p1) && /Chanda is NOT on screen/.test(p1) && p1.includes("The clip's picture now: @Horse rears up"), "the AI gets the words, the scene and what to write");
     ok(ai.thinking.every((t) => t === "disabled"), "thinking is switched off");
+    ok(/This is the first clip of the video\./.test(p1) && /This is the last clip of the video\./.test(p1), "without neighbours the AI is told it stands alone");
+    const rn = await call("POST", { ...base, index: 4, voice: km, before: { n: 4, title: "The magical moment", km: "មុនគេ", en: "Before.", picture: "@Horse rears up under the moon." }, after: { n: 6, title: "Best time", km: "បន្ទាប់", en: "After.", picture: "@Horse walks to the lotus pond at dawn." } });
+    const pn = ai.prompts[ai.prompts.length - 1];
+    ok(rn.status === 200 && pn.includes(`The clip before (clip 4, The magical moment): Chanda says "មុនគេ"`) && pn.includes("Its picture: @Horse walks to the lotus pond at dawn.") && /follows on naturally from the clip before and leads into the clip after/.test(pn), "the scenes before and after are given to the AI so the new one connects");
+    await call("POST", { op: "reset", date: D, index: 4 });
     const g1 = await call("GET", { date: D });
     ok(JSON.stringify(g1.body.edits) === JSON.stringify(r1.body.edits), "the change is saved for that date (any device sees it)");
     ok(JSON.stringify((await call("GET", { date: "2026-11-17" })).body.edits) === "{}", "other dates are not touched");

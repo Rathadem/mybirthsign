@@ -4,7 +4,7 @@
 // STUDIO_SHOTS=<folder> saves screenshots.
 import path from "node:path";
 import { createRequire } from "node:module";
-import { setup, teardown, serve, KEY } from "./studio-voice-test.mjs";
+import { setup, teardown, serve, KEY, ai } from "./studio-voice-test.mjs";
 const require = createRequire(import.meta.url);
 let chromium; try { ({ chromium } = require("playwright")); } catch (e) { ({ chromium } = await import("playwright")); }
 let fails = 0, passes = 0;
@@ -28,10 +28,15 @@ try {
   ok(await p.isVisible("#vobtn") && /Update voice-over/.test(await p.textContent("#vobtn")), "the top bar has 🎙 Update voice-over");
   ok(!(await p.isVisible("#vo")), "the panel is closed at first");
   const orig = await p.evaluate(() => window.__lastPack.v60.scenes.map((s) => ({ km: s.km, en: s.en })));
+  const titles = await p.evaluate(() => window.__lastPack.v60.scenes.map((s) => s.title));
   const before = await sec60(p), allBefore = await p.evaluate(() => window.__lastMd);
   await p.click("#vobtn"); await p.waitForSelector("#vo-scene");
   ok((await p.$$("#vo-vid option")).length === 6 && (await p.inputValue("#vo-vid")) === "60s" && /16\/11\/2026/.test(await p.textContent("#vo h2")), "the panel offers all 6 videos for 16/11/2026, starting with the 60-second video");
   ok((await p.$$("#vo-scene option")).length === 8, "the 60-second video has 8 scenes to choose from");
+  ok((await p.$$("#vo-story li")).length === 8 && (await p.$$eval("#vo-story .km", (els) => els.map((e) => e.textContent))).every((t, k) => t === orig[k].km), "the whole video is listed: all 8 scenes with their voice-over");
+  await p.click('#vo-story [data-vo="pick"][data-i="5"]');
+  ok((await p.inputValue("#vo-scene")) === "5" && (await p.textContent("#vo-old")) === orig[5].km && /you are here/.test(await p.textContent("#vo-story li.cur")), "tapping scene 6 in the list chooses it");
+  ok(/before/.test(await p.textContent('#vo-story li:nth-child(5)')) && /next/.test(await p.textContent('#vo-story li:nth-child(7)')), "the scenes before and after it are marked");
   await p.selectOption("#vo-scene", "3");
   ok((await p.textContent("#vo-old")) === orig[3].km && /Original voice-over · scene 4/.test(await p.textContent("#vo .now h3")), "choosing scene 4 shows its original Khmer voice-over in the first column");
   const km = "ត្រៀមបើកទ្វារផ្ទះ ដើម្បីទទួលមាសប្រាក់ និងសំណាង";
@@ -41,6 +46,9 @@ try {
   await p.click('#vo [data-vo="go"]');
   await p.waitForSelector("#vo .res", { timeout: 30000 });
   ok(/^✓ Scene 4 now uses your words/.test(await p.textContent("#vo .res")) && /New picture:/.test(await p.textContent("#vo .res")), "the panel shows the result with the new picture");
+  const lastPrompt = ai.prompts[ai.prompts.length - 1];
+  ok(lastPrompt.includes(`The clip before (clip 3, ${titles[2]}): Chanda says "${orig[2].km}"`) && lastPrompt.includes(`The clip after (clip 5, ${titles[4]}): Chanda says "${orig[4].km}"`), "the AI got scenes 3 and 5 so the new scene 4 connects");
+  ok(/your voice-over/.test(await p.textContent("#vo-story li.cur")) && (await p.textContent("#vo-story li.cur .km")) === km, "the list shows scene 4 with your new words");
   const s4 = await scene4(p);
   ok(/^Scene 4 – .* · your voice-over/.test(s4) && s4.includes("acts out the owner's words") && s4.includes(kmFlowLike(km)) && s4.includes("welcome gold"), "scene 4 in the 60s video has the new picture and both voice lines");
   const md = await p.evaluate(() => window.__lastMd), srt = await p.evaluate(() => window.__lastPack.srtVid["60s"].km);

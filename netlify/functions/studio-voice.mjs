@@ -52,14 +52,17 @@ const TOOL = (other) => ({ name: "write_clip", description: "Save the clip's oth
 }, required: ["line", "picture"] } });
 
 export function rewritePrompt(x) {
-  const { animal, title, n, onCam, picture, voice, lang, now, videoName, wide } = x, a = animal.toLowerCase(), other = lang === "km" ? "en" : "km";
+  const { animal, title, n, onCam, picture, voice, lang, now, videoName, wide, before, after } = x, a = animal.toLowerCase(), other = lang === "km" ? "en" : "km";
+  // the clips around it (16/11/2026), so the new picture follows on from the one before and leads into the next
+  const around = (before ? `The clip before (clip ${before.n}, ${before.title}): Chanda says "${before.line}". Its picture: ${before.picture}\n` : "This is the first clip of the video.\n") +
+    (after ? `The clip after (clip ${after.n}, ${after.title}): Chanda says "${after.line}". Its picture: ${after.picture}\n` : "This is the last clip of the video.\n");
   return `You are helping the owner of MyBirthSign change one 10-second clip of today's video "${videoName}" (${wide ? "horizontal 16:9" : "vertical 9:16"}, made in Google Flow). The series is about the Chinese zodiac animals as guardians in a Khmer temple world, presented by Chanda; this clip is about the ${animal}. Only Chanda speaks; the zodiac guardians and their animals never speak.
 Clip ${n}: ${title}. ${onCam ? `Chanda is ON CAMERA in this clip: she faces the camera and speaks to the viewer with natural lip movements; @${animal} (the ${animal} guardian and the ${a}) is with her and only acts.` : `Chanda is NOT on screen in this clip (her voice is a voice-over); @${animal} (the ${animal} guardian and the ${a}) acts and never speaks.`}
 The clip's picture now: ${picture}
 Chanda's words now: ${now}
-The owner has written Chanda's new ${lang === "km" ? "Khmer" : "English"} words for this clip. Keep them exactly as written, word for word: "${voice}"
+${around}The owner has written Chanda's new ${lang === "km" ? "Khmer" : "English"} words for this clip. Keep them exactly as written, word for word: "${voice}"
 1. Write the same words in ${other === "km" ? "natural spoken Khmer (Khmer script), as Chanda would say them" : "natural English, as a faithful translation"}.
-2. Write the clip's new picture so that it shows what the new words say: @${animal} acts them out, moment by moment, with the setting, light and magic, and one smooth camera move. For example, if Chanda says to get ready to open the door and receive gold, money and good luck, @${animal} opens a tall temple door and gold coins and money fly around it in a glowing swirl, bringing luck to everyone born in the Year of the ${animal}.
+2. Write the clip's new picture so that it shows what the new words say: @${animal} acts them out, moment by moment, with the setting, light and magic, and one smooth camera move, so that it follows on naturally from the clip before and leads into the clip after (the same place, light and characters where that makes sense). For example, if Chanda says to get ready to open the door and receive gold, money and good luck, @${animal} opens a tall temple door and gold coins and money fly around it in a glowing swirl, bringing luck to everyone born in the Year of the ${animal}.
 Rules for the picture: call the characters only by their saved Flow names (@${animal}${onCam ? ", @Chanda" : ""} or another zodiac guardian such as @Rat); never describe how they look (the saved Flow characters keep their looks); stay in the same world, time of day and mood as the picture now; no written text, letters or numbers in the picture; no blood, fighting or anything frightening; ${onCam ? "@Chanda keeps facing the camera and speaking with natural lip movements; " : "no one on screen speaks or moves their mouth; "}at most 70 words.
 Answer with the tool write_clip.`;
 }
@@ -134,6 +137,8 @@ export default async (req, context) => {
     const lang = KHMER.test(voice) ? "km" : "en", other = lang === "km" ? "en" : "km";
     const x = { animal, title: str(b.title, 120) || `Scene ${index + 1}`, n: index + 1, onCam: !!b.onCam, picture: str(b.picture, 3000), voice, lang, now: str(lang === "km" ? b.km : b.en, 500),
       videoName: str(b.videoName, 160) || "60-second video – Facebook & TikTok", wide: !!b.wide };
+    const nb = (o) => (o && typeof o === "object" && (o.km || o.en) ? { n: Math.max(1, Math.min(200, Number(o.n) || 0)), title: str(o.title, 120), line: str(lang === "km" ? o.km : o.en, 300), picture: str(o.picture, 700) } : null);
+    x.before = nb(b.before); x.after = nb(b.after);
     await countRewrite(st);
     const raw = await ask(rewritePrompt(x), TOOL(other), t0);
     const line = str(raw.line, 500), picture = str(raw.picture, 900);
