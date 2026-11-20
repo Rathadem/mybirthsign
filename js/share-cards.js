@@ -307,9 +307,13 @@
     "ជើង": 0, "ឦសាន": 45, "ឥសាន": 45, "កើត": 90, "អាគ្នេយ៍": 135, "ត្បូង": 180, "និរតី": 225, "លិច": 270, "ពាយព្យ": 315, "ពាយ័ព្យ": 315,
     "北": 0, "东北": 45, "东": 90, "东南": 135, "南": 180, "西南": 225, "西": 270, "西北": 315 };
   function dirAngle(t) { var k = String(t || "").toLowerCase().replace(/^(ទិស)?(ខាង)?/, "").replace(/^正/, "").replace(/方$/, "").trim(); return k in DIRS ? DIRS[k] : null; }
-  // the four lucky tiles: number / colour / direction / time, each with its own picture
+  // the four lucky tiles: number / colour / direction / time, each with its own picture. spec.noNumber: the three tiles
+  // without the number (the cards posted on Facebook, owner's request 20/11/2026: Facebook made the Page harder to find
+  // for people under 18, and big lucky numbers can look like lottery picks to its checks)
   function luckyTiles(ctx, L, T, spec, y) {
-    var n = 4, gap = 16, tw = (INNER - gap * (n - 1)) / n, th = 156, items = [[spec.lucky3 ? T.luckyNum : T.number, numL(L, spec.lucky3 || spec.number), "num"], [T.color, spec.color, "col"], [T.direction, spec.direction, "dir"], [T.time, numL(L, spec.time), "time"]];
+    var items = [[spec.lucky3 ? T.luckyNum : T.number, numL(L, spec.lucky3 || spec.number), "num"], [T.color, spec.color, "col"], [T.direction, spec.direction, "dir"], [T.time, numL(L, spec.time), "time"]];
+    if (spec.noNumber) items = items.slice(1);
+    var n = items.length, gap = 16, tw = (INNER - gap * (n - 1)) / n, th = 156;
     items.forEach(function (it, i) {
       var x = PAD + i * (tw + gap), cx = x + tw / 2, iy = y + 76;
       var bg = ctx.createLinearGradient(0, y, 0, y + th); bg.addColorStop(0, "rgba(246,220,155,.16)"); bg.addColorStop(1, "rgba(246,220,155,.04)");
@@ -353,7 +357,7 @@
   }
   function daily(spec0, format) {
     var spec, L = langOf(spec0), T = LBL[L], tc = TIER[spec0.tier] || TIER.ordinary;
-    return Promise.all([medals([spec0.animal]), fontsReady(L, spec0), lucky3(spec0)]).then(function (r) {
+    return Promise.all([medals([spec0.animal]), fontsReady(L, spec0), spec0.noNumber ? spec0 : lucky3(spec0)]).then(function (r) {
       spec = r[2];
       return render(L, T.note, format, function (ctx, o) {
         var R = o.compact ? 88 : 108, my = o.compact ? 214 : 262;

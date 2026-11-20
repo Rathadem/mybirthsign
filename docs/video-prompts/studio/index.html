@@ -696,14 +696,14 @@ function buildPack(iso, F, forSign, data = null, P = null, edits = null) {
   const voiceKm = [
     `តើរាសីរបស់អ្នក ស្ថិតក្នុងចំណោមបីឆ្នាំ ដែលមានសំណាងជាងគេថ្ងៃនេះឬទេ? នេះគឺជោគជតារាសី សម្រាប់ថ្ងៃទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} ឆ្នាំ ${iso.slice(0, 4)}។`,
     summaryKm,
-    `សម្រាប់លេខសំណាងថ្ងៃនេះ៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2} និង ${n.d3}។`).join(" ")} សូមសរសេរលេខសំណាងរបស់អ្នក នៅក្នុងមតិយោបល់ ហើយនិយាយម្ដងទៀត!`,
-    "ចូលមើលលេខសំណាង និងលម្អិតសម្រាប់រាសីទាំង 12 នៅ mybirthsign.com",
+    `អ្នកកើតឆ្នាំ${dayKm} ពណ៌សំណាងរបស់អ្នកថ្ងៃនេះ គឺពណ៌${sign(day).lucky.color.km} ហើយទិសសំណាង គឺទិស${sign(day).lucky.direction.km}។ សូមសរសេររាសីរបស់អ្នក នៅក្នុងមតិយោបល់!`,
+    "ចូលមើលលម្អិតសម្រាប់រាសីទាំង 12 នៅ mybirthsign.com",
   ];
   const voiceEn = [
     `Is your sign one of today's three luckiest? Here's your Chinese zodiac fortune for ${LD}.`,
     summaryEn,
-    `For lucky numbers today: ${nums.map((n) => `${n.a}, ${n.d2} and ${n.d3}.`).join(" ")} Comment your lucky number below, and say it again!`,
-    "See all 12 signs and full lucky numbers at mybirthsign.com.",
+    `Year of the ${day}, your lucky color today is ${sign(day).lucky.color.en}, and your lucky direction is the ${sign(day).lucky.direction.en.toLowerCase()}. Comment your sign below!`,
+    "See all 12 signs at mybirthsign.com.",
   ];
   const srtKm = srt(voiceKm.flatMap((v) => splitLines(v, "km")));
   const srtEn = srt(voiceEn.flatMap((v) => splitLines(v, "en")));
@@ -718,6 +718,9 @@ function buildPack(iso, F, forSign, data = null, P = null, edits = null) {
   // hashtag. Facebook stopped recommending the daily posts to people under 18 (31/10–04/11/2026), and number lists like
   // "3 · 28 · 769 · 3770 · 38911" can look like lottery picks to its automatic checks. The numbers stay on the website,
   // the cards, the videos and Telegram; the captions link to the website for them.
+  // Since 20/11/2026 (Facebook again made the Page harder to find for people under 18) the videos for Facebook have no
+  // lucky numbers either: the 60-second video has a wish scene in their place, and the 45- and 30-second videos give
+  // the luckiest sign's lucky color and direction. The YouTube videos and descriptions, TikTok captions and Telegram keep them.
   const tagsEnFb = tagsEn.replace(" #LuckyNumbers", "");
   const DISC_EN = "Traditional Chinese zodiac reading for entertainment and self-reflection only, not a scientific prediction.";
 
@@ -1156,7 +1159,7 @@ function buildPack(iso, F, forSign, data = null, P = null, edits = null) {
         [`It's ${LD.split(", ")[0]}, ${dateEn}, and the ${day} has a ${dd.label.en}!`, `ថ្ងៃនេះ ${wdKm} ${dateKm} ឆ្នាំ${dayKm}មាន${dd.label.km}!`],
         [`${dateEn} belongs to the ${day}. Year of the ${day}, this ${dd.label.en} is yours!`, `${dateKm} ជាថ្ងៃរបស់ឆ្នាំ${dayKm}។ អ្នកកើតឆ្នាំ${dayKm} ${dd.label.km}នេះ ជារបស់អ្នក!`]]), rot(1, [
         elLine,
-        ["Stay with me for your lucky color, time and numbers.", "សូមមើលបន្ត ដើម្បីដឹងពណ៌ ពេលវេលា និងលេខសំណាងរបស់អ្នក។"],
+        ["Stay with me for your lucky color, time and direction.", "សូមមើលបន្ត ដើម្បីដឹងពណ៌ ពេលវេលា និងទិសសំណាងរបស់អ្នក។"],
         ["Let's see what this lucky day brings you.", "តោះ មកមើលថា ថ្ងៃសំណាងនេះ នាំអ្វីមកឲ្យអ្នក។"]]).concat([
         [`A ${DEL.yy} ${DEL.el} day!`, `ថ្ងៃធាតុ${DEL.km}!`], ["Stay with me!", "សូមមើលបន្ត!"]]))],
     mean60: [`What the ${day} means`, `Low-angle hero shot: the ${dl} looks up at the full moon, and ${S9.vis}. ${cap(S9.mood)} mood. Slow upward camera tilt. ${alive(day)} ${lockAnimal(day)}`,
@@ -1188,7 +1191,18 @@ function buildPack(iso, F, forSign, data = null, P = null, edits = null) {
         ["Face that way when you make a wish.", "សូមបែរមុខទៅទិសនោះ ពេលអធិដ្ឋាន។"],
         ["Use that time for calls and big decisions.", "សូមប្រើពេលនោះ សម្រាប់ការទូរស័ព្ទ និងការសម្រេចចិត្តធំៗ។"]]).concat([
         ["Plan around it.", "សូមរៀបចំផែនការតាមនោះ។"]]))],
-    // the lucky-numbers line stays the same every day; only the picture changes
+    // the 60-second video's scene 7 (owner's request, 20/11/2026: no lucky-number scene in the Facebook videos, because
+    // Facebook made the Page harder to find for people under 18): a wish, in the same place and length as the old
+    // lucky-numbers scene, so scene numbers and saved voice-over edits stay the same. The call to comment stays.
+    wish60: ["Make a wish", `${DV(27, WISH_OBJ(dl), 2)} ${DV(38, CAM, 2)} Peaceful, warm and magical mood. ${alive(day)} ${lockAnimal(day)}`,
+      ...V(3, 13, [
+        ["Make a small wish today, and take one kind step toward it. Comment your sign below, and save this video!",
+          "ថ្ងៃនេះ សូមប្រាថ្នាអ្វីមួយតូចៗ ហើយធ្វើរឿងល្អមួយ។ សូមសរសេររាសីរបស់អ្នក ក្នុងមតិយោបល់ ហើយរក្សាទុកវីដេអូនេះ!"],
+        ["A peaceful heart helps good luck find its way to you. Comment your sign below, and save this video!",
+          "ចិត្តដែលស្ងប់ នឹងជួយនាំសំណាងល្អ មករកអ្នក។ សូមសរសេររាសីរបស់អ្នក ក្នុងមតិយោបល់ ហើយរក្សាទុកវីដេអូនេះ!"],
+        ["Make a wish with a calm and happy heart. Comment your sign below, and save this video!",
+          "សូមប្រាថ្នាអ្វីមួយ ដោយចិត្តស្ងប់ និងរីករាយ។ សូមសរសេររាសីរបស់អ្នក ក្នុងមតិយោបល់ ហើយរក្សាទុកវីដេអូនេះ!"]])],
+    // the lucky-numbers scene of the YouTube full-fortune video (yt8); the line stays the same every day, only the picture changes
     num60: ["Lucky numbers", `${V(4, 9, [
         `Wide, symmetrical front shot: a huge glowing golden wheel rises out of the lotus pond in front of the temple, spins with beams of golden light, then slows to a gentle shining turn. The ${dl} bounces excitedly in front of it and glances back at the camera, delighted.`,
         `Three glowing golden orbs rise from the pond one after another and hover in a row in front of the ${dl}, each one brightening as it appears; the ${dl} nudges the nearest one gently and looks at the camera, delighted.`,
@@ -1221,7 +1235,7 @@ function buildPack(iso, F, forSign, data = null, P = null, edits = null) {
   const longScenes = [SC.moon, SC.appear, SC.meaning, overview, ...signScenes, SC.wish, SC.thanks, SC.end];
   const longChapters = [["0:00", "Introduction"], ...F.signs.map((sg, i) => [mmss((4 + i * 2) * 10), `${sg.animal} (${sg.nameKm}) – ${sg.label.en}`]), [mmss((4 + 24) * 10), "Closing"]];
   const VIDEOS = [
-    { id: "60s", name: "60-second video – Facebook & TikTok (8 scenes, 80 seconds)", secs: 80, keys: ["appear", "rev60", "mean60", "magic60", "color60", "timedir60", "num60", "end60"] },
+    { id: "60s", name: "60-second video – Facebook & TikTok (8 scenes, 80 seconds)", secs: 80, keys: ["appear", "rev60", "mean60", "magic60", "color60", "timedir60", "wish60", "end60"] },
     { id: "180s", name: "180-second video – YouTube", secs: 180, keys: ["moon", "appear", "meaning", "personality", "magic", "love", "work", "money", "color", "time", "direction", "numbers", "luckydays", "reminder", "wish", "thanks", "recap", "end"] },
   ].map((v) => ({ ...v, scenes: v.keys.map((k) => SC[k]) }));
   VIDEOS.push({ id: "long", name: `Long YouTube video – all 12 signs (about ${Math.round(longScenes.length * 10 / 60)} minutes)`, secs: longScenes.length * 10, scenes: longScenes, chapters: longChapters,
@@ -1450,7 +1464,7 @@ function buildPack(iso, F, forSign, data = null, P = null, edits = null) {
   const dateLineKm = `ថ្ងៃនេះ ${wdKm} ទី ${Number(iso.slice(8))} ខែ${MKM[Number(iso.slice(5, 7)) - 1]} គឺជាថ្ងៃឆ្នាំ${dayKm}។`;
   const HOOKS = {
     "60s": { win: V(5, 12, [0, 1, 2, 3, 4]), whys: ["Speaks straight to people of this sign and promises exactly what the video gives.", "Specific and true (only the day's animal has a Great Day), creates curiosity, and every viewer wants to know if it is their sign.", "A direct question that everyone wants answered, so they keep watching.", "A small guessing game keeps people watching until the answer.", "A real fact about the zodiac cycle that makes the video feel trustworthy."], list: [
-      ["Identity", `Born in the Year of the ${day}? Today is a Great Day for you. Here's your lucky color, time, and numbers.`, `អ្នកកើតឆ្នាំ${dayKm}មែនទេ? ថ្ងៃនេះ ជាថ្ងៃល្អខ្លាំងសម្រាប់អ្នក។ មកមើលពណ៌ ពេលវេលា និងលេខសំណាងរបស់អ្នក។`],
+      ["Identity", `Born in the Year of the ${day}? Today is a Great Day for you. Here's your lucky color, time, and direction.`, `អ្នកកើតឆ្នាំ${dayKm}មែនទេ? ថ្ងៃនេះ ជាថ្ងៃល្អខ្លាំងសម្រាប់អ្នក។ មកមើលពណ៌ ពេលវេលា និងទិសសំណាងរបស់អ្នក។`],
       ["Curiosity", "Out of all twelve zodiac signs, only one has a Great Day today. Is it yours?", "ក្នុងចំណោមរាសីទាំង 12 មានតែមួយគត់ ដែលមានថ្ងៃល្អខ្លាំងនៅថ្ងៃនេះ។ តើជារាសីរបស់អ្នកឬទេ?"],
       ["Question", "Which zodiac animal is the luckiest today? Here's the answer, and what it means for you.", "តើឆ្នាំណា មានសំណាងជាងគេនៅថ្ងៃនេះ? នេះគឺជាចម្លើយ និងអត្ថន័យសម្រាប់អ្នក។"],
       ["Challenge", `Can you guess today's luckiest zodiac animal? Three clues: ${clueEn}.`, `ទាយមើល៖ តើឆ្នាំណា មានសំណាងជាងគេថ្ងៃនេះ? តម្រុយ៖ ${clueKm}។`],
@@ -1500,7 +1514,7 @@ function buildPack(iso, F, forSign, data = null, P = null, edits = null) {
   const storyKw = `${day.toLowerCase()} bedtime story, zodiac story for kids, Chinese zodiac ${day.toLowerCase()}, Year of the ${day}, lucky color today, Khmer story, Cambodian story`;
   const META = {
     "60s": { topic: `Today's luckiest zodiac animal, the ${day}, in 80 seconds. For viewers who follow Chinese zodiac signs, especially people born in the Year of the ${day}, scrolling Facebook Reels and TikTok.`,
-      kw: `${day.toLowerCase()} zodiac today, luckiest zodiac sign today, Chinese zodiac ${day.toLowerCase()}, lucky color today, lucky numbers today` },
+      kw: `${day.toLowerCase()} zodiac today, luckiest zodiac sign today, Chinese zodiac ${day.toLowerCase()}, lucky color today, lucky direction today` },
     "180s": { topic: `A three-minute guide to the ${day}'s Great Day: meaning, character, love, work, money and lucky details. For people born in the Year of the ${day} and zodiac fans on YouTube Shorts.`,
       kw: `Year of the ${day}, ${day.toLowerCase()} fortune today, ${day.toLowerCase()} personality, Chinese zodiac ${day.toLowerCase()} lucky color, lucky numbers` },
     long: { topic: "A full daily fortune for all twelve Chinese zodiac signs. For anyone who wants their own sign's rating, lucky color, best time and direction; chapters let each viewer jump to their sign.",
@@ -1542,8 +1556,8 @@ Tip: thick bold font, yellow or white with a dark outline, short enough to read 
     "60s": [
       ["Title – English", `${EMO[day]} ${day} Day – Today's Luckiest Sign! | ${D}`],
       ["Title – Khmer", `${EMO[day]} ថ្ងៃឆ្នាំ${dayKm} – ឆ្នាំដែលសំណាងបំផុតថ្ងៃនេះ! | ${D}`],
-      ["Caption – English (Facebook, TikTok)", `${S9.en} ${EMO[day]}🌕\n\nToday, ${D}, is a ${dd.label.en} for the ${day}.\n${factsEn.filter(noNums).map((x) => `✨ ${x}`).join("\n")}\n\nBorn in the Year of the ${day}? Comment ${EMO[day]} below! 👇\nLucky numbers and all 12 signs: https://mybirthsign.com (TikTok: link in bio)\n${DISC_EN}\n\n${tagsEnFb} #fyp #Reels`],
-      ["Caption – Khmer (Facebook, TikTok)", `${S9.km} ${EMO[day]}🌕\n\nថ្ងៃនេះ ${D} ជា${dd.label.km} សម្រាប់ឆ្នាំ${dayKm}។\n${factsKm.filter(noNums).map((x) => `✨ ${x}`).join("\n")}\n\nអ្នកកើតឆ្នាំ${dayKm}មែនទេ? Comment ${EMO[day]} ប្រាប់ផង! 👇\nមើលលេខសំណាង និងរាសីទាំង 12៖ https://mybirthsign.com/km/ (TikTok៖ Link នៅក្នុង bio)\n${disclaimer}\n\n${tags} #fyp #Reels`],
+      ["Caption – English (Facebook, TikTok)", `${S9.en} ${EMO[day]}🌕\n\nToday, ${D}, is a ${dd.label.en} for the ${day}.\n${factsEn.filter(noNums).map((x) => `✨ ${x}`).join("\n")}\n\nBorn in the Year of the ${day}? Comment ${EMO[day]} below! 👇\nAll 12 signs: https://mybirthsign.com (TikTok: link in bio)\n${DISC_EN}\n\n${tagsEnFb} #fyp #Reels`],
+      ["Caption – Khmer (Facebook, TikTok)", `${S9.km} ${EMO[day]}🌕\n\nថ្ងៃនេះ ${D} ជា${dd.label.km} សម្រាប់ឆ្នាំ${dayKm}។\n${factsKm.filter(noNums).map((x) => `✨ ${x}`).join("\n")}\n\nអ្នកកើតឆ្នាំ${dayKm}មែនទេ? Comment ${EMO[day]} ប្រាប់ផង! 👇\nមើលរាសីទាំង 12៖ https://mybirthsign.com/km/ (TikTok៖ Link នៅក្នុង bio)\n${disclaimer}\n\n${tags} #fyp #Reels`],
     ],
     "180s": [
       ["Title – English", `${day} Day Fortune – ${D} | Lucky Color, Time & Numbers for the Year of the ${day} ${EMO[day]}`],
@@ -1895,19 +1909,21 @@ ${disclaimer}
     ["1", `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! Here is your Chinese zodiac fortune for ${LD.replace(/^\w+, /, "")}.`, `ជោគជតារាសីប្រចាំថ្ងៃនេះ ថ្ងៃទី ${Number(iso.slice(8))} ខែ${["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"][Number(iso.slice(5,7))-1]}។ ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}!`],
     ["2", `${list(lucky)} are the luckiest signs today!`, `${kmList(lucky.map((a) => `ឆ្នាំ${km(a)}`))} មានសំណាងល្អជាងគេនៅថ្ងៃនេះ!`],
     ["3", careful.length ? `${list(careful)}, take it easy today. Slow down and rest.` : "Take a calm breath and enjoy the day.", careful.length ? `${kmList(careful.map((a) => `ឆ្នាំ${km(a)}`))} គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ។` : "សូមឲ្យថ្ងៃនេះស្ងប់ស្ងាត់ និងរីករាយ។"],
-    ["5", `For lucky numbers: ${nums.map((n) => `${n.a} ${n.d2}`).join(", ")}! Comment your lucky number and say it again!`, `សម្រាប់លេខសំណាង៖ ${nums.map((n) => `ឆ្នាំ${km(n.a)} ${n.d2}`).join(" ")}! សូមសរសេរលេខសំណាងរបស់អ្នក ហើយនិយាយម្ដងទៀត!`],
+    // scene 5: the luckiest sign's lucky color and direction (owner's request, 20/11/2026: no lucky numbers in the videos
+    // for Facebook, which made the Page harder to find for people under 18)
+    ["5", `Year of the ${day}, your lucky color is ${sign(day).lucky.color.en}, and your lucky direction is the ${sign(day).lucky.direction.en.toLowerCase()}. Comment your sign below!`, `អ្នកកើតឆ្នាំ${dayKm} ពណ៌សំណាងគឺពណ៌${sign(day).lucky.color.km} ហើយទិសសំណាងគឺទិស${sign(day).lucky.direction.km}។ សូមសរសេររាសីរបស់អ្នក ក្នុងមតិយោបល់!`],
     ["4", "See all twelve signs at mybirthsign dot com. Have a lucky day!", "ចូលមើលរាសីទាំង 12 នៅ mybirthsign.com។ សូមឲ្យមានសំណាងល្អ!"],
   ];
   // 30-second video for Gemini Omni 1.2 Flash (owner's request, 08/11/2026): Omni makes clips of up to 15 seconds with the
   // voice, music and sound, so the 45-second video becomes 2 clips of 15 seconds. Scene 1 = the 45-second video's scenes
-  // 1–3 (Chanda's hook on camera, the lucky signs, the sign that should take it easy); Scene 2 = its scenes 5 and 4 (lucky
-  // numbers, ending). The spoken words are the 45-second video's own, so both versions say the same thing.
+  // 1–3 (Chanda's hook on camera, the lucky signs, the sign that should take it easy); Scene 2 = its scenes 5 and 4 (the
+  // luckiest sign's lucky color and direction, ending). The spoken words are the 45-second video's own, so both versions say the same thing.
   const FL = Object.fromEntries(FLOW_LINES.map(([n, en, kmL]) => [n, { en, km: kmL }]));
   const omniVoice = (lang, parts) => `Audio: Chanda's voice, ${lang === "km" ? VOICE_KM.replace(/,$/, "") : VOICE_EN}. ${parts.map(([from, to, onCam, line]) =>
     `From ${from} to ${to} seconds ${onCam ? "Chanda is on camera and speaks to the viewer with natural lip movements that match her words." : "Chanda is heard as a voice-over only: she is not on screen, and no one on screen speaks or moves their mouth."} She says${lang === "km" ? " in Khmer" : ""}: "${lang === "km" ? kmFlow(line) : line}"`).join(" ")} ${MUSIC}`;
   const OMNI_SHOT = "One continuous 15-second shot: the camera moves smoothly from one moment to the next, with no hard cuts. No on-screen text. The animals and guardians never speak or move their mouths: they only act.";
   const omniMd = `## 30-second video – Omni 1.2 (2 scenes × 15 seconds)
-For Gemini Omni 1.2 Flash (in Google Flow or the Gemini app), which makes clips of up to 15 seconds with the voice, music and sound: 2 clips of 15 seconds, 30 seconds in total. Set the clip length to 15 seconds and the format to vertical 9:16, and make both clips in the same project with the same settings. Add @Chanda and the characters each scene names as ingredients (reference images). For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style, the scene second by second and the voice together. Use one language for the whole video. Put the clips in order 1, 2, and add the on-screen captions from "On-screen captions" (1–3 over Scene 1, then 5 and 4 over Scene 2). The words come from the 45-second video (shortened a little to fit: Scene 1 leaves out the year, and Scene 2 leaves out "say it again").
+For Gemini Omni 1.2 Flash (in Google Flow or the Gemini app), which makes clips of up to 15 seconds with the voice, music and sound: 2 clips of 15 seconds, 30 seconds in total. Set the clip length to 15 seconds and the format to vertical 9:16, and make both clips in the same project with the same settings. Add @Chanda and the characters each scene names as ingredients (reference images). For each scene, press "Copy + English voice" or "Copy + Khmer voice": it copies the style, the scene second by second and the voice together. Use one language for the whole video. Put the clips in order 1, 2, and add the on-screen captions from "On-screen captions" (1–3 over Scene 1, then 5 and 4 over Scene 2). The words come from the 45-second video (Scene 1 leaves out the year, to fit).
 
 ### Scene 1 – Today's fortune (0:00–0:15)
 0–6 seconds: ${cap(HOST_LOOK)}, stands in front of the Angkor-style temple at night, facing the camera and speaking to the viewer with natural lip movements, then turns and gestures toward the pond. ${DV(63, FEEL.hello)} ${NATURAL} Chanda is the saved Flow character @Chanda.
@@ -1920,18 +1936,18 @@ ${OMNI_SHOT} The characters match the saved Flow characters exactly.
 English voice: ${omniVoice("en", [[0, 6, true, FL[1].en.replace(/ \d{4}\.$/, ".")], [6, 15, false, `${FL[2].en} ${FL[3].en}`]])}
 Khmer voice: ${omniVoice("km", [[0, 6, true, FL[1].km], [6, 15, false, `${FL[2].km} ${FL[3].km}`]])}
 
-### Scene 2 – Lucky numbers and goodbye (0:15–0:30)
-0–9 seconds: magical and powerful. A huge glowing golden zodiac wheel rises out of the lotus pond in front of the temple, with the twelve golden-armored zodiac guardians around its rim. It spins faster and faster, shooting beams of golden light and sparkles, then slows to a gentle, shining turn under the full moon. The camera slowly pushes in, keeping open space in the middle and lower part of the frame for the number captions.
+### Scene 2 – Lucky color and goodbye (0:15–0:30)
+0–9 seconds: magical and powerful. A huge glowing golden zodiac wheel rises out of the lotus pond in front of the temple, with the twelve golden-armored zodiac guardians around its rim. It spins faster and faster, shooting beams of golden light and sparkles, then slows to a gentle, shining turn under the full moon. The camera slowly pushes in, keeping open space in the middle and lower part of the frame for the captions.
 9–15 seconds: ${DV(31, FINALE_SKY, 4)}, and the huge full moon glows over the pond. The camera rises up and pulls back for a wide, epic view, leaving open sky at the top of the frame for a title.
 ${OMNI_SHOT}
-English voice: ${omniVoice("en", [[0, 9, false, FL[5].en.replace(" and say it again!", "!")], [9, 15, false, FL[4].en]])}
-Khmer voice: ${omniVoice("km", [[0, 9, false, FL[5].km.replace(" ហើយនិយាយម្ដងទៀត!", "!")], [9, 15, false, FL[4].km]])}
+English voice: ${omniVoice("en", [[0, 9, false, FL[5].en], [9, 15, false, FL[4].en]])}
+Khmer voice: ${omniVoice("km", [[0, 9, false, FL[5].km], [9, 15, false, FL[4].km]])}
 `;
   const md = `# Daily video prompt pack — ${D} · ${day} day (ថ្ងៃឆ្នាំ${dayKm})
 
 Lucky signs: ${lucky.join(", ")}${careful.length ? ` · Careful: ${careful.join(", ")}` : ""}
 Day element: ${DEL.yy} ${DEL.el} ${DEL.emo} (${DEL.pillar} day; ធាតុ${DEL.km}) · every action scene today carries ${DEL.el} magic: ${DEL.fx}.
-Format: vertical 9:16 (YouTube Shorts, Facebook Reels, TikTok), about 45 seconds: 4 Veo scenes of about 8 seconds, then a lucky-numbers scene of about 10–12 seconds.
+Format: vertical 9:16 (YouTube Shorts, Facebook Reels, TikTok), about 45 seconds: 4 Veo scenes of about 8 seconds, then a lucky color and direction scene of about 10–12 seconds. No lucky numbers in the video (Facebook-safe).
 Two versions: make the pictures once, then record a Khmer voice-over and an English voice-over (two videos, or one video with both subtitle tracks).
 Meaning scenes: in the love, work, money and horoscope scenes the zodiac guardian and its animal act out what Chanda is saying, the guardian protecting and caring and the animal trusting (no real-life people), and every scene with Chanda on camera says which feeling she shows.
 Ratings, lucky signs and lucky numbers come from the site's fixed rules and match the website's daily fortune for this date.${same ? "" : "\nVoice-over wording: standard script (this pack was made ahead; the site's own daily wording appears the day before)."}
@@ -1955,10 +1971,10 @@ ${audio("en", false, `Today is ${/^[AEIOU]/.test(day) ? "an" : "a"} ${day} day! 
 Khmer audio (use instead for the Khmer video): ${audio("km", false, kmFlow(`ថ្ងៃនេះជាថ្ងៃឆ្នាំ${dayKm}! ${SYMBOL[day].km}`))}
 
 ### Caption – English
-${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for the ${day}. Lucky numbers: ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (for fun only). All 12 signs: https://mybirthsign.com
+${SYMBOL[day].en} ${EMO[day]}🌕 Today, ${D}, is a ${sign(day).label.en} for the ${day}. Lucky color: ${sign(day).lucky.color.en}. All 12 signs: https://mybirthsign.com
 
 ### Caption – Khmer
-${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).label.km}សម្រាប់ឆ្នាំ${dayKm}។ លេខសំណាង៖ ${nums[0].d1} · ${nums[0].d2} · ${nums[0].d3} (សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ)។ មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
+${SYMBOL[day].km} ${EMO[day]}🌕 ថ្ងៃនេះ ${D} ជា${sign(day).label.km}សម្រាប់ឆ្នាំ${dayKm}។ ពណ៌សំណាង៖ ពណ៌${sign(day).lucky.color.km}។ មើលរាសីទាំង 12៖ https://mybirthsign.com/km/
 
 ${VIDEOS.map(videoMd).join("\n\n")}
 
@@ -2031,8 +2047,8 @@ ${careful.length ? `Photorealistic golden fantasy-epic style, same saved Flow ch
 ## Scene 4 – Outro
 Magical and powerful. ${cap(DV(31, FINALE_SKY, 4))}, and the huge full moon glows over the pond. The camera rises up and pulls back for a wide, epic view, leaving open sky at the top of the frame for a title.
 
-## Scene 5 – Lucky numbers (about 10–12 seconds)
-Magical and powerful. A huge glowing golden zodiac wheel rises out of the lotus pond in front of the temple, with the twelve golden-armored zodiac guardians around its rim. It spins faster and faster, shooting beams of golden light and sparkles, then slows to a gentle, shining turn under the full moon. The camera slowly pushes in, keeping open space in the middle and lower part of the frame for the number captions. (Loop the slow-turning part, or slow-zoom a still picture, to fill the time.)
+## Scene 5 – Lucky color and direction (about 10–12 seconds)
+Magical and powerful. A huge glowing golden zodiac wheel rises out of the lotus pond in front of the temple, with the twelve golden-armored zodiac guardians around its rim. It spins faster and faster, shooting beams of golden light and sparkles, then slows to a gentle, shining turn under the full moon. The camera slowly pushes in, keeping open space in the middle and lower part of the frame for the captions. (Loop the slow-turning part, or slow-zoom a still picture, to fill the time.)
 
 ## On-screen captions (add in the editor)
 ### Khmer version
@@ -2040,22 +2056,18 @@ Magical and powerful. A huge glowing golden zodiac wheel rises out of the lotus 
 2. ${luckyLabelsKm}
 ${careful.length ? `3. ${careful.map((a) => `ឆ្នាំ${km(a)} – ${sign(a).label.km} · គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ`).join(" ")}` : "3. —"}
 4. ចូលមើលលម្អិតនៅ mybirthsign.com
-5. លេខសំណាងថ្ងៃនេះ សម្រាប់ឆ្នាំសំណាង
-${nums.map((n) => numLine(n, `ឆ្នាំ${km(n.a)}`)).join("\n")}
-   សម្រាប់ការកម្សាន្តប៉ុណ្ណោះ
+5. ឆ្នាំ${dayKm}៖ ពណ៌សំណាង ពណ៌${sign(day).lucky.color.km} · ទិសសំណាង ទិស${sign(day).lucky.direction.km}
 
 ### English version
 1. Daily Chinese Zodiac Fortune · ${D} · ${day} Day
 2. ${luckyLabelsEn}
 ${careful.length ? `3. ${careful.map((a) => `${a} – ${sign(a).label.en} · slow down and rest`).join(" ")}` : "3. —"}
 4. More at mybirthsign.com
-5. Today's lucky numbers for the lucky signs
-${nums.map((n) => numLine(n, n.a)).join("\n")}
-   For fun only
+5. ${day}: lucky color ${sign(day).lucky.color.en} · lucky direction ${sign(day).lucky.direction.en}
 
 ## Voice in Google Flow (spoken inside each clip)
 Flow (Veo) can make the voice and music together with the picture. Add ONE of these lines to the END of each scene prompt: the English one for the English video, the Khmer one for the Khmer video. Each line is short enough for an 8-second clip.
-Put the clips in this order in your editor: 1, 2, 3, 5 (lucky numbers), 4 (ending).
+Put the clips in this order in your editor: 1, 2, 3, 5 (lucky color and direction), 4 (ending).
 Voice style (keep it the same every day so the channel has one recognisable voice): ${VOICE_EN}
 Khmer note: if Flow does not pronounce Khmer well, use the English version in Flow and record the Khmer voice-over below yourself or with a Khmer text-to-speech app.
 
@@ -2117,7 +2129,7 @@ Facebook-safe caption: the lucky numbers are on the website, not in the post, so
 
 ✨ ឆ្នាំសំណាងថ្ងៃនេះ៖ ${lucky.map((a) => `ឆ្នាំ${km(a)} (${sign(a).label.km})`).join(" · ")}
 ${careful.length ? `🌿 គួរប្រុងប្រយ័ត្ន៖ ${careful.map((a) => `ឆ្នាំ${km(a)}`).join(" ")} – គួរសម្រាកឲ្យស្រួលខ្លួន ធ្វើអ្វីៗយឺតៗ និងកុំប្រញាប់ក្នុងការសម្រេចចិត្ត។\n` : ""}
-👉 មើលរាសីទាំង 12 ពណ៌សំណាង ទិសសំណាង និងលេខសំណាង៖ https://mybirthsign.com/km/
+👉 មើលរាសីទាំង 12 ពណ៌សំណាង និងទិសសំណាង៖ https://mybirthsign.com/km/
 
 ${disclaimer}
 
@@ -2128,7 +2140,7 @@ ${tags}
 
 ✨ Lucky signs today: ${lucky.map((a) => `${a} (${sign(a).label.en})`).join(" · ")}
 ${careful.length ? `🌿 Take it easy: ${list(careful)} – slow down, rest and don't rush big decisions.\n` : ""}
-👉 All 12 signs, with lucky colors, directions and numbers: https://mybirthsign.com
+👉 All 12 signs, with lucky colors and directions: https://mybirthsign.com
 
 ${DISC_EN}
 
@@ -2464,14 +2476,17 @@ function charactersMd(KM_NAMES) {
   // Works on https://mybirthsign.com/studio/ (it reads the published daily fortune page of that date and draws the same
   // cards with the site's js/share-cards.js). The claude.ai copy cannot reach the site, so it shows a link instead.
   var onSite = /(^|\.)mybirthsign\.com$/.test(location.hostname) || location.hostname === "localhost";
-  var CARD = { lang: "en", fmt: "portrait", blobs: [], iso: "" };
-  try { CARD.lang = localStorage.getItem("mbs-card-lang") || "en"; CARD.fmt = localStorage.getItem("mbs-card-fmt") || "portrait"; } catch (e) {}
+  // num: "hide" draws the daily cards without the lucky number (for Facebook, owner's request 20/11/2026: Facebook made the
+  // Page harder to find for people under 18), "show" keeps it (Telegram and others)
+  var CARD = { lang: "en", fmt: "portrait", num: "hide", blobs: [], iso: "" };
+  try { CARD.lang = localStorage.getItem("mbs-card-lang") || "en"; CARD.fmt = localStorage.getItem("mbs-card-fmt") || "portrait"; CARD.num = localStorage.getItem("mbs-card-num") || "hide"; } catch (e) {}
   function cardsSection(iso) {
     var body = onSite
       ? '<p class="note">The day\'s share cards for ' + dmy(iso) + ': lucky signs of the day, the Great Day sign, the two Good Day signs and the sign to take it easy (the other signs are left out). Download them and schedule your posts before the day starts. A day\'s cards appear once its fortune page is published (about a day ahead).</p>' +
         '<div class="cardbar"><label>Language<select id="clang"><option value="en">English</option><option value="km">ខ្មែរ (Khmer)</option><option value="zh">中文 (Chinese)</option></select></label>' +
         '<label>View<select id="cview"><option value="grid">Small (many per row)</option><option value="big">Large (one per row)</option></select></label>' +
         '<label>Size<select id="cfmt"><option value="portrait">Feed post (Facebook, Telegram)</option><option value="square">Square</option><option value="story">Story / Reel (9:16)</option></select></label>' +
+        '<label>Lucky number<select id="cnum"><option value="hide">Hide (for Facebook)</option><option value="show">Show (Telegram, others)</option></select></label>' +
         '<button class="primary" id="czip" disabled>Save all</button><button id="cfolder" disabled title="Cards, video prompts and subtitles for this date in one folder">Download folder</button></div><p class="note">Tap a card to see it full size. On a phone, “Save” opens the share sheet: choose “Save Image” (Photos) or share straight to Facebook or Telegram.</p><div class="cardgrid" id="cardgrid"></div>'
       : '<p class="note"><b>The cards show only in the Studio on your website.</b> This copy inside Claude cannot read the website\'s daily fortune. Open this address in your browser:</p><p><a href="https://mybirthsign.com/studio/" target="_blank" rel="noopener" style="color:var(--gold-soft);font-weight:700;font-size:1.1rem">mybirthsign.com/studio/ →</a></p>';
     return '<details class="sec" id="seccards" open><summary><h2>Daily cards – post before the day</h2></summary><div class="secbody">' + body + "</div></details>";
@@ -2522,7 +2537,7 @@ function charactersMd(KM_NAMES) {
   var cardJob = 0;
   function loadCards(iso, wanted) {
     if (!onSite || !$("cardgrid")) return;
-    $("clang").value = CARD.lang; $("cfmt").value = CARD.fmt; $("cview").value = CARD.view || "grid";
+    $("clang").value = CARD.lang; $("cfmt").value = CARD.fmt; $("cview").value = CARD.view || "grid"; $("cnum").value = CARD.num;
     $("cardgrid").classList.toggle("big", CARD.view === "big");
     var job = ++cardJob, grid = $("cardgrid"), zip = $("czip");
     CARD.blobs.forEach(function (x) { URL.revokeObjectURL(x.url); }); CARD.blobs = []; CARD.iso = iso; zip.disabled = true; $("cfolder").disabled = true;
@@ -2545,7 +2560,8 @@ function charactersMd(KM_NAMES) {
       return specs.reduce(function (p, sp, i) {       // one at a time, so phones keep up
         return p.then(function () {
           if (job !== cardJob) return;
-          return window.MBSShareCards[sp.cardType](sp, CARD.fmt).then(toJpeg).then(function (blob) {
+          var draw = CARD.num === "show" || sp.cardType !== "daily" ? sp : Object.assign({}, sp, { noNumber: true });
+          return window.MBSShareCards[sp.cardType](draw, CARD.fmt).then(toJpeg).then(function (blob) {
             if (job !== cardJob || !blob) return;
             var kind = sp.cardType === "lucky" ? "lucky-today" : { great: "great-day", good: "good-day", caution: "take-it-easy" }[sp.tier] + "-" + String(sp.animal).toLowerCase();
             var name = "mybirthsign-" + iso + "-" + i + "-" + kind + "-" + CARD.lang + "-" + CARD.fmt + ".jpg";
@@ -2593,9 +2609,9 @@ function charactersMd(KM_NAMES) {
       try { localStorage.setItem("mbs-card-view", CARD.view); } catch (er) {}
       return;
     }
-    if (e.target.id === "clang" || e.target.id === "cfmt") {
-      CARD.lang = $("clang").value; CARD.fmt = $("cfmt").value;
-      try { localStorage.setItem("mbs-card-lang", CARD.lang); localStorage.setItem("mbs-card-fmt", CARD.fmt); } catch (er) {}
+    if (e.target.id === "clang" || e.target.id === "cfmt" || e.target.id === "cnum") {
+      CARD.lang = $("clang").value; CARD.fmt = $("cfmt").value; CARD.num = $("cnum").value;
+      try { localStorage.setItem("mbs-card-lang", CARD.lang); localStorage.setItem("mbs-card-fmt", CARD.fmt); localStorage.setItem("mbs-card-num", CARD.num); } catch (er) {}
       loadCards(D.value);
     }
   });

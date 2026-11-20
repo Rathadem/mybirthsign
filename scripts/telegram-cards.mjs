@@ -6,7 +6,8 @@
 //
 //   node scripts/build-site.mjs && node scripts/telegram-cards.mjs --date 2026-10-29 --out tg-cards
 //
-// Writes <out>/<date>/1-km.jpg … 5-km.jpg, 1-en.jpg … 5-en.jpg and <out>/<date>/cards.json (file list with titles).
+// Writes <out>/<date>/1-km.jpg … 5-km.jpg, 1-en.jpg … 5-en.jpg and <out>/<date>/cards.json (file list with titles), plus
+// the Facebook copies of the Khmer daily cards without the lucky number (2-km-fb.jpg …) and facebook-km.json.
 // If the fortune page for the date is not built, it writes nothing and exits normally (the text post still goes out).
 import fs from "node:fs";
 import path from "node:path";
@@ -98,11 +99,31 @@ for (const [lang, specs] of langs) {
     list.push({ file, lang, title: sp.cardType === "lucky" ? "Lucky signs today" : `${sp.name || sp.animal} · ${sp.label || ""}` });
   });
 }
+// Facebook copies of the Khmer daily cards without the lucky number (<n>-km-fb.jpg, owner's request 20/11/2026: Facebook
+// made the Page harder to find for people under 18). Only the Facebook posts use them; Telegram keeps the cards above
+// (cards.json lists only those). The lucky-signs card has no number, so Facebook uses it as it is.
+const fbFiles = {};
+const kmDrawn = list.some((c) => c.lang === "km"), kmSpecs0 = (langs.find(([l]) => l === "km") || [])[1] || [];
+if (kmDrawn) {
+  const daily = kmSpecs0.map((s, i) => [s, i]).filter(([s]) => s.cardType === "daily");
+  const jpgs = await page.evaluate(async (specs) => {
+    const res = [];
+    for (const sp of specs) {
+      const png = await window.MBSShareCards.daily(Object.assign({}, sp, { noNumber: true }), "portrait");
+      const im = await createImageBitmap(png), c = document.createElement("canvas");
+      c.width = im.width; c.height = im.height;
+      const x = c.getContext("2d"); x.fillStyle = "#0b0826"; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0);
+      res.push(c.toDataURL("image/jpeg", 0.9));
+    }
+    return res;
+  }, daily.map(([s]) => s));
+  jpgs.forEach((d, j) => { const i = daily[j][1], file = `${i + 1}-km-fb.jpg`; fs.writeFileSync(path.join(dir, file), Buffer.from(d.split(",")[1], "base64")); fbFiles[i] = file; });
+}
 fs.writeFileSync(path.join(dir, "cards.json"), JSON.stringify({ date, cards: list }, null, 2) + "\n");
 // the day's Khmer Facebook posts for PublishHub (scripts/facebook-feed.mjs): only when the Khmer cards were drawn
 const kmSpecs = (langs.find(([l]) => l === "km") || [])[1];
-if (kmSpecs && list.some((c) => c.lang === "km")) {
-  const feed = facebookFeed(date, kmSpecs, kmSpecs.map((s, i) => `${i + 1}-km.jpg`));
+if (kmSpecs && kmDrawn) {
+  const feed = facebookFeed(date, kmSpecs, kmSpecs.map((s, i) => (s.cardType === "daily" ? fbFiles[i] : `${i + 1}-km.jpg`)));
   fs.writeFileSync(path.join(dir, "facebook-km.json"), JSON.stringify(feed, null, 2) + "\n");
 }
 await browser.close();

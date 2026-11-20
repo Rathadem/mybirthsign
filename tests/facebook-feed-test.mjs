@@ -24,7 +24,8 @@ function specsFor(date) {
 const dates = fs.readdirSync(path.join(ROOT, "dist", "km", "blog")).map((f) => (/^daily-fortune-(\d{4}-\d{2}-\d{2})\.html$/.exec(f) || [])[1]).filter(Boolean).sort().slice(-20);
 ok(dates.length >= 5, "built Khmer fortune pages found");
 for (const date of dates) {
-  const specs = specsFor(date), files = specs.map((s, i) => `${i + 1}-km.jpg`);
+  // as scripts/telegram-cards.mjs: the daily cards are the Facebook copies without the lucky number
+  const specs = specsFor(date), files = specs.map((s, i) => (s.cardType === "daily" ? `${i + 1}-km-fb.jpg` : `${i + 1}-km.jpg`));
   const feed = facebookFeed(date, specs, files);
   const dmy = date.split("-").reverse().join("/");
   ok(feed.time === "06:00" && feed.timezone === "Asia/Phnom_Penh" && feed.lang === "km", `${date}: 06:00 Cambodia time, Khmer`);
@@ -40,7 +41,8 @@ for (const date of dates) {
     const digits = p.caption.replace(/https?:\/\/\S+/g, "").replace(dmy, "").replace("ទាំង 12", "");
     ok(!/\d/.test(digits), `${date} ${p.key}: no numbers besides the date (Facebook-safe)`);
     ok(!/ភ្នាល់|ឆ្នោត|ល្បែង|lottery|betting|gambl/i.test(p.caption), `${date} ${p.key}: no betting words`);
-    ok(p.images.every((f) => /^\d-km\.jpg$/.test(f)), `${date} ${p.key}: Khmer card files`);
+    ok(p.images.every((f) => /^\d-km(-fb)?\.jpg$/.test(f)), `${date} ${p.key}: Khmer card files`);
+    ok(p.key === "lucky" ? p.images.every((f) => /^\d-km\.jpg$/.test(f)) : p.images.every((f) => /-km-fb\.jpg$/.test(f)), `${date} ${p.key}: daily cards are the copies without the lucky number`);
   }
   const lucky = feed.posts[0], top = specs[0].topNames.map((n) => "ឆ្នាំ" + n);
   ok(top.every((n) => lucky.caption.includes(n)), `${date}: the lucky post names the lucky signs`);

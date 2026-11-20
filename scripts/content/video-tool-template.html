@@ -478,14 +478,17 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   // Works on https://mybirthsign.com/studio/ (it reads the published daily fortune page of that date and draws the same
   // cards with the site's js/share-cards.js). The claude.ai copy cannot reach the site, so it shows a link instead.
   var onSite = /(^|\.)mybirthsign\.com$/.test(location.hostname) || location.hostname === "localhost";
-  var CARD = { lang: "en", fmt: "portrait", blobs: [], iso: "" };
-  try { CARD.lang = localStorage.getItem("mbs-card-lang") || "en"; CARD.fmt = localStorage.getItem("mbs-card-fmt") || "portrait"; } catch (e) {}
+  // num: "hide" draws the daily cards without the lucky number (for Facebook, owner's request 20/11/2026: Facebook made the
+  // Page harder to find for people under 18), "show" keeps it (Telegram and others)
+  var CARD = { lang: "en", fmt: "portrait", num: "hide", blobs: [], iso: "" };
+  try { CARD.lang = localStorage.getItem("mbs-card-lang") || "en"; CARD.fmt = localStorage.getItem("mbs-card-fmt") || "portrait"; CARD.num = localStorage.getItem("mbs-card-num") || "hide"; } catch (e) {}
   function cardsSection(iso) {
     var body = onSite
       ? '<p class="note">The day\'s share cards for ' + dmy(iso) + ': lucky signs of the day, the Great Day sign, the two Good Day signs and the sign to take it easy (the other signs are left out). Download them and schedule your posts before the day starts. A day\'s cards appear once its fortune page is published (about a day ahead).</p>' +
         '<div class="cardbar"><label>Language<select id="clang"><option value="en">English</option><option value="km">ខ្មែរ (Khmer)</option><option value="zh">中文 (Chinese)</option></select></label>' +
         '<label>View<select id="cview"><option value="grid">Small (many per row)</option><option value="big">Large (one per row)</option></select></label>' +
         '<label>Size<select id="cfmt"><option value="portrait">Feed post (Facebook, Telegram)</option><option value="square">Square</option><option value="story">Story / Reel (9:16)</option></select></label>' +
+        '<label>Lucky number<select id="cnum"><option value="hide">Hide (for Facebook)</option><option value="show">Show (Telegram, others)</option></select></label>' +
         '<button class="primary" id="czip" disabled>Save all</button><button id="cfolder" disabled title="Cards, video prompts and subtitles for this date in one folder">Download folder</button></div><p class="note">Tap a card to see it full size. On a phone, “Save” opens the share sheet: choose “Save Image” (Photos) or share straight to Facebook or Telegram.</p><div class="cardgrid" id="cardgrid"></div>'
       : '<p class="note"><b>The cards show only in the Studio on your website.</b> This copy inside Claude cannot read the website\'s daily fortune. Open this address in your browser:</p><p><a href="https://mybirthsign.com/studio/" target="_blank" rel="noopener" style="color:var(--gold-soft);font-weight:700;font-size:1.1rem">mybirthsign.com/studio/ →</a></p>';
     return '<details class="sec" id="seccards" open><summary><h2>Daily cards – post before the day</h2></summary><div class="secbody">' + body + "</div></details>";
@@ -536,7 +539,7 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
   var cardJob = 0;
   function loadCards(iso, wanted) {
     if (!onSite || !$("cardgrid")) return;
-    $("clang").value = CARD.lang; $("cfmt").value = CARD.fmt; $("cview").value = CARD.view || "grid";
+    $("clang").value = CARD.lang; $("cfmt").value = CARD.fmt; $("cview").value = CARD.view || "grid"; $("cnum").value = CARD.num;
     $("cardgrid").classList.toggle("big", CARD.view === "big");
     var job = ++cardJob, grid = $("cardgrid"), zip = $("czip");
     CARD.blobs.forEach(function (x) { URL.revokeObjectURL(x.url); }); CARD.blobs = []; CARD.iso = iso; zip.disabled = true; $("cfolder").disabled = true;
@@ -559,7 +562,8 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       return specs.reduce(function (p, sp, i) {       // one at a time, so phones keep up
         return p.then(function () {
           if (job !== cardJob) return;
-          return window.MBSShareCards[sp.cardType](sp, CARD.fmt).then(toJpeg).then(function (blob) {
+          var draw = CARD.num === "show" || sp.cardType !== "daily" ? sp : Object.assign({}, sp, { noNumber: true });
+          return window.MBSShareCards[sp.cardType](draw, CARD.fmt).then(toJpeg).then(function (blob) {
             if (job !== cardJob || !blob) return;
             var kind = sp.cardType === "lucky" ? "lucky-today" : { great: "great-day", good: "good-day", caution: "take-it-easy" }[sp.tier] + "-" + String(sp.animal).toLowerCase();
             var name = "mybirthsign-" + iso + "-" + i + "-" + kind + "-" + CARD.lang + "-" + CARD.fmt + ".jpg";
@@ -607,9 +611,9 @@ details.sec[open] > summary::before { transform: rotate(90deg); }
       try { localStorage.setItem("mbs-card-view", CARD.view); } catch (er) {}
       return;
     }
-    if (e.target.id === "clang" || e.target.id === "cfmt") {
-      CARD.lang = $("clang").value; CARD.fmt = $("cfmt").value;
-      try { localStorage.setItem("mbs-card-lang", CARD.lang); localStorage.setItem("mbs-card-fmt", CARD.fmt); } catch (er) {}
+    if (e.target.id === "clang" || e.target.id === "cfmt" || e.target.id === "cnum") {
+      CARD.lang = $("clang").value; CARD.fmt = $("cfmt").value; CARD.num = $("cnum").value;
+      try { localStorage.setItem("mbs-card-lang", CARD.lang); localStorage.setItem("mbs-card-fmt", CARD.fmt); localStorage.setItem("mbs-card-num", CARD.num); } catch (er) {}
       loadCards(D.value);
     }
   });

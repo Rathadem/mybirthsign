@@ -4,6 +4,7 @@
 // (publishhub: server/src/lib/dailyFeed.ts, set with DAILY_FEED_URL and DAILY_FEED_ACCOUNT_ID).
 // Three posts, as the owner asked (14/11/2026): the lucky signs card; the good signs (the Great Day card and the Good
 // Day cards together, one post); the sign to take it easy. A post whose cards are missing that day is left out.
+// Facebook-safe pictures: the daily cards are the Facebook copies without the lucky number (<n>-km-fb.jpg, 20/11/2026).
 // Facebook-safe captions: no lucky numbers and no betting words (the numbers are on the website), the site's usual
 // hashtags and the line saying it is traditional entertainment. Dates in Western digits, dd/mm/yyyy.
 export const FEED_TIME = "06:00";
